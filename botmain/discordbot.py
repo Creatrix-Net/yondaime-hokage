@@ -25,7 +25,6 @@ async def info(ctx):
     embed.add_field(name="Server Region", value=f"{ctx.guild.region}")
     embed.add_field(name="Server ID", value=f"{ctx.guild.id}")
     embed.set_thumbnail(url=f"{ctx.guild.icon}")
-
     await ctx.send(embed=embed)
 
 @bot.command(aliases=['8ball'])

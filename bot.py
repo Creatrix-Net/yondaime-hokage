@@ -1,51 +1,34 @@
 import discord
 from discord.ext import commands
-import os
+import datetime
 import random
 
-#Loading the .env file to environment variables
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TOKEN = 'Nzc5NTU5ODIxMTYyMzE1Nzg3.X7iTqA.PEmxShgoueoJgaE6BvQatCCT4XM' 
+from urllib import parse, request
+import re
 
+TOKEN = 'Nzc5NTU5ODIxMTYyMzE1Nzg3.X7iTqA.PEmxShgoueoJgaE6BvQatCCT4XM'
+bot = commands.Bot(command_prefix='.', description="This is a Helper Bot only for the freelance server")
 
-client = commands.Bot(command_prefix=".")
-
-@client.event
-async def on_ready():
-    print("Ready man")
-
-
-#### Commands ####
-
-#Member join
-@client.event
-async def on_member_join(member):
-    print(member)
-
-@client.event
-async def on_member_remove(member):
-    print(member)
-
-
-#Sends hello message when someoone says hello
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('hello'):
-        await message.channel.send('**Hello!**')
-
-
-#### Commands ####
-
-#to find the latency
-@client.command(name='ping')
+@bot.command()
 async def ping(ctx):
-    await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
+    await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
 
-#8ball command
-@client.command(aliases=['8ball'])
+@bot.command()
+async def sum(ctx, numOne: int, numTwo: int):
+    await ctx.send(numOne + numTwo)
+
+@bot.command()
+async def info(ctx):
+    embed = discord.Embed(title=f"{ctx.guild.name}", description="{ctx.guild.description}", timestamp=datetime.datetime.utcnow(), color=discord.Color.blue())
+    embed.add_field(name="Server created at", value=f"{ctx.guild.created_at}")
+    embed.add_field(name="Server Owner", value=f"{ctx.guild.owner}")
+    embed.add_field(name="Server Region", value=f"{ctx.guild.region}")
+    embed.add_field(name="Server ID", value=f"{ctx.guild.id}")
+    embed.set_thumbnail(url=f"{ctx.guild.icon}")
+
+    await ctx.send(embed=embed)
+
+@bot.command(aliases=['8ball'])
 async def _8ball(ctx, *, question):
     responses = [
         "It is certain.",
@@ -71,4 +54,39 @@ async def _8ball(ctx, *, question):
         "Stoping asking me fucking studip questions !!!! I need peace bitch!"
     ]
     await ctx.send(f'**Your question**: {question}\n **Here you go my Answer** : {random.choice(responses)}')
-client.run(TOKEN)
+
+
+@bot.command()
+async def youtube(ctx, *, search):
+    query_string = parse.urlencode({'search_query': search})
+    html_content = request.urlopen('http://www.youtube.com/results?' + query_string)
+    # print(html_content.read().decode())
+    search_results = re.findall('href=\"\\/watch\\?v=(.{11})', html_content.read().decode())
+    print(search_results)
+    # I will put just the first result, you can loop the response to show more results
+    await ctx.send('https://www.youtube.com/watch?v=' + search_results[0])
+
+# Events
+@bot.event
+async def on_ready():
+    await bot.change_presence(activity=discord.Streaming(name="Naruto", url="https://gogoanime.so/naruto-episode-31"))
+    print('My Ready is Body')
+
+
+@bot.listen()
+async def on_message(message):
+    if "tutorial" in message.content.lower():
+        # in this case don't respond with the word "Tutorial" or you will call the on_message event recursively
+        await message.channel.send('This is that you want https://www.youtube.com/channel/UCzdpJWTOXXhuSKw-yERbu3g')
+        await bot.process_commands(message)
+
+@bot.listen()
+async def on_message(message):
+    if message.author == bot.user:
+        return
+    if "fuck" in message.content.lower():
+        # in this case don't respond with the word "Tutorial" or you will call the on_message event recursively
+        await message.channel.send(f'Fuck off!!! <@{message.author.id}>')
+        await bot.process_commands(message)
+
+bot.run(TOKEN)

@@ -31,7 +31,7 @@ async def on_message(message):
         await message.channel.send('Hello!')
 
 @client.command
-async def ping(ctx):
+async def ping(ctx, arg=None):
     await ctx.send('Pong!')
 
 client.run(TOKEN)

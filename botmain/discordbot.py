@@ -64,11 +64,11 @@ async def _8ball(ctx, *, question):
 @bot.command()
 async def spank(ctx, member = ''):
     if member == '':
-        desc=f'<@{ctx.author.id}> spanks itself!!! LOL!'
+        desc=f'** <@{ctx.author.id}> spanks themselves !!! LOL!**'
     elif member[:2] == '<@':
-        desc=f'<@{ctx.author.id}> spanks {member} !!! Damm!'
+        desc=f'** <@{ctx.author.id}> spanks {member} !!! Damm! **'
     else:
-        desc=f'<@{ctx.author.id}> spanks itself!!! LOL!'
+        desc=f'** <@{ctx.author.id}> spanks themselves !!! LOL! **'
     onlyfiles = [f for f in listdir(join(BASE_DIR,'botmain','discord_bot_images','spank'))]
 
 

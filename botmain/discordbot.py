@@ -1,37 +1,36 @@
 import datetime
 import random
-import re
 from os import listdir
-from os.path import isfile, join
+from os.path import join
 from pathlib import Path
-from urllib import parse, request
 
 import discord
 from discord.ext import commands
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 TOKEN = 'Nzc5NTU5ODIxMTYyMzE1Nzg3.X7iTqA.PEmxShgoueoJgaE6BvQatCCT4XM'
+DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('discord_bot_images')
 bot = commands.Bot(command_prefix='.', description="This is a Helper Bot only for the freelance server")
 
+#Commands
+
+#ping
 @bot.command()
 async def ping(ctx):
     await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
 
-@bot.command()
-async def sum(ctx, numOne: int, numTwo: int):
-    await ctx.send(numOne + numTwo)
-
+#info
 @bot.command()
 async def info(ctx):
-    embed = discord.Embed(title=f"{ctx.guild.name}", description=f"{ctx.guild.description if ctx.guild.description else '' }", timestamp=datetime.datetime.utcnow(), color=discord.Color.blue())
-    embed.add_field(name="Server created at", value=f"{ctx.guild.created_at}")
-    embed.add_field(name="Server Owner", value=f"<@{ctx.guild.owner_id}>")
-    embed.add_field(name="Server Region", value=f"{str(ctx.guild.region).upper() if ctx.guild.region else 'No region set till now'}")
-    embed.add_field(name="Server ID", value=f"{ctx.guild.id}")
-    embed.add_field(name="Members(Bots included)", value=ctx.guild.member_count)
+    embed = discord.Embed(title=f"**{ctx.guild.name}**", description=f"{ctx.guild.description if ctx.guild.description else '' }", timestamp=datetime.datetime.utcnow(), color=discord.Color.blue())
+    embed.add_field(name="**Server created at**", value=f"{ctx.guild.created_at}")
+    embed.add_field(name="**Server Owner**", value=f"<@{ctx.guild.owner_id}>")
+    embed.add_field(name="**Server Region**", value=f"{str(ctx.guild.region).upper() if ctx.guild.region else 'No region set till now'}")
+    embed.add_field(name="**Server ID**", value=f"{ctx.guild.id}")
+    embed.add_field(name="**Members(Bots included)**", value=ctx.guild.member_count)
     embed.set_thumbnail(url=str(ctx.guild.icon_url))
     await ctx.send(embed=embed)
 
+#8ball
 @bot.command(aliases=['8ball'])
 async def _8ball(ctx, *, question):
     responses = [
@@ -63,40 +62,110 @@ async def _8ball(ctx, *, question):
 #spank
 @bot.command()
 async def spank(ctx, member = ''):
+    global DEFAULT_GIF_LIST_PATH
     if member == '':
         desc=f'** <@{ctx.author.id}> spanks themselves !!! LOL!**'
-    elif member[:2] == '<@':
+    elif member[:2] == '<@' or member.split('<@')[1].isdigit():
         desc=f'** <@{ctx.author.id}> spanks {member} !!! Damm! **'
     else:
         desc=f'** <@{ctx.author.id}> spanks themselves !!! LOL! **'
-    onlyfiles = [f for f in listdir(join(BASE_DIR,'botmain','discord_bot_images','spank'))]
+    onlyfiles = [f for f in listdir(join(DEFAULT_GIF_LIST_PATH ,'spank'))]
 
 
     embed = discord.Embed(description=desc, timestamp=datetime.datetime.utcnow())
     image_name=random.choice(onlyfiles)
 
-    file = discord.File(join(BASE_DIR,'botmain','discord_bot_images','spank',image_name), filename=image_name)
+    file = discord.File(join(DEFAULT_GIF_LIST_PATH,'spank',image_name), filename=image_name)
     embed.set_image(url=f"attachment://{image_name}")
     await ctx.send(file=file,embed=embed)
+
 
 #slap
 @bot.command()
 async def slap(ctx, member = ''):
+    global DEFAULT_GIF_LIST_PATH
     if member == '':
         desc=f'** <@{ctx.author.id}> slaps themselves !!! LOL!**'
-    elif member[:2] == '<@':
+    elif member[:2] == '<@' or member.split('<@')[1].isdigit():
         desc=f'** <@{ctx.author.id}> slaps {member} !!! Damm! **'
     else:
         desc=f'** <@{ctx.author.id}> slaps themselves !!! LOL! **'
-    onlyfiles = [f for f in listdir(join(BASE_DIR,'botmain','discord_bot_images','slap'))]
+    onlyfiles = [f for f in listdir(join(DEFAULT_GIF_LIST_PATH ,'slap'))]
 
 
     embed = discord.Embed(description=desc, timestamp=datetime.datetime.utcnow())
     image_name=random.choice(onlyfiles)
 
-    file = discord.File(join(BASE_DIR,'botmain','discord_bot_images','slap',image_name), filename=image_name)
+    file = discord.File(join(DEFAULT_GIF_LIST_PATH,'slap',image_name), filename=image_name)
     embed.set_image(url=f"attachment://{image_name}")
     await ctx.send(file=file,embed=embed)
+
+
+#hug
+@bot.command()
+async def hug(ctx, member = ''):
+    global DEFAULT_GIF_LIST_PATH
+    if member == '':
+        desc=f'** <@{ctx.author.id}> hugs themselves ❤️❤️❤️❤️ **'
+    elif member[:2] == '<@' or member.split('<@')[1].isdigit():
+        desc=f'** <@{ctx.author.id}> hugs {member} !!! ❤️❤️❤️ **'
+    else:
+        desc=f'** <@{ctx.author.id}> hugs themselves !!! ❤️❤️❤️❤️ **'
+    onlyfiles = [f for f in listdir(join(DEFAULT_GIF_LIST_PATH ,'hug'))]
+
+
+    embed = discord.Embed(description=desc, timestamp=datetime.datetime.utcnow())
+    image_name=random.choice(onlyfiles)
+
+    file = discord.File(join(DEFAULT_GIF_LIST_PATH,'hug',image_name), filename=image_name)
+    embed.set_image(url=f"attachment://{image_name}")
+    await ctx.send(file=file,embed=embed)
+
+
+#poke
+@bot.command()
+async def poke(ctx, member = ''):
+    global DEFAULT_GIF_LIST_PATH
+    if member == '':
+        desc=f'** <@{ctx.author.id}> pokes themselves! **'
+    elif member[:2] == '<@' or member.split('<@')[1].isdigit():
+        desc=f'** {member} <@{ctx.author.id}> pokes you !!! **'
+    else:
+        desc=f'** <@{ctx.author.id}> hugs themselves !!! **'
+    onlyfiles = [f for f in listdir(join(DEFAULT_GIF_LIST_PATH ,'poke'))]
+
+
+    embed = discord.Embed(description=desc, timestamp=datetime.datetime.utcnow())
+    image_name=random.choice(onlyfiles)
+
+    file = discord.File(join(DEFAULT_GIF_LIST_PATH,'poke',image_name), filename=image_name)
+    embed.set_image(url=f"attachment://{image_name}")
+    await ctx.send(file=file,embed=embed)
+
+
+#poke
+@bot.command()
+async def high5(ctx, member = ''):
+    global DEFAULT_GIF_LIST_PATH
+    if member == '':
+        desc=f'**<@{ctx.author.id}> high-fives **'
+    elif member[:2] == '<@' or member.split('<@')[1].isdigit():
+        desc=f'**<@{ctx.author.id}> high fives {member} !!! **'
+    else:
+        desc=f'**<@{ctx.author.id}> high-fives **'
+    onlyfiles = [f for f in listdir(join(DEFAULT_GIF_LIST_PATH ,'high5'))]
+
+
+    embed = discord.Embed(description=desc, timestamp=datetime.datetime.utcnow())
+    image_name=random.choice(onlyfiles)
+
+    file = discord.File(join(DEFAULT_GIF_LIST_PATH,'high5',image_name), filename=image_name)
+    embed.set_image(url=f"attachment://{image_name}")
+    await ctx.send(file=file,embed=embed)
+
+
+
+
 
 # Events
 @bot.event
@@ -107,7 +176,7 @@ async def on_ready():
 
 @bot.listen()
 async def on_message(message):
-    if "tutorial" in message.content.lower():
+    if "youtube" in message.content.lower():
         # in this case don't respond with the word "Tutorial" or you will call the on_message event recursively
         await message.channel.send('This is that you want https://www.youtube.com/channel/UCzdpJWTOXXhuSKw-yERbu3g')
         await bot.process_commands(message)

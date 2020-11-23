@@ -65,6 +65,8 @@ async def spank(ctx, member = ''):
     global DEFAULT_GIF_LIST_PATH
     if member == '':
         desc=f'** <@{ctx.author.id}> spanks themselves !!! LOL!**'
+    elif member == '@everyone':
+        await ctx.send(f'** <@{ctx.author.id}> why would you spank @everyone? **')
     elif member[:2] == '<@' or member.split('<@')[1].isdigit():
         desc=f'** <@{ctx.author.id}> spanks {member} !!! Damm! **'
     else:
@@ -86,6 +88,8 @@ async def slap(ctx, member = ''):
     global DEFAULT_GIF_LIST_PATH
     if member == '':
         desc=f'** <@{ctx.author.id}> slaps themselves !!! LOL!**'
+    elif member == '@everyone':
+        await ctx.send(f'** <@{ctx.author.id}> why would you slap @everyone? **')
     elif member[:2] == '<@' or member.split('<@')[1].isdigit():
         desc=f'** <@{ctx.author.id}> slaps {member} !!! Damm! **'
     else:
@@ -107,6 +111,8 @@ async def hug(ctx, member = ''):
     global DEFAULT_GIF_LIST_PATH
     if member == '':
         desc=f'** <@{ctx.author.id}> hugs themselves ❤️❤️❤️❤️ **'
+    elif member == '@everyone':
+        await ctx.send(f'** <@{ctx.author.id}> why would you hug @everyone? **')
     elif member[:2] == '<@' or member.split('<@')[1].isdigit():
         desc=f'** <@{ctx.author.id}> hugs {member} !!! ❤️❤️❤️ **'
     else:
@@ -128,6 +134,8 @@ async def poke(ctx, member = ''):
     global DEFAULT_GIF_LIST_PATH
     if member == '':
         desc=f'** <@{ctx.author.id}> pokes themselves! **'
+    elif member == '@everyone':
+        await ctx.send(f'** <@{ctx.author.id}> why would you poke @everyone? **')
     elif member[:2] == '<@' or member.split('<@')[1].isdigit():
         desc=f'** {member} <@{ctx.author.id}> pokes you !!! **'
     else:
@@ -149,6 +157,8 @@ async def high5(ctx, member = ''):
     global DEFAULT_GIF_LIST_PATH
     if member == '':
         desc=f'**<@{ctx.author.id}> high-fives **'
+    elif member == '@everyone':
+        desc=f'**@everyone <@{ctx.author.id}> high-fives **'
     elif member[:2] == '<@' or member.split('<@')[1].isdigit():
         desc=f'**<@{ctx.author.id}> high fives {member} !!! **'
     else:
@@ -160,6 +170,28 @@ async def high5(ctx, member = ''):
     image_name=random.choice(onlyfiles)
 
     file = discord.File(join(DEFAULT_GIF_LIST_PATH,'high5',image_name), filename=image_name)
+    embed.set_image(url=f"attachment://{image_name}")
+    await ctx.send(file=file,embed=embed)
+
+#party
+@bot.command()
+async def party(ctx, member = ''):
+    global DEFAULT_GIF_LIST_PATH
+    if member == '':
+        desc=f'**<@{ctx.author.id}> is partying !!**'
+    elif member == '@everyone':
+        desc=f'**@everyone <@{ctx.author.id}> is partying!! come join them !! **'
+    elif member[:2] == '<@' or member.split('<@')[1].isdigit():
+        desc=f'**<@{ctx.author.id}> parties with {member} !!! Yaay !!! **'
+    else:
+        desc=f'**<@{ctx.author.id}> is partying !!!**'
+    onlyfiles = [f for f in listdir(join(DEFAULT_GIF_LIST_PATH ,'party'))]
+
+
+    embed = discord.Embed(description=desc, timestamp=datetime.datetime.utcnow())
+    image_name=random.choice(onlyfiles)
+
+    file = discord.File(join(DEFAULT_GIF_LIST_PATH,'party',image_name), filename=image_name)
     embed.set_image(url=f"attachment://{image_name}")
     await ctx.send(file=file,embed=embed)
 
@@ -176,6 +208,8 @@ async def on_ready():
 
 @bot.listen()
 async def on_message(message):
+    if message.author.bot or message.author == bot.user:
+        return
     if "youtube" in message.content.lower():
         # in this case don't respond with the word "Tutorial" or you will call the on_message event recursively
         await message.channel.send('This is that you want https://www.youtube.com/channel/UCzdpJWTOXXhuSKw-yERbu3g')
@@ -183,10 +217,17 @@ async def on_message(message):
 
 @bot.listen()
 async def on_message(message):
-    if message.author == bot.user:
+    if message.author.bot or message.author == bot.user:
         return
     if "fuck" in message.content.lower():
         await message.channel.send(f'Fuck off!!! <@{message.author.id}>')
         await bot.process_commands(message)
+
+@bot.listen()
+async def on_message(message):
+    if message.author.bot or message.author == bot.user:
+        return
+    if "hi" or "hey" or "hiya" or "hello" or "hola" or "holla" in message.content.lower():
+        await message.channel.send(f'**Hello** <@{message.author.id}>')
 
 bot.run(TOKEN)

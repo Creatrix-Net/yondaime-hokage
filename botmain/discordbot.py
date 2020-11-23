@@ -79,6 +79,25 @@ async def spank(ctx, member = ''):
     embed.set_image(url=f"attachment://{image_name}")
     await ctx.send(file=file,embed=embed)
 
+#slap
+@bot.command()
+async def slap(ctx, member = ''):
+    if member == '':
+        desc=f'** <@{ctx.author.id}> slaps themselves !!! LOL!**'
+    elif member[:2] == '<@':
+        desc=f'** <@{ctx.author.id}> slaps {member} !!! Damm! **'
+    else:
+        desc=f'** <@{ctx.author.id}> slaps themselves !!! LOL! **'
+    onlyfiles = [f for f in listdir(join(BASE_DIR,'botmain','discord_bot_images','slap'))]
+
+
+    embed = discord.Embed(description=desc, timestamp=datetime.datetime.utcnow())
+    image_name=random.choice(onlyfiles)
+
+    file = discord.File(join(BASE_DIR,'botmain','discord_bot_images','slap',image_name), filename=image_name)
+    embed.set_image(url=f"attachment://{image_name}")
+    await ctx.send(file=file,embed=embed)
+
 # Events
 @bot.event
 async def on_ready():

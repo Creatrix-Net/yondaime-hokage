@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class servers(models.Model):
     servername = models.CharField(_('Server Name'),null=True,max_length=500)
     server_user_data = models.JSONField(_('Server Users Data'),null=False,default=dict)
+    levels = models.BooleanField()
 
     def __str__(self):
         return self.servername

@@ -6,6 +6,7 @@ from pathlib import Path
 
 import discord
 from discord.ext import commands
+from discord.utils import find
 
 TOKEN = 'Nzc5NTU5ODIxMTYyMzE1Nzg3.X7iTqA.PEmxShgoueoJgaE6BvQatCCT4XM'
 DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('discord_bot_images')
@@ -205,6 +206,13 @@ async def on_ready():
     await bot.change_presence(activity=discord.Streaming(name="Naruto", url="https://gogoanime.so/naruto-episode-31"))
     print('My Ready is Body')
 
+#on join send message event
+@bot.event
+async def on_guild_join(guild):
+    general = find(lambda x: x.name == 'general',  guild.text_channels)
+    if general and general.permissions_for(guild.me).send_messages:
+        await general.send(f'** Hello {guild.name}! I am Dhruva Shaw bot!!! **')
+
 
 @bot.listen()
 async def on_message(message):
@@ -213,6 +221,7 @@ async def on_message(message):
     if "youtube" in message.content.lower():
         # in this case don't respond with the word "Tutorial" or you will call the on_message event recursively
         await message.channel.send('This is that you want https://www.youtube.com/channel/UCzdpJWTOXXhuSKw-yERbu3g')
+        await bot.process_commands(message)
 
 @bot.listen()
 async def on_message(message):
@@ -220,12 +229,16 @@ async def on_message(message):
         return
     if "fuck" in message.content.lower():
         await message.channel.send(f'Fuck off!!! <@{message.author.id}>')
+        await bot.process_commands(message)
 
 @bot.listen()
 async def on_message(message):
     if message.author.bot or message.author == bot.user:
         return
-    if "hi" or "hey" or "hiya" or "hello" or "hola" or "holla" in message.content.lower():
-        await message.channel.send(f'**Hello** <@{message.author.id}>')
+    for i in ["hi","hey","hiya","hello","hola","holla"]:
+        if i in message.content.lower():
+            await message.channel.send(f'**Hello** <@{message.author.id}>')
+            await bot.process_commands(message)
+            break
 
 bot.run(TOKEN)

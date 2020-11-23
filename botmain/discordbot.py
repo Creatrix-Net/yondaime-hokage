@@ -213,7 +213,6 @@ async def on_message(message):
     if "youtube" in message.content.lower():
         # in this case don't respond with the word "Tutorial" or you will call the on_message event recursively
         await message.channel.send('This is that you want https://www.youtube.com/channel/UCzdpJWTOXXhuSKw-yERbu3g')
-        await bot.process_commands(message)
 
 @bot.listen()
 async def on_message(message):
@@ -221,7 +220,6 @@ async def on_message(message):
         return
     if "fuck" in message.content.lower():
         await message.channel.send(f'Fuck off!!! <@{message.author.id}>')
-        await bot.process_commands(message)
 
 @bot.listen()
 async def on_message(message):

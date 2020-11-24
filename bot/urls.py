@@ -6,8 +6,8 @@ from django.conf.urls import url
 from botmain.views import home
 
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
+urlpatterns = [ 
     url(r'^discord/', include('discord_auth_data.urls')),
+    path('admin/', admin.site.urls),
     path('', home),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

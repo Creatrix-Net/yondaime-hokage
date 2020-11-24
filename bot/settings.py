@@ -28,6 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 INSTALLED_APPS = [
     'botmain.apps.BotmainConfig',
+    'discord_auth_data.apps.DiscordAuthDataConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -35,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+
 ]
 
 MIDDLEWARE = [
@@ -75,6 +78,7 @@ if os.path.isfile(dotenv_file):
     PRODUCTION_SERVER = False
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
     DEBUG = True
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
     DATABASES = {'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))}
 
@@ -132,6 +136,11 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
+
+DISCORD_CLIENT_ID = 779559821162315787
+DISCORD_CLIENT_SECRET = 'AGF7OeRQJiASW0gokOX-bYC7C7Y7P5TL'
+DISCORD_BASE_URI = 'https://discord.com/api/v6'
+
 
 # # Deployment check
 if PRODUCTION_SERVER:

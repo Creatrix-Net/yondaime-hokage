@@ -25,10 +25,13 @@ def oauth_session(request, state=None, token=None):
     else:
         redirect_uri = request.build_absolute_uri(
             reverse('discord_bind_callback'))
-    scope = (['email', 'guilds.join'] if settings.DISCORD_EMAIL_SCOPE
-             else ['identity', 'guilds.join'])
-    return OAuth2Session(settings.DISCORD_CLIENT_ID,
+    scope = ['identify', 'email','guilds','messages.read']
+    return OAuth2Session(client_id=settings.DISCORD_CLIENT_ID,
                          redirect_uri=redirect_uri,
+                         auto_refresh_kwargs={
+                            'client_id': settings.DISCORD_CLIENT_ID,
+                            'client_secret': settings.DISCORD_CLIENT_SECRET,
+                        },
                          scope=scope,
                          token=token,
                          state=state

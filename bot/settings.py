@@ -137,8 +137,9 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
-DISCORD_CLIENT_ID = 779559821162315787
-DISCORD_CLIENT_SECRET = 'AGF7OeRQJiASW0gokOX-bYC7C7Y7P5TL'
+#Configuration for the discord
+DISCORD_CLIENT_ID = os.getenv('DISCORD_CLIENT_ID')
+DISCORD_CLIENT_SECRET = os.getenv('DISCORD_CLIENT_SECRET')
 DISCORD_BASE_URI = 'https://discord.com/api/v6'
 
 

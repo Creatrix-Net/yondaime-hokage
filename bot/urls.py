@@ -11,7 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('', home, name="Home"),
-    path('accounts/login/', signin,name='signin'),
+    url(r'^accounts/', include('account.urls')),
     url(r'^discord/', include('discord_auth_data.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

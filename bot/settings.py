@@ -15,6 +15,7 @@ from pathlib import Path
 
 import dj_database_url
 import dotenv
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -118,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Calcutta'
 
 USE_I18N = True
 
@@ -142,6 +143,10 @@ DISCORD_CLIENT_ID = os.getenv('DISCORD_CLIENT_ID')
 DISCORD_CLIENT_SECRET = os.getenv('DISCORD_CLIENT_SECRET')
 DISCORD_BASE_URI = 'https://discord.com/api/v6'
 
+#Overiding a message tag
+MESSAGE_TAGS = {
+    messages.ERROR : 'danger'
+}
 
 # # Deployment check
 if PRODUCTION_SERVER:

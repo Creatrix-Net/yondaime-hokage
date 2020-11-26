@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import (PasswordChangeForm, UserChangeForm)
+from django.contrib.auth.forms import (PasswordChangeForm, UserChangeForm,AuthenticationForm)
 from django.contrib.auth.models import User
 
 class EditProfileForm(UserChangeForm):
@@ -40,3 +40,15 @@ class PasswordChangeForms(PasswordChangeForm):
 
         self.fields["new_password2"].widget.attrs["placeholder"] = "Retype the new password"
         self.fields["new_password2"].widget.attrs["class"] = "form-control mb-10 "
+
+class LoginForm(AuthenticationForm):
+    class Meta:
+        model = User
+        fields = ('username','password')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs["placeholder"] = "Type in username"
+        self.fields["username"].widget.attrs["class"] = "form-control"
+
+        self.fields["password"].widget.attrs["placeholder"] = "Type in your password"
+        self.fields["password"].widget.attrs["class"] = "form-control"

@@ -28,3 +28,7 @@ def home(request):
         'server_name': 'Server Selection Dashboard',
         'servers':servers
     })
+
+@login_required
+def server_inside(request,userid,serverid):
+    pass

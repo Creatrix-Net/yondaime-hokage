@@ -141,7 +141,8 @@ MEDIA_URL = '/media/'
 #Configuration for the discord
 DISCORD_CLIENT_ID = os.getenv('DISCORD_CLIENT_ID')
 DISCORD_CLIENT_SECRET = os.getenv('DISCORD_CLIENT_SECRET')
-DISCORD_BASE_URI = 'https://discord.com/api/v6'
+DISCORD_BASE_URI = 'https://discord.com/api/v8'
+BOT_ID = os.getenv('BOT_ID')
 
 #Overiding a message tag
 MESSAGE_TAGS = {

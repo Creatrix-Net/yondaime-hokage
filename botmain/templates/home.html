@@ -1,0 +1,22 @@
+{% extends "layout.html" %}{% load static %}{% load extras %}{% block body %}
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Select Your Server</h1>
+    <p class="lead">First select your server then go to the dashboard</p>
+</div>
+
+<div class="card-deck mb-3 text-center">
+    {% for j in servers %} {% with servers|get_val:j as i %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">{{i.name}}</h4>
+        </div>
+        <div class="card-body">
+            <h1 class="card-title pricing-card-title"><img src="{% if i.icon %}https://cdn.discordapp.com/icons/{{i.id}}/{{i.icon}}.png{% else %}{% static 'img/discord.png' %}{% endif %}"></h1>
+            <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
+        </div>
+    </div>
+    {% endwith %} {% endfor %}
+</div>
+{% endblock %}

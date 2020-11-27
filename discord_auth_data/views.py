@@ -106,7 +106,7 @@ def callback(request):
         'grant_type': 'authorization_code',
         'code': request.GET.get('code'),
         'redirect_uri': request.build_absolute_uri(reverse('discord_bind_callback')),
-        'scope': 'identify email connections',
+        'scope': 'identify email connections guild',
         'state': request.GET.get('state'),
     }
     headers = {

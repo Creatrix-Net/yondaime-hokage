@@ -22,7 +22,7 @@ def view_profile(request):
         if form.is_valid():
             messages.success(request, "Your <strong>Profile</strong> has been update successfully !")
             form.save()
-            return redirect('/account/profile')
+            return redirect(reverse('Profile'))
         else: messages.error(request, "Please correct the errors mentioned below!") 
     
     else:
@@ -39,7 +39,7 @@ def change_password(request):
             messages.success(request, "Your <strong>password</strong> has been update successfully !")
             form.save()
             update_session_auth_hash(request, form.user)
-            return redirect(reverse('change_password'))
+            return redirect(reverse('Change Password'))
         
         else: messages.error(request, "Please correct the errors mentioned below!") 
     

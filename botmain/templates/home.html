@@ -14,7 +14,7 @@
         </div>
         <div class="card-body">
             <h1 class="card-title pricing-card-title"><img src="{% if i.icon %}https://cdn.discordapp.com/icons/{{i.id}}/{{i.icon}}.png{% else %}{% static 'img/discord.png' %}{% endif %}"></h1>
-            <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
+            <a href="{% url 'Dashboard' userid=userid serverid=i.id  %}"><button type="button" class="btn btn-lg btn-block btn-primary">Get started</button></a>
         </div>
     </div>
     {% endwith %} {% endfor %}

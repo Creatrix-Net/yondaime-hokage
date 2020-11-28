@@ -24,11 +24,16 @@ def home(request):
         )
         if b.status_code == 200:
             servers[i["name"]] = i
+    
+    userid = DiscordUser.objects.filter(user=request.user).values('uid').all()[0]['uid']
     return render(request,'home.html',{
         'server_name': 'Server Selection Dashboard',
-        'servers':servers
+        'servers':servers,
+        'userid':userid
     })
 
 @login_required
 def server_inside(request,userid,serverid):
-    pass
+    return render(request,'home.html',{
+        'server_name': 'Server Selection Dashboard',
+    })

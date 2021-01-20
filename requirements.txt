@@ -25,4 +25,4 @@ sqlparse==0.4.1
 urllib3==1.26.2
 uwsgidecorators==1.1.0
 whitenoise==5.2.0
-yarl==1.5.1
+yarl==1.6.3

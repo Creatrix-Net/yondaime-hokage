@@ -87,7 +87,7 @@ if os.path.isfile(dotenv_file):
 
 else:
     PRODUCTION_SERVER = True
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS =['*']
     DATABASES = {'default': dj_database_url.config(default=os.environ['DATABASE_URL'])}
     SECRET_KEY = os.environ['SECRET_KEY']

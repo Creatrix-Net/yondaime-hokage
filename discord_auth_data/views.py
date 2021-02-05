@@ -1,21 +1,16 @@
 from __future__ import unicode_literals
 
-import logging
 from datetime import datetime
 
 import requests
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.timezone import make_aware
 from requests_oauthlib import OAuth2Session
 
 from .conf import settings
-from .models import DiscordInvite, DiscordUser
-
-logger = logging.getLogger(__name__)
+from .models import DiscordUser
 
 
 def oauth_session(request, state=None, token=None):
@@ -23,8 +18,8 @@ def oauth_session(request, state=None, token=None):
     if settings.DISCORD_REDIRECT_URI is not None:
         redirect_uri = settings.DISCORD_REDIRECT_URI
     else:
-        redirect_uri = request.build_absolute_uri(
-            reverse('discord_bind_callback'))
+        redirect_uri = request.build_absolute_uri(reverse('discord_bind_callback'))
+    
     scope = ['identify', 'email','guilds','messages.read']
     return OAuth2Session(client_id=settings.DISCORD_CLIENT_ID,
                          redirect_uri=redirect_uri,
@@ -38,15 +33,10 @@ def oauth_session(request, state=None, token=None):
                          )
 
 
+
 @login_required
 def index(request):
     # Record the final redirect alternatives
-    if 'invite_uri' in request.GET:
-        request.session['discord_bind_invite_uri'] = request.GET['invite_uri']
-    else:
-        request.session['discord_bind_invite_uri'] = (
-                settings.DISCORD_INVITE_URI)
-
     if 'return_uri' in request.GET:
         request.session['discord_bind_return_uri'] = request.GET['return_uri']
     else:
@@ -125,35 +115,10 @@ def callback(request):
     data = decompose_data(users.json(), credentials)
     bind_user(request, data)
 
-    # Accept Discord invites
-    groups = request.user.groups.all()
-    invites = DiscordInvite.objects.filter(active=True).filter(
-                                        Q(groups__in=groups) | Q(groups=None))
-    count = 0
-    for invite in invites:
-        r = requests.post(settings.DISCORD_BASE_URI + '/invites/' + invite.code)
-        if r.status_code == requests.codes.ok:
-            count += 1
-            logger.info(('accepted Discord '
-                         'invite for %s/%s') % (invite.guild_name,
-                                                invite.channel_name))
-        else:
-            logger.error(('failed to accept Discord '
-                          'invite for %s/%s: %d %s') % (invite.guild_name,
-                                                        invite.channel_name,
-                                                        r.status_code,
-                                                        r.reason))
-
-    # Select return target
-    if count > 0:
-        messages.success(request, '%d Discord invite(s) accepted.' % count)
-        url = request.session['discord_bind_invite_uri']
-    else:
-        url = request.session['discord_bind_return_uri']
+    url = request.session['discord_bind_return_uri']
 
     # Clean up
     del request.session['discord_bind_oauth_state']
-    del request.session['discord_bind_invite_uri']
     del request.session['discord_bind_return_uri']
 
     return HttpResponseRedirect(url)

@@ -267,7 +267,7 @@ async def on_message(message):
     if "fuck" in message.content.lower():
         await message.channel.send(f'Fuck off!!! <@{message.author.id}>')
         await bot.process_commands(message)
-
+/*
 @bot.listen()
 async def on_message(message):
     if message.author.bot or message.author == bot.user:
@@ -277,5 +277,5 @@ async def on_message(message):
             await message.channel.send(f'**Hello** <@{message.author.id}>')
             await bot.process_commands(message)
             break
-
+*/
 bot.run(TOKEN)

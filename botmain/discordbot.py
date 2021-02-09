@@ -246,9 +246,7 @@ async def on_ready():
 #on join send message event
 @bot.event
 async def on_guild_join(guild):
-    general = find(lambda x: x.name == 'general',  guild.text_channels)
-    if general and general.permissions_for(guild.me).send_messages:
-        await general.send(f'** Hello {guild.name}! I am Dhruva Shaw bot!!! **')
+    await guild.system_channel.send(f'** Hello {guild.name}! I am Dhruva Shaw bot!!! do .help or {bot.user} help for commands!**')
 
 
 @bot.listen()

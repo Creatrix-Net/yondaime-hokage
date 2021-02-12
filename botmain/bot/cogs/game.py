@@ -72,10 +72,6 @@ class Games(commands.Cog):
                 timeout=60,)
         except asyncio.TimeoutError:
             return await message.edit(embed=discord.Embed(description="No one ate the cookie..."))
-        print(_, user)
-        print(_)
-        print(user)
-        print(str(_.emoji))
         end = time.perf_counter()
         await message.edit(embed=discord.Embed(description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"))
         lis3 = ["1", "2"]

@@ -25,19 +25,28 @@ intents.members = True
 intents.reactions = True
 intents.guilds = True
 
-TOKEN = 'Nzc5NTU5ODIxMTYyMzE1Nzg3.X7iTqA.PEmxShgoueoJgaE6BvQatCCT4XM'
-topastoken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc3OTU1OTgyMTE2MjMxNTc4NyIsImJvdCI6dHJ1ZSwiaWF0IjoxNjEyODcxOTczfQ.dtqLmmqI5Ktp3xxaNyj-G-zat071kveqrraKQJFBKkk'
+BASE_DIR = Path(__file__).resolve().parent.parent
+def token_get(tokenname):
+    import dotenv
+    dotenv_file = os.path.join(BASE_DIR, "bot",".env")
+    if os.path.isfile(dotenv_file):
+        dotenv.load_dotenv(dotenv_file)
+    return os.environ.get(tokenname)
+
+
+TOKEN = token_get('TOKEN')
+topastoken = token_get('TOPASTOKEN')
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(')'), intents=intents, help_command=Help(),  allowed_mentions=discord.AllowedMentions(users=True, roles=False, everyone=False),case_insensitive=True,description="Hi I am **Minato Namikaze**, Yondaime Hokage")
 bot.mystbin_client = mystbin.Client()
 bot.version = "1"
 hce = bot.get_command("help")
 hce.hidden = True
-chatbottoken = open("chat.txt", "a+").read()
-bot.topken = f"{topastoken}"
+chatbottoken = token_get('CHATBOTTOKEN')
+bot.topken = topastoken #Topgg Token
 bot.chatbot = ac.Cleverbot(f"{chatbottoken}")
-bot.se = aiozaneapi.Client('MTE=.89SNKEEIaYvNsGhO0g0UMs0tIEarF7q9SmPgyR73jwT2ne23')
-bot.dagpi = Client('slKkwVI9wgMORv8ytee3nwRKzx9rPvLoK53F2JwLw9TU0VI4naEZ0RFuZPqFeOyY')
+bot.se = aiozaneapi.Client(token_get('ZANEAPI'))
+bot.dagpi = Client(token_get('DAGPI'))
 bot.start_time = time.time()
 bot.thresholds = (10, 25, 50, 100)
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('discord_bot_images')

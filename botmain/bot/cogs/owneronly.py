@@ -1,33 +1,21 @@
 import ast
 import asyncio
-import collections
 import contextlib
 import copy
 import datetime
 import inspect
 import io
-import json
-import os
-import random
-import subprocess as sp
+
 import textwrap
-import time
 import traceback
 import typing
 from contextlib import redirect_stdout
 from datetime import datetime
-from multiprocessing.connection import Client
 
 import aiohttp
 import discord
-import psutil
-import requests
+
 from discord.ext import commands
-from discord.ext.commands import bot
-from discord.shard import ShardInfo
-from discord.user import User
-from discord.utils import get
-from jishaku import codeblocks
 
 
 def insert_returns(body):

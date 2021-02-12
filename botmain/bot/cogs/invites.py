@@ -1,9 +1,6 @@
-
-# Discord Imports
 import discord
 from discord.ext import commands, tasks
 
-# Other Imports
 import asyncio
 import datetime
 import time
@@ -158,7 +155,6 @@ class Invites(commands.Cog):
 
     @commands.Cog.listener()
     async def on_invite_create(self, invite: discord.Invite) -> None:
-        print(f"created invite {invite} in {invite.guild}")
         cached = self.bot.invites.get(invite.guild.id, None)
 
         if cached:

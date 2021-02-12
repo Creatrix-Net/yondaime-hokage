@@ -230,30 +230,6 @@ class OwnerOnly(commands.Cog):
     async def changestat(self, ctx):
         await ctx.send(f"Hi yeah")
 
-    @changestat.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def stream(self, ctx, *, activity='placeholder (owner to lazy lol)'):
-        await self.bot.change_presence(activity=discord.Streaming(name=activity, url="http://www.twitch.tv/transhelperdiscordbot"))
-        await ctx.send(f'Changed activity to {activity} using Stream status.')
-
-    @changestat.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def game(self, ctx, *, activity='placeholder (owner to lazy lol)'):
-        await self.bot.change_presence(activity=discord.Game(name=activity))
-        await ctx.send(f'Changed activity to {activity} using Game status.')
-
-    @changestat.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def watching(self, ctx, *, activity='placeholder (owner to lazy lol)'):
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
-        await ctx.send(f'Changed activity to {activity} using Watching status.')
-
-    @changestat.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def listening(self, ctx, *, activity='placeholder (owner to lazy lol)'):
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=activity))
-        await ctx.send(f'Changed activity to {activity} using Listening status.')
-
     @dev.group()
     @commands.check(owners)
     async def send(self, ctx, id: typing.Optional[int] = None, *, message):

@@ -1,17 +1,12 @@
-# Discord Imports
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 
-# Time Imports
 import datetime
 import time
 
-# Other Imports
 import random
 import asyncio
-
-# Thanks Isirk for the cb command, I modified it, if your looking to take it please ask Isirk#0001 on discord
 
 
 class Games(commands.Cog):

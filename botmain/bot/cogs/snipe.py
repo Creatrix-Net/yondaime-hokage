@@ -3,9 +3,7 @@ from discord.ext import commands
 import datetime
 import re
 
-# road ad regex, thanks road
 invitere = r"(?:https?:\/\/)?discord(?:\.gg|app\.com\/invite)?\/(?:#\/)([a-zA-Z0-9-]*)"
-# my own regex
 invitere2 = r"(http[s]?:\/\/)*discord((app\.com\/invite)|(\.gg))\/(invite\/)?(#\/)?([A-Za-z0-9\-]+)(\/)?"
 
 

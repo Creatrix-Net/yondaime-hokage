@@ -1,4 +1,3 @@
-# Discord Imports
 import discord
 from discord.ext import commands, owoify
 from discord.ext.commands import Cog
@@ -7,18 +6,15 @@ from discord.utils import get
 from discord import Activity, ActivityType, Embed
 from discord import __version__ as discord_version
 
-# Time Imports
 import datetime
 from datetime import timedelta
 import time
 from time import sleep as bedtime
 
 
-# Platform Imports
 import platform
 
 
-# Others
 import random
 import asyncio
 import os

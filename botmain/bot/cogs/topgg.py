@@ -13,7 +13,7 @@ class TopGG(commands.Cog):
 
     async def on_guild_post(self):
         print("Server count posted successfully")
-        c = self.bot.get_channel(800450802174263356)
+        c = self.guild.system_channel
         await c.send(f"Updated Top.gg Server Stats, Current Guild Count {len(self.bot.guilds)}")
 
 def setup(bot):

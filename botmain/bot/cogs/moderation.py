@@ -2,11 +2,9 @@
 import discord
 from discord.ext import commands, tasks
 
-# Time Imports
 from dateutil.relativedelta import relativedelta
 import datetime
 
-# Other Imports
 from copy import deepcopy
 import re
 import asyncio

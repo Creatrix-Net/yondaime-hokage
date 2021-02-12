@@ -1,8 +1,6 @@
-# Discord Imports
 import discord
 from discord.ext import commands
 
-# Other Imports
 import mystbin
 import random
 

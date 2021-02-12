@@ -1,13 +1,10 @@
-# Discord Imports
 import discord
 from discord.ext import commands
 
-# Image Imports
 from asyncdagpi import ImageFeatures
 from PIL import Image, ImageFont, ImageDraw
 from io import FileIO
 
-# Other Imports
 from asyncio import sleep
 import os
 

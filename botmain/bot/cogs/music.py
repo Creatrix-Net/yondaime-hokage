@@ -1,6 +1,3 @@
-# FULL CREDIT TO WAVELINK EXAMPLES, UPDATING THIS SOON
-
-
 import asyncio
 import async_timeout
 import copy
@@ -165,7 +162,7 @@ class Player(wavelink.Player):
             pass
 
 
-class InteractiveController():
+class InteractiveController(menus.Menu):
     """The Players interactive controller menu class."""
 
     def __init__(self, *, embed: discord.Embed, player: Player):

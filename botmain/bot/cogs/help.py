@@ -1,4 +1,3 @@
-# Discord Imports
 import discord
 from discord.ext import commands
 
@@ -7,7 +6,7 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(description='Open support ticket if enabled by the server admins')
     @commands.cooldown(1, 120, commands.BucketType.guild)
     async def support(self, ctx):
         chan = discord.utils.get(ctx.guild.channels, name="support")
@@ -26,7 +25,7 @@ class Help(commands.Cog):
             else:
                 pass
     
-    @commands.command()
+    @commands.command(description='Resolves the existing ticket!')
     @commands.has_permissions(administrator=True)
     async def resolved(self, ctx, member: discord.Member):
         await member.send(f'Hope your issue has been resolved in {ctx.guild.name}, {member.mention}')

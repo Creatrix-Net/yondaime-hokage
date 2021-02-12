@@ -12,13 +12,13 @@ import time
 import random
 import inspect
 import os
-import utils
-
+import utils_dis as utils
 
 class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.start_time = bot.start_time
+        self.bot.github = bot.github
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):
@@ -49,7 +49,7 @@ class Info(commands.Cog):
             return await ctx.send(embed=embed)
 
     @commands.command()
-    async def who(self, ctx):
+    async def who(self, ctx): 
         m = utils.WhoMenu(bot=self.bot)
         await m.start(ctx)
 
@@ -74,7 +74,7 @@ class Info(commands.Cog):
     @commands.command()
     async def source(self, ctx):
         """ Displays source code """
-        source_url = 'https://github.com/Dhruvacube/dhruva-shaw-bot'
+        source_url = self.bot.github
         e = discord.Embed(title="You didn't provide a command (because you cant), so here's the source!",
                           description=f"[Source]({source_url})")
         await ctx.send(embed=e)
@@ -87,18 +87,6 @@ class Info(commands.Cog):
         e = discord.Embed(title=f"Avatar for {user.name}")
         e.set_image(url=user.avatar_url)
         await ctx.send(embed=e)
-
-    # @commands.command()
-    # @commands.guild_only()
-    # async def roles(self, ctx):
-    #  """ Get all roles in current server """
-     #   allroles = ""
-
-       # for num, role in enumerate(sorted(ctx.guild.roles, reverse=True), start=1):
-       #     allroles += f"[{str(num).zfill(2)}] {role.id}\t{role.name}\t[ Users: {len(role.members)} ]\r\n"
-
-       # data = BytesIO(allroles.encode('utf-8'))
-       # await ctx.send(content=f"Roles in **{ctx.guild.name}**", file=discord.File(data, filename=f"Roles"))
 
     @commands.command()
     @commands.guild_only()

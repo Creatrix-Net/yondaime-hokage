@@ -9,4 +9,4 @@ def home(request):
     return redirect(reverse('admin:index'))
 
 def home_view_alive(request):
-    return HttpResponse('<h1>Congratulations You succesfully kept the bot alive</h1>')
+    return HttpResponse('<h1>Congratulations You succesfully kept the bot alive</h1>', status=200)

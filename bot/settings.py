@@ -69,7 +69,7 @@ if os.path.isfile(dotenv_file):
 
 else:
     PRODUCTION_SERVER = True
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = ['*']
     GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = None
     DATABASES = {'default': dj_database_url.config(

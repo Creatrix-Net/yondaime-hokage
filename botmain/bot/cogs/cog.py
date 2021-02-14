@@ -12,7 +12,7 @@ import time
 import random
 import inspect
 import os
-import utils_dis as utils
+from ..utils_dis import *
 
 class Info(commands.Cog):
     def __init__(self, bot):
@@ -50,12 +50,12 @@ class Info(commands.Cog):
 
     @commands.command()
     async def who(self, ctx): 
-        m = utils.WhoMenu(bot=self.bot)
+        m = WhoMenu(bot=self.bot)
         await m.start(ctx)
 
     @commands.command()
     async def vote(self, ctx):
-        m = utils.VotingMenu(bot=self.bot)
+        m = VotingMenu(bot=self.bot)
         await m.start(ctx)
         
 

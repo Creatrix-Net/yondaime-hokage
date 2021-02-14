@@ -12,7 +12,7 @@ from asyncdagpi import Client
 from discord.ext import commands
 from discord.ext.buttons import Paginator
 
-from help import Help
+from bot.help import Help
 
 
 class Page(Paginator):
@@ -27,7 +27,7 @@ intents.reactions = True
 intents.guilds = True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-dotenv_file = os.path.join(BASE_DIR, "bot",".env")
+dotenv_file = os.path.join(BASE_DIR, "botmain",".env")
 def token_get(tokenname):
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
@@ -51,14 +51,14 @@ bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
 bot.topgg = token_get('TOPGG')
 bot.thresholds = (10, 25, 50, 100)
-bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('discord_bot_images')
+bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True) / join('bot','discord_bot_images')
 
 # Events
 @bot.event
 async def on_ready():
-    for filename in os.listdir(Path(__file__).resolve(strict=True).parent / join('cogs')):
+    for filename in os.listdir(Path(__file__).resolve(strict=True).parent / join('bot','cogs')):
         if filename.endswith('.py'):
-            bot.load_extension(f'cogs.{filename[:-3]}')
+            bot.load_extension(f'bot.cogs.{filename[:-3]}')
     await bot.change_presence(activity=discord.Streaming(name="Naruto", url=token_get("WEBSITE")))
     print('My Body is ready!')
 

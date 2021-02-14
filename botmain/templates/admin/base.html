@@ -1,0 +1,5 @@
+{% extends "admin/base.html" %}{% load static %} {% block extrahead %}
+<!-- ==Adding the favicons== -->
+<link rel="shortcut icon" href="{% static 'logo.png' %}" />
+<!-- ==Ends== -->
+{{ block.super }} {% endblock %}

@@ -1,2 +1,2 @@
-worker: python botmain/bot/discordbot.py
-web: gunicorn botmain/wsgi.py
+worker: python botmain/discordbot.py
+web: gunicorn bot.wsgi.py

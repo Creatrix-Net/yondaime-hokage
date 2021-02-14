@@ -96,7 +96,7 @@ class Server_Setup(commands.Cog):
                         and not user.bot,
                         timeout=60,)
                     if str(_.emoji) in right:
-                        sup_roles =await ctx.guild.create_role(name="Support_Required")
+                        sup_roles = await ctx.guild.create_role(name="Support_Required")
                         overwrite_dict.update({discord.utils.get(ctx.guild.roles,name="Support Required"): discord.PermissionOverwrite(read_messages=False)})
                         sup = await ctx.guild.create_text_channel("Support", overwrites=overwrite_dict,category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
                         await botask.send(f'{sup.mention} channel **created** as the **support** channel for the {ctx.guild.name} server!')

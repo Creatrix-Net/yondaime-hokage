@@ -18,13 +18,9 @@ class AnimeImageAdmin(admin.ModelAdmin):
     search_fields = list_display = ('anime_category', 'id','image')
     readonly_fields  = ('view_picture',)
     list_per_page = 100
-    countmodels = AnimeImage.objects.count()
+   
+    list_filter = (('anime_category', RelatedDropdownFilter),)
     
-    if countmodels > 10:
-        list_filter = (('anime_category', RelatedDropdownFilter),)
-    else:
-        list_filter = ('anime_category',)
-        
     fieldsets = (
         (_('Anime Category'), {'fields': ('anime_category', )}),
         (_('Image'), {'fields': ('image', 'view_picture',)}),

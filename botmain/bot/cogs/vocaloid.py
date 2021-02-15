@@ -77,7 +77,25 @@ class Vocaloid(commands.Cog):
         data = requests.get(url=self.endpoint + 'miki').json()['url']
         await ctx.send(data)
 
+    @commands.command()
+    async def lily(self, ctx):
+        data = requests.get(url=self.endpoint + 'lily').json()['url']
+        await ctx.send(data)
 
+    @commands.command()
+    async def mayu(self, ctx):
+        data = requests.get(url=self.endpoint + 'mayu').json()['url']
+        await ctx.send(data)
+
+    @commands.command()
+    async def aoki(self, ctx):
+        data = requests.get(url=self.endpoint + 'aoki').json()['url']
+        await ctx.send(data)
+
+    @commands.command()
+    async def zola(self, ctx):
+        data = requests.get(url=self.endpoint + 'zola').json()['url']
+        await ctx.send(data)
 
 def setup(bot):
     bot.add_cog(Vocaloid(bot))

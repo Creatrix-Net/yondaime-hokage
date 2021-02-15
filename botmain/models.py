@@ -14,7 +14,7 @@ class AnimeName(models.Model):
 
 class AnimeImage(models.Model):
     anime_category = models.ForeignKey(AnimeName, on_delete=models.CASCADE, verbose_name=_('Anime Category'))
-    image = models.URLField(verbose_name=_('Anime Image Url'))
+    image = models.URLField(verbose_name=_('Anime Image Url'),unique=True)
 
     def __str__(self):
         return self.anime_category.anime_name + " " + str(self.id)

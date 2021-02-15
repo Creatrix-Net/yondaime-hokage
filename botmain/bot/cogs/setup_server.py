@@ -20,9 +20,9 @@ class Server_Setup(commands.Cog):
         category = discord.utils.get(ctx.guild.categories, name="Admin / Feedback") if discord.utils.get(ctx.guild.categories, name="Admin / Feedback") else False
         if not category:category = await ctx.guild.create_category("Admin / Feedback", overwrites = overwrite_dict, reason="To log the admin and feedback events")
 
-        botask = discord.utils.get(category.channels, name="bot-setup") if discord.utils.get(ctx.guild.channels, name="bot-setup") else False
-        feed_channel = discord.utils.get(category.channels, name="feedback") if discord.utils.get(ctx.guild.channels, name="feedback") else False
-        support_channel = discord.utils.get(category.channels, name="support") if discord.utils.get(ctx.guild.channels, name="support") else False
+        botask = discord.utils.get(category.channels, name="bot-setup") if discord.utils.get(category.channels, name="bot-setup") else False
+        feed_channel = discord.utils.get(category.channels, name="feedback") if discord.utils.get(category.channels, name="feedback") else False
+        support_channel = discord.utils.get(category.channels, name="support") if discord.utils.get(category.channels, name="support") else False
         support_channel_roles = discord.utils.get(ctx.guild.roles, name="Support_Required") if discord.utils.get(ctx.guild.roles, name="Support_Required") else False
         
         if feed_channel and support_channel: 
@@ -97,7 +97,7 @@ class Server_Setup(commands.Cog):
                         timeout=60,)
                     if str(_.emoji) in right:
                         sup_roles = await ctx.guild.create_role(name="Support_Required")
-                        overwrite_dict.update({discord.utils.get(ctx.guild.roles,name="Support Required"): discord.PermissionOverwrite(read_messages=False)})
+                        overwrite_dict.update({discord.utils.get(ctx.guild.roles,name="Support_Required"): discord.PermissionOverwrite(read_messages=False)})
                         sup = await ctx.guild.create_text_channel("Support", overwrites=overwrite_dict,category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
                         await botask.send(f'{sup.mention} channel **created** as the **support** channel for the {ctx.guild.name} server!')
                         await sup.send('@here This channel will be used as the support channel who needs support!')
@@ -107,7 +107,7 @@ class Server_Setup(commands.Cog):
                         await botask.send(f'**Okay** no support system will be there for the **{ctx.guild.name}**') 
                 except asyncio.TimeoutError:
                     sup_roles = await ctx.guild.create_role(name="Support_Required")
-                    overwrite_dict.update({discord.utils.get(ctx.guild.roles,name="Support Required"): discord.PermissionOverwrite(read_messages=False)})
+                    overwrite_dict.update({discord.utils.get(ctx.guild.roles,name="Support_Required"): discord.PermissionOverwrite(read_messages=False)})
                     sup = await ctx.guild.create_text_channel("Support", overwrites=overwrite_dict,category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
                     await botask.edit(embed=discord.Embed(description=f"No reaction from the **Administrators**!! So creating all **Channels and roles as per my requirements!** for the support system for the **{ctx.guild.name}**"))
                     await sup.send('@here This channel will be used as the support channel who needs support!')

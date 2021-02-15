@@ -27,5 +27,15 @@ class Vocaloid(commands.Cog):
         data = requests.get(url=self.endpoint + 'gumi').json()['url']
         await ctx.send(data)
 
+    @commands.command()
+    async def ia(self, ctx):
+        data = requests.get(url=self.endpoint + 'ia').json()['url']
+        await ctx.send(data)
+
+    @commands.command()
+    async def luka(self, ctx):
+        data = requests.get(url=self.endpoint + 'luka').json()['url']
+        await ctx.send(data)
+
 def setup(bot):
     bot.add_cog(Vocaloid(bot))

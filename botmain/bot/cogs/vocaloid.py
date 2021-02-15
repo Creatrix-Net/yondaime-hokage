@@ -11,3 +11,7 @@ class Vocaloid(commands.Cog):
     async def rin(self, ctx):
         data = requests.get(url=self.endpoint + rin).json()['url']
         await ctx.guild.send(data)
+
+
+def setup(bot):
+    bot.add_cog(Vocaloid(bot))

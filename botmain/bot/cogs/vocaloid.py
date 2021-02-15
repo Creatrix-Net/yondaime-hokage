@@ -12,6 +12,20 @@ class Vocaloid(commands.Cog):
         data = requests.get(url=self.endpoint + 'rin').json()['url']
         await ctx.send(data)
 
+    @commands.command()
+    async def rin(self, ctx):
+        data = requests.get(url=self.endpoint + 'rin').json()['url']
+        await ctx.send(data)
+
+    @commands.command()
+    async def una(self, ctx):
+        data = requests.get(url=self.endpoint + 'una').json()['url']
+        await ctx.send(data)
+
+    @commands.command()
+    async def gumi(self, ctx):
+        data = requests.get(url=self.endpoint + 'gumi').json()['url']
+        await ctx.send(data)
 
 def setup(bot):
     bot.add_cog(Vocaloid(bot))

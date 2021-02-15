@@ -41,7 +41,7 @@ idna==2.10
 image-process==0.0.1
 import-expression==1.1.4
 isort==5.7.0
-lazy-object-proxy==1.4.3
+lazy-object-proxy==1.5.2
 linecache2==1.0.0
 MarkupSafe==1.1.1
 mccabe==0.6.1

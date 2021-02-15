@@ -10,6 +10,7 @@ class Anime(commands.Cog):
         self.bot.start_time = bot.start_time
         self.bot.github = bot.github
     
+    @commands.command()
     async def naruto(self, ctx):
         anime_category = AnimeName.objects.filter(anime_name__in=['Naruto','Shippuden', 'Naruto Shippuden', 'Boruto']).all()
         await ctx.send(choice(AnimeImage.objects.filter(anime_category=choice(anime_category).iterator())))

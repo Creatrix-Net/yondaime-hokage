@@ -37,5 +37,20 @@ class Vocaloid(commands.Cog):
         data = requests.get(url=self.endpoint + 'luka').json()['url']
         await ctx.send(data)
 
+    @commands.command()
+    async def fukase(self, ctx):
+        data = requests.get(url=self.endpoint + 'fukase').json()['url']
+        await ctx.send(data)
+
+    @commands.command()
+    async def miku(self, ctx):
+        data = requests.get(url=self.endpoint + 'miku').json()['url']
+        await ctx.send(data)
+
+    @commands.command(alias=['len'])
+    async def _len(self, ctx):
+        data = requests.get(url=self.endpoint + 'rin').json()['url']
+        await ctx.send(data)
+
 def setup(bot):
     bot.add_cog(Vocaloid(bot))

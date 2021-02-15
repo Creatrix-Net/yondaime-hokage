@@ -97,5 +97,10 @@ class Vocaloid(commands.Cog):
         data = requests.get(url=self.endpoint + 'zola').json()['url']
         await ctx.send(data)
 
+    @commands.command()
+    async def diva(self, ctx):
+        data = requests.get(url=self.endpoint + 'diva').json()['url']
+        await ctx.send(data)
+
 def setup(bot):
     bot.add_cog(Vocaloid(bot))

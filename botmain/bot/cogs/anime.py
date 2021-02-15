@@ -6,7 +6,7 @@ import os
 
   
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bot.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', '....bot.settings')
 django.setup()
 
 class Anime(commands.Cog):

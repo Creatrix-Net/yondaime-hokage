@@ -10,7 +10,7 @@ class Vocaloid(commands.Cog):
     @commands.command()
     async def rin(self, ctx):
         data = requests.get(url=self.endpoint + 'rin').json()['url']
-        await ctx.guild.send(data)
+        await ctx.send(data)
 
 
 def setup(bot):

@@ -51,7 +51,7 @@ bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
 bot.topgg = token_get('TOPGG')
 bot.thresholds = (10, 25, 50, 100)
-bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True) / join('bot','discord_bot_images')
+bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 
 # Events
 @bot.event
@@ -100,7 +100,7 @@ async def on_command_error(ctx, error):
         e4 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e4.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e4)
-    if isinstance(error, commands.CommandInvokeError):
+    elif isinstance(error, commands.CommandInvokeError):
         haha = ctx.author.avatar_url
         e7 = discord.Embed(title="Oh no green you fucked up", description=f"`{error}`")
         e7.add_field(name="Command Caused By?", value=f"{ctx.command}")

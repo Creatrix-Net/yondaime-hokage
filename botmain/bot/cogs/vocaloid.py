@@ -47,10 +47,32 @@ class Vocaloid(commands.Cog):
         data = requests.get(url=self.endpoint + 'miku').json()['url']
         await ctx.send(data)
 
-    @commands.command(alias=['len'])
+    @commands.command(aliases=['len'])
     async def _len(self, ctx):
-        data = requests.get(url=self.endpoint + 'rin').json()['url']
+        data = requests.get(url=self.endpoint + 'len').json()['url']
         await ctx.send(data)
+
+    @commands.command()
+    async def kaito(self, ctx):
+        data = requests.get(url=self.endpoint + 'kaito').json()['url']
+        await ctx.send(data)
+
+    @commands.command()
+    async def teto(self, ctx):
+        data = requests.get(url=self.endpoint + 'teto').json()['url']
+        await ctx.send(data)
+
+    @commands.command()
+    async def meiko(self, ctx):
+        data = requests.get(url=self.endpoint + 'meiko').json()['url']
+        await ctx.send(data)
+
+    @commands.command()
+    async def yukari(self, ctx):
+        data = requests.get(url=self.endpoint + 'yukari').json()['url']
+        await ctx.send(data)
+
+
 
 def setup(bot):
     bot.add_cog(Vocaloid(bot))

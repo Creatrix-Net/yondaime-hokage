@@ -72,6 +72,11 @@ class Vocaloid(commands.Cog):
         data = requests.get(url=self.endpoint + 'yukari').json()['url']
         await ctx.send(data)
 
+    @commands.command()
+    async def miki(self, ctx):
+        data = requests.get(url=self.endpoint + 'miki').json()['url']
+        await ctx.send(data)
+
 
 
 def setup(bot):

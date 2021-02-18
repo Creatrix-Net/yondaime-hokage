@@ -1,4 +1,4 @@
-import discord
+mport discord
 from discord.ext import commands
 import requests 
 

@@ -9,21 +9,29 @@ class Help(commands.Cog):
     @commands.command(description='Open support ticket if enabled by the server admins')
     @commands.cooldown(1, 120, commands.BucketType.guild)
     async def support(self, ctx):
-        chan = discord.utils.get(ctx.guild.channels, name="support")
-        if ctx.message.author == ctx.guild.owner:
-            await ctx.send(f'{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:')
-        elif discord.utils.get(ctx.guild.roles, name="Support_Required") in ctx.message.author.roles:
-            await ctx.send(f'{ctx.author.mention} you already applied for the support , please check the {chan.mention} channel.')
+        category = discord.utils.get(ctx.guild.categories, name="Admin / Feedback") if discord.utils.get(ctx.guild.categories, name="Admin / Feedback") else False
+        if category:
+            chan = discord.utils.get(category.channels, name="support") if discord.utils.get(category.channels, name="support") else False
         else:
-            channel = ctx.channel
-            await ctx.message.author.add_roles(discord.utils.get(ctx.guild.roles, name="Support_Required"))
-            if channel.guild is ctx.guild:
-                per = ctx.author.mention
-                await chan.send(f"{per} in {channel.mention} needs support! @here")
-                await ctx.send(f"**Help Desk** has been has been notifed!")
-                await ctx.message.author.send(f'Your need for the support in {ctx.guild.name} has been registered')
+            chan = False
+        
+        if category and chan:
+            if ctx.message.author == ctx.guild.owner:
+                await ctx.send(f'{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:')
+            elif discord.utils.get(ctx.guild.roles, name="Support_Required") in ctx.message.author.roles:
+                await ctx.send(f'{ctx.author.mention} you already applied for the support , please check the {chan.mention} channel.')
             else:
-                pass
+                channel = ctx.channel
+                await ctx.message.author.add_roles(discord.utils.get(ctx.guild.roles, name="Support_Required"))
+                if channel.guild is ctx.guild:
+                    per = ctx.author.mention
+                    await chan.send(f"{per} in {channel.mention} needs support! @here")
+                    await ctx.send(f"**Help Desk** has been has been notifed!")
+                    await ctx.message.author.send(f'Your need for the support in {ctx.guild.name} has been registered')
+                else:
+                    pass
+        else:
+            await ctx.send(f'**Sorry to say** {ctx.author.mention}, but **no support channel** has been setup for the {ctx.guild.name} by the admin! **So, I can\'t help you**')
     
     @commands.command(description='Resolves the existing ticket!')
     @commands.has_permissions(administrator=True)

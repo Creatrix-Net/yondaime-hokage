@@ -32,25 +32,6 @@ class Random(commands.Cog):
         lol = await owoify.owoify(f"{text}")
         await ctx.send(lol)
         
-    @command()
-    @commands.cooldown(1, 120, commands.BucketType.guild)
-    async def feedback(self, ctx, *, feed):
-        channel = self.bot.get_channel(ctx.guild.system_channel.id)
-        e = discord.Embed(title="Sent Feedback!",
-                          description=f"Your feedback '{feed}' has been sent!")
-        await ctx.send(embed=e)
-        e2 = discord.Embed(
-            title=f"Oh no, is it bad or good? ({ctx.author} has sent feedback)", description=f"{feed}")
-        await channel.send(embed=e2)
-
-    @feedback.error
-    async def feedback_handler(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            l = self.bot.get_command("feedback")
-            left = l.get_cooldown_retry_after(ctx)
-            e = discord.Embed(
-                title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
-            await ctx.send(embed=e)
             
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)

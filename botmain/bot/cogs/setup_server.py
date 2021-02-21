@@ -22,6 +22,9 @@ class Server_Setup(commands.Cog):
 
         botask = discord.utils.get(category.channels, name="bot-setup") if discord.utils.get(category.channels, name="bot-setup") else False
         feed_channel = discord.utils.get(category.channels, name="feedback") if discord.utils.get(category.channels, name="feedback") else False
+
+        bingo = discord.utils.get(category.channels, name="BingoBook") if discord.utils.get(category.channels, name="BingoBook") else False
+
         support_channel = discord.utils.get(category.channels, name="support") if discord.utils.get(category.channels, name="support") else False
         support_channel_roles = discord.utils.get(ctx.guild.roles, name="Support_Required") if discord.utils.get(ctx.guild.roles, name="Support_Required") else False
         

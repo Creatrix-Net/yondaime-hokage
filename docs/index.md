@@ -11,7 +11,7 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 
 ---
 
-#
+
 ### Fun
 - 8ball 
 - high5 
@@ -20,15 +20,21 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - poke 
 - slap 
 - spank
+
 #
+
 ### Games
 - chatbot 
 - reaction
+
 #
+
 ### Help
 - resolved 
 - support
+
 #
+
 ### Image Manipulation
 - bi
 - captcha 
@@ -43,7 +49,9 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - wanted 
 - wi 
 - wni
+
 #
+
 ### Info
 - avatar 
 - joinedat 
@@ -55,17 +63,23 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - user 
 - vote 
 - who
+
 #
+
 ### Invites
 - invitestats
+
 #
+
 ###### Moderation
 - ban 
 - kick 
 - purge
 - setdelay 
 - unban
+
 #
+
 ### Music
 - connect 
 - disconnect 
@@ -80,15 +94,21 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - stop 
 - swap_dj
 - volume
+
 #
+
 ### MystbinApi
 - getmystbin
 - mystbin
+
 #
+
 ### OwnerOnly
 - eval
 - dev
+
 #
+
 ### Random
 - ar
 - braille

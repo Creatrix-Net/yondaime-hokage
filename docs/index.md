@@ -21,19 +21,19 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - slap 
 - spank
 
-#
+***
 
 ### Games
 - chatbot 
 - reaction
 
-#
+***
 
 ### Help
 - resolved 
 - support
 
-#
+***
 
 ### Image Manipulation
 - bi
@@ -50,7 +50,7 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - wi 
 - wni
 
-#
+***
 
 ### Info
 - avatar 
@@ -64,12 +64,12 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - vote 
 - who
 
-#
+***
 
 ### Invites
 - invitestats
 
-#
+***
 
 ###### Moderation
 - ban 
@@ -78,7 +78,7 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - setdelay 
 - unban
 
-#
+***
 
 ### Music
 - connect 
@@ -95,19 +95,19 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - swap_dj
 - volume
 
-#
+***
 
 ### MystbinApi
 - getmystbin
 - mystbin
 
-#
+***
 
 ### OwnerOnly
 - eval
 - dev
 
-#
+***
 
 ### Random
 - ar
@@ -123,10 +123,14 @@ Thank's for using **@Minato Namikaze**, the list below shows all commands in the
 - sn 
 - stats 
 - tts
-#
+
+***
+
 ### Server Setup
 - setup
-#
+
+***
+
 ### Snipe
 - snipe
 

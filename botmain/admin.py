@@ -30,9 +30,7 @@ class DiscordBotListAdmin(admin.ModelAdmin):
     search_fields = list_display = ('website',)
     readonly_fields  = ('view_website','view_widget')
     list_per_page = 10
-   
-    list_filter = ('website',)
-    
+       
     fieldsets = (
         (_('Information'), {'fields': ('website', 'widget')}),
         (_('View Website'), {'fields': ('view_website', )}),
@@ -43,9 +41,7 @@ class ServerListAdmin(admin.ModelAdmin):
     search_fields = list_display = ('website',)
     readonly_fields  = ('view',)
     list_per_page = 10
-   
-    list_filter = ('website',)
-    
+       
     fieldsets = (
         (_('Information'), {'fields': ('website', )}),
         (_('View Website'), {'fields': ('view',)}),

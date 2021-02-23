@@ -29,3 +29,41 @@ class AnimeImage(models.Model):
 
     class Meta:
         verbose_name_plural = "Anime Image"
+
+
+class DiscordBotList(models.Model):
+    website = models.URLField(_('Website Url Field'))
+    widget = models.TextField(_('Website Bot Widget Code'),null=True,blank=True,help_text=_('Optional'))
+
+    def __str__(self):
+        return self.website
+    
+    def view_website(self):
+        if self.website:
+            return mark_safe(f'<a href="{self.website}" onclick="return showAddAnotherPopup(this)" class="submit-row"></a>')
+        else:
+            return "Please fill the values"
+    
+    def view_widget(self):
+        if self.website:
+            return mark_safe('<div>'+self.widget+'</div>')
+        else:
+            return "No widget information!"
+    
+    class Meta:
+        verbose_name_plural = "Discord Bot List Websites"
+
+
+class ServerList(models.Model):
+    website = models.URLField(_('Website Url Field'))
+
+    def __str__(self):
+        return self.website
+    class Meta:
+        verbose_name_plural = "Server List Websites"
+    
+    def view(self):
+        if self.website:
+            return mark_safe(f'<a href="{self.website}" onclick="return showAddAnotherPopup(this)" class="submit-row"></a>')
+        else:
+            return "Please Fill the values"

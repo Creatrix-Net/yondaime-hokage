@@ -26,6 +26,34 @@ class AnimeImageAdmin(admin.ModelAdmin):
         (_('Image'), {'fields': ('image', 'view_picture',)}),
     )
 
+class DiscordBotListAdmin(admin.ModelAdmin):
+    search_fields = list_display = ('website',)
+    readonly_fields  = ('view_website','view_widget')
+    list_per_page = 10
+   
+    list_filter = ('website',)
+    
+    fieldsets = (
+        (_('Information'), {'fields': ('website', 'widget')}),
+        (_('View Website'), {'fields': ('view_website', )}),
+        (_('View Widget'), {'fields': ('view_widget', )}),
+    )
+
+class ServerListAdmin(admin.ModelAdmin):
+    search_fields = list_display = ('website',)
+    readonly_fields  = ('view',)
+    list_per_page = 10
+   
+    list_filter = ('website',)
+    
+    fieldsets = (
+        (_('Information'), {'fields': ('website', )}),
+        (_('View Website'), {'fields': ('view',)}),
+    )
+
+admin.site.register(DiscordBotList, DiscordBotListAdmin)
+admin.site.register(ServerList, ServerListAdmin)
+
 admin.site.register(AnimeName, AnimeNameAdmin)
 admin.site.register(AnimeImage, AnimeImageAdmin)
 admin.site.unregister(Group)

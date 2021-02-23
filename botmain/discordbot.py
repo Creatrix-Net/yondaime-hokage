@@ -73,14 +73,6 @@ async def on_guild_join(guild):
     await guild.system_channel.send(f'Hey @here, **{guild.owner}** or **anyone with administrator access** please type **)setup** in anyof the channels to setup the server!')
 
 
-@bot.listen()
-async def on_message(message):
-    if message.author.bot or message.author == bot.user:
-        return
-    if "fuck" in message.content.lower():
-        await message.channel.send(f'Fuck off!!! <@{message.author.id}>')
-        await bot.process_commands(message)
-
 @bot.event
 async def on_command_error(ctx, error):
     guild = ctx.guild

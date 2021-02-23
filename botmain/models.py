@@ -40,7 +40,7 @@ class DiscordBotList(models.Model):
     
     def view_website(self):
         if self.website:
-            return mark_safe(f'<a href="{self.website}" onclick="return showAddAnotherPopup(this)" class="submit-row"></a>')
+            return mark_safe(f'<a href="{self.website}" onclick="return showAddAnotherPopup(this)" class="submit-row">View Website</a>')
         else:
             return "Please fill the values"
     
@@ -64,6 +64,6 @@ class ServerList(models.Model):
     
     def view(self):
         if self.website:
-            return mark_safe(f'<a href="{self.website}" onclick="return showAddAnotherPopup(this)" class="submit-row"></a>')
+            return mark_safe(f'<a href="{self.website}" onclick="return showAddAnotherPopup(this)" class="submit-row">View Website</a>')
         else:
             return "Please Fill the values"

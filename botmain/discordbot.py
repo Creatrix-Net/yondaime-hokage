@@ -88,6 +88,8 @@ async def on_guild_join(guild):
         e34.set_thumbnail(url=guild.icon_url)
     if ctx.guild.banner:
         e34.set_image(url=guild.banner_url_as(format="png"))
+    c = bot.get_channel(813954921782706227)
+    await c.send(embed=e34)
 
 
 @bot.event

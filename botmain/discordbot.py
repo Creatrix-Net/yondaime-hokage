@@ -69,8 +69,6 @@ async def on_ready():
 #on join send message event
 @bot.event
 async def on_guild_join(guild):
-    hokage_roles = discord.utils.get(guild.roles, name="Hokage") if discord.utils.get(guild.roles, name="Hokage") else False
-    hokage = hokage_roles if hokage_roles else await guild.create_role(name="Hokage",mentionable=True,hoist=True,colour=discord.Colour.dark_orange())
     img=random.choice(minato_gif)
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
     await guild.system_channel.send(file=file)

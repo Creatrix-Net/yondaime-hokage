@@ -83,7 +83,7 @@ async def on_guild_join(guild):
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
     await guild.system_channel.send(file=file)
 
-    e34= discord.Embed(title=f'{guild.name}', color='green')
+    e34= discord.Embed(title=f'{guild.name}', color='green',description='Added')
     if ctx.guild.icon:
         e34.set_thumbnail(url=guild.icon_url)
     if ctx.guild.banner:
@@ -91,6 +91,15 @@ async def on_guild_join(guild):
     c = bot.get_channel(813954921782706227)
     await c.send(embed=e34)
 
+@bot.event
+async def on_guild_remove(guild):
+    e34= discord.Embed(title=f'{guild.name}', color='red',description='Left')
+    if ctx.guild.icon:
+        e34.set_thumbnail(url=guild.icon_url)
+    if ctx.guild.banner:
+        e34.set_image(url=guild.banner_url_as(format="png"))
+    c = bot.get_channel(813954921782706227)
+    await c.send(embed=e34)
 
 @bot.event
 async def on_command_error(ctx, error):

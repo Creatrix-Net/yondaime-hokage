@@ -54,8 +54,10 @@ class OwnerOnly(commands.Cog):
         self.appleapiisbad = True
   
     @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def serverdump(self, ctx):
+        '''Dumps server name to thr developer'''
         c = bot.get_channel(813954921782706227)
         e = discord.Embed(title=f'In **{ctz.guild.name}**',description=f'Bump by {ctx.author.mention}' , color= 0x2ecc71)
         

@@ -83,7 +83,7 @@ async def on_guild_join(guild):
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
     await guild.system_channel.send(file=file)
 
-    e34= discord.Embed(title=f'{guild.name}', color='green',description='Added')
+    e34= discord.Embed(title=f'{guild.name}', color= 0x2ecc71,description='Added')
     if ctx.guild.icon:
         e34.set_thumbnail(url=guild.icon_url)
     if ctx.guild.banner:

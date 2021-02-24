@@ -73,7 +73,7 @@ async def on_guild_join(guild):
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
     await guild.system_channel.send(file=file)
 
-    await guild.system_channel.send(f'Hello ** {guild.name}**! I am **{bot.user.mention}**!!! \n> **Help cmd** :\n> ~ **) help**\n> or \n> ~ ** {bot.user.mention} help**')
+    await guild.system_channel.send(f'Hello ** {guild.name}**! I am **{bot.user.mention}**!!! \n> **Help cmd** :\n> ~ `**) help**`\n> or \n> ~ `**{bot.user.mention} help**`')
     await guild.system_channel.send(f'----------\n----------\n**Myself {bot.user.mention} aka Yondaime Hokage**----------\n----------\n')
     await guild.system_channel.send(f'Hey @here, **{guild.owner}** or **anyone with administrator access** please type **)setup** in any of the channels in the server to do the setup!')
     

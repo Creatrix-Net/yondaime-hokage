@@ -84,9 +84,9 @@ async def on_guild_join(guild):
     await guild.system_channel.send(file=file)
 
     e34= discord.Embed(title=f'{guild.name}', color= 0x2ecc71,description='Added')
-    if ctx.guild.icon:
+    if guild.icon:
         e34.set_thumbnail(url=guild.icon_url)
-    if ctx.guild.banner:
+    if guild.banner:
         e34.set_image(url=guild.banner_url_as(format="png"))
     c = bot.get_channel(813954921782706227)
     await c.send(embed=e34)
@@ -94,9 +94,9 @@ async def on_guild_join(guild):
 @bot.event
 async def on_guild_remove(guild):
     e34= discord.Embed(title=f'{guild.name}', color= 0xe74c3c,description='Left')
-    if ctx.guild.icon:
+    if guild.icon:
         e34.set_thumbnail(url=guild.icon_url)
-    if ctx.guild.banner:
+    if guild.banner:
         e34.set_image(url=guild.banner_url_as(format="png"))
     c = bot.get_channel(813954921782706227)
     await c.send(embed=e34)

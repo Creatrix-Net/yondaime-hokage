@@ -52,9 +52,13 @@ class OwnerOnly(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.appleapiisbad = True
-
   
-
+    @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
+    @commands.has_permissions(administrator=True)
+    async def serverdump(self, ctx):
+        c = bot.get_channel(813954921782706227)
+        e = discord.Embed(title=f'In **{ctz.guild.name}**',description=f'Bump by {ctx.author.mention}' , color= 0x2ecc71)
+        
     def owners(ctx):
         return ctx.author.id == ctx.guild.owner_id
 

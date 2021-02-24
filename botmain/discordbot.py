@@ -83,6 +83,12 @@ async def on_guild_join(guild):
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
     await guild.system_channel.send(file=file)
 
+    e34= discord.Embed(title=f'{guild.name}', color='green')
+    if ctx.guild.icon:
+        e34.set_thumbnail(url=guild.icon_url)
+    if ctx.guild.banner:
+        e34.set_image(url=guild.banner_url_as(format="png"))
+
 
 @bot.event
 async def on_command_error(ctx, error):

@@ -12,7 +12,7 @@ class TopGG(commands.Cog):
         self.dblpy = dbl.DBLClient(self.bot, self.bot.topken, autopost=True) 
 
     async def on_guild_post(self):
-        c = self.bot.get_channel(811539621275631626)
+        c = self.bot.get_channel(813954921782706227)
         await c.send(f"Yo! Updated Top.gg Server Stats, Current Guild Count {len(self.bot.guilds)}")
     
     async def on_dbl_vote(self,data):

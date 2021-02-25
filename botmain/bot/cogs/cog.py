@@ -21,7 +21,7 @@ class Info(commands.Cog):
         self.bot.github = bot.github
 
     @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
-    @commands.cooldown(1, 120, commands.BucketType.guild)
+    @commands.cooldown(1, 1080, commands.BucketType.guild)
     @commands.has_permissions(administrator=True)
     async def serverdump(self, ctx):
         '''Dumps server name to thr developer'''

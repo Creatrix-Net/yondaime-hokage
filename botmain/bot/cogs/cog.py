@@ -21,7 +21,7 @@ class Info(commands.Cog):
         self.bot.github = bot.github
 
     @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
-    @commands.guild_only()
+    @commands.cooldown(1, 120, commands.BucketType.guild)
     @commands.has_permissions(administrator=True)
     async def serverdump(self, ctx):
         '''Dumps server name to thr developer'''
@@ -50,7 +50,7 @@ class Info(commands.Cog):
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):
         if user is None:
-            user = ctx.author
+            user = ctx.author 
         for activity in user.activities:
             if isinstance(activity, Spotify):
                 w = discord.Embed(title="Oooo, what a party!", description=f"{user.name} is listening to Spotify, let's see what!")

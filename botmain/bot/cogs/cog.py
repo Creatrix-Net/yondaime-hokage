@@ -36,16 +36,16 @@ class Info(commands.Cog):
                     if guild.banner:
                         e.set_image(url=guild.banner_url_as(format="png"))
                     await c.send(embed=e)
-            await b.edit('**Updated ! Please check the <#813954921782706227>**')
+            await ctx.send('**Updated ! Please check the <#813954921782706227>**')
         else:
-            a = await ctx.send('**Sending the info to my developer')
+            a = await ctx.send('**Sending the info to my developer**')
             e = discord.Embed(title=f'In **{ctx.guild.name}**',description=f'Bumped by {ctx.message.author}' , color= 0x2ecc71)
             if ctx.guild.icon:
                 e.set_thumbnail(url=ctx.guild.icon_url)
             if ctx.guild.banner:
                 e.set_image(url=ctx.guild.banner_url_as(format="png"))
             await c.send(embed=e)
-            await a.edit(f'Sent the info to developer that ,I am on {ctx.guild.name} 😉')
+            await ctx.send(f'Sent the info to developer that 'I am on {ctx.guild.name}' , {ctx.author.mention} 😉')
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):

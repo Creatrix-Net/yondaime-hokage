@@ -20,6 +20,28 @@ class Info(commands.Cog):
         self.bot.start_time = bot.start_time
         self.bot.github = bot.github
 
+    @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def serverdump(self, ctx):
+        '''Dumps server name to thr developer'''
+        c = bot.get_channel(813954921782706227)
+        if ctx.guild.id == 747480356625711204:
+            for guild in ctx.bot.guilds:
+                if not guild.id == 747480356625711204:
+                    e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color= 0x2ecc71)
+                    if guild.icon:
+                         e.set_thumbnail(url=guild.icon_url)
+                    if guild.banner:
+                         e.set_image(url=guild.banner_url_as(format="png"))
+        else:
+            a = await ctx.send('**Sending the info to my developer')
+            e = discord.Embed(title=f'In **{ctx.guild.name}**',description=f'Bumped by {ctx.message.author}' , color= 0x2ecc71)
+            if ctx.guild.icon:
+                e.set_thumbnail(url=ctx.guild.icon_url)
+            if ctx.guild.banner:
+                e.set_image(url=ctx.guild.banner_url_as(format="png"))
+
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):
         if user is None:

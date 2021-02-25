@@ -21,7 +21,7 @@ class Info(commands.Cog):
         self.bot.github = bot.github
 
     @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
-    @commands.cooldown(1, 120, commands.BucketType.guild)
+    @commands.cooldown(1, 1080, commands.BucketType.guild)
     @commands.has_permissions(administrator=True)
     async def serverdump(self, ctx):
         '''Dumps server name to thr developer'''
@@ -45,7 +45,7 @@ class Info(commands.Cog):
             if ctx.guild.banner:
                 e.set_image(url=ctx.guild.banner_url_as(format="png"))
             await c.send(embed=e)
-            await ctx.send(f'Sent the info to developer that 'I am on {ctx.guild.name}' , {ctx.author.mention} 😉')
+            await ctx.send(f'Sent the info to developer that "I am on {ctx.guild.name}" , {ctx.author.mention} 😉')
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):

@@ -30,7 +30,7 @@ class Info(commands.Cog):
             b = await ctx.send('** Okay updating info ! **')
             for guild in ctx.bot.guilds:
                 if not guild.id == 747480356625711204: e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color= 0x2ecc71)
-                    if guild.icon: e.set_thumbnail(url=guild.icon_url)
+                    if guild.icon:e.set_thumbnail(url=guild.icon_url)
                     if guild.banner:e.set_image(url=guild.banner_url_as(format="png"))
             await b.edit('**Updated ! Please check the <#813954921782706227>**')
         else:

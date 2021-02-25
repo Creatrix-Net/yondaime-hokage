@@ -240,11 +240,6 @@ class OwnerOnly(commands.Cog):
             channel = self.bot.get_channel(int(id))
             await channel.send(f"{message}")
             await ctx.author.send("Sent your message :)")
-def setup(bot):
-    bot.add_cog(OwnerOnly(bot))
-
-       
-        e = discord.Embed(title=f'In **{ctz.guild.name}**',description=f'Bump by {ctx.author.mention}' , color= 0x2ecc71)
         
     def owners(ctx):
         return ctx.author.id == ctx.guild.owner_id
@@ -435,5 +430,5 @@ def setup(bot):
             await ctx.author.send("Sent your message :)")
 
 
-def setup(bot):
+def setup(bot): 
     bot.add_cog(OwnerOnly(bot))

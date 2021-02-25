@@ -18,17 +18,22 @@ class Server_Setup(commands.Cog):
         overwrite_dict.update({ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),ctx.guild.me: discord.PermissionOverwrite(read_messages=True)})
         
         category = discord.utils.get(ctx.guild.categories, name="Admin / Feedback") if discord.utils.get(ctx.guild.categories, name="Admin / Feedback") else False
+        bingo = discord.utils.get(ctx.guild.categories, name="Bingo Book") if discord.utils.get(ctx.guild.categories, name="Bingo Book") else False
         if not category:category = await ctx.guild.create_category("Admin / Feedback", overwrites = overwrite_dict, reason="To log the admin and feedback events")
 
+        #Setup / Feedback
         botask = discord.utils.get(category.channels, name="bot-setup") if discord.utils.get(category.channels, name="bot-setup") else False
         feed_channel = discord.utils.get(category.channels, name="feedback") if discord.utils.get(category.channels, name="feedback") else False
 
-        bingo = discord.utils.get(category.channels, name="BingoBook") if discord.utils.get(category.channels, name="BingoBook") else False
+        #Bingo Book
+        ban = discord.utils.get(bingo.channels, name="ban") if discord.utils.get(bingo.channels, name="ban") else False
+        unban = discord.utils.get(bingo.channels, name="unban") if discord.utils.get(bingo.channels, name="unban") else False
 
+        #Support
         support_channel = discord.utils.get(category.channels, name="support") if discord.utils.get(category.channels, name="support") else False
         support_channel_roles = discord.utils.get(ctx.guild.roles, name="Support_Required") if discord.utils.get(ctx.guild.roles, name="Support_Required") else False
         
-        if feed_channel and support_channel: 
+        if feed_channel and support_channel and ban and unban: 
             await ctx.send('You have already configured your server mate!')
             await feed_channel.send('@here This channel will be used to log the feedbacks given by members.')
 
@@ -124,6 +129,68 @@ class Server_Setup(commands.Cog):
                 await support_channel.send(f'Once the member uses the support command they will be given a role of {sup_roles.mention} to access this channel')
                 await support_channel.send(f'Then you can use resolved command if the issue has been resolved!')
             
+            #Ban
+            if not ban:
+                embed = discord.Embed(title=f"@here Want to log bans for the **{ctx.guild.name}** ?")
+                embed.add_field(name="Yes", value=":white_check_mark:")
+                embed.add_field(name="No", value=":x:")
+                ban1 = await botask.send(embed=embed)
+                await ban1.add_reaction('\u2705')
+                await ban1.add_reaction('\u274C')
+                try:
+                    _, user = await ctx.bot.wait_for(
+                        "reaction_add",
+                        check=lambda _reaction, user: _reaction.message.guild == ctx.guild
+                        and _reaction.message.channel == botask
+                        and _reaction.message == ban1 and str(_reaction.emoji) in reactions and user != ctx.bot.user
+                        and not user.bot,
+                        timeout=60,)
+                    if str(_.emoji) in right:
+                        if not bingo:bingo = await ctx.guild.create_category("Bingo Book", overwrites = overwrite_dict, reason="To log the the bans and unban events")
+                        
+                        ban = await ctx.guild.create_text_channel("ban", category=discord.utils.get(ctx.guild.categories, name="Bingo Book"))
+                        await botask.send(f'{feed.mention} channel **created** for logging the **bans** for the {ctx.guild.name}')
+                        await ban.send('@here This channel will be used to log the server ban.')
+                    else:
+                        await botask.send(f'**Okay** no logging system for the **{ctx.guild.name}** bans will be there') 
+                except asyncio.TimeoutError:
+                    if not bingo:bingo = await ctx.guild.create_category("Bingo Book", overwrites = overwrite_dict, reason="To log the the bans and unban events")
+                        
+                    ban = await ctx.guild.create_text_channel("ban", category=discord.utils.get(ctx.guild.categories, name="Bingo Book"))
+                    await botask.send(f'{feed.mention} channel **created** for logging the **bans** for the {ctx.guild.name}')
+                    await ban.send('@here This channel will be used to log the server ban.')
+
+            #UnBan
+            if not unban:
+                embed = discord.Embed(title=f"@here Want to log unbans for the **{ctx.guild.name}** ?")
+                embed.add_field(name="Yes", value=":white_check_mark:")
+                embed.add_field(name="No", value=":x:")
+                unban1 = await botask.send(embed=embed)
+                await unban1.add_reaction('\u2705')
+                await unban1.add_reaction('\u274C')
+                try:
+                    _, user = await ctx.bot.wait_for(
+                        "reaction_add",
+                        check=lambda _reaction, user: _reaction.message.guild == ctx.guild
+                        and _reaction.message.channel == botask
+                        and _reaction.message == unban1 and str(_reaction.emoji) in reactions and user != ctx.bot.user
+                        and not user.bot,
+                        timeout=60,)
+                    if str(_.emoji) in right:
+                        if not bingo:bingo = await ctx.guild.create_category("Bingo Book", overwrites = overwrite_dict, reason="To log the the bans and unban events")
+                        
+                        unban = await ctx.guild.create_text_channel("unban", category=discord.utils.get(ctx.guild.categories, name="Bingo Book"))
+                        await botask.send(f'{feed.mention} channel **created** for logging the **unbans** for the {ctx.guild.name}')
+                        await ban.send('@here This channel will be used to log the server unban.')
+                    else:
+                        await botask.send(f'**Okay** no logging system for the **{ctx.guild.name}** unbans will be there')
+                except asyncio.TimeoutError:
+                    if not bingo:bingo = await ctx.guild.create_category("Bingo Book", overwrites = overwrite_dict, reason="To log the the bans and unban events")
+                        
+                    unban = await ctx.guild.create_text_channel("unban", category=discord.utils.get(ctx.guild.categories, name="Bingo Book"))
+                    await botask.send(f'{feed.mention} channel **created** for logging the **unbans** for the {ctx.guild.name}')
+                    await ban.send('@here This channel will be used to log the server unban.')
+
             #Setup Finish
             import time
             await botask.send('Deleting this setup channel in')

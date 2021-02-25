@@ -1,0 +1,35 @@
+{% extends "layout.html" %}{% load static %}{% block body %}
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Announcements</h1>
+    <p class="lead">Send announcement messages to your announcement channels.</p>
+</div>
+
+<div class="mb-3">
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <form method="post" action="{% url 'Send' %}">{% csrf_token %}
+        <div class="mb-3 form-floating">
+            <select name="weebhook" class="form-control form-select mb-3" id="floatingSelect">
+                {% for i in weebhook %}
+                <option value="{{i.name}}">{{i.name}}</option>
+                {% endfor %}
+            </select>
+            <label for="floatingSelect">Select Webhook Channel</label>
+        </div>
+        <div class="form-floating">
+            <textarea name="announcement" class="form-control" placeholder="You can use discord styling" id="AnnouncementMessage" style="height: 100px"></textarea>
+            <label for="AnnouncementMessage">Announcement Message</label>
+            <button type="submit" class="btn btn-outline-primary mt-2">Announce Now</button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

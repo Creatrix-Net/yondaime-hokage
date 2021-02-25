@@ -67,3 +67,18 @@ class ServerList(models.Model):
             return mark_safe(f'<a href="{self.website}" onclick="return showAddAnotherPopup(this)" class="submit-row">View Website</a>')
         else:
             return "Please Fill the values"
+
+class Webhooks(models.Model):
+    name = models.CharField(max_length=400, unique=True)
+    weebhook_id = models.TextField(unique=True)
+    webhook_token = models.TextField(unique=True)
+
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        self.name = '#'+self.name
+        return super(Webhooks, self).save(*args, **kwargs)
+    
+    class Meta:
+        verbose_name_plural = "Webhooks"

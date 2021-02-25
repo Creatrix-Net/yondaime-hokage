@@ -47,8 +47,22 @@ class ServerListAdmin(admin.ModelAdmin):
         (_('View Website'), {'fields': ('view',)}),
     )
 
+
+class WeebhookAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = list_display + ('weebhook_id','webhook_token')
+    list_per_page = 10
+       
+    fieldsets = (
+        (_('Webhook Name'), {'fields': ('name', )}),
+        (_('Webhook Credentials'), {'fields': ('weebhook_id','webhook_token')}),
+    )
+
+
 admin.site.register(DiscordBotList, DiscordBotListAdmin)
 admin.site.register(ServerList, ServerListAdmin)
+
+admin.site.register(Webhooks, WeebhookAdmin)
 
 admin.site.register(AnimeName, AnimeNameAdmin)
 admin.site.register(AnimeImage, AnimeImageAdmin)

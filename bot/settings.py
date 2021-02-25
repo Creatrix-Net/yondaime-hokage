@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import dj_database_url
 import dotenv
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,6 +16,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 INSTALLED_APPS = [
     'botmain.apps.BotmainConfig',
+    'discord_auth_data.apps.DiscordAuthDataConfig',
+    'account.apps.AccountConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,7 +61,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'bot.wsgi.application'
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
-    SECRET_KEY = 'dmroa9$j*+tu^%begx5sie)s76)=*uru53=rix3e@+_or*f9u)'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     dotenv.load_dotenv(dotenv_file)
     PRODUCTION_SERVER = False
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
@@ -123,6 +126,18 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
+
+#Configuration for the discord
+DISCORD_CLIENT_ID = os.getenv('DISCORD_CLIENT_ID')
+DISCORD_CLIENT_SECRET = os.getenv('DISCORD_CLIENT_SECRET')
+DISCORD_BASE_URI = 'https://discord.com/api/v8'
+BOT_ID = os.getenv('BOT_ID')
+
+#Overiding a message tag
+MESSAGE_TAGS = {
+    messages.ERROR : 'danger'
+}
+
 if PRODUCTION_SERVER:
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
@@ -133,3 +148,6 @@ if PRODUCTION_SERVER:
 
 ID = os.environ.get('DISCORD_CLIENT_ID')
 SECRECT = os.environ.get('DISCORD_CLIENT_SECRET')
+
+DOCS=os.environ.get('DOCS')
+WEBSITE=os.environ.get('WEBSITE')

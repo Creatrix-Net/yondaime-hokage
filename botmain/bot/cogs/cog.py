@@ -25,13 +25,17 @@ class Info(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def serverdump(self, ctx):
         '''Dumps server name to thr developer'''
-        c = bot.get_channel(813954921782706227)
+        c = self.bot.get_channel(813954921782706227)
         if ctx.guild.id == 747480356625711204:
             b = await ctx.send('** Okay updating info ! **')
             for guild in ctx.bot.guilds:
-                if not guild.id == 747480356625711204: e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color= 0x2ecc71)
-                    if guild.icon:e.set_thumbnail(url=guild.icon_url)
-                    if guild.banner:e.set_image(url=guild.banner_url_as(format="png"))
+                if not guild.id == 747480356625711204: 
+                    e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color= 0x2ecc71)
+                    if guild.icon:
+                        e.set_thumbnail(url=guild.icon_url)
+                    if guild.banner:
+                        e.set_image(url=guild.banner_url_as(format="png"))
+                    await c.send(embed=e)
             await b.edit('**Updated ! Please check the <#813954921782706227>**')
         else:
             a = await ctx.send('**Sending the info to my developer')
@@ -40,7 +44,8 @@ class Info(commands.Cog):
                 e.set_thumbnail(url=ctx.guild.icon_url)
             if ctx.guild.banner:
                 e.set_image(url=ctx.guild.banner_url_as(format="png"))
-            await a.edit(f'Sent the info to developer that ,I am on {ctx.guild.name.} 😉')
+            await c.send(embed=e)
+            await a.edit(f'Sent the info to developer that ,I am on {ctx.guild.name} 😉')
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):

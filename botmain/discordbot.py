@@ -54,8 +54,8 @@ bot.topgg = token_get('TOPGG')
 bot.thresholds = (10, 25, 50, 100)
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 
-minato_dir = Path(__file__).resolve(strict=True).parent
-minato_gif = onlyfiles = [f for f in os.listdir(join(minato_dir ,'minato'))]
+minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
+minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
 
 # Events
 @bot.event
@@ -69,35 +69,20 @@ async def on_ready():
 #on join send message event
 @bot.event
 async def on_guild_join(guild):
+    hokage_roles = discord.utils.get(guild.roles, name="Hokage") if discord.utils.get(guild.roles, name="Hokage") else False
+    hokage = hokage_roles if hokage_roles else await guild.create_role(name="Hokage",mentionable=True,hoist=True,colour=discord.Colour.dark_orange())
     img=random.choice(minato_gif)
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
     await guild.system_channel.send(file=file)
 
-    await guild.system_channel.send(f'Hello ** {guild.name}**! I am **{bot.user.mention}**!!! \n> **Help cmd** :\n> ~ **`)help`**\n> or \n> ~ **{bot.user.mention}** ** `help`**')
-    await guild.system_channel.send(f'----------\n----------\n**Myself {bot.user.mention} aka Yondaime Hokage**\n----------\n----------\n')
-    await guild.system_channel.send(f'> ~ Hey @here, **{guild.owner.mention}** or **anyone with administrator access** please type **`)setup`** in any of the channels in the server to do the setup!')
+    await guild.system_channel.send(f'Hello ** {guild.name}**! I am **{bot.user.mention}**!!! do type **) help** or **{bot.user.mention} help** for commands!')
+    await guild.system_channel.send(f'Myself {bot.user.mention} aka Yandaime Hokage')
+    await guild.system_channel.send(f'Hey @here, **{guild.owner}** or **anyone with administrator access** please type **)setup** in any of the channels in the server to do the setup!')
     
     img=random.choice(minato_gif)
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
     await guild.system_channel.send(file=file)
 
-    e34= discord.Embed(title=f'{guild.name}', color= 0x2ecc71,description='Added')
-    if guild.icon:
-        e34.set_thumbnail(url=guild.icon_url)
-    if guild.banner:
-        e34.set_image(url=guild.banner_url_as(format="png"))
-    c = bot.get_channel(813954921782706227)
-    await c.send(embed=e34)
-
-@bot.event
-async def on_guild_remove(guild):
-    e34= discord.Embed(title=f'{guild.name}', color= 0xe74c3c,description='Left')
-    if guild.icon:
-        e34.set_thumbnail(url=guild.icon_url)
-    if guild.banner:
-        e34.set_image(url=guild.banner_url_as(format="png"))
-    c = bot.get_channel(813954921782706227)
-    await c.send(embed=e34)
 
 @bot.event
 async def on_command_error(ctx, error):

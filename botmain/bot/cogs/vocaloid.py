@@ -47,7 +47,7 @@ class Vocaloid(commands.Cog):
         data = requests.get(url=self.endpoint + 'miku').json()['url']
         await ctx.send(data)
 
-    @commands.command(name='len',aliases=['len'])
+    @commands.command(name='len_vocaloid ',aliases=['len'])
     async def _len(self, ctx):
         data = requests.get(url=self.endpoint + 'len').json()['url']
         await ctx.send(data)

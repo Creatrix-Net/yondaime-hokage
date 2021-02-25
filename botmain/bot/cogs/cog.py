@@ -24,7 +24,7 @@ class Info(commands.Cog):
     @commands.cooldown(1, 1080, commands.BucketType.guild)
     @commands.has_permissions(administrator=True)
     async def serverdump(self, ctx):
-        '''Dumps server name to thr developer'''
+        '''Dumps server name to the developer'''
         c = self.bot.get_channel(813954921782706227)
         if ctx.guild.id == 747480356625711204:
             b = await ctx.send('** Okay updating info ! **')

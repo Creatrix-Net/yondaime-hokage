@@ -41,6 +41,7 @@ class Info(commands.Cog):
                 e.set_thumbnail(url=ctx.guild.icon_url)
             if ctx.guild.banner:
                 e.set_image(url=ctx.guild.banner_url_as(format="png"))
+            await a.edit(f'Sent the info to developer that ,I am on {ctx.guild.name.} 😉')
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):

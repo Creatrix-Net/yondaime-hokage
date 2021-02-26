@@ -1,4 +1,4 @@
-﻿aiohttp==3.6.3
+﻿aiohttp==3.7.4
 aiozaneapi==1.6
 antiorm==1.2.1
 APScheduler==3.7.0

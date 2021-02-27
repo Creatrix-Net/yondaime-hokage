@@ -55,6 +55,7 @@ def invite_bot(request):
             'client_secret': settings.DISCORD_CLIENT_SECRET,
             'permissions': 2147483656
         },
+        redirect_uri= request.META.get('HTTP_REFERER'),
         scope=['bot',],
     )
     url, state = a.authorization_url(settings.DISCORD_BASE_URI + settings.DISCORD_AUTHZ_PATH)

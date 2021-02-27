@@ -20,7 +20,7 @@ class Feedback(commands.Cog):
                             description=f"Your feedback '{feed}' has been sent!")
             await ctx.send(embed=e)
             e2 = discord.Embed(
-                title=f"Oh no, is it bad or good? ({ctx.author} has sent feedback)", description=f"{feed}")
+                title=f"{ctx.author} has sent feedback", description=f"{feed}")
             await channel.send(embed=e2)
         else:
             await ctx.send(f'**Sorry to say** {ctx.author.mention}, but **no feedback channel** has been setup for the {ctx.guild.name}')

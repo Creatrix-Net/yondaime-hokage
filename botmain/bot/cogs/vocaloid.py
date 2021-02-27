@@ -63,7 +63,7 @@ class Vocaloid(commands.Cog):
         e.set_image(url=data)
         await ctx.send(embed=e)
 
-    @commands.command(name='len_vocaloid ',aliases=['len'])
+    @commands.command(name='len')
     async def _len(self, ctx):
         data = requests.get(url=self.endpoint + 'len').json()['url']
         e=discord.Embed()

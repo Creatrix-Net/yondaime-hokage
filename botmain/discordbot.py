@@ -1,3 +1,4 @@
+  
 import os
 import time
 from os.path import join
@@ -42,20 +43,27 @@ bot.mystbin_client = mystbin.Client()
 bot.version = "1"
 hce = bot.get_command("help")
 hce.hidden = True
+
 chatbottoken = token_get('CHATBOTTOKEN')
 bot.topken = topastoken #Topgg Token
 bot.chatbot = ac.Cleverbot(f"{chatbottoken}")
 bot.se = aiozaneapi.Client(token_get('ZANEAPI'))
 bot.dagpi = Client(token_get('DAGPI'))
 bot.start_time = time.time()
+
+bot.discord_id = token_get('DISCORD_CLIENT_ID')
+bot.secrect_client = token_get('DISCORD_CLIENT_SECRET')
+
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
 bot.topgg = token_get('TOPGG')
+bot.discordbotlist = token_get('DBLST')
 bot.thresholds = (10, 25, 50, 100)
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 
 minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
+
 
 # Events
 @bot.event
@@ -69,20 +77,62 @@ async def on_ready():
 #on join send message event
 @bot.event
 async def on_guild_join(guild):
-    hokage_roles = discord.utils.get(guild.roles, name="Hokage") if discord.utils.get(guild.roles, name="Hokage") else False
-    hokage = hokage_roles if hokage_roles else await guild.create_role(name="Hokage",mentionable=True,hoist=True,colour=discord.Colour.dark_orange())
     img=random.choice(minato_gif)
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
     await guild.system_channel.send(file=file)
 
-    await guild.system_channel.send(f'Hello ** {guild.name}**! I am **{bot.user.mention}**!!! do type **) help** or **{bot.user.mention} help** for commands!')
-    await guild.system_channel.send(f'Myself {bot.user.mention} aka Yandaime Hokage')
-    await guild.system_channel.send(f'Hey @here, **{guild.owner}** or **anyone with administrator access** please type **)setup** in any of the channels in the server to do the setup!')
+    await guild.system_channel.send(f'Hello ** {guild.name}**! I am **{bot.user.mention}**!!! \n> **Help cmd** :\n> ~ **`)help`**\n> or \n> ~ **`{bot.user.mention} help`**')
+    await guild.system_channel.send(f'----------\n----------\n**Myself {bot.user.mention} aka Yondaime Hokage**----------\n----------\n')
+    await guild.system_channel.send(f'> ~ Hey @here, **{guild.owner.mention}** or **anyone with administrator access** please type **`)setup`** in any of the channels in the server to do the setup!')
     
     img=random.choice(minato_gif)
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
     await guild.system_channel.send(file=file)
 
+    e34= discord.Embed(title=f'{guild.name}', color= 0x2ecc71,description='Added')
+    if guild.icon:
+        e34.set_thumbnail(url=guild.icon_url)
+    if guild.banner:
+        e34.set_image(url=guild.banner_url_as(format="png"))
+    c = bot.get_channel(813954921782706227)
+    await c.send(embed=e34)
+
+#when bot leaves the server
+@bot.event
+async def on_guild_remove(guild):
+    e34= discord.Embed(title=f'{guild.name}', color= 0xe74c3c,description='Left')
+    if guild.icon:
+        e34.set_thumbnail(url=guild.icon_url)
+    if guild.banner:
+        e34.set_image(url=guild.banner_url_as(format="png"))
+    c = bot.get_channel(813954921782706227)
+    await c.send(embed=e34)
+
+#ban
+@bot.event
+async def on_member_ban(guild, user):
+    bingo = discord.utils.get(guild.categories, name="Bingo Book") if discord.utils.get(guild.categories, name="Bingo Book") else False
+    if bingo:
+        ban = discord.utils.get(bingo.channels, name="ban") if discord.utils.get(bingo.channels, name="ban") else False
+        if ban:
+            e=discord.Embed(title='**Ban**',description=f'**{user.mention}** was banned!', color=0xe74c3c)
+            e.set_image(url='https://i.imgur.com/B7EAJKM.jpg')
+            if user.avatar_url:
+                e.set_thumbnail(url=user.avatar_url)
+            await ban.send(embed=e)
+
+#unban
+@bot.event
+async def on_member_unban(guild, user):
+    bingo = discord.utils.get(guild.categories, name="Bingo Book") if discord.utils.get(guild.categories, name="Bingo Book") else False
+    if bingo:
+        unban = discord.utils.get(bingo.channels, name="unban") if discord.utils.get(bingo.channels, name="unban") else False
+        if unban:
+            e=discord.Embed(title='**Unban**',description=f'**{user.mention}** was unbanned!', color=0x2ecc71)
+            e.set_image(url='https://i.imgur.com/O1Xvv7I.jpg')
+            if user.avatar_url:
+                e.set_thumbnail(url=user.avatar_url)
+            await unban.send(embed=e)
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -103,11 +153,12 @@ async def on_command_error(ctx, error):
         e4 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e4.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e4)
-    '''elif isinstance(error, commands.CommandInvokeError):
+    
+    elif isinstance(error, commands.CommandInvokeError):
         haha = ctx.author.avatar_url
         e7 = discord.Embed(title="Oh no green you fucked up", description=f"`{error}`")
         e7.add_field(name="Command Caused By?", value=f"{ctx.command}")
-        e7.add_field(name="By?", value=f"ID : {ctx.author.id}, Name : {ctx.author.name}")
+        e7.add_field(name="By", value=f"ID : {ctx.author.id}, Name : {ctx.author.name}")
         e7.set_thumbnail(url=f"{haha}")
         e7.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e7)
@@ -115,9 +166,9 @@ async def on_command_error(ctx, error):
         haaha = ctx.author.avatar_url
         e9 = discord.Embed(title="Oh no green you fucked up", description=f"`{error}`")
         e9.add_field(name="Command Caused By?", value=f"{ctx.command}")
-        e9.add_field(name="By?", value=f"ID : {ctx.author.id}, Name : {ctx.author.name}")
+        e9.add_field(name="By", value=f"ID : {ctx.author.id}, Name : {ctx.author.name}")
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e9)'''
+        await ctx.channel.send(embed=e9)
 
 bot.run(TOKEN)

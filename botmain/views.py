@@ -48,12 +48,14 @@ def keep_alive(request):
 
 def invite_bot(request):
     from requests_oauthlib import OAuth2Session
-    return OAuth2Session(
+    a = OAuth2Session(
         client_id=settings.DISCORD_CLIENT_ID,
-        permissions=2147483656,
         auto_refresh_kwargs={
             'client_id': settings.DISCORD_CLIENT_ID,
             'client_secret': settings.DISCORD_CLIENT_SECRET,
+            'permissions': 2147483656
         },
         scope=['bot',],
     )
+    url, state = a.authorization_url(settings.DISCORD_BASE_URI + settings.DISCORD_AUTHZ_PATH)
+    return redirect(url)

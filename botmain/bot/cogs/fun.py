@@ -13,7 +13,7 @@ class Fun(commands.Cog):
         self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
         
     #8ball
-    @commands.command(aliases=['8ball'])
+    @commands.command(name='8ball')
     async def _8ball(self,ctx, *, question):
         responses = [
             "It is certain.",

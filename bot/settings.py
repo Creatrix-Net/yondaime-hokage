@@ -61,8 +61,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'bot.wsgi.application'
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
-    SECRET_KEY = os.environ.get('SECRET_KEY')
     dotenv.load_dotenv(dotenv_file)
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     PRODUCTION_SERVER = False
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
     DEBUG = True

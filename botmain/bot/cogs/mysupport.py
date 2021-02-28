@@ -23,9 +23,9 @@ class MySupport(commands.Cog):
         embed.set_thumbnail(url=ctx.bot.user.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(description='Generates my support server invite')
     async def supportserver(self, ctx):
-        await crx.send('**Here you go**')
+        await crx.send('**Here you go, my support server invite**')
         await ctx.send('https://discord.gg/g9zQbjE73K')
 
 def setup(bot):

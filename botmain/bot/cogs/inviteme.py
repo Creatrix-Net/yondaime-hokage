@@ -6,7 +6,7 @@ class InviteMe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(description='Generates my invite link to your server')
+    @commands.command(description='Generates my invite link for your server')
     async def inviteme(self, ctx):
         link = OAuth2Session(
             client_id = self.bot.discord_id,
@@ -15,7 +15,7 @@ class InviteMe(commands.Cog):
                 'client_secret': self.bot.secrect_client,
                 'permissions': 2147483656
             },
-            redirect_uri = None
+            redirect_uri = 'https://dhruvacube.github.io/yondaime-hokage/',
             scope=['bot',],
         )
         url, state = link.authorization_url('https://discord.com/api/v8' + '/oauth2/authorize')

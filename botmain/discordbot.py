@@ -110,7 +110,8 @@ async def on_guild_remove(guild):
     if guild.banner:
         e34.set_image(url=guild.banner_url_as(format="png"))
     c = bot.get_channel(813954921782706227)
-    await c.send(embed=e34)
+    if guild.name:
+        await c.send(embed=e34)
 
 #ban
 @bot.event

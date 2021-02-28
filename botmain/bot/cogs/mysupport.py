@@ -29,4 +29,4 @@ class MySupport(commands.Cog):
         await ctx.send('https://discord.gg/g9zQbjE73K')
 
 def setup(bot):
-    bot.add_cog(InviteMe(bot))
+    bot.add_cog(MySupport(bot))

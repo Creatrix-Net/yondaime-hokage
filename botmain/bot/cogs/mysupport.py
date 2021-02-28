@@ -25,9 +25,8 @@ class MySupport(commands.Cog):
 
     @commands.command()
     async def supportserver(self, ctx):
-        embed=discord.Embed(title='**Invite Link**',description=f'[My Invite Link!]({url})')
-        embed.set_thumbnail(url=ctx.bot.user.avatar_url)
-        await ctx.send(embed=embed)
+        await crx.send('**Here you go**')
+        await ctx.send('https://discord.gg/g9zQbjE73K')
 
 def setup(bot):
     bot.add_cog(InviteMe(bot))

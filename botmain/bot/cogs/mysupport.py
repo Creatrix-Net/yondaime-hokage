@@ -25,7 +25,7 @@ class MySupport(commands.Cog):
 
     @commands.command(description='Generates my support server invite')
     async def supportserver(self, ctx):
-        await crx.send('**Here you go, my support server invite**')
+        await ctx.send('**Here you go, my support server invite**')
         await ctx.send('https://discord.gg/g9zQbjE73K')
 
 def setup(bot):

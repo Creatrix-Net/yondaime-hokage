@@ -15,6 +15,7 @@ class InviteMe(commands.Cog):
                 'client_secret': self.bot.secrect_client,
                 'permissions': 2147483656
             },
+            redirect_uri = None
             scope=['bot',],
         )
         url, state = link.authorization_url('https://discord.com/api/v8' + '/oauth2/authorize')

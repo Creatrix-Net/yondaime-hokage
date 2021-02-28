@@ -36,15 +36,18 @@ def sendmessages(request):
 
 
 def keep_alive(request):
-    return render(
-        request, 
-        'keep_alive.html',
-        {
-            'server_name': 'Keeping Alive The Bot',
-            'docs':settings.DOCS,
-            'website':settings.WEBSITE
-        }
-    )
+    if request.META.get('HTTP_AUTHORIZATION') == settings.AUTH_PASS:
+        return render(
+            request, 
+            'keep_alive.html',
+            {
+                'server_name': 'Keeping Alive The Bot',
+                'docs':settings.DOCS,
+                'website':settings.WEBSITE
+            }
+        )
+    else:
+        return redirect(reverse('Home'))
 
 def invite_bot(request):
     from requests_oauthlib import OAuth2Session

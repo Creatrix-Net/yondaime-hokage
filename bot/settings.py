@@ -150,4 +150,5 @@ ID = os.environ.get('DISCORD_CLIENT_ID')
 SECRECT = os.environ.get('DISCORD_CLIENT_SECRET')
 
 DOCS=os.environ.get('DOCS')
-WEBSITE=os.environ.get('WEBSITE')
+WEBSITE=os.environ.get('WEBSITE') 
+AUTH_PASS=os.environ.get('AUTH_PASS')

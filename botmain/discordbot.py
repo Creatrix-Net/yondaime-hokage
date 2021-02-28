@@ -29,7 +29,7 @@ intents.reactions = True
 intents.guilds = True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-dotenv_file = os.path.join(BASE_DIR, "botmain",".env")
+dotenv_file = os.path.join(BASE_DIR,".env")
 def token_get(tokenname):
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)

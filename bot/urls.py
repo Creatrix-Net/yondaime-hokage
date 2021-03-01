@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
-from botmain.views import home, invite_bot, keep_alive, sendmessages
+from botmain.views import *
 from account.views import *
 
 
@@ -15,6 +15,8 @@ urlpatterns = [
     path('', home, name="Home"),
     path('send/', sendmessages, name="Send"),
     path('invite/', invite_bot, name="Invite"),
+
+    path('get_anime_image/<str:name>', return_available_anime,name="Get Anime Names"),
 
     url(r'^accounts/', include('account.urls')),
     url(r'^discord/', include('discord_auth_data.urls')),

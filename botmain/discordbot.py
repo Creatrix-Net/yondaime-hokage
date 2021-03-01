@@ -54,6 +54,8 @@ bot.start_time = time.time()
 bot.discord_id = token_get('DISCORD_CLIENT_ID')
 bot.secrect_client = token_get('DISCORD_CLIENT_SECRET')
 
+bot.sitereq = token_get('REQWEBSITE')
+
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
 bot.topgg = token_get('TOPGG')
@@ -138,6 +140,13 @@ async def on_member_unban(guild, user):
             if user.avatar_url:
                 e.set_thumbnail(url=user.avatar_url)
             await unban.send(embed=e)
+
+#on message event
+@bot.event
+async def on_message(message):
+    if message.channel.id == '814134179049635840':
+        c = bot.get_channel(813954921782706227)
+        await c.send(message)
 
 @bot.event
 async def on_command_error(ctx, error):

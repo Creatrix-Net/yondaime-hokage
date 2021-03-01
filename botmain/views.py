@@ -7,8 +7,10 @@ from discord_auth_data.models import *
 from django.conf import settings
 import discord
 from discord import Webhook, RequestsWebhookAdapter
+from django.http import JsonResponse
 
-from .models import Webhooks
+
+from .models import *
 from django.conf import settings
 
 # Create your views here.
@@ -63,3 +65,10 @@ def invite_bot(request):
     )
     url, state = a.authorization_url(settings.DISCORD_BASE_URI + settings.DISCORD_AUTHZ_PATH)
     return redirect(url)
+
+
+def return_available_anime(request, name):
+    name_id = AnimeName.objects.filter(anime_name__in=name).all()
+    anime = [i.anime_name for i in AnimeName.objects.iterator()]
+
+    #return JsonResponse(anime, safe=False)

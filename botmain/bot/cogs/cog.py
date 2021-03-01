@@ -3,15 +3,8 @@ import discord
 from discord.ext import commands
 from discord import Spotify
 
-# Time Imports
-from datetime import datetime
-import datetime
 import time
 
-# Other Imports
-import random
-import inspect
-import os
 from ..utils_dis import *
 
 class Info(commands.Cog):
@@ -28,6 +21,7 @@ class Info(commands.Cog):
         c = self.bot.get_channel(813954921782706227)
         if ctx.guild.id == 747480356625711204:
             b = await ctx.send('** Okay updating info ! **')
+            n=0
             for guild in ctx.bot.guilds:
                 if not guild.id == 747480356625711204: 
                     e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color= 0x2ecc71)
@@ -35,7 +29,9 @@ class Info(commands.Cog):
                         e.set_thumbnail(url=guild.icon_url)
                     if guild.banner:
                         e.set_image(url=guild.banner_url_as(format="png"))
+                    n+=1
                     await c.send(embed=e)
+            await c.send(f'In total {n} servers')
             await ctx.send('**Updated ! Please check the <#813954921782706227>**')
         else:
             a = await ctx.send('**Sending the info to my developer**')
@@ -46,6 +42,17 @@ class Info(commands.Cog):
                 e.set_image(url=ctx.guild.banner_url_as(format="png"))
             await c.send(embed=e)
             await ctx.send(f'Sent the info to developer that "I am on {ctx.guild.name}" , {ctx.author.mention} 😉')
+
+    @commands.command(name='mystats', description='Tell that in how many servers I am there!')
+    @commands.cooldown(1, 1080)
+    async def mystats(self, ctx):
+        if ctx.guild.id == 747480356625711204:
+            b = await ctx.send('** Okay updating info ! **')
+            n=0
+            for guild in ctx.bot.guilds:
+                if not guild.id == 747480356625711204: 
+                    n+=1
+            await ctx.send(f'In total {n} servers')
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):

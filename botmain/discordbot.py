@@ -148,13 +148,15 @@ async def on_message(message):
         embed = message.embeds[0].to_dict()
         
         for guild in bot.guilds:
-            if not guild.id == 747480356625711204: 
-                e = discord.Embed(title=embed['title'],description=embed['description'] , color= 0x2ecc71)
-                if guild.icon:
-                    e.set_thumbnail(url=guild.icon_url)
-                if guild.banner:
-                    e.set_image(url=guild.banner_url_as(format="png"))
-                await guild.system_channel.send(embed=e)
+            try:
+                if not guild.id == 747480356625711204: 
+                    e = discord.Embed(title=embed['title'],description=embed['description'] , color= 0x2ecc71)
+                    if guild.icon:
+                        e.set_thumbnail(url=guild.icon_url)
+                    if guild.banner:
+                        e.set_image(url=guild.banner_url_as(format="png"))
+                    await guild.system_channel.send(embed=e)
+            except: print('Tried but failed!')
     await bot.process_commands(message)
                 
 

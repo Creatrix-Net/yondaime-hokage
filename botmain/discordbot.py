@@ -40,7 +40,7 @@ topastoken = token_get('TOPASTOKEN')
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(')'), intents=intents, help_command=Help(),  allowed_mentions=discord.AllowedMentions(users=True, roles=False, everyone=False),case_insensitive=True,description="Hi I am **Minato Namikaze**, Yondaime Hokage")
 bot.mystbin_client = mystbin.Client()
-bot.version = "1"
+bot.version = str(token_get('BOT_VER'))
 hce = bot.get_command("help")
 hce.hidden = True
 
@@ -144,9 +144,18 @@ async def on_member_unban(guild, user):
 #on message event
 @bot.event
 async def on_message(message):
-    if message.channel.id == '814134179049635840':
-        c = bot.get_channel(813954921782706227)
-        await c.send(message)
+    if message.channel.id == 814134179049635840:
+        embed = message.embeds[0].to_dict()
+        
+        for guild in bot.guilds:
+            if not guild.id == 747480356625711204: 
+                e = discord.Embed(title=embed['title'],description=embed['description'] , color= 0x2ecc71)
+                if guild.icon:
+                    e.set_thumbnail(url=guild.icon_url)
+                if guild.banner:
+                    e.set_image(url=guild.banner_url_as(format="png"))
+                await guild.system_channel.send(embed=e)
+                
 
 @bot.event
 async def on_command_error(ctx, error):

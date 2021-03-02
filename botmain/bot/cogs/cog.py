@@ -43,9 +43,9 @@ class Info(commands.Cog):
             await c.send(embed=e)
             await ctx.send(f'Sent the info to developer that "I am on {ctx.guild.name}" , {ctx.author.mention} 😉')
 
-    @commands.command(name='mystats', description='Tell that in how many servers I am there!')
+    @commands.command(name='myservercount', description='Tell that in how many servers I am there!')
     @commands.cooldown(1, 1080)
-    async def mystats(self, ctx):
+    async def myservercount(self, ctx):
         if ctx.guild.id == 747480356625711204:
             b = await ctx.send('** Okay updating info ! **')
             n=0

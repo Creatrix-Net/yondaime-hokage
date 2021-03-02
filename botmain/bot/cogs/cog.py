@@ -45,14 +45,12 @@ class Info(commands.Cog):
 
     @commands.command(name='myservercount', description='Tell that in how many servers I am there!')
     @commands.cooldown(1, 1080)
-    async def myservercount(self, ctx):
-        if ctx.guild.id == 747480356625711204:
-            b = await ctx.send('** Okay updating info ! **')
-            n=0
-            for guild in ctx.bot.guilds:
-                if not guild.id == 747480356625711204: 
-                    n+=1
-            await ctx.send(f'In total {n} servers')
+    async def myservercount(self, ctx):           
+        n=0
+        for guild in ctx.bot.guilds:
+            if not guild.id == 747480356625711204: 
+                n+=1
+        await ctx.send(f'In total **{n} servers**, I am there.')
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):

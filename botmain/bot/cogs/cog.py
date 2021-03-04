@@ -23,14 +23,13 @@ class Info(commands.Cog):
             b = await ctx.send('** Okay updating info ! **')
             n=0
             for guild in ctx.bot.guilds:
-                if not guild.id == 747480356625711204: 
-                    e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color= 0x2ecc71)
-                    if guild.icon:
-                        e.set_thumbnail(url=guild.icon_url)
-                    if guild.banner:
-                        e.set_image(url=guild.banner_url_as(format="png"))
-                    n+=1
-                    await c.send(embed=e)
+                e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color= 0x2ecc71)
+                if guild.icon:
+                    e.set_thumbnail(url=guild.icon_url)
+                if guild.banner:
+                    e.set_image(url=guild.banner_url_as(format="png"))
+                n+=1
+                await c.send(embed=e)
             await c.send(f'In total {n} servers')
             await ctx.send('**Updated ! Please check the <#813954921782706227>**')
         else:

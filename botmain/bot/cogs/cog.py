@@ -47,8 +47,7 @@ class Info(commands.Cog):
     async def myservercount(self, ctx):           
         n=0
         for guild in ctx.bot.guilds:
-            if not guild.id == 747480356625711204: 
-                n+=1
+        n+=1
         await ctx.send(f'In total **{n} servers**, I am there.')
 
     @commands.command()

@@ -6,10 +6,10 @@
 And rest the [DISCORD PRIVACY POLICY](https://discord.com/privacy) applies.**
 
 - This bot is open source project
-- No data is stored, all is done by internal cache provided by discord
+- No data is stored, all data is done by internal cache provided by discord
 - It is licensed under [**Creative Commons Zero v1.0 Universal**](https://github.com/Dhruvacube/yondaime-hokage/blob/master/LICENSE) 
 
-**Still having doubts ?? you can contact me here [CONTACT ME LINK](https://dhruvacuber.pythonanywhere.com/contact/) OR [SOCIAL LINKS](https://github.com/Dhruvacube/yondaime-hokage/wiki/Social-Links)**
+**Still having doubts ?? you can contact me here [CONTACT ME LINK](https://dhruvacuber.pythonanywhere.com/contact/) OR [SOCIAL LINKS](social.md)**
 
 ***
 

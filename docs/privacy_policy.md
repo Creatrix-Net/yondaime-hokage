@@ -1,5 +1,5 @@
 ***
-# Well, Here is the Policy :)
+# Well, Here is the Privacy Policy :)
 
 #### Well well well, Nothing is stored! Really nothing is stored! All is based on internal cache provided by Discord!
 **Except the server name which is just meant for the developer to see in which server the bot is in

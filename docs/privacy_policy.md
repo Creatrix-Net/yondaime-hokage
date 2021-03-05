@@ -1,7 +1,7 @@
 ***
 # Well, Here is the Privacy Policy :)
 
-#### Well well well, Nothing is stored! Really nothing is stored! All is based on internal cache provided by Discord!
+#### Well well well, Nothing is stored! Really nothing is stored! All is based on [internal cache](https://discord.com/developers/docs/topics/gateway) provided by Discord!
 **Except the server name which is just meant for the developer to see in which server the bot is in
 And rest the [DISCORD PRIVACY POLICY](https://discord.com/privacy) applies.**
 

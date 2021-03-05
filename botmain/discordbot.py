@@ -56,6 +56,8 @@ bot.secrect_client = token_get('DISCORD_CLIENT_SECRET')
 
 bot.sitereq = token_get('REQWEBSITE')
 
+bot.statcord = token_get('STATCORD')
+
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
 bot.topgg = token_get('TOPGG')

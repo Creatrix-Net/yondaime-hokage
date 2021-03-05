@@ -112,13 +112,15 @@ class Random(commands.Cog):
 
     @command(usage="remind <time> <reminder> (Time needs to be in seconds...)")
     async def remind(self, ctx, time, *, reminder):
-        e = discord.Embed(title="I will remind you!",
-                          descripition=f"I will you remind you in {time} seconds!")
-        await ctx.send(embed=e)
-        await asyncio.sleep(int(time))
-        e2 = discord.Embed(
-            title=f"Hello {ctx.author}", description=f"I have come to remind you to {reminder}!")
-        await ctx.message.reply(embed=e2)
+        if int(time) < 12*60*60:
+            e = discord.Embed(title="I will remind you!",
+                            descripition=f"I will you remind you in {int(time)/3600} minutes!")
+            await ctx.send(embed=e)
+            await asyncio.sleep(int(time))
+            e2 = discord.Embed(
+                title=f"Hello {ctx.author}", description=f"I have come to remind you to {reminder}!")
+            await ctx.message.reply(embed=e2)
+        else: await ctx.send('Please give a reminder time less than 12 hours, I cannot remember for that long!')
 
     @command(pass_context=True, usage="ar <role>")
     async def ar(self, ctx, *, role1):

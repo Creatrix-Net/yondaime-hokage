@@ -43,7 +43,7 @@ class WhoMenu(menus.Menu):
 
     @menus.button('\N{WHITE HEAVY CHECK MARK}')
     async def on_add(self, payload):
-        e1 = discord.Embed(title="Well, Heres The Policy :)", description=f"Well well well, Nothing is stored! Really nothing is stored! All is based on internal cache provided by Discord!", color=discord.Colour.from_hsv(random.random(), 1, 1))
+        e1 = discord.Embed(title="Well, Heres The Policy :)", description=f"Well well well, Nothing is stored! Really nothing is stored! All is based on internal cache provided by Discord! For more please visit [THIS LINK](https://dhruvacube.github.io/yondaime-hokage/privacy_policy)", color=discord.Colour.from_hsv(random.random(), 1, 1))
         await self.message.edit(content="", embed=e1)
         
 

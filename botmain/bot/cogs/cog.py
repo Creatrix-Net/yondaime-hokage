@@ -42,14 +42,6 @@ class Info(commands.Cog):
             await c.send(embed=e)
             await ctx.send(f'Sent the info to developer that "I am on {ctx.guild.name}" , {ctx.author.mention} 😉')
 
-    @commands.command(name='myservercount', description='Tell that in how many servers I am there!')
-    @commands.cooldown(1, 1080)
-    async def myservercount(self, ctx):           
-        n=0
-        for guild in ctx.bot.guilds:
-        n+=1
-        await ctx.send(f'In total **{n} servers**, I am there.')
-
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):
         if user is None:

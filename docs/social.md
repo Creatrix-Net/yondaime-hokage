@@ -11,6 +11,10 @@
 * [Support Server](https://discord.gg/g9zQbjE73K)
 * [TopGG](https://top.gg/bot/779559821162315787)
 * [Discord Bot List](https://discordbotlist.com/bots/minato-namikaze)
+* [DISCORD EXTREME LIST](https://discordextremelist.xyz/en-US/bots/779559821162315787)
+* [BOTLIST](https://botlist.space/bot/779559821162315787)
+* [BOTS FOR DISCORD](https://botsfordiscord.com/bot/779559821162315787)
+* [DISCORD BOATS](https://discord.boats/bot/779559821162315787)
 
 ***
 

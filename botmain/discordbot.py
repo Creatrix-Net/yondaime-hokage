@@ -158,7 +158,7 @@ async def on_message(message):
             except: print('Tried but failed!')
     await bot.process_commands(message)
                 
-
+'''
 @bot.event
 async def on_command_error(ctx, error):
     guild = ctx.guild
@@ -193,6 +193,6 @@ async def on_command_error(ctx, error):
         e9.add_field(name="By", value=f"ID : {ctx.author.id}, Name : {ctx.author.name}")
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e9)
+        await ctx.channel.send(embed=e9)'''
 
 bot.run(TOKEN)

@@ -139,7 +139,7 @@ class OwnerOnly(commands.Cog):
             'guild': ctx.guild,
             'message': ctx.message,
             'source': inspect.getsource,
-            'owner': self.bot.get_user(536991233461649408)
+            'owner': self.bot.get_user(536991233461649408) #ctx.guild.owner_id
         }
 
         def cleanup_code(content):

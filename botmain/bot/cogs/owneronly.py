@@ -126,7 +126,7 @@ class OwnerOnly(commands.Cog):
 
         return await alt_ctx.command.invoke(alt_ctx)
 
-
+    @commands.is_owner()
     @commands.command(name='eval')
     async def _eval(self, ctx, *, body):
         """Evaluates python code"""
@@ -139,7 +139,7 @@ class OwnerOnly(commands.Cog):
             'guild': ctx.guild,
             'message': ctx.message,
             'source': inspect.getsource,
-            'owner': self.bot.get_user(ctx.guild.owner_id)
+            'owner': self.bot.get_user(536991233461649408)
         }
 
         def cleanup_code(content):

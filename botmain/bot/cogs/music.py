@@ -323,7 +323,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                           'rest_uri': 'http://'+self.host+':80',
                           'password': self.auth_pass,
                           'identifier': 'MAIN',
-                          'region': 'us'
+                          'region': 'us_central'
                           }}
 
         for n in nodes.values():

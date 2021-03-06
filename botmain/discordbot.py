@@ -58,6 +58,9 @@ bot.sitereq = token_get('REQWEBSITE')
 
 bot.statcord = token_get('STATCORD')
 
+bot.auth_pass = token_get('AUTH_PASS')
+bot.lavalink = token_get('LAVALINK')
+
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
 bot.topgg = token_get('TOPGG')

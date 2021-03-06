@@ -300,6 +300,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.auth_pass = bot.auth_pass
+        self.host = bot.lavalink
 
         if not hasattr(bot, 'wavelink'):
             bot.wavelink = wavelink.Client(bot=bot)
@@ -316,12 +318,12 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             for node in previous.values():
                 await node.destroy()
 
-        nodes = {'MAIN': {'host': 'lavalink.something.host',
+        nodes = {'MAIN': {'host': self.host,
                           'port': 80,
-                          'rest_uri': 'http://lavalink.something.host:80',
-                          'password': 'youshallnotpass',
+                          'rest_uri': 'http://'+self.host+':80',
+                          'password': self.auth_pass,
                           'identifier': 'MAIN',
-                          'region': 'us_central'
+                          'region': 'us'
                           }}
 
         for n in nodes.values():

@@ -77,8 +77,8 @@ minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
 async def on_ready():
     for filename in os.listdir(Path(__file__).resolve(strict=True).parent / join('bot','cogs')):
         if filename.endswith('.py'):
-            #if filename != 'music.py':
-            bot.load_extension(f'bot.cogs.{filename[:-3]}')
+            if filename != 'music.py':
+                bot.load_extension(f'bot.cogs.{filename[:-3]}')
     await bot.change_presence(activity=discord.Streaming(name="Naruto", url=token_get("WEBSITE")))
     print('My Body is ready!')
 
@@ -162,7 +162,7 @@ async def on_message(message):
             except: print('Tried but failed!')
     await bot.process_commands(message)
                 
-'''
+
 @bot.event
 async def on_command_error(ctx, error):
     guild = ctx.guild
@@ -197,6 +197,6 @@ async def on_command_error(ctx, error):
         e9.add_field(name="By", value=f"ID : {ctx.author.id}, Name : {ctx.author.name}")
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e9)'''
+        await ctx.channel.send(embed=e9)
 
 bot.run(TOKEN)

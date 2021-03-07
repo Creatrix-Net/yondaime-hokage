@@ -93,10 +93,12 @@ async def on_guild_join(guild):
     await guild.system_channel.send(f'----------\n----------\n**Myself {bot.user.mention} aka Yondaime Hokage**\n----------\n----------\n')
     await guild.system_channel.send(f'> ~ Hey @here, **{guild.owner.mention}** or **anyone with administrator access** please type **`)setup`** in any of the channels in the server to do the setup!')
     await guild.system_channel.send(f'----------')
+    '''
     if guild.id not in (568567800910839811 , 632908146305925129):
         await guild.system_channel.send('My **sleeping time** is from')
         await guild.system_channel.send('**00:00 AM IST**  to')
         await guild.system_channel.send('**07:00 AM IST**')
+    '''
     
     img=random.choice(minato_gif)
     file = discord.File(join(minato_dir, 'minato',img), filename=img)

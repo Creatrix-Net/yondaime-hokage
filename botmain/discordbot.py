@@ -79,7 +79,7 @@ async def on_ready():
         if filename.endswith('.py'):
             if filename != 'music.py':
                 bot.load_extension(f'bot.cogs.{filename[:-3]}')
-    await bot.change_presence(activity=discord.Game()
+    await bot.change_presence(activity=discord.Game(),party={'id':'ae488379-351d-4a4f-ad32-2b9b01c91657'})
     print('My Body is ready!')
 
 #on join send message event

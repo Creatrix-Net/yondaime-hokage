@@ -77,8 +77,8 @@ minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
 async def on_ready():
     for filename in os.listdir(Path(__file__).resolve(strict=True).parent / join('bot','cogs')):
         if filename.endswith('.py'):
-            if filename != 'music.py':
-                bot.load_extension(f'bot.cogs.{filename[:-3]}')
+            #if filename != 'music.py':
+            bot.load_extension(f'bot.cogs.{filename[:-3]}')
     await bot.change_presence(activity=discord.Streaming(name="Naruto", url=token_get("WEBSITE")))
     print('My Body is ready!')
 

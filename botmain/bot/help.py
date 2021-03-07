@@ -23,7 +23,7 @@ class Help(commands.MinimalHelpCommand):
     
     def get_opening_note(self):
         ctx = self.context
-        return f"Thank's for using {ctx.guild.me.mention}, the list below shows all commands in their respective groups :)"
+        return f"**Music commands will not be available for a month! Sorry!** \nThank's for using {ctx.guild.me.mention}, the list below shows all commands in their respective groups :)"
 
     async def command_not_found(self, command):
         destination = self.get_destination()

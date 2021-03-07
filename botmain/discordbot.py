@@ -170,12 +170,12 @@ async def on_command_error(ctx, error):
         e1 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e1.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e1)
-'''
+    '''
     elif isinstance(error, commands.CommandNotFound):
         e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e2.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e2)
-'''
+    '''
     elif isinstance(error, commands.MissingPermissions):
         e3 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e3.set_footer(text=f"{ctx.author.name}")
@@ -184,7 +184,7 @@ async def on_command_error(ctx, error):
         e4 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e4.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e4)
-'''
+    '''
     elif isinstance(error, commands.CommandInvokeError):
         haha = ctx.author.avatar_url
         e7 = discord.Embed(title="Oh no green you fucked up", description=f"`{error}`")
@@ -201,6 +201,6 @@ async def on_command_error(ctx, error):
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e9) ki
-'''
+    '''
 
 bot.run(TOKEN)

@@ -320,13 +320,13 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             for node in previous.values():
                 await node.destroy()
 
-        nodes = {'MAIN': {'host': 'lavalink.something.host',
+        nodes = {'MAIN': {'host': self.host,
                           'port': 80,
-                          'rest_uri': 'http://lavalink.something.host:80',
-                          'password': 'youshallnotpass',
+                          'rest_uri': 'http://'+self.host+':80',
+                          'password': self.auth_pass,
                           'identifier': 'MAIN',
                           'region': 'us_central'
-                          }}
+                }}
 
         for n in nodes.values():
             await self.bot.wavelink.initiate_node(**n)

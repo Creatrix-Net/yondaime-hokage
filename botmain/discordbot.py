@@ -79,7 +79,7 @@ async def on_ready():
         if filename.endswith('.py'):
             if filename != 'music.py':
                 bot.load_extension(f'bot.cogs.{filename[:-3]}')
-    await bot.change_presence(activity=discord.CustomActivity(name='Naruto',party={'id':'ae488379-351d-4a4f-ad32-2b9b01c91657'}))
+    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
     print('My Body is ready!')
 
 #on join send message event
@@ -91,7 +91,7 @@ async def on_guild_join(guild):
 
     await guild.system_channel.send(f'Hello ** {guild.name}**! I am **{bot.user.mention}**!!! \n> **Help cmd** :\n> ~ **`)help`**\n> or \n> ~ **`{bot.user.mention} help`**')
     await guild.system_channel.send(f'----------\n----------\n**Myself {bot.user.mention} aka Yondaime Hokage**\n----------\n----------\n')
-    await guild.system_channel.send(f'> ~ Hey @here, **{guild.owner.mention}** or **anyone with administrator access** please type **`)setup`** in any of the channels in the server to do the setup!')
+    await guild.system_channel.send(f'> ~ Hey **{guild.owner.mention}** or **anyone with administrator access** please type **`)setup`** in any of the channels in the server to do the setup!')
     await guild.system_channel.send(f'----------')
     '''
     if guild.id not in (568567800910839811 , 632908146305925129):
@@ -153,6 +153,9 @@ async def on_member_unban(guild, user):
 #on message event
 @bot.event
 async def on_message(message):
+    if bot.user.mentioned_in(message) and message.mention_everyone is False and message.content.lower() == '<@!779559821162315787>' or message.content.lower() == '<@!779559821162315787> prefix':
+        await  message.channel.send('The prefix is **)** ,A full list of all commands is available by typing ```)help```')
+    await bot.process_commands(message)
     if message.channel.id == 814134179049635840:
         embed = message.embeds[0].to_dict()
         
@@ -181,7 +184,7 @@ async def on_command_error(ctx, error):
         e4 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e4.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e4)
-    
+    '''
     elif isinstance(error, commands.CommandNotFound):
         e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e2.set_footer(text=f"{ctx.author.name}")
@@ -202,6 +205,6 @@ async def on_command_error(ctx, error):
         e9.add_field(name="By", value=f"ID : {ctx.author.id}, Name : {ctx.author.name}")
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e9)
+        await ctx.channel.send(embed=e9)'''
 
 bot.run(TOKEN)

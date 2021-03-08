@@ -77,8 +77,9 @@ minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
 async def on_ready():
     for filename in os.listdir(Path(__file__).resolve(strict=True).parent / join('bot','cogs')):
         if filename.endswith('.py'):
-            bot.load_extension(f'bot.cogs.{filename[:-3]}')
-    await bot.change_presence(activity=discord.Streaming(name="Naruto", url=token_get("WEBSITE")))
+            if filename != 'music.py':
+                bot.load_extension(f'bot.cogs.{filename[:-3]}')
+    await bot.change_presence(activity=discord.CustomActivity(name='Naruto',party={'id':'ae488379-351d-4a4f-ad32-2b9b01c91657'}))
     print('My Body is ready!')
 
 #on join send message event
@@ -92,9 +93,12 @@ async def on_guild_join(guild):
     await guild.system_channel.send(f'----------\n----------\n**Myself {bot.user.mention} aka Yondaime Hokage**\n----------\n----------\n')
     await guild.system_channel.send(f'> ~ Hey @here, **{guild.owner.mention}** or **anyone with administrator access** please type **`)setup`** in any of the channels in the server to do the setup!')
     await guild.system_channel.send(f'----------')
-    await guild.system_channel.send('My **sleeping time** is from')
-    await guild.system_channel.send('**00:00 AM IST**  to')
-    await guild.system_channel.send('**07:00 AM IST**')
+    '''
+    if guild.id not in (568567800910839811 , 632908146305925129):
+        await guild.system_channel.send('My **sleeping time** is from')
+        await guild.system_channel.send('**00:00 AM IST**  to')
+        await guild.system_channel.send('**07:00 AM IST**')
+    '''
     
     img=random.choice(minato_gif)
     file = discord.File(join(minato_dir, 'minato',img), filename=img)
@@ -161,7 +165,7 @@ async def on_message(message):
             except: print('Tried but failed!')
     await bot.process_commands(message)
                 
-'''
+
 @bot.event
 async def on_command_error(ctx, error):
     guild = ctx.guild
@@ -169,10 +173,6 @@ async def on_command_error(ctx, error):
         e1 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e1.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e1)
-    elif isinstance(error, commands.CommandNotFound):
-        e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
-        e2.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e2)
     elif isinstance(error, commands.MissingPermissions):
         e3 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e3.set_footer(text=f"{ctx.author.name}")
@@ -181,6 +181,12 @@ async def on_command_error(ctx, error):
         e4 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e4.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e4)
+    
+    elif isinstance(error, commands.CommandNotFound):
+        e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
+        e2.set_footer(text=f"{ctx.author.name}")
+        await ctx.channel.send(embed=e2)
+
     elif isinstance(error, commands.CommandInvokeError):
         haha = ctx.author.avatar_url
         e7 = discord.Embed(title="Oh no green you fucked up", description=f"`{error}`")
@@ -196,6 +202,6 @@ async def on_command_error(ctx, error):
         e9.add_field(name="By", value=f"ID : {ctx.author.id}, Name : {ctx.author.name}")
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e9)'''
+        await ctx.channel.send(embed=e9)
 
 bot.run(TOKEN)

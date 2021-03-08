@@ -85,24 +85,27 @@ async def on_ready():
 #on join send message event
 @bot.event
 async def on_guild_join(guild):
-    img=random.choice(minato_gif)
-    file = discord.File(join(minato_dir, 'minato',img), filename=img)
-    await guild.system_channel.send(file=file)
+    try:
+        img=random.choice(minato_gif)
+        file = discord.File(join(minato_dir, 'minato',img), filename=img)
+        await guild.system_channel.send(file=file)
 
-    await guild.system_channel.send(f'Hello ** {guild.name}**! I am **{bot.user.mention}**!!! \n> **Help cmd** :\n> ~ **`)help`**\n> or \n> ~ **`{bot.user.mention} help`**')
-    await guild.system_channel.send(f'----------\n----------\n**Myself {bot.user.mention} aka Yondaime Hokage**\n----------\n----------\n')
-    await guild.system_channel.send(f'> ~ Hey **{guild.owner.mention}** or **anyone with administrator access** please type **`)setup`** in any of the channels in the server to do the setup!')
-    await guild.system_channel.send(f'----------')
-    '''
-    if guild.id not in (568567800910839811 , 632908146305925129):
-        await guild.system_channel.send('My **sleeping time** is from')
-        await guild.system_channel.send('**00:00 AM IST**  to')
-        await guild.system_channel.send('**07:00 AM IST**')
-    '''
-    
-    img=random.choice(minato_gif)
-    file = discord.File(join(minato_dir, 'minato',img), filename=img)
-    await guild.system_channel.send(file=file)
+        f=open(Path(__file__).resolve(strict=True).parent / join('bot','welcome_message.txt'),'r')
+        f1=f.read()
+        await guild.system_channel.send(f1.format(guild.name, bot.user.mention, bot.user.mention, bot.user.mention, guild.owner.mention))
+
+        '''
+        if guild.id not in (568567800910839811 , 632908146305925129):
+            await guild.system_channel.send(f'----------')
+            await guild.system_channel.send('My **sleeping time** is from')
+            await guild.system_channel.send('**00:00 AM IST**  to')
+            await guild.system_channel.send('**07:00 AM IST**')
+        '''
+        
+        img=random.choice(minato_gif)
+        file = discord.File(join(minato_dir, 'minato',img), filename=img)
+        await guild.system_channel.send(file=file)
+    except: pass
 
     e34= discord.Embed(title=f'{guild.name}', color= 0x2ecc71,description='Added')
     if guild.icon:

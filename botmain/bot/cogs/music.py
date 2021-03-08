@@ -1,3 +1,7 @@
+# FULL CREDIT TO WAVELINK EXAMPLES, UPDATING THIS SOON
+
+
+from gtts import gTTS
 import asyncio
 import async_timeout
 import copy
@@ -191,7 +195,7 @@ class InteractiveController(menus.Menu):
         if payload.member not in self.bot.get_channel(int(self.player.channel_id)).members:
             return False
 
-        return payload.emoji in self.menus
+        return payload.emoji in self.buttons
 
     async def send_initial_message(self, ctx: commands.Context, channel: discord.TextChannel) -> discord.Message:
         return await channel.send(embed=self.embed)
@@ -300,8 +304,6 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.auth_pass = bot.auth_pass
-        self.host = bot.lavalink
 
         if not hasattr(bot, 'wavelink'):
             bot.wavelink = wavelink.Client(bot=bot)
@@ -318,12 +320,12 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             for node in previous.values():
                 await node.destroy()
 
-        nodes = {'MAIN': {'host': self.host,
+        nodes = {'MAIN': {'host': 'lavalink.something.host',
                           'port': 80,
-                          'rest_uri': 'http://'+self.host+':80',
-                          'password': self.auth_pass,
+                          'rest_uri': 'http://lavalink.something.host:80',
+                          'password': 'youshallnotpass',
                           'identifier': 'MAIN',
-                          'region': 'us'
+                          'region': 'us_central'
                           }}
 
         for n in nodes.values():
@@ -443,18 +445,6 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             raise NoChannelProvided
 
         await player.connect(channel.id)
-    
-    @commands.command()
-    async def disconnect(self, ctx: commands.Context, *, channel: discord.VoiceChannel = None):
-        """Dissconnect from a voice channel."""
-        player: Player = self.bot.wavelink.get_player(
-            guild_id=ctx.guild.id, cls=Player, context=ctx)
-
-        channel = getattr(ctx.author.voice, 'channel', channel)
-        if channel is None:
-            raise NoChannelProvided
-
-        await player.disconnect()
 
     @commands.command()
     async def play(self, ctx: commands.Context, *, query: str):
@@ -471,7 +461,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
         tracks = await self.bot.wavelink.get_tracks(query)
         if not tracks:
-            return await ctx.send('No songs were found with that query. Please try again.')
+            return await ctx.send('No songs were found with that query. Please try again.', delete_after=15)
 
         if isinstance(tracks, wavelink.TrackPlaylist):
             for track in tracks.tracks:
@@ -479,10 +469,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 await player.queue.put(track)
 
             await ctx.send(f'```ini\nAdded the playlist {tracks.data["playlistInfo"]["name"]}'
-                           f' with {len(tracks.tracks)} songs to the queue.\n```')
+                           f' with {len(tracks.tracks)} songs to the queue.\n```', delete_after=15)
         else:
             track = Track(tracks[0].id, tracks[0].info, requester=ctx.author)
-            await ctx.send(f'```ini\nAdded {track.title} to the Queue\n```')
+            await ctx.send(f'```ini\nAdded {track.title} to the Queue\n```', delete_after=15)
             await player.queue.put(track)
 
         if not player.is_playing:
@@ -498,7 +488,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return
 
         if self.is_privileged(ctx):
-            await ctx.send('An admin or DJ has paused the player.')
+            await ctx.send('An admin or DJ has paused the player.', delete_after=10)
             player.pause_votes.clear()
 
             return await player.set_pause(True)
@@ -507,11 +497,11 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player.pause_votes.add(ctx.author)
 
         if len(player.pause_votes) >= required:
-            await ctx.send('Vote to pause passed. Pausing player.')
+            await ctx.send('Vote to pause passed. Pausing player.', delete_after=10)
             player.pause_votes.clear()
             await player.set_pause(True)
         else:
-            await ctx.send(f'{ctx.author.mention} has voted to pause the player.')
+            await ctx.send(f'{ctx.author.mention} has voted to pause the player.', delete_after=15)
 
     @commands.command()
     async def resume(self, ctx: commands.Context):
@@ -523,7 +513,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return
 
         if self.is_privileged(ctx):
-            await ctx.send('An admin or DJ has resumed the player.')
+            await ctx.send('An admin or DJ has resumed the player.', delete_after=10)
             player.resume_votes.clear()
 
             return await player.set_pause(False)
@@ -532,11 +522,11 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player.resume_votes.add(ctx.author)
 
         if len(player.resume_votes) >= required:
-            await ctx.send('Vote to resume passed. Resuming player.')
+            await ctx.send('Vote to resume passed. Resuming player.', delete_after=10)
             player.resume_votes.clear()
             await player.set_pause(False)
         else:
-            await ctx.send(f'{ctx.author.mention} has voted to resume the player.')
+            await ctx.send(f'{ctx.author.mention} has voted to resume the player.', delete_after=15)
 
     @commands.command()
     async def skip(self, ctx: commands.Context):
@@ -548,13 +538,13 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return
 
         if self.is_privileged(ctx):
-            await ctx.send('An admin or DJ has skipped the song.')
+            await ctx.send('An admin or DJ has skipped the song.', delete_after=10)
             player.skip_votes.clear()
 
             return await player.stop()
 
         if ctx.author == player.current.requester:
-            await ctx.send('The song requester has skipped the song.')
+            await ctx.send('The song requester has skipped the song.', delete_after=10)
             player.skip_votes.clear()
 
             return await player.stop()
@@ -563,11 +553,11 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player.skip_votes.add(ctx.author)
 
         if len(player.skip_votes) >= required:
-            await ctx.send('Vote to skip passed. Skipping song.')
+            await ctx.send('Vote to skip passed. Skipping song.', delete_after=10)
             player.skip_votes.clear()
             await player.stop()
         else:
-            await ctx.send(f'{ctx.author.mention} has voted to skip the song.')
+            await ctx.send(f'{ctx.author.mention} has voted to skip the song.', delete_after=15)
 
     @commands.command()
     async def stop(self, ctx: commands.Context):
@@ -579,17 +569,17 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return
 
         if self.is_privileged(ctx):
-            await ctx.send('An admin or DJ has stopped the player.')
+            await ctx.send('An admin or DJ has stopped the player.', delete_after=10)
             return await player.teardown()
 
         required = self.required(ctx)
         player.stop_votes.add(ctx.author)
 
         if len(player.stop_votes) >= required:
-            await ctx.send('Vote to stop passed. Stopping the player.')
+            await ctx.send('Vote to stop passed. Stopping the player.', delete_after=10)
             await player.teardown()
         else:
-            await ctx.send(f'{ctx.author.mention} has voted to stop the player.')
+            await ctx.send(f'{ctx.author.mention} has voted to stop the player.', delete_after=15)
 
     @commands.command(aliases=['v', 'vol'])
     async def volume(self, ctx: commands.Context, *, vol: int):
@@ -607,7 +597,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return await ctx.send('Please enter a value between 1 and 100.')
 
         await player.set_volume(vol)
-        await ctx.send(f'Set the volume to **{vol}**%')
+        await ctx.send(f'Set the volume to **{vol}**%', delete_after=7)
 
     @commands.command(aliases=['mix'])
     async def shuffle(self, ctx: commands.Context):
@@ -619,10 +609,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return
 
         if player.queue.qsize() < 3:
-            return await ctx.send('Add more songs to the queue before shuffling.')
+            return await ctx.send('Add more songs to the queue before shuffling.', delete_after=15)
 
         if self.is_privileged(ctx):
-            await ctx.send('An admin or DJ has shuffled the playlist.')
+            await ctx.send('An admin or DJ has shuffled the playlist.', delete_after=10)
             player.shuffle_votes.clear()
             return random.shuffle(player.queue._queue)
 
@@ -630,11 +620,11 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player.shuffle_votes.add(ctx.author)
 
         if len(player.shuffle_votes) >= required:
-            await ctx.send('Vote to shuffle passed. Shuffling the playlist.')
+            await ctx.send('Vote to shuffle passed. Shuffling the playlist.', delete_after=10)
             player.shuffle_votes.clear()
             random.shuffle(player.queue._queue)
         else:
-            await ctx.send(f'{ctx.author.mention} has voted to shuffle the playlist.')
+            await ctx.send(f'{ctx.author.mention} has voted to shuffle the playlist.', delete_after=15)
 
     @commands.command(hidden=True)
     async def vol_up(self, ctx: commands.Context):
@@ -649,7 +639,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
         if vol > 100:
             vol = 100
-            await ctx.send('Maximum volume reached')
+            await ctx.send('Maximum volume reached', delete_after=7)
 
         await player.set_volume(vol)
 
@@ -666,7 +656,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
         if vol < 0:
             vol = 0
-            await ctx.send('Player is currently muted')
+            await ctx.send('Player is currently muted', delete_after=10)
 
         await player.set_volume(vol)
 
@@ -693,7 +683,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             joined = "\n".join(eqs.keys())
             return await ctx.send(f'Invalid EQ provided. Valid EQs:\n\n{joined}')
 
-        await ctx.send(f'Successfully changed equalizer to {equalizer}')
+        await ctx.send(f'Successfully changed equalizer to {equalizer}', delete_after=15)
         await player.set_eq(eq)
 
     @commands.command(aliases=['q', 'que'])
@@ -706,7 +696,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return
 
         if player.queue.qsize() == 0:
-            return await ctx.send('There are no more songs in the queue.')
+            return await ctx.send('There are no more songs in the queue.', delete_after=15)
 
         entries = [track.title for track in player.queue._queue]
         pages = PaginatorSource(entries=entries)
@@ -736,18 +726,18 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return
 
         if not self.is_privileged(ctx):
-            return await ctx.send('Only admins and the DJ may use this command.')
+            return await ctx.send('Only admins and the DJ may use this command.', delete_after=15)
 
         members = self.bot.get_channel(int(player.channel_id)).members
 
         if member and member not in members:
-            return await ctx.send(f'{member} is not currently in voice, so can not be a DJ.')
+            return await ctx.send(f'{member} is not currently in voice, so can not be a DJ.', delete_after=15)
 
         if member and member == player.dj:
-            return await ctx.send('Cannot swap DJ to the current DJ... :)')
+            return await ctx.send('Cannot swap DJ to the current DJ... :)', delete_after=15)
 
         if len(members) <= 2:
-            return await ctx.send('No more members to swap to.')
+            return await ctx.send('No more members to swap to.', delete_after=15)
 
         if member:
             player.dj = member

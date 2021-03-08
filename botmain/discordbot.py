@@ -157,7 +157,8 @@ async def on_member_unban(guild, user):
 @bot.event
 async def on_message(message):
     if bot.user.mentioned_in(message) and message.mention_everyone is False and message.content.lower() == '<@!779559821162315787>' or message.content.lower() == '<@!779559821162315787> prefix':
-        await  message.channel.send('The prefix is **)** ,A full list of all commands is available by typing ```)help```')
+        if not message.author.bot:
+            await  message.channel.send('The prefix is **)** ,A full list of all commands is available by typing ```)help```')
     if message.channel.id == 814134179049635840:
         embed = message.embeds[0].to_dict()
         

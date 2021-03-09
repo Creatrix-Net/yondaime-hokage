@@ -189,7 +189,7 @@ async def on_command_error(ctx, error):
         await ctx.channel.send(embed=e4)
 
     elif isinstance(error, commands.CommandInvokeError):
-        e7 = discord.Embed(title="Oh no, I guess I have not been given proper access!", description=f"`{error}`")
+        e7 = discord.Embed(title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
         e7.add_field(name="Command Error Caused By:", value=f"{ctx.command}")
         e7.add_field(name="By", value=f"{ctx.author.name}")
         e7.add_field(name="MY INVITE LINK", value=f"[LINK](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=2147483656&scope=bot)")

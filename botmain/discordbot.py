@@ -75,6 +75,7 @@ minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
 # Events
 @bot.event
 async def on_ready():
+    os.system('python botmain/change_presence.py')
     for filename in os.listdir(Path(__file__).resolve(strict=True).parent / join('bot','cogs')):
         if filename.endswith('.py'):
             if filename != 'music.py':

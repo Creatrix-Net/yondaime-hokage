@@ -52,19 +52,7 @@ def keep_alive(request):
         return redirect(reverse('Home'))
 
 def invite_bot(request):
-    from requests_oauthlib import OAuth2Session
-    a = OAuth2Session(
-        client_id=settings.DISCORD_CLIENT_ID,
-        auto_refresh_kwargs={
-            'client_id': settings.DISCORD_CLIENT_ID,
-            'client_secret': settings.DISCORD_CLIENT_SECRET,
-            'permissions': 2147483656
-        },
-        redirect_uri= request.META.get('HTTP_REFERER'),
-        scope=['bot',],
-    )
-    url, state = a.authorization_url(settings.DISCORD_BASE_URI + settings.DISCORD_AUTHZ_PATH)
-    return redirect(url)
+    return redirect('https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=2147483656&scope=bot')
 
 
 def return_available_anime(request, name):

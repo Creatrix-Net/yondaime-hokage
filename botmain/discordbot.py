@@ -80,7 +80,6 @@ async def on_ready():
             if filename != 'music.py':
                 bot.load_extension(f'bot.cogs.{filename[:-3]}')
     await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
-    await bot.db
     current_time = time.time()
     difference = int(round(current_time - bot.start_time))
     bot.stats = bot.get_channel(819128718152695878)
@@ -199,6 +198,7 @@ async def on_command_error(ctx, error):
         if ctx.guild.id == '632908146305925129' or ctx.guild.id == 632908146305925129:
             perms=4294967287
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access!", description=f"`{error}`")
+        e7 = discord.Embed(title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
         e7.add_field(name="Command Error Caused By:", value=f"{ctx.command}")
         e7.add_field(name="By", value=f"{ctx.author.name}")
         e7.add_field(name="MY INVITE LINK", value=f"[LINK](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions={perms}&scope=bot)")

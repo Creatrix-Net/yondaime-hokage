@@ -161,16 +161,17 @@ class Random(commands.Cog):
             timestamp=ctx.message.created_at,
         )
 
-        embed.add_field(name="Bot Version:", value=self.bot.version)
-        embed.add_field(name="Python Version:", value=pythonVersion)
-        embed.add_field(name="Discord.Py Version", value=dpyVersion)
-        embed.add_field(name="Total Guilds:", value=serverCount)
-        embed.add_field(name="Total Users:", value=memberCount)
-        embed.add_field(name="Bot Developers:", value="DHRUVA SHAW#0550")
+        embed.set_thumbnail(url=self.bot.user.avatar_url)
+
+        embed.add_field(name="**Bot Version:**", value=self.bot.version)
+        embed.add_field(name="**Python Version:**", value=pythonVersion)
+        embed.add_field(name="**Discord.Py Version**", value=dpyVersion)
+        embed.add_field(name="**Total Guilds:**", value=serverCount+1)
+        embed.add_field(name="**Total Users:**", value=memberCount)
+        embed.add_field(name="**Bot Developers:**", value="DHRUVA SHAW#0550")
 
         embed.set_footer(text=f"{ctx.author} | {self.bot.user.name}")
-        embed.set_author(name=self.bot.user.name,
-                         icon_url=self.bot.user.avatar_url)
+        embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
 
         await ctx.send(embed=embed)
 

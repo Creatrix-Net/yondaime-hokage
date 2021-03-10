@@ -2,7 +2,7 @@
 import discord
 from discord.ext import commands
 from discord import Spotify
-
+import datetime
 import time
 
 from ..utils_dis import *
@@ -21,7 +21,7 @@ class Info(commands.Cog):
         c = self.bot.get_channel(813954921782706227)
         if ctx.guild.id == 747480356625711204:
             b = await ctx.send('** Okay updating info ! **')
-            n=0
+            n=1
             for guild in ctx.bot.guilds:
                 e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color= 0x2ecc71)
                 if guild.icon:
@@ -79,6 +79,19 @@ class Info(commands.Cog):
     async def vote(self, ctx):
         m = VotingMenu(bot=self.bot)
         await m.start(ctx)
+    
+    @commands.command()
+    async def uptime(self, ctx):
+        current_time = time.time()
+        difference = int(round(current_time - self.bot.start_time))
+        text = str(datetime.timedelta(seconds=difference))
+        embed = discord.Embed(colour=ctx.message.author.top_role.colour)
+        embed.add_field(name="Uptime", value=text)
+        embed.set_footer(text=f"{ctx.author} | {self.bot.user}")
+        try:
+            await ctx.send(embed=embed)
+        except discord.HTTPException:
+            await ctx.send("Current uptime: " + text)
         
 
     @commands.command()

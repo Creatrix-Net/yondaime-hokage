@@ -80,7 +80,13 @@ async def on_ready():
             if filename != 'music.py':
                 bot.load_extension(f'bot.cogs.{filename[:-3]}')
     await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
-    print('My Body is ready!')
+    await bot.db
+    current_time = time.time()
+    difference = int(round(current_time - bot.start_time))
+    bot.stats = bot.get_channel(819128718152695878)
+    bot.description = f"Multi-Purpose Discord.py bot used in {len(bot.guilds)+1} guilds! Minato Namikaze Aka Yondaime Hokage"
+    e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready, loaded all cogs perfectly! Time to load is {difference} secs :)")
+    await bot.stats.send(embed=e)
 
 #on join send message event
 @bot.event
@@ -189,10 +195,13 @@ async def on_command_error(ctx, error):
         await ctx.channel.send(embed=e4)
 
     elif isinstance(error, commands.CommandInvokeError):
+        perms=2147483656
+        if ctx.guild.id == '632908146305925129' or ctx.guild.id == 632908146305925129:
+            perms=4294967287
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access!", description=f"`{error}`")
         e7.add_field(name="Command Error Caused By:", value=f"{ctx.command}")
         e7.add_field(name="By", value=f"{ctx.author.name}")
-        e7.add_field(name="MY INVITE LINK", value=f"[LINK](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=2147483656&scope=bot)")
+        e7.add_field(name="MY INVITE LINK", value=f"[LINK](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions={perms}&scope=bot)")
         e7.set_thumbnail(url=f"https://i.imgur.com/1zey3je.jpg")
         e7.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e7)

@@ -58,19 +58,6 @@ class Info(commands.Cog):
                 return await ctx.send(embed=e)
 
     @commands.command()
-    async def lp(self, ctx, member: discord.Member = None):
-        if member is None:
-            starttext = "Maybe you should learn python first"
-            embed2 = discord.Embed(
-                title=f"{starttext}", description="Here's some tutorials! \n [Click Here For](https://automatetheboringstuff.com/) complete beginners to programming \n [Click Here For](https://learnxinyminutes.com/docs/python3/) people who know programming already \n [Click Here For](https://docs.python.org/3/tutorial/) the official tutorial\n [Click Here For](http://python.swaroopch.com/) a useful book\n [See Also For](http://www.codeabbey.com/) exercises for beginners")
-            return await ctx.send(embed=embed2)
-        else:
-            starttext = f"Maybe you should learn python first {member.name}"
-            embed = discord.Embed(
-                title=f"{starttext}", description="Here's some tutorials! \n [Click Here For](https://automatetheboringstuff.com/) complete beginners to programming \n [Click Here For](https://learnxinyminutes.com/docs/python3/) people who know programming already \n [Click Here For](https://docs.python.org/3/tutorial/) the official tutorial\n [Click Here For](http://python.swaroopch.com/) a useful book\n [See Also For](http://www.codeabbey.com/) exercises for beginners")
-            return await ctx.send(embed=embed)
-
-    @commands.command()
     async def who(self, ctx): 
         m = WhoMenu(bot=self.bot)
         await m.start(ctx)
@@ -84,7 +71,7 @@ class Info(commands.Cog):
     async def uptime(self, ctx):
         current_time = time.time()
         difference = int(round(current_time - self.bot.start_time))
-        text = str(datetime.timedelta(seconds=difference))
+        text = str(datetime.timedelta(seconds=difference)) + ' mins' if str(datetime.timedelta(seconds=difference))[0]=='0' or str(datetime.timedelta(seconds=difference))[0:1]!='00' else ' hours'
         embed = discord.Embed(colour=ctx.message.author.top_role.colour)
         embed.add_field(name="Uptime", value=text)
         embed.set_footer(text=f"{ctx.author} | {self.bot.user}")

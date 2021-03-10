@@ -169,6 +169,7 @@ class Random(commands.Cog):
         embed.add_field(name="**Total Guilds:**", value=serverCount+1)
         embed.add_field(name="**Total Users:**", value=memberCount)
         embed.add_field(name="**Bot Developers:**", value="DHRUVA SHAW#0550")
+        embed.add_field(name="**More Info:**", value="[Click Here](https://statcord.com/bot/779559821162315787)")
 
         embed.set_footer(text=f"{ctx.author} | {self.bot.user.name}")
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)

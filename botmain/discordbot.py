@@ -1,4 +1,5 @@
   
+from datetime import datetime
 import os
 import time
 from os.path import join
@@ -80,12 +81,16 @@ async def on_ready():
             if filename != 'music.py':
                 bot.load_extension(f'bot.cogs.{filename[:-3]}')
     await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
+    
     current_time = time.time()
     difference = int(round(current_time - bot.start_time))
-    bot.stats = bot.get_channel(819128718152695878)
+    stats = bot.get_channel(819128718152695878)
     bot.description = f"Multi-Purpose Discord.py bot used in {len(bot.guilds)+1} guilds! Minato Namikaze Aka Yondaime Hokage"
-    e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready, loaded all cogs perfectly! Time to load is {difference} secs :)")
-    await bot.stats.send(embed=e)
+    e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)")
+    e.set_thumbnail(url='https://i.imgur.com/fMx8iil.jpg')
+    print('Started The Bot')
+
+    await stats.send(embed=e)
 
 #on join send message event
 @bot.event

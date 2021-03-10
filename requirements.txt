@@ -89,7 +89,7 @@ tzlocal==2.1
 uritemplate==3.0.1
 urllib3==1.26.3
 utils==1.0.1
-wavelink==0.9.8
+wavelink==0.9.9
 whitenoise==5.2.0
 wrapt==1.12.1
 yarl==1.6.3

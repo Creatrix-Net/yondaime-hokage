@@ -199,7 +199,7 @@ async def on_command_error(ctx, error):
         await ctx.channel.send(embed=e4)
 
     elif isinstance(error, commands.CommandInvokeError):
-        perms=2147483656
+        perms= 4294967287 #2147483656
         if ctx.guild.id == '632908146305925129' or ctx.guild.id == 632908146305925129:
             perms=4294967287
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access!", description=f"`{error}`")

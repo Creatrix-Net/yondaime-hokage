@@ -123,6 +123,7 @@ async def on_guild_join(guild):
     if guild.banner:
         e34.set_image(url=guild.banner_url_as(format="png"))
     c = bot.get_channel(813954921782706227)
+    e34.add_field(name='**Members**',value=f'{guild.member_count} | {sum(1 for member in guild.members if member.bot)}')
     await c.send(embed=e34)
 
 #when bot leaves the server

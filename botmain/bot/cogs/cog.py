@@ -145,7 +145,7 @@ class Info(commands.Cog):
                 name="**Members**", value=ctx.guild.member_count, inline=True)
             embed.add_field(name="**Bots**", value=find_bots, inline=True)
             embed.add_field(name="**Owner**", value=ctx.guild.owner, inline=True)
-            embed.add_field(name="**Region**", value=ctx.guild.region.capitalize(), inline=True)
+            embed.add_field(name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
             await ctx.send(embed=embed)
 
     @server.command(name="server_icon", aliases=["icon"])

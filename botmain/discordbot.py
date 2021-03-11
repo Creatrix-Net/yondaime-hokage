@@ -177,6 +177,7 @@ async def on_message(message):
                 if not guild.id == 747480356625711204: 
                     e = discord.Embed(title=embed['title'],description=embed['description'] , color= 0x2ecc71)
                     e.set_thumbnail(url='https://i.imgur.com/lwGawEv.jpeg')
+                    e.add_field(name='**Members**',value=f'{guild.member_count} | {sum(1 for member in guild.members if member.bot)}')
                     await guild.system_channel.send(embed=e)
             except: print('Tried but failed!')
     await bot.process_commands(message)

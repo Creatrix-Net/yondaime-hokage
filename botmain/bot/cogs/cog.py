@@ -130,21 +130,21 @@ class Info(commands.Cog):
             find_bots = sum(1 for member in ctx.guild.members if member.bot)
 
             embed = discord.Embed(
-                title=f"ℹ information about **{ctx.guild.name}**", description=None)
+                title=f"ℹ Information Bbout **{ctx.guild.name}**", description=None)
 
             if ctx.guild.icon:
                 embed.set_thumbnail(url=ctx.guild.icon_url)
             if ctx.guild.banner:
                 embed.set_image(url=ctx.guild.banner_url_as(format="png"))
 
-            embed.add_field(name="Server Name",
+            embed.add_field(name="**Server Name**",
                             value=ctx.guild.name, inline=True)
-            embed.add_field(name="Server ID", value=ctx.guild.id, inline=True)
+            embed.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             embed.add_field(
-                name="Members", value=ctx.guild.member_count, inline=True)
-            embed.add_field(name="Bots", value=find_bots, inline=True)
-            embed.add_field(name="Owner", value=ctx.guild.owner, inline=True)
-            embed.add_field(name="Region", value=ctx.guild.region, inline=True)
+                name="**Members**", value=ctx.guild.member_count, inline=True)
+            embed.add_field(name="**Bots**", value=find_bots, inline=True)
+            embed.add_field(name="**Owner**", value=ctx.guild.owner, inline=True)
+            embed.add_field(name="**Region**", value=ctx.guild.region.capitalize(), inline=True)
             await ctx.send(embed=embed)
 
     @server.command(name="server_icon", aliases=["icon"])

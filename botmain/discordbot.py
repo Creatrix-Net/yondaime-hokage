@@ -14,6 +14,7 @@ import mystbin
 from asyncdagpi import Client
 from discord.ext import commands
 from discord.ext.buttons import Paginator
+import uuid
 
 from bot.help import Help
 
@@ -67,11 +68,11 @@ bot.owner = token_get('OWNER')
 bot.topgg = token_get('TOPGG')
 bot.discordbotlist = token_get('DBLST')
 bot.thresholds = (10, 25, 50, 100)
+bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** ||私の湊波風別名第四火影||"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 
 minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
-
 
 # Events
 @bot.event
@@ -81,11 +82,10 @@ async def on_ready():
             if filename != 'music.py':
                 bot.load_extension(f'bot.cogs.{filename[:-3]}')
     await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
-    
+
     current_time = time.time()
     difference = int(round(current_time - bot.start_time))
     stats = bot.get_channel(819128718152695878)
-    bot.description = f"Multi-Purpose Discord.py bot used in {len(bot.guilds)+1} guilds! Minato Namikaze Aka Yondaime Hokage"
     e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)")
     e.set_thumbnail(url='https://i.imgur.com/fMx8iil.jpg')
     print('Started The Bot')
@@ -166,7 +166,7 @@ async def on_member_unban(guild, user):
 #on message event
 @bot.event
 async def on_message(message):
-    if bot.user.mentioned_in(message) and message.mention_everyone is False and message.content.lower() == '<@!779559821162315787>' or message.content.lower() == '<@!779559821162315787> prefix':
+    if bot.user.mentioned_in(message) and message.mention_everyone is False and message.content.lower() in ('<@!779559821162315787>', '<@779559821162315787>') or message.content.lower() in ('<@!779559821162315787> prefix', '<@779559821162315787> prefix'):
         if not message.author.bot:
             await  message.channel.send('The prefix is **)** ,A full list of all commands is available by typing ```)help```')
     if message.channel.id == 814134179049635840:

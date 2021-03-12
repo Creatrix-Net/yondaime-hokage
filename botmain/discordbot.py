@@ -123,6 +123,7 @@ async def on_guild_join(guild):
     if guild.banner:
         e34.set_image(url=guild.banner_url_as(format="png"))
     c = bot.get_channel(813954921782706227)
+    e34.add_field(name='**Members**',value=f'{guild.member_count} | {sum(1 for member in guild.members if member.bot)}')
     await c.send(embed=e34)
 
 #when bot leaves the server
@@ -200,7 +201,7 @@ async def on_command_error(ctx, error):
         await ctx.channel.send(embed=e4)
 
     elif isinstance(error, commands.CommandInvokeError):
-        perms= 4294967287 #2147483656
+        perms= 1073737719 #2147483656
         if ctx.guild.id == '632908146305925129' or ctx.guild.id == 632908146305925129:
             perms=4294967287
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access!", description=f"`{error}`")

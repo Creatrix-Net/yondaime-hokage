@@ -201,9 +201,7 @@ async def on_command_error(ctx, error):
         await ctx.channel.send(embed=e4)
 
     elif isinstance(error, commands.CommandInvokeError):
-        perms= 1610084342 #1073737719 #2147483656
-        if ctx.guild.id == '632908146305925129' or ctx.guild.id == 632908146305925129:
-            perms=1610084342
+        perms= 8 #1073737719 #2147483656
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access!", description=f"`{error}`")
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
         e7.add_field(name="Command Error Caused By:", value=f"{ctx.command}")

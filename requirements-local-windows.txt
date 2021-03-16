@@ -87,7 +87,7 @@ traceback2==1.4.0
 typing-extensions==3.7.4.3
 tzlocal==2.1
 uritemplate==3.0.1
-urllib3==1.26.3
+urllib3==1.26.4
 utils==1.0.1
 wavelink==0.9.9
 whitenoise==5.2.0

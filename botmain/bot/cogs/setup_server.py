@@ -197,8 +197,9 @@ class Server_Setup(commands.Cog):
             #Setup Finish
             import time
             await botask.send('Deleting this setup channel in')
-            for i in range(5):
-                await botask.send(5-i)
+            gb = await botask.send(5)
+            for i in range(1,5):
+                await gb.edit(content=5-i)
                 time.sleep(1)
             await botask.delete()
 

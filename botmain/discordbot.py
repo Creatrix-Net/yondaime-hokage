@@ -209,6 +209,7 @@ async def on_command_error(ctx, error):
         e7.set_thumbnail(url=f"https://i.imgur.com/1zey3je.jpg")
         e7.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e7)
+    '''
     else:
         haaha = ctx.author.avatar_url
         e9 = discord.Embed(title="Oh no there was some error", description=f"`{error}`")
@@ -217,7 +218,7 @@ async def on_command_error(ctx, error):
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e9)
-    '''
+
     elif isinstance(error, commands.CommandNotFound):
         e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e2.set_footer(text=f"{ctx.author.name}")

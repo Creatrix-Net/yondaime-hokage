@@ -14,6 +14,8 @@ from asyncdagpi import Client
 from discord.ext import commands
 from discord.ext.buttons import Paginator
 import uuid
+import dbl
+
 
 from bot.help import Help
 

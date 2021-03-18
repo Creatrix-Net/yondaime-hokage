@@ -93,7 +93,7 @@ async def on_ready():
 
     await stats.send(embed=e)
     dblpy = dbl.DBLClient(bot, bot.topken, autopost=True) 
-    await post_guild_count(bot.guilds)
+    await dbl.post_guild_count(bot.guilds)
 
 #on join send message event
 @bot.event

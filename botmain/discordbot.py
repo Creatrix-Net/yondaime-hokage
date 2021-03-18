@@ -4,6 +4,7 @@ import time
 from os.path import join
 from pathlib import Path
 import random
+import requests
 
 import aiozaneapi
 import async_cleverbot as ac
@@ -66,14 +67,42 @@ bot.lavalink = token_get('LAVALINK')
 
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
-bot.topgg = token_get('TOPGG')
 bot.discordbotlist = token_get('DBLST')
 bot.thresholds = (10, 25, 50, 100)
 bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** ||私の湊波風別名第四火影||"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 
+bot.topgg = token_get('TOPGG')
+bot.dblst = token_get('DISCORDBOTLIST')
+bot.botlist = token_get('BOTLISTSPACE')
+bot.bfd = token_get('BOTSFORDISCORD')
+
 minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
+
+async def post_guild_stats_all():
+    guildsno = len(bot.guilds)+2
+    members = len(set(bot.get_all_members()))
+
+    dblpy = dbl.DBLClient(bot, bot.topken, autopost=True)
+    await dblpy.post_guild_count(guildsno)
+    requests.post(f'https://discordbotlist.com/api/v1/bots/{bot.discord_id}/stats',
+        headers={'Authorization':bot.dblst},
+        data={'guilds':guildsno,'users':members}
+    )
+    requests.post(f'https://discordbotlist.com/api/v1/bots/{bot.discord_id}/stats',
+        headers={'Authorization':bot.dblst},
+        data={'guilds':guildsno,'users':members}
+    )
+    r=requests.post(f'https://botsfordiscord.com/api/bot/{bot.discord_id}',
+        headers={'Authorization':bot.bfd,'Content-Type':'application/json'},
+        data={'server_count':guildsno}
+    )
+    r1=requests.post(f'https://api.botlist.space/v1/bots/{bot.discord_id}',
+        headers={'Authorization':bot.botlist,'Content-Type':'application/json'},
+        data={'server_count':guildsno}
+    )
+    print(r.status_code,r1.json())
 
 # Events
 @bot.event
@@ -91,9 +120,8 @@ async def on_ready():
     e.set_thumbnail(url='https://i.imgur.com/fMx8iil.jpg')
     print('Started The Bot')
 
-    await stats.send(embed=e)
-    dblpy = dbl.DBLClient(bot, bot.topken, autopost=True) 
-    await dbl.post_guild_count(bot.guilds)
+    await stats.send(embed=e) 
+    await post_guild_stats_all()
 
 #on join send message event
 @bot.event
@@ -119,6 +147,7 @@ async def on_guild_join(guild):
         file = discord.File(join(minato_dir, 'minato',img), filename=img)
         await guild.system_channel.send(file=file)
     except: pass
+    await post_guild_stats_all()
 
     e34= discord.Embed(title=f'{guild.name}', color= 0x2ecc71,description='Added')
     if guild.icon:
@@ -140,6 +169,7 @@ async def on_guild_remove(guild):
     c = bot.get_channel(813954921782706227)
     if guild.name:
         await c.send(embed=e34)
+    await post_guild_stats_all()
 
 #ban
 @bot.event

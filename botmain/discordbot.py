@@ -115,6 +115,7 @@ async def on_guild_join(guild):
         file = discord.File(join(minato_dir, 'minato',img), filename=img)
         await guild.system_channel.send(file=file)
     except: pass
+    dblpy = dbl.DBLClient(bot, bot.topken, autopost=True) 
 
     e34= discord.Embed(title=f'{guild.name}', color= 0x2ecc71,description='Added')
     if guild.icon:

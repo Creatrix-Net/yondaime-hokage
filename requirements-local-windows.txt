@@ -7,7 +7,7 @@ astroid==2.5
 astunparse==1.6.3
 async-cleverbot==0.2.2
 async-timeout==3.0.1
-asyncdagpi==3.3.0
+asyncdagpi==3.3.2
 attrs==20.3.0
 backoff==1.10.0
 beautifulsoup4==4.9.3

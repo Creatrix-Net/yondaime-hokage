@@ -81,28 +81,24 @@ minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bo
 minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
 
 async def post_guild_stats_all():
-    guildsno = len(bot.guilds)+2
+    guildsno = len(bot.guilds)+1
     members = len(set(bot.get_all_members()))
 
     dblpy = dbl.DBLClient(bot, bot.topken, autopost=True)
     await dblpy.post_guild_count(guildsno)
-    requests.post(f'https://discordbotlist.com/api/v1/bots/{bot.discord_id}/stats',
+    b=requests.post(f'https://discordbotlist.com/api/v1/bots/{bot.discord_id}/stats',
         headers={'Authorization':bot.dblst},
         data={'guilds':guildsno,'users':members}
     )
-    requests.post(f'https://discordbotlist.com/api/v1/bots/{bot.discord_id}/stats',
-        headers={'Authorization':bot.dblst},
-        data={'guilds':guildsno,'users':members}
-    )
-    r=requests.post(f'https://botsfordiscord.com/api/bot/{bot.discord_id}',
+    c=requests.post(f'https://botsfordiscord.com/api/bot/{bot.discord_id}',
         headers={'Authorization':bot.bfd,'Content-Type':'application/json'},
-        data={'server_count':guildsno}
+        json={'server_count':guildsno}
     )
-    r1=requests.post(f'https://api.botlist.space/v1/bots/{bot.discord_id}',
+    d=requests.post(f'https://api.botlist.space/v1/bots/{bot.discord_id}',
         headers={'Authorization':bot.botlist,'Content-Type':'application/json'},
-        data={'server_count':guildsno}
+        json={'server_count':guildsno}
     )
-    print(r.status_code,r1.json())
+    print(b.status_code,c.status_code,d.status_code)
 
 # Events
 @bot.event

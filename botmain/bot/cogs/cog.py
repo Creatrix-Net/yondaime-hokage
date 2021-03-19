@@ -4,6 +4,8 @@ from discord.ext import commands
 from discord import Spotify
 import datetime
 import time
+import requests
+import dbl
 
 from ..utils_dis import *
 
@@ -12,6 +14,51 @@ class Info(commands.Cog):
         self.bot = bot
         self.bot.start_time = bot.start_time
         self.bot.github = bot.github
+        self.bot.discord_id = bot.discord_id
+
+        self.bot.bfd = bot.bfd
+        self.bot.dblst = bot.dblst
+        self.bot.botlist = bot.botlist
+        self.bot.topken = bot.topken
+        self.bot.discordboats = bot.discordboats
+        self.bot.discordbotsgg = bot.discordbotsgg
+    
+    async def post_guild_stats_all(self):
+        guildsno = len(self.bot.guilds)+1
+        members = len(set(self.bot.get_all_members()))
+
+        dblpy = dbl.DBLClient(self.bot, self.bot.topken, autopost=True)
+        await dblpy.post_guild_count(guildsno)
+        b=requests.post(f'https://discordbotlist.com/api/v1/bots/{self.bot.discord_id}/stats',
+            headers={'Authorization':self.bot.dblst},
+            data={'guilds':guildsno,'users':members}
+        )
+        c=requests.post(f'https://botsfordiscord.com/api/bot/{self.bot.discord_id}',
+            headers={'Authorization':self.bot.bfd,'Content-Type':'application/json'},
+            json={'server_count':guildsno}
+        )
+        d=requests.post(f'https://api.botlist.space/v1/bots/{self.bot.discord_id}',
+            headers={'Authorization':self.bot.botlist,'Content-Type':'application/json'},
+            json={'server_count':guildsno}
+        )
+        e=requests.post(f'https://discord.boats/api/bot/{self.bot.discord_id}',
+            headers={'Authorization':self.bot.discordboats},
+            data={'server_count':guildsno}
+        )
+        f=requests.post(f'https://discord.bots.gg/api/v1/bots/{self.bot.discord_id}/stats',
+            headers={'Authorization':self.bot.discordbotsgg,'Content-Type':'application/json'},
+            json={'guildCount':guildsno}
+        )
+        r = self.bot.get_channel(822472454030229545)
+        e1 = discord.Embed(title='Status posted successfully',description='[Widgets Link](https://dhruvacube.github.io/yondaime-hokage/widgets)' , color= 0x2ecc71)
+        e1.set_thumbnail(url='https://i.imgur.com/Reopagp.jpg')
+        e1.add_field(name='TOPGG',value='200 : [TOPGG](https://top.gg/bot/779559821162315787)')
+        e1.add_field(name='DISCORDBOTLIST',value=str(b.status_code)+' : [DISCORDBOTLIST](https://discord.ly/minato-namikaze)')
+        e1.add_field(name='BOTSFORDISCORD',value=str(c.status_code)+' : [BOTSFORDISCORD](https://botsfordiscord.com/bot/779559821162315787)')
+        e1.add_field(name='DISCORDLIST.SPACE',value=str(d.status_code)+' : [DISCORDLIST.SPACE](https://discordlist.space/bot/779559821162315787)')
+        e1.add_field(name='DISCORD.BOATS',value=str(e.status_code)+' : [DISCORD.BOATS](https://discord.boats/bot/779559821162315787)')
+        e1.add_field(name='DISCORD.BOTS.GG',value=str(f.status_code)+' : [DISCORD.BOTS.GG](https://discord.bots.gg/bots/779559821162315787/)')
+        await r.send(embed=e1)
 
     @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
     @commands.cooldown(1, 1080, commands.BucketType.guild)
@@ -42,6 +89,7 @@ class Info(commands.Cog):
                 e.set_image(url=ctx.guild.banner_url_as(format="png"))
             await c.send(embed=e)
             await ctx.send(f'Sent the info to developer that "I am on {ctx.guild.name}" , {ctx.author.mention} 😉')
+            await self.post_guild_stats_all()
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):

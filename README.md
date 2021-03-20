@@ -22,6 +22,7 @@
 * [Docs](https://dhruvacube.github.io/yondaime-hokage/)
 * [Commands List](https://dhruvacube.github.io/yondaime-hokage/help)
 * [Privacy Policy](https://dhruvacube.github.io/yondaime-hokage/privacy_policy)
+* [Widgets](https://dhruvacube.github.io/yondaime-hokage/widgets)
 
 ***
 

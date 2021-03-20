@@ -78,6 +78,8 @@ bot.botlist = token_get('BOTLISTSPACE')
 bot.bfd = token_get('BOTSFORDISCORD')
 bot.discordboats = token_get('DISCORDBOATS')
 bot.discordbotsgg = token_get('DISCORDBOTS')
+bot.discordlistology = token_get('DISCORDLISTOLOGY')
+bot.discordextremelist = token_get('DISCORDEXTREMELIST')
 
 minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
@@ -85,6 +87,9 @@ minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
 async def post_guild_stats_all():
     guildsno = len(bot.guilds)+1
     members = len(set(bot.get_all_members()))
+    imageslistdir = Path(__file__).resolve(strict=True).parent / join('bot','images_list.txt')
+    filepointer=open(imageslistdir)
+    imageslist = filepointer.readlines()
 
     dblpy = dbl.DBLClient(bot, bot.topken, autopost=True)
     await dblpy.post_guild_count(guildsno)
@@ -108,15 +113,26 @@ async def post_guild_stats_all():
         headers={'Authorization':bot.discordbotsgg,'Content-Type':'application/json'},
         json={'guildCount':guildsno}
     )
+    g=requests.post(f'https://discordlistology.com/api/v1/bots/{bot.discord_id}/stats',
+        headers={'Authorization':bot.discordlistology},
+        data={'servers':guildsno}
+    )
+    h=requests.post(f'https://api.discordextremelist.xyz/v2/bot/{bot.discord_id}/stats',
+        headers={'Authorization':bot.discordextremelist,'Content-Type':'application/json'},
+        json={'guildCount':guildsno}
+    )
     r = bot.get_channel(822472454030229545)
     e1 = discord.Embed(title='Status posted successfully',description='[Widgets Link](https://dhruvacube.github.io/yondaime-hokage/widgets)' , color= 0x2ecc71)
+    e1.set_image(url=random.choice(imageslist).strip('\n'))
     e1.set_thumbnail(url='https://i.imgur.com/Reopagp.jpg')
-    e1.add_field(name='TOPGG',value='200 : [TOPGG](https://top.gg/bot/779559821162315787)')
-    e1.add_field(name='DISCORDBOTLIST',value=str(b.status_code)+' : [DISCORDBOTLIST](https://discord.ly/minato-namikaze)')
-    e1.add_field(name='BOTSFORDISCORD',value=str(c.status_code)+' : [BOTSFORDISCORD](https://botsfordiscord.com/bot/779559821162315787)')
-    e1.add_field(name='DISCORDLIST.SPACE',value=str(d.status_code)+' : [DISCORDLIST.SPACE](https://discordlist.space/bot/779559821162315787)')
-    e1.add_field(name='DISCORD.BOATS',value=str(e.status_code)+' : [DISCORD.BOATS](https://discord.boats/bot/779559821162315787)')
-    e1.add_field(name='DISCORD.BOTS.GG',value=str(f.status_code)+' : [DISCORD.BOTS.GG](https://discord.bots.gg/bots/779559821162315787/)')
+    e1.add_field(name='TopGG',value='200 : [TopGG](https://top.gg/bot/779559821162315787)')
+    e1.add_field(name='DiscordBotList',value=str(b.status_code)+' : [DiscordBotList](https://discord.ly/minato-namikaze)')
+    e1.add_field(name='BotsForDiscord',value=str(c.status_code)+' : [BotsForDiscord](https://botsfordiscord.com/bot/779559821162315787)')
+    e1.add_field(name='DiscordListSpace',value=str(d.status_code)+' : [DiscordListSpace](https://discordlist.space/bot/779559821162315787)')
+    e1.add_field(name='DiscordBoats',value=str(e.status_code)+' : [DiscordBoats](https://discord.boats/bot/779559821162315787)')
+    e1.add_field(name='DiscordBots',value=str(f.status_code)+' : [DiscordBots](https://discord.bots.gg/bots/779559821162315787/)')
+    e1.add_field(name='DiscordListoLogy',value=str(g.status_code)+' : [DiscordListoLogy](https://discordlistology.com/bots/779559821162315787)')
+    e1.add_field(name='DiscordExtremeList',value=str(h.status_code)+' : [DiscordExtremeList](https://discordextremelist.xyz/en-US/bots/779559821162315787)')
     await r.send(embed=e1)
 
 # Events

@@ -35,7 +35,7 @@
 
 ### Widgets
 
-[![Discord Bots](https://top.gg/api/widget/779559821162315787.svg)](https://top.gg/bot/779559821162315787)    [![Bots for Discord](https://botsfordiscord.com/api/bot/779559821162315787/widget)](https://botsfordiscord.com/bots/779559821162315787)
+[![Discord Bots](https://top.gg/api/widget/779559821162315787.svg)](https://top.gg/bot/779559821162315787)
 
 [![Bots for Discord](https://botsfordiscord.com/api/bot/779559821162315787/widget)](https://botsfordiscord.com/bots/779559821162315787)  [![Discord Boats](https://discord.boats/api/widget/779559821162315787)](https://discord.boats/bot/779559821162315787)
 

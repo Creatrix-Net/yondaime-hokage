@@ -92,7 +92,7 @@ async def post_guild_stats_all():
     imageslist = filepointer.readlines()
 
     dblpy = dbl.DBLClient(bot, bot.topken, autopost=True)
-    await dblpy.post_guild_count(guildsno+1)
+    await dblpy.post_guild_count(guildsno+1-1)
     b=requests.post(f'https://discordbotlist.com/api/v1/bots/{bot.discord_id}/stats',
         headers={'Authorization':bot.dblst},
         data={'guilds':guildsno,'users':members}

@@ -5,7 +5,7 @@
 
 ![Minato Namikaze](https://i.imgur.com/WOCK4g1.jpg "Minato Namikaze")
 
-[![Discord Bots](https://top.gg/api/widget/status/779559821162315787.svg)](https://top.gg/bot/779559821162315787) [![Discord Bots](https://botlist.space/bot/779559821162315787/badge?property=prefix&style=plastic&color=informational)](https://top.gg/bot/779559821162315787)
+[![Discord Bots](https://top.gg/api/widget/status/779559821162315787.svg)](https://top.gg/bot/779559821162315787) [![Discord Bots](https://botlist.space/bot/779559821162315787/badge?property=prefix&style=plastic&color=informational)](https://top.gg/bot/779559821162315787) [![time tracker](https://wakatime.com/badge/github/Dhruvacube/yondaime-hokage.svg)](https://wakatime.com/badge/github/Dhruvacube/yondaime-hokage)
 
 
 * [Support Server](https://discord.gg/g9zQbjE73K)

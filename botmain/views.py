@@ -7,7 +7,6 @@ from discord_auth_data.models import *
 from django.conf import settings
 import discord
 from discord import Webhook, RequestsWebhookAdapter
-from django.http import JsonResponse
 
 
 from .models import *
@@ -52,7 +51,7 @@ def keep_alive(request):
         return redirect(reverse('Home'))
 
 def invite_bot(request):
-    return redirect('https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=2147483656&scope=bot')
+    return redirect(discord.utils.oauth_url(client_id=settings.DISCORD_CLIENT_ID, permissions=8))
 
 
 def return_available_anime(request, name):

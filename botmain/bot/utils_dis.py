@@ -20,7 +20,7 @@ class VotingMenu(menus.Menu):
     @menus.button('\N{WHITE HEAVY CHECK MARK}')
     async def on_check_mark(self, payload):
         e1 = discord.Embed(title="Thanks!", 
-        description=f"Thanks {self.ctx.author.mention}! Here's the links: \n - **[TopGG]({self.bot.topgg})** \n - **[Discordbotlist]({self.bot.discordbotlist})**  \n - **[Discordlist.Space](https://discordlist.space/bot/779559821162315787/upvote)**  \n - **[BotsForDiscord](https://botsfordiscord.com/bot/779559821162315787/vote)**  \n - **[Discord.Boats](https://discord.boats/bot/779559821162315787/vote)**")
+        description=f"Thanks {self.ctx.author.mention}! Here's the links: \n - **[TopGG]({self.bot.topgg})** \n - **[Discordbotlist]({self.bot.discordbotlist})**  \n - **[Discordlist.Space](https://discordlist.space/bot/779559821162315787/upvote)**  \n - **[BotsForDiscord](https://botsfordiscord.com/bot/779559821162315787/vote)**  \n - **[Discord.Boats](https://discord.boats/bot/779559821162315787/vote)**  \n - **[Discordlistology](https://discordlistology.com/bots/779559821162315787)**")
         
         await self.message.edit(content="", embed=e1)
         self.stop()

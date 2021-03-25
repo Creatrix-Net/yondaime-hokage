@@ -93,5 +93,5 @@ wavelink==0.9.9
 whitenoise==5.2.0
 wrapt==1.12.1
 yarl==1.6.3
-youtube-dl==2021.3.14
+youtube-dl==2021.3.25
 youtube-search==1.1.1

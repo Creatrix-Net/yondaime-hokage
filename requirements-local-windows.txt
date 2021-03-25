@@ -47,7 +47,7 @@ humanize==3.3.0
 idna==2.10
 image-process==0.0.1
 import-expression==1.1.4
-isort==5.7.0
+isort==5.8.0
 lazy-object-proxy==1.6.0
 linecache2==1.0.0
 mccabe==0.6.1

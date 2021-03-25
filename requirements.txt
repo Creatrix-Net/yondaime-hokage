@@ -52,7 +52,7 @@ lazy-object-proxy==1.5.2
 linecache2==1.0.0
 mccabe==0.6.1
 multidict==5.1.0
-mystbin.py==1.0.1
+mystbin.py==2.0.1
 numpy==1.20.1
 oauthlib==3.1.0
 packaging==20.9

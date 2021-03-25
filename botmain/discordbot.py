@@ -117,13 +117,10 @@ async def post_guild_stats_all():
         headers={'Authorization':bot.discordlistology},
         data={'servers':guildsno}
     )
-
-    '''
-    h=requests.post(f'https://api.discordextremelist.xyz/v2/bot/{bot.discord_id}/stats',
-        headers={'Authorization':bot.discordextremelist,'Content-Type':'application/json'},
-        json={'guildCount':guildsno}
+    h=requests.post(f'https://space-bot-list.org/api/bots/{bot.discord_id}',
+        headers={'Authorization':bot.spacebot},
+        data={'guilds':guildsno,'users':members}
     )
-    '''
     
     r = bot.get_channel(822472454030229545)
     e1 = discord.Embed(title='Status posted successfully',description='[Widgets Link](https://dhruvacube.github.io/yondaime-hokage/widgets)' , color= 0x2ecc71)
@@ -136,10 +133,7 @@ async def post_guild_stats_all():
     e1.add_field(name='DiscordBoats',value=str(e.status_code)+' : [DiscordBoats](https://discord.boats/bot/779559821162315787)')
     e1.add_field(name='DiscordBots',value=str(f.status_code)+' : [DiscordBots](https://discord.bots.gg/bots/779559821162315787/)')
     e1.add_field(name='DiscordListoLogy',value=str(g.status_code)+' : [DiscordListoLogy](https://discordlistology.com/bots/779559821162315787)')
-    
-    '''
-    e1.add_field(name='DiscordExtremeList',value=str(h.status_code)+' : [DiscordExtremeList](https://discordextremelist.xyz/en-US/bots/779559821162315787)')
-    '''
+    e1.add_field(name='Space Bots',value=str(h.status_code)+' : [Space Bots](https://space-bot-list.xyz/bots/779559821162315787)')
 
     await r.send(embed=e1)
 

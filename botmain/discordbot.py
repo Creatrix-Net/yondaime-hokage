@@ -80,7 +80,7 @@ bot.discordboats = token_get('DISCORDBOATS')
 bot.discordbotsgg = token_get('DISCORDBOTS')
 bot.discordlistology = token_get('DISCORDLISTOLOGY')
 bot.discordextremelist = token_get('DISCORDEXTREMELIST')
-bot.spacebot = token_bot('SPACEBOT')
+bot.spacebot = token_get('SPACEBOT')
 
 minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]

@@ -48,7 +48,7 @@ idna==2.10
 image-process==0.0.1
 import-expression==1.1.4
 isort==5.7.0
-lazy-object-proxy==1.5.2
+lazy-object-proxy==1.6.0
 linecache2==1.0.0
 mccabe==0.6.1
 multidict==5.1.0
@@ -93,5 +93,5 @@ wavelink==0.9.9
 whitenoise==5.2.0
 wrapt==1.12.1
 yarl==1.6.3
-youtube-dl==2021.3.14
+youtube-dl==2021.3.25
 youtube-search==1.1.1

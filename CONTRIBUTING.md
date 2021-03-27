@@ -38,7 +38,5 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 - What actually happens
 - Notes (possibly including why you think this might be happening, or stuff you tried that didn't work)
 
-People *love* thorough bug reports. I'm not even kidding.
-
 ## License
 By contributing, you agree that your contributions will be licensed under its MIT License.

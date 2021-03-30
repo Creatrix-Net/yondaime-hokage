@@ -42,7 +42,7 @@ def token_get(tokenname):
 TOKEN = token_get('TOKEN')
 topastoken = token_get('TOPASTOKEN')
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(')'), case_insensitive=True,intents=intents, help_command=Help(),  allowed_mentions=discord.AllowedMentions(users=True, roles=False, everyone=False),case_insensitive=True,description="Hi I am **Minato Namikaze**, Yondaime Hokage")
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(')'),intents=intents, help_command=Help(),  allowed_mentions=discord.AllowedMentions(users=True, roles=False, everyone=False),case_insensitive=True,description="Hi I am **Minato Namikaze**, Yondaime Hokage")
 bot.mystbin_client = mystbin.Client()
 bot.version = str(token_get('BOT_VER'))
 hce = bot.get_command("help")

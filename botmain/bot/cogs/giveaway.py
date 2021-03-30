@@ -60,13 +60,15 @@ class Giveaway(Cog):
         prize = answers[2]
 
         await ctx.send(f"Your giveaway will be hosted in {channel.mention} and will last for {answers[1]}")
-        embed = Embed(title="Giveaway Time !!",
-                    description=f"Win a {prize} today",
+        embed = Embed(title="**🎉🎉 Giveaway Time !! 🎉🎉**",
+                    description=f"🎁 Win a **{prize}** today",
                     colour=0x00FFFF)
         embed.add_field(name="Hosted By:", value=ctx.author.mention)
-        embed.set_footer(text=f"Giveway ends in {answers[1]} from now")
+        embed.set_image(url='https://i.imgur.com/efLKnlh.png')
+        embed.add_field(name='Giveway ends in', value=f'{answers[1]} from now')
         newMsg = await channel.send(embed=embed)
-        embed.set_footer(text=f"Giveway ends in {answers[1]} from now | **Giveaway ID:** {newMsg.id}")
+        embed.set_footer(text=f"Giveaway ID: {newMsg.id}")
+        await newMsg.edit(embed=embed)
         await newMsg.add_reaction("🎉")
 
         #Check if Giveaway Cancelled
@@ -80,18 +82,19 @@ class Giveaway(Cog):
             
             #Check if User list is not empty
             if len(users) <= 0:
-                emptyEmbed = Embed(title="Giveaway Time !!",
-                                   description=f"Win a {prize} today")
+                emptyEmbed = Embed(title="**🎉🎉 Giveaway Time !! 🎉🎉**",
+                                   description=f"🎁 Win a **{prize}** today")
                 emptyEmbed.add_field(name="Hosted By:", value=ctx.author.mention)
-                emptyEmbed.set_footer(text="No one won the Giveaway")
+                emptyEmbed.set_image(url='https://i.imgur.com/efLKnlh.png')
+                emptyEmbed.set_footer(text="**No one won the Giveaway**")
                 await myMsg.edit(embed=emptyEmbed)
                 return
             if len(users) > 0:
                 winner = choice(users)
-                winnerEmbed = Embed(title="Giveaway Time !!",
-                                    description=f"Win a {prize} today",
+                winnerEmbed = Embed(title="🎉🎉 Giveaway Time !! 🎉🎉",
+                                    description=f"🎁 Win a **{prize}** today",
                                     colour=0x00FFFF)
-                winnerEmbed.add_field(name=f"Congratulations On Winning {prize}", value=winner.mention)
+                winnerEmbed.add_field(name=f"Congratulations On Winning **{prize}**", value=winner.mention)
                 winnerEmbed.set_image(url="https://firebasestorage.googleapis.com/v0/b/sociality-a732c.appspot.com/o/Loli.png?alt=media&token=ab5c8924-9a14-40a9-97b8-dba68b69195d")
                 await myMsg.edit(embed=winnerEmbed)
                 return
@@ -111,28 +114,30 @@ class Giveaway(Cog):
             await ctx.send("The channel or ID mentioned was incorrect")
         users = await msg.reactions[0].users().flatten()
         if len(users) <= 0:
-            emptyEmbed = Embed(title="Giveaway Time !!",
-                                   description=f"Win a Prize today")
+            emptyEmbed = Embed(title="🎉🎉 Giveaway Time !! 🎉🎉",
+                                   description=f"🎁 Win a Prize today")
             emptyEmbed.add_field(name="Hosted By:", value=ctx.author.mention)
-            emptyEmbed.set_footer(text="No one won the Giveaway")
+            emptyEmbed.set_image(url='https://i.imgur.com/efLKnlh.png')
+            emptyEmbed.set_footer(text="**No one won the Giveaway**")
             await msg.edit(embed=emptyEmbed)
             return
         if len(users) > 0:
             winner = choice(users)
-            winnerEmbed = Embed(title="Giveaway Time !!",
-                                description=f"Win a Prize today",
+            winnerEmbed = Embed(title="🎉🎉 Giveaway Time !! 🎉🎉",
+                                description=f"🎁 Win a Prize today",
                                 colour=0x00FFFF)
-            winnerEmbed.add_field(name=f"Congratulations On Winning Giveaway", value=winner.mention)
+            winnerEmbed.add_field(name=f"🎉 Congratulations On Winning Giveaway 🎉", value=winner.mention)
             winnerEmbed.set_image(url="https://firebasestorage.googleapis.com/v0/b/sociality-a732c.appspot.com/o/Loli.png?alt=media&token=ab5c8924-9a14-40a9-97b8-dba68b69195d")
             await msg.edit(embed=winnerEmbed)
-            await channel.send(f"Congratulations {winner.mention} on winning the Giveaway")
+            await channel.send(f"🎉 Congratulations **{winner.mention}** on winning the Giveaway 🎉")
             await channel.send(f'https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}')
             return
 
     @command(name="giftdel", aliases=["gifdel", "gftdel", "gdl"])
     @has_permissions(manage_guild=True)
     # @has_role("admin")
-    async def giveaway_stop(self, ctx, channel : discord.TextChannel, GiveawayID: int):
+    async def giveaway_stop(self, ctx, GiveawayID: int):
+        channel = ctx.message.channel
         try:
             msg = await channel.fetch_message(GiveawayID)
             newEmbed = Embed(title="Giveaway Cancelled", description="The giveaway has been cancelled!!")

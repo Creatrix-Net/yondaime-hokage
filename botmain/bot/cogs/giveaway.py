@@ -7,13 +7,14 @@ from typing import Optional
 from random import choice
 from asyncio import TimeoutError, sleep
 from ..lib.util.util import convert
+import time as timemod
 
 class Giveaway(Cog):
     def __init__(self,bot):
         self.bot = bot
         self.cancelled = False
 
-    @command(name="giveaway", aliases=["gcreate", "gcr", "giftcr"])
+    @command(name="giveaway", aliases=["gcreate", "gcr", "giftcr"], description='Allowes you to to create giveaway by answering some simple questions!')
     @has_permissions(manage_guild=True)
     async def create_giveaway(self, ctx):
         #Ask Questions
@@ -46,7 +47,7 @@ class Giveaway(Cog):
         try:
             channel_id = int(answers[0][2:-1])
         except:
-            await ctx.send(f"The Channel provided was wrong. The channel should be {ctx.channel.mention}")
+            await ctx.send(f"The Channel provided was wrong. The channel provided should be like {ctx.channel.mention}")
             return
 
         channel = self.bot.get_channel(channel_id)
@@ -88,11 +89,11 @@ class Giveaway(Cog):
                     colour=0x00FFFF)
         embed.add_field(name="Hosted By:", value=ctx.author.mention)
         embed.set_image(url='https://i.imgur.com/efLKnlh.png')
-        embed.add_field(name='Giveway ends in', value=f'{answers[1]} from now')
+        embed.add_field(name='Giveway ends in', value=f'{answers[1]} from now | [Timer](https://dhruvacube.github.io/yondaime-hokage/giveaway_timer.html?start={int(timemod.time() * 1000)}&length={time * 1000})')
         if role:
             embed.add_field(name='Role Required', value=f'{role}')
         if task:
-            embed.add_field(name=':checkered_flag: Tasks', value={task})
+            embed.add_field(name=':checkered_flag: Tasks', value=task)
         newMsg = await channel.send(embed=embed)
         embed.set_footer(text=f"Giveaway ID: {newMsg.id}")
         await newMsg.edit(embed=embed)
@@ -103,29 +104,7 @@ class Giveaway(Cog):
         self.cancelled = False
         await sleep(time)
         if not self.cancelled:
-            myMsg = await channel.fetch_message(newMsg.id)
-
-            users = await myMsg.reactions[0].users().flatten()
-            users.pop(users.index(self.bot.user))
-            
-            #Check if User list is not empty
-            if len(users) <= 0:
-                emptyEmbed = Embed(title="**🎉🎉 Giveaway Time !! 🎉🎉**",
-                                   description=f"🎁 Win a **{prize}** today")
-                emptyEmbed.add_field(name="Hosted By:", value=ctx.author.mention)
-                emptyEmbed.set_image(url='https://i.imgur.com/efLKnlh.png')
-                emptyEmbed.set_footer(text="**No one won the Giveaway**")
-                await myMsg.edit(embed=emptyEmbed)
-                return
-            if len(users) > 0:
-                winner = choice(users)
-                winnerEmbed = Embed(title="🎉🎉 Giveaway Time !! 🎉🎉",
-                                    description=f"🎁 Win a **{prize}** today",
-                                    colour=0x00FFFF)
-                winnerEmbed.add_field(name=f"Congratulations On Winning **{prize}**", value=winner.mention)
-                winnerEmbed.set_image(url="https://firebasestorage.googleapis.com/v0/b/sociality-a732c.appspot.com/o/Loli.png?alt=media&token=ab5c8924-9a14-40a9-97b8-dba68b69195d")
-                await myMsg.edit(embed=winnerEmbed)
-                return
+            await self.giveaway_reroll(ctx, newMsg.id, channel)
 
     @create_giveaway.error
     async def create_giveaway_error(self, ctx, exc):
@@ -133,37 +112,68 @@ class Giveaway(Cog):
             await ctx.send("You are not allowed to create Giveaways")
         
 
-    @command(name="giftrrl", aliases=["gifreroll", "gftroll", "grr"])
+    @command(name="giftrrl", aliases=["gifreroll", "gftroll", "grr"], description='It picks out the giveaway winners by mentioning the giveaway ID mentioned at the footer of the giveaway.')
     @has_permissions(manage_guild=True)
     async def giveaway_reroll(self, ctx, GiveawayID: int, channel=None):
         if not channel:
             channel = ctx.message.channel
         try:
             msg = await channel.fetch_message(GiveawayID)
+            msg_embd_field = msg.embeds[0].to_dict()['fields']
+            task,role = None,None
+            for i in msg_embd_field:
+                if i['name'].lower() == 'Role Required'.lower():
+                    role=i['value']
+                if i['name'] == ':checkered_flag: Tasks':
+                    task=i['value']
+                if i['name'] == 'Hosted By':
+                    host=i['value']
         except:
             await ctx.send("The channel or ID mentioned was incorrect")
-        users = await msg.reactions[0].users().flatten()
+        users1 = await msg.reactions[0].users().flatten()
+        users1.pop(users1.index(self.bot.user))
+        users=[]
+        if role:
+            for i in users1:
+                if role in i.roles:
+                    users.append(i)
         if len(users) <= 0:
             emptyEmbed = Embed(title="🎉🎉 Giveaway Time !! 🎉🎉",
                                    description=f"🎁 Win a Prize today")
-            emptyEmbed.add_field(name="Hosted By:", value=ctx.author.mention)
+            try:
+                emptyEmbed.add_field(name="Hosted By:", value=host)
+            except: pass
+            emptyEmbed.add_field(name="No winners", value="Not enough participants to determine the winners")
             emptyEmbed.set_image(url='https://i.imgur.com/efLKnlh.png')
-            emptyEmbed.set_footer(text="**No one won the Giveaway**")
+            emptyEmbed.set_footer(text="No one won the Giveaway")
             await msg.edit(embed=emptyEmbed)
+            await ctx.send('No one won the giveaway! As there were not enough participants!')
+            await ctx.send(f'https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}')
             return
         if len(users) > 0:
             winner = choice(users)
             winnerEmbed = Embed(title="🎉🎉 Giveaway Time !! 🎉🎉",
                                 description=f"🎁 Win a Prize today",
                                 colour=0x00FFFF)
+            try:
+                winnerEmbed.set_footer(text=msg_embd_field['footer']['text'])
+            except: pass
             winnerEmbed.add_field(name=f"🎉 Congratulations On Winning Giveaway 🎉", value=winner.mention)
             winnerEmbed.set_image(url="https://firebasestorage.googleapis.com/v0/b/sociality-a732c.appspot.com/o/Loli.png?alt=media&token=ab5c8924-9a14-40a9-97b8-dba68b69195d")
+            try:
+                if role:
+                    winnerEmbed.add_field(name='Role Required', value=role)
+            except: pass
+            try:
+                if task:
+                    winnerEmbed.add_field(name=':checkered_flag: Tasks', value=task)
+            except: pass
             await msg.edit(embed=winnerEmbed)
             await channel.send(f"🎉 Congratulations **{winner.mention}** on winning the Giveaway 🎉")
-            await channel.send(f'https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}')
+            await ctx.send(f'https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}')
             return
 
-    @command(name="giftdel", aliases=["gifdel", "gftdel", "gdl"])
+    @command(name="giftdel", aliases=["gifdel", "gftdel", "gdl"], description='Cancels the specified giveaway')
     @has_permissions(manage_guild=True)
     # @has_role("admin")
     async def giveaway_stop(self, ctx,GiveawayID: int, channel=None):

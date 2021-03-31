@@ -12,10 +12,14 @@ checkbox.addEventListener("change", function() {
         trans();
         document.documentElement.setAttribute("data-theme", "dartheme");
         document.cookie = "preference=dark";
+        document.getElementById("1").src = 'assets/white.png';
+        document.getElementById("2").src = 'assets/white.png';
     } else {
         trans();
         document.documentElement.setAttribute("data-theme", "lighttheme");
         document.cookie = "preference=light";
+        document.getElementById("1").src = 'assets/black.png';
+        document.getElementById("2").src = 'assets/black.png';
     }
 });
 

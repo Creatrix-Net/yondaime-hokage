@@ -1,6 +1,6 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" type="image/png" href="https://media.discordapp.net/attachments/717289384084242474/771313316429430794/santa_lunar3.png?width=345&height=474" />
+<link rel="icon" type="image/png" href="assets/white.png" />
 
 <head>
     <title>Giveaway Timer</title>
@@ -25,18 +25,24 @@
         if (getCookie("preference") === "dark") {
             document.documentElement.setAttribute("data-theme", "dartheme");
             document.getElementById("switch").checked = true;
+            document.getElementById("1").src = 'assets/white.png';
+            document.getElementById("2").src = 'assets/white.png';
         } else if (getCookie("preference") === "light") {
             document.documentElement.setAttribute("data-theme", "lighttheme");
             document.getElementById("switch").checked = false;
+            document.getElementById("1").src = 'assets/black.png';
+            document.getElementById("2").src = 'assets/black.png';
         } else {
             document.documentElement.setAttribute("data-theme", "dartheme");
             document.getElementById("switch").checked = true;
+            document.getElementById("1").src = 'assets/white.png';
+            document.getElementById("2").src = 'assets/white.png';
         }
     </script>
 
     <center>
         <h1 class="title">
-            <u><b>Giveaway Timer</b></u>
+            <img class="image1" src='assets/white.png' style='height: 5%' id='1' /> <u><b>Giveaway Timer</b></u> <img class="image1" src='assets/white.png' style='height: 5%' id='2' />
         </h1>
     </center>
     <br \ />
@@ -55,6 +61,9 @@
         <h1 id="endDate" class="dateTs">
             Loading...
         </h1>
+    </center>
+    <center>
+        <img src='assets/konoha.png' style='height: 50%; padding: 20px; border-radius: 50px;' />
     </center>
 
     <script src="assets/script.js"></script>

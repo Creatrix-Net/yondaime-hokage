@@ -51,7 +51,7 @@ html[data-theme="dartheme"] {
     }
 }
 
-@media only screen and (max-width: 357px) {
+@media only screen and (max-width: 380px) {
     .image1 {
         display: none;
     }

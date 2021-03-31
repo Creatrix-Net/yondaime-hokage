@@ -42,7 +42,7 @@ Google-Images-Search==1.3.8
 googleapis-common-protos==1.53.0
 gTTS==2.2.2
 gunicorn==20.1.0
-httplib2==0.19.0
+httplib2==0.19.1
 humanize==3.3.0
 idna==2.10
 image-process==0.0.1

@@ -80,7 +80,7 @@ six==1.15.0
 soupsieve==2.2.1
 spotify==0.10.2
 sqlparse==0.4.1
-statcord.py==3.0.8
+statcord.py==3.0.9
 termcolor==1.1.0
 toml==0.10.2
 traceback2==1.4.0

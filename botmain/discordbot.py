@@ -13,6 +13,7 @@ from discord.ext import commands
 from discord.ext.buttons import Paginator
 import dbl
 import requests
+import random
 
 
 from bot.help import Help

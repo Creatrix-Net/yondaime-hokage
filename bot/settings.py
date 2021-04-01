@@ -153,3 +153,6 @@ DOCS=os.environ.get('DOCS')
 WEBSITE=os.environ.get('WEBSITE') 
 AUTH_PASS=os.environ.get('AUTH_PASS')
 
+STATUSPAGE_API=os.environ.get('STATUSPAGE_API')
+METRIC_ID=os.environ.get('METRIC_ID')
+PAGE_ID=os.environ.get('PAGE_ID')

@@ -1,4 +1,5 @@
 from django.contrib import messages
+import requests
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -7,7 +8,6 @@ from discord_auth_data.models import *
 from django.conf import settings
 import discord
 from discord import Webhook, RequestsWebhookAdapter
-from django.http import JsonResponse
 
 
 from .models import *
@@ -39,6 +39,23 @@ def sendmessages(request):
 
 def keep_alive(request):
     if request.META.get('HTTP_AUTHORIZATION') == settings.AUTH_PASS:
+        api_key = settings.STATUSPAGE_API
+        page_id = settings.PAGE_ID
+        metric_id = settings.METRIC_ID
+        api_base = 'api.statuspage.io'
+
+        headers = {"Content-Type": "application/json", "Authorization": "OAuth " + api_key}
+            
+        a=request.post(
+            'https://'+api_base+"/v1/pages/" + page_id + "/metrics/" + metric_id + "/data.json", 
+            headers=headers, 
+            json={
+                "data": {
+                "metric_id": metric_id
+                }
+            }
+        )
+        print(a.status_code)
         return render(
             request, 
             'keep_alive.html',

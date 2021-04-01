@@ -1,10 +1,7 @@
-from datetime import datetime 
 import os
 import time
 from os.path import join
 from pathlib import Path
-import random
-import requests
 
 import aiozaneapi
 import async_cleverbot as ac
@@ -14,8 +11,8 @@ import mystbin
 from asyncdagpi import Client
 from discord.ext import commands
 from discord.ext.buttons import Paginator
-import uuid
 import dbl
+import requests
 
 
 from bot.help import Help
@@ -84,6 +81,7 @@ bot.spacebot = token_get('SPACEBOT')
 
 minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
+    
 
 async def post_guild_stats_all():
     guildsno = len(bot.guilds)+1

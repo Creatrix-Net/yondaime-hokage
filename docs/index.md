@@ -23,6 +23,8 @@
 * [Commands List](https://dhruvacube.github.io/yondaime-hokage/help)
 * [Privacy Policy](https://dhruvacube.github.io/yondaime-hokage/privacy_policy)
 * [Widgets](https://dhruvacube.github.io/yondaime-hokage/widgets)
+* [Statcord](https://statcord.com/bot/779559821162315787)
+* [Status Page](https://minatonamikaze.statuspage.io/)
 
 ***
 

@@ -242,9 +242,28 @@ async def on_message(message):
                 if not guild.id == 747480356625711204: 
                     e = discord.Embed(title=embed['title'],description=embed['description'] , color= 0x2ecc71)
                     e.set_thumbnail(url='https://i.imgur.com/lwGawEv.jpeg')
-                    e.add_field(name='**Members**',value=f'{guild.member_count} | {sum(1 for member in guild.members if member.bot)}')
                     await guild.system_channel.send(embed=e)
-            except: print('Tried but failed!')
+            except:
+                me = await bot.get_user_info('MY_SNOWFLAKE_ID')
+                find_bots = sum(1 for member in guild.members if member.bot)
+
+                embed = discord.Embed(
+                    title=f"ℹ  Failed to send the message in **{guild.name}**", description=None)
+
+                if guild.icon:
+                    embed.set_thumbnail(url=guild.icon_url)
+                if guild.banner:
+                    embed.set_image(url=guild.banner_url_as(format="png"))
+
+                embed.add_field(name="**Server Name**",
+                                value=guild.name, inline=True)
+                embed.add_field(name="**Server ID**", value=guild.id, inline=True)
+                embed.add_field(
+                    name="**Members**", value=guild.member_count, inline=True)
+                embed.add_field(name="**Bots**", value=find_bots, inline=True)
+                embed.add_field(name="**Owner**", value=guild.owner, inline=True)
+                embed.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
+                await me.send(embed=embed)
     await bot.process_commands(message)
                 
 

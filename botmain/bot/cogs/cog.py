@@ -134,7 +134,7 @@ class Info(commands.Cog):
             find_bots = sum(1 for member in ctx.guild.members if member.bot)
 
             embed = discord.Embed(
-                title=f"ℹ Information Bbout **{ctx.guild.name}**", description=None)
+                title=f"ℹ Information About **{ctx.guild.name}**", description=None)
 
             if ctx.guild.icon:
                 embed.set_thumbnail(url=ctx.guild.icon_url)

@@ -245,26 +245,28 @@ async def on_message(message):
                     e.set_thumbnail(url='https://i.imgur.com/lwGawEv.jpeg')
                     await guild.system_channel.send(embed=e)
             except:
-                me = bot.get_user('571889108046184449')
-                find_bots = sum(1 for member in guild.members if member.bot)
+                try:
+                    me = bot.get_user(571889108046184449)
+                    find_bots = sum(1 for member in guild.members if member.bot)
 
-                embed = discord.Embed(
-                    title=f"ℹ  Failed to send the message in **{guild.name}**", description=None)
+                    embed = discord.Embed(
+                        title=f"ℹ  Failed to send the message in **{guild.name}**", description=None)
 
-                if guild.icon:
-                    embed.set_thumbnail(url=guild.icon_url)
-                if guild.banner:
-                    embed.set_image(url=guild.banner_url_as(format="png"))
+                    if guild.icon:
+                        embed.set_thumbnail(url=guild.icon_url)
+                    if guild.banner:
+                        embed.set_image(url=guild.banner_url_as(format="png"))
 
-                embed.add_field(name="**Server Name**",
-                                value=guild.name, inline=True)
-                embed.add_field(name="**Server ID**", value=guild.id, inline=True)
-                embed.add_field(
-                    name="**Members**", value=guild.member_count, inline=True)
-                embed.add_field(name="**Bots**", value=find_bots, inline=True)
-                embed.add_field(name="**Owner**", value=guild.owner, inline=True)
-                embed.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
-                await me.send(embed=embed)
+                    embed.add_field(name="**Server Name**",
+                                    value=guild.name, inline=True)
+                    embed.add_field(name="**Server ID**", value=guild.id, inline=True)
+                    embed.add_field(
+                        name="**Members**", value=guild.member_count, inline=True)
+                    embed.add_field(name="**Bots**", value=find_bots, inline=True)
+                    embed.add_field(name="**Owner**", value=guild.owner, inline=True)
+                    embed.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
+                    await me.send(embed=embed)
+                except: print('Failed')
     try:
         if message.channel.is_news():
             await message.publish() 

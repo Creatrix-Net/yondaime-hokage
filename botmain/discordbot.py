@@ -239,6 +239,7 @@ async def on_message(message):
         embed = message.embeds[0].to_dict()
         
         for guild in bot.guilds:
+            n=0
             try:
                 if not guild.id == 747480356625711204: 
                     e = discord.Embed(title=embed['title'],description=embed['description'] , color= 0x2ecc71)
@@ -267,6 +268,8 @@ async def on_message(message):
                     embed.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
                     await me.send(embed=embed)
                 except: print('Failed')
+        me = bot.get_user(571889108046184449)
+        me.send('Failed to send in '+n+' servers')
     try:
         if message.channel.is_news():
             await message.publish() 

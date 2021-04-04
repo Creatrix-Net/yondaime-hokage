@@ -1,6 +1,6 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 
-import statcord
+import statcord, requests, time
 
 
 class StatcordPost(commands.Cog):
@@ -14,7 +14,6 @@ class StatcordPost(commands.Cog):
     @commands.Cog.listener()
     async def on_command(self,ctx):
         self.api.command_run(ctx)
-
 
 def setup(bot):
     bot.add_cog(StatcordPost(bot))

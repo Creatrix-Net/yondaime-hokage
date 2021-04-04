@@ -59,6 +59,7 @@ bot.secrect_client = token_get('DISCORD_CLIENT_SECRET')
 bot.sitereq = token_get('REQWEBSITE')
 
 bot.statcord = token_get('STATCORD')
+bot.api_key_statuspage = token_get('STATUSPAGE_API')
 
 bot.auth_pass = token_get('AUTH_PASS')
 bot.lavalink = token_get('LAVALINK')
@@ -149,7 +150,7 @@ async def on_ready():
     difference = int(round(current_time - bot.start_time))
     stats = bot.get_channel(819128718152695878)
     e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)")
-    e.set_thumbnail(url='https://i.imgur.com/fMx8iil.jpg')
+    e.set_thumbnail(url=bot.user.avatar_url)
     print('Started The Bot')
 
     await stats.send(embed=e) 
@@ -244,7 +245,7 @@ async def on_message(message):
                     e.set_thumbnail(url='https://i.imgur.com/lwGawEv.jpeg')
                     await guild.system_channel.send(embed=e)
             except:
-                me = await bot.get_user_info('MY_SNOWFLAKE_ID')
+                me = await bot.get_user_info('571889108046184449')
                 find_bots = sum(1 for member in guild.members if member.bot)
 
                 embed = discord.Embed(
@@ -264,6 +265,10 @@ async def on_message(message):
                 embed.add_field(name="**Owner**", value=guild.owner, inline=True)
                 embed.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
                 await me.send(embed=embed)
+    try:
+        if message.channel.is_news():
+            await message.publish() 
+    except: pass
     await bot.process_commands(message)
                 
 
@@ -285,7 +290,6 @@ async def on_command_error(ctx, error):
 
     elif isinstance(error, commands.CommandInvokeError):
         perms= 8 #1073737719 #2147483656
-        e7 = discord.Embed(title="Oh no, I guess I have not been given proper access!", description=f"`{error}`")
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
         e7.add_field(name="Command Error Caused By:", value=f"{ctx.command}")
         e7.add_field(name="By", value=f"{ctx.author.name}")

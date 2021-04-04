@@ -245,7 +245,7 @@ async def on_message(message):
                     e.set_thumbnail(url='https://i.imgur.com/lwGawEv.jpeg')
                     await guild.system_channel.send(embed=e)
             except:
-                me = await bot.get_user_info('571889108046184449')
+                me = await bot.get_user('571889108046184449')
                 find_bots = sum(1 for member in guild.members if member.bot)
 
                 embed = discord.Embed(

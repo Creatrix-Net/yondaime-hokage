@@ -38,23 +38,6 @@ def sendmessages(request):
 
 
 def keep_alive(request):
-    api_key = settings.STATUSPAGE_API
-    page_id = settings.PAGE_ID
-    metric_id = settings.METRIC_ID
-    api_base = 'api.statuspage.io'
-
-    import time, random
-    headers = {"Content-Type": "application/json", "Authorization": "OAuth " + api_key}
-    ts = int(time.time()) - (random.randint(0,50) * 5 * 60)
-    value = 5
-    a=requests.post(
-            'https://'+api_base+"/v1/pages/" + page_id + "/metrics/" + metric_id + "/data", 
-            headers=headers, 
-            json={'data':{'timestamp': ts, 'value': value}}
-    ) 
-    if (a.status_code >= 500):
-        genericError = "Error encountered. Please ensure that your page code and authorization key are correct."
-        print(genericError)
     if request.META.get('HTTP_AUTHORIZATION') == settings.AUTH_PASS:
         return render(
             request, 
@@ -63,7 +46,6 @@ def keep_alive(request):
                 'server_name': 'Keeping Alive The Bot',
                 'docs':settings.DOCS,
                 'website':settings.WEBSITE,
-                'statuspagecode': a.status_code
             }
         )
     else:

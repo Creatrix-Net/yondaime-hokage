@@ -59,7 +59,7 @@ bot.secrect_client = token_get('DISCORD_CLIENT_SECRET')
 bot.sitereq = token_get('REQWEBSITE')
 
 bot.statcord = token_get('STATCORD')
-bot.api_key_statuspage = token_get('STATUSPAGE_API')
+bot.auth_pass = token_get('AUTH_PASS')
 
 bot.auth_pass = token_get('AUTH_PASS')
 bot.lavalink = token_get('LAVALINK')
@@ -123,6 +123,16 @@ async def post_guild_stats_all():
         headers = {"Authorization": bot.spacebot, "Content-Type": "application/json"}, 
         json = {"guilds": guildsno, "users": members})
     
+    s1=requests.post('https://statusupdateminatonamikaze.dhruvacube.repl.co/registed_servers',
+        headers = {"Authorization": bot.auth_pass},
+        data={"SERVERS": len(bot.guilds)+1}
+    )
+    r1=requests.post('https://statusupdateminatonamikaze.dhruvacube.repl.co/registed_users',
+        headers = {"Authorization": bot.auth_pass},
+        data={"USERS": len(set(bot.get_all_members()))}
+    )
+    print(s1,r1)
+    
     r = bot.get_channel(822472454030229545)
     e1 = discord.Embed(title='Status posted successfully',description='[Widgets Link](https://dhruvacube.github.io/yondaime-hokage/widgets)' , color= 0x2ecc71)
     e1.set_image(url=random.choice(imageslist).strip('\n'))
@@ -152,6 +162,16 @@ async def on_ready():
     e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)")
     e.set_thumbnail(url=bot.user.avatar_url)
     print('Started The Bot')
+
+    s1=requests.post('https://statusupdateminatonamikaze.dhruvacube.repl.co/registed_servers',
+        headers = {"Authorization": bot.auth_pass},
+        data={"SERVERS": len(bot.guilds)+1}
+    )
+    r1=requests.post('https://statusupdateminatonamikaze.dhruvacube.repl.co/registed_users',
+        headers = {"Authorization": bot.auth_pass},
+        data={"USERS": len(set(bot.get_all_members()))}
+    )
+    print(s1,r1)
 
     await stats.send(embed=e) 
 

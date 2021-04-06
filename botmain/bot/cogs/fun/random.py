@@ -1,31 +1,20 @@
+import asyncio
+import io
+import os
+import platform
+import random
+
 import discord
 from discord.ext import commands, owoify
-from discord.ext.commands import Cog
 from discord.ext.commands import command
-from discord.utils import get
-from discord import Activity, ActivityType, Embed
-from discord import __version__ as discord_version
-
-import datetime
-from datetime import timedelta
-import time
-from time import sleep as bedtime
-
-
-import platform
-
-
-import random
-import asyncio
-import os
 from gtts import gTTS
-import io
 from PIL import Image
 
 
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.description = 'Some random fun and usefull commands.'
         
     @command()
     async def owoify(self, ctx, text):
@@ -147,7 +136,7 @@ class Random(commands.Cog):
         await asyncio.sleep(5)
         os.remove("tts.mp3")
 
-    @command(name="stats", description="A usefull command that displays bot statistics.", usage="stats")
+    @command(name="stats", description="A usefull command that displays bot statistics.")
     async def stats(self, ctx):
         pythonVersion = platform.python_version()
         dpyVersion = discord.__version__

@@ -1,14 +1,16 @@
+import random
+
 import discord
 from discord.ext import commands
 
 import mystbin
-import random
 
 
 class MystbinApi(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.mystbin_client = bot.mystbin_client
+        self.description = 'Use Mystbin using their API'
 
     @commands.command(aliases=["myst"])
     async def mystbin(self, ctx, *, text):

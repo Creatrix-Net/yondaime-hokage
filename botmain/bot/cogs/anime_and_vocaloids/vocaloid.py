@@ -1,11 +1,13 @@
 import discord
+import requests
 from discord.ext import commands
-import requests 
+
 
 class Vocaloid(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.endpoint = 'https://api.meek.moe/'
+        self.description = 'Get some kawai pictures of the vocaloids.'
     
     async def meek_api(self,ctx, name):
         data = requests.get(url = self.endpoint + name).json()['url']

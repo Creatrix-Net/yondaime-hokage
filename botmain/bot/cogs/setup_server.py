@@ -4,9 +4,10 @@ import discord
 from discord.ext import commands
 
 
-class Server_Setup(commands.Cog):
+class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot):
         self.bot = bot
+        self.description = 'Setups up the server for feedback, ban and unban logs and also setups the channel and roles to create a support management system for the server.'
     
     @commands.command(name='setup',description="Easy setup for the server")
     @commands.has_permissions(administrator=True)
@@ -204,4 +205,4 @@ class Server_Setup(commands.Cog):
             await botask.delete()
 
 def setup(bot):
-    bot.add_cog(Server_Setup(bot))
+    bot.add_cog(ServerSetup(bot))

@@ -1,20 +1,19 @@
-import discord
-from discord.ext import commands
-
-from asyncdagpi import ImageFeatures
-from PIL import Image, ImageFont, ImageDraw
+import os
+from asyncio import sleep
 from io import FileIO
 
-from asyncio import sleep
-import os
+import discord
+from asyncdagpi import ImageFeatures
+from discord.ext import commands
+from PIL import Image, ImageDraw, ImageFont
 
 
-
-class ImageManipulation(commands.Cog):
+class ImageManipulation(commands.Cog, name="Image Manipulation"):
     def __init__(self, bot):
         self.bot = bot
         self.bot.dagpi = bot.dagpi
         self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
+        self.description = 'Some fun Image Manipulation Commands'
 
     @commands.command()
     async def wni(self, ctx, *, name):

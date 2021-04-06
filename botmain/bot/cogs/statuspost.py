@@ -1,6 +1,5 @@
-from discord.ext import commands, tasks
-
-import statcord, requests, time
+import statcord
+from discord.ext import commands
 
 
 class StatcordPost(commands.Cog):

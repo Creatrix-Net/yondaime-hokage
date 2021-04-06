@@ -5,7 +5,6 @@ import copy
 import datetime
 import inspect
 import io
-
 import textwrap
 import traceback
 import typing
@@ -14,7 +13,6 @@ from datetime import datetime
 
 import aiohttp
 import discord
-
 from discord.ext import commands
 
 
@@ -52,8 +50,7 @@ class OwnerOnly(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.appleapiisbad = True
-
-  
+        self.description = 'Some commands which is only restricted to server owners.'
 
     def owners(ctx):
         return ctx.author.id == ctx.guild.owner_id

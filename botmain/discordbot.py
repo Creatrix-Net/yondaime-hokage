@@ -1,20 +1,20 @@
 import os
+import random
 import time
 from os.path import join
 from pathlib import Path
 
 import aiozaneapi
 import async_cleverbot as ac
+import dbl
 import discord
 import dotenv
 import mystbin
+import requests
 from asyncdagpi import Client
 from discord.ext import commands
 from discord.ext.buttons import Paginator
-import dbl
-import requests
-import random
-
+from pretty_help import PrettyHelp
 
 from bot.help import Help
 
@@ -40,11 +40,20 @@ def token_get(tokenname):
 TOKEN = token_get('TOKEN')
 topastoken = token_get('TOPASTOKEN')
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(')'),intents=intents, help_command=Help(),  allowed_mentions=discord.AllowedMentions(users=True, roles=False, everyone=False),case_insensitive=True,description="Hi I am **Minato Namikaze**, Yondaime Hokage")
+def get_prefix(bot, message):
+    """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
+
+    prefixes = [')', 'm!', 'm']
+
+    if not message.guild:
+        return 'm!'
+
+    return commands.when_mentioned_or(*prefixes)(bot, message)
+
+bot = commands.Bot(command_prefix=get_prefix,intents=intents, help_command=PrettyHelp(show_index=True),  allowed_mentions=discord.AllowedMentions(users=True, roles=False, everyone=False),case_insensitive=True,description="Hi I am **Minato Namikaze**, Yondaime Hokage")
 bot.mystbin_client = mystbin.Client()
 bot.version = str(token_get('BOT_VER'))
 hce = bot.get_command("help")
-hce.hidden = True
 
 chatbottoken = token_get('CHATBOTTOKEN')
 bot.topken = topastoken #Topgg Token
@@ -56,19 +65,14 @@ bot.start_time = time.time()
 bot.discord_id = token_get('DISCORD_CLIENT_ID')
 bot.secrect_client = token_get('DISCORD_CLIENT_SECRET')
 
-bot.sitereq = token_get('REQWEBSITE')
-
 bot.statcord = token_get('STATCORD')
 bot.auth_pass = token_get('AUTH_PASS')
-
-bot.auth_pass = token_get('AUTH_PASS')
-bot.lavalink = token_get('LAVALINK')
 
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
 bot.discordbotlist = token_get('DBLST')
 bot.thresholds = (10, 25, 50, 100)
-bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** ||私の湊波風別名第四火影||"
+bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影 "
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 
 bot.topgg = token_get('TOPGG')
@@ -81,8 +85,8 @@ bot.discordlistology = token_get('DISCORDLISTOLOGY')
 bot.discordextremelist = token_get('DISCORDEXTREMELIST')
 bot.spacebot = token_get('SPACEBOT')
 
-minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
-minato_gif = [f for f in os.listdir(join(minato_dir ,'minato'))]
+bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
+bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
     
 
 async def post_guild_stats_all():
@@ -123,16 +127,6 @@ async def post_guild_stats_all():
         headers = {"Authorization": bot.spacebot, "Content-Type": "application/json"}, 
         json = {"guilds": guildsno, "users": members})
     
-    s1=requests.post('https://statusupdateminatonamikaze.dhruvacube.repl.co/registed_servers',
-        headers = {"Authorization": bot.auth_pass},
-        data={"SERVERS": len(bot.guilds)+1}
-    )
-    r1=requests.post('https://statusupdateminatonamikaze.dhruvacube.repl.co/registed_users',
-        headers = {"Authorization": bot.auth_pass},
-        data={"USERS": len(set(bot.get_all_members()))}
-    )
-    print(s1,r1)
-    
     r = bot.get_channel(822472454030229545)
     e1 = discord.Embed(title='Status posted successfully',description='[Widgets Link](https://dhruvacube.github.io/yondaime-hokage/widgets)' , color= 0x2ecc71)
     e1.set_image(url=random.choice(imageslist).strip('\n'))
@@ -152,7 +146,7 @@ async def post_guild_stats_all():
 async def on_ready():
     for filename in os.listdir(Path(__file__).resolve(strict=True).parent / join('bot','cogs')):
         if filename.endswith('.py'):
-            if filename != 'music.py':
+            if filename != 'music1.py':
                 bot.load_extension(f'bot.cogs.{filename[:-3]}')
     await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
 
@@ -163,138 +157,7 @@ async def on_ready():
     e.set_thumbnail(url=bot.user.avatar_url)
     print('Started The Bot')
 
-    s1=requests.post('https://statusupdateminatonamikaze.dhruvacube.repl.co/registed_servers',
-        headers = {"Authorization": bot.auth_pass},
-        data={"SERVERS": len(bot.guilds)+1}
-    )
-    r1=requests.post('https://statusupdateminatonamikaze.dhruvacube.repl.co/registed_users',
-        headers = {"Authorization": bot.auth_pass},
-        data={"USERS": len(set(bot.get_all_members()))}
-    )
-    print(s1,r1)
-
     await stats.send(embed=e) 
-
-#on join send message event
-@bot.event
-async def on_guild_join(guild):
-    try:
-        img=random.choice(minato_gif)
-        file = discord.File(join(minato_dir, 'minato',img), filename=img)
-        await guild.system_channel.send(file=file)
-
-        f=open(Path(__file__).resolve(strict=True).parent / join('bot','welcome_message.txt'),'r')
-        f1=f.read()
-        await guild.system_channel.send(f1.format(guild.name, bot.user.mention, bot.user.mention, bot.user.mention, guild.owner.mention))
-
-        '''
-        if guild.id not in (568567800910839811 , 632908146305925129):
-            await guild.system_channel.send(f'----------')
-            await guild.system_channel.send('My **sleeping time** is from')
-            await guild.system_channel.send('**00:00 AM IST**  to')
-            await guild.system_channel.send('**07:00 AM IST**')
-        '''
-        
-        img=random.choice(minato_gif)
-        file = discord.File(join(minato_dir, 'minato',img), filename=img)
-        await guild.system_channel.send(file=file)
-    except: pass
-    await post_guild_stats_all()
-
-    e34= discord.Embed(title=f'{guild.name}', color= 0x2ecc71,description='Added')
-    if guild.icon:
-        e34.set_thumbnail(url=guild.icon_url)
-    if guild.banner:
-        e34.set_image(url=guild.banner_url_as(format="png"))
-    c = bot.get_channel(813954921782706227)
-    e34.add_field(name='**Members**',value=f'{guild.member_count} | {sum(1 for member in guild.members if member.bot)}')
-    await c.send(embed=e34)
-
-#when bot leaves the server
-@bot.event
-async def on_guild_remove(guild):
-    e34= discord.Embed(title=f'{guild.name}', color= 0xe74c3c,description='Left')
-    if guild.icon:
-        e34.set_thumbnail(url=guild.icon_url)
-    if guild.banner:
-        e34.set_image(url=guild.banner_url_as(format="png"))
-    c = bot.get_channel(813954921782706227)
-    if guild.name:
-        await c.send(embed=e34)
-    await post_guild_stats_all()
-
-#ban
-@bot.event
-async def on_member_ban(guild, user):
-    bingo = discord.utils.get(guild.categories, name="Bingo Book") if discord.utils.get(guild.categories, name="Bingo Book") else False
-    if bingo:
-        ban = discord.utils.get(bingo.channels, name="ban") if discord.utils.get(bingo.channels, name="ban") else False
-        if ban:
-            e=discord.Embed(title='**Ban**',description=f'**{user.mention}** was banned!', color=0xe74c3c)
-            e.set_image(url='https://i.imgur.com/B7EAJKM.jpg')
-            if user.avatar_url:
-                e.set_thumbnail(url=user.avatar_url)
-            await ban.send(embed=e)
-
-#unban
-@bot.event
-async def on_member_unban(guild, user):
-    bingo = discord.utils.get(guild.categories, name="Bingo Book") if discord.utils.get(guild.categories, name="Bingo Book") else False
-    if bingo:
-        unban = discord.utils.get(bingo.channels, name="unban") if discord.utils.get(bingo.channels, name="unban") else False
-        if unban:
-            e=discord.Embed(title='**Unban**',description=f'**{user.mention}** was unbanned!', color=0x2ecc71)
-            e.set_image(url='https://i.imgur.com/O1Xvv7I.jpg')
-            if user.avatar_url:
-                e.set_thumbnail(url=user.avatar_url)
-            await unban.send(embed=e)
-
-#on message event
-@bot.event
-async def on_message(message):
-    if bot.user.mentioned_in(message) and message.mention_everyone is False and message.content.lower() in ('<@!779559821162315787>', '<@779559821162315787>') or message.content.lower() in ('<@!779559821162315787> prefix', '<@779559821162315787> prefix'):
-        if not message.author.bot:
-            await  message.channel.send('The prefix is **)** ,A full list of all commands is available by typing ```)help```')
-    if message.channel.id == 814134179049635840:
-        embed = message.embeds[0].to_dict()
-        
-        for guild in bot.guilds:
-            n=0
-            try:
-                if not guild.id == 747480356625711204: 
-                    e = discord.Embed(title=embed['title'],description=embed['description'] , color= 0x2ecc71)
-                    e.set_thumbnail(url='https://i.imgur.com/lwGawEv.jpeg')
-                    await guild.system_channel.send(embed=e)
-            except:
-                try:
-                    me = bot.get_user(571889108046184449)
-                    find_bots = sum(1 for member in guild.members if member.bot)
-
-                    embed = discord.Embed(
-                        title=f"ℹ  Failed to send the message in **{guild.name}**", description=None)
-
-                    if guild.icon:
-                        embed.set_thumbnail(url=guild.icon_url)
-                    if guild.banner:
-                        embed.set_image(url=guild.banner_url_as(format="png"))
-
-                    embed.add_field(name="**Server Name**",
-                                    value=guild.name, inline=True)
-                    embed.add_field(name="**Server ID**", value=guild.id, inline=True)
-                    embed.add_field(
-                        name="**Members**", value=guild.member_count, inline=True)
-                    embed.add_field(name="**Bots**", value=find_bots, inline=True)
-                    embed.add_field(name="**Owner**", value=guild.owner, inline=True)
-                    embed.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
-                    await me.send(embed=embed)
-                except: print('Failed')
-        me = bot.get_user(571889108046184449)
-        me.send('Failed to send in '+n+' servers')
-    try:
-        if message.channel.is_news():
-            await message.publish() 
-    except: pass
-    await bot.process_commands(message)
                 
 
 @bot.event

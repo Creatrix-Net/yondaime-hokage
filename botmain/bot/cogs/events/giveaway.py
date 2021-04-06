@@ -1,18 +1,19 @@
-import discord
-from discord.ext.commands import Cog, MissingPermissions
-from discord.ext.commands import command, has_permissions, has_role
-from discord import Member
-from discord import Embed,File
-from typing import Optional
-from random import choice
-from asyncio import TimeoutError, sleep
-from ..lib.util.util import convert
 import time as timemod
+from asyncio import TimeoutError, sleep
+from random import choice
+
+from discord import Embed
+from discord.ext.commands import (Cog, MissingPermissions, command,
+                                  has_permissions)
+
+from ...lib.util.util import convert
+
 
 class Giveaway(Cog):
     def __init__(self,bot):
         self.bot = bot
         self.cancelled = False
+        self.description='Helps you to organise a simple giveaway.'
 
     @command(name="giveaway", aliases=["gcreate", "gcr", "giftcr"], description='Allowes you to to create giveaway by answering some simple questions!')
     @has_permissions(manage_guild=True)

@@ -11,6 +11,7 @@ class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
+        self.description = 'Some fun Roleplay Commands'
         
     #8ball
     @commands.command(name='8ball')

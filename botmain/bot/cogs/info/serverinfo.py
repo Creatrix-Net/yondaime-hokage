@@ -1,13 +1,13 @@
 # Discord Imports
-import discord
-from discord.ext import commands
-from discord import Spotify
 import datetime
 import time
-import requests
-import dbl
 
-from ..utils_dis import *
+import discord
+from discord import Spotify
+from discord.ext import commands
+
+from ...utils_dis import *
+
 
 class Info(commands.Cog):
     def __init__(self, bot):
@@ -15,6 +15,8 @@ class Info(commands.Cog):
         self.bot.start_time = bot.start_time
         self.bot.github = bot.github
         self.bot.discord_id = bot.discord_id
+        
+        self.description = "Get's the Information about the server"
 
     @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
     @commands.cooldown(1, 1080, commands.BucketType.guild)

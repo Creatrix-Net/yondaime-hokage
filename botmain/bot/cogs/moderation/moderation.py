@@ -1,15 +1,8 @@
 # Discord Imports
-import discord
-from discord.ext import commands, tasks
-
-from dateutil.relativedelta import relativedelta
-import datetime
-
-from copy import deepcopy
 import re
-import asyncio
 
-
+import discord
+from discord.ext import commands
 
 time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
@@ -35,6 +28,7 @@ class TimeConverter(commands.Converter):
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.description = 'Some simple moderation commands'
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)

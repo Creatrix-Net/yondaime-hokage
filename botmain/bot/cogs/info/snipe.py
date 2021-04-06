@@ -1,7 +1,7 @@
+import re
+
 import discord
 from discord.ext import commands
-import datetime
-import re
 
 invitere = r"(?:https?:\/\/)?discord(?:\.gg|app\.com\/invite)?\/(?:#\/)([a-zA-Z0-9-]*)"
 invitere2 = r"(http[s]?:\/\/)*discord((app\.com\/invite)|(\.gg))\/(invite\/)?(#\/)?([A-Za-z0-9\-]+)(\/)?"
@@ -11,6 +11,7 @@ class Snipe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.snipes = {}
+        self.description = '"Snipes" someone\'s message that\'s been edited or deleted.'
 
         @bot.listen('on_message_delete')
         async def on_message_delete(msg):

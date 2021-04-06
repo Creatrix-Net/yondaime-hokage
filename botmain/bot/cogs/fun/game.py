@@ -1,23 +1,22 @@
+import asyncio
+import random
+import time
+
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
-
-import datetime
-import time
-
-import random
-import asyncio
 
 
 class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.chatbot = bot.chatbot
+        self.description = 'A simple reaction game and also here you can chat with me!'
 
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
     @commands.command(aliases=['cb'])
     async def chatbot(self, ctx):
-        '''Talk to chatbot'''
+        '''Talk with me!'''
         lis = "cancel"
         transmit = True
         await ctx.send(f'Chatbot Started!\nType the following items `{lis}` to end.')

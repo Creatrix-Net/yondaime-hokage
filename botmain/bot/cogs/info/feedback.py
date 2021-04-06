@@ -1,10 +1,12 @@
-from discord.ext import commands
 import discord
+from discord.ext import commands
 from discord.ext.commands import command
+
 
 class Feedback(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.description = 'Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server owner)'
     
     @command()
     @commands.cooldown(1, 120, commands.BucketType.guild)

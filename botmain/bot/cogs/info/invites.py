@@ -1,11 +1,10 @@
-import discord
-from discord.ext import commands, tasks
-
 import asyncio
 import datetime
 import time
 from typing import Dict, Optional
 
+import discord
+from discord.ext import commands, tasks
 
 # poll period in minutes for the
 # update_invite_expiry task
@@ -27,6 +26,8 @@ class Invites(commands.Cog):
         self.bot.wait_for_invites = self.wait_for_invites
 
         self.bot.loop.create_task(self.__ainit__())
+
+        self.description = 'Get invites information about the server'
 
     async def __ainit__(self):
         # wait until the bots internal cache is ready

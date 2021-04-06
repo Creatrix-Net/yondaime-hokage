@@ -1,9 +1,11 @@
 import discord
 from discord.ext import commands
 
-class MySupport(commands.Cog):
+
+class MySupport(commands.Cog, name="My Support"):
     def __init__(self, bot):
         self.bot = bot
+        self.bot = 'Having problems with me? Then you can get the help here.'
     
     @commands.command(description='Generates my invite link for your server')
     async def inviteme(self, ctx):

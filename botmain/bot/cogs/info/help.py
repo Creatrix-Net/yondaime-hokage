@@ -5,6 +5,7 @@ from discord.ext import commands
 class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.description = 'Displays the support command for the server, this can onnly be used if the server owner has enabled it.'
 
     @commands.command(description='Open support ticket if enabled by the server admins')
     @commands.cooldown(1, 120, commands.BucketType.guild)

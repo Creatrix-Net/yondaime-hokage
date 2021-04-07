@@ -1,12 +1,14 @@
 # Discord Imports
 import datetime
 import time
+from discord_slash import cog_ext
+
 
 import discord
 from discord import Spotify
 from discord.ext import commands
 
-from ...utils_dis import *
+from ...lib.util.utils_dis import *
 
 
 class Info(commands.Cog):
@@ -86,7 +88,7 @@ class Info(commands.Cog):
         except discord.HTTPException:
             await ctx.send("Current uptime: " + text)
         
-
+    @cog_ext.cog_slash(name="ping")
     @commands.command()
     async def ping(self, ctx):
         starttime = time.time()

@@ -6,6 +6,7 @@ import discord
 from asyncdagpi import ImageFeatures
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
+import datetime
 
 
 class ImageManipulation(commands.Cog, name="Image Manipulation"):
@@ -15,32 +16,60 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
         self.description = 'Some fun Image Manipulation Commands'
 
-    @commands.command()
-    async def wni(self, ctx, *, name):
-        text = f"{name} was not the imposter"
-        img = Image.open(FileIO(self.DEFAULT_GIF_LIST_PATH / "amongus.png"))
-        draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("Arial.ttf")), 70)
-        draw.text((450, 300), text, font=font, fill="white", align="center")
-        img.save("wni.png")
-        await ctx.send(file=discord.File("wni.png"))
-        await sleep(3)
-        os.remove("wni.png")
+    @commands.command( usage='<member.mention>')
+    async def wni(self, ctx, *, member: discord.Member = ''):
+        '''Prove that you are not sus!'''
+        if member == '@everyone':
+            await ctx.send(f'** <@{ctx.author.id}> yes yes bro!!! Everyone is not sus!**')
+            return
+        elif member[:2] == '<@' or member.split('<@')[1].isdigit():
+            desc=f'** {member}  was not the imposter**'
+        elif member!='':
+            desc=f'** {member}  was not the imposter**'
+        else:
+            desc=(f'** <@{ctx.author.id}> yes ma boi you are not __sus__!!**')
+        
+        file_path = self.DEFAULT_GIF_LIST_PATH / "amoungus_friends.png"
+        file=discord.File(file_path)
+        
+        embed = discord.Embed(description=desc,timestamp=datetime.datetime.utcnow())
+        embed.set_image(url=f"attachment://{file_path}")
+        await ctx.send(file=file)
 
-    @commands.command()
-    async def wi(self, ctx, *, name):
-        text = f"{name} was the imposter"
+
+    @commands.command(usage='<member.mention>')
+    async def wi(self, ctx, *, member: discord.Member = ''):
+        '''Prove anyone that they are sus!'''
+        if member == '@everyone':
+            desc = f'Hmmmmmmm ** <@{ctx.author.id}> , Hey guys <@{ctx.author.id}> is the sus !!!**'
+            await ctx.send(desc)
+            text = f'{ctx.author.display_name}  is the imposter'
+        elif type(member)== discord.Member:
+            desc = f'** {member.mention}  is the imposter**'
+            text = f'{member.display_name}  is the imposter'
+        elif member!='':
+            desc = f'** {member}  is the imposter**'
+            text = f'{member}  is the imposter'
+        else:
+            await ctx.send(f'** <@{ctx.author.id}> why you being __sus__ ! **')
+            return
+        
+        embed = discord.Embed(description=desc,timestamp=datetime.datetime.utcnow())
+        
         img = Image.open(FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("amongus.png")))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype(FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("Arial.ttf")), 60)
-        draw.text((450, 300), text, font=font, fill="red", align="right")
+        draw.text((250, 300), text, font=font, fill="red", align="right")
         img.save("wi.png")
-        await ctx.send(file=discord.File("wi.png"))
+        embed.set_image(url=f"attachment://wi.png")
+        await ctx.send(file=discord.File("wi.png"),embed=embed)
         await sleep(3)
         os.remove("wi.png")
 
-    @commands.command()
+
+    @commands.command(usage='<member.mention>')
     async def triggered(self, ctx, member: discord.Member = None):
+        '''Make anyone triggered'''
         if member is None:
             member = ctx.author
 
@@ -51,8 +80,9 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://triggered.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.command(cooldown_after_parsing=True)
+    @commands.command(cooldown_after_parsing=True, usage='<discord.member.to.send> <your.message>')
     async def message(self, ctx, member: discord.Member = None, *, text):
+        '''Send a fake Discord message'''
         if member is None:
             member = ctx.author
 
@@ -68,8 +98,9 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://message.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.command(cooldown_after_parsing=True)
-    async def captcha(self, ctx, member: discord.Member = None, *, text):
+    @commands.command(cooldown_after_parsing=True, usage='<member.mention> <captcha.text>')
+    async def captcha(self, ctx, member: discord.Member = None, *, text='Detect Face'):
+        '''Captcha v3 Image mockup'''
         if member is None:
             member = ctx.author
 
@@ -90,6 +121,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
 
     @commands.command()
     async def pixel(self, ctx, member: discord.Member = None):
+        '''Pixallate your pfp'''
         if member is None:
             member = ctx.author
 
@@ -102,7 +134,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
 
     @commands.command()
     async def jail(self, ctx, member: discord.Member = None):
-        """Yes."""
+        """Jail yourself or someone"""
         if member is None:
             member = ctx.author
         url = str(member.avatar_url_as(format="png", size=1024))
@@ -114,6 +146,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
 
     @commands.command()
     async def magik(self, ctx, member: discord.Member = None):
+        '''See yourself the magic! '''
         if member is None:
             member = ctx.author
 
@@ -126,6 +159,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
 
     @commands.command()
     async def wanted(self, ctx, member: discord.Member = None):
+        '''Get yourself or someone listed in Bingo Book'''
         if member is None:
             member = ctx.author
 
@@ -138,6 +172,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
 
     @commands.command()
     async def rainbow(self, ctx, member: discord.Member = None):
+        '''Rainbow light effect'''
         if member is None:
             member = ctx.author
 
@@ -147,43 +182,45 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="Here You Go! Filter used is gay!")
         e.set_image(url=f"attachment://rainbow.{img.format}")
         await ctx.send(embed=e, file=e2file)
-
+    
     @commands.command()
-    async def pan(self, ctx, *, name):
-        text = f"Yay! {name} Has come out as pan! :)"
-        img = Image.open(FileIO(self.DEFAULT_GIF_LIST_PATH / "pan1.jpg"))
-        draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(FileIO(self.DEFAULT_GIF_LIST_PATH / "Arial.ttf"), 50)
-        draw.text((250, 300), text, font=font, fill="Black", align="center")
-        img.save("enby.png")
-        await ctx.send(file=discord.File("enby.png"))
-        await sleep(3)
-        os.remove("enby.png")
+    async def gay(self, ctx, member: discord.Member = None):
+        '''Seperate yourself/others and mark them/yourself as gay!'''
+        if member is None:
+            member = ctx.author
 
+        url = str(member.avatar_url_as(format="png", size=1024))
+        img = await self.bot.dagpi.image_process(ImageFeatures.gay(), url)
+        e2file = discord.File(fp=img.image, filename=f"gay.{img.format}")
+        e = discord.Embed(title="There you go gay!")
+        e.set_image(url=f"attachment://gay.{img.format}")
+        await ctx.send(embed=e, file=e2file)
+    
     @commands.command()
-    async def enby(self, ctx, *, name):
-        text = f"Yay! {name} Has come out as enby!"
-        img = Image.open(FileIO(self.DEFAULT_GIF_LIST_PATH / "enby1.png"))
-        draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(FileIO(self.DEFAULT_GIF_LIST_PATH / "Arial.ttf"), 160)
-        draw.text((1700, 1100), text, font=font, fill="Black", align="center")
-        img.save("enby.png")
-        await ctx.send(file=discord.File("enby.png"))
-        await sleep(3)
-        os.remove("enby.png")
+    async def trash(self, ctx, member: discord.Member = None):
+        '''Puts trash into trashbin'''
+        if member is None:
+            member = ctx.author
 
-    @commands.command()
-    async def bi(self, ctx, *, name):
-        text = f"Yay! {name} Has come out as bisexual! \nWell done!"
-        img = Image.open(FileIO(self.DEFAULT_GIF_LIST_PATH / "bi1.jfif"))
-        draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(FileIO(self.DEFAULT_GIF_LIST_PATH / "Arial.ttf"), 14)
-        draw.text((30, 85), text, font=font, fill="Black", align="center")
-        img.save("bi.png")
-        await ctx.send(file=discord.File("bi.png"))
-        await sleep(3)
-        os.remove("bi.png")
+        url = str(member.avatar_url_as(format="png", size=1024))
+        img = await self.bot.dagpi.image_process(ImageFeatures.trash(), url)
+        e2file = discord.File(fp=img.image, filename=f"trash.{img.format}")
+        e = discord.Embed(title="There you go piece of Trash!")
+        e.set_image(url=f"attachment://trash.{img.format}")
+        await ctx.send(embed=e, file=e2file)
+    
+    @commands.command(aliases=['delete_trash','dt'])
+    async def delete(self, ctx, member: discord.Member = None):
+        '''Removes trash from bin'''
+        if member is None:
+            member = ctx.author
 
+        url = str(member.avatar_url_as(format="png", size=1024))
+        img = await self.bot.dagpi.image_process(ImageFeatures.delete(), url)
+        e2file = discord.File(fp=img.image, filename=f"delete.{img.format}")
+        e = discord.Embed(title="There you go piece of trash removed!")
+        e.set_image(url=f"attachment://delete.{img.format}")
+        await ctx.send(embed=e, file=e2file)
 
 def setup(bot):
     bot.add_cog(ImageManipulation(bot))

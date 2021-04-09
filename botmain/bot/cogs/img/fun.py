@@ -2,9 +2,11 @@ import datetime
 import random
 from os import listdir
 from os.path import join
+import time
 
 import discord
 from discord.ext import commands
+from discord_slash import cog_ext
 
 class Fun(commands.Cog):
     def __init__(self, bot):
@@ -38,18 +40,19 @@ class Fun(commands.Cog):
             "Very doubtful",
             "Stoping asking me fucking studip questions !!!! I need peace bitch!"
         ]
+        time.sleep(3)
         for i in random.choice(responses).split(' '):
             await ctx.send(f'**{i.upper()}**')
 
     #spank
     @commands.command()
-    async def spank(self,ctx, member = ''):
+    async def spank(self,ctx, member: discord.Member = ''):
         if member == '':
             desc=f'** <@{ctx.author.id}> spanks themselves !!! LOL!**'
-        elif member == '@everyone':
+        elif member in ['@everyone', '@here']:
             await ctx.send(f'** <@{ctx.author.id}> why would you spank @everyone? **')
-        elif member[:2] == '<@' or member.split('<@')[1].isdigit():
-            desc=f'** <@{ctx.author.id}> spanks {member} !!! Damm! **'
+        elif type(member)== discord.Member:
+            desc=f'** <@{ctx.author.id}> spanks {member.mention} !!! Damm! **'
         else:
             desc=f'** <@{ctx.author.id}> spanks themselves !!! LOL! **'
         onlyfiles = [f for f in listdir(join(self.DEFAULT_GIF_LIST_PATH ,'spank'))]
@@ -65,13 +68,13 @@ class Fun(commands.Cog):
 
     #slap
     @commands.command()
-    async def slap(self,ctx, member = ''):
+    async def slap(self,ctx, member: discord.Member = ''):
         if member == '':
             desc=f'** <@{ctx.author.id}> slaps themselves !!! LOL!**'
-        elif member == '@everyone':
+        elif member in ['@everyone', '@here']:
             await ctx.send(f'** <@{ctx.author.id}> why would you slap @everyone? **')
-        elif member[:2] == '<@' or member.split('<@')[1].isdigit():
-            desc=f'** <@{ctx.author.id}> slaps {member} !!! Damm! **'
+        elif type(member)== discord.Member:
+            desc=f'** <@{ctx.author.id}> slaps {member.mention} !!! Damm! **'
         else:
             desc=f'** <@{ctx.author.id}> slaps themselves !!! LOL! **'
         onlyfiles = [f for f in listdir(join(self.DEFAULT_GIF_LIST_PATH ,'slap'))]
@@ -87,13 +90,13 @@ class Fun(commands.Cog):
 
     #hug
     @commands.command()
-    async def hug(self,ctx, member = ''):
+    async def hug(self,ctx, member: discord.Member = ''):
         if member == '':
             desc=f'** <@{ctx.author.id}> hugs themselves :heart: :heart: :heart: :heart: **'
-        elif member == '@everyone':
+        elif member in ['@everyone', '@here']:
             await ctx.send(f'** <@{ctx.author.id}> why would you hug @everyone? **')
-        elif member[:2] == '<@' or member.split('<@')[1].isdigit():
-            desc=f'** <@{ctx.author.id}> hugs {member} !!! :heart: :heart: :heart: **'
+        elif type(member)== discord.Member:
+            desc=f'** <@{ctx.author.id}> hugs {member.mention} !!! :heart: :heart: :heart: **'
         else:
             desc=f'** <@{ctx.author.id}> hugs themselves !!! :heart: :heart: :heart: :heart: **'
         onlyfiles = [f for f in listdir(join(self.DEFAULT_GIF_LIST_PATH ,'hug'))]
@@ -109,12 +112,12 @@ class Fun(commands.Cog):
 
     #poke
     @commands.command()
-    async def poke(self,ctx, member = ''):
+    async def poke(self,ctx, member: discord.Member = ''):
         if member == '':
             desc=f'** <@{ctx.author.id}> pokes themselves! **'
-        elif member == '@everyone':
+        elif member in ['@everyone', '@here']:
             await ctx.send(f'** <@{ctx.author.id}> why would you poke @everyone? **')
-        elif member[:2] == '<@' or member.split('<@')[1].isdigit():
+        elif type(member)== discord.Member:
             desc=f'** {member} <@{ctx.author.id}> pokes you !!! **'
         else:
             desc=f'** <@{ctx.author.id}> hugs themselves !!! **'
@@ -131,13 +134,13 @@ class Fun(commands.Cog):
 
     #poke
     @commands.command()
-    async def high5(self,ctx, member = ''):
+    async def high5(self,ctx, member: discord.Member = ''):
         if member == '':
             desc=f'**<@{ctx.author.id}> high-fives **'
-        elif member == '@everyone':
+        elif member in ['@everyone', '@here']:
             desc=f'**@everyone <@{ctx.author.id}> high-fives **'
-        elif member[:2] == '<@' or member.split('<@')[1].isdigit():
-            desc=f'**<@{ctx.author.id}> high fives {member} !!! **'
+        elif type(member)== discord.Member:
+            desc=f'**<@{ctx.author.id}> high fives {member.mention} !!! **'
         else:
             desc=f'**<@{ctx.author.id}> high-fives **'
         onlyfiles = [f for f in listdir(join(self.DEFAULT_GIF_LIST_PATH ,'high5'))]
@@ -152,13 +155,13 @@ class Fun(commands.Cog):
 
     #party
     @commands.command()
-    async def party(self,ctx, member = ''):
+    async def party(self,ctx, member: discord.Member = ''):
         if member == '':
             desc=f'**<@{ctx.author.id}> is partying !!**'
-        elif member == '@everyone':
+        elif member in ['@everyone', '@here']:
             desc=f'**@everyone <@{ctx.author.id}> is partying!! come join them !! **'
-        elif member[:2] == '<@' or member.split('<@')[1].isdigit():
-            desc=f'**<@{ctx.author.id}> parties with {member} !!! Yaay !!! **'
+        elif type(member)== discord.Member:
+            desc=f'**<@{ctx.author.id}> parties with {member.mention} !!! Yaay !!! **'
         else:
             desc=f'**<@{ctx.author.id}> is partying !!!**'
         onlyfiles = [f for f in listdir(join(self.DEFAULT_GIF_LIST_PATH ,'party'))]

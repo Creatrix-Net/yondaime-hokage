@@ -25,6 +25,7 @@ class Page(Paginator):
             await self.page.clear_reactions()
         except discord.HTTPException:
             pass
+
 intents = discord.Intents.all()
 intents.members = True
 intents.reactions = True
@@ -114,8 +115,7 @@ async def on_ready():
     e.set_thumbnail(url=bot.user.avatar_url)
     print('Started The Bot')
 
-    await stats.send(embed=e) 
-                
+    await stats.send(embed=e)           
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -132,7 +132,7 @@ async def on_command_error(ctx, error):
         e4 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e4.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e4)
-    '''
+    
     elif isinstance(error, commands.CommandInvokeError):
         perms= 8 #1073737719 #2147483656
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
@@ -151,7 +151,7 @@ async def on_command_error(ctx, error):
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e9)
-
+'''
     elif isinstance(error, commands.CommandNotFound):
         e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e2.set_footer(text=f"{ctx.author.name}")

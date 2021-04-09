@@ -2,7 +2,7 @@
 aiozaneapi==1.6
 antiorm==1.2.1
 APScheduler==3.7.0
-asgiref==3.3.1
+asgiref==3.3.4
 astroid==2.5.2
 astunparse==1.6.3
 async-cleverbot==0.2.2
@@ -25,7 +25,7 @@ default==0.1.2
 discord==1.0.1
 discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@4429b564fd8f031deaccd60caa5be7320e248816
 discord-ext-owoify==0.0.6a0
-discord.py==1.6.0
+discord.py==1.7.1
 DiscordUtils==1.2.8
 dj-database-url==0.5.0
 Django==3.2

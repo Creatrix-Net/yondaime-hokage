@@ -160,4 +160,3 @@ async def on_command_error(ctx, error):
     '''
 
 bot.run(TOKEN)
-WebhookManager.run(80)

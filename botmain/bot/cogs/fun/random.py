@@ -181,7 +181,7 @@ class Random(commands.Cog):
         await ctx.send("hi.")
 
     @command()
-    async def gay(self, ctx):
+    async def gaymeter(self, ctx):
         await ctx.send(f"You are {random.randint(1, 100)}% gay")
 
 

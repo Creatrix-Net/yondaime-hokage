@@ -15,6 +15,7 @@ from discord.ext import commands
 from discord.ext.buttons import Paginator
 from pretty_help import PrettyHelp
 from bot.lib.util import post_user_stats
+import DiscordUtils
 
 # from .bot.help import Help
 
@@ -91,7 +92,7 @@ bot.spacebot = token_get('SPACEBOT')
 bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
     
-
+music = DiscordUtils.Music()
 
 # Events
 @bot.event
@@ -115,7 +116,7 @@ async def on_ready():
     e.set_thumbnail(url=bot.user.avatar_url)
     print('Started The Bot')
 
-    await stats.send(embed=e)           
+    await stats.send(embed=e)    
 
 @bot.event
 async def on_command_error(ctx, error):

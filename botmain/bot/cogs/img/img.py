@@ -202,7 +202,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         if member is None:
             member = ctx.author
 
-        url = str(member.avatar_url_as(format="png", size=1024))
+        url = str(member.avatar_url_as(format="png", size=512))
         img = await self.bot.dagpi.image_process(ImageFeatures.trash(), url)
         e2file = discord.File(fp=img.image, filename=f"trash.{img.format}")
         e = discord.Embed(title="There you go piece of Trash!")
@@ -220,6 +220,58 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e2file = discord.File(fp=img.image, filename=f"delete.{img.format}")
         e = discord.Embed(title="There you go piece of trash removed!")
         e.set_image(url=f"attachment://delete.{img.format}")
+        await ctx.send(embed=e, file=e2file)
+    
+    @commands.command()
+    async def angel(self, ctx, member: discord.Member = None):
+        '''Be an Angel'''
+        if member is None:
+            member = ctx.author
+
+        url = str(member.avatar_url_as(format="png", size=512))
+        img = await self.bot.dagpi.image_process(ImageFeatures.angel(), url)
+        e2file = discord.File(fp=img.image, filename=f"angel.{img.format}")
+        e = discord.Embed(title="Our dear Angel!")
+        e.set_image(url=f"attachment://angel.{img.format}")
+        await ctx.send(embed=e, file=e2file)
+    
+    @commands.command()
+    async def satan(self, ctx, member: discord.Member = None):
+        '''Be the Devil'''
+        if member is None:
+            member = ctx.author
+
+        url = str(member.avatar_url_as(format="png", size=64))
+        img = await self.bot.dagpi.image_process(ImageFeatures.satan(), url)
+        e2file = discord.File(fp=img.image, filename=f"satan.{img.format}")
+        e = discord.Embed(title="Satan!!!")
+        e.set_image(url=f"attachment://satan.{img.format}")
+        await ctx.send(embed=e, file=e2file)
+    
+    @commands.command(aliases=['chp','chpaint','charcoal_paint','charcoalp'])
+    async def charcoal(self, ctx, member: discord.Member = None):
+        '''Get your pfp beautiful charcoal paint'''
+        if member is None:
+            member = ctx.author
+
+        url = str(member.avatar_url_as(format="png", size=1024))
+        img = await self.bot.dagpi.image_process(ImageFeatures.charcoal(), url)
+        e2file = discord.File(fp=img.image, filename=f"charcoal.{img.format}")
+        e = discord.Embed(title="There you go your lovely charcoal paintaing")
+        e.set_image(url=f"attachment://charcoal.{img.format}")
+        await ctx.send(embed=e, file=e2file)
+    
+    @commands.command()
+    async def hitler(self, ctx, member: discord.Member = None):
+        '''Hail Hitler'''
+        if member is None:
+            member = ctx.author
+
+        url = str(member.avatar_url_as(format="png", size=64))
+        img = await self.bot.dagpi.image_process(ImageFeatures.hitler(), url)
+        e2file = discord.File(fp=img.image, filename=f"hitler.{img.format}")
+        e = discord.Embed(title="Worse than Hitler!!!")
+        e.set_image(url=f"attachment://hitler.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
 def setup(bot):

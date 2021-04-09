@@ -69,11 +69,6 @@ class Info(commands.Cog):
     async def who(self, ctx): 
         m = WhoMenu(bot=self.bot)
         await m.start(ctx)
-
-    @commands.command()
-    async def vote(self, ctx):
-        m = VotingMenu(bot=self.bot)
-        await m.start(ctx)
     
     @commands.command()
     async def uptime(self, ctx):

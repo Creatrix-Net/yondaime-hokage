@@ -2,7 +2,7 @@ import random
 from os.path import join
 from pathlib import Path
 
-import dbl
+import topgg
 import discord
 import requests
 
@@ -19,7 +19,7 @@ class PostStats:
         filepointer = open(imageslistdir)
         imageslist = filepointer.readlines()
 
-        dblpy = dbl.DBLClient(self.bot, self.bot.topken, autopost=True)
+        dblpy = topgg.DBLClient(self.bot, self.bot.topken, autopost=True)
         await dblpy.post_guild_count(guildsno)
         b = requests.post(f'https://discordbotlist.com/api/v1/bots/{self.bot.discord_id}/stats',
                           headers={'Authorization': self.bot.dblst},
@@ -44,10 +44,6 @@ class PostStats:
                                    'Content-Type': 'application/json'},
                           json={'guildCount': guildsno}
                           )
-        g = requests.post(f'https://discordlistology.com/api/v1/bots/{self.bot.discord_id}/stats',
-                          headers={'Authorization': self.bot.discordlistology},
-                          data={'servers': guildsno}
-                          )
 
         h = requests.post(f'https://space-bot-list.xyz/api/bots/{self.bot.discord_id}',
                           headers={"Authorization": self.bot.spacebot,
@@ -71,8 +67,6 @@ class PostStats:
             e.status_code)+' : [DiscordBoats](https://discord.boats/bot/779559821162315787)')
         e1.add_field(name='DiscordBots', value=str(
             f.status_code)+' : [DiscordBots](https://discord.bots.gg/bots/779559821162315787/)')
-        e1.add_field(name='DiscordListoLogy', value=str(
-            g.status_code)+' : [DiscordListoLogy](https://discordlistology.com/bots/779559821162315787)')
         e1.add_field(name='Space Bots', value=str(
             h.status_code)+' : [Space Bots](https://space-bot-list.xyz/bots/779559821162315787)')
         await r.send(embed=e1)

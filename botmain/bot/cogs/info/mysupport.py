@@ -9,7 +9,7 @@ class MySupport(commands.Cog, name="My Support"):
     
     @commands.command(description='Generates my invite link for your server')
     async def inviteme(self, ctx):
-        embed=discord.Embed(title='**Invite Link**',description=f'[My Invite Link!](https://discord.com/oauth2/authorize?client_id={self.bot.user.id}&permissions=8&scope=bot)')
+        embed=discord.Embed(title='**Invite Link**',description=f'[My Invite Link!](https://discord.com/oauth2/authorize?client_id={self.bot.discord_id}&permissions=8&scope=bot%20applications.commands)')
         embed.set_thumbnail(url=ctx.bot.user.avatar_url)
         await ctx.send(embed=embed)
 

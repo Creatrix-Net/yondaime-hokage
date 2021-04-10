@@ -3,6 +3,7 @@ import time
 from os.path import join
 from pathlib import Path
 from discord_slash import SlashCommand
+import sentry_sdk
 
 
 import aiozaneapi
@@ -41,6 +42,8 @@ def token_get(tokenname):
 
 TOKEN = token_get('TOKEN')
 topastoken = token_get('TOPASTOKEN')
+
+sentry_link = token_get('SENTRY')
 
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
@@ -137,24 +140,63 @@ async def on_command_error(ctx, error):
         await ctx.channel.send(embed=e2, delete_after=3)
 
     elif isinstance(error, commands.CommandInvokeError):
-        perms= 8 #1073737719 #2147483656
+        c = bot.get_channel(830366314761420821)
+        
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
         e7.add_field(name="Command Error Caused By:", value=f"{ctx.command}")
         e7.add_field(name="By", value=f"{ctx.author.name}")
-        e7.add_field(name="MY INVITE LINK", value=f"[LINK](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions={perms}&scope=bot)")
+        e7.add_field(name="MY INVITE LINK", value=f'[LINK](https://discord.com/oauth2/authorize?client_id={bot.discord_id}&permissions=8&scope=bot%20applications.commands)')
         e7.set_thumbnail(url=f"https://i.imgur.com/1zey3je.jpg")
         e7.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e7)
-  
+        await ctx.channel.send(embed=e7, delete_after=2)
+        await c.send(embed=e7)
+        
+
+        await ctx.send('**Sending the error report info to my developer**', delete_after=2)
+        e = discord.Embed(title=f'In **{ctx.guild.name}**',description=f'User affected {ctx.message.author}' , color= 0x2ecc71)
+        if ctx.guild.icon:
+            e.set_thumbnail(url=ctx.guild.icon_url)
+        if ctx.guild.banner:
+            e.set_image(url=ctx.guild.banner_url_as(format="png"))
+        e.add_field(name='**Total Members**',value=ctx.guild.member_count)
+        e.add_field(name='**Bots**',value=sum(1 for member in ctx.guild.members if member.bot))
+        e.add_field(name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
+        e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
+        await ctx.send('**Error report was successfully sent**', delete_after=2)
+        await c.send(embed=e)
     else:
+        c = bot.get_channel(830366314761420821)
+        
         haaha = ctx.author.avatar_url
         e9 = discord.Embed(title="Oh no there was some error", description=f"`{error}`")
         e9.add_field(name="**Command Error Caused By**", value=f"{ctx.command}")
         e9.add_field(name="**By**", value=f"**ID** : {ctx.author.id}, **Name** : {ctx.author.name}")
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e9)
+        await ctx.channel.send(embed=e9, delete_after=2)
+        await c.send(embed=e9)
+        
+        await ctx.send('**Sending the error report info to my developer**', delete_after=2)
+        e = discord.Embed(title=f'In **{ctx.guild.name}**',description=f'User affected {ctx.message.author}' , color= 0x2ecc71)
+        if ctx.guild.icon:
+            e.set_thumbnail(url=ctx.guild.icon_url)
+        if ctx.guild.banner:
+            e.set_image(url=ctx.guild.banner_url_as(format="png"))
+        e.add_field(name='**Total Members**',value=ctx.guild.member_count)
+        e.add_field(name='**Bots**',value=sum(1 for member in ctx.guild.members if member.bot))
+        e.add_field(name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
+        e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
+        await ctx.send('**Error report was successfully sent**', delete_after=2)
+        await c.send(embed=e)
 
 
+sentry_sdk.init(
+    sentry_link,
+    traces_sample_rate=1.0
+)
+try:
+    division_by_zero = 1 / 0
+except:
+    pass
 
 bot.run(TOKEN)

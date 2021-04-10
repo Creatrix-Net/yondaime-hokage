@@ -273,6 +273,19 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="Worse than Hitler!!!")
         e.set_image(url=f"attachment://hitler.{img.format}")
         await ctx.send(embed=e, file=e2file)
+    
+    @commands.command(usage="<member.mention> (Optional)")
+    async def wasted(self, ctx, member: discord.Member = None):
+        '''GTA V wasted screen'''
+        if member is None:
+            member = ctx.author
+
+        url = str(member.avatar_url_as(format="png", size=1024))
+        img = await self.bot.dagpi.image_process(ImageFeatures.wasted(), url)
+        e2file = discord.File(fp=img.image, filename=f"wasted.{img.format}")
+        e = discord.Embed(title="Wasted! :skull_crossbones:")
+        e.set_image(url=f"attachment://wasted.{img.format}")
+        await ctx.send(embed=e, file=e2file)
 
 def setup(bot):
     bot.add_cog(ImageManipulation(bot))

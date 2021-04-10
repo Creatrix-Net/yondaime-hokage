@@ -42,7 +42,10 @@ class BotEvents(commands.Cog):
         if guild.banner:
             e34.set_image(url=guild.banner_url_as(format="png"))
         c = self.bot.get_channel(813954921782706227)
-        e34.add_field(name='**Members**',value=f'{guild.member_count} | {sum(1 for member in guild.members if member.bot)}')
+        e34.add_field(name='**Total Members**',value={guild.member_count})
+        e34.add_field(name='**Bots**',value={sum(1 for member in guild.members if member.bot)})
+        e34.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
+        e34.add_field(name="**Server ID**", value=guild.id, inline=True)
         await c.send(embed=e34)
 
     #when bot leaves the server
@@ -54,8 +57,11 @@ class BotEvents(commands.Cog):
         if guild.banner:
             e34.set_image(url=guild.banner_url_as(format="png"))
         c = self.bot.get_channel(813954921782706227)
-        if guild.name:
-            await c.send(embed=e34)
+        e34.add_field(name='**Total Members**',value={guild.member_count})
+        e34.add_field(name='**Bots**',value={sum(1 for member in guild.members if member.bot)})
+        e34.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
+        e34.add_field(name="**Server ID**", value=guild.id, inline=True)
+        await c.send(embed=e34)
 
     #ban
     @commands.Cog.listener()

@@ -2,7 +2,7 @@ import random
 from os.path import join
 from pathlib import Path
 
-import topgg
+from ..topgg import *
 import discord
 import requests
 
@@ -19,7 +19,7 @@ class PostStats:
         filepointer = open(imageslistdir)
         imageslist = filepointer.readlines()
 
-        dblpy = topgg.DBLClient(self.bot, self.bot.topken, autopost=True)
+        dblpy = DBLClient(self.bot, self.bot.topken, autopost=True)
         await dblpy.post_guild_count(guildsno)
         b = requests.post(f'https://discordbotlist.com/api/v1/bots/{self.bot.discord_id}/stats',
                           headers={'Authorization': self.bot.dblst},

@@ -3,11 +3,13 @@ from discord import embeds
 from discord.ext import commands
 from requests import status_codes
 from ...lib.util.utils_dis import *
-import topgg, requests
+from ...lib.topgg import *
+import requests
 
 
 class VoteInfo(commands.Cog):
     def __init__(self, bot):
+        self.description = 'Get information about your votes for me'
         self.bot = bot
         self.discord_id = bot.discord_id
         
@@ -18,16 +20,18 @@ class VoteInfo(commands.Cog):
         self.bfd_site = '[Click Here](https://botsfordiscord.com/bot/779559821162315787)'
         self.discordboats_site = '[Click Here](https://discord.boats/bot/779559821162315787/)'
         
-        self.dblpy = topgg.DBLClient(self.bot, self.bot.topken)
+        self.dblpy = DBLClient(self.bot, self.bot.topken)
         
         
     @commands.command()
     async def vote(self, ctx):
+        '''Get all the voting links'''
         m = VotingMenu(bot=self.bot)
         await m.start(ctx)
     
-    @commands.command()
+    @commands.command(usage='<member.mention> optional')
     async def hasvoted(self, ctx, member: discord.Member = None):
+        '''Check if the user has voted or not'''
         if not member:
             member = ctx.author
         async with ctx.channel.typing():

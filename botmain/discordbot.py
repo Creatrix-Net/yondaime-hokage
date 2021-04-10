@@ -95,6 +95,7 @@ music = DiscordUtils.Music()
 # Events
 @bot.event
 async def on_ready():
+    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
     cog_dir = Path(__file__).resolve(strict=True).parent / join('bot','cogs')
     for filename in os.listdir(cog_dir):
         if os.path.isdir(cog_dir / filename):
@@ -105,7 +106,6 @@ async def on_ready():
             if filename.endswith('.py'):
                 if filename != 'music1.py':
                     bot.load_extension(f'bot.cogs.{filename[:-3]}')
-    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
 
     current_time = time.time()
     difference = int(round(current_time - bot.start_time))
@@ -135,7 +135,7 @@ async def on_command_error(ctx, error):
         e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e2.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e2, delete_after=3)
-'''
+
     elif isinstance(error, commands.CommandInvokeError):
         perms= 8 #1073737719 #2147483656
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
@@ -154,7 +154,7 @@ async def on_command_error(ctx, error):
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e9)
-    '''
+
 
 
 bot.run(TOKEN)

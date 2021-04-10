@@ -55,9 +55,9 @@ class OwnerOnly(commands.Cog):
     def owners(ctx):
         return ctx.author.id == ctx.guild.owner_id
 
-    @commands.group(invoke_without_command=True, description = 'Type )help dev and to get list of all commands under dev group')
-    async def dev(self, ctx, command=None):
-        '''Type )help dev and to get list of all commands under dev group'''
+    @commands.group(invoke_without_command=True, description = 'Type )help own and to get list of all commands under own group')
+    async def own(self, ctx, command=None):
+        '''Type )help own and to get list of all commands under own group'''
         command2 = self.bot.get_command(f"{command}")
         if command2 is None:
             await ctx.send_help(ctx.command)
@@ -69,8 +69,9 @@ class OwnerOnly(commands.Cog):
                 pass
 
     @commands.is_owner()
-    @dev.group(aliases=["ss"])
+    @own.group(aliases=["ss"])
     async def screenshot(self, ctx, url):
+        '''Take a screenshot of a site'''
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
         embed = discord.Embed(title=f"Screenshot of {url}")
@@ -83,8 +84,9 @@ class OwnerOnly(commands.Cog):
             await ctx.send(file=discord.File(io.BytesIO(res), filename="ss.png"), embed=embed)
             
 
-    @dev.group()
+    @own.group()
     async def leaveguildbecauseimmad(self, ctx):
+        '''Make bot leave the guild ! Lol !'''
         message2 = ctx.message
         owner = self.bot.get_user(ctx.guild.owner_id)
         await message2.add_reaction('\U00002705')
@@ -102,8 +104,9 @@ class OwnerOnly(commands.Cog):
 
 
     @commands.is_owner()
-    @dev.group(name="as")
+    @own.group(name="as", usage='')
     async def foddd(self, ctx: commands.Context, target: discord.User, *, command_string: str):
+        '''Execute my commands pretending as others | usage: <member.mention> <command.name> eg: )own as @Minato angel'''
         if ctx.guild:
             # Try to upgrade to a Member instance
             # This used to be done by a Union converter, but doing it like this makes
@@ -137,7 +140,7 @@ class OwnerOnly(commands.Cog):
             'guild': ctx.guild,
             'message': ctx.message,
             'source': inspect.getsource,
-            'owner': self.bot.get_user(536991233461649408) #ctx.guild.owner_id
+            'owner': self.bot.get_user(ctx.guild.owner_id) #ctx.guild.owner_id
         }
 
         def cleanup_code(content):
@@ -215,18 +218,13 @@ class OwnerOnly(commands.Cog):
         else:
             await ctx.message.add_reaction('\u2705')
 
-    @dev.group(invoke_without_command=True)
+    @own.group(invoke_without_command=True)
     @commands.check(owners)
     async def chnick(self, ctx, *, name):
         me3 = ctx.guild.me
         await me3.edit(nick=name)
         word1 = "Nickname Changed To"
         await ctx.send(f"{word1} {name}")
-
-    @dev.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def changestat(self, ctx):
-        await ctx.send(f"Hi yeah")
 
     @commands.command(usage='<channel id> or <channel.mention starting with #> <message to send>')
     @commands.has_permissions(manage_guild=True)

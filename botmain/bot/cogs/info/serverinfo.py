@@ -36,10 +36,10 @@ class Info(commands.Cog):
                 if guild.banner:
                     e.set_image(url=guild.banner_url_as(format="png"))
                 n+=1
-                e.add_field(name='**Total Members**',value={guild.member_count})
-                e.add_field(name='**Bots**',value={sum(1 for member in guild.members if member.bot)})
-                e.add_field(name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
-                e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
+                e.add_field(name='**Total Members**',value=guild.member_count)
+                e.add_field(name='**Bots**',value=sum(1 for member in guild.members if member.bot))
+                e.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
+                e.add_field(name="**Server ID**", value=guild.id, inline=True)
                 await c.send(embed=e)
             await c.send(f'In total {n} servers')
             await ctx.send('**Updated ! Please check the <#813954921782706227>**')

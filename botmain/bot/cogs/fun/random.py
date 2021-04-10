@@ -99,7 +99,7 @@ class Random(commands.Cog):
                 title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
             await msg.edit(content="", embed=e)
 
-    @command(usage="remind <time> <reminder> (Time needs to be in seconds...)")
+    @command(usage="<time> <reminder> (Time needs to be in seconds...)")
     async def remind(self, ctx, time, *, reminder):
         if int(time) < 12*60*60:
             e = discord.Embed(title="I will remind you!",

@@ -122,15 +122,19 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         e1 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e1.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e1)
+        await ctx.channel.send(embed=e1, delete_after=3)
     elif isinstance(error, commands.MissingPermissions):
         e3 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e3.set_footer(text=f"{ctx.author.name}")
-        await ctx.send(embed=e3)
+        await ctx.send(embed=e3, delete_after=3)
     elif isinstance(error, commands.MissingRequiredArgument):
         e4 = discord.Embed(title="Command Error!", description=f"`{error}`")
         e4.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e4)
+        await ctx.channel.send(embed=e4, delete_after=2)
+    elif isinstance(error, commands.CommandNotFound):
+        e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
+        e2.set_footer(text=f"{ctx.author.name}")
+        await ctx.channel.send(embed=e2, delete_after=3)
 '''
     elif isinstance(error, commands.CommandInvokeError):
         perms= 8 #1073737719 #2147483656
@@ -150,11 +154,6 @@ async def on_command_error(ctx, error):
         e9.set_thumbnail(url=f"{haaha}")
         e9.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e9)
-
-    elif isinstance(error, commands.CommandNotFound):
-        e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
-        e2.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e2)
     '''
 
 

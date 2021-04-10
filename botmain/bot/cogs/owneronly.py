@@ -55,8 +55,9 @@ class OwnerOnly(commands.Cog):
     def owners(ctx):
         return ctx.author.id == ctx.guild.owner_id
 
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, description = 'Type )help dev and to get list of all commands under dev group')
     async def dev(self, ctx, command=None):
+        '''Type )help dev and to get list of all commands under dev group'''
         command2 = self.bot.get_command(f"{command}")
         if command2 is None:
             await ctx.send_help(ctx.command)
@@ -227,18 +228,22 @@ class OwnerOnly(commands.Cog):
     async def changestat(self, ctx):
         await ctx.send(f"Hi yeah")
 
-    @dev.group()
-    @commands.check(owners)
-    async def send(self, ctx, id: typing.Optional[int] = None, *, message):
-        if id is None:
+    @commands.command(usage='<channel id> or <channel.mention starting with #> <message to send>')
+    @commands.has_permissions(manage_guild=True)
+    async def send(self, ctx, id: typing.Optional[int] = None, channel: discord.TextChannel = None,*, message):
+        '''Sends your message to specific channel'''
+        if id is None and channel is None:
             id = message
             channel2 = ctx.channel
             await channel2.send(f"{id}")
-            await ctx.author.send("Sent your message :)")
-        else:
-            channel = self.bot.get_channel(int(id))
+            await ctx.author.send(f"Sent your message in {channel2} :)")
+        elif id is None and channel is not None:
             await channel.send(f"{message}")
-            await ctx.author.send("Sent your message :)")
+            await ctx.author.send(f"Sent your message in {channel} :)")
+        else:
+            channel1 = self.bot.get_channel(int(id))
+            await channel1.send(f"{message}")
+            await ctx.author.send(f"Sent your message in {channel} :)")
 
 
 def setup(bot):

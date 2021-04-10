@@ -15,7 +15,6 @@
 * [BOTS FOR DISCORD](https://botsfordiscord.com/bot/779559821162315787)
 * [DISCORD BOATS](https://discord.boats/bot/779559821162315787)
 * [DISCORD LABS](https://bots.discordlabs.org/bot/779559821162315787)
-* [DiscordListoLogy](https://discordlistology.com/bots/779559821162315787)
 
 ***
 

@@ -79,7 +79,7 @@ bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
 bot.discordbotlist = token_get('DBLST')
 bot.thresholds = (10, 25, 50, 100)
-bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影 "
+bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影  ||Music commands may not work as they are in development||"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
 
 bot.topgg = token_get('TOPGG')

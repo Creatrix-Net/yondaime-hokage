@@ -7,6 +7,7 @@ class Developer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.appleapiisbad = True
+        self.description = 'These set of commands are only locked to the developer'
     
     def owners(ctx):
         return ctx.author.id == 571889108046184449

@@ -14,10 +14,8 @@ from asyncdagpi import Client
 from discord.ext import commands
 from discord.ext.buttons import Paginator
 from pretty_help import PrettyHelp
-from bot.lib.util import post_user_stats
 import DiscordUtils
 
-from topgg import WebhookManager
 
 # from .bot.help import Help
 
@@ -158,5 +156,6 @@ async def on_command_error(ctx, error):
         e2.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e2)
     '''
+
 
 bot.run(TOKEN)

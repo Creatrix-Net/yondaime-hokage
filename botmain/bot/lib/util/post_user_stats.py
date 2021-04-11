@@ -15,7 +15,7 @@ class PostStats:
         guildsno = len(self.bot.guilds)+1
         members = len(set(self.bot.get_all_members()))
         imageslistdir = Path(__file__).resolve(
-            strict=True).parent / join('bot', 'images_list.txt')
+            strict=True).parent.parent.parent / join( 'images_list.txt')
         filepointer = open(imageslistdir)
         imageslist = filepointer.readlines()
 

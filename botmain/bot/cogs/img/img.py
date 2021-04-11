@@ -22,7 +22,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         if member == '@everyone':
             await ctx.send(f'** <@{ctx.author.id}> yes yes bro!!! Everyone is not sus!**')
             return
-        elif member[:2] == '<@' or member.split('<@')[1].isdigit():
+        elif type(member)== discord.Member:
             desc=f'** {member}  was not the imposter**'
         elif member!='':
             desc=f'** {member}  was not the imposter**'

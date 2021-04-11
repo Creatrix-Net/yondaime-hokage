@@ -68,7 +68,7 @@ class BotEvents(commands.Cog):
 
     #ban
     @commands.Cog.listener()
-    async def on_member_ban(guild, user):
+    async def on_member_ban(self,guild, user):
         bingo = discord.utils.get(guild.categories, name="Bingo Book") if discord.utils.get(guild.categories, name="Bingo Book") else False
         if bingo:
             ban = discord.utils.get(bingo.channels, name="ban") if discord.utils.get(bingo.channels, name="ban") else False
@@ -81,7 +81,7 @@ class BotEvents(commands.Cog):
 
     #unban
     @commands.Cog.listener()
-    async def on_member_unban(guild, user):
+    async def on_member_unban(self,guild, user):
         bingo = discord.utils.get(guild.categories, name="Bingo Book") if discord.utils.get(guild.categories, name="Bingo Book") else False
         if bingo:
             unban = discord.utils.get(bingo.channels, name="unban") if discord.utils.get(bingo.channels, name="unban") else False

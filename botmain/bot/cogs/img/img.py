@@ -34,7 +34,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         
         embed = discord.Embed(description=desc,timestamp=datetime.datetime.utcnow())
         embed.set_image(url=f"attachment://{file_path}")
-        await ctx.send(file=file)
+        await ctx.send(file=file, embed=embed)
 
 
     @commands.command(usage='<member.mention>')

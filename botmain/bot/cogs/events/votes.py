@@ -49,9 +49,9 @@ class VoteInfo(commands.Cog):
             c_list = True if str(member.id) in c.json()['hasVoted24'] else False
             d_list = d.json()['voted']
             
-            e.add_field(name='TopGG', value='Voted : ' + self.topgg_site if await self.dblpy.get_user_vote(member.id) else 'Not Voted : '+ self.topgg_site)
-            e.add_field(name='BotsForDiscord', value='Voted : ' + self.bfd_site if c_list else 'Not Voted : '+ self.bfd_site)
-            e.add_field(name='DiscordBoats', value='Voted : ' + self.discordboats_site if d_list else 'Not Voted : '+ self.discordboats_site)
+            e.add_field(name='**TopGG**', value='Voted : ' + self.topgg_site if await self.dblpy.get_user_vote(member.id) else 'Not Voted : '+ self.topgg_site)
+            e.add_field(name='**BotsForDiscord**', value='Voted : ' + self.bfd_site if c_list else 'Not Voted : '+ self.bfd_site)
+            e.add_field(name='**DiscordBoats**', value='Voted : ' + self.discordboats_site if d_list else 'Not Voted : '+ self.discordboats_site)
             
             await ctx.send(embed=e)
         

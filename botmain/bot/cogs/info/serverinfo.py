@@ -50,8 +50,8 @@ class Info(commands.Cog):
                 e.set_thumbnail(url=ctx.guild.icon_url)
             if ctx.guild.banner:
                 e.set_image(url=ctx.guild.banner_url_as(format="png"))
-            e.add_field(name='**Total Members**',value={ctx.guild.member_count})
-            e.add_field(name='**Bots**',value={sum(1 for member in ctx.guild.members if member.bot)})
+            e.add_field(name='**Total Members**',value=ctx.guild.member_count)
+            e.add_field(name='**Bots**',value=sum(1 for member in ctx.guild.members if member.bot))
             e.add_field(name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await c.send(embed=e)

@@ -45,7 +45,7 @@ class Info(commands.Cog):
             await ctx.send('**Updated ! Please check the <#813954921782706227>**')
         else:
             a = await ctx.send('**Sending the info to my developer**')
-            e = discord.Embed(title=f'In **{ctx.guild.name}**',description=f'Bumped by {ctx.message.author}' , color= 0x2ecc71)
+            e = discord.Embed(title=f'In **{ctx.guild.name}**',description=f'Bumped by **{ctx.message.author}**' , color= 0x2ecc71)
             if ctx.guild.icon:
                 e.set_thumbnail(url=ctx.guild.icon_url)
             if ctx.guild.banner:
@@ -55,7 +55,7 @@ class Info(commands.Cog):
             e.add_field(name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await c.send(embed=e)
-            await ctx.send(f'Sent the info to developer that "**I am on __{ctx.guild.name}__**" , {ctx.author.mention} 😉')
+            await ctx.send(f'Sent the info to developer that "**I am in __{ctx.guild.name}__ guild**" , {ctx.author.mention} 😉')
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):

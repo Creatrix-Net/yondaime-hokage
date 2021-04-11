@@ -17,6 +17,8 @@ from discord.ext.buttons import Paginator
 from pretty_help import PrettyHelp
 import DiscordUtils
 
+from bot.lib.util.post_user_stats import PostStats
+
 
 # from .bot.help import Help
 
@@ -95,6 +97,8 @@ bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
     
 music = DiscordUtils.Music()
 
+posting = PostStats(bot)
+
 # Events
 @bot.event
 async def on_ready():
@@ -117,6 +121,7 @@ async def on_ready():
     e.set_thumbnail(url=bot.user.avatar_url)
     print('Started The Bot')
 
+    await posting.post_guild_stats_all()
     await stats.send(embed=e)    
 
 @bot.event

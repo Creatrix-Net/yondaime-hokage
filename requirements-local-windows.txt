@@ -43,7 +43,7 @@ googleapis-common-protos==1.53.0
 gTTS==2.2.2
 gunicorn==20.1.0
 httplib2==0.19.1
-humanize==3.3.0
+humanize==3.4.0
 idna==2.10
 image-process==0.0.1
 import-expression==1.1.4

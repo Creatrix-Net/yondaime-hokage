@@ -12,7 +12,7 @@ import discord
 import dotenv
 import mystbin
 from asyncdagpi import Client
-from discord.ext import commands
+from discord.ext import commands, ipc
 from discord.ext.buttons import Paginator
 from pretty_help import PrettyHelp
 import DiscordUtils
@@ -96,8 +96,9 @@ bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discor
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
     
 music = DiscordUtils.Music()
-
 posting = PostStats(bot)
+
+ipc = ipc.Server(bot, secret_key=token_get('AUTH_PASS'))
 
 # Events
 @bot.event
@@ -193,6 +194,17 @@ async def on_command_error(ctx, error):
         e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
         await ctx.send('**Error report was successfully sent**', delete_after=2)
         await c.send(embed=e)
+
+@bot.event
+async def on_ipc_ready():
+    """Called upon the IPC Server being ready"""
+    print("Ipc is ready.")
+
+@bot.event
+async def on_ipc_error(endpoint, error):
+    """Called upon an error being raised within an IPC route"""
+    me = bot.get_user(571889108046184449)
+    me.send(endpoint + " raised " + error)
 
 
 sentry_sdk.init(

@@ -12,7 +12,6 @@ def token_get(tokenname):
 
 sentry_link = token_get('SENTRY')
 
-
 def main():
     """Run administrative tasks."""
     global sentry_link
@@ -25,6 +24,7 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    
     sentry_sdk.init(
         sentry_link,
         traces_sample_rate=1.0

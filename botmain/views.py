@@ -12,8 +12,19 @@ from discord import Webhook, RequestsWebhookAdapter
 
 from .models import *
 from django.conf import settings
+from login.bot_ipc_connect import BotIPCConnect
 
 # Create your views here.
+async def main(request):
+    a=BotIPCConnect()
+    return render(
+        request,
+        'index.html',
+        {
+            'bot_pfp': await a.ipc_client.request("get_bot_pfp"),
+        }
+    )
+
 @login_required
 def home(request):
     return render(request,'home.html',{

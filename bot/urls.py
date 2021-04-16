@@ -10,6 +10,7 @@ from account.views import *
 urlpatterns = [ 
     path('admin/', admin.site.urls),
 
+path('main/', main, name="main"),
     path('keep_alive_bot', keep_alive, name="Keep Alive Bot"),
     
     path('', home, name="Home"),

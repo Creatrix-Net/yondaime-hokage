@@ -6,12 +6,9 @@ class IpcRoutes(commands.Cog):
         self.bot = bot
 
     @ipc.server.route()
-    async def get_bot_pfp(self):
-        url = self.bot.get_guild(
-           self.bot.user.avatar_url
-        )
-
-        return url  
+    async def get_bot_pfp(self,data):
+        url = str(self.bot.user.avatar_url)
+        return url
 
 
 def setup(bot):

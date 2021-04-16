@@ -3,7 +3,7 @@ import os
 import dj_database_url
 import dotenv
 from django.contrib.messages import constants as messages
-
+import discord
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -62,13 +62,14 @@ WSGI_APPLICATION = 'bot.wsgi.application'
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = os.environ.get('SECRET_KEY','SECTECT_KEY')
     PRODUCTION_SERVER = False
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
     DEBUG = True
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
     DATABASES = {'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'))}
+    LOCAL=True
 
 else:
     PRODUCTION_SERVER = True
@@ -83,6 +84,7 @@ else:
         ['whitenoise.middleware.WhiteNoiseMiddleware']+MIDDLEWARE[1:]
     INSTALLED_APPS = INSTALLED_APPS[0:-1] + \
         ['whitenoise.runserver_nostatic',]+[INSTALLED_APPS[-1]]
+    LOCAL=False
 
 
 # Password validation
@@ -152,3 +154,4 @@ SECRECT = os.environ.get('DISCORD_CLIENT_SECRET')
 DOCS=os.environ.get('DOCS')
 WEBSITE=os.environ.get('WEBSITE') 
 AUTH_PASS=os.environ.get('AUTH_PASS')
+

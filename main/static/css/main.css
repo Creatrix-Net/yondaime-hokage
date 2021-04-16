@@ -10,27 +10,24 @@ body {
 }
 
 .nav-link {
-    font-size: 14px !important;
-    background: transparent !important;
-    font-family: Lato, sans-serif !important;
-    text-transform: capitalize !important;
-}
+     font-size: 14px !important;
+     background: transparent !important;
+     font-family: Lato, sans-serif !important;
+     text-transform: capitalize !important;
+ }
+ .nav-link:hover {
+     background: transparent !important;
+     color: #AD91FF !important;
+     font-weight: bold !important;
+ }
 
-.nav-link:hover {
-    background: transparent !important;
-    color: #AD91FF !important;
-    font-weight: bold !important;
-}
-
-.login-btn {
-    border: 2px solid #AD91FF !important;
-    font-size: 10px !important;
-}
-
-.login-btn:hover {
-    background: #AD91FF !important;
-}
-
+ .login-btn {
+     border: 2px solid #AD91FF !important;
+     font-size: 10px !important;
+ }
+ .login-btn:hover {
+     background: #AD91FF !important;
+ }
 .navbar {
     box-shadow: none !important
 }
@@ -53,17 +50,15 @@ body {
 .btn-primary {
     background-color: #AD91FF!important
 }
-
 .btn-secondary {
     background-color: #2C2F33 !important
 }
-
 .heading {
     padding: 160px 50px !important;
     color: #fff !important;
-    background-image: url("../img/D9SjLcR.jpg") !important;
+    background-image: url("../assets/wavy-purple-by-nouridio.svg") !important;
     background-position: bottom !important;
-    background-size: 100% !important;
+    background-size: 300% !important;
     background-repeat: no-repeat !important;
 }
 
@@ -79,6 +74,7 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
+
 .features {
     text-align: center !important;
     background: #AD91FF !important;
@@ -88,7 +84,6 @@ body {
     background-size: 200% !important;
     background-repeat: no-repeat !important;
 }
-
 .features .title {
     font-size: 40px !important;
     color: #ffffff !important;
@@ -107,7 +102,6 @@ body {
 .features .card-title {
     margin: 0 0 -3px !important;
 }
-
 .cards {
     margin-top: 30px !important;
 }
@@ -128,7 +122,7 @@ body {
     padding-top: 300px !important;
 }
 
-.statistics .card-body {
+.statistics .card-body{
     padding: 0 !important;
     height: 280 !important;
     width: 332 !important;
@@ -153,13 +147,13 @@ body {
     color: #f7f7f7 !important;
 }
 
+
 .page_end {
-    background-image: url("../img/D9SjLcR.jpg") !important;
+    background-image: url("../assets/wavy-light-by-nouridio.svg") !important;
     background-position: bottom !important;
     background-size: 200% !important;
     background-repeat: no-repeat !important;
 }
-
 .start {
     padding: 60px 50px !important
 }
@@ -174,9 +168,8 @@ body {
     border-radius: 22px !important;
     border: 4px solid #AD91FF;
 }
-
 .features .card-text {
-    color: rgba(255, 255, 255, 0.46) !important
+color: rgba(255, 255, 255, 0.46) !important
 }
 
 .features .card-body {
@@ -186,7 +179,6 @@ body {
 .navbar-toggler-icon {
     color: #fff !important
 }
-
 .footer {
     text-align: center !important;
     padding: 5px 6px !important;

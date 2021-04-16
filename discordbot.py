@@ -17,11 +17,11 @@ from discord.ext.buttons import Paginator
 from pretty_help import PrettyHelp
 import DiscordUtils
 
-from bot.lib.util.post_user_stats import PostStats
+
+from botmain.bot.lib.util.post_user_stats import PostStats
 
 
 # from .bot.help import Help
-
 
 class Page(Paginator):
     async def teardown(self):
@@ -35,8 +35,8 @@ intents.members = True
 intents.reactions = True
 intents.guilds = True
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-dotenv_file = os.path.join(BASE_DIR,".env")
+
+dotenv_file = os.path.join(".env")
 def token_get(tokenname):
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
@@ -79,41 +79,47 @@ bot.auth_pass = token_get('AUTH_PASS')
 
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
-bot.discordbotlist = token_get('DBLST')
 bot.thresholds = (10, 25, 50, 100)
 bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影  ||Music commands may not work as they are in development||"
-bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
+bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 
-bot.topgg = token_get('TOPGG')
 bot.dblst = token_get('DISCORDBOTLIST')
 bot.botlist = token_get('BOTLISTSPACE')
 bot.bfd = token_get('BOTSFORDISCORD')
 bot.discordboats = token_get('DISCORDBOATS')
 bot.discordbotsgg = token_get('DISCORDBOTS')
 bot.spacebot = token_get('SPACEBOT')
+bot.bladebot = token_get('BLADEBOT')
+bot.voidbot = token_get('FATESLIST')
+bot.fateslist = token_get('VOIDBOT')
 
-bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('bot','discord_bot_images')
+bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
     
 music = DiscordUtils.Music()
 posting = PostStats(bot)
 
-ipc = ipc.Server(bot, secret_key=token_get('AUTH_PASS'))
+ipc1 = ipc.Server(bot, host='localhost',secret_key=token_get('AUTH_PASS'))
 
 # Events
+import threading
+
 @bot.event
 async def on_ready():
+    # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bot.settings')
+
+    # threading.Thread(target=os.system('python manage.py runserver')).start()
     await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
-    cog_dir = Path(__file__).resolve(strict=True).parent / join('bot','cogs')
+    cog_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','cogs')
     for filename in os.listdir(cog_dir):
         if os.path.isdir(cog_dir / filename):
             for i in os.listdir(cog_dir / filename):
                 if i.endswith('.py'):
-                    bot.load_extension(f'bot.cogs.{filename.strip(" ")}.{i[:-3]}')
+                    bot.load_extension(f'botmain.bot.cogs.{filename.strip(" ")}.{i[:-3]}')
         else:
             if filename.endswith('.py'):
                 if filename != 'music1.py':
-                    bot.load_extension(f'bot.cogs.{filename[:-3]}')
+                    bot.load_extension(f'botmain.bot.cogs.{filename[:-3]}')
 
     current_time = time.time()
     difference = int(round(current_time - bot.start_time))
@@ -124,6 +130,8 @@ async def on_ready():
 
     await posting.post_guild_stats_all()
     await stats.send(embed=e)    
+    # from django.conf import settings
+    # settings.BOT = bot
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -203,8 +211,11 @@ async def on_ipc_ready():
 @bot.event
 async def on_ipc_error(endpoint, error):
     """Called upon an error being raised within an IPC route"""
-    me = bot.get_user(571889108046184449)
-    me.send(endpoint + " raised " + error)
+    try:
+        me = bot.get_user(571889108046184449)
+        await me.send(str(endpoint) + " raised " + str(error))
+    except:
+        print(str(endpoint) + " raised " + str(error))
 
 
 sentry_sdk.init(
@@ -216,4 +227,8 @@ try:
 except:
     pass
 
+# import threading
+# from django.core.management import call_command
+# threading.Thread(target=call_command('runserver')).start()
+ipc1.start()
 bot.run(TOKEN)

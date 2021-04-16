@@ -49,6 +49,18 @@ class PostStats:
                           headers={"Authorization": self.bot.spacebot,
                                    "Content-Type": "application/json"},
                           json={"guilds": guildsno, "users": members})
+        i = requests.post(f'https://api.voidbots.net/bot/stats/{self.bot.discord_id}',
+                          headers={"Authorization": self.bot.voidbot,
+                                   "Content-Type": "application/json"},
+                          json={"server_count": guildsno})
+        j = requests.post(f'https://fateslist.xyz/api/v2/bots/{self.bot.discord_id}/stats',
+                          headers={"Authorization": self.bot.fateslist,
+                                   "Content-Type": "application/json"},
+                          json={"guild_count": guildsno, "user_count": members})
+        k = requests.post(f'https://bladebotlist.xyz/api/bots/{self.bot.discord_id}/stats',
+                          headers={"Authorization": self.bot.bladebot,
+                                   "Content-Type": "application/json"},
+                          json={"servercount": guildsno})
 
         r = self.bot.get_channel(822472454030229545)
         e1 = discord.Embed(title='Status posted successfully',
@@ -69,4 +81,10 @@ class PostStats:
             f.status_code)+' : [DiscordBots](https://discord.bots.gg/bots/779559821162315787/)')
         e1.add_field(name='Space Bots', value=str(
             h.status_code)+' : [Space Bots](https://space-bot-list.xyz/bots/779559821162315787)')
+        e1.add_field(name='Void Bots', value=str(
+            i.status_code)+' : [Void Bots](https://voidbots.net/bot/779559821162315787/)')
+        e1.add_field(name='Fates List', value=str(
+            j.status_code)+' : [Fates List](https://fateslist.xyz/minato/)')
+        e1.add_field(name='BladeBotList', value=str(
+            k.status_code)+' : [BladeBotList](https://bladebotlist.xyz/bot/779559821162315787/)')
         await r.send(embed=e1)

@@ -3,7 +3,6 @@ import os
 import dj_database_url
 import dotenv
 from django.contrib.messages import constants as messages
-import discord
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -75,16 +74,14 @@ else:
     PRODUCTION_SERVER = True
     DEBUG = False
     ALLOWED_HOSTS = ['*']
-    GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = None
-    DATABASES = {'default': dj_database_url.config(
-        default=os.environ['DATABASE_URL'])}
     SECRET_KEY = os.environ['SECRET_KEY']
-
-    MIDDLEWARE = [MIDDLEWARE[0]] + \
-        ['whitenoise.middleware.WhiteNoiseMiddleware']+MIDDLEWARE[1:]
-    INSTALLED_APPS = INSTALLED_APPS[0:-1] + \
-        ['whitenoise.runserver_nostatic',]+[INSTALLED_APPS[-1]]
     LOCAL=False
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation

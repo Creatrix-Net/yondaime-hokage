@@ -7,3 +7,4 @@ CONTRIBUTING.md linguist-documentation
 CODE_OF_CONDUCT.md linguist-documentation
 requirements.txt linguist-language=requirements
 requirements-local-windows.txt linguist-language=requirements-local
+.github/* linguist-generated

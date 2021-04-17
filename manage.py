@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+import multiprocessing
 import os
 import sys
-import threading
 
 import dotenv
 import sentry_sdk
-
-import multiprocessing
 
 
 def token_get(tokenname):

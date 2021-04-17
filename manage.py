@@ -2,8 +2,13 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-import sentry_sdk
+import threading
+
 import dotenv
+import sentry_sdk
+
+import multiprocessing
+
 
 def token_get(tokenname):
     if os.path.isfile(".env"):
@@ -24,7 +29,6 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    
     sentry_sdk.init(
         sentry_link,
         traces_sample_rate=1.0
@@ -37,4 +41,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    multiprocessing.Process(target=main).start()
+    multiprocessing.Process(target=os.system('python discordbot.py')).start()

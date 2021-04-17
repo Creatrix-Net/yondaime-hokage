@@ -7,10 +7,8 @@ from datetime import time
 class BotIPCConnect:
     def __init__(self):
         if settings.LOCAL:
-            self.host = 'localhost'
         
             self.ipc_client = ipc.Client(
-                host=self.host,
                 secret_key=settings.AUTH_PASS,
             )
         else:

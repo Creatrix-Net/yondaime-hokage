@@ -99,10 +99,7 @@ bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
 music = DiscordUtils.Music()
 posting = PostStats(bot)
 
-ipc1 = ipc.Server(bot, host='localhost',secret_key=token_get('AUTH_PASS'))
-
-# Events
-import threading
+ipc1 = ipc.Server(bot,secret_key=token_get('AUTH_PASS'))
 
 @bot.event
 async def on_ready():

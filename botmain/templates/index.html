@@ -82,61 +82,141 @@
             .bgimg-2,
             .bgimg-3,
             .bgimg-4 {
-                background-attachment: scroll;
+                background-attachment: fixed;
             }
+        }
+        
+        .avatar {
+            height: 140px;
+            position: relative;
+            width: 140px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .avatar img {
+            border-radius: 9999px;
+            height: 100%;
+            position: relative;
+            width: 100%;
+            z-index: 2;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        @keyframes cycle-colors {
+            0% {
+                border-color: hsl(0, 100%, 50%);
+            }
+            25% {
+                border-color: hsl(90, 100%, 50%);
+            }
+            50% {
+                border-color: hsl(180, 100%, 50%);
+            }
+            75% {
+                border-color: hsl(270, 100%, 50%);
+            }
+            100% {
+                border-color: hsl(360, 100%, 50%);
+            }
+        }
+        
+        @keyframes pulse {
+            to {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+        
+        .avatar::before,
+        .avatar::after {
+            animation: pulse 2s linear infinite;
+            border: #fff solid 8px;
+            border-radius: 9999px;
+            box-sizing: border-box;
+            content: ' ';
+            height: 140%;
+            left: -20%;
+            opacity: .6;
+            position: absolute;
+            top: -20%;
+            transform: scale(0.714);
+            width: 140%;
+            z-index: 1;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .avatar::after {
+            animation-delay: 1s;
+        }
+        
+        .avatar:hover::before,
+        .avatar:hover::after {
+            animation: pulse 1s linear infinite, cycle-colors 6s linear infinite;
+        }
+        
+        .avatar:hover::after {
+            animation-delay: .5s;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="bgimg-1">
+    <div class="bgimg-1 text-center">
         <center>
-            <img src="{{bot_pfp}}" class="img-fluid mx-auto" style="border-radius: 50%; width: 10%;">
+            <div class="avatar">
+                <img src="{{bot_pfp}}" style="border-radius: 50%;">
+            </div>
         </center>
+        <div class="caption" style="margin-top: 5%;">
+            <h3><span class="border" style="background-color:transparent;font-size:25px;color: #000000;font-weight: bold;">MINATO NAMIKAZE</span></h3>
+        </div>
     </div>
 
-    <div style="color: #777;background-color:white;text-align:center;padding:50px 80px;text-align: justify;">
-        <h3 style="text-align:center;">Parallax Demo</h3>
+    <div style="color: #777;background-color:white;text-align:center;padding:50px 80px;text-align: justify; ">
+        <h3 style="text-align:center; ">Parallax Demo</h3>
         <p>Parallax scrolling is a web site trend where the background content is moved at a different speed than the foreground content while scrolling. Nascetur per nec posuere turpis, lectus nec libero turpis nunc at, sed posuere mollis ullamcorper libero
             ante lectus, blandit pellentesque a, magna turpis est sapien duis blandit dignissim. Viverra interdum mi magna mi, morbi sociis. Condimentum dui ipsum consequat morbi, curabitur aliquam pede, nullam vitae eu placerat eget et vehicula. Varius
             quisque non molestie dolor, nunc nisl dapibus vestibulum at, sodales tincidunt mauris ullamcorper, dapibus pulvinar, in in neque risus odio. Accumsan fringilla vulputate at quibusdam sociis eleifend, aenean maecenas vulputate, non id vehicula
             lorem mattis, ratione interdum sociis ornare. Suscipit proin magna cras vel, non sit platea sit, maecenas ante augue etiam maecenas, porta porttitor placerat leo.</p>
     </div>
 
-    <div class="bgimg-2">
-        <div class="caption">
-            <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">LESS HEIGHT</span>
+    <div class="bgimg-2 ">
+        <div class="caption ">
+            <span class="border " style="background-color:transparent;font-size:25px;color: #f7f7f7; ">LESS HEIGHT</span>
         </div>
     </div>
 
-    <div style="position:relative;">
-        <div style="color:#ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify;">
+    <div style="position:relative; ">
+        <div style="color:#ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify; ">
             <p>Scroll up and down to really get the feeling of how Parallax Scrolling works.</p>
         </div>
     </div>
 
-    <div class="bgimg-3">
-        <div class="caption">
-            <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">SCROLL UP</span>
+    <div class="bgimg-3 ">
+        <div class="caption ">
+            <span class="border " style="background-color:transparent;font-size:25px;color: #f7f7f7; ">SCROLL UP</span>
         </div>
     </div>
 
-    <div style="position:relative;">
-        <div style="color:#ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify;">
+    <div style="position:relative; ">
+        <div style="color:#ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify; ">
             <p>Scroll up and down to really get the feeling of how Parallax Scrolling works.</p>
         </div>
     </div>
 
-    <div class="bgimg-4">
-        <div class="caption">
-            <span class="border">COOL!</span>
+    <div class="bgimg-4 ">
+        <div class="caption ">
+            <span class="border ">COOL!</span>
         </div>
     </div>
 
 </body>
 <!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-<script src="{% static 'js/now-ui-kit.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js " integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf " crossorigin="anonymous "></script>
+<script src="{% static 'js/now-ui-kit.min.js' %} "></script>
 
 </html>

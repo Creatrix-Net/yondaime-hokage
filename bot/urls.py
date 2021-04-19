@@ -4,18 +4,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
 from botmain.views import *
-from account.views import *
 
 
 urlpatterns = [ 
     path('admin/', admin.site.urls),
     #  path('accounts/', include('allauth.urls')),
 
-    path('main/', main, name="main"),
+    path('', main, name="Home"),
     path('keep_alive_bot', keep_alive, name="Keep Alive Bot"),
     
-    path('', home, name="Home"),
-    path('send/', sendmessages, name="Send"),
     path('invite/', invite_bot, name="Invite"),
 
     path('get_anime_image/<str:name>', return_available_anime,name="Get Anime Names"),

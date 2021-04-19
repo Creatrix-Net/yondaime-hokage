@@ -39,12 +39,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
-    # try:
-    #     multiprocessing.Process(target=main).start()
-    # except:
-    #     pass
-    # try:
-    #     multiprocessing.Process(target=os.system('python discordbot.py')).start()
-    # except:
-    #     pass
+    try:
+        multiprocessing.Process(target=main).start()
+        multiprocessing.Process(target=os.system('python discordbot.py')).start()
+    except KeyboardInterrupt:
+        sys.exit()

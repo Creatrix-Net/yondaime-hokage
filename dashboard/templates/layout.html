@@ -14,6 +14,7 @@
 
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link href="{% static 'css/legacy.css' %}" rel="stylesheet">
 
     <meta name="theme-color" content="#563d7c">
 
@@ -40,14 +41,13 @@
 <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-body border-bottom shadow-sm">
         <p class="h5 my-0 me-md-auto fw-normal"><a href="{% url 'Home' %}" style=" text-decoration: none; color: black;">Minato Namikaze</a></p>
-        {% if user.is_authenticated %}
         <nav class="my-2 my-md-0 me-md-3">
-            <strong><a class="p-2 text-dark">Welcome {{user}}!</a></strong>
-            <a class="p-2 text-dark" href="{% url 'admin:index' %}" target="_blank">Admin Panel</a>
+            <strong><a class="p-2 text-dark">Welcome {{user}}!</a></strong> {% if user.is_superuser %}
+            <a class="p-2 text-dark" href="{% url 'admin:index' %}" target="_blank">Admin Panel</a> {% endif %}
             <a class="p-2 text-dark" href="">Edit Profile</a>
             <a class="p-2 text-dark" href="">Change Password</a>
         </nav>
-        <a class="btn btn-outline-danger" href="">Logout</a> {% endif %}
+        <a class="btn btn-outline-danger" href="">Logout</a>
     </div>
 
     <div class="container">

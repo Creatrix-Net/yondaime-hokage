@@ -4,7 +4,7 @@ from os.path import join
 from pathlib import Path
 from discord_slash import SlashCommand
 import sentry_sdk
-
+import asyncio
 
 import aiozaneapi
 import async_cleverbot as ac
@@ -224,8 +224,14 @@ try:
 except:
     pass
 
-# import threading
-# from django.core.management import call_command
-# threading.Thread(target=call_command('runserver')).start()
-ipc1.start()
-bot.run(TOKEN)
+try:
+    ipc1.start()
+except:
+    pass
+try:
+    bot.run(TOKEN)
+except RuntimeError:
+    bot.logout()
+except KeyboardInterrupt:
+    bot.logout()
+

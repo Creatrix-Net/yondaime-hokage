@@ -1,5 +1,4 @@
 {% extends "layout.html" %}{% load static %}{% block body %}
-<link href="{% static 'css/legacy.css' %}" rel="stylesheet">
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Announcements</h1>
@@ -18,11 +17,11 @@
     <form method="post" action="{% url 'Send' %}">{% csrf_token %}
         <div class="mb-3 form-floating">
             <select name="weebhook" class="form-control form-select mb-3" id="floatingSelect">
-                {% for i in weebhook %}
-                <option value="{{i.name}}">{{i.name}}</option>
+                {% for i in textchannel %}
+                <option value="{{i.id}}">{{i.name}}</option>
                 {% endfor %}
             </select>
-            <label for="floatingSelect">Select Webhook Channel</label>
+            <label for="floatingSelect">Select Text Channel Channel</label>
         </div>
         <div class="form-floating">
             <textarea name="announcement" maxlength='2048' class="form-control" placeholder="You can use discord styling" id="AnnouncementMessage" style="height: 100px"></textarea>

@@ -9,8 +9,9 @@ from account.views import *
 
 urlpatterns = [ 
     path('admin/', admin.site.urls),
+    #  path('accounts/', include('allauth.urls')),
 
-path('main/', main, name="main"),
+    path('main/', main, name="main"),
     path('keep_alive_bot', keep_alive, name="Keep Alive Bot"),
     
     path('', home, name="Home"),
@@ -19,7 +20,7 @@ path('main/', main, name="main"),
 
     path('get_anime_image/<str:name>', return_available_anime,name="Get Anime Names"),
 
-    url(r'^accounts/', include('account.urls')),
+    # url(r'^accounts/', include('account.urls')),
     url(r'^discord/', include('discord_auth_data.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

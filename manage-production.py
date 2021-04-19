@@ -39,5 +39,12 @@ def main():
 
 
 if __name__ == '__main__':
-    multiprocessing.Process(target=main).start()
-    multiprocessing.Process(target=os.system('python discordbot.py')).start()
+    main()
+    # try:
+    #     multiprocessing.Process(target=main).start()
+    # except:
+    #     pass
+    # try:
+    #     multiprocessing.Process(target=os.system('python discordbot.py')).start()
+    # except:
+    #     pass

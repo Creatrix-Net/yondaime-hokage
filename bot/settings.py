@@ -20,14 +20,23 @@ INSTALLED_APPS = [
 
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
     'django_admin_listfilter_dropdown',
+    
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.discord',
 
 ]
+
+SITE_ID = 1
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -130,6 +139,11 @@ MEDIA_URL = '/media/'
 DISCORD_CLIENT_ID = os.getenv('DISCORD_CLIENT_ID')
 DISCORD_CLIENT_SECRET = os.getenv('DISCORD_CLIENT_SECRET')
 DISCORD_BASE_URI = 'https://discord.com/api/v8'
+BASE_URI = 'https://discordapp.com/api'
+DISCORD_AUTHZ_PATH = '/oauth2/authorize'
+DISCORD_TOKEN_PATH = '/oauth2/token'
+DISCORD_RETURN_URI ='/'
+DISCORD_REDIRECT_URI = None
 BOT_ID = os.getenv('BOT_ID')
 
 #Overiding a message tag
@@ -151,4 +165,3 @@ SECRECT = os.environ.get('DISCORD_CLIENT_SECRET')
 DOCS=os.environ.get('DOCS')
 WEBSITE=os.environ.get('WEBSITE') 
 AUTH_PASS=os.environ.get('AUTH_PASS')
-

@@ -2,9 +2,7 @@ from django.contrib import messages
 import requests
 
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from django.urls.base import reverse
-from discord_auth_data.models import *
 from django.conf import settings
 import discord
 from discord import Webhook, RequestsWebhookAdapter
@@ -12,6 +10,7 @@ from discord import Webhook, RequestsWebhookAdapter
 
 from .models import *
 from django.conf import settings
+from discord_auth_data.decorators import myuser_login_required
 from login.bot_ipc_connect import BotIPCConnect
 
 # Create your views here.
@@ -25,7 +24,7 @@ async def main(request):
         }
     )
 
-@login_required
+@myuser_login_required
 def home(request):
     return render(request,'home.html',{
         'server_name': 'Announcement Portal',

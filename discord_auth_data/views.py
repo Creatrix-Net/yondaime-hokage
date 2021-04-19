@@ -3,15 +3,12 @@ from __future__ import unicode_literals
 from datetime import datetime
 
 import requests
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.timezone import make_aware
 from requests_oauthlib import OAuth2Session
 
-from .conf import settings
-from .models import DiscordUser
-
+from django.conf import settings
 
 def oauth_session(request, state=None, token=None):
     """ Constructs the OAuth2 session object. """
@@ -20,7 +17,7 @@ def oauth_session(request, state=None, token=None):
     else:
         redirect_uri = request.build_absolute_uri(reverse('discord_bind_callback'))
     
-    scope = ['identify', 'email','guilds','messages.read']
+    scope = ['identify', 'email',]
     return OAuth2Session(client_id=settings.DISCORD_CLIENT_ID,
                          redirect_uri=redirect_uri,
                          auto_refresh_kwargs={
@@ -32,9 +29,6 @@ def oauth_session(request, state=None, token=None):
                          state=state
                          )
 
-
-
-@login_required
 def index(request):
     # Record the final redirect alternatives
     if 'return_uri' in request.GET:
@@ -51,7 +45,6 @@ def index(request):
     return HttpResponseRedirect(url)
 
 
-@login_required
 def callback(request):
     def decompose_data(user, token):
         """ Extract the important details """
@@ -72,20 +65,18 @@ def callback(request):
             expiry = datetime.fromtimestamp(float(token['expires_in']))
             if settings.USE_TZ:
                 expiry = make_aware(expiry)
-            data['expiry'] = expiry
+            data['expiry'] = datetimeconverter(expiry)
         except KeyError:
             pass
         return data
+    
+    def datetimeconverter(o):
+        if isinstance(o, datetime):
+            return o.__str__()
 
     def bind_user(request, data):
         """ Create or update a DiscordUser instance """
-        uid = data.pop('uid')
-        count = DiscordUser.objects.filter(uid=uid).update(user=request.user,
-                                                           **data)
-        if count == 0:
-            DiscordUser.objects.create(uid=uid,
-                                       user=request.user,
-                                       **data)
+        request.session[str(request.session.session_key)] = data
 
     state = request.session['discord_bind_oauth_state'] 
     if 'state' not in request.GET or request.GET['state'] != state:

@@ -6,3 +6,4 @@ afdaf.py
 botmain/bot/music.py
 db.sqlite3
 poetry.lock
+manage.py

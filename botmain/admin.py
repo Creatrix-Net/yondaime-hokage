@@ -47,9 +47,20 @@ class ServerListAdmin(admin.ModelAdmin):
         (_('View Website'), {'fields': ('view',)}),
     )
 
+class InvitesAdmin(admin.ModelAdmin):
+    search_fields = list_display = ('name', 'site', 'invites')
+    readonly_fields  = ('invites',)
+    list_per_page = 10
+       
+    fieldsets = (
+        (_('Information of Referrer'), {'fields': ('name', 'site')}),
+        (_('Total No of Invites'), {'fields': ('invites',)}),
+    )
 
 admin.site.register(DiscordBotList, DiscordBotListAdmin)
 admin.site.register(ServerList, ServerListAdmin)
+
+admin.site.register(Invite, InvitesAdmin)
 
 admin.site.register(AnimeName, AnimeNameAdmin)
 admin.site.register(AnimeImage, AnimeImageAdmin)

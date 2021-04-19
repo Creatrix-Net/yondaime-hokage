@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.html import mark_safe
 
 class AnimeName(models.Model):
+    '''Anime Category'''
     anime_name = models.CharField(verbose_name=_('Name of the Anime'),unique=True, max_length=500)
     url = models.URLField(verbose_name=_('Anime Description Url'),null=True,blank=True, help_text=_('Optional'))
 
@@ -13,6 +14,7 @@ class AnimeName(models.Model):
         verbose_name_plural = "Anime Name"
 
 class AnimeImage(models.Model):
+    '''Anime Image'''
     anime_category = models.ForeignKey(AnimeName, on_delete=models.CASCADE, verbose_name=_('Anime Category'))
     image = models.URLField(verbose_name=_('Anime Image Url'),unique=True)
 
@@ -32,6 +34,7 @@ class AnimeImage(models.Model):
 
 
 class DiscordBotList(models.Model):
+    '''Botlisting Sites'''
     website = models.URLField(_('Website Url Field'))
     widget = models.TextField(_('Website Bot Widget Code'),null=True,blank=True,help_text=_('Optional'))
 
@@ -55,6 +58,7 @@ class DiscordBotList(models.Model):
 
 
 class ServerList(models.Model):
+    '''Support Server listring Sites'''
     website = models.URLField(_('Website Url Field'))
 
     def __str__(self):
@@ -67,3 +71,15 @@ class ServerList(models.Model):
             return mark_safe(f'<a href="{self.website}" onclick="return showAddAnotherPopup(this)" class="submit-row">View Website</a>')
         else:
             return "Please Fill the values"
+        
+class Invite(models.Model):
+    '''Invites Data'''
+    name = models.CharField(_('Referrer'), max_length=250)
+    site = models.URLField(_('Referrer Sites'))
+    invites = models.PositiveBigIntegerField(_('No of Invites'), default=0)
+    
+    def __str__(self):
+        return self.name.capitalize()
+    
+    class Meta:
+        ordering = ['-invites']

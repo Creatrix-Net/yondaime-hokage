@@ -74,8 +74,11 @@ def callback(request):
         if isinstance(o, datetime):
             return o.__str__()
 
-    def bind_user(request, data):
+    async def bind_user(request, data):
         """ Create or update a DiscordUser instance """
+        from .bot_ipc_connect import BotIPCConnect
+        a=BotIPCConnect()
+        data.update({'guilds': await a.ipc_client.request("get_user_access_server", user=data['uid'])})
         request.session[str(request.session.session_key)] = data
 
     state = request.session['discord_bind_oauth_state'] 
@@ -104,7 +107,8 @@ def callback(request):
         'Authorization': f'{credentials.get("token_type")} {access_token}',
     })
     data = decompose_data(users.json(), credentials)
-    bind_user(request, data)
+    import asyncio
+    asyncio.run(bind_user(request, data))
 
     url = request.session['discord_bind_return_uri']
 

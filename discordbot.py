@@ -4,7 +4,6 @@ from os.path import join
 from pathlib import Path
 from discord_slash import SlashCommand
 import sentry_sdk
-import asyncio
 
 import aiozaneapi
 import async_cleverbot as ac
@@ -159,10 +158,10 @@ async def on_command_error(ctx, error):
         e7.add_field(name="MY INVITE LINK", value=f'[LINK](https://discord.com/oauth2/authorize?client_id={bot.discord_id}&permissions=8&scope=bot%20applications.commands)')
         e7.set_thumbnail(url=f"https://i.imgur.com/1zey3je.jpg")
         e7.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e7, delete_after=2)
+        await ctx.channel.send(embed=e7, delete_after=5)
         await c.send(embed=e7)
         
-
+        '''
         await ctx.send('**Sending the error report info to my developer**', delete_after=2)
         e = discord.Embed(title=f'In **{ctx.guild.name}**',description=f'User affected {ctx.message.author}' , color= 0x2ecc71)
         if ctx.guild.icon:
@@ -175,6 +174,7 @@ async def on_command_error(ctx, error):
         e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
         await ctx.send('**Error report was successfully sent**', delete_after=2)
         await c.send(embed=e)
+        '''
     else:
         c = bot.get_channel(830366314761420821)
         

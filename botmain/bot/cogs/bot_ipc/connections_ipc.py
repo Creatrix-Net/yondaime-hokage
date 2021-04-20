@@ -17,6 +17,18 @@ class IpcRoutes(commands.Cog):
         for channel in guild.text_channels:
             text_channel_list.append(channel)
         return text_channel_list
+    
+    @ipc.server.route()
+    async def get_user_access_server(self,data):
+        '''Min manage server perm required'''
+        user = self.bot.get_user(int(data.user))
+        profile = await user.profile()
+        mutual_guild = profile.mutual_guild
+        mutual_guild_list = list()
+        for i in mutual_guild:
+            if i.user.guild_permissions.manage_guild:
+                mutual_guild_list.append(i)
+        return mutual_guild_list
 
 
 def setup(bot):

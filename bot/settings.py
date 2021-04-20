@@ -132,7 +132,7 @@ DISCORD_BASE_URI = 'https://discord.com/api/v8'
 BASE_URI = 'https://discordapp.com/api'
 DISCORD_AUTHZ_PATH = '/oauth2/authorize'
 DISCORD_TOKEN_PATH = '/oauth2/token'
-DISCORD_RETURN_URI ='/'
+DISCORD_RETURN_URI ='/dashboard/'
 DISCORD_REDIRECT_URI = None
 BOT_ID = os.getenv('BOT_ID')
 

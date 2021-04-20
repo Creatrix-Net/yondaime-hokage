@@ -153,7 +153,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                         if not bingo:bingo = await ctx.guild.create_category("Bingo Book", reason="To log the the bans and unban events")
                         
                         ban = await ctx.guild.create_text_channel("ban", category=discord.utils.get(ctx.guild.categories, name="Bingo Book"))
-                        await botask.send(f'{feed.mention} channel **created** for logging the **bans** for the {ctx.guild.name}')
+                        await botask.send(f'{ban.mention} channel **created** for logging the **bans** for the {ctx.guild.name}')
                         await ban.send('@here This channel will be used to log the server ban.')
                     else:
                         await botask.send(f'**Okay** no logging system for the **{ctx.guild.name}** bans will be there') 

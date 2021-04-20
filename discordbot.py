@@ -2,23 +2,21 @@ import os
 import time
 from os.path import join
 from pathlib import Path
-from discord_slash import SlashCommand
-import sentry_sdk
 
 import aiozaneapi
 import async_cleverbot as ac
 import discord
+import DiscordUtils
 import dotenv
 import mystbin
+import sentry_sdk
 from asyncdagpi import Client
 from discord.ext import commands, ipc
 from discord.ext.buttons import Paginator
+from discord_slash import SlashCommand
 from pretty_help import PrettyHelp
-import DiscordUtils
-
 
 from botmain.bot.lib.util.post_user_stats import PostStats
-
 
 # from .bot.help import Help
 

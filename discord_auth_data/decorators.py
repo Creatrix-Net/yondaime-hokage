@@ -25,7 +25,7 @@ def myuser_manage_server_perms(view_func):
             return HttpResponseRedirect(reverse("discord_bind_index"))
         else:
             guilds = request.session[str(request.session.session_key)]['data']['guilds']
-            path = str(request.get_full_path).split('/')[-1] #dashboard/userid/guildid
+            path = str(request.path).split('/')[-1] #dashboard/userid/guildid
             for i in guilds:
                 if int(path) != int(i.id):
                     raise PermissionDenied

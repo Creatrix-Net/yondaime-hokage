@@ -94,5 +94,5 @@ whitenoise==5.2.0
 windows-curses==2.2.0
 wrapt==1.12.1
 yarl==1.6.3
-youtube-dl==2021.4.1
+youtube-dl==2021.4.17
 youtube-search==1.1.1

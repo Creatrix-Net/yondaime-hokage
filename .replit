@@ -1,2 +1,2 @@
 language = "python3"
-run = "python manage.py runserver 0.0.0.0:3000"
+run = "python manage-production.py runserver 0.0.0.0:3000"

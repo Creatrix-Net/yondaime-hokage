@@ -10,6 +10,12 @@ from requests_oauthlib import OAuth2Session
 
 from django.conf import settings
 
+def logout(request):
+    try:
+        del request.session[str(request.session.session_key)]
+    except: pass
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 def oauth_session(request, state=None, token=None):
     """ Constructs the OAuth2 session object. """
     if settings.DISCORD_REDIRECT_URI is not None:

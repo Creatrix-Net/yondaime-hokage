@@ -18,7 +18,7 @@
         <div class="mb-3 form-floating">
             <select name="weebhook" class="form-control form-select mb-3" id="floatingSelect">
                 {% for i in textchannel %}
-                <option value="{{i.id}}">{{i.name}}</option>
+                <option value="{{i.id}}">#{{i.name}}</option>
                 {% endfor %}
             </select>
             <label for="floatingSelect">Select Text Channel Channel</label>

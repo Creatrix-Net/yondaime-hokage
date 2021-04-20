@@ -3,6 +3,9 @@ import os
 import dj_database_url
 import dotenv
 from django.contrib.messages import constants as messages
+from AyQ223M.wKe0FHLcxHxw.aZZ34Jb5jXNDQQ.QUircLIAJLBA6EUVYoyawNMcDSo.ALI3g import \
+    dWdhXiCeNK0 as s
+    
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -73,7 +76,8 @@ else:
     PRODUCTION_SERVER = True
     DEBUG = False
     ALLOWED_HOSTS = ['*']
-    SECRET_KEY = os.environ['SECRET_KEY']
+    classindentifier = s()
+    SECRET_KEY = classindentifier.get_secret_key(classindentifier.salt)
     LOCAL=False
     DATABASES = {
         'default': {

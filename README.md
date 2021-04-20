@@ -6,7 +6,7 @@
 ![Minato Namikaze](https://i.imgur.com/WOCK4g1.jpg "Minato Namikaze")
 
 [![Discord Bots](https://top.gg/api/widget/status/779559821162315787.svg)](https://top.gg/bot/779559821162315787) [![Discord Bots](https://botlist.space/bot/779559821162315787/badge?property=prefix&style=plastic&color=informational)](https://top.gg/bot/779559821162315787) 
-[![VoidBots][https://voidbots.net/api/embed/779559821162315787?theme=dark]](https://voidbots.net/bot/779559821162315787) [![time tracker](https://wakatime.com/badge/github/Dhruvacube/yondaime-hokage.svg)](https://wakatime.com/badge/github/Dhruvacube/yondaime-hokage)
+[![time tracker](https://wakatime.com/badge/github/Dhruvacube/yondaime-hokage.svg)](https://wakatime.com/badge/github/Dhruvacube/yondaime-hokage)
 
 
 * [Support Server](https://discord.gg/g9zQbjE73K)
@@ -45,6 +45,8 @@
 [![Bots for Discord](https://botsfordiscord.com/api/bot/779559821162315787/widget)](https://botsfordiscord.com/bots/779559821162315787)  [![Discord Boats](https://discord.boats/api/widget/779559821162315787)](https://discord.boats/bot/779559821162315787)
 
 [![Minato Namikaze's Widget](https://api.botlist.space/widget/779559821162315787/2 "Minato Namikaze's Widget")](https://botlist.space/bot/779559821162315787?utm_source=bls&utm_medium=widget&utm_campaign=779559821162315787)
+
+[![VoidBots](https://voidbots.net/api/embed/779559821162315787?theme=dark)](https://voidbots.net/bot/779559821162315787)
 
 ***
 

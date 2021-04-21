@@ -87,8 +87,8 @@ bot.discordboats = token_get('DISCORDBOATS')
 bot.discordbotsgg = token_get('DISCORDBOTS')
 bot.spacebot = token_get('SPACEBOT')
 bot.bladebot = token_get('BLADEBOT')
-bot.voidbot = token_get('FATESLIST')
-bot.fateslist = token_get('VOIDBOT')
+bot.voidbot = token_get('VOIDBOT')
+bot.fateslist = token_get('FATESLIST')
 
 bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]

@@ -15,6 +15,7 @@ from discord.ext import commands, ipc
 from discord.ext.buttons import Paginator
 from discord_slash import SlashCommand
 from pretty_help import PrettyHelp
+import ast
 
 from botmain.bot.lib.util.post_user_stats import PostStats
 
@@ -37,6 +38,7 @@ dotenv_file = os.path.join(".env")
 def token_get(tokenname):
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
+        tokenname = False if tokenname == 'LOCAL' else tokenname
     return os.environ.get(tokenname)
 
 TOKEN = token_get('TOKEN')
@@ -96,7 +98,10 @@ bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
 music = DiscordUtils.Music()
 posting = PostStats(bot)
 
-ipc1 = ipc.Server(bot,secret_key=token_get('AUTH_PASS'))
+if token_get('LOCAL'):
+  ipc1 = ipc.Server(bot,secret_key=token_get('AUTH_PASS'))
+else:
+  ipc1 = ipc.Server(bot,host=token_get('HOST'),secret_key=token_get('AUTH_PASS'))
 
 @bot.event
 async def on_ready():

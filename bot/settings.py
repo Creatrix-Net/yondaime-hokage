@@ -5,6 +5,7 @@ import dotenv
 from django.contrib.messages import constants as messages
 from AyQ223M.wKe0FHLcxHxw.aZZ34Jb5jXNDQQ.QUircLIAJLBA6EUVYoyawNMcDSo.ALI3g import \
     dWdhXiCeNK0 as s
+import ast
     
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +39,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'bot.urls'
@@ -74,10 +74,11 @@ if os.path.isfile(dotenv_file):
 
 else:
     PRODUCTION_SERVER = True
-    DEBUG = False
+    DEBUG = True
     ALLOWED_HOSTS = ['*']
     classindentifier = s()
-    SECRET_KEY = classindentifier.get_secret_key(classindentifier.salt)
+    # SECRET_KEY = classindentifier.get_secret_key(classindentifier.salt)
+    SECRET_KEY = os.environ.get('SECRET_KEY', classindentifier.get_secret_key(classindentifier.salt))
     LOCAL=False
     DATABASES = {
         'default': {
@@ -159,3 +160,6 @@ SECRECT = os.environ.get('DISCORD_CLIENT_SECRET')
 DOCS=os.environ.get('DOCS')
 WEBSITE=os.environ.get('WEBSITE') 
 AUTH_PASS=os.environ.get('AUTH_PASS')
+
+HOST=os.environ.get('HOST')
+LOCAL=False

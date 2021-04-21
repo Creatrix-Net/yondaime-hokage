@@ -39,7 +39,7 @@ def token_get(tokenname):
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
         tokenname = False if tokenname == 'LOCAL' else tokenname
-    return os.environ.get(tokenname)
+    return os.environ.get(tokenname) if tokenname else tokenname
 
 TOKEN = token_get('TOKEN')
 topastoken = token_get('TOPASTOKEN')
@@ -226,7 +226,10 @@ try:
     division_by_zero = 1 / 0
 except:
     pass
-
+run = lambda: os.system('python manage.py runserver')
+from threading import Thread
+t = Thread(target=run)
+t.start()
 try:
     ipc1.start()
 except:

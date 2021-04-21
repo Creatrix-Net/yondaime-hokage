@@ -39,6 +39,7 @@ def main():
 
 
 if __name__ == '__main__':
+    import threading
     try:
         multiprocessing.Process(target=main).start()
         multiprocessing.Process(target=os.system('python discordbot.py')).start()

@@ -97,8 +97,7 @@ class Moderation(commands.Cog):
     )
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def unban(self, ctx, member, *, reason=None):
-        member = await self.bot.fetch_user(int(member))
+    async def unban(self, ctx, member: discord.Member, *, reason=None):
         await ctx.guild.unban(member, reason=reason)
 
         embed = discord.Embed(

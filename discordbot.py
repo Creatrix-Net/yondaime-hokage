@@ -39,7 +39,7 @@ def token_get(tokenname):
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
         tokenname = False if tokenname == 'LOCAL' else tokenname
-    return os.environ.get(tokenname) if tokenname else tokenname
+    return os.environ.get(tokenname).strip('\n') if tokenname else tokenname.strip('\n')
 
 TOKEN = token_get('TOKEN')
 topastoken = token_get('TOPASTOKEN')
@@ -98,10 +98,10 @@ bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
 music = DiscordUtils.Music()
 posting = PostStats(bot)
 
-if token_get('LOCAL'):
-  ipc1 = ipc.Server(bot,secret_key=token_get('AUTH_PASS'))
-else:
-  ipc1 = ipc.Server(bot,host=token_get('HOST'),secret_key=token_get('AUTH_PASS'))
+# if token_get('LOCAL'):
+#   ipc1 = ipc.Server(bot,secret_key=token_get('AUTH_PASS'))
+# else:
+#   ipc1 = ipc.Server(bot,host=token_get('HOST'),secret_key=token_get('AUTH_PASS'))
 
 @bot.event
 async def on_ready():

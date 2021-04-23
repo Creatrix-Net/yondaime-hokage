@@ -29,9 +29,11 @@ class Page(Paginator):
             pass
 
 intents = discord.Intents.all()
-intents.members = True
+intents.members = False
 intents.reactions = True
 intents.guilds = True
+intents.presences = False
+
 
 
 dotenv_file = os.path.join(".env")

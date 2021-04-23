@@ -56,7 +56,8 @@ class Info(commands.Cog):
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await c.send(embed=e)
             await ctx.send(f'Sent the info to developer that "**I am in __{ctx.guild.name}__ guild**" , {ctx.author.mention} 😉')
-
+            
+    '''
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):
         if user is None:
@@ -71,6 +72,7 @@ class Info(commands.Cog):
             else:
                 e = discord.Embed(title="❌ Nope, the user (you or another) aren't listening to Spotify", description=f"User {user.name} isn't listening to Spotify")
                 return await ctx.send(embed=e)
+    '''
 
     @commands.command()
     async def who(self, ctx): 

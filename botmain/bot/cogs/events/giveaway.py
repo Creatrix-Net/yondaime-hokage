@@ -151,7 +151,7 @@ class Giveaway(Cog):
             await ctx.send('No one won the giveaway! As there were not enough participants!')
             await ctx.send(f'https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}')
             return
-        if len(users) > 0:
+        else: #len(users) > 0
             winner = choice(users)
             winnerEmbed = Embed(title="🎉🎉 Giveaway Time !! 🎉🎉",
                                 description=f"🎁 Win a Prize today",

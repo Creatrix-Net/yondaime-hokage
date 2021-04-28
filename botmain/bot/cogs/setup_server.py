@@ -2,16 +2,21 @@ import asyncio
 
 import discord
 from discord.ext import commands
+from os.path import join
 
 
 class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Setups up the server for feedback, ban and unban logs and also setups the channel and roles to create a support management system for the server.'
+        self.file = discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png')
+        self.embed = discord.Embed(description='Please **check** the **channel pins**')
     
     @commands.command(name='setup',description="Easy setup for the server")
     @commands.has_permissions(administrator=True)
     async def _setup(self,ctx):
+        await ctx.message.delete()
+        self.embed.set_image(url="attachment://pin.png")
         admin_roles = [role for role in ctx.guild.roles if role.permissions.administrator and not role.managed]
         overwrite_dict = {}
         for i in admin_roles:
@@ -38,13 +43,13 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         support_channel_roles = discord.utils.get(ctx.guild.roles, name="Support_Required") if discord.utils.get(ctx.guild.roles, name="Support_Required") else False
         
         if feed_channel and support_channel and ban and unban: 
-            await ctx.send('You have already configured your server mate!')
+            await ctx.send('You have already configured your server mate!', delete_after=5)
             await feed_channel.send('@here This channel will be used to log the feedbacks given by members.')
 
-            sup_roles = support_channel_roles if support_channel_roles else await ctx.guild.create_role(name="Support_Required")
-            await support_channel.send('@here This channel will be used as the support channel who needs support!')
-            await support_channel.send(f'Once the member uses the support command they will be given a role of {sup_roles.mention} to access this channel')
-            await support_channel.send(f'Then you can use resolved command if the issue has been resolved!')
+            sup_roles = support_channel_roles if support_channel_roles else await ctx.guild.create_role(name="SupportRequired")
+            await support_channel.send('@here **This channel** will be used as the **support channel** who needs support!')
+            await support_channel.send(f'Once the member uses the **`)support` command** they will be given a role of **{sup_roles.mention}** to **access this channel**')
+            await support_channel.send(f'Then you can use **`)resolved`** command if the **issue has been resolved!**')
             await ctx.send(f'Please head over to {feed_channel.mention} {support_channel.mention}')
 
         else:
@@ -54,15 +59,15 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             #Bot Setup Channel
             if not botask:
                 botask = await ctx.guild.create_text_channel("Bot Setup", category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
-                await ctx.send(f'**{botask.mention}** channel is **created** please head over there for the server setup of the bot!')
-                await ctx.send(f'Roles having access to {botask.mention} are')
+                await ctx.send(f'**{botask.mention}** channel is **created** please head over there for the server setup of the bot!', delete_after=8)
+                await ctx.send(f'Roles having access to {botask.mention} are', delete_after=8)
                 for i in admin_roles:
-                    await ctx.send(f'{i.mention}')
-            else: await ctx.send(f'Please head over the {botask.mention}')
+                    await ctx.send(f'{i.mention}', delete_after=5)
+            else: await ctx.send(f'Please head over the {botask.mention}, delete_after=5')
             
             #Feedback
             if not feed_channel:
-                embed = discord.Embed(title=f"@here Want to create a feedback system for the **{ctx.guild.name}** ?")
+                embed = discord.Embed(title=f"Want to create a feedback system for the **{ctx.guild.name}** ?")
                 embed.add_field(name="Yes", value=":white_check_mark:")
                 embed.add_field(name="No", value=":x:")
                 feedback = await botask.send(embed=embed)
@@ -79,21 +84,23 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     if str(_.emoji) in right:
                         feed = await ctx.guild.create_text_channel("Feedback", category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
                         await botask.send(f'{feed.mention} channel **created** for logging the **feedbacks** for the {ctx.guild.name} by members!')
-                        await feed.send('@here This channel will be used to log the feedbacks given by members.')
+                        a = await feed.send('@here This channel will be used to log the feedbacks given by members.')
+                        await a.pin()
                     else:
                         await botask.send(f'**Okay** no feedback system will be there for the **{ctx.guild.name}**')
                 except asyncio.TimeoutError:
                     feed = await ctx.guild.create_text_channel("Feedback", category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
                     await botask.edit(embed=discord.Embed(description="No reaction from the **Administrators**!! So creating all **Channels and roles as per my requirements!** for the feedback system for the **{ctx.guild.name}**"))
-                    await feed.send('@here This channel will be used to log the feedbacks given by members.')
+                    a = await feed.send('@here This channel will be used to log the feedbacks given by members.')
+                    await a.pin()
                     await botask.send(f'{feed.mention} channel **created** for logging the **feedbacks** for the {ctx.guild.name} by members!')
             else: 
-                await ctx.send(f'The channel for logging of feedback is already there {feed_channel.mention}')
-                await feed_channel.send('@here This channel will be used to log the feedbacks given by members.')
+                await ctx.send(f'The channel for logging of feedback is already there {feed_channel.mention}', delete_after=5)
+                await feed_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
             
             #Support
             if not support_channel:
-                embed = discord.Embed(title=f"@here Want to create a support system for the **{ctx.guild.name}** ?")
+                embed = discord.Embed(title=f"Want to create a support system for the **{ctx.guild.name}** ?")
                 embed.add_field(name="Yes", value=":white_check_mark:")
                 embed.add_field(name="No", value=":x:")
                 support = await botask.send(embed=embed)
@@ -108,13 +115,16 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                         and not user.bot,
                         timeout=60,)
                     if str(_.emoji) in right:
-                        sup_roles = await ctx.guild.create_role(name="Support_Required")
+                        sup_roles = await ctx.guild.create_role(name="SupportRequired")
                         overwrite_dict.update({discord.utils.get(ctx.guild.roles,name="Support_Required"): discord.PermissionOverwrite(read_messages=False)})
                         sup = await ctx.guild.create_text_channel("Support", overwrites=overwrite_dict,category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
                         await botask.send(f'{sup.mention} channel **created** as the **support** channel for the {ctx.guild.name} server!')
-                        await sup.send('@here This channel will be used as the support channel who needs support!')
-                        await sup.send(f'Once the member uses the support command they will be given a role of {sup_roles.mention} to access this channel')
-                        await sup.send(f'Then you can use resolved command if the issue has been resolved!')
+                        a=await sup.send('@here **This channel** will be used as the **support channel** who needs support!')
+                        b=await sup.send(f'Once the member uses the **`)support` command** they will be given a role of **{sup_roles.mention}** to **access this channel**')
+                        c=await sup.send(f'Then you can use **`)resolved`** command if the **issue has been resolved!**')
+                        await a.pin()
+                        await b.pin()
+                        await c.pin()
                     else:
                         await botask.send(f'**Okay** no support system will be there for the **{ctx.guild.name}**') 
                 except asyncio.TimeoutError:
@@ -122,20 +132,21 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     overwrite_dict.update({discord.utils.get(ctx.guild.roles,name="Support_Required"): discord.PermissionOverwrite(read_messages=False)})
                     sup = await ctx.guild.create_text_channel("Support", overwrites=overwrite_dict,category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
                     await botask.edit(embed=discord.Embed(description=f"No reaction from the **Administrators**!! So creating all **Channels and roles as per my requirements!** for the support system for the **{ctx.guild.name}**"))
-                    await sup.send('@here This channel will be used as the support channel who needs support!')
-                    await sup.send(f'Once the member uses the support command they will be given a role of {sup_roles.mention} to access this channel')
-                    await sup.send(f'Then you can use resolved command if the issue has been resolved!')
+                    a=await sup.send('@here **This channel** will be used as the **support channel** who needs support!')
+                    b=await sup.send(f'Once the member uses the **`)support` command** they will be given a role of **{sup_roles.mention}** to **access this channel**')
+                    c=await sup.send(f'Then you can use **`)resolved`** command if the **issue has been resolved!**')
+                    await a.pin()
+                    await b.pin()
+                    await c.pin()
                     await botask.send(f'{sup.mention} channel **created** as the **support** channel for the {ctx.guild.name} server!')
             else:
-                await ctx.send(f'The channel for support is already there {support_channel.mention}')
+                await ctx.send(f'The channel for support is already there {support_channel.mention}', delete_after=5)
                 sup_roles = support_channel_roles if support_channel_roles else await ctx.guild.create_role(name="Support_Required")
-                await support_channel.send('@here This channel will be used as the support channel who needs support!')
-                await support_channel.send(f'Once the member uses the support command they will be given a role of {sup_roles.mention} to access this channel')
-                await support_channel.send(f'Then you can use resolved command if the issue has been resolved!')
+                await support_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
             
             #Ban
             if not ban:
-                embed = discord.Embed(title=f"@here Want to log bans for the **{ctx.guild.name}** ?")
+                embed = discord.Embed(title=f"Want to log bans for the **{ctx.guild.name}** ?")
                 embed.add_field(name="Yes", value=":white_check_mark:")
                 embed.add_field(name="No", value=":x:")
                 ban1 = await botask.send(embed=embed)
@@ -154,7 +165,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                         
                         ban = await ctx.guild.create_text_channel("ban", category=discord.utils.get(ctx.guild.categories, name="Bingo Book"))
                         await botask.send(f'{ban.mention} channel **created** for logging the **bans** for the {ctx.guild.name}')
-                        await ban.send('@here This channel will be used to log the server ban.')
+                        a=await ban.send('@here This channel will be used to log the server ban.')
+                        await a.pin()
                     else:
                         await botask.send(f'**Okay** no logging system for the **{ctx.guild.name}** bans will be there') 
                 except asyncio.TimeoutError:
@@ -162,11 +174,14 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                         
                     ban = await ctx.guild.create_text_channel("ban", category=discord.utils.get(ctx.guild.categories, name="Bingo Book"))
                     await botask.send(f'{ban.mention} channel **created** for logging the **bans** for the {ctx.guild.name}')
-                    await ban.send('@here This channel will be used to log the server ban.')
+                    a=await ban.send('@here This channel will be used to log the server ban.')
+                    await a.pin()
+            else:
+                await ctx.send(f'Channels for **logging bans already there**! {ban.mention}', delete_after=5)
 
             #UnBan
             if not unban:
-                embed = discord.Embed(title=f"@here Want to log unbans for the **{ctx.guild.name}** ?")
+                embed = discord.Embed(title=f"Want to log unbans for the **{ctx.guild.name}** ?")
                 embed.add_field(name="Yes", value=":white_check_mark:")
                 embed.add_field(name="No", value=":x:")
                 unban1 = await botask.send(embed=embed)
@@ -194,6 +209,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     unban = await ctx.guild.create_text_channel("unban", category=discord.utils.get(ctx.guild.categories, name="Bingo Book"))
                     await botask.send(f'{unban.mention} channel **created** for logging the **unbans** for the {ctx.guild.name}')
                     await unban.send('@here This channel will be used to log the server unban.')
+            else:
+                await ctx.send(f'Channels for **logging unbans already there**! {unban.mention}', delete_after=5)
 
             #Setup Finish
             import time

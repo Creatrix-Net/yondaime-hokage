@@ -65,8 +65,8 @@ class Info(commands.Cog):
         for activity in user.activities:
             if isinstance(activity, Spotify):
                 w = discord.Embed(title="Oooo, what a party!", description=f"{user.name} is listening to Spotify, let's see what!")
-                w.add_field(name="Listening to?", value=f"{activity.title}")
-                w.add_field(name="By?", value=f"{activity.artist}")
+                w.add_field(name="**Listening to**", value=f"{activity.title}")
+                w.add_field(name="**By**", value=f"{activity.artist}")
                 w.set_thumbnail(url=activity.album_cover_url)
                 return await ctx.send(embed=w)
             else:

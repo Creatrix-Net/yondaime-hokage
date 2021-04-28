@@ -29,7 +29,6 @@ class Page(Paginator):
             pass
 
 intents = discord.Intents.all()
-intents.members = False
 intents.reactions = True
 intents.guilds = True
 intents.presences = False
@@ -228,14 +227,14 @@ try:
     division_by_zero = 1 / 0
 except:
     pass
-run = lambda: os.system('python manage.py runserver')
-from threading import Thread
-t = Thread(target=run)
-t.start()
-try:
-    ipc1.start()
-except:
-    pass
+# run = lambda: os.system('python manage.py runserver')
+# from threading import Thread
+# t = Thread(target=run)
+# t.start()
+# try:
+#     ipc1.start()
+# except:
+#     pass
 try:
     bot.run(TOKEN)
 except RuntimeError:

@@ -19,8 +19,8 @@ class BotEvents(commands.Cog):
         try:
             img=random.choice(self.minato_gif)
             file = discord.File(join(self.minato_dir, 'minato',img), filename=img)
-            await guild.system_channel.send(file=file)
-            f=open(Path(__file__).resolve(strict=True).parent.parent.parent.parent / join('bot','welcome_message.txt'),'r')
+            await guild.system_channel.send('https://i.imgur.com/j6j7ob7.mp4')
+            f=open(Path(__file__).resolve(strict=True).parent.parent.parent / join('welcome_message.txt'),'r')
             f1=f.read()
             await guild.system_channel.send(f1.format(guild.name, self.bot.user.mention, self.bot.user.mention, self.bot.user.mention, guild.owner.mention))
 

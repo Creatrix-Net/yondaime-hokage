@@ -9,15 +9,11 @@ class Feedback(commands.Cog):
         self.description = 'Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server owner)'
     
     @command()
-    @commands.cooldown(1, 120, commands.BucketType.guild)
+    @commands.cooldown(1, 60, commands.BucketType.guild)
     async def feedback(self, ctx, *, feed):
-        category = discord.utils.get(ctx.guild.categories, name="Admin / Feedback") if discord.utils.get(ctx.guild.categories, name="Admin / Feedback") else False
-        if category:
-            channel = discord.utils.get(category.channels, name="feedback") if discord.utils.get(category.channels, name="feedback") else False
-        else:
-            channel = False
+        channel = discord.utils.get(ctx.guild.channels, name="feedback") if discord.utils.get(ctx.guild.channels, name="feedback") else False
         
-        if category and channel:
+        if channel:
             e = discord.Embed(title="Sent Feedback!",
                             description=f"Your feedback '{feed}' has been sent!")
             await ctx.send(embed=e)
@@ -34,7 +30,7 @@ class Feedback(commands.Cog):
             left = l.get_cooldown_retry_after(ctx)
             e = discord.Embed(
                 title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
-            await ctx.send(embed=e)
+            await ctx.send(embed=e, delete_after=3)
 
 def setup(bot):
     bot.add_cog(Feedback(bot))

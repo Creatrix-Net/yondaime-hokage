@@ -15,9 +15,10 @@ class Giveaway(Cog):
         self.cancelled = False
         self.description='Helps you to organise a simple giveaway.'
 
-    @command(name="giveaway", aliases=["gcreate", "gcr", "giftcr"], description='Allowes you to to create giveaway by answering some simple questions!')
+    @command(name="giveaway", aliases=["gcreate", "gcr", "giftcr"],)
     @has_permissions(manage_guild=True)
     async def create_giveaway(self, ctx):
+        '''Allowes you to to create giveaway by answering some simple questions!'''
         #Ask Questions
         embed = Embed(title="Giveaway Time!!✨",
                       description="Time for a new Giveaway. Answer the following questions in 25 seconds each for the Giveaway",
@@ -113,9 +114,10 @@ class Giveaway(Cog):
             await ctx.send("You are not allowed to create Giveaways")
         
 
-    @command(name="giftrrl", usage="<giveaway id> <channel>",aliases=["gifreroll", "gftroll", "grr"], description='It picks out the giveaway winners by mentioning the giveaway ID mentioned at the footer of the giveaway.')
+    @command(name="giftrrl", usage="<giveaway id> <channel>",aliases=["gifreroll", "gftroll", "grr"],)
     @has_permissions(manage_guild=True)
     async def giveaway_reroll(self, ctx, GiveawayID: int, channel=None):
+        '''It picks out the giveaway winners by mentioning the giveaway ID mentioned at the footer of the giveaway.'''
         if not channel:
             channel = ctx.message.channel
         try:
@@ -174,10 +176,11 @@ class Giveaway(Cog):
             await ctx.send(f'https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}')
             return
 
-    @command(name="giftdel", usage='<giveaway id> <channel>',aliases=["gifdel", "gftdel", "gdl"], description='Cancels the specified giveaway')
+    @command(name="giftdel", usage='<giveaway id> <channel>',aliases=["gifdel", "gftdel", "gdl"],)
     @has_permissions(manage_guild=True)
     # @has_role("admin")
     async def giveaway_stop(self, ctx,GiveawayID: int, channel=None):
+        '''Cancels the specified giveaway'''
         if not channel: 
             channel = ctx.message.channel
         try:

@@ -38,7 +38,7 @@ gunicorn==20.1.0
 httplib2==0.19.1
 idna==2.10
 multidict==5.1.0
-mystbin.py==2.0.1
+mystbin.py
 oauthlib==3.1.0
 packaging==20.9
 Pillow==8.2.0

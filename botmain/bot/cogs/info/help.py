@@ -34,7 +34,7 @@ class Help(commands.Cog):
         else:
             await ctx.send(f'**Sorry to say** {ctx.author.mention}, but **no support channel** has been setup for the {ctx.guild.name} by the admin! **So, I can\'t help you**')
     
-    @commands.command(description='Resolves the existing ticket!')
+    @commands.command(description='Resolves the existing ticket!',usage='<member.mention>')
     @commands.has_permissions(administrator=True)
     async def resolved(self, ctx, member: discord.Member):
         await member.send(f'Hope your issue has been resolved in {ctx.guild.name}, {member.mention}')

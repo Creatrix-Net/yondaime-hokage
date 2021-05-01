@@ -15,8 +15,9 @@ class Fun(commands.Cog):
         self.description = 'Some fun Roleplay Commands'
         
     #8ball
-    @commands.command(name='8ball')
+    @commands.command(name='8ball', usage='<question>')
     async def _8ball(self,ctx, *, question):
+        '''Ask questions about your future'''
         responses = [
             "It is certain.",
             "It is decidedly so.",
@@ -45,8 +46,9 @@ class Fun(commands.Cog):
             await ctx.send(f'**{i.upper()}**')
 
     #spank
-    @commands.command()
+    @commands.command(usage='<member.mention>')
     async def spank(self,ctx, member: discord.Member = ''):
+        '''Spank someone'''
         if member == '':
             desc=f'** <@{ctx.author.id}> spanks themselves !!! LOL!**'
         elif member in ['@everyone', '@here']:
@@ -67,8 +69,9 @@ class Fun(commands.Cog):
 
 
     #slap
-    @commands.command()
+    @commands.command(usage='<member.mention>')
     async def slap(self,ctx, member: discord.Member = ''):
+        '''Slap someone'''
         if member == '':
             desc=f'** <@{ctx.author.id}> slaps themselves !!! LOL!**'
         elif member in ['@everyone', '@here']:
@@ -89,8 +92,9 @@ class Fun(commands.Cog):
 
 
     #hug
-    @commands.command()
+    @commands.command(usage='<member.mention>')
     async def hug(self,ctx, member: discord.Member = ''):
+        '''Hug someone'''
         if member == '':
             desc=f'** <@{ctx.author.id}> hugs themselves :heart: :heart: :heart: :heart: **'
         elif member in ['@everyone', '@here']:
@@ -111,8 +115,9 @@ class Fun(commands.Cog):
 
 
     #poke
-    @commands.command()
+    @commands.command(usage='<member.mention>')
     async def poke(self,ctx, member: discord.Member = ''):
+        '''Poke someone'''
         if member == '':
             desc=f'** <@{ctx.author.id}> pokes themselves! **'
         elif member in ['@everyone', '@here']:
@@ -133,8 +138,9 @@ class Fun(commands.Cog):
 
 
     #poke
-    @commands.command()
+    @commands.command(usage='<member.mention>')
     async def high5(self,ctx, member: discord.Member = ''):
+        '''Do a highfive'''
         if member == '':
             desc=f'**<@{ctx.author.id}> high-fives **'
         elif member in ['@everyone', '@here']:
@@ -154,8 +160,9 @@ class Fun(commands.Cog):
         await ctx.send(file=file,embed=embed)
 
     #party
-    @commands.command()
+    @commands.command(usage='<member.mention>')
     async def party(self,ctx, member: discord.Member = ''):
+        '''Party with someone'''
         if member == '':
             desc=f'**<@{ctx.author.id}> is partying !!**'
         elif member in ['@everyone', '@here']:

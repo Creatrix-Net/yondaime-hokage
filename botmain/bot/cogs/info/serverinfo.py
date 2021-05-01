@@ -75,7 +75,8 @@ class Info(commands.Cog):
     '''
 
     @commands.command()
-    async def who(self, ctx): 
+    async def who(self, ctx):
+        '''Get the Privacy Policy'''
         m = WhoMenu(bot=self.bot)
         await m.start(ctx)
     
@@ -92,9 +93,10 @@ class Info(commands.Cog):
         except discord.HTTPException:
             await ctx.send("Current uptime: " + text)
         
-    @cog_ext.cog_slash(name="ping")
+    # @cog_ext.cog_slash(name="ping")
     @commands.command()
     async def ping(self, ctx):
+        '''Get the Latency'''
         starttime = time.time()
         msg = await ctx.send("Ping...")
         async with ctx.channel.typing():

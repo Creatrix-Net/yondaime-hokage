@@ -16,8 +16,9 @@ class Random(commands.Cog):
         self.bot = bot
         self.description = 'Some random fun and usefull commands.'
         
-    @command()
+    @command(usage='{text}')
     async def owoify(self, ctx, text):
+        '''Owoify the message'''
         lol = owoify.owoify(f"{text}")
         await ctx.send(lol)
         
@@ -25,6 +26,7 @@ class Random(commands.Cog):
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def magic(self, ctx, user: discord.Member=None):
+        '''See the magic'''
         user = user or ctx.author
         file = await self.bot.se.magic(f'{user.avatar_url}')
         filea = discord.File(file, "floor.gif")
@@ -46,6 +48,7 @@ class Random(commands.Cog):
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def braille(self, ctx, user: discord.Member=None):
+        '''Braille your profile photo'''
         user = user or ctx.author
         file = await self.bot.se.braille(f'{user.avatar_url}')
         await ctx.send(file)
@@ -63,6 +66,7 @@ class Random(commands.Cog):
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx, colour="255-255-255", *, url=None):
+        '''Generates easy QR Code'''
         colours = dict([("255-255-255", "255-255-255"),
                         ("black", "0-0-0"), ("red", "FF0000"), ("blue", "00f")])
         col = ["black", "red", "blue"]
@@ -101,6 +105,7 @@ class Random(commands.Cog):
 
     @command(usage="<time> <reminder> (Time needs to be in seconds...)")
     async def remind(self, ctx, time, *, reminder):
+        '''A simple reminder'''
         if int(time) < 12*60*60:
             e = discord.Embed(title="I will remind you!",
                             descripition=f"I will you remind you in {int(time)/3600} minutes!")
@@ -111,8 +116,9 @@ class Random(commands.Cog):
             await ctx.message.reply(embed=e2)
         else: await ctx.send('Please give a reminder time less than 12 hours, I cannot remember for that long!')
 
-    @command(pass_context=True, usage="ar <role>")
+    @command(pass_context=True, usage="<role>")
     async def ar(self, ctx, *, role1):
+        '''Add roles'''
         member = ctx.message.author
         role = discord.utils.get(member.guild.roles, name=f"{role1}")
         await member.add_roles(role)
@@ -120,16 +126,18 @@ class Random(commands.Cog):
             title="Added Roles", description=f"I have added the roles '{role1}' for you!")
         await ctx.send(embed=e)
 
-    @command(usage="sn <name>")
+    @command(usage="<name>")
     async def sn(self, ctx, *, name):
+        '''Introduce yourself to everyone'''
         tts = gTTS(text=f"Hi! {name} is really cool!", lang='en')
         tts.save("announce.mp3")
         await ctx.send(file=discord.File("announce.mp3"))
         await asyncio.sleep(5)
         os.remove("announce.mp3")
 
-    @command(usage="tts <text>")
+    @command(usage="<text>")
     async def tts(self, ctx, *, text):
+        '''Generate text to speech messages'''
         lol = gTTS(text=f"{text}")
         lol.save("tts.mp3")
         await ctx.send(file=discord.File("tts.mp3"))
@@ -138,6 +146,7 @@ class Random(commands.Cog):
 
     @command(name="stats", description="A usefull command that displays bot statistics.")
     async def stats(self, ctx):
+        '''Get the stats for the me'''
         pythonVersion = platform.python_version()
         dpyVersion = discord.__version__
         serverCount = len(self.bot.guilds)
@@ -166,7 +175,7 @@ class Random(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @command(aliases=['color', 'colour', 'sc'])
+    @command(aliases=['color', 'colour', 'sc'], usage='<hexadecimal colour code>')
     async def show_color(self, ctx, *, color: discord.Colour):
         '''Enter a color and you will see it!'''
         file = io.BytesIO()
@@ -178,10 +187,12 @@ class Random(commands.Cog):
 
     @command()
     async def hi(self, ctx):
+        '''Say Hi'''
         await ctx.send("hi.")
 
     @command()
     async def gaymeter(self, ctx):
+        '''Gaymeter! Lol!'''
         await ctx.send(f"You are {random.randint(1, 100)}% gay")
 
 

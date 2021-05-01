@@ -113,7 +113,7 @@ class Giveaway(Cog):
             await ctx.send("You are not allowed to create Giveaways")
         
 
-    @command(name="giftrrl", aliases=["gifreroll", "gftroll", "grr"], description='It picks out the giveaway winners by mentioning the giveaway ID mentioned at the footer of the giveaway.')
+    @command(name="giftrrl", usage="<giveaway id> <channel>",aliases=["gifreroll", "gftroll", "grr"], description='It picks out the giveaway winners by mentioning the giveaway ID mentioned at the footer of the giveaway.')
     @has_permissions(manage_guild=True)
     async def giveaway_reroll(self, ctx, GiveawayID: int, channel=None):
         if not channel:
@@ -174,7 +174,7 @@ class Giveaway(Cog):
             await ctx.send(f'https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}')
             return
 
-    @command(name="giftdel", aliases=["gifdel", "gftdel", "gdl"], description='Cancels the specified giveaway')
+    @command(name="giftdel", usage='<giveaway id> <channel>',aliases=["gifdel", "gftdel", "gdl"], description='Cancels the specified giveaway')
     @has_permissions(manage_guild=True)
     # @has_role("admin")
     async def giveaway_stop(self, ctx,GiveawayID: int, channel=None):

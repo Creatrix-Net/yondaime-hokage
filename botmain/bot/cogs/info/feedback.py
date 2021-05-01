@@ -11,6 +11,8 @@ class Feedback(commands.Cog):
     @command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def feedback(self, ctx, *, feed):
+        '''Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server owner)'''
+        
         channel = discord.utils.get(ctx.guild.channels, name="feedback") if discord.utils.get(ctx.guild.channels, name="feedback") else False
         
         if channel:

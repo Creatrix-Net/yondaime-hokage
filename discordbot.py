@@ -106,9 +106,6 @@ posting = PostStats(bot)
 
 @bot.event
 async def on_ready():
-    # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bot.settings')
-
-    # threading.Thread(target=os.system('python manage.py runserver')).start()
     await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
     cog_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','cogs')
     for filename in os.listdir(cog_dir):
@@ -130,8 +127,7 @@ async def on_ready():
 
     await posting.post_guild_stats_all()
     await stats.send(embed=e)    
-    # from django.conf import settings
-    # settings.BOT = bot
+
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -165,7 +161,7 @@ async def on_command_error(ctx, error):
         await ctx.channel.send(embed=e7, delete_after=5)
         await c.send(embed=e7)
         
-        '''
+        
         await ctx.send('**Sending the error report info to my developer**', delete_after=2)
         e = discord.Embed(title=f'In **{ctx.guild.name}**',description=f'User affected {ctx.message.author}' , color= 0x2ecc71)
         if ctx.guild.icon:
@@ -178,7 +174,7 @@ async def on_command_error(ctx, error):
         e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
         await ctx.send('**Error report was successfully sent**', delete_after=2)
         await c.send(embed=e)
-        '''
+        
     else:
         c = bot.get_channel(830366314761420821)
         

@@ -44,13 +44,13 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         
         if feed_channel and support_channel and ban and unban: 
             await ctx.send('You have already configured your server mate!', delete_after=5)
-            await feed_channel.send('@here This channel will be used to log the feedbacks given by members.')
+            await feed_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
 
             sup_roles = support_channel_roles if support_channel_roles else await ctx.guild.create_role(name="SupportRequired")
-            await support_channel.send('@here **This channel** will be used as the **support channel** who needs support!')
-            await support_channel.send(f'Once the member uses the **`)support` command** they will be given a role of **{sup_roles.mention}** to **access this channel**')
-            await support_channel.send(f'Then you can use **`)resolved`** command if the **issue has been resolved!**')
-            await ctx.send(f'Please head over to {feed_channel.mention} {support_channel.mention}')
+            await support_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
+            await ban.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
+            await unban.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
+            await ctx.send(f'Please head over to {feed_channel.mention} {support_channel.mention} {ban.mention} {unban.mention}')
 
         else:
             reactions = ['\u2705','\u274C','✅','❌']

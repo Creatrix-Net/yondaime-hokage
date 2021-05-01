@@ -133,10 +133,10 @@ class BotEvents(commands.Cog):
                     except: print('Failed')
             me = self.bot.get_user(571889108046184449)
             me.send('Failed to send in '+n+' servers')
-        try:
-            if message.channel.is_news():
-                await message.publish() 
-        except: pass
+            try:
+                if message.channel.is_news():
+                    await message.publish() 
+            except: pass
         # await self.bot.process_commands(message)
 
 def setup(bot):

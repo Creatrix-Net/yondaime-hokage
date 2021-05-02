@@ -41,7 +41,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
         #Support
         support_channel = discord.utils.get(category.channels, name="support") if discord.utils.get(category.channels, name="support") else False
-        support_channel_roles = discord.utils.get(ctx.guild.roles, name="Support_Required") if discord.utils.get(ctx.guild.roles, name="Support_Required") else False
+        support_channel_roles = discord.utils.get(ctx.guild.roles, name="SupportRequired") if discord.utils.get(ctx.guild.roles, name="SupportRequired") else False
         
         if feed_channel and support_channel and ban and unban: 
             await ctx.send('You have already configured your server mate!', delete_after=5)

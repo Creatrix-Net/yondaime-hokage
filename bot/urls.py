@@ -15,8 +15,7 @@ urlpatterns = [
     path('invite/', invite_bot, name="Invite"),
 
     path('get_anime_image/<str:name>', return_available_anime,name="Get Anime Names"),
-
     url(r'^discord/', include('discord_auth_data.urls')),
-    url(r'^dashboard/', include('dashboard.urls')),
+   
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -15,6 +15,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @commands.command(name='setup',description="Easy setup for the server")
     @commands.has_permissions(administrator=True)
     async def _setup(self,ctx):
+        'A command that setups up the server for feedback, ban and unban logs and also setups the channel and roles to create a support management system for the server.'
         await ctx.message.delete()
         self.embed.set_image(url="attachment://pin.png")
         admin_roles = [role for role in ctx.guild.roles if role.permissions.administrator and not role.managed]

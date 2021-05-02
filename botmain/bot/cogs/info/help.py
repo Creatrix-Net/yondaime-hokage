@@ -10,6 +10,7 @@ class Help(commands.Cog):
     @commands.command(description='Open support ticket if enabled by the server admins')
     @commands.cooldown(1, 120, commands.BucketType.guild)
     async def support(self, ctx):
+        '''Open support ticket if enabled by the server admins'''
         category = discord.utils.get(ctx.guild.categories, name="Admin / Feedback") if discord.utils.get(ctx.guild.categories, name="Admin / Feedback") else False
         if category:
             chan = discord.utils.get(category.channels, name="support") if discord.utils.get(category.channels, name="support") else False
@@ -37,6 +38,7 @@ class Help(commands.Cog):
     @commands.command(description='Resolves the existing ticket!',usage='<member.mention>')
     @commands.has_permissions(administrator=True)
     async def resolved(self, ctx, member: discord.Member):
+        '''Resolves the existing ticket!'''
         await member.send(f'Hope your issue has been resolved in {ctx.guild.name}, {member.mention}')
         await ctx.send(f'The issue/query for {member.mention} has been set to resolved!')
         await member.remove_roles(discord.utils.get(ctx.guild.roles, name="Support_Required"))

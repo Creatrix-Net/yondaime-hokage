@@ -82,6 +82,7 @@ class Info(commands.Cog):
     
     @commands.command()
     async def uptime(self, ctx):
+        '''Get the uptime in hours for me'''
         current_time = time.time()
         difference = int(round(current_time - self.bot.start_time))
         text = str(datetime.timedelta(seconds=difference)) + ' mins' if str(datetime.timedelta(seconds=difference))[0]=='0' or str(datetime.timedelta(seconds=difference))[0:1]!='00' else ' hours'

@@ -20,11 +20,11 @@ class Help(commands.Cog):
         if category and chan:
             if ctx.message.author == ctx.guild.owner:
                 await ctx.send(f'{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:')
-            elif discord.utils.get(ctx.guild.roles, name="Support_Required") in ctx.message.author.roles:
+            elif discord.utils.get(ctx.guild.roles, name="SupportRequired") in ctx.message.author.roles:
                 await ctx.send(f'{ctx.author.mention} you already applied for the support , please check the {chan.mention} channel.')
             else:
                 channel = ctx.channel
-                await ctx.message.author.add_roles(discord.utils.get(ctx.guild.roles, name="Support_Required"))
+                await ctx.message.author.add_roles(discord.utils.get(ctx.guild.roles, name="SupportRequired"))
                 if channel.guild is ctx.guild:
                     per = ctx.author.mention
                     await chan.send(f"{per} in {channel.mention} needs support! @here")
@@ -41,7 +41,7 @@ class Help(commands.Cog):
         '''Resolves the existing ticket!'''
         await member.send(f'Hope your issue has been resolved in {ctx.guild.name}, {member.mention}')
         await ctx.send(f'The issue/query for {member.mention} has been set to resolved!')
-        await member.remove_roles(discord.utils.get(ctx.guild.roles, name="Support_Required"))
+        await member.remove_roles(discord.utils.get(ctx.guild.roles, name="SupportRequired"))
 
 
 def setup(bot):

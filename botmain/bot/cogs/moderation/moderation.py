@@ -52,6 +52,7 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
+        '''A command which kicks a given user'''
         await ctx.guild.kick(user=member, reason=reason)
 
         embed = discord.Embed(
@@ -75,6 +76,7 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
+        '''A command which bans a given user'''
         await ctx.guild.ban(user=member, reason=reason)
 
         embed = discord.Embed(
@@ -98,6 +100,7 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
     async def unban(self, ctx, member: discord.Member, *, reason=None):
+        '''A command which unbans a given user'''
         await ctx.guild.unban(member, reason=reason)
 
         embed = discord.Embed(
@@ -113,10 +116,11 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
     async def purge(self, ctx, amount=5):
+        '''A command which purges the channel it is called in'''
         await ctx.channel.purge(limit=amount + 1)
         embed = discord.Embed(
             title=f"{ctx.author.name} purged: {ctx.channel.name}",
-            description=f"{amount} messages were cleared",
+            description=f"{amount+1} messages were cleared",
         )
         await ctx.send(embed=embed, delete_after=4)
 

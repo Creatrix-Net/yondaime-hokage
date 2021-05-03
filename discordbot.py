@@ -3,7 +3,7 @@ import time
 from os.path import join
 from pathlib import Path
 
-import aiozaneapi
+# import aiozaneapi
 import async_cleverbot as ac
 import discord
 import DiscordUtils
@@ -67,7 +67,7 @@ hce = bot.get_command("help")
 chatbottoken = token_get('CHATBOTTOKEN')
 bot.topken = topastoken #Topgg Token
 bot.chatbot = ac.Cleverbot(f"{chatbottoken}")
-bot.se = aiozaneapi.Client(token_get('ZANEAPI'))
+# bot.se = aiozaneapi.Client(token_get('ZANEAPI'))
 bot.dagpi = Client(token_get('DAGPI'))
 bot.start_time = time.time()
 

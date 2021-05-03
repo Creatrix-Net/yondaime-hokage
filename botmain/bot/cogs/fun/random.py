@@ -22,11 +22,10 @@ class Random(commands.Cog):
         lol = owoify.owoify(f"{text}")
         await ctx.send(lol)
         
-            
+    '''       
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def magic(self, ctx, user: discord.Member=None):
-        '''See the magic'''
         user = user or ctx.author
         file = await self.bot.se.magic(f'{user.avatar_url}')
         filea = discord.File(file, "floor.gif")
@@ -48,7 +47,6 @@ class Random(commands.Cog):
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def braille(self, ctx, user: discord.Member=None):
-        '''Braille your profile photo'''
         user = user or ctx.author
         file = await self.bot.se.braille(f'{user.avatar_url}')
         await ctx.send(file)
@@ -62,6 +60,7 @@ class Random(commands.Cog):
             e = discord.Embed(
                 title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
             await msg.edit(content="", embed=e)
+    '''
             
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)

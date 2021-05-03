@@ -98,6 +98,7 @@ class BotEvents(commands.Cog):
         if self.bot.user.mentioned_in(message) and message.mention_everyone is False and message.content.lower() in ('<@!779559821162315787>', '<@779559821162315787>') or message.content.lower() in ('<@!779559821162315787> prefix', '<@779559821162315787> prefix'):
             if not message.author.bot:
                 await  message.channel.send('The prefix is **)** ,A full list of all commands is available by typing ```)help```')
+        '''
         if message.channel.id == 814134179049635840:
             embed = message.embeds[0].to_dict()
             
@@ -137,6 +138,7 @@ class BotEvents(commands.Cog):
                 if message.channel.is_news():
                     await message.publish() 
             except: pass
+        '''
         # await self.bot.process_commands(message)
 
 def setup(bot):

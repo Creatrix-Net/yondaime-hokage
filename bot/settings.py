@@ -68,7 +68,7 @@ if os.path.isfile(dotenv_file):
 
 else:
     PRODUCTION_SERVER = True
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = ['*']
     # SECRET_KEY = classindentifier.get_secret_key(classindentifier.salt)
     SECRET_KEY = os.environ.get('SECRET_KEY', 'YO')

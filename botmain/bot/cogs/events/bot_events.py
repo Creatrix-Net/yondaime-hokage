@@ -48,6 +48,7 @@ class BotEvents(commands.Cog):
         e34.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
         e34.add_field(name="**Server ID**", value=guild.id, inline=True)
         await c.send(embed=e34)
+        await c.send(f'We are now currently at **{len(self.bot.guilds)+1} servers**')
         await self.posting.post_guild_stats_all()
 
     #when bot leaves the server
@@ -64,6 +65,7 @@ class BotEvents(commands.Cog):
         e34.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
         e34.add_field(name="**Server ID**", value=guild.id, inline=True)
         await c.send(embed=e34)
+        await c.send(f'We are now currently at **{len(self.bot.guilds)+1} servers**')
         await self.posting.post_guild_stats_all()
 
     #ban

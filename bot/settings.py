@@ -16,7 +16,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 INSTALLED_APPS = [
     'botmain.apps.BotmainConfig',
-    'discord_auth_data.apps.DiscordAuthDataConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -24,8 +23,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'django_admin_listfilter_dropdown',
 
 ]
 

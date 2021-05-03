@@ -58,11 +58,11 @@ class VoteInfo(commands.Cog):
                             )
             g = requests.get(f'https://bladebotlist.xyz/api/bots/{self.bot.discord_id}/votes/{member.id}',
                             )
-            c_list = True if str(member.id) in c.json()['hasVoted24'] else False
-            d_list = d.json()['voted']
-            e12 = e1.json()['voted']
-            f1 = f.json()['voted']
-            g1 = g.json()['voted']
+            c_list = True if str(member.id) in c.json().get('hasVoted24', False) else False
+            d_list = d.json().get('voted', False)
+            e12 = e1.json().get('voted', False)
+            f1 = f.json().get('voted', False)
+            g1 = g.json().get('voted', False)
             
             e.add_field(name='**TopGG**', value='Voted : ' + self.topgg_site if await self.dblpy.get_user_vote(member.id) else 'Not Voted : '+ self.topgg_site)
             e.add_field(name='**BotsForDiscord**', value='Voted : ' + self.bfd_site if c_list else 'Not Voted : '+ self.bfd_site)

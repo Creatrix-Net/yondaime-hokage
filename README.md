@@ -38,16 +38,4 @@
 
 ***
 
-### Widgets
-
-[![Discord Bots](https://top.gg/api/widget/779559821162315787.svg)](https://top.gg/bot/779559821162315787)
-
-[![Bots for Discord](https://botsfordiscord.com/api/bot/779559821162315787/widget)](https://botsfordiscord.com/bots/779559821162315787)  [![Discord Boats](https://discord.boats/api/widget/779559821162315787)](https://discord.boats/bot/779559821162315787)
-
-[![Minato Namikaze's Widget](https://api.botlist.space/widget/779559821162315787/2 "Minato Namikaze's Widget")](https://botlist.space/bot/779559821162315787?utm_source=bls&utm_medium=widget&utm_campaign=779559821162315787)
-
-[![VoidBots](https://voidbots.net/api/embed/779559821162315787?theme=dark)](https://voidbots.net/bot/779559821162315787)
-
-***
-
 ![Namikaze Family](https://media.discordapp.net/attachments/777918705098686465/813086521481232414/image0.jpg)

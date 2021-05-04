@@ -15,9 +15,10 @@ from discord.ext import commands, ipc
 from discord.ext.buttons import Paginator
 from discord_slash import SlashCommand
 from pretty_help import PrettyHelp
-import ast
 
 from botmain.bot.lib.util.post_user_stats import PostStats
+from pypresence import Presence
+
 
 # from .bot.help import Help
 
@@ -126,8 +127,7 @@ async def on_ready():
     print('Started The Bot')
 
     await posting.post_guild_stats_all()
-    await stats.send(embed=e)    
-
+    await stats.send(embed=e)
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -231,6 +231,20 @@ except:
 #     ipc1.start()
 # except:
 #     pass
+client_id = '779559821162315787'
+RPC = Presence(client_id)
+RPC.connect()
+RPC.update(
+    state="火 Minato Namikaze 火", 
+    large_image="img_9692",
+    small_image="oqy9h2m",
+    details ="Konichiwa, myself Minato Namikaze, \n Konohagakure Yondaime Hokage, \n\n I try my best to do every work as a Hokage",
+    large_text="Minato Namikaze | 波風ミナト",
+    small_text="Minato Namikaze",
+    buttons=[{"label": "Invite", "url": "https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&scope=bot%20applications.commands"},
+             {"label": "Website", "url": 'https://dhruvacube.github.io/yondaime-hokage/'}
+             ]
+)
 try:
     bot.run(TOKEN)
 except RuntimeError:

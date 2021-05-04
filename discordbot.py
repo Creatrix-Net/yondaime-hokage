@@ -231,6 +231,7 @@ except:
 #     ipc1.start()
 # except:
 #     pass
+'''
 client_id = '779559821162315787'
 RPC = Presence(client_id)
 RPC.connect()
@@ -245,6 +246,7 @@ RPC.update(
              {"label": "Website", "url": 'https://dhruvacube.github.io/yondaime-hokage/'}
              ]
 )
+'''
 try:
     bot.run(TOKEN)
 except RuntimeError:

@@ -1,0 +1,8 @@
+.vscode
+.env
+*.pyc
+img12345.py
+afdaf.py
+botmain/bot/music.py
+db.sqlite3
+botmain/bot/games/

@@ -1,0 +1,142 @@
+@import url("https://fonts.googleapis.com/css?family=Fredoka+One&display=swap");
+html {
+    background: var(--backg);
+    --btn: #2ab1ce;
+    --backg: #fff;
+    --colorx: #232323;
+    --timer: #0099CC;
+    --dateTs: #9a9a9a;
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+}
+
+html[data-theme="dartheme"] {
+    background: var(--backg);
+    --btn: #ea4b3c;
+    --backg: #232323;
+    --colorx: #fff;
+    --timer: #42C0FB;
+    --dateTs: silver;
+}
+
+
+/*desktop*/
+
+@media only screen and (min-width: 768px) {
+    .center {
+        width: 32%;
+    }
+    .timer {
+        font-size: 55px;
+    }
+    .title {
+        font-size: 50px;
+    }
+    .dateTs {
+        font-size: 32px;
+    }
+}
+
+
+/*mobile*/
+
+@media only screen and (max-width: 767px) {
+    .center {
+        width: 50%;
+    }
+    .dateTs {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 380px) {
+    .image1 {
+        display: none;
+    }
+}
+
+h1 {
+    font-family: "Fredoka One", cursive;
+    font-weight: 300;
+    color: var(--colorx);
+    text-align: center;
+}
+
+h2 {
+    font-family: "Fredoka One", cursive;
+    font-weight: 100;
+    color: var(--colorx);
+    text-align: center;
+}
+
+input[type="checkbox"] {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+}
+
+label {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 60px;
+    position: relative;
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 55px;
+    height: 30px;
+    background: var(--btn);
+}
+
+label:after {
+    border-radius: 50%;
+    position: absolute;
+    content: "";
+    background: #fff;
+    width: 20px;
+    height: 20px;
+    top: 5px;
+    left: 4px;
+    transition: ease-in-out 200ms;
+}
+
+input:checked+label {
+    background: #ea4b3c;
+}
+
+input:checked+label:after {
+    left: calc(100% - 5px);
+    transform: translateX(-100%);
+}
+
+html.transition,
+html.transition *:before,
+html.transition *:after {
+    transition: ease-in-out 170ms !important;
+    transition-delay: 0 !important;
+}
+
+p {
+    font-family: "Fredoka One", cursive;
+    font-weight: 300;
+    color: var(--colorx);
+    text-align: center;
+}
+
+.dateTs {
+    color: var(--dateTs);
+    text-align: center;
+}
+
+.timer {
+    color: var(--timer);
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

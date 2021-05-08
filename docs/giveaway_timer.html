@@ -1,0 +1,72 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/png" href="assets/white.png" />
+
+<head>
+    <title>Giveaway Timer</title>
+    <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body>
+    <center>
+        <div class="container">
+            <input class="container_toggle" type="checkbox" id="switch" name="mode" />
+            <label for="switch">Toggle</label>
+        </div>
+    </center>
+    <script>
+        function getCookie(cookiename) {
+            var cookiestring = RegExp("" + cookiename + "[^;]+").exec(
+                document.cookie
+            );
+            return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./, "") : "");
+        }
+
+        if (getCookie("preference") === "dark") {
+            document.documentElement.setAttribute("data-theme", "dartheme");
+            document.getElementById("switch").checked = true;
+            document.getElementById("1").src = 'assets/white.png';
+            document.getElementById("2").src = 'assets/white.png';
+        } else if (getCookie("preference") === "light") {
+            document.documentElement.setAttribute("data-theme", "lighttheme");
+            document.getElementById("switch").checked = false;
+            document.getElementById("1").src = 'assets/black.png';
+            document.getElementById("2").src = 'assets/black.png';
+        } else {
+            document.documentElement.setAttribute("data-theme", "dartheme");
+            document.getElementById("switch").checked = true;
+            document.getElementById("1").src = 'assets/white.png';
+            document.getElementById("2").src = 'assets/white.png';
+        }
+    </script>
+
+    <center>
+        <h1 class="title">
+            <img class="image1" src='assets/white.png' style='height: 5%' id='1' /> <u><b>Giveaway Timer</b></u> <img class="image1" src='assets/white.png' style='height: 5%' id='2' />
+        </h1>
+    </center>
+    <br \ />
+    <center>
+        <noscript>
+        <p style="color:green">
+          <b>Why is this loading forever?<br \ />(Enable JavaScript)</b>
+        </p>
+      </noscript>
+        <h1 class="timer" id="timer">
+            Loading...
+        </h1>
+    </center>
+    <br \ />
+    <center>
+        <h1 id="endDate" class="dateTs">
+            Loading...
+        </h1>
+    </center>
+    
+        <img src='assets/konoha.png' style='height: 50%;width:100% ;padding: 20px; border-radius: 50px;' />
+    
+
+    <script src="assets/script.js"></script>
+</body>
+
+</html>

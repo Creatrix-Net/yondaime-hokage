@@ -40,7 +40,7 @@ class Games(commands.Cog):
             blue = member,
         )
         await game.start(ctx, remove_reaction_after=True)
-    
+    '''
     @commands.command(aliases=['hg'])
     async def hangman(self, ctx):
         '''Play hangman'''
@@ -50,7 +50,7 @@ class Games(commands.Cog):
         await ctx.send('__After execution__ of **hangman** command *reply* to the embed *to guess the word/movie.*')
         game = hangman.Hangman()
         await game.start(ctx)
-    
+    '''
     @commands.command(aliases=['aki'])
     async def akinator(self, ctx):
         '''Play Akinator'''
@@ -74,7 +74,7 @@ class Games(commands.Cog):
         await ctx.send('<https://en.wikipedia.org/wiki/2048_(video_game)#Gameplay>')
         game = twenty_48.Twenty48()
         await game.start(ctx, remove_reaction_after = True, delete_button = False, embed = discord.Embed())
-    
+    '''
     @commands.command(usage='<other player.mention>')
     @commands.guild_only()
     async def chess(self, ctx, member: discord.Member):
@@ -92,6 +92,7 @@ class Games(commands.Cog):
             black=member
         )
         await game.start(ctx)
+    '''
 
 
 

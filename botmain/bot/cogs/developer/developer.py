@@ -75,7 +75,7 @@ class Developer(commands.Cog):
         await self._send_guilds(ctx, guilds, "Shared Servers")
     
     @dev.group(usage="<server ID>")
-    async def createinvite(self, ctx, *, guild: discord.Guild):
+    async def createinvite(self, ctx, *, guild):
         '''Create an invite to the specified server'''
         try:
             invite = (await guild.invites())[0]

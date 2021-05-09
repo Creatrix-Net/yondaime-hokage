@@ -2,7 +2,7 @@ import random
 from os.path import join
 from pathlib import Path
 
-from ..topgg import *
+from dbl import *
 import discord
 import requests
 

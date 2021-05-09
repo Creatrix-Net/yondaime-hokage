@@ -7,6 +7,8 @@ import textwrap
 import io
 import traceback
 from contextlib import redirect_stdout
+from ...lib.tools import *
+from ...lib.classes.embed import *
 
 
 class Developer(commands.Cog):
@@ -17,9 +19,37 @@ class Developer(commands.Cog):
     
     def owners(ctx):
         return ctx.author.id == 571889108046184449
+    
+    async def _send_guilds(self, ctx, guilds, title):
+        if len(guilds) == 0:
+            await ctx.send(embed=ErrorEmbed(description="No such guild was found."))
+            return
+
+        all_pages = []
+
+        for chunk in [guilds[i : i + 20] for i in range(0, len(guilds), 20)]:
+            page = Embed(title=title)
+
+            for guild in chunk:
+                if page.description == discord.Embed.Empty:
+                    page.description = guild
+                else:
+                    page.description += f"\n{guild}"
+
+            page.set_footer(text="Use the reactions to flip pages.")
+            all_pages.append(page)
+
+        if len(all_pages) == 1:
+            embed = all_pages[0]
+            embed.set_footer(text=discord.Embed.Empty)
+            await ctx.send(embed=embed)
+            return
+
+        await create_paginator(self.bot, ctx, all_pages)
 
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
+    @commands.check(owners)
     async def dev(self, ctx, command=None):
         '''These set of commands are only locked to the developer'''
         command2 = self.bot.get_command(f"{command}")
@@ -31,6 +61,33 @@ class Developer(commands.Cog):
             else:
                 
                 pass
+    
+    @dev.group(name='sharedservers', usage="<user>")
+    async def sharedservers(self, ctx, *, user: discord.Member):
+        '''Get a list of servers the bot shares with the user.'''
+        guilds = [
+            f"{guild.name} `{guild.id}` ({guild.member_count} members)"
+            for guild in [
+                guild for guild in user.mutual_guilds
+            ]
+        ]
+
+        await self._send_guilds(ctx, guilds, "Shared Servers")
+    
+    @dev.group(usage="<server ID>")
+    async def createinvite(self, ctx, *, guild: discord.Guild):
+        '''Create an invite to the specified server'''
+        try:
+            invite = (await guild.invites())[0]
+        except (IndexError, discord.Forbidden):
+            try:
+                invite = (await guild.text_channels())[0].create_invite(max_age=120)
+            except (IndexError, discord.Forbidden):
+                await ctx.send(embed=ErrorEmbed(description="No permissions to create an invite link."))
+                return
+
+        await ctx.send(embed=Embed(description=f"Here is the invite link: {invite.url}"))
+    
     @dev.group(invoke_without_command=True, name='eval')
     @commands.check(owners)
     async def _eval(self, ctx, *, body):

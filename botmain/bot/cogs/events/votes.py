@@ -1,9 +1,7 @@
 import discord
-from discord import embeds
 from discord.ext import commands
-from requests import status_codes
 from ...lib.util.utils_dis import *
-from ...lib.topgg import *
+from dbl import *
 import requests
 
 

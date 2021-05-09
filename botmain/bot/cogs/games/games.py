@@ -43,10 +43,10 @@ class Games(commands.Cog):
     '''
     @commands.command(aliases=['hg'])
     async def hangman(self, ctx):
-        '''Play hangman'''
+        
         await ctx.send('**Here is the link to know about** *Hangman*:')
         await ctx.send('<https://en.wikipedia.org/wiki/Hangman_(game)#Example_game>')
-        '''Play Hangman'''
+        
         await ctx.send('__After execution__ of **hangman** command *reply* to the embed *to guess the word/movie.*')
         game = hangman.Hangman()
         await game.start(ctx)
@@ -78,7 +78,7 @@ class Games(commands.Cog):
     @commands.command(usage='<other player.mention>')
     @commands.guild_only()
     async def chess(self, ctx, member: discord.Member):
-        '''Play Chess with your partner'''
+        #Play Chess with your partner
         if member == ctx.author or member.bot:
             await ctx.send('*You cannot play this game yourself or with a bot*')
             return

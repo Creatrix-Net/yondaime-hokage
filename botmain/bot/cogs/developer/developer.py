@@ -75,8 +75,13 @@ class Developer(commands.Cog):
         await self._send_guilds(ctx, guilds, "Shared Servers")
     
     @dev.group(usage="<server ID>")
-    async def createinvite(self, ctx, *, guild):
+    async def createinvite(self, ctx, *, argument:int):
         '''Create an invite to the specified server'''
+        try:
+            guild = self.bot.get_guild(int(argument))
+        except:
+            await ctx.send(embed=ErrorEmbed(description="Guild not found"))
+            return
         try:
             invite = (await guild.invites())[0]
         except (IndexError, discord.Forbidden):

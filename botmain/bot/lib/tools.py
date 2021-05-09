@@ -1,3 +1,4 @@
+import time
 async def create_paginator(bot, ctx, pages):
     msg = await ctx.send(embed=pages[0])
 

@@ -51,7 +51,7 @@ sentry_link = token_get('SENTRY')
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
-    prefixes = [')', 'm!', 'm']
+    prefixes = [')', 'm!', 'minato', 'minato ']
 
     if not message.guild:
         return 'm!'

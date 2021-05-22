@@ -6,7 +6,6 @@ from pathlib import Path
 # import aiozaneapi
 import async_cleverbot as ac
 import discord
-import DiscordUtils
 import dotenv
 import mystbin
 import sentry_sdk
@@ -97,7 +96,6 @@ bot.fateslist = token_get('FATESLIST')
 bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
     
-music = DiscordUtils.Music()
 posting = PostStats(bot)
 
 # if token_get('LOCAL'):

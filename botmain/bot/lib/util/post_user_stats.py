@@ -64,7 +64,7 @@ class PostStats:
 
         r = self.bot.get_channel(822472454030229545)
         e1 = discord.Embed(title='Status posted successfully',
-                           description='[Widgets Link](https://dhruvacube.github.io/yondaime-hokage/widgets)', color=0x2ecc71)
+                           description='[Widgets Link](https://the-4th-hokage.github.io/widgets) [Invite Stats](https://minatonamekaze-invitelogs.dhruvacube.repl.co/)', color=discord.Color.random())
         e1.set_image(url=random.choice(imageslist).strip('\n'))
         e1.set_thumbnail(url='https://i.imgur.com/Reopagp.jpg')
         e1.add_field(

@@ -94,7 +94,7 @@ class Giveaway(Cog):
                     colour=0x00FFFF)
         embed.add_field(name="Hosted By:", value=ctx.author.mention)
         embed.set_image(url='https://i.imgur.com/efLKnlh.png')
-        embed.add_field(name='Giveway ends in', value=f'{answers[1]} from now | [Timer](https://dhruvacube.github.io/yondaime-hokage/giveaway_timer.html?start={int(timemod.time() * 1000)}&length={time * 1000})')
+        embed.add_field(name='Giveway ends in', value=f'{answers[1]} from now | [Timer](https://the-4th-hokage.github.io/giveaway_timer.html?start={int(timemod.time() * 1000)}&length={time * 1000})')
         if role:
             embed.add_field(name='Role Required', value=f'{role}')
         if task:

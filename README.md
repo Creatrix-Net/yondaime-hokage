@@ -23,10 +23,10 @@
 ***
 
 ### Minato Namikaze Bot Docs
-* [Docs](https://dhruvacube.github.io/yondaime-hokage/)
-* [Commands List](https://dhruvacube.github.io/yondaime-hokage/help)
-* [Privacy Policy](https://dhruvacube.github.io/yondaime-hokage/privacy_policy)
-* [Widgets](https://dhruvacube.github.io/yondaime-hokage/widgets)
+* [Docs](https://the-4th-hokage.github.io/)
+* [Commands List](https://the-4th-hokage.github.io/help)
+* [Privacy Policy](https://the-4th-hokage.github.io/privacy_policy)
+* [Widgets](https://the-4th-hokage.github.io/widgets)
 
 ***
 

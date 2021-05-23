@@ -54,7 +54,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'bot.wsgi.application'
-dotenv_file = os.path.join(BASE_DIR, ".env")
+dotenv_file = os.path.join(BASE_DIR.parent, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
     SECRET_KEY = os.environ.get('SECRET_KEY','SECTECT_KEY')
@@ -73,12 +73,8 @@ else:
     # SECRET_KEY = classindentifier.get_secret_key(classindentifier.salt)
     SECRET_KEY = os.environ.get('SECRET_KEY', 'YO')
     LOCAL=False
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+    DATABASES = {'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'))}
     MIDDLEWARE = [MIDDLEWARE[0]] + \
         ['whitenoise.middleware.WhiteNoiseMiddleware']+MIDDLEWARE[1:]
     INSTALLED_APPS = INSTALLED_APPS[0:-1] + \
@@ -128,14 +124,6 @@ MEDIA_URL = '/media/'
 
 
 #Configuration for the discord
-DISCORD_CLIENT_ID = os.getenv('DISCORD_CLIENT_ID')
-DISCORD_CLIENT_SECRET = os.getenv('DISCORD_CLIENT_SECRET')
-DISCORD_BASE_URI = 'https://discord.com/api/v8'
-BASE_URI = 'https://discordapp.com/api'
-DISCORD_AUTHZ_PATH = '/oauth2/authorize'
-DISCORD_TOKEN_PATH = '/oauth2/token'
-DISCORD_RETURN_URI ='/dashboard/'
-DISCORD_REDIRECT_URI = None
 BOT_ID = os.getenv('BOT_ID')
 
 #Overiding a message tag

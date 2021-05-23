@@ -73,12 +73,8 @@ else:
     # SECRET_KEY = classindentifier.get_secret_key(classindentifier.salt)
     SECRET_KEY = os.environ.get('SECRET_KEY', 'YO')
     LOCAL=False
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+    DATABASES = {'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'))}
     MIDDLEWARE = [MIDDLEWARE[0]] + \
         ['whitenoise.middleware.WhiteNoiseMiddleware']+MIDDLEWARE[1:]
     INSTALLED_APPS = INSTALLED_APPS[0:-1] + \

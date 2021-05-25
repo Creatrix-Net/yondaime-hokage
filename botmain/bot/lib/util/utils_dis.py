@@ -9,7 +9,7 @@ class VotingMenu(menus.Menu):
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
-        self.bot.owner = bot.owner
+        self.bot.owner = "[DHRUVA SHAW#0550](https://discord.com/users/571889108046184449/)"
 
     async def send_initial_message(self, ctx, channel):
         e = discord.Embed(title="I see you want vote!",

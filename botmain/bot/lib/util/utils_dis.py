@@ -21,16 +21,16 @@ class VotingMenu(menus.Menu):
         
         topgg =  '\n - **[TopGG](https://top.gg/bot/779559821162315787)** '
         Discordbotlist = '\n - **[Discordbotlist](https://discordbotlist.com/bots/minato-namikaze)**'
-        Discordlist = '   \n - **[Discordlist.Space](https://discordlist.space/bot/779559821162315787/upvote)**  '
+        Discordlist = '   \n - **[Discordlist.Space](https://discordlist.space/bot/779559821162315787/upvote)**'
         BotsForDiscord = '\n - **[BotsForDiscord](https://botsfordiscord.com/bot/779559821162315787/vote)**'
-        Boats = '\n - **[Discord.Boats](https://discord.boats/bot/779559821162315787/vote)**  '
+        Boats = '\n - **[Discord.Boats](https://discord.boats/bot/779559821162315787/vote)**'
         Space = '\n - **[Space Bots List](https://space-bot-list.xyz/bots/779559821162315787/vote)**'
         fateslist = '\n - **[Fates List](https://fateslist.xyz/bot/779559821162315787/vote)**'
         voidbots = '\n - **[Void Bots](https://voidbots.net/bot/779559821162315787/vote)**'
         bladebotlist = '\n - **[BladeBotList](https://bladebotlist.xyz/bot/779559821162315787/vote)**'
         
         e1 = discord.Embed(title="Thanks!",
-            description=f"Thanks {self.ctx.author.mention}! Here's the links:{topgg}{Discordbotlist}{Discordlist}{BotsForDiscord}{Boats}{Space}{fateslist}{voidbots}{bladebotlist}"
+            description=f"Thanks {self.ctx.author.mention}! Here's the links:{topgg}{Discordbotlist}{Discordlist}{BotsForDiscord}{Boats}{Space}{fateslist}{voidbots}{bladebotlist}\n**[DisbotList](https://disbotlist.xyz/bot/779559821162315787/vote)**"
         )
         await self.message.edit(content="", embed=e1)
         self.stop()

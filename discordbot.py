@@ -120,7 +120,7 @@ async def on_ready():
     difference = int(round(current_time - bot.start_time))
     stats = bot.get_channel(819128718152695878)
     e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",color=discord.Color.random()
-    e.set_thumbnail(url=bot.user.avatar_url)
+    e.set_thumbnail(url=bot.avatar_url)
     print('Started The Bot')
 
     await posting.post_guild_stats_all()

@@ -143,7 +143,7 @@ async def on_command_error(ctx, error):
         e4.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e4, delete_after=2)
     elif isinstance(error, commands.CommandNotFound):
-        if not ctx.guild.id = 632908146305925129:
+        if not ctx.guild.id == 632908146305925129:
             e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
             e2.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e2, delete_after=3)

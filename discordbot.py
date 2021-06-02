@@ -143,9 +143,10 @@ async def on_command_error(ctx, error):
         e4.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e4, delete_after=2)
     elif isinstance(error, commands.CommandNotFound):
-        e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
-        e2.set_footer(text=f"{ctx.author.name}")
-        await ctx.channel.send(embed=e2, delete_after=3)
+        if not ctx.guild.id = 632908146305925129:
+            e2 = discord.Embed(title="Command Error!", description=f"`{error}`")
+            e2.set_footer(text=f"{ctx.author.name}")
+            await ctx.channel.send(embed=e2, delete_after=3)
 
     elif isinstance(error, commands.CommandInvokeError):
         c = bot.get_channel(830366314761420821)
@@ -153,7 +154,7 @@ async def on_command_error(ctx, error):
         e7 = discord.Embed(title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
         e7.add_field(name="Command Error Caused By:", value=f"{ctx.command}")
         e7.add_field(name="By", value=f"{ctx.author.name}")
-        e7.add_field(name="MY INVITE LINK", value=f'[LINK](https://discord.com/oauth2/authorize?client_id={bot.discord_id}&permissions=8&scope=bot%20applications.commands)')
+        e7.add_field(name="MY INVITE LINK", value=f'[LINK](https://minatonamikaze-invites.herokuapp.com/invite?sitename=Direct%20From%20Bot&password=cube12345%3F)')
         e7.set_thumbnail(url=f"https://i.imgur.com/1zey3je.jpg")
         e7.set_footer(text=f"{ctx.author.name}")
         await ctx.channel.send(embed=e7, delete_after=5)

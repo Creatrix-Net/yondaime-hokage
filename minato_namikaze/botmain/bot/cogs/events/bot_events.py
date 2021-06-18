@@ -23,15 +23,6 @@ class BotEvents(commands.Cog):
             f=open(Path(__file__).resolve(strict=True).parent.parent.parent / join('welcome_message.txt'),'r')
             f1=f.read()
             await guild.system_channel.send(f1.format(guild.name, self.bot.user.mention, self.bot.user.mention, self.bot.user.mention, guild.owner.mention))
-
-            '''
-            if guild.id not in (568567800910839811 , 632908146305925129):
-                await guild.system_channel.send(f'----------')
-                await guild.system_channel.send('My **sleeping time** is from')
-                await guild.system_channel.send('**00:00 AM IST**  to')
-                await guild.system_channel.send('**07:00 AM IST**')
-            '''
-            
             img=random.choice(self.minato_gif)
             file = discord.File(join(self.minato_dir, 'minato',img), filename=img)
             await guild.system_channel.send(file=file)
@@ -100,48 +91,6 @@ class BotEvents(commands.Cog):
         if self.bot.user.mentioned_in(message) and message.mention_everyone is False and message.content.lower() in ('<@!779559821162315787>', '<@779559821162315787>') or message.content.lower() in ('<@!779559821162315787> prefix', '<@779559821162315787> prefix'):
             if not message.author.bot:
                 await  message.channel.send('The prefix is **)** ,A full list of all commands is available by typing ```)help```')
-        '''
-        if message.channel.id == 814134179049635840:
-            embed = message.embeds[0].to_dict()
-            
-            for guild in self.bot.guilds:
-                n=0
-                try:
-                    if not guild.id == 747480356625711204: 
-                        e = discord.Embed(title=embed['title'],description=embed['description'] , color= 0x2ecc71)
-                        e.set_thumbnail(url='https://i.imgur.com/lwGawEv.jpeg')
-                        await guild.system_channel.send(embed=e)
-                except:
-                    try:
-                        me = self.bot.get_user(571889108046184449)
-                        find_bots = sum(1 for member in guild.members if member.bot)
-
-                        embed = discord.Embed(
-                            title=f"ℹ  Failed to send the message in **{guild.name}**", description=None)
-
-                        if guild.icon:
-                            embed.set_thumbnail(url=guild.icon_url)
-                        if guild.banner:
-                            embed.set_image(url=guild.banner_url_as(format="png"))
-
-                        embed.add_field(name="**Server Name**",
-                                        value=guild.name, inline=True)
-                        embed.add_field(name="**Server ID**", value=guild.id, inline=True)
-                        embed.add_field(
-                            name="**Members**", value=guild.member_count, inline=True)
-                        embed.add_field(name="**Bots**", value=find_bots, inline=True)
-                        embed.add_field(name="**Owner**", value=guild.owner, inline=True)
-                        embed.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
-                        await me.send(embed=embed)
-                    except: print('Failed')
-            me = self.bot.get_user(571889108046184449)
-            me.send('Failed to send in '+n+' servers')
-            try:
-                if message.channel.is_news():
-                    await message.publish() 
-            except: pass
-        '''
-        # await self.bot.process_commands(message)
 
 def setup(bot):
     bot.add_cog(BotEvents(bot))

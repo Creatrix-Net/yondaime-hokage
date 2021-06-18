@@ -2,10 +2,7 @@ akinator.py
 async-cleverbot
 asyncdagpi
 buttons
-chess
-dblpy
 discord
-discord-ext-ipc
 discord-ext-menus
 discord-ext-owoify
 discord-pretty-help

@@ -3,6 +3,7 @@ import re
 
 import discord
 from discord.ext import commands
+from ...lib import get_dm, get_user
 
 time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
@@ -44,6 +45,7 @@ class Moderation(commands.Cog):
         await ctx.channel.edit(slowmode_delay=seconds)
         await ctx.send(f"{message}")
 
+
     @commands.command(
         name="kick",
         description="A command which kicks a given user",
@@ -61,12 +63,9 @@ class Moderation(commands.Cog):
         await ctx.send(embed=embed)
 
     @kick.error
-    async def error_handler(ctx, error):
+    async def error_handler(self, ctx, error):
         if isinstance(error, discord.BotMissingPermissions):
             await ctx.send(f"I need the permissions: {' '.join(error.missing_perms)}")
-
-        else:
-            raise error
 
     @commands.command(
         name="ban",
@@ -85,13 +84,12 @@ class Moderation(commands.Cog):
         )
         await ctx.send(embed=embed)
 
+
     @ban.error
-    async def error_handler(ctx, error):
+    async def error_handler(self, ctx, error):
         if isinstance(error, discord.BotMissingPermissions):
             await ctx.send(f"I need the permissions: {' '.join(error.missing_perms)}")
-
-        else:
-            raise error
+            
 
     @commands.command(
         name="unban",
@@ -100,20 +98,20 @@ class Moderation(commands.Cog):
     )
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def unban(self, ctx, member: discord.Member, *, reason=None):
+    async def unban(self, ctx, *, member: str):
         '''A command which unbans a given user'''
-        await ctx.guild.unban(member, reason=reason)
+        await ctx.message.delete()
+        banned_users = await ctx.guild.bans()
 
-        embed = discord.Embed(
-            title=f"{ctx.author.name} unbanned: {member.name}", description=reason
-        )
-        await ctx.send(embed=embed)
+        member_name, member_discriminator = member.split('#')
+        for ban_entry in banned_users:
+            user = ban_entry.user
 
-    @commands.command(
-        name="purge",
-        description="A command which purges the channel it is called in",
-        usage="[amount]",
-    )
+            if (user.name, user.discriminator) == (member_name, member_discriminator):
+                await ctx.guild.unban(user)
+                await ctx.channel.send(f"Unbanned: {user.mention}")
+    
+    
     @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
     async def purge(self, ctx, amount=5):
@@ -124,6 +122,11 @@ class Moderation(commands.Cog):
             description=f"{amount+1} messages were cleared",
         )
         await ctx.send(embed=embed, delete_after=4)
+    
+    @commands.guild_only()
+    @commands.has_guild_permissions(manage_messages=True)
+    async def warn(self, ctx, member: int or discord.Member):
+        member = get_user(member)
 
 
 def setup(bot):

@@ -7,8 +7,8 @@ import textwrap
 import io
 import traceback
 from contextlib import redirect_stdout
-from ...lib.tools import *
 from ...lib.classes.embed import *
+from ...lib import create_paginator
 
 
 class Developer(commands.Cog):

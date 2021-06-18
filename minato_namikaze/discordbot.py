@@ -3,7 +3,6 @@ import time
 from os.path import join
 from pathlib import Path
 
-# import aiozaneapi
 import async_cleverbot as ac
 import discord
 import dotenv
@@ -54,9 +53,7 @@ bot.mystbin_client = mystbin.Client()
 bot.version = str(token_get('BOT_VER'))
 hce = bot.get_command("help")
 
-chatbottoken = token_get('CHATBOTTOKEN')
-bot.topken = topastoken #Topgg Token
-bot.chatbot = ac.Cleverbot(f"{chatbottoken}")
+bot.chatbot = ac.Cleverbot(token_get('CHATBOTTOKEN'))
 bot.dagpi = Client(token_get('DAGPI'))
 bot.start_time = time.time()
 
@@ -72,15 +69,6 @@ bot.thresholds = (10, 25, 50, 100)
 bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影  ||Music commands may not work as they are in development||"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 
-bot.dblst = token_get('DISCORDBOTLIST')
-bot.botlist = token_get('BOTLISTSPACE')
-bot.bfd = token_get('BOTSFORDISCORD')
-bot.discordboats = token_get('DISCORDBOATS')
-bot.discordbotsgg = token_get('DISCORDBOTS')
-bot.spacebot = token_get('SPACEBOT')
-bot.bladebot = token_get('BLADEBOT')
-bot.voidbot = token_get('VOIDBOT')
-bot.fateslist = token_get('FATESLIST')
 
 bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
@@ -96,8 +84,7 @@ async def on_ready():
                     bot.load_extension(f'botmain.bot.cogs.{filename.strip(" ")}.{i[:-3]}')
         else:
             if filename.endswith('.py'):
-                if filename != 'music1.py':
-                    bot.load_extension(f'botmain.bot.cogs.{filename[:-3]}')
+                bot.load_extension(f'botmain.bot.cogs.{filename[:-3]}')
 
     current_time = time.time()
     difference = int(round(current_time - bot.start_time))
@@ -107,7 +94,13 @@ async def on_ready():
     print('Started The Bot')
 
     await stats.send(embed=e)
-    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
+    await bot.change_presence(
+        status=discord.Status.idle, 
+        activity=discord.Activity(
+            type=discord.ActivityType.watching, 
+            name='over Naruto'
+        )
+    )
 
 
 sentry_sdk.init(

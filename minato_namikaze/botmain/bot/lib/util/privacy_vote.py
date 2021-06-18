@@ -45,7 +45,7 @@ class VotingMenu(menus.Menu):
         await self.message.delete()
 
 
-class WhoMenu(menus.Menu):
+class PrivacyPolicy(menus.Menu):
     def __init__(self, bot):
         super().__init__()
         self.bot = bot

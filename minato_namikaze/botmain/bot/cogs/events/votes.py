@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands
-from ...lib.util.utils_dis import *
-from dbl import *
 import requests
 
 

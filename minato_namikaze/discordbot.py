@@ -13,8 +13,9 @@ from asyncdagpi import Client
 from discord.ext import commands
 from discord_slash import SlashCommand
 from pretty_help import PrettyHelp
+from pathlib import Path
 
-from .botmain.bot.lib import PostStats
+
 from pypresence import Presence
 import ast
 
@@ -25,7 +26,7 @@ intents.presences = False
 
 
 
-dotenv_file = os.path.join(".env")
+dotenv_file = os.path.join(Path(__file__).resolve().parent.parent / ".env")
 def token_get(tokenname):
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
@@ -84,7 +85,6 @@ bot.fateslist = token_get('FATESLIST')
 bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
     
-posting = PostStats(bot)
 
 @bot.event
 async def on_ready():
@@ -106,7 +106,6 @@ async def on_ready():
     e.set_thumbnail(url=bot.user.avatar_url)
     print('Started The Bot')
 
-    await posting.post_guild_stats_all()
     await stats.send(embed=e)
     await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='over Naruto'))
 

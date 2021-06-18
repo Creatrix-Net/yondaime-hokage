@@ -11,7 +11,7 @@ class VotingMenu(menus.Menu):
         self.bot = bot
         self.bot.owner = "[DHRUVA SHAW#0550](https://discord.com/users/571889108046184449/)"
 
-    async def send_initial_message(self, ctx, channel):
+    async def send_initial_message(self, ctx, channel): 
         e = discord.Embed(title="I see you want vote!",
                           description=f"{ctx.author.mention}, maybe react with your choice :)")
         return await channel.send(embed=e)

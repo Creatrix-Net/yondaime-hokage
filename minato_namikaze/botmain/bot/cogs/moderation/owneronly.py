@@ -9,7 +9,7 @@ import aiohttp
 import discord
 from discord.ext import commands
 
-from ...lib.owneronly import *
+from ...lib import copy_context_with
 
 
 class OwnerOnly(commands.Cog):

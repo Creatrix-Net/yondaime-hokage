@@ -169,7 +169,7 @@ class Random(commands.Cog):
         embed.add_field(name="**Discord.Py Version**", value=dpyVersion)
         embed.add_field(name="**Total Guilds:**", value=serverCount+1)
         embed.add_field(name="**Total Users:**", value=memberCount)
-        embed.add_field(name="**Bot Developers:**", value="DHRUVA SHAW#0550")
+        embed.add_field(name="**Bot Developers:**", value="[DHRUVA SHAW#0550](https://discord.com/users/571889108046184449/)")
         embed.add_field(name="**More Info:**", value="[Click Here](https://statcord.com/bot/779559821162315787)")
         embed.add_field(name="**Incidents/Maintenance Reports:**", value="[Click Here](https://minatonamikaze.statuspage.io/)")
 

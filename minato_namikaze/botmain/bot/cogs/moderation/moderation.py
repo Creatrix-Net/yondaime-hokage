@@ -62,11 +62,6 @@ class Moderation(commands.Cog):
             title=f"{ctx.author.name} kicked: {member.name}", description=reason)
         await ctx.send(embed=embed)
 
-    @kick.error
-    async def error_handler(self, ctx, error):
-        if isinstance(error, discord.BotMissingPermissions):
-            await ctx.send(f"I need the permissions: {' '.join(error.missing_perms)}")
-
     @commands.command(
         name="ban",
         description="A command which bans a given user",
@@ -83,13 +78,6 @@ class Moderation(commands.Cog):
             title=f"{ctx.author.name} banned: {member.name}", description=reason
         )
         await ctx.send(embed=embed)
-
-
-    @ban.error
-    async def error_handler(self, ctx, error):
-        if isinstance(error, discord.BotMissingPermissions):
-            await ctx.send(f"I need the permissions: {' '.join(error.missing_perms)}")
-            
 
     @commands.command(
         name="unban",

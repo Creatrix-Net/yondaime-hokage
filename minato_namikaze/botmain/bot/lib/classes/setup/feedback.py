@@ -32,5 +32,5 @@ class Feedback(menus.Menu):
 
     @menus.button('\N{NEGATIVE SQUARED CROSS MARK}')
     async def on_stop(self, payload):
-        await self.channel.send(f'**Okay** no feedback system will be there for the **{self.ctx.guild.name}**')
+        await self.channel.send(f'**Okay** no **feedback system** will be there for the **{self.ctx.guild.name}**')
         return

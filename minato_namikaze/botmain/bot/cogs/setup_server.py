@@ -35,9 +35,11 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 description = f'Please head over to {feed_channel.mention} {support_channel.mention} {ban.mention} {unban.mention}'
             )
             
+            if not support_channel and support_channel_roles:
+                await ctx.guild.create_role(name="SupportRequired")
+            
             await feed_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
             time.sleep(1)
-            sup_roles = support_channel_roles if support_channel_roles else await ctx.guild.create_role(name="SupportRequired")
             await support_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
             time.sleep(1)
             await ban.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
@@ -47,9 +49,6 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             await ctx.send(embed=e)
 
         else:
-            reactions = ['\u2705','\u274C','✅','❌']
-            right = ['\u2705','✅']
-            
             #Bot Setup Channel
             if not botask:
                 botask = await ctx.guild.create_text_channel("Bot Setup", category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
@@ -69,56 +68,10 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             
             #Support
             if not support_channel:
-                embed = discord.Embed(title=f"Want to create a support system for the **{ctx.guild.name}** ?")
-                embed.add_field(name="Yes", value=":white_check_mark:")
-                embed.add_field(name="No", value=":x:")
-                support = await botask.send(embed=embed)
-                await support.add_reaction('\u2705')
-                await support.add_reaction('\u274C')
-                n=0
-                while True:
-                    try:
-                        _, user = await ctx.bot.wait_for(
-                            "reaction_add",
-                            check=lambda _reaction, user: _reaction.message.guild == ctx.guild
-                            and _reaction.message.channel == botask
-                            and _reaction.message == support and str(_reaction.emoji) in reactions and user != ctx.bot.user
-                            and not user.bot,
-                            timeout=60,)
-                        if str(_.emoji) in right:
-                            sup_roles = await ctx.guild.create_role(name="SupportRequired")
-                            overwrite_dict.update({discord.utils.get(ctx.guild.roles,name="Support_Required"): discord.PermissionOverwrite(read_messages=False)})
-                            sup = await ctx.guild.create_text_channel("Support", overwrites=overwrite_dict,category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
-                            await botask.send(f'{sup.mention} channel **created** as the **support** channel for the {ctx.guild.name} server!')
-                            a=await sup.send('@here **This channel** will be used as the **support channel** who needs support!')
-                            b=await sup.send(f'Once the member uses the **`)support` command** they will be given a role of **{sup_roles.mention}** to **access this channel**')
-                            c=await sup.send(f'Then you can use **`)resolved`** command if the **issue has been resolved!**')
-                            await a.pin()
-                            await b.pin()
-                            await c.pin()
-                            n+=1
-                        else:
-                            n+=1
-                            await botask.send(f'**Okay** no support system will be there for the **{ctx.guild.name}**') 
-                    except asyncio.TimeoutError:
-                        n+=1
-                        sup_roles = await ctx.guild.create_role(name="Support_Required")
-                        overwrite_dict.update({discord.utils.get(ctx.guild.roles,name="Support_Required"): discord.PermissionOverwrite(read_messages=False)})
-                        sup = await ctx.guild.create_text_channel("Support", overwrites=overwrite_dict,category=discord.utils.get(ctx.guild.categories, name="Admin / Feedback"))
-                        await botask.edit(embed=discord.Embed(description=f"No reaction from the **Administrators**!! So creating all **Channels and roles as per my requirements!** for the support system for the **{ctx.guild.name}**"))
-                        a=await sup.send('@here **This channel** will be used as the **support channel** who needs support!')
-                        b=await sup.send(f'Once the member uses the **`)support` command** they will be given a role of **{sup_roles.mention}** to **access this channel**')
-                        c=await sup.send(f'Then you can use **`)resolved`** command if the **issue has been resolved!**')
-                        await a.pin()
-                        await b.pin()
-                        await c.pin()
-                        await botask.send(f'{sup.mention} channel **created** as the **support** channel for the {ctx.guild.name} server!')
-                    except:
-                        await botask.send('Invalid reaction given, please choose from ✅ or ❌', delete_after=4)
-                    if n>0: break
+                m = Support()
+                await m.start(ctx,channel=botask)
             else:
                 await ctx.send(f'The channel for support is already there {support_channel.mention}', delete_after=5)
-                sup_roles = support_channel_roles if support_channel_roles else await ctx.guild.create_role(name="Support_Required")
                 await support_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'),embed=self.embed)
             
             #Ban

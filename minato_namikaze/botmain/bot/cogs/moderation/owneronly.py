@@ -21,7 +21,7 @@ class OwnerOnly(commands.Cog):
     def owners(ctx):
         return ctx.author.id == ctx.guild.owner_id
 
-    @commands.group(invoke_without_command=True, description = 'Type )help own and to get list of all commands under own group')
+    @commands.group(invoke_without_command=True, description='Type )help own and to get list of all commands under own group')
     @commands.guild_only()
     async def own(self, ctx, command=None):
         '''Type )help own and to get list of all commands under own group'''
@@ -32,7 +32,7 @@ class OwnerOnly(commands.Cog):
             if command is None:
                 await ctx.send_help(ctx.command)
             else:
-                
+
                 pass
 
     @own.group(aliases=["ss"])
@@ -48,7 +48,6 @@ class OwnerOnly(commands.Cog):
             embed.set_footer(
                 text=f"{ctx.author} | Minato Namikaze | {current_time} ")
             await ctx.send(file=discord.File(io.BytesIO(res), filename="ss.png"), embed=embed)
-            
 
     @own.group()
     async def leaveguildbecauseimmad(self, ctx):
@@ -65,9 +64,8 @@ class OwnerOnly(commands.Cog):
         await msg.edit(content="3")
         await asyncio.sleep(1)
         await msg.edit(content="I'm bored now, good bye suckers lmao")
-        
-        await owner.send("Finally. You have escaped level one")
 
+        await owner.send("Finally. You have escaped level one")
 
     @commands.is_owner()
     @own.group(name="as", usage='')
@@ -104,7 +102,7 @@ class OwnerOnly(commands.Cog):
 
     @commands.command(usage='<channel id> or <channel.mention starting with #> <message to send>')
     @commands.has_permissions(manage_guild=True)
-    async def send(self, ctx, id: typing.Optional[int] = None, channel: discord.TextChannel = None,*, message):
+    async def send(self, ctx, id: typing.Optional[int] = None, channel: discord.TextChannel = None, *, message):
         '''Sends your message/announcement to specific channel'''
         if id is None and channel is None:
             id = message

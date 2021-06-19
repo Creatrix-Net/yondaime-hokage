@@ -5,29 +5,27 @@ import platform
 import random
 
 import discord
+from asyncdagpi import ImageFeatures
 from discord.ext import commands, owoify
 from discord.ext.commands import command
 from gtts import gTTS
 from PIL import Image
-from asyncdagpi import ImageFeatures
-
 
 
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Some random fun and usefull commands.'
-        
+
     @command(usage='{text}')
     async def owoify(self, ctx, text):
         '''Owoify the message'''
         lol = owoify.owoify(f"{text}")
         await ctx.send(lol)
-        
-       
+
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def magic(self, ctx, user: discord.Member=None):
+    async def magic(self, ctx, user: discord.Member = None):
         user = user or ctx.author
         url = str(user.avatar_url_as(format="png", size=1024))
         img = await self.bot.dagpi.image_process(ImageFeatures.magik(), url)
@@ -35,7 +33,7 @@ class Random(commands.Cog):
         e = discord.Embed(title="Magik!")
         e.set_image(url=f"attachment://magik.{img.format}")
         await ctx.send(embed=e, file=e2file)
-        
+
     @magic.error
     async def magic_handler(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
@@ -45,7 +43,7 @@ class Random(commands.Cog):
             e = discord.Embed(
                 title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
             await msg.edit(content="", embed=e)
-            
+
     '''
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
@@ -64,7 +62,7 @@ class Random(commands.Cog):
                 title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
             await msg.edit(content="", embed=e)
     '''
-            
+
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx, colour="255-255-255", *, url=None):
@@ -95,6 +93,7 @@ class Random(commands.Cog):
                 await msg.edit(content="", embed=e)
             else:
                 pass
+
     @qr.error
     async def qr_handler(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
@@ -110,24 +109,14 @@ class Random(commands.Cog):
         '''A simple reminder'''
         if int(time) < 12*60*60:
             e = discord.Embed(title="I will remind you!",
-                            descripition=f"I will you remind you in {int(time)/3600} minutes!")
+                              descripition=f"I will you remind you in {int(time)/3600} minutes!")
             await ctx.send(embed=e)
             await asyncio.sleep(int(time))
             e2 = discord.Embed(
                 title=f"Hello {ctx.author}", description=f"I have come to remind you to {reminder}!")
             await ctx.message.reply(embed=e2)
-        else: await ctx.send('Please give a reminder time less than 12 hours, I cannot remember for that long!')
-
-    @command(pass_context=True, usage="<role>")
-    @commands.guild_only()
-    async def ar(self, ctx, *, role1):
-        '''Add roles'''
-        member = ctx.message.author
-        role = discord.utils.get(member.guild.roles, name=f"{role1}")
-        await member.add_roles(role)
-        e = discord.Embed(
-            title="Added Roles", description=f"I have added the roles '{role1}' for you!")
-        await ctx.send(embed=e)
+        else:
+            await ctx.send('Please give a reminder time less than 12 hours, I cannot remember for that long!')
 
     @command(usage="<name>")
     async def sn(self, ctx, *, name):
@@ -169,12 +158,16 @@ class Random(commands.Cog):
         embed.add_field(name="**Discord.Py Version**", value=dpyVersion)
         embed.add_field(name="**Total Guilds:**", value=serverCount+1)
         embed.add_field(name="**Total Users:**", value=memberCount)
-        embed.add_field(name="**Bot Developers:**", value="[DHRUVA SHAW#0550](https://discord.com/users/571889108046184449/)")
-        embed.add_field(name="**More Info:**", value="[Click Here](https://statcord.com/bot/779559821162315787)")
-        embed.add_field(name="**Incidents/Maintenance Reports:**", value="[Click Here](https://minatonamikaze.statuspage.io/)")
+        embed.add_field(name="**Bot Developers:**",
+                        value="[DHRUVA SHAW#0550](https://discord.com/users/571889108046184449/)")
+        embed.add_field(name="**More Info:**",
+                        value="[Click Here](https://statcord.com/bot/779559821162315787)")
+        embed.add_field(name="**Incidents/Maintenance Reports:**",
+                        value="[Click Here](https://minatonamikaze.statuspage.io/)")
 
         embed.set_footer(text=f"{ctx.author} | {self.bot.user.name}")
-        embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
+        embed.set_author(name=self.bot.user.name,
+                         icon_url=self.bot.user.avatar_url)
 
         await ctx.send(embed=embed)
 

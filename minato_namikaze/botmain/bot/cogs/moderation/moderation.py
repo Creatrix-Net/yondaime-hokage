@@ -3,7 +3,8 @@ import re
 
 import discord
 from discord.ext import commands
-from ...lib import get_dm, get_user
+
+from ...lib import get_user
 
 time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
@@ -44,7 +45,6 @@ class Moderation(commands.Cog):
             message = f"Reset Slowmode of channel {ctx.channel.name}"
         await ctx.channel.edit(slowmode_delay=seconds)
         await ctx.send(f"{message}")
-
 
     @commands.command(
         name="kick",
@@ -98,8 +98,7 @@ class Moderation(commands.Cog):
             if (user.name, user.discriminator) == (member_name, member_discriminator):
                 await ctx.guild.unban(user)
                 await ctx.channel.send(f"Unbanned: {user.mention}")
-    
-    
+
     @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
     async def purge(self, ctx, amount=5):
@@ -107,10 +106,10 @@ class Moderation(commands.Cog):
         await ctx.channel.purge(limit=amount + 1)
         embed = discord.Embed(
             title=f"{ctx.author.name} purged: {ctx.channel.name}",
-            description=f"{amount+1} messages were cleared",
+            description=f"{amount} messages were cleared",
         )
         await ctx.send(embed=embed, delete_after=4)
-    
+
     @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
     async def warn(self, ctx, member: int or discord.Member):

@@ -4,10 +4,9 @@ from random import choice
 from ..classes.embed import Embed, ErrorEmbed
 
 import aiohttp
-import discord
 
 
-async def meek_api(ctx, name):
+async def meek_api(name: str):
     session = aiohttp.ClientSession()
 
     l = choice(['https://api.meek.moe/', 'https://mikuapi.predeactor.net/random',

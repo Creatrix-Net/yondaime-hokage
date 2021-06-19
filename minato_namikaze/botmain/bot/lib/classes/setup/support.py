@@ -1,46 +1,51 @@
 import discord
 from discord.ext import menus
-from ..embed import Embed
+
 from ...util import perms_dict
+from ..embed import Embed
+
 
 class Support(menus.Menu):
     def __init__(self, bot):
         super().__init__(timeout=60.0)
         self.bot = bot
-    
+
     async def send_initial_message(self, ctx, channel):
-        embed = Embed(title=f"Want to create a support system for the **{ctx.guild.name}** ?")
+        embed = Embed(
+            title=f"Want to create a support system for the **{ctx.guild.name}** ?")
         embed.add_field(name="Yes", value=":white_check_mark:")
         embed.add_field(name="No", value=":negative_squared_cross_mark:")
         return await channel.send(embed=embed)
-    
+
     @menus.button('\N{WHITE HEAVY CHECK MARK}')
     async def on_add(self, payload):
-        sup_roles = discord.utils.get(self.ctx.guild.roles, name="SupportRequired")
+        sup_roles = discord.utils.get(
+            self.ctx.guild.roles, name="SupportRequired")
         if not sup_roles:
             sup_roles = await self.ctx.guild.create_role(name="SupportRequired")
-        
+
         admin_roles, overwrite_dict = perms_dict(self.ctx)
-        
+
         overwrite_dict.update({
             discord.utils.get(
-                self.ctx.guild.roles,name="SupportRequired"): discord.PermissionOverwrite(read_messages=False)
-            })
-        
+                self.ctx.guild.roles, name="SupportRequired"): discord.PermissionOverwrite(read_messages=False)
+        })
+
         sup = await self.ctx.guild.create_text_channel(
             "Support", overwrites=overwrite_dict,
-            topic = 'This channel will be used as a support channel for this server.',
-            category=discord.utils.get(self.ctx.guild.categories, name="Admin / Feedback")
+            topic='This channel will be used as a support channel for this server.',
+            category=discord.utils.get(
+                self.ctx.guild.categories, name="Admin / Feedback")
         )
-        
+
         a = '**This channel** will be used as the **support channel** who needs support!'
         b = f'Once the member uses the **`)support` command** they will be given a role of **{sup_roles.mention}** to **access this channel**'
         c = 'Then you can use **`)resolved`** command if the **issue has been resolved!**'
 
         await self.channel.send(f'{sup.mention} channel **created** as the **support** channel for the {self.ctx.guild.name} server!')
         e = Embed(
-            title = 'Important notes!',
-            description = f'- {a} \n -{b} \n -{c}'
+            title='Important notes!',
+            description=f'- {a} \n -{b} \n -{c}'
         )
         message_embed = await sup.send(embed=e)
         await message_embed.pin()

@@ -20,7 +20,7 @@ class MystbinApi(commands.Cog):
                           description=f"[Click Here]({paste.url})")
         await ctx.send(embed=e)
 
-    @commands.command(aliases=["getmyst"],usage='<mystbin_id>')
+    @commands.command(aliases=["getmyst"], usage='<mystbin_id>')
     async def getmystbin(self, ctx, id):
         '''Get your Mystbi using your id'''
         try:

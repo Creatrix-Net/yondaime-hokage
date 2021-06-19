@@ -1,14 +1,17 @@
-from discord.ext import commands
-import discord, os
-import subprocess as sp
-from pathlib import Path
 import inspect
-import textwrap
 import io
+import os
+import subprocess as sp
+import textwrap
 import traceback
 from contextlib import redirect_stdout
-from ...lib.classes.embed import *
+from pathlib import Path
+
+import discord
+from discord.ext import commands
+
 from ...lib import create_paginator
+from ...lib.classes.embed import *
 
 
 class Developer(commands.Cog):
@@ -16,10 +19,10 @@ class Developer(commands.Cog):
         self.bot = bot
         self.appleapiisbad = True
         self.description = 'These set of commands are only locked to the developer'
-    
+
     def owners(ctx):
         return ctx.author.id == 571889108046184449
-    
+
     async def _send_guilds(self, ctx, guilds, title):
         if len(guilds) == 0:
             await ctx.send(embed=ErrorEmbed(description="No such guild was found."))
@@ -27,7 +30,7 @@ class Developer(commands.Cog):
 
         all_pages = []
 
-        for chunk in [guilds[i : i + 20] for i in range(0, len(guilds), 20)]:
+        for chunk in [guilds[i: i + 20] for i in range(0, len(guilds), 20)]:
             page = Embed(title=title)
 
             for guild in chunk:
@@ -59,9 +62,9 @@ class Developer(commands.Cog):
             if command is None:
                 await ctx.send_help(ctx.command)
             else:
-                
+
                 pass
-    
+
     @dev.group(name='sharedservers', usage="<user>")
     async def sharedservers(self, ctx, *, user: discord.Member):
         '''Get a list of servers the bot shares with the user.'''
@@ -73,9 +76,9 @@ class Developer(commands.Cog):
         ]
 
         await self._send_guilds(ctx, guilds, "Shared Servers")
-    
+
     @dev.group(usage="<server ID>")
-    async def createinvite(self, ctx, *, argument:int):
+    async def createinvite(self, ctx, *, argument: int):
         '''Create an invite to the specified server'''
         try:
             guild = self.bot.get_guild(int(argument))
@@ -92,7 +95,7 @@ class Developer(commands.Cog):
                 return
 
         await ctx.send(embed=Embed(description=f"Here is the invite link: {invite.url}"))
-    
+
     @dev.group(invoke_without_command=True, name='eval')
     @commands.check(owners)
     async def _eval(self, ctx, *, body):
@@ -106,7 +109,8 @@ class Developer(commands.Cog):
             'guild': ctx.guild,
             'message': ctx.message,
             'source': inspect.getsource,
-            'owner': self.bot.get_user(ctx.guild.owner_id) #ctx.guild.owner_id
+            # ctx.guild.owner_id
+            'owner': self.bot.get_user(ctx.guild.owner_id)
         }
 
         def cleanup_code(content):
@@ -183,7 +187,7 @@ class Developer(commands.Cog):
             await ctx.message.add_reaction('\u2049')  # x
         else:
             await ctx.message.add_reaction('\u2705')
-    
+
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def load(self, ctx, name: str):
@@ -193,7 +197,7 @@ class Developer(commands.Cog):
         except Exception as e:
             return await ctx.send(f"```py\n{e}```")
         await ctx.send(f"Loaded extension **`cogs/{name}.py`**")
-    
+
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def reload(self, ctx, name: str):
@@ -204,7 +208,7 @@ class Developer(commands.Cog):
 
         except Exception as e:
             return await ctx.send(f"```py\n{e}```")
-    
+
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def unload(self, ctx, name: str):
@@ -214,12 +218,12 @@ class Developer(commands.Cog):
         except Exception as e:
             return await ctx.send(f"```py\n{e}```")
         await ctx.send(f"📤 Unloaded extension **`cogs/{name}.py`**")
-    
+
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def reloadall(self, ctx):
         """Reloads all extensions. """
-        
+
         cog_dir = Path(__file__).resolve(strict=True).parent.parent
         error_collection = []
         for file in os.listdir(cog_dir):
@@ -227,7 +231,8 @@ class Developer(commands.Cog):
                 for i in os.listdir(cog_dir / file):
                     if i.endswith('.py'):
                         try:
-                            self.bot.reload_extension(f"cogs.{file.strip(' ')}.{i[:-3]}")
+                            self.bot.reload_extension(
+                                f"cogs.{file.strip(' ')}.{i[:-3]}")
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
@@ -247,7 +252,7 @@ class Developer(commands.Cog):
             )
 
         await ctx.send("**`Reloaded All Extentions`**")
-    
+
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def sync(self, ctx):
@@ -268,7 +273,8 @@ class Developer(commands.Cog):
                 for i in os.listdir(cog_dir / file):
                     if i.endswith('.py'):
                         try:
-                            self.bot.reload_extension(f"cogs.{file.strip(' ')}.{i[:-3]}")
+                            self.bot.reload_extension(
+                                f"cogs.{file.strip(' ')}.{i[:-3]}")
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
@@ -288,48 +294,47 @@ class Developer(commands.Cog):
             )
 
         await msg.edit(embed=embed)
-    
+
     # @dev.group(invoke_without_command=True)
     # @commands.check(owners)
     # async def sendguildmessages(self,ctx):
     #     m = WhoMenu(bot=self.bot)
     #     await m.start(ctx)
-    
+
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def changestat(self, ctx):
         '''Change the bot status'''
         await ctx.send(f"Hi yeah")
-    
+
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
     async def stream(self, ctx, *, activity='placeholder (owner to lazy lol)'):
         '''Streaming Activity'''
-        await self.bot.change_presence(activity=discord.Streaming(status=discord.Status.idle,name=activity, url="http://www.twitch.tv/transhelperdiscordbot"))
+        await self.bot.change_presence(activity=discord.Streaming(status=discord.Status.idle, name=activity, url="http://www.twitch.tv/transhelperdiscordbot"))
         await ctx.send(f'Changed activity to **{activity}** using **Stream status**.')
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
     async def game(self, ctx, *, activity='placeholder (owner to lazy lol)'):
         '''Game Activity'''
-        await self.bot.change_presence(status=discord.Status.idle,activity=discord.Game(name=activity))
+        await self.bot.change_presence(status=discord.Status.idle, activity=discord.Game(name=activity))
         await ctx.send(f'Changed activity to **{activity}** using **Game status**.')
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
     async def watching(self, ctx, *, activity='placeholder (owner to lazy lol)'):
         '''Watching activity'''
-        await self.bot.change_presence(activity=discord.Activity(status=discord.Status.idle,type=discord.ActivityType.watching, name=activity))
+        await self.bot.change_presence(activity=discord.Activity(status=discord.Status.idle, type=discord.ActivityType.watching, name=activity))
         await ctx.send(f'Changed activity to **{activity}** using **Watching status**.')
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
     async def listening(self, ctx, *, activity='placeholder (owner to lazy lol)'):
         '''Listenting Activity'''
-        await self.bot.change_presence(activity=discord.Activity(status=discord.Status.idle,type=discord.ActivityType.listening, name=activity))
+        await self.bot.change_presence(activity=discord.Activity(status=discord.Status.idle, type=discord.ActivityType.listening, name=activity))
         await ctx.send(f'Changed activity to **{activity}** using **Listening status**.')
 
 
 def setup(bot):
     bot.add_cog(Developer(bot))
-    

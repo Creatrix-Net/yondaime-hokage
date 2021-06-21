@@ -71,20 +71,20 @@ class Help(commands.Cog):
         await ctx.send(f'The issue/query for {member.mention} has been set to resolved!')
         await member.remove_roles(discord.utils.get(ctx.guild.roles, name="SupportRequired"))
     
-    @commands.command(description='Resolves the existing ticket!')
-    async def chksupreq(ctx):
+    @commands.command(description='Checks who still requires the support.')
+    async def chksupreq(self, ctx):
         role_sup = discord.utils.get(ctx.guild.roles, name="SupportRequired")
         l = [m for m in ctx.guild.members if role_sup in m.roles]
         embed = []
         l_no = 0
-        for i in range(len(l//10)):
+        for i in range(len(l)//10):
             description = ''
             for l in range(10):
                 description += f'\n**{l_no+1}** {l[l_no].mention}'
                 l_no += 1
             
             e = Embed(
-                title = 'Those who still require support',
+                title = 'Those who still require support:',
                 description = description
             )
             embed.append(e)

@@ -6,7 +6,6 @@ from pathlib import Path
 import async_cleverbot as ac
 import discord
 import dotenv
-import mystbin
 import sentry_sdk
 from asyncdagpi import Client
 from discord.ext import commands
@@ -32,8 +31,6 @@ def token_get(tokenname):
     return os.environ.get(tokenname, 'False').strip('\n')
 
 TOKEN = token_get('TOKEN')
-topastoken = token_get('TOPASTOKEN')
-
 sentry_link = token_get('SENTRY')
 
 def get_prefix(bot, message):
@@ -49,33 +46,22 @@ def get_prefix(bot, message):
 bot = commands.Bot(command_prefix=get_prefix,intents=intents, help_command=PrettyHelp(show_index=True),  allowed_mentions=discord.AllowedMentions(users=True, roles=False, everyone=False),case_insensitive=True,description="Hi I am **Minato Namikaze**, Yondaime Hokage")
 slash = SlashCommand(bot, sync_commands=True)
 
-bot.mystbin_client = mystbin.Client()
 bot.version = str(token_get('BOT_VER'))
-hce = bot.get_command("help")
 
-bot.chatbot = ac.Cleverbot(token_get('CHATBOTTOKEN'))
-bot.dagpi = Client(token_get('DAGPI'))
 bot.start_time = time.time()
-
-bot.discord_id = token_get('DISCORD_CLIENT_ID')
-bot.secrect_client = token_get('DISCORD_CLIENT_SECRET')
-
-bot.statcord = token_get('STATCORD')
-bot.auth_pass = token_get('AUTH_PASS')
-
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
-bot.thresholds = (10, 25, 50, 100)
 bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影  ||Music commands may not work as they are in development||"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 
 
 bot.minato_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
-    
+
 
 @bot.event
 async def on_ready():
+    current_time = time.time()
     cog_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','cogs')
     for filename in os.listdir(cog_dir):
         if os.path.isdir(cog_dir / filename):
@@ -85,11 +71,9 @@ async def on_ready():
         else:
             if filename.endswith('.py'):
                 bot.load_extension(f'botmain.bot.cogs.{filename[:-3]}')
-
-    current_time = time.time()
     difference = int(round(current_time - bot.start_time))
     stats = bot.get_channel(819128718152695878)
-    e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)")
+    e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",color=discord.Colour.random())
     e.set_thumbnail(url=bot.user.avatar_url)
     print('Started The Bot')
 
@@ -130,10 +114,5 @@ if ast.literal_eval(token_get('LOCAL')):
         )
     except: pass
 
-try:
-    bot.run(TOKEN)
-except RuntimeError:
-    bot.logout()
-except KeyboardInterrupt:
-    bot.logout()
+bot.run(TOKEN)
 

@@ -12,12 +12,12 @@ class VoteInfo(commands.Cog):
         self.description = 'Get information about your votes for me'
         self.bot = bot
 
-        self.topgg_site = f'[Click Here](https://top.gg/bot/{discord_id})'
-        self.bfd_site = f'[Click Here](https://botsfordiscord.com/bot/{discord_id})'
-        self.discordboats_site = f'[Click Here](https://discord.boats/bot/{discord_id}/)'
-        self.void_bots_site = f'[Click Here](https://voidbots.net/bot/{discord_id}/)'
+        self.topgg_site = f'[Click Here](https://top.gg/bot/{self.bot.user.id})'
+        self.bfd_site = f'[Click Here](https://botsfordiscord.com/bot/{self.bot.user.id})'
+        self.discordboats_site = f'[Click Here](https://discord.boats/bot/{self.bot.user.id}/)'
+        self.void_bots_site = f'[Click Here](https://voidbots.net/bot/{self.bot.user.id}/)'
         self.fateslist_bots_site = '[Click Here](https://fateslist.xyz/minato/)'
-        self.bladebot_bots_site = f'[Click Here](https://bladebotlist.xyz/bot/{discord_id}/)'
+        self.bladebot_bots_site = f'[Click Here](https://bladebotlist.xyz/bot/{self.bot.user.id}/)'
 
     @commands.command()
     async def vote(self, ctx):
@@ -36,23 +36,23 @@ class VoteInfo(commands.Cog):
                 description=f'{member.mention} here your voting stats for last 12hours'
             )
             e.set_thumbnail(url=member.avatar_url)
-            a = requests.get(f'https://top.gg/api/bots/{discord_id}/check')
-            c = requests.get(f'https://botsfordiscord.com/api/bot/{discord_id}/votes',
+            a = requests.get(f'https://top.gg/api/bots/{self.bot.user.id}/check')
+            c = requests.get(f'https://botsfordiscord.com/api/bot/{self.bot.user.id}/votes',
                              headers={'Authorization': self.bfd,
                                       'Content-Type': 'application/json'},
                              )
-            d = requests.get(f'https://discord.boats/api/bot/{discord_id}/voted',
+            d = requests.get(f'https://discord.boats/api/bot/{self.bot.user.id}/voted',
                              params={'id': member.id}
 
                              )
-            e1 = requests.get(f'http://api.voidbots.net/bot/voted/{discord_id}/{member.id}',
+            e1 = requests.get(f'http://api.voidbots.net/bot/voted/{self.bot.user.id}/{member.id}',
                               headers={"Authorization": voidbot}
                               )
-            f = requests.get(f'https://fateslist.xyz/api/v2/bots/{discord_id}/votes',
+            f = requests.get(f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/votes',
                              headers={"Authorization": fateslist},
                              params={'user_id': member.id}
                              )
-            g = requests.get(f'https://bladebotlist.xyz/api/bots/{discord_id}/votes/{member.id}',
+            g = requests.get(f'https://bladebotlist.xyz/api/bots/{self.bot.user.id}/votes/{member.id}',
                              )
             c_list = True if str(member.id) in c.json().get(
                 'hasVoted24', False) else False

@@ -13,7 +13,6 @@ class Info(commands.Cog):
         self.bot = bot
         self.bot.start_time = bot.start_time
         self.bot.github = bot.github
-        self.bot.discord_id = bot.discord_id
         
         self.description = "Get's the Information about the server"
 

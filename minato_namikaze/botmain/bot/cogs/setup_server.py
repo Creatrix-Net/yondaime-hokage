@@ -15,7 +15,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         self.bot = bot
         self.description = 'Setups up the server for feedback, ban and unban logs and also setups the channel and roles to create a support management system for the server.'
         self.file = discord.File(
-            join(self.bot.minato_dir, 'pin.png'), filename='pin.png')
+            join(self.bot.minato_dir, 'discord','pin.png'), filename='pin.png')
         self.embed = Embed(description='Please **check** the **channel pins**')
 
     @commands.command(name='setup', description="Easy setup for the server")
@@ -42,15 +42,15 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             if not support_channel and support_channel_roles:
                 await ctx.guild.create_role(name="SupportRequired")
 
-            await feed_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'), embed=self.embed)
+            await feed_channel.send(file=self.file, embed=self.embed)
             time.sleep(1)
-            await support_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'), embed=self.embed)
+            await support_channel.send(file=self.file, embed=self.embed)
             time.sleep(1)
-            await ban.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'), embed=self.embed)
+            await ban.send(file=self.file, embed=self.embed)
             time.sleep(1)
-            await unban.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'), embed=self.embed)
+            await unban.send(file=self.file, embed=self.embed)
             time.sleep(1)
-            await warns.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'), embed=self.embed)
+            await warns.send(file=self.file, embed=self.embed)
             time.sleep(1)
             await ctx.send(embed=e)
 
@@ -72,7 +72,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
                 await ctx.send(f'The channel for logging of feedback is already there {feed_channel.mention}', delete_after=5)
-                await feed_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'), embed=self.embed)
+                await feed_channel.send(file=self.file, embed=self.embed)
 
             # Support
             if not support_channel:
@@ -81,7 +81,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
                 await ctx.send(f'The channel for support is already there {support_channel.mention}', delete_after=5)
-                await support_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'), embed=self.embed)
+                await support_channel.send(file=self.file, embed=self.embed)
 
             # Ban
             if not ban:

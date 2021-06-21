@@ -1,31 +1,11 @@
-# Discord Imports
-import re
+from typing import Optional, Union
 
 import discord
 from discord.ext import commands
-from typing import Union, Optional
+from os.path import join
 
-from ...lib import get_user, Embed, get_roles, ErrorEmbed, check_if_warning_system_setup, return_warning_channel
-
-time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
-time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
-
-
-class TimeConverter(commands.Converter):
-    async def convert(self, ctx, argument):
-        args = argument.lower()
-        matches = re.findall(time_regex, args)
-        time = 0
-        for key, value in matches:
-            try:
-                time += time_dict[value] * float(key)
-            except KeyError:
-                raise commands.BadArgument(
-                    f"{value} is an invalid time key! h|m|s|d are valid arguments"
-                )
-            except ValueError:
-                raise commands.BadArgument(f"{key} is not a number!")
-        return round(time)
+from ...lib import (Embed, ErrorEmbed, check_if_warning_system_setup,
+                    get_roles, get_user, return_warning_channel)
 
 
 class Moderation(commands.Cog):
@@ -138,15 +118,41 @@ class Moderation(commands.Cog):
         warning_channel = return_warning_channel(ctx)
         await member.send(embed=e)
         await warning_channel.send(embed=e, content=member.mention)
+        await ctx.send(f'{member.mention} has been **warned** by you ||{ctx.author.mention}||', delete_after=10)
     
     @warn.error
     async def warn_handler(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             e = ErrorEmbed(
             title=f'No warning system setup for the {ctx.guild.name}', 
-            description='You can setup the **warning system** using `)setup` command'
+            description='You can always setup the **warning system** using `)setup` command'
         )
-        await ctx.send(embed=e)
+            await ctx.send(embed=e)
+    
+    @commands.command(pass_context=True, usage='<member.mention>')
+    @commands.guild_only()
+    @commands.check(check_if_warning_system_setup)
+    async def warnlist(self, ctx, member: Optional[Union[int, discord.Member]] = None):
+        member = get_user(member if member != None else ctx.message.author)
+        e = Embed(title = 'Type the below message in the search bar')
+        search_image = discord.File(join(self.bot.minato_dir, 'discord','search.png'), filename='search.png')
+        e.set_image(url="attachment://search.png")
+        await ctx.send(file=search_image, embed=e)
+        
+        warning_channel = return_warning_channel(ctx)
+        message = f'mentions: {member}  in: {warning_channel}'
+        await ctx.send(message)
+    
+    @warnlist.error
+    async def warnlist_handler(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            e = ErrorEmbed(
+            title=f'No warning system setup for the {ctx.guild.name}', 
+            description='You/Admin can always setup the **warning system** using `)setup` command'
+        )
+            await ctx.send(embed=e)
+    
+    
 
 
 def setup(bot):

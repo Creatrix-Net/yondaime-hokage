@@ -45,7 +45,7 @@ async def channel_creation(ctx):
         ban = False
 
     # Unban
-    if discord.utils.get(ctx.guild.text_channels, name="unban"):
+    if discord.utils.get(ctx.guild.text_channels, topic="Unbans of the server will be logged here."):
         unban = discord.utils.get(
             ctx.guild.text_channels,
             topic='Unbans of the server will be logged here.',
@@ -54,7 +54,7 @@ async def channel_creation(ctx):
         unban = False
     
     # Warns
-    if discord.utils.get(ctx.guild.text_channels, name="warns"):
+    if discord.utils.get(ctx.guild.text_channels, topic='Warning of the server members will be logged here.'):
         warns = discord.utils.get(
             ctx.guild.text_channels,
             topic='Warning of the server members will be logged here.',

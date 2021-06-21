@@ -28,7 +28,7 @@ class Feedback(commands.Cog):
 
     @feedback.error
     async def feedback_handler(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
+        if isinstance(self, error, commands.CommandOnCooldown):
             l = self.bot.get_command("feedback")
             left = l.get_cooldown_retry_after(ctx)
             e = discord.Embed(

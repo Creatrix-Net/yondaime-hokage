@@ -24,11 +24,12 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     async def _setup(self, ctx):
         'A command that setups up the server for feedback, ban and unban logs and also setups the channel and roles to create a support management system for the server.'
         await ctx.message.delete()
+        commanwaitingtime = 3
 
         self.embed.set_image(url="attachment://pin.png")
 
         admin_roles, overwrite_dict = perms_dict(ctx)
-        feed_channel, support_channel, support_channel_roles, ban, unban, botask = channel_creation(
+        feed_channel, support_channel, support_channel_roles, ban, unban, botask = await channel_creation(
             ctx)
 
         if feed_channel and support_channel and ban and unban:
@@ -63,39 +64,51 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Feedback
             if not feed_channel:
-                m = Feedback()
+                m = Feedback(bot=self.bot)
                 await m.start(ctx, channel=botask)
+                await asyncio.sleep(commanwaitingtime)
             else:
                 await ctx.send(f'The channel for logging of feedback is already there {feed_channel.mention}', delete_after=5)
                 await feed_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'), embed=self.embed)
 
             # Support
             if not support_channel:
-                m = Support()
+                m = Support(bot=self.bot)
                 await m.start(ctx, channel=botask)
+                await asyncio.sleep(commanwaitingtime)
             else:
                 await ctx.send(f'The channel for support is already there {support_channel.mention}', delete_after=5)
                 await support_channel.send(file=discord.File(join(self.bot.minato_dir, 'pin.png'), filename='pin.png'), embed=self.embed)
 
             # Ban
             if not ban:
-                m = Ban()
+                m = Ban(bot=self.bot)
                 await m.start(ctx, channel=botask)
+                await asyncio.sleep(commanwaitingtime)
             else:
                 await ctx.send(f'Channels for **logging bans already there**! {ban.mention}', delete_after=5)
 
             # UnBan
             if not unban:
-                m = Unban()
+                m = Unban(bot=self.bot)
                 await m.start(ctx, channel=botask)
+                await asyncio.sleep(commanwaitingtime)
+            else:
+                await ctx.send(f'Channels for **logging unbans already there**! {unban.mention}', delete_after=5)
+            
+            # Warns
+            if not unban:
+                m = Warns(bot=self.bot)
+                await m.start(ctx, channel=botask)
+                await asyncio.sleep(commanwaitingtime)
             else:
                 await ctx.send(f'Channels for **logging unbans already there**! {unban.mention}', delete_after=5)
 
             # Setup Finish
-            await botask.send('Deleting this setup channel in')
-            gb = await botask.send(5)
-            for i in range(1, 5):
-                await gb.edit(content=5-i)
+            await botask.send('**Deleting this setup channel in**')
+            gb = await botask.send(30)
+            for i in range(1, 30):
+                await gb.edit(content=30-i)
                 time.sleep(1)
             await botask.delete()
 

@@ -3,7 +3,6 @@ from os.path import join
 from pathlib import Path
 from .vars import *
 from ..classes.embed import Embed
-import discord
 import aiohttp
 
 

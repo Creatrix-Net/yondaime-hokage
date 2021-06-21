@@ -1,14 +1,11 @@
 # Discord Imports
 import datetime
 import time
-from discord_slash import cog_ext
-
 
 import discord
 from discord import Spotify
 from discord.ext import commands
-
-from ...lib.util.utils_dis import *
+from ...lib import PrivacyPolicy
 
 
 class Info(commands.Cog):
@@ -78,7 +75,7 @@ class Info(commands.Cog):
     @commands.command()
     async def who(self, ctx):
         '''Get the Privacy Policy'''
-        m = WhoMenu(bot=self.bot)
+        m = PrivacyPolicy(bot=self.bot)
         await m.start(ctx)
     
     @commands.command()

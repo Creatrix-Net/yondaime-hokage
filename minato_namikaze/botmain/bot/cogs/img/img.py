@@ -7,12 +7,14 @@ from asyncdagpi import ImageFeatures
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
 import datetime
+from asyncdagpi import Client
+from ...lib import dagpi
 
 
 class ImageManipulation(commands.Cog, name="Image Manipulation"):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.dagpi = bot.dagpi
+        self.bot.dagpi = Client(dagpi)
         self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
         self.description = 'Some fun Image Manipulation Commands'
 

@@ -9,7 +9,7 @@ import mystbin
 class MystbinApi(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.mystbin_client = bot.mystbin_client
+        self.bot.mystbin_client = mystbin.Client()
         self.description = 'Use Mystbin using their API'
 
     @commands.command(aliases=["myst"], usage='<code>/<text>')

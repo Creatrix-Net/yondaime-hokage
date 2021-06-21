@@ -4,13 +4,14 @@ from discord.ext import menus
 from ..embed import Embed
 
 
-class Ban(menus.Menu):
+class Warns(menus.Menu):
     def __init__(self, bot):
         super().__init__(timeout=60.0)
         self.bot = bot
 
     async def send_initial_message(self, ctx, channel):
-        embed = Embed(title=f"Want to log bans for the **{ctx.guild.name}** ?")
+        embed = Embed(
+            title=f"Want a warning system for the **{ctx.guild.name}** ?")
         embed.add_field(name="Yes", value=":white_check_mark:")
         embed.add_field(name="No", value=":negative_squared_cross_mark:")
         return await channel.send(embed=embed)
@@ -24,23 +25,23 @@ class Ban(menus.Menu):
                 "Bingo Book",
                 reason="To log the the bans and unban events + warns"
             )
-        ban = await self.ctx.guild.create_text_channel(
-            "ban",
-            topic='Bans of the server will be logged here.',
+        unban = await self.ctx.guild.create_text_channel(
+            "warns",
+            topic='Warning of the server members will be logged here.',
             category=discord.utils.get(
                 self.ctx.guild.categories,
                 name="Bingo Book")
         )
 
-        await self.channel.send(f'{ban.mention} channel **created** for logging the **ban** of the {self.ctx.guild.name} server.')
+        await self.channel.send(f'{unban.mention} channel **created** for logging the **warns** for the {self.ctx.guild.name}')
         e = Embed(
-            description='This channel will be used to log the server bans.'
+            description='This channel will be used to log the server members warn.'
         )
-        a = await ban.send(embed=e)
+        a = await unban.send(embed=e)
         await a.pin()
         return
 
     @menus.button('\N{NEGATIVE SQUARED CROSS MARK}')
     async def on_stop(self, payload):
-        await self.channel.send(f'**Okay** no logging system for the **{self.ctx.guild.name}** bans will be there')
+        await self.channel.send(f'**Okay** no warning system for the **{self.ctx.guild.name}** warns will be there')
         return

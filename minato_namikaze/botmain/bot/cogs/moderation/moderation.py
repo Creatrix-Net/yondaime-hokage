@@ -110,10 +110,10 @@ class Moderation(commands.Cog):
         )
         await ctx.send(embed=embed, delete_after=4)
 
-    @commands.guild_only()
-    @commands.has_guild_permissions(manage_messages=True)
-    async def warn(self, ctx, member: int or discord.Member):
-        member = get_user(member)
+    # @commands.guild_only()
+    # @commands.has_guild_permissions(manage_messages=True)
+    # async def warn(self, ctx, member: int or discord.Member):
+    #     member = get_user(member)
 
 
 def setup(bot):

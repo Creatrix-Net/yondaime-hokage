@@ -5,12 +5,15 @@ import time
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
+import async_cleverbot as ac
+
+from ...lib import chatbot
 
 
 class FunGames(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.chatbot = bot.chatbot
+        self.bot.chatbot = ac.Cleverbot(f"{chatbot}")
         self.description = 'A simple reaction game and also here you can chat with me!'
 
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)

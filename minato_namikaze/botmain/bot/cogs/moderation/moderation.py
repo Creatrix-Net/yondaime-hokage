@@ -3,6 +3,7 @@ import re
 
 import discord
 from discord.ext import commands
+from typing import Union, Optional
 
 from ...lib import get_user
 
@@ -109,11 +110,22 @@ class Moderation(commands.Cog):
             description=f"{amount} messages were cleared",
         )
         await ctx.send(embed=embed, delete_after=4)
+    
+    @command(pass_context=True, usage="<member.mention> <role>")
+    @commands.guild_only()
+    async def ar(self, ctx, member: Optional[int, discord.Member], role: Union[int, discord.Role]):
+        '''Add roles'''
+        member = get_user(member if member != None else ctx.message.author)
+        role = discord.utils.get(member.guild.roles, name=f"{role1}")
+        await member.add_roles(role)
+        e = discord.Embed(
+            title="Added Roles", description=f"I have added the roles '{role1}' for you!")
+        await ctx.send(embed=e)
 
-    # @commands.guild_only()
-    # @commands.has_guild_permissions(manage_messages=True)
-    # async def warn(self, ctx, member: int or discord.Member):
-    #     member = get_user(member)
+    @commands.guild_only()
+    @commands.has_guild_permissions(manage_messages=True)
+    async def warn(self, ctx, member: Union[int, discord.Member]):
+        member = get_user(member)
 
 
 def setup(bot):

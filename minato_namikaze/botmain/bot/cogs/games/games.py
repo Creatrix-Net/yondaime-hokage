@@ -7,9 +7,9 @@ class Games(commands.Cog):
         self.bot = bot
         self.description = "Play some amazing games"
     
-    @commands.command(aliases=['tc'])
+    @commands.command(aliases=['tc'], usage='<other player.mention>')
     @commands.guild_only()
-    async def tictactoe(self, ctx, member: discord.Member, usage='<other player.mention>'):
+    async def tictactoe(self, ctx, member: discord.Member):
         '''Play Amazing Tictactoe Game'''
         if member == ctx.author or member.bot:
             await ctx.send('*You cannot play this game yourself or with a bot*')

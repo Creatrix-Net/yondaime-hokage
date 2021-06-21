@@ -1,8 +1,7 @@
 from discord.ext import commands
 from discord_slash import SlashContext, cog_ext
 
-from ...lib.util import meek_moe
-
+from ...lib import meek_api as meek_moe
 
 class VocaloidSlash(commands.Cog):
     def __init__(self, bot):

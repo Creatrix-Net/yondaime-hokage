@@ -27,3 +27,4 @@ statcord.py
 whitenoise
 youtube-dl
 youtube-search
+english-words

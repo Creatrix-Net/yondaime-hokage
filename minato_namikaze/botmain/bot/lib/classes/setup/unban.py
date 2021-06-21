@@ -23,7 +23,7 @@ class Unban(menus.Menu):
         if not bingo:
             bingo = await self.ctx.guild.create_category(
                 "Bingo Book",
-                reason="To log the the bans and unban events"
+                reason="To log the the bans and unban events + warns"
             )
         unban = await self.ctx.guild.create_text_channel(
             "unban",

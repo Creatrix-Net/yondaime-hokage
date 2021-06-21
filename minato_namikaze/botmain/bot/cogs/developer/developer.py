@@ -11,7 +11,7 @@ import discord
 from discord.ext import commands
 
 from ...lib import create_paginator
-from ...lib.classes.embed import *
+from ...lib.classes.embed import Embed, ErrorEmbed
 
 
 class Developer(commands.Cog):

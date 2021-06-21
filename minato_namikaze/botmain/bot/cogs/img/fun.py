@@ -2,11 +2,9 @@ import datetime
 import random
 from os import listdir
 from os.path import join
-import time
 
 import discord
 from discord.ext import commands
-from discord_slash import cog_ext
 from asyncdagpi import ImageFeatures
 
 

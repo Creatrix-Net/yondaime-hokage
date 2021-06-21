@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 from typing import Union, Optional
 
-from ...lib import get_user
+from ...lib import get_user, Embed, get_roles, ErrorEmbed, check_if_warning_system_setup, return_warning_channel
 
 time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
@@ -59,7 +59,7 @@ class Moderation(commands.Cog):
         '''A command which kicks a given user'''
         await ctx.guild.kick(user=member, reason=reason)
 
-        embed = discord.Embed(
+        embed = Embed(
             title=f"{ctx.author.name} kicked: {member.name}", description=reason)
         await ctx.send(embed=embed)
 
@@ -75,7 +75,7 @@ class Moderation(commands.Cog):
         '''A command which bans a given user'''
         await ctx.guild.ban(user=member, reason=reason)
 
-        embed = discord.Embed(
+        embed = Embed(
             title=f"{ctx.author.name} banned: {member.name}", description=reason
         )
         await ctx.send(embed=embed)
@@ -105,27 +105,48 @@ class Moderation(commands.Cog):
     async def purge(self, ctx, amount=5):
         '''A command which purges the channel it is called in'''
         await ctx.channel.purge(limit=amount + 1)
-        embed = discord.Embed(
+        embed = Embed(
             title=f"{ctx.author.name} purged: {ctx.channel.name}",
             description=f"{amount} messages were cleared",
         )
         await ctx.send(embed=embed, delete_after=4)
     
-    @command(pass_context=True, usage="<member.mention> <role>")
+    @commands.command(pass_context=True, usage="<member.mention> <role>", alias=['add_roles'])
     @commands.guild_only()
-    async def ar(self, ctx, member: Optional[int, discord.Member], role: Union[int, discord.Role]):
+    @commands.has_guild_permissions(manage_roles=True)
+    async def ar(self, ctx, member: Optional[Union[int, discord.Member]], role: Union[int, discord.Role]):
         '''Add roles'''
         member = get_user(member if member != None else ctx.message.author)
-        role = discord.utils.get(member.guild.roles, name=f"{role1}")
+        role = get_roles(role,ctx)
         await member.add_roles(role)
-        e = discord.Embed(
-            title="Added Roles", description=f"I have added the roles '{role1}' for you!")
+        e = Embed(
+            title="Added Roles", description=f"I have added the roles '{role.mention}' for {member.mention}!"
+        )
         await ctx.send(embed=e)
-
+    
+    @commands.command(pass_context=True, usage='<member.mention> <optional: reason>')
     @commands.guild_only()
-    @commands.has_guild_permissions(manage_messages=True)
-    async def warn(self, ctx, member: Union[int, discord.Member]):
+    @commands.has_guild_permissions(kick_members=True)
+    @commands.check(check_if_warning_system_setup)
+    async def warn(self, ctx, member: Union[int, discord.Member], *,reason: str = None):
         member = get_user(member)
+        e = ErrorEmbed(title = 'You have been warned!')
+        e.add_field(name='**Responsible Moderator**:', value=ctx.message.author.mention,inline=True)
+        if reason:
+            e.add_field(name='**Reason**:', value=reason, inline=True)
+        
+        warning_channel = return_warning_channel(ctx)
+        await member.send(embed=e)
+        await warning_channel.send(embed=e, content=member.mention)
+    
+    @warn.error
+    async def warn_handler(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            e = ErrorEmbed(
+            title=f'No warning system setup for the {ctx.guild.name}', 
+            description='You can setup the **warning system** using `)setup` command'
+        )
+        await ctx.send(embed=e)
 
 
 def setup(bot):

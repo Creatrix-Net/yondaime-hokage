@@ -32,7 +32,6 @@ class OwnerOnly(commands.Cog):
             if command is None:
                 await ctx.send_help(ctx.command)
             else:
-
                 pass
 
     @own.group(aliases=["ss"])
@@ -67,7 +66,7 @@ class OwnerOnly(commands.Cog):
 
         await owner.send("Finally. You have escaped level one")
 
-    @commands.is_owner()
+    @commands.check(owners)
     @own.group(name="as", usage='')
     async def foddd(self, ctx: commands.Context, target: discord.User, *, command_string: str):
         '''Execute my commands pretending as others | usage: <member.mention> <command.name> eg: )own as @Minato angel'''

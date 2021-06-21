@@ -6,8 +6,8 @@ from ..embed import Embed
 
 
 class Support(menus.Menu):
-    def __init__(self, bot):
-        super().__init__(timeout=60.0)
+    def __init__(self, bot, timeout):
+        super().__init__(timeout=timeout)
         self.bot = bot
 
     async def send_initial_message(self, ctx, channel):

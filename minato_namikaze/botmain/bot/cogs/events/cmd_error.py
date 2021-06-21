@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from ...lib import Embed
 
 
 class BotEventsCommands(commands.Cog):
@@ -9,31 +10,31 @@ class BotEventsCommands(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            e1 = discord.Embed(title="Command Error!",
+            e1 = Embed(title="Command Error!",
                                description=f"`{error}`")
             e1.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e1, delete_after=3)
 
         elif isinstance(error, commands.MissingPermissions):
-            e3 = discord.Embed(title="Command Error!",
+            e3 = Embed(title="Command Error!",
                                description=f"`{error}`")
             e3.set_footer(text=f"{ctx.author.name}")
             await ctx.send(embed=e3, delete_after=3)
 
         elif isinstance(error, commands.MissingRequiredArgument):
-            e4 = discord.Embed(title="Command Error!",
+            e4 = Embed(title="Command Error!",
                                description=f"`{error}`")
             e4.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e4, delete_after=2)
 
         elif isinstance(error, commands.CommandNotFound):
-            e2 = discord.Embed(title="Command Error!",
+            e2 = Embed(title="Command Error!",
                                description=f"`{error}`")
             e2.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e2, delete_after=3)
 
         elif isinstance(error, commands.CommandInvokeError):
-            e7 = discord.Embed(
+            e7 = Embed(
                 title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
             e7.add_field(name="Command Error Caused By:",
                          value=f"{ctx.command}")
@@ -59,7 +60,7 @@ class BotEventsCommands(commands.Cog):
 
             await ctx.send('**Sending the error report info to my developer**', delete_after=2)
             e = discord.Embed(
-                title=f'In **{ctx.guild.name}**', description=f'User affected {ctx.message.author}', color=0x2ecc71)
+                title=f'In **{ctx.guild.name}**', description=f'User affected {ctx.message.author}')
             if ctx.guild.icon:
                 e.set_thumbnail(url=ctx.guild.icon_url)
             if ctx.guild.banner:

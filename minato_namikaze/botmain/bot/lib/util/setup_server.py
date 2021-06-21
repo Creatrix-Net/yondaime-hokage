@@ -52,9 +52,18 @@ async def channel_creation(ctx):
         )
     else:
         unban = False
+    
+    # Warns
+    if discord.utils.get(ctx.guild.text_channels, name="warns"):
+        warns = discord.utils.get(
+            ctx.guild.text_channels,
+            topic='Warning of the server members will be logged here.',
+        )
+    else:
+        warns = False
 
     # Support
-    if discord.utils.get(ctx.guild.text_channels, topic='This channel will be used as a support channel for thsi server.'):
+    if discord.utils.get(ctx.guild.text_channels, topic='This channel will be used as a support channel for this server.'):
         support_channel = discord.utils.get(
             ctx.guild.text_channels,
             topic='This channel will be used as a support channel for this server.'
@@ -65,13 +74,14 @@ async def channel_creation(ctx):
     support_channel_roles = discord.utils.get(ctx.guild.roles, name="SupportRequired") if discord.utils.get(
         ctx.guild.roles, name="SupportRequired") else False
 
-    if not category and not support_channel and not unban and not ban and not feed_channel:
-        category = await ctx.guild.create_category("Admin / Feedback", overwrites=overwrite_dict, reason="To log the admin and feedback events")
+    if isinstance(support_channel,bool) or isinstance(unban,bool) or isinstance(ban,bool) or isinstance(feed_channel,bool) or isinstance(warns,bool):
+        if isinstance(category,bool):
+            category = await ctx.guild.create_category("Admin / Feedback", overwrites=overwrite_dict, reason="To log the admin and feedback events")
 
     # Bot Setup
-    if discord.utils.get(category.channels, name="bot-setup"):
+    if not discord.utils.get(category.channels, name="bot-setup"):
         botask = discord.utils.get(category.channels, name="bot-setup")
     else:
         botask = False
 
-    return feed_channel, support_channel, support_channel_roles, ban, unban, botask
+    return feed_channel, support_channel, support_channel_roles, ban, unban, warns,botask

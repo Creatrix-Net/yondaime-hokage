@@ -1,9 +1,10 @@
 from os.path import join
 from pathlib import Path
 from random import choice
-from ..classes.embed import Embed, ErrorEmbed
 
 import aiohttp
+
+from ..classes.embed import Embed, ErrorEmbed
 
 
 async def meek_api(name: str):
@@ -21,7 +22,7 @@ async def meek_api(name: str):
         e.set_image(url=url['url'])
     except:
         imageslistdir = Path(__file__).resolve(
-            strict=True).parent.parent / join('text','vocaloid_images.txt')
+            strict=True).parent.parent / join('text', 'vocaloid_images.txt')
         filepointer = open(imageslistdir)
         imageslist = filepointer.readlines()
         if name == 'miku':

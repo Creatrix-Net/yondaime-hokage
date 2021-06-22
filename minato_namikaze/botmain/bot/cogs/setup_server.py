@@ -15,7 +15,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         self.bot = bot
         self.description = 'Setups up the server for feedback, ban and unban logs and also setups the channel and roles to create a support management system for the server.'
         self.file = discord.File(
-            join(self.bot.minato_dir, 'discord','pin.png'), filename='pin.png')
+            join(self.bot.minato_dir, 'discord', 'pin.png'), filename='pin.png')
         self.embed = Embed(description='Please **check** the **channel pins**')
 
     @commands.command(name='setup', description="Easy setup for the server")
@@ -30,7 +30,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         self.embed.set_image(url="attachment://pin.png")
 
         admin_roles, overwrite_dict = perms_dict(ctx)
-        feed_channel, support_channel, support_channel_roles, ban, unban, warns,botask = await channel_creation(
+        feed_channel, support_channel, support_channel_roles, ban, unban, warns, botask = await channel_creation(
             ctx)
 
         if feed_channel and support_channel and ban and unban and warns:
@@ -98,7 +98,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
                 await ctx.send(f'Channel for **logging unbans already there**! {unban.mention}', delete_after=5)
-            
+
             # Warns
             if not warns:
                 m = Warns(bot=self.bot, timeout=commanwaitingtime)

@@ -1,6 +1,8 @@
 import statcord
 from discord.ext import commands
+
 from ..lib import statcord as statcordkey
+
 
 class StatcordPost(commands.Cog):
     def __init__(self, bot):

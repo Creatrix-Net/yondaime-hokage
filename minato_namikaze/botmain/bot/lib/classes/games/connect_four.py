@@ -1,35 +1,36 @@
 import discord
 from discord.ext import commands
 
-RED   = "🔴"
-BLUE  = "🔵"
+RED = "🔴"
+BLUE = "🔵"
 BLANK = "⬛"
+
 
 class ConnectFour:
 
     def __init__(self, *, red: discord.Member, blue: discord.Member):
-        self.red_player  = red
+        self.red_player = red
         self.blue_player = blue
-        self.board       = [[BLANK for __ in range(7)] for __ in range(6)]
-        self._controls   = ('1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣')
-        self.turn        = self.red_player
-        self.message    = None
-        self.winner      = None
+        self.board = [[BLANK for __ in range(7)] for __ in range(6)]
+        self._controls = ('1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣')
+        self.turn = self.red_player
+        self.message = None
+        self.winner = None
         self._conversion = {
-            '1️⃣': 0, 
-            '2️⃣': 1, 
-            '3️⃣': 2, 
-            '4️⃣': 3, 
-            '5️⃣': 4, 
-            '6️⃣': 5, 
-            '7️⃣': 6, 
+            '1️⃣': 0,
+            '2️⃣': 1,
+            '3️⃣': 2,
+            '4️⃣': 3,
+            '5️⃣': 4,
+            '6️⃣': 5,
+            '7️⃣': 6,
         }
         self._PlayerToEmoji = {
-            self.red_player : RED, 
+            self.red_player: RED,
             self.blue_player: BLUE,
         }
         self._EmojiToPlayer = {
-            RED: self.red_player, 
+            RED: self.red_player,
             BLUE: self.blue_player,
         }
 
@@ -47,14 +48,14 @@ class ConnectFour:
             status = f"{self.winner} won!" if self.winner else "Tie"
             embed.description = f"**Game over**\n{status}"
         return embed
-        
+
     async def PlacePiece(self, emoji: str, user) -> list:
-        
+
         if emoji not in self._controls:
             raise KeyError("Provided emoji is not one of the valid controls")
         y = self._conversion[emoji]
 
-        for x in range(5,-1,-1):
+        for x in range(5, -1, -1):
             if self.board[x][y] == BLANK:
                 self.board[x][y] = self._PlayerToEmoji[user]
                 break
@@ -92,7 +93,7 @@ class ConnectFour:
                     return True
 
         return False
-    
+
     async def start(self, ctx: commands.Context, *, remove_reaction_after: bool = False, **kwargs):
 
         embed = await self.make_embed()
@@ -119,6 +120,6 @@ class ConnectFour:
                 await self.message.remove_reaction(emoji, user)
 
             await self.message.edit(content=self.BoardString(), embed=embed)
-        
+
         embed = await self.make_embed()
         return await self.message.edit(content=self.BoardString(), embed=embed)

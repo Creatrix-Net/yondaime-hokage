@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from ...lib import Embed
+from ...lib import Embed, ErrorEmbed
 
 
 class BotEventsCommands(commands.Cog):
@@ -32,6 +32,10 @@ class BotEventsCommands(commands.Cog):
                                description=f"`{error}`")
             e2.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e2, delete_after=3)
+        
+        elif isinstance(error, commands.BotMissingPermissions):
+            e = ErrorEmbed(description=f"I **need** the following **permissions**: **{' '.join(error.missing_perms)}**")
+            await ctx.send(embed=e)
 
         elif isinstance(error, commands.CommandInvokeError):
             e7 = Embed(

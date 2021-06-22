@@ -1,39 +1,42 @@
 from typing import Optional, Union
+
 import discord
 from discord.ext import commands
 
-BLANK  = "⬛"
+BLANK = "⬛"
 CIRCLE = "⭕"
-CROSS  = "❌"
+CROSS = "❌"
+
 
 class Tictactoe:
 
     def __init__(self, cross: discord.Member, circle: discord.Member) -> None:
-        self.cross       = cross
-        self.circle      = circle
-        self.board       = [[BLANK for __ in range(3)] for __ in range(3)]
-        self.turn        = self.cross
-        self.winner      = None
-        self.message     = None
-        self._controls   = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣']
+        self.cross = cross
+        self.circle = circle
+        self.board = [[BLANK for __ in range(3)] for __ in range(3)]
+        self.turn = self.cross
+        self.winner = None
+        self.message = None
+        self._controls = ['1️⃣', '2️⃣', '3️⃣',
+                          '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣']
         self._conversion = {
-            '1️⃣': (0, 0), 
-            '2️⃣': (0, 1), 
-            '3️⃣': (0, 2), 
-            '4️⃣': (1, 0), 
-            '5️⃣': (1, 1), 
-            '6️⃣': (1, 2), 
-            '7️⃣': (2, 0), 
-            '8️⃣': (2, 1), 
-            '9️⃣': (2, 2), 
+            '1️⃣': (0, 0),
+            '2️⃣': (0, 1),
+            '3️⃣': (0, 2),
+            '4️⃣': (1, 0),
+            '5️⃣': (1, 1),
+            '6️⃣': (1, 2),
+            '7️⃣': (2, 0),
+            '8️⃣': (2, 1),
+            '9️⃣': (2, 2),
         }
         self._EmojiToPlayer = {
-            CIRCLE: self.circle, 
-            CROSS : self.cross, 
+            CIRCLE: self.circle,
+            CROSS: self.cross,
         }
         self._PlayerToEmoji = {
-            self.cross: CROSS, 
-            self.circle: CIRCLE, 
+            self.cross: CROSS,
+            self.circle: CIRCLE,
         }
 
     def BoardString(self) -> str:
@@ -60,7 +63,7 @@ class Tictactoe:
             x, y = self._conversion[emoji]
             piece = self._PlayerToEmoji[user]
             self.board[x][y] = piece
-            self.turn        = self.circle if user == self.cross else self.cross
+            self.turn = self.circle if user == self.cross else self.cross
             self._conversion.pop(emoji)
             self._controls.remove(emoji)
             return self.board
@@ -82,11 +85,11 @@ class Tictactoe:
         if (self.board[0][0] == self.board[1][1] == self.board[2][2]) and self.board[0][0] != BLANK:
             self.winner = self._EmojiToPlayer[self.board[0][0]]
             return True
-           
+
         if (self.board[0][2] == self.board[1][1] == self.board[2][0]) and self.board[0][2] != BLANK:
             self.winner = self._EmojiToPlayer[self.board[0][2]]
             return True
-           
+
         return False
 
     async def start(self, ctx: commands.Context, *, remove_reaction_after: bool = False, return_after_block: int = None, **kwargs):
@@ -105,7 +108,7 @@ class Tictactoe:
 
             if await self.GameOver():
                 break
-            
+
             emoji = str(reaction.emoji)
             await self.MakeMove(emoji, user)
             embed = await self.make_embed()
@@ -114,6 +117,6 @@ class Tictactoe:
                 await self.message.remove_reaction(emoji, user)
 
             await self.message.edit(content=self.BoardString(), embed=embed)
-        
+
         embed = await self.make_embed()
         return await self.message.edit(content=self.BoardString(), embed=embed)

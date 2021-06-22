@@ -36,7 +36,8 @@ class VoteInfo(commands.Cog):
                 description=f'{member.mention} here your voting stats for last 12hours'
             )
             e.set_thumbnail(url=member.avatar_url)
-            a = requests.get(f'https://top.gg/api/bots/{self.bot.user.id}/check')
+            a = requests.get(
+                f'https://top.gg/api/bots/{self.bot.user.id}/check')
             c = requests.get(f'https://botsfordiscord.com/api/bot/{self.bot.user.id}/votes',
                              headers={'Authorization': self.bfd,
                                       'Content-Type': 'application/json'},

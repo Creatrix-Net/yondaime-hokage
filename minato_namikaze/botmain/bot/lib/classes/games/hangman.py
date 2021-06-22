@@ -1,8 +1,8 @@
-import discord
-from discord.ext import commands
+import random
 from typing import Union
 
-import random
+import discord
+from discord.ext import commands
 from english_words import english_words_set
 
 stages = ['''
@@ -14,7 +14,7 @@ stages = ['''
             |      / \\\t
          ___|___
             ''',
-            '''
+          '''
             _________\t
             |/      |\t
             |      😦\t
@@ -23,7 +23,7 @@ stages = ['''
             |      /\t
          ___|___
             ''',
-            '''
+          '''
             _________\t
             |/      |\t
             |      😦\t
@@ -32,7 +32,7 @@ stages = ['''
             |
          ___|___
             ''',
-            '''
+          '''
             --------\t
             |/     |\t
             |     😦\t
@@ -41,7 +41,7 @@ stages = ['''
             |
          ___|___
             ''',
-            '''
+          '''
             _________\t
             |/      |\t
             |      😦\t
@@ -50,7 +50,7 @@ stages = ['''
             |
          ___|___
             ''',
-            '''
+          '''
             _________\t
             |/      |\t
             |      😦\t
@@ -59,7 +59,7 @@ stages = ['''
             |
          ___|___
             ''',
-            '''
+          '''
             _________\t
             |/      |\t
             |      
@@ -67,8 +67,8 @@ stages = ['''
             |
             |
          ___|___
-            ''', 
-            '''
+            ''',
+          '''
             _________\t
             |/     
             |      
@@ -76,8 +76,8 @@ stages = ['''
             |
             |
          ___|___
-            ''', 
-            '''
+            ''',
+          '''
             ___      \t
             |/      
             |      
@@ -86,21 +86,23 @@ stages = ['''
             |
          ___|___
             '''
-        ]
+          ]
+
 
 class Hangman:
 
     def __init__(self):
-        self._alpha = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-        self.word    = random.choice(list(english_words_set)).lower()
+        self._alpha = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+                       'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        self.word = random.choice(list(english_words_set)).lower()
         self.letters = [l for l in self.word]
         self.correct = [r"\_" for __ in self.word]
         self.wrong_letters = []
-        self._embed   = discord.Embed(title='HANGMAN')
+        self._embed = discord.Embed(title='HANGMAN')
         self._message = None
         self._counter = 8
         self.GameOver = False
-        self.lives    = lambda : f"`{('❤️' * self._counter) or '-'}`"
+        self.lives = lambda: f"`{('❤️' * self._counter) or '-'}`"
 
     async def MakeGuess(self, guess: str) -> None:
 
@@ -114,14 +116,17 @@ class Hangman:
             matches = [a for a, b in enumerate(self.letters) if b == guess]
             for match in matches:
                 self.correct[match] = guess
-            self._embed.set_field_at(0, name='Word', value=f"{' '.join(self.correct)}")
+            self._embed.set_field_at(
+                0, name='Word', value=f"{' '.join(self.correct)}")
             await self._message.edit(embed=self._embed)
         else:
             self._alpha.remove(guess)
             self._counter -= 1
             self.wrong_letters.append(guess)
-            self._embed.set_field_at(1, name='Wrong letters', value=f"{', '.join(self.wrong_letters)}")
-            self._embed.set_field_at(2, name='Lives left', value=self.lives(), inline=False)
+            self._embed.set_field_at(
+                1, name='Wrong letters', value=f"{', '.join(self.wrong_letters)}")
+            self._embed.set_field_at(
+                2, name='Lives left', value=self.lives(), inline=False)
             self._embed.description = f"```\n{stages[self._counter]}\n```"
             await self._message.edit(embed=self._embed)
 
@@ -148,7 +153,8 @@ class Hangman:
         self._embed.add_field(name='Word', value=f"{' '.join(self.correct)}")
         wrong_letters = ', '.join(self.wrong_letters) or '  \u200b'
         self._embed.add_field(name='Wrong letters', value=wrong_letters)
-        self._embed.add_field(name='Lives left', value=self.lives(), inline=False)
+        self._embed.add_field(
+            name='Lives left', value=self.lives(), inline=False)
         self._message = await ctx.send(embed=self._embed, **kwargs)
 
         while True:
@@ -170,4 +176,4 @@ class Hangman:
                     await message.delete()
                 except:
                     pass
-        return 
+        return

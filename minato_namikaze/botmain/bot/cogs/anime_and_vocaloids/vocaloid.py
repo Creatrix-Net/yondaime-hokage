@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from ...lib import meek_api as meek_moe
+from ...lib.functions.meek_moe import meek_api as meek_moe
 
 class Vocaloid(commands.Cog):
     def __init__(self, bot):

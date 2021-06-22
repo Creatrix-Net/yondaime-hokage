@@ -5,9 +5,7 @@ from os.path import join
 import discord
 from discord.ext import commands
 
-from ..lib.classes import *
-from ..lib.classes.setup import *
-from ..lib.util.setup_server import *
+from ..lib import *
 
 
 class ServerSetup(commands.Cog, name="Server Setup"):

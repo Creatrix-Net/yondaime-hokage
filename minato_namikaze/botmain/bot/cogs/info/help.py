@@ -4,17 +4,19 @@ import discord
 import DiscordUtils
 from discord.ext import commands
 
-from ...lib import Embed, check_if_support_is_setup, get_user, return_support_channel
+from ...lib import Embed, ErrorEmbed, check_if_support_is_setup, get_user, return_support_channel
 
 
 class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        e = ErrorEmbed(
+        self.description = 'Displays the support command for the server, this can only be used if the server owner has enabled it.'
+    
+    def errorembed(ctx):
+        return ErrorEmbed(
             title=f'No support system setup for the {ctx.guild.name}',
             description='An dmin can always setup the **support system** using `)setup` command'
         )
-        self.description = 'Displays the support command for the server, this can only be used if the server owner has enabled it.'
 
     @commands.command(description='Open support ticket if enabled by the server admins')
     @commands.cooldown(1, 120, commands.BucketType.guild)
@@ -54,7 +56,7 @@ class Help(commands.Cog):
     @support.error
     async def error_handler(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send(embed=self.e)
+            await ctx.send(embed=errorembed(ctx))
 
     @commands.command(description='Resolves the existing ticket!', usage='<member.mention>')
     @commands.check(check_if_support_is_setup)
@@ -77,7 +79,7 @@ class Help(commands.Cog):
     @resolved.error
     async def error_handler(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send(embed=self.e)
+            await ctx.send(embed=errorembed(ctx))
 
     @commands.command(description='Checks who still requires the support.')
     async def chksupreq(self, ctx):
@@ -109,7 +111,7 @@ class Help(commands.Cog):
     @chksupreq.error
     async def error_handler(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send(embed=self.e)
+            await ctx.send(embed=errorembed(ctx))
 
 
 def setup(bot):

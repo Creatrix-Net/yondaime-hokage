@@ -1,5 +1,5 @@
 import discord
-from .util import warns, support, ban, unban, feedback
+from .vars import warns, support, ban, unban, feedback
 
 
 def perms_dict(ctx):

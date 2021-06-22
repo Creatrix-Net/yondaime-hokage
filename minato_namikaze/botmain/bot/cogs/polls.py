@@ -3,12 +3,14 @@ from discord.ext import commands
 from dpymenus import Page, Poll
 
 
-class MyPoll(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+class Polls(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.description = 'Create quick polls'
 
     @commands.command()
-    async def poll(self, ctx):
+    async def strawpolls(self, ctx):
+        '''Create straw polls easily'''
         first = Page(title='Sun vs Moon Poll', description='Do you prefer the sun or the moon?')
         first.set_footer(text='Only vote once! Your vote won\'t count if you cheat!')
         first.buttons(['\U00002600', '\U0001F315'])
@@ -25,5 +27,5 @@ class MyPoll(commands.Cog):
         await menu.next()
 
 
-def setup(client):
-    client.add_cog(MyPoll(client))
+def setup(bot):
+    bot.add_cog(Polls(bot))

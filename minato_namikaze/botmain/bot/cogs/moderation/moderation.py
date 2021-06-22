@@ -1,8 +1,8 @@
+from os.path import join
 from typing import Optional, Union
 
 import discord
 from discord.ext import commands
-from os.path import join
 
 from ...lib import (Embed, ErrorEmbed, check_if_warning_system_setup,
                     get_roles, get_user, return_warning_channel)
@@ -67,18 +67,27 @@ class Moderation(commands.Cog):
     )
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def unban(self, ctx, *, member: str):
+    async def unban(self, ctx, *, member: Union[str, int, discord.Member]):
         '''A command which unbans a given user'''
         await ctx.message.delete()
         banned_users = await ctx.guild.bans()
-
         member_name, member_discriminator = member.split('#')
         for ban_entry in banned_users:
             user = ban_entry.user
-
-            if (user.name, user.discriminator) == (member_name, member_discriminator):
-                await ctx.guild.unban(user)
-                await ctx.channel.send(f"Unbanned: {user.mention}")
+            e = Embed(title='Unbanned!',
+                      description=f'**Unbanned**: {user.mention}')
+            if isinstance(member, str):
+                if (user.name, user.discriminator) == (member_name, member_discriminator):
+                    await ctx.guild.unban(user)
+                    await ctx.channel.send(embed=e)
+            elif isinstance(member, int):
+                if user.id == int(member):
+                    await ctx.guild.unban(user)
+                    await ctx.channel.send(embed=e)
+            else:
+                if user == member:
+                    await ctx.guild.unban(user)
+                    await ctx.channel.send(embed=e)
 
     @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
@@ -90,69 +99,71 @@ class Moderation(commands.Cog):
             description=f"{amount} messages were cleared",
         )
         await ctx.send(embed=embed, delete_after=4)
-    
+
     @commands.command(pass_context=True, usage="<member.mention> <role>", alias=['add_roles'])
     @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
     async def ar(self, ctx, member: Optional[Union[int, discord.Member]], role: Union[int, discord.Role]):
         '''Add roles'''
-        member = get_user(member if member != None else ctx.message.author)
-        role = get_roles(role,ctx)
+        member = get_user(member if member !=
+                          None else ctx.message.author, ctx)
+        role = get_roles(role, ctx)
         await member.add_roles(role)
         e = Embed(
             title="Added Roles", description=f"I have added the roles '{role.mention}' for {member.mention}!"
         )
         await ctx.send(embed=e)
-    
+
     @commands.command(pass_context=True, usage='<member.mention> <optional: reason>')
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
     @commands.check(check_if_warning_system_setup)
-    async def warn(self, ctx, member: Union[int, discord.Member], *,reason: str = None):
-        member = get_user(member)
-        e = ErrorEmbed(title = 'You have been warned!')
-        e.add_field(name='**Responsible Moderator**:', value=ctx.message.author.mention,inline=True)
+    async def warn(self, ctx, member: Union[int, discord.Member], *, reason: str = None):
+        member = get_user(member, ctx)
+        e = ErrorEmbed(title='You have been warned!')
+        e.add_field(name='**Responsible Moderator**:',
+                    value=ctx.message.author.mention, inline=True)
         if reason:
             e.add_field(name='**Reason**:', value=reason, inline=True)
-        
+
         warning_channel = return_warning_channel(ctx)
         await member.send(embed=e)
         await warning_channel.send(embed=e, content=member.mention)
         await ctx.send(f'{member.mention} has been **warned** by you ||{ctx.author.mention}||', delete_after=10)
-    
+
     @warn.error
     async def warn_handler(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             e = ErrorEmbed(
-            title=f'No warning system setup for the {ctx.guild.name}', 
-            description='You can always setup the **warning system** using `)setup` command'
-        )
+                title=f'No warning system setup for the {ctx.guild.name}',
+                description='You can always setup the **warning system** using `)setup` command'
+            )
             await ctx.send(embed=e)
-    
+
     @commands.command(pass_context=True, usage='<member.mention>')
     @commands.guild_only()
     @commands.check(check_if_warning_system_setup)
     async def warnlist(self, ctx, member: Optional[Union[int, discord.Member]] = None):
-        member = get_user(member if member != None else ctx.message.author)
-        e = Embed(title = 'Type the below message in the search bar')
-        search_image = discord.File(join(self.bot.minato_dir, 'discord','search.png'), filename='search.png')
+        member = get_user(member if member !=
+                          None else ctx.message.author, ctx)
+        e = Embed(title='Type the below message in the search bar')
+        search_image = discord.File(
+            join(self.bot.minato_dir, 'discord', 'search.png'), filename='search.png')
         e.set_image(url="attachment://search.png")
         await ctx.send(file=search_image, embed=e)
-        
+
         warning_channel = return_warning_channel(ctx)
         message = f'mentions: {member}  in: {warning_channel}'
         await ctx.send(message)
-    
+
     @warnlist.error
     async def warnlist_handler(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             e = ErrorEmbed(
-            title=f'No warning system setup for the {ctx.guild.name}', 
-            description='You/Admin can always setup the **warning system** using `)setup` command'
-        )
+                title=f'No warning system setup for the {ctx.guild.name}',
+                description='You/Admin can always setup the **warning system** using `)setup` command'
+            )
             await ctx.send(embed=e)
-    
-    
 
 
 def setup(bot):

@@ -2,6 +2,7 @@ import discord
 from discord.ext import menus
 
 from ..embed import Embed
+from ...util import feedback
 
 
 class Feedback(menus.Menu):
@@ -20,7 +21,7 @@ class Feedback(menus.Menu):
     async def on_add(self, payload):
         feed = await self.ctx.guild.create_text_channel(
             "Feedback",
-            topic='Feedback given by the members of the servers will be logged here.',
+            topic=feedback,
             category=discord.utils.get(
                 self.ctx.guild.categories,
                 name="Admin / Feedback")

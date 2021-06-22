@@ -28,3 +28,4 @@ whitenoise
 youtube-dl
 youtube-search
 english-words
+dpymenus

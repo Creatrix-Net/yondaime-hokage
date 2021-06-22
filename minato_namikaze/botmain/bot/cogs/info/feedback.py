@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import command
+from ...lib import Embed, return_feedback_channel, ErrorEmbed, check_if_feedback_system_setup
 
 
 class Feedback(commands.Cog):
@@ -11,29 +12,35 @@ class Feedback(commands.Cog):
     @command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
     @commands.guild_only()
+    @commands.check(check_if_feedback_system_setup)
     async def feedback(self, ctx, *, feed):
         '''Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server owner)'''
         
-        channel = discord.utils.get(ctx.guild.channels, name="feedback") if discord.utils.get(ctx.guild.channels, name="feedback") else False
+        channel = return_feedback_channel(ctx)
         
-        if channel:
-            e = discord.Embed(title="Sent Feedback!",
-                            description=f"Your feedback '{feed}' has been sent!")
-            await ctx.send(embed=e)
-            e2 = discord.Embed(
+        e = discord.Embed(title="Feedback sent!",
+                description=f"Your feedback '{feed}' has been sent!")
+        await ctx.send(embed=e)
+        e2 = discord.Embed(
                 title=f"{ctx.author} has sent feedback", description=f"{feed}")
-            await channel.send(embed=e2)
-        else:
-            await ctx.send(f'**Sorry to say** {ctx.author.mention}, but **no feedback channel** has been setup for the {ctx.guild.name}')
-
+        await channel.send(embed=e2)
+    
+    
     @feedback.error
     async def feedback_handler(self, ctx, error):
-        if isinstance(self, error, commands.CommandOnCooldown):
+        if isinstance(error, commands.CommandOnCooldown):
             l = self.bot.get_command("feedback")
             left = l.get_cooldown_retry_after(ctx)
-            e = discord.Embed(
-                title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
+            e = ErrorEmbed(
+                title=f"Cooldown left - {round(left)}")
             await ctx.send(embed=e, delete_after=3)
+        
+        elif isinstance(error, commands.CheckFailure):
+            e = ErrorEmbed(
+                title='No Feedback system setup for this server!',
+                description =  description='An admin can always setup the **feedback system** using `)setup` command'
+            )
+            await ctx.send(embed=e, delete_after=10)
 
 def setup(bot):
     bot.add_cog(Feedback(bot))

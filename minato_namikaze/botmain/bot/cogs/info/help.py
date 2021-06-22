@@ -4,53 +4,57 @@ import discord
 import DiscordUtils
 from discord.ext import commands
 
-from ...lib import Embed, check_if_support_is_setup, get_user
+from ...lib import Embed, check_if_support_is_setup, get_user, return_support_channel
 
 
 class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.description = 'Displays the support command for the server, this can onnly be used if the server owner has enabled it.'
+        e = ErrorEmbed(
+            title=f'No support system setup for the {ctx.guild.name}',
+            description='An dmin can always setup the **support system** using `)setup` command'
+        )
+        self.description = 'Displays the support command for the server, this can only be used if the server owner has enabled it.'
 
     @commands.command(description='Open support ticket if enabled by the server admins')
     @commands.cooldown(1, 120, commands.BucketType.guild)
+    @commands.check(check_if_support_is_setup)
     @commands.guild_only()
     async def support(self, ctx):
         '''Open support ticket if enabled by the server admins'''
-        chan = discord.utils.get(
-            ctx.guild.channels,
-            topic='This channel will be used as a support channel for this server.',
-        )
-        if not chan:
-            chan = False
+        chan = return_support_channel(ctx)
+        
+        if ctx.message.author == ctx.guild.owner:
+            await ctx.send(f'{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:')
 
-        if chan:
-            if ctx.message.author == ctx.guild.owner:
-                await ctx.send(f'{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:')
+        elif discord.utils.get(ctx.guild.roles, name="SupportRequired") in ctx.message.author.roles:
+            await ctx.send(f'{ctx.author.mention} you already applied for the support , please check the {chan.mention} channel.')
 
-            elif discord.utils.get(ctx.guild.roles, name="SupportRequired") in ctx.message.author.roles:
-                await ctx.send(f'{ctx.author.mention} you already applied for the support , please check the {chan.mention} channel.')
-
-            else:
-                channel = ctx.channel
-                await ctx.message.author.add_roles(discord.utils.get(ctx.guild.roles, name="SupportRequired"))
-                if channel.guild is ctx.guild:
-                    per = ctx.author.mention
-                    e = Embed(
-                        title='Help Required',
-                        description=f"{per} in {channel.mention} needs support!"
-                    )
-                    await chan.send("@here", embed=e)
-                    await ctx.send(f"**Help Desk** has been has been notifed!")
-                    e = Embed(
-                        title='Support Requirement Registered',
-                        description=f'Your need for the support in **{ctx.guild.name}** has been registered'
-                    )
-                    await ctx.message.author.send('Hello', embed=e)
-                else:
-                    pass
         else:
+            channel = ctx.channel
+            await ctx.message.author.add_roles(discord.utils.get(ctx.guild.roles, name="SupportRequired"))
+            if channel.guild is ctx.guild:
+                per = ctx.author.mention
+                e = Embed(
+                    title='Help Required',
+                    description=f"{per} in {channel.mention} needs support!"
+                )
+                await chan.send("@here", embed=e)
+                await ctx.send(f"**Help Desk** has been has been notifed!")
+                e = Embed(
+                    title='Support Requirement Registered',
+                    description=f'Your need for the support in **{ctx.guild.name}** has been registered'
+                )
+                await ctx.message.author.send('Hello', embed=e)
+            else:
+                pass
+
             await ctx.send(f'**Sorry to say** {ctx.author.mention}, but **no support channel** has been setup for the {ctx.guild.name} by the admin! **So, I can\'t help you**')
+
+    @support.error
+    async def error_handler(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send(embed=self.e)
 
     @commands.command(description='Resolves the existing ticket!', usage='<member.mention>')
     @commands.check(check_if_support_is_setup)
@@ -69,6 +73,11 @@ class Help(commands.Cog):
         await member.send(f'Hope your issue has been resolved in {ctx.guild.name}, {member.mention}')
         await ctx.send(f'The issue/query for {member.mention} has been set to resolved!')
         await member.remove_roles(discord.utils.get(ctx.guild.roles, name="SupportRequired"))
+
+    @resolved.error
+    async def error_handler(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send(embed=self.e)
 
     @commands.command(description='Checks who still requires the support.')
     async def chksupreq(self, ctx):
@@ -96,6 +105,11 @@ class Help(commands.Cog):
         paginator.add_reaction('⏭️', "last")
 
         await paginator.run(embed)
+
+    @chksupreq.error
+    async def error_handler(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send(embed=self.e)
 
 
 def setup(bot):

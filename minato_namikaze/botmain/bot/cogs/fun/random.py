@@ -45,25 +45,6 @@ class Random(commands.Cog):
                 title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
             await msg.edit(content="", embed=e)
 
-    '''
-    @command()
-    @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def braille(self, ctx, user: discord.Member=None):
-        user = user or ctx.author
-        file = await self.bot.se.braille(f'{user.avatar_url}')
-        await ctx.send(file)
-        
-    @braille.error
-    async def braille_handler(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            l = self.bot.get_command("braille")
-            left = l.get_cooldown_retry_after(ctx)
-            msg = await ctx.send("Just Getting The Cooldown")
-            e = discord.Embed(
-                title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
-            await msg.edit(content="", embed=e)
-    '''
-
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx, colour="255-255-255", *, url=None):

@@ -89,6 +89,11 @@ class Moderation(commands.Cog):
                     await ctx.guild.unban(user)
                     await ctx.channel.send(embed=e)
 
+    @commands.command(
+        name="purge",
+        description="A command which purges the channel it is called in",
+        usage="[amount]",
+    )
     @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
     async def purge(self, ctx, amount=5):

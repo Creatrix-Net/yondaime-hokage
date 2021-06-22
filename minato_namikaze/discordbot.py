@@ -114,5 +114,6 @@ if ast.literal_eval(token_get('LOCAL')):
         )
     except: pass
 
-bot.run(TOKEN)
+if __name__ == '__main__':
+    bot.run(TOKEN)
 

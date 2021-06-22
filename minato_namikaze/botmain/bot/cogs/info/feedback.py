@@ -38,7 +38,7 @@ class Feedback(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             e = ErrorEmbed(
                 title='No Feedback system setup for this server!',
-                description =  description='An admin can always setup the **feedback system** using `)setup` command'
+                description='An admin can always setup the **feedback system** using `)setup` command'
             )
             await ctx.send(embed=e, delete_after=10)
 

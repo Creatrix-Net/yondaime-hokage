@@ -10,6 +10,7 @@ from discord.ext import commands, owoify
 from discord.ext.commands import command
 from gtts import gTTS
 from PIL import Image
+from ...lib import TimeConverter
 
 
 class Random(commands.Cog):
@@ -105,7 +106,7 @@ class Random(commands.Cog):
             await msg.edit(content="", embed=e)
 
     @command(usage="<time> <reminder> (Time needs to be in seconds...)")
-    async def remind(self, ctx, time, *, reminder):
+    async def remind(self, ctx, time: TimeConverter, *, reminder):
         '''A simple reminder'''
         if int(time) < 12*60*60:
             e = discord.Embed(title="I will remind you!",

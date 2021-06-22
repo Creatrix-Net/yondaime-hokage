@@ -28,8 +28,9 @@ class VoteInfo(commands.Cog):
     @commands.command(usage='<member.mention> optional')
     async def hasvoted(self, ctx, member: Optional[Union[int, discord.Member]] = None):
         '''Check if the user has voted or not'''
-        if not member:
-            member = ctx.author
+        member = get_user(ctx.author if not member else member, ctx)
+        if member.bot:
+            return await ctx.send('You **can\'t** check for a **bot account**')
         async with ctx.channel.typing():
             e = Embed(
                 title=f'{member.display_name} vote stats for me',
@@ -37,9 +38,14 @@ class VoteInfo(commands.Cog):
             )
             e.set_thumbnail(url=member.avatar_url)
             a = requests.get(
-                f'https://top.gg/api/bots/{self.bot.user.id}/check')
+                f'https://top.gg/api/bots/{self.bot.user.id}/check',
+                params={'userId': member.id},
+                headers={
+                    "Authorization": topken
+                }
+                )
             c = requests.get(f'https://botsfordiscord.com/api/bot/{self.bot.user.id}/votes',
-                             headers={'Authorization': self.bfd,
+                             headers={'Authorization': bfd,
                                       'Content-Type': 'application/json'},
                              )
             d = requests.get(f'https://discord.boats/api/bot/{self.bot.user.id}/voted',
@@ -55,14 +61,39 @@ class VoteInfo(commands.Cog):
                              )
             g = requests.get(f'https://bladebotlist.xyz/api/bots/{self.bot.user.id}/votes/{member.id}',
                              )
-            c_list = True if str(member.id) in c.json().get(
+            
+            try:
+                a_list = True if a.json().get('voted') >= 1 else False
+            except:
+                a_list = False
+            
+            try:
+                c_list = True if str(member.id) in c.json().get(
                 'hasVoted24', False) else False
-            d_list = d.json().get('voted', False)
-            e12 = e1.json().get('voted', False)
-            f1 = f.json().get('voted', False)
-            g1 = g.json().get('voted', False)
-
-            e.add_field(name='**TopGG**', value='Voted : ' + self.topgg_site if await self.dblpy.get_user_vote(member.id) else 'Not Voted : ' + self.topgg_site)
+            except:
+                c_list = False
+            
+            try:
+                d_list = d.json().get('voted', False)
+            except:
+                d_list = False
+            
+            try:
+                e12 = e1.json().get('voted', False)
+            except:
+                e12 = False
+             
+            try:   
+                f1 = f.json().get('voted', False)
+            except:
+                f1 = False
+            
+            try:    
+                g1 = g.json().get('voted', False)
+            except:
+                g1 = False
+            
+            e.add_field(name='**TopGG**', value='Voted : ' + self.topgg_site if a_list else 'Not Voted : ' + self.topgg_site)
             e.add_field(name='**BotsForDiscord**', value='Voted : ' +
                         self.bfd_site if c_list else 'Not Voted : ' + self.bfd_site)
             e.add_field(name='**DiscordBoats**', value='Voted : ' +

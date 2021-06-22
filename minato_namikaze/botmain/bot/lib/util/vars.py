@@ -32,3 +32,10 @@ spacebot = token_get('SPACEBOT')
 version = token_get('VERSION')
 
 chatbot = token_get('CHATBOTTOKEN')
+
+
+warns = 'Warning of the server members will be logged here.'
+support = 'This channel will be used as a support channel for this server.'
+ban = 'This channel will be used to log the server bans.'
+unban = 'Unbans of the server will be logged here.'
+feedback = 'This channel will be used to log the feedbacks given by members.'

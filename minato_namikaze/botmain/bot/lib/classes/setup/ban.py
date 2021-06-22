@@ -2,6 +2,7 @@ import discord
 from discord.ext import menus
 
 from ..embed import Embed
+from ...util import ban
 
 
 class Ban(menus.Menu):
@@ -26,7 +27,7 @@ class Ban(menus.Menu):
             )
         ban = await self.ctx.guild.create_text_channel(
             "ban",
-            topic='Bans of the server will be logged here.',
+            topic=ban,
             category=discord.utils.get(
                 self.ctx.guild.categories,
                 name="Bingo Book")

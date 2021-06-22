@@ -1,7 +1,7 @@
 import discord
 from discord.ext import menus
 
-from ...util import perms_dict
+from ...util import perms_dict, support
 from ..embed import Embed
 
 
@@ -33,7 +33,7 @@ class Support(menus.Menu):
 
         sup = await self.ctx.guild.create_text_channel(
             "Support", overwrites=overwrite_dict,
-            topic='This channel will be used as a support channel for this server.',
+            topic=support,
             category=discord.utils.get(
                 self.ctx.guild.categories, name="Admin / Feedback")
         )

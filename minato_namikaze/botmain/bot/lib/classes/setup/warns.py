@@ -2,6 +2,7 @@ import discord
 from discord.ext import menus
 
 from ..embed import Embed
+from ...util import warns
 
 
 class Warns(menus.Menu):
@@ -27,7 +28,7 @@ class Warns(menus.Menu):
             )
         unban = await self.ctx.guild.create_text_channel(
             "warns",
-            topic='Warning of the server members will be logged here.',
+            topic=warns,
             category=discord.utils.get(
                 self.ctx.guild.categories,
                 name="Bingo Book")

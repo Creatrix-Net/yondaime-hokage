@@ -1,11 +1,5 @@
 import discord
-
-def check_if_support_is_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic='This channel will be used as a support channel for thsi server.'):
-        support_channel = True
-    else:
-        support_channel = False
-    return support_channel
+from .util import warns, support, ban, unban, feedback
 
 
 def perms_dict(ctx):
@@ -27,46 +21,46 @@ async def channel_creation(ctx):
         ctx.guild.categories, name="Admin / Feedback") else False
 
     # Feedback Channel
-    if discord.utils.get(ctx.guild.text_channels, topic='Feedback given by the members of the servers will be logged here.'):
+    if discord.utils.get(ctx.guild.text_channels, topic=feedback):
         feed_channel = discord.utils.get(
             ctx.guild.text_channels,
-            topic='Feedback given by the members of the servers will be logged here.'
+            topic=feedback
         )
     else:
         feed_channel = False
 
     # Ban
-    if discord.utils.get(ctx.guild.text_channels, topic='Bans of the server will be logged here.',):
+    if discord.utils.get(ctx.guild.text_channels, topic=ban,):
         ban = discord.utils.get(
             ctx.guild.text_channels,
-            topic='Bans of the server will be logged here.'
+            topic=ban
         )
     else:
         ban = False
 
     # Unban
-    if discord.utils.get(ctx.guild.text_channels, topic="Unbans of the server will be logged here."):
+    if discord.utils.get(ctx.guild.text_channels, topic=unban):
         unban = discord.utils.get(
             ctx.guild.text_channels,
-            topic='Unbans of the server will be logged here.',
+            topic=unban,
         )
     else:
         unban = False
     
     # Warns
-    if discord.utils.get(ctx.guild.text_channels, topic='Warning of the server members will be logged here.'):
+    if discord.utils.get(ctx.guild.text_channels, topic=warns):
         warns = discord.utils.get(
             ctx.guild.text_channels,
-            topic='Warning of the server members will be logged here.',
+            topic=warns,
         )
     else:
         warns = False
 
     # Support
-    if discord.utils.get(ctx.guild.text_channels, topic='This channel will be used as a support channel for this server.'):
+    if discord.utils.get(ctx.guild.text_channels, topic=support):
         support_channel = discord.utils.get(
             ctx.guild.text_channels,
-            topic='This channel will be used as a support channel for this server.'
+            topic=support
         )
     else:
         support_channel = False

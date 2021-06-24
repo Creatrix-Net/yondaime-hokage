@@ -28,6 +28,7 @@ voidbot = token_get('VOIDBOT')
 fateslist = token_get('FATESLIST')
 bladebot = token_get('BLADEBOT')
 spacebot = token_get('SPACEBOT')
+discordlabs = token_get('DISCORDLABS')
 
 version = token_get('VERSION')
 

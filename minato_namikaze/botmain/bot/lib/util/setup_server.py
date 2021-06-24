@@ -30,31 +30,31 @@ async def channel_creation(ctx):
         feed_channel = False
 
     # Ban
-    if discord.utils.get(ctx.guild.text_channels, topic=ban,):
-        ban = discord.utils.get(
+    if discord.utils.get(ctx.guild.text_channels, topic=ban):
+        ban_channel = discord.utils.get(
             ctx.guild.text_channels,
             topic=ban
         )
     else:
-        ban = False
+        ban_channel = False
 
     # Unban
     if discord.utils.get(ctx.guild.text_channels, topic=unban):
-        unban = discord.utils.get(
+        unban_channel = discord.utils.get(
             ctx.guild.text_channels,
             topic=unban,
         )
     else:
-        unban = False
+        unban_channel = False
     
     # Warns
     if discord.utils.get(ctx.guild.text_channels, topic=warns):
-        warns = discord.utils.get(
+        warns_channel = discord.utils.get(
             ctx.guild.text_channels,
             topic=warns,
         )
     else:
-        warns = False
+        warns_channel = False
 
     # Support
     if discord.utils.get(ctx.guild.text_channels, topic=support):
@@ -78,4 +78,4 @@ async def channel_creation(ctx):
     else:
         botask = False
 
-    return feed_channel, support_channel, support_channel_roles, ban, unban, warns,botask
+    return feed_channel, support_channel, support_channel_roles, ban_channel, unban_channel, warns_channel,botask

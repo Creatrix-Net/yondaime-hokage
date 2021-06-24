@@ -6,9 +6,10 @@ from ...util import ban
 
 
 class Ban(menus.Menu):
-    def __init__(self, bot, timeout):
+    def __init__(self, bot, timeout, channel):
         super().__init__(timeout=timeout)
         self.bot = bot
+        self.channel = channel
 
     async def send_initial_message(self, ctx, channel):
         embed = Embed(title=f"Want to log bans for the **{ctx.guild.name}** ?")
@@ -25,7 +26,7 @@ class Ban(menus.Menu):
                 "Bingo Book",
                 reason="To log the the bans and unban events + warns"
             )
-        ban = await self.ctx.guild.create_text_channel(
+        ban_channel = await self.ctx.guild.create_text_channel(
             "ban",
             topic=ban,
             category=discord.utils.get(
@@ -33,11 +34,11 @@ class Ban(menus.Menu):
                 name="Bingo Book")
         )
 
-        await self.channel.send(f'{ban.mention} channel **created** for logging the **ban** of the {self.ctx.guild.name} server.')
+        await self.channel.send(f'{ban_channel.mention} channel **created** for logging the **ban** of the {self.ctx.guild.name} server.')
         e = Embed(
             description='This channel will be used to log the server bans.'
         )
-        a = await ban.send(embed=e)
+        a = await ban_channel.send(embed=e)
         await a.pin()
         return
 

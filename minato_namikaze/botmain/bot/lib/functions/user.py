@@ -19,3 +19,10 @@ def get_roles(role: Union[int, discord.Role], ctx=None):
     if isinstance(role, int):
         role = discord.utils.get(ctx.guild.roles, id=role)
     return role
+
+async def get_bot_inviter(guild: discord.Guild, bot: discord.Client):
+    try:
+        async for i in guild.audit_logs(limit=1):
+            return i.user
+    except:
+        return guild.owner

@@ -2,12 +2,11 @@ import time as timemod
 from asyncio import TimeoutError, sleep
 from random import choice
 
-from discord import Embed
 from discord.ext import commands
 from discord.ext.commands import (Cog, MissingPermissions, command,
                                   has_permissions)
 
-from ...lib.util.util import convert
+from ...lib import convert, Embed
 
 
 class Giveaway(Cog):
@@ -66,7 +65,7 @@ class Giveaway(Cog):
             except:
                 i = ctx.guild.roles
                 for j in i:
-                    if j.name == '@everyone':
+                    if j.name in ('@everyone', '@here'):
                         i.remove(j)
                 bot_roles = choice(i)
                 await ctx.send(f"The role provided was wrong. The role should be like {bot_roles.mention}")

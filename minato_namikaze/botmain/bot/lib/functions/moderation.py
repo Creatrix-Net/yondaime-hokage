@@ -40,17 +40,17 @@ def check_if_feedback_system_setup(ctx):
         return False
 
 #return warns
-def return_warning_channel(ctx):
-    return discord.utils.get(ctx.guild.text_channels, topic=warns)
+def return_warning_channel(ctx = None, guild = None):
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=warns)
 
-def return_ban_channel(ctx):
-    return discord.utils.get(ctx.guild.text_channels, topic=ban)
+def return_ban_channel(ctx = None, guild = None):
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=ban)
 
-def return_unban_channel(ctx):
-    return discord.utils.get(ctx.guild.text_channels, topic=unban)
+def return_unban_channel(ctx = None, guild = None):
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=unban)
 
-def return_feedback_channel(ctx):
-    return discord.utils.get(ctx.guild.text_channels, topic=feedback)
+def return_feedback_channel(ctx = None, guild = None):
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=feedback)
 
-def return_support_channel(ctx):
-    return discord.utils.get(ctx.guild.text_channels, topic=support)
+def return_support_channel(ctx = None, guild = None):
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=support)

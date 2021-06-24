@@ -69,6 +69,10 @@ class PostStats:
                             headers={"Authorization": bladebot,
                                      "Content-Type": "application/json"},
                             json={"servercount": guildsno})
+        j = await self.post(f'https://bots.discordlabs.org/v2/bot/{self.bot.user.id}/stats',
+                            headers={"Authorization": discordlabs,
+                                     "Content-Type": "application/json"},
+                            json={"server_count": guildsno})
 
         r = self.bot.get_channel(822472454030229545)
         e1 = Embed(title='Status posted successfully',
@@ -97,5 +101,7 @@ class PostStats:
             j.status)+f' : [Fates List](https://fateslist.xyz/hatsune-miku/)')
         e1.add_field(name='BladeBotList', value=str(
             k.status)+f' : [BladeBotList](https://bladebotlist.xyz/bot/{self.bot.user.id}/)')
+        e1.add_field(name='DiscordLabs', value=str(
+            j.status)+f' : [DiscordLabs](https://bots.discordlabs.org/bot/{self.bot.user.id})')
         
         await r.send(embed=e1)

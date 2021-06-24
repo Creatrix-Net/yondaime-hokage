@@ -6,9 +6,10 @@ from ...util import unban
 
 
 class Unban(menus.Menu):
-    def __init__(self, bot, timeout):
+    def __init__(self, bot, timeout, channel):
         super().__init__(timeout=timeout)
         self.bot = bot
+        self.channel = channel
 
     async def send_initial_message(self, ctx, channel):
         embed = Embed(

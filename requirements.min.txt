@@ -1,7 +1,6 @@
 akinator.py
 async-cleverbot
 asyncdagpi
-buttons
 discord
 discord-ext-menus
 discord-ext-owoify
@@ -29,3 +28,5 @@ youtube-dl
 youtube-search
 english-words
 dpymenus
+TenGiphPy
+discord-components

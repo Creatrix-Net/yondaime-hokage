@@ -12,16 +12,18 @@ from discord.ext import commands
 from discord_slash import SlashCommand
 from pretty_help import PrettyHelp
 from pathlib import Path
-
+from discord_components import DiscordComponents
 
 from pypresence import Presence
 import ast
+
+from botmain.bot.lib import MenuHelp
 
 intents = discord.Intents.all()
 intents.reactions = True
 intents.guilds = True
 intents.presences = False
-
+intents.integrations = True
 
 
 dotenv_file = os.path.join(Path(__file__).resolve().parent.parent / ".env")
@@ -43,7 +45,26 @@ def get_prefix(bot, message):
 
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
-bot = commands.Bot(command_prefix=get_prefix,intents=intents, help_command=PrettyHelp(show_index=True),  allowed_mentions=discord.AllowedMentions(users=True, roles=False, everyone=False),case_insensitive=True,description="Hi I am **Minato Namikaze**, Yondaime Hokage")
+bot = commands.Bot(
+    command_prefix = get_prefix,
+    intents = intents, 
+    help_command = PrettyHelp(
+        show_index=True,
+        menu = MenuHelp(
+            page_left=":pikawalk:852872040016248863", 
+            page_right=":thiccguy:852872039874428939", 
+            remove=":sus:852797247304761405",
+            active_time=60.0
+        )
+    ),  
+    allowed_mentions = discord.AllowedMentions(
+        users=True, 
+        roles=False, 
+        everyone=False
+    ),
+    case_insensitive=True,
+    description="Hi I am **Minato Namikaze**, Yondaime Hokage"
+)
 slash = SlashCommand(bot, sync_commands=True)
 
 bot.version = str(token_get('BOT_VER'))
@@ -62,6 +83,7 @@ bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
 @bot.event
 async def on_ready():
     current_time = time.time()
+    DiscordComponents(bot)
     cog_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','cogs')
     for filename in os.listdir(cog_dir):
         if os.path.isdir(cog_dir / filename):

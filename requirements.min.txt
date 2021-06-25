@@ -27,6 +27,5 @@ whitenoise
 youtube-dl
 youtube-search
 english-words
-dpymenus
 TenGiphPy
 discord-components

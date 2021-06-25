@@ -16,8 +16,10 @@ from discord_components import DiscordComponents
 
 from pypresence import Presence
 import ast
+import DiscordUtils
 
-from botmain.bot.lib import MenuHelp
+
+from botmain.bot.lib import MenuHelp, PostStats
 
 intents = discord.Intents.all()
 intents.reactions = True
@@ -72,6 +74,7 @@ bot.version = str(token_get('BOT_VER'))
 bot.start_time = time.time()
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
+bot.music = DiscordUtils.Music()
 bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影  ||Music commands may not work as they are in development||"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 
@@ -97,6 +100,7 @@ async def on_ready():
     stats = bot.get_channel(819128718152695878)
     e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",color=discord.Colour.random())
     e.set_thumbnail(url=bot.user.avatar_url)
+    await PostStats(bot=bot).post_guild_stats_all()
     print('Started The Bot')
 
     await stats.send(embed=e)

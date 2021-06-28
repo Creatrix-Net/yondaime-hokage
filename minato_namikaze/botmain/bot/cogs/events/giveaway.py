@@ -110,11 +110,6 @@ class Giveaway(Cog):
         if not self.cancelled:
             await self.giveaway_reroll(ctx, newMsg.id, channel)
 
-    @create_giveaway.error
-    async def create_giveaway_error(self, ctx, exc):
-        if isinstance(exc, MissingPermissions):
-            await ctx.send("You are not allowed to create Giveaways")
-
     @command(name="giftrrl", usage="<giveaway id> <channel>", aliases=["gifreroll", "gftroll", "grr"],)
     @has_permissions(manage_guild=True)
     @commands.guild_only()

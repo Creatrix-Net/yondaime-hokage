@@ -35,16 +35,6 @@ class Random(commands.Cog):
         e.set_image(url=f"attachment://magik.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @magic.error
-    async def magic_handler(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            l = self.bot.get_command("magic")
-            left = l.get_cooldown_retry_after(ctx)
-            msg = await ctx.send("Just Getting The Cooldown")
-            e = discord.Embed(
-                title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
-            await msg.edit(content="", embed=e)
-
     @command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx, colour="255-255-255", *, url=None):
@@ -75,16 +65,6 @@ class Random(commands.Cog):
                 await msg.edit(content="", embed=e)
             else:
                 pass
-
-    @qr.error
-    async def qr_handler(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            l = self.bot.get_command("qr")
-            left = l.get_cooldown_retry_after(ctx)
-            msg = await ctx.send("Just Getting The Cooldown")
-            e = discord.Embed(
-                title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
-            await msg.edit(content="", embed=e)
 
     @command(usage="<time> <reminder> (Time needs to be in seconds...)")
     async def remind(self, ctx, time: TimeConverter, *, reminder):

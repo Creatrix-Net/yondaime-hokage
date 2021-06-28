@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+
 from ...lib import Embed, ErrorEmbed
 
 
@@ -10,35 +11,202 @@ class BotEventsCommands(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            e1 = Embed(title="Command Error!",
-                               description=f"`{error}`")
+            e1 = ErrorEmbed(
+                title="Command Error!",
+                description=f"`{error}`"
+            )
             e1.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e1, delete_after=3)
 
-        elif isinstance(error, commands.MissingPermissions):
-            e3 = Embed(title="Command Error!",
-                               description=f"`{error}`")
-            e3.set_footer(text=f"{ctx.author.name}")
-            await ctx.send(embed=e3, delete_after=3)
-
         elif isinstance(error, commands.MissingRequiredArgument):
-            e4 = Embed(title="Command Error!",
-                               description=f"`{error}`")
+            e4 = ErrorEmbed(
+                title="Command Error!",
+                description=f"`{error}`"
+            )
             e4.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e4, delete_after=2)
 
         elif isinstance(error, commands.CommandNotFound):
-            e2 = Embed(title="Command Error!",
-                               description=f"`{error}`")
+            e2 = ErrorEmbed(
+                title="Command Error!",
+                description=f"`{error}`"
+            )
             e2.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e2, delete_after=3)
-        
+
         elif isinstance(error, commands.BotMissingPermissions):
-            e = ErrorEmbed(description=f"I **need** the following **permissions**: **{' '.join(error.missing_perms)}**")
+            e = ErrorEmbed(
+                description=f"I **need** the following **permissions**: **{' '.join(error.missing_perms)}**"
+            )
             await ctx.send(embed=e)
 
+        elif isinstance(error, commands.MissingPermissions):
+            e = ErrorEmbed(
+                description=f"You **need** the following **permissions**: **{' '.join(error.missing_perms)}** to run this command!"
+            )
+            await ctx.send(embed=e)
+
+        elif isinstance(error, commands.UserInputError):
+            await ctx.send(
+                embed=Embed(
+                    description=f'There was something **wrong** with your **input**!\n Please type\n ```)help {ctx.command.name}```,\n to know how to use the command'
+                )
+            )
+
+        elif isinstance(error, commands.commands.NotOwner):
+            return
+
+        elif isinstance(error, commands.CheckFailure):
+            return
+
+        elif isinstance(error, commands.CheckAnyFailure):
+            return
+
+        elif isinstance(error, commands.EmojiNotFound):
+            await ctx.send(embed=ErrorEmbed(
+                description=f'The emoji provided {error.argument} was **not found!**'
+            ), delete_after=3)
+
+        elif isinstance(error, commands.PartialEmojiConversionFailure):
+            return
+
+        elif isinstance(error, commands.BadInviteArgument):
+            return
+
+        elif isinstance(error, commands.PartialEmojiConversionFailure):
+            return
+
+        elif isinstance(error, commands.RoleNotFound):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=error
+                )
+            )
+
+        elif isinstance(error, commands.NSFWChannelRequired):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f'{error.channel.mention} is an **NSFW Channel**! **{ctx.command.name}** can be run only in **NSFW Channels**! :triumph:'
+                )
+            )
+
+        elif isinstance(error, commands.MissingRole):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f"You **need** the following **role**: **{' '.join(error.missing_role)}**"
+                )
+            )
+
+        elif isinstance(error, commands.MissingAnyRole):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f"You **need** the following **role**: **{' '.join(error.missing_roles)}**"
+                )
+            )
+
+        elif isinstance(error, commands.BotMissingRole):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f"I **need** the following **role**: **{' '.join(error.missing_role)}**"
+                )
+            )
+
+        elif isinstance(error, commands.BotMissingAnyRole):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f"I **need** the following **role**: **{' '.join(error.missing_roles)}**"
+                )
+            )
+
+        elif isinstance(error, commands.commands.BadBoolArgument):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=error
+                )
+            )
+
+        elif isinstance(error, commands.BadColourArgument):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=error
+                )
+            )
+
+        elif isinstance(error, commands.ChannelNotFound):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=error
+                )
+            )
+
+        elif isinstance(error, commands.MessageNotFound):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=error
+                )
+            )
+
+        elif isinstance(error, commands.MemberNotFound):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=error
+                )
+            )
+
+        elif isinstance(error, commands.GuildNotFound):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=error
+                )
+            )
+
+        elif isinstance(error, commands.UserNotFound):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=error
+                )
+            )
+
+        elif isinstance(error, commands.ChannelNotReadable):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f'I need the **read message history** permission in that channel! In order to execute **{ctx.command.name}**'
+                )
+            )
+
+        elif isinstance(error, commands.commands.DisabledCommand):
+            return
+
+        elif isinstance(error, commands.MaxConcurrencyReached):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=error
+                )
+            )
+
+        elif isinstance(error, commands.PrivateMessageOnly):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f'**{ctx.command.name}** works only in **DM\'s**'
+                )
+            )
+
+        elif isinstance(error, commands.NoPrivateMessage):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f'**{ctx.command.name}** doesn\'t work in **DM\'s**'
+                )
+            )
+
+        elif isinstance(error, commands.CommandOnCooldown):
+            l = self.bot.get_command(ctx.command.name)
+            left = l.get_cooldown_retry_after(ctx)
+            e = ErrorEmbed(
+                title=f"Cooldown left - {round(left)}")
+            await ctx.send(embed=e, delete_after=5)
+
         elif isinstance(error, commands.CommandInvokeError):
-            e7 = Embed(
+            e7 = ErrorEmbed(
                 title="Oh no, I guess I have not been given proper access! Or some internal error", description=f"`{error}`")
             e7.add_field(name="Command Error Caused By:",
                          value=f"{ctx.command}")
@@ -51,7 +219,7 @@ class BotEventsCommands(commands.Cog):
             c = self.bot.get_channel(830366314761420821)
 
             haaha = ctx.author.avatar_url
-            e9 = discord.Embed(
+            e9 = ErrorEmbed(
                 title="Oh no there was some error", description=f"`{error}`")
             e9.add_field(name="**Command Error Caused By**",
                          value=f"{ctx.command}")
@@ -63,7 +231,7 @@ class BotEventsCommands(commands.Cog):
             await c.send(embed=e9)
 
             await ctx.send('**Sending the error report info to my developer**', delete_after=2)
-            e = discord.Embed(
+            e = Embed(
                 title=f'In **{ctx.guild.name}**', description=f'User affected {ctx.message.author}')
             if ctx.guild.icon:
                 e.set_thumbnail(url=ctx.guild.icon_url)

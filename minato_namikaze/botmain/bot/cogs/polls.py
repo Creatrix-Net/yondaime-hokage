@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import discord
 from discord.ext import commands
 from ..lib import Embed, ErrorEmbed, convert
@@ -12,7 +13,7 @@ class QuickPoll(commands.Cog):
         self.reactions = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟']
 
     @commands.command(pass_context=True, aliases=['poll', 'polls'])
-    async def quickpoll(self, ctx):
+    async def polltime(self, ctx):
         '''Create polls easily'''
         
         def check(m):
@@ -81,36 +82,55 @@ class QuickPoll(commands.Cog):
     @commands.command(pass_context=True, usage='<poll id>', aliases=['result', 'results'])
     async def tally(self, ctx, id):
         '''Get polls results'''
-        poll_message = await ctx.fetch_message(id)
+        try:
+            poll_message = await ctx.fetch_message(id)
+        except discord.NotFound:
+            await ctx.send(embed=ErrorEmbed(description=f'No polls with this {id} found!'))
+        except discord.Forbidden:
+            await ctx.send(embed=ErrorEmbed(description='**Read Message** permission is required to execute this command!'))
+            
+        error_message = ErrorEmbed(description=f'**{id}** is not a poll!')
         if not poll_message.embeds:
+            await ctx.send(embed=error_message)
             return
         embed = poll_message.embeds[0]
         if poll_message.author == ctx.message.author:
+            await ctx.send(embed=error_message)
             return
-        if not embed.footer.text.startswith('Poll ID:'):
+        elif embed.title.startswith('(Strawpoll)') or embed.title.startswith('Results of the poll'):
+            await ctx.send(embed=error_message)
             return
-        if embed.title.startswith('(Strawpoll)'):
-            return
+        else:
+            try:
+                if embed.footer.text.startswith('Poll ID:'):
+                    await ctx.send(embed=error_message)
+                    return
+            except:
+                await ctx.send(embed=error_message)
+                return
         
-        unformatted_options = [x.strip() for x in embed.description.split('\n')]
-        opt_dict = {x[:2]: x[3:] for x in unformatted_options} if unformatted_options[0][0] == '1' else {x[:1]: x[2:] for x in unformatted_options}
         
-        voters = [ctx.message.author.id]  # add the bot's ID to the list of voters to exclude it's votes
-        
+        unformatted_options = [x.strip('\n').strip(' ') for x in embed.description.split('\n') if x.strip('\n').strip(' ') != '']
+        opt_dict = {}
+        for x in unformatted_options:
+            if x[0] != '🔟':
+                opt_dict.update({x[0]: x[4:]})  
+            else: 
+                opt_dict.update({x[0]: x[1:]}) 
+
+        voters = [self.bot.user.id]  # add the bot's ID to the list of voters to exclude it's votes
         tally = {x: 0 for x in opt_dict.keys()}
         for reaction in poll_message.reactions:
-            if reaction.emoji in opt_dict.keys():
-                reactors = await self.bot.get_reaction_users(reaction)
+            if reaction.emoji in self.reactions:
+                reactors = await reaction.users().flatten()
                 for reactor in reactors:
                     if reactor.id not in voters:
-                        tally[reaction.emoji] += 1
+                        tally[str(self.reactions.index(reaction.emoji)+1)] += 1
                         voters.append(reactor.id)
-        for i,key in enumerate(tally.keys()):
-            print('{} **{}**: {}'.format(self.reactions[i],opt_dict[key], tally[key]))
 
         embed_result = Embed(
             title='Results of the poll for "{}":\n'.format(embed.title),
-            description='\n'.join(['{} **{}**: {}'.format(self.reactions[i],opt_dict[key], tally[key]) for i,key in enumerate(tally.keys())])
+            description='\n'.join(['{} **{}**: {}\n'.format(self.reactions[i],opt_dict[key], tally[key]) for i,key in enumerate(tally.keys())])
         )
         embed.set_footer(text='Poll ID: {}'.format(id))
         await ctx.send(embed=embed_result)

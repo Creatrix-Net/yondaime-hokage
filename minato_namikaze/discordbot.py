@@ -129,8 +129,8 @@ if ast.literal_eval(token_get('LOCAL')):
         RPC.connect()
         RPC.update(
             state="火 Minato Namikaze 火", 
-            large_image="img_9692",
-            small_image="oqy9h2m",
+            large_image="fzglchm",
+            small_image="m57xri9",
             details ="Konichiwa, myself Minato Namikaze, \n Konohagakure Yondaime Hokage, \n\n I try my best to do every work as a Hokage",
             large_text="Minato Namikaze | 波風ミナト",
             small_text="Minato Namikaze",

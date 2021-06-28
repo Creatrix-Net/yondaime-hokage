@@ -82,11 +82,18 @@ class Help(commands.Cog):
             await ctx.send(embed=errorembed(ctx))
 
     @commands.command(description='Checks who still requires the support.')
+    @commands.check(check_if_support_is_setup)
     async def chksupreq(self, ctx):
         role_sup = discord.utils.get(ctx.guild.roles, name="SupportRequired")
         l = [m for m in ctx.guild.members if role_sup in m.roles]
         embed = []
         l_no = 0
+        if len(l) == 0:
+            e = Embed(
+                description='Those who still **require support** are **None**! :joy:',
+            )
+            await ctx.send(embed=e)
+            return
         for i in range(len(l)//10):
             description = ''
             for l in range(10):

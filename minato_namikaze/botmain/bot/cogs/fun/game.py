@@ -13,7 +13,7 @@ from asyncio import TimeoutError, sleep
 from random import choice
 
 
-from ...lib import chatbot, Embed
+from ...lib import chatbot, Embed, ErrorEmbed
 
 
 class FunGames(commands.Cog):
@@ -89,8 +89,7 @@ class FunGames(commands.Cog):
     @commands.command()
     async def cointoss(self, ctx):
         embed = Embed(
-            color=0xF5F5F5,
-            title=f"🪙 {ctx.author.name}'s coin toss 🪙",
+            title=f":coin: {ctx.author.name}'s coin toss :coin:",
             description="Pick heads or tails below!",
         )
 
@@ -129,7 +128,7 @@ class FunGames(commands.Cog):
             res = await self.bot.wait_for("button_click", check=check, timeout=20)
         except TimeoutError:
             await msg.edit(
-                embed=Embed(color=0xED564E, title="Timeout!", description="No-one reacted. ☹️"),
+                embed=ErrorEmbed(title="Timeout!", description="No-one reacted. :frowning2:"),
                 components=[
                     Button(style=ButtonStyle.red, label="Oh-no! Timeout reached!", disabled=True)
                 ],
@@ -139,7 +138,6 @@ class FunGames(commands.Cog):
         await res.respond(
             type=7,
             embed=Embed(
-                color=0xF5F5F5,
                 title=f"🪙 {ctx.author.name}'s coin toss 🪙",
                 description=f"You chose **{res.component.label.lower()}**!",
             ),
@@ -151,13 +149,11 @@ class FunGames(commands.Cog):
 
         if game_choice == res.component.label:
             embed = Embed(
-                color=0x65DD65,
                 title=f"🪙 {ctx.author.name}'s coin toss 🪙",
                 description=f"You chose **{res.component.label.lower()}**!\n\n> **YOU WIN!**",
             )
         else:
-            embed = Embed(
-                color=0xED564E,
+            embed = ErrorEmbed(
                 title=f"🪙 {ctx.author.name}'s coin toss 🪙",
                 description=f"You chose **{res.component.label.lower()}**!\n\n> You lost.",
             )

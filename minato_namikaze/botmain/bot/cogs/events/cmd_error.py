@@ -54,7 +54,7 @@ class BotEventsCommands(commands.Cog):
                 ), delete_after=self.delete_after_time
             )
 
-        elif isinstance(error, commands.commands.NotOwner):
+        elif isinstance(error, commands.NotOwner):
             return
 
         elif isinstance(error, commands.CheckFailure):
@@ -119,7 +119,7 @@ class BotEventsCommands(commands.Cog):
                 ), delete_after=self.delete_after_time
             )
 
-        elif isinstance(error, commands.commands.BadBoolArgument):
+        elif isinstance(error, commands.BadBoolArgument):
             await ctx.send(
                 embed=ErrorEmbed(
                     description=error
@@ -175,7 +175,7 @@ class BotEventsCommands(commands.Cog):
                 ), delete_after=self.delete_after_time
             )
 
-        elif isinstance(error, commands.commands.DisabledCommand):
+        elif isinstance(error, commands.DisabledCommand):
             return
 
         elif isinstance(error, commands.MaxConcurrencyReached):

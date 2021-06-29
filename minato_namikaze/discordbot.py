@@ -10,7 +10,6 @@ import sentry_sdk
 from asyncdagpi import Client
 from discord.ext import commands
 from discord_slash import SlashCommand
-from pretty_help import PrettyHelp
 from pathlib import Path
 from discord_components import DiscordComponents
 
@@ -19,7 +18,7 @@ import ast
 import DiscordUtils
 
 
-from botmain.bot.lib import MenuHelp, PostStats
+from botmain.bot.lib import MenuHelp, PostStats, HelpClassPretty
 
 intents = discord.Intents.all()
 intents.reactions = True
@@ -50,7 +49,7 @@ def get_prefix(bot, message):
 bot = commands.Bot(
     command_prefix = get_prefix,
     intents = intents, 
-    help_command = PrettyHelp(
+    help_command = HelpClassPretty(
         show_index=True,
         menu = MenuHelp(
             page_left=":pikawalk:852872040016248863", 
@@ -75,7 +74,7 @@ bot.start_time = time.time()
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
 bot.music = DiscordUtils.Music()
-bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影  ||Music commands may not work as they are in development||"
+bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 
 

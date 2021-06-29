@@ -1,11 +1,57 @@
-from pretty_help import DefaultMenu
+from pretty_help import DefaultMenu, PrettyHelp
+from pretty_help.pretty_help import Paginator
 from discord_components import DiscordComponents, Button, ButtonStyle
+from ..functions import emoji_random_func
+from typing import List, Union
 
 import asyncio
-from typing import List
 
 import discord
 from discord.ext import commands
+
+
+class CustomHelpPaginator(Paginator):
+    def add_cog(
+        self, title: Union[str, commands.Cog], commands_list: List[commands.Command], bot=None
+    ):
+        cog = isinstance(title, commands.Cog)
+        if not commands_list:
+            return
+
+        page_title = title.qualified_name if cog else title
+        if bot:
+            page_title += ' ' + emoji_random_func(bot)
+        embed = self._new_page(page_title, (title.description or "") if cog else "")
+        self._add_command_fields(embed, page_title, commands_list)
+    
+    def add_command(self, command: commands.Command, signature: str, bot=None):
+        desc = f"{command.description}\n\n" if command.description else ""
+        page = self._new_page(
+            command.qualified_name + ' '  + emoji_random_func(bot) if bot else command.qualified_name,
+            f"{self.prefix}{self.__command_info(command)}{self.suffix}" or "",
+        )
+        if command.aliases:
+            aliases = ", ".join(command.aliases)
+            page.add_field(
+                name="**Aliases**",
+                value=f"{self.prefix}{aliases}{self.suffix}",
+                inline=False,
+            )
+        page.add_field(
+            name="**Usage**", value=f"{self.prefix}{signature}{self.suffix}", inline=False
+        )
+        self._add_page(page)
+    
+    @staticmethod
+    def __command_info(command: Union[commands.Command, commands.Group]):
+        info = ""
+        if command.description:
+            info += command.description + "\n\n"
+        if command.help:
+            info += command.help
+        if not info:
+            info = "None"
+        return info
 
 class MenuHelp(DefaultMenu):
     async def send_pages(
@@ -82,3 +128,50 @@ class MenuHelp(DefaultMenu):
                             await message.remove_reaction(emoji, bot.user)
                         except Exception:
                             pass
+
+class HelpClassPretty(PrettyHelp):
+    def __init__(self, **options):
+        super().__init__(**options)
+        self.paginator = CustomHelpPaginator(color=self.color)
+    
+    async def send_command_help(self, command: commands.Command):
+        filtered = await self.filter_commands([command])
+        if filtered:
+            self.paginator.add_command(command, self.get_command_signature(command), self.context.bot)
+            await self.send_pages()
+        
+    async def send_bot_help(self, mapping: dict):
+        bot = self.context.bot
+        channel = self.get_destination()
+        async with channel.typing():
+            mapping = dict((name, []) for name in mapping)
+            help_filtered = (
+                filter(lambda c: c.name != "help", bot.commands)
+                if len(bot.commands) > 1
+                else bot.commands
+            )
+            for cmd in await self.filter_commands(
+                help_filtered,
+                sort=self.sort_commands,
+            ):
+                mapping[cmd.cog].append(cmd)
+            self.paginator.add_cog(self.no_category, mapping.pop(None), bot)
+            sorted_map = sorted(
+                mapping.items(),
+                key=lambda cg: cg[0].qualified_name
+                if isinstance(cg[0], commands.Cog)
+                else str(cg[0]),
+            )
+            for cog, command_list in sorted_map:
+                self.paginator.add_cog(cog, command_list, bot)
+            self.paginator.add_index(self.show_index, self.index_title + ' ' +emoji_random_func(bot), bot)
+        await self.send_pages()
+    
+    async def send_cog_help(self, cog: commands.Cog):
+        async with self.get_destination().typing():
+            filtered = await self.filter_commands(
+                cog.get_commands(), sort=self.sort_commands
+            )
+            self.paginator.add_cog(cog, filtered, self.context.bot)
+        await self.send_pages()
+

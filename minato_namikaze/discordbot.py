@@ -18,7 +18,7 @@ import ast
 import DiscordUtils
 
 
-from botmain.bot.lib import MenuHelp, PostStats, HelpClassPretty
+from botmain.bot.lib import MenuHelp, HelpClassPretty
 
 intents = discord.Intents.all()
 intents.reactions = True
@@ -99,7 +99,6 @@ async def on_ready():
     stats = bot.get_channel(819128718152695878)
     e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",color=discord.Colour.random())
     e.set_thumbnail(url=bot.user.avatar_url)
-    await PostStats(bot=bot).post_guild_stats_all()
     print('Started The Bot')
 
     await stats.send(embed=e)

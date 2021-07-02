@@ -3,6 +3,7 @@ from pretty_help.pretty_help import Paginator
 from discord_components import DiscordComponents, Button, ButtonStyle
 from ..functions import emoji_random_func
 from typing import List, Union
+from ..classes import Embed
 
 import asyncio
 
@@ -69,7 +70,7 @@ class MenuHelp(DefaultMenu):
                         style=ButtonStyle.URL,
                         url="https://discord.gg/g9zQbjE73K",
                         emoji = discord.utils.get(ctx.guild.emojis, id=848961696047300649)
-                    )
+                    ),
                 ]
         )
 
@@ -80,7 +81,7 @@ class MenuHelp(DefaultMenu):
 
             for reaction in self:
                 await message.add_reaction(reaction)
-
+            
             while navigating:
                 try:
 

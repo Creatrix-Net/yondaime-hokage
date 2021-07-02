@@ -53,6 +53,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'bot.wsgi.application'
 dotenv_file = os.path.join(BASE_DIR.parent, ".env")
 if os.path.isfile(dotenv_file):
@@ -62,8 +63,9 @@ if os.path.isfile(dotenv_file):
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
     DEBUG = True
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-    DATABASES = {'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'))}
+    DATABASES = {
+        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    }
     LOCAL=True
 
 else:
@@ -73,8 +75,9 @@ else:
     # SECRET_KEY = classindentifier.get_secret_key(classindentifier.salt)
     SECRET_KEY = os.environ.get('SECRET_KEY', 'YO')
     LOCAL=False
-    DATABASES = {'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'))}
+    DATABASES = {
+        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    }
     MIDDLEWARE = [MIDDLEWARE[0]] + \
         ['whitenoise.middleware.WhiteNoiseMiddleware']+MIDDLEWARE[1:]
     INSTALLED_APPS = INSTALLED_APPS[0:-1] + \

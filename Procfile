@@ -1,2 +1,2 @@
 worker: python minato_namikaze/discordbot.py
-web: gunicorn --chdir minato_namikaze bot.wsgi
+web: gunicorn --chdir minato_namikaze bot.wsgi:application

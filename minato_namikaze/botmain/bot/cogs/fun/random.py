@@ -2,40 +2,74 @@ import asyncio
 import io
 import os
 import platform
+from random import choice
+
 import random
 
 import discord
 from asyncdagpi import ImageFeatures
 from discord.ext import commands, owoify
-from discord.ext.commands import command
+from discord.ext import commands
 from gtts import gTTS
 from PIL import Image
-from ...lib import TimeConverter
+from ...lib import TimeConverter, Embed, insults, get_user
+from typing import Optional, Union
 
 
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Some random fun and usefull commands.'
+    
+    @commands.command(aliases=["takeitback"], usage='<member.mention>')
+    async def insult(self, ctx, user: Optional[Union[int, discord.Member]] = None):
+        """
+        Insult a user
+        `user` the user you would like to insult
+        """
+        if user:
+            user = get_user(user, ctx)
+            if user.id == self.bot.user.id:
+                user = ctx.message.author
+                bot_msg = [
+                    
+                        " How original. No one else had thought of trying to **get the bot to insult itself**. \nI applaud your creativity. \nYawn. **Perhaps this is why you don't have friends**. \n\nYou don't add anything new to any conversation. \n**You are more of a bot than me, predictable answers, and absolutely dull to have an actual conversation with.**"
+                    ,
+                    
+                        "Just remember I am **Konohagakure Yellow Falsh** and **Konohagakure FOURTH HOKAGE**"
+                    ,
+                ]
+                e=Embed(title='⚠️', description=choice(bot_msg))
+                e.set_image(url='https://i.imgur.com/45CUkfq.jpeg')
+                await ctx.send(ctx.author.mention,embed=e)
 
-    @command(usage='{text}')
+            else:
+                await ctx.send(
+                    f'{user.mention} was **insulted** by {ctx.message.author.mention}',
+                    embed=Embed(title='⚠️', description=choice(insults))
+                )
+        else:
+            await ctx.send(ctx.message.author.mention,embed=Embed(title='⚠️', description=choice(insults)))
+        
+
+    @commands.command(usage='{text}')
     async def owoify(self, ctx, text):
         '''Owoify the message'''
         lol = owoify.owoify(f"{text}")
         await ctx.send(lol)
 
-    @command()
+    @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def magic(self, ctx, user: discord.Member = None):
         user = user or ctx.author
         url = str(user.avatar_url_as(format="png", size=1024))
         img = await self.bot.dagpi.image_process(ImageFeatures.magik(), url)
         e2file = discord.File(fp=img.image, filename=f"magik.{img.format}")
-        e = discord.Embed(title="Magik!")
+        e = Embed(title="Magik!")
         e.set_image(url=f"attachment://magik.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @command()
+    @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx, colour="255-255-255", *, url=None):
         '''Generates easy QR Code'''
@@ -44,7 +78,7 @@ class Random(commands.Cog):
         col = ["black", "red", "blue"]
         if colour == "255-255-255":
             col = ["255-255-255", "red", "blue"]
-        e = discord.Embed(title="Here you go, Made qr code!")
+        e = Embed(title="Here you go, Made qr code!")
         msg = await ctx.send("Creating!")
 
         if colour in col:
@@ -66,21 +100,21 @@ class Random(commands.Cog):
             else:
                 pass
 
-    @command(usage="<time> <reminder> (Time needs to be in seconds...)")
+    @commands.command(usage="<time> <reminder> (Time needs to be in seconds...)")
     async def remind(self, ctx, time: TimeConverter, *, reminder):
         '''A simple reminder'''
         if int(time) < 12*60*60:
-            e = discord.Embed(title="I will remind you!",
+            e = Embed(title="I will remind you!",
                               descripition=f"I will you remind you in {int(time)/3600} minutes!")
             await ctx.send(embed=e)
             await asyncio.sleep(int(time))
-            e2 = discord.Embed(
+            e2 = Embed(
                 title=f"Hello {ctx.author}", description=f"I have come to remind you to {reminder}!")
             await ctx.message.reply(embed=e2)
         else:
             await ctx.send('Please give a reminder time less than 12 hours, I cannot remember for that long!')
 
-    @command(usage="<name>")
+    @commands.command(usage="<name>")
     async def sn(self, ctx, *, name):
         '''Introduce yourself to everyone'''
         tts = gTTS(text=f"Hi! {name} is really cool!", lang='en')
@@ -89,7 +123,7 @@ class Random(commands.Cog):
         await asyncio.sleep(5)
         os.remove("announce.mp3")
 
-    @command(usage="<text>")
+    @commands.command(usage="<text>")
     async def tts(self, ctx, *, text):
         '''Generate text to speech messages'''
         lol = gTTS(text=f"{text}")
@@ -98,57 +132,22 @@ class Random(commands.Cog):
         await asyncio.sleep(5)
         os.remove("tts.mp3")
 
-    @command(name="stats", description="A usefull command that displays bot statistics.")
-    async def stats(self, ctx):
-        '''Get the stats for the me'''
-        pythonVersion = platform.python_version()
-        dpyVersion = discord.__version__
-        serverCount = len(self.bot.guilds)
-        memberCount = len(set(self.bot.get_all_members()))
-
-        embed = discord.Embed(
-            title=f"{self.bot.user.name} Stats",
-            description="\uFEFF",
-            colour=ctx.author.colour,
-            timestamp=ctx.message.created_at,
-        )
-
-        embed.set_thumbnail(url=self.bot.user.avatar_url)
-
-        embed.add_field(name="**Bot Version:**", value=self.bot.version)
-        embed.add_field(name="**Python Version:**", value=pythonVersion)
-        embed.add_field(name="**Discord.Py Version**", value=dpyVersion)
-        embed.add_field(name="**Total Guilds:**", value=serverCount+1)
-        embed.add_field(name="**Total Users:**", value=memberCount)
-        embed.add_field(name="**Bot Developers:**",
-                        value="[DHRUVA SHAW#0550](https://discord.com/users/571889108046184449/)")
-        embed.add_field(name="**More Info:**",
-                        value="[Click Here](https://statcord.com/bot/779559821162315787)")
-        embed.add_field(name="**Incidents/Maintenance Reports:**",
-                        value="[Click Here](https://minatonamikaze.statuspage.io/)")
-
-        embed.set_footer(text=f"{ctx.author} | {self.bot.user.name}")
-        embed.set_author(name=self.bot.user.name,
-                         icon_url=self.bot.user.avatar_url)
-
-        await ctx.send(embed=embed)
-
-    @command(aliases=['color', 'colour', 'sc'], usage='<hexadecimal colour code>')
+    @commands.command(aliases=['color', 'colour', 'sc'], usage='<hexadecimal colour code>')
     async def show_color(self, ctx, *, color: discord.Colour):
         '''Enter a color and you will see it!'''
         file = io.BytesIO()
         Image.new('RGB', (200, 90), color.to_rgb()).save(file, format='PNG')
         file.seek(0)
-        em = discord.Embed(color=color, title=f'Showing Color: {str(color)}')
+        em = Embed(color=color, title=f'Showing Color: {str(color)}')
         em.set_image(url='attachment://color.png')
         await ctx.send(file=discord.File(file, 'color.png'), embed=em)
 
-    @command()
+    @commands.command()
     async def hi(self, ctx):
         '''Say Hi'''
         await ctx.send("hi.")
 
-    @command()
+    @commands.command()
     async def gaymeter(self, ctx):
         '''Gaymeter! Lol!'''
         await ctx.send(f"You are {random.randint(1, 100)}% gay")

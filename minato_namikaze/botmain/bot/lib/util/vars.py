@@ -14,8 +14,6 @@ website = token_get('WEBSITE')
 github = token_get('GITHUB')
 
 statcord = token_get('STATCORD')
-discord_id = token_get('DISCORD_CLIENT_ID')
-
 dagpi = token_get('DAGPI')
 
 dblst = token_get('DISCORDBOTLIST')

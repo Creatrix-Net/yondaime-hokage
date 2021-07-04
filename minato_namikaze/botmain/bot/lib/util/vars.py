@@ -2,6 +2,11 @@ import os
 from pathlib import Path
 
 import dotenv
+from typing import List
+
+
+with open(os.path.join(Path(__file__).resolve().parent.parent, 'text', 'insult.txt')) as f:
+    insults: List[str] = list(map(lambda a: a.strip(' ').strip('\n').strip('\'').strip('"').strip('\\'), f.read().split(',')))
 
 dotenv_file = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / ".env"
 def token_get(tokenname):

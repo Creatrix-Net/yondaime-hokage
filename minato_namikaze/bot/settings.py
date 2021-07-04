@@ -8,10 +8,6 @@ from django.contrib.messages import constants as messages
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -66,7 +62,6 @@ if os.path.isfile(dotenv_file):
     DATABASES = {
         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
     }
-    LOCAL=True
 
 else:
     PRODUCTION_SERVER = True
@@ -74,7 +69,6 @@ else:
     ALLOWED_HOSTS = ['*']
     # SECRET_KEY = classindentifier.get_secret_key(classindentifier.salt)
     SECRET_KEY = os.environ.get('SECRET_KEY', 'YO')
-    LOCAL=False
     DATABASES = {
         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
     }
@@ -126,9 +120,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 
-#Configuration for the discord
-BOT_ID = os.getenv('BOT_ID')
-
 #Overiding a message tag
 MESSAGE_TAGS = {
     messages.ERROR : 'danger'
@@ -141,13 +132,3 @@ if PRODUCTION_SERVER:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_REFERRER_POLICY = "same-origin"
-
-ID = os.environ.get('DISCORD_CLIENT_ID')
-SECRECT = os.environ.get('DISCORD_CLIENT_SECRET')
-
-DOCS=os.environ.get('DOCS')
-WEBSITE=os.environ.get('WEBSITE') 
-AUTH_PASS=os.environ.get('AUTH_PASS')
-
-HOST=os.environ.get('HOST')
-LOCAL=False

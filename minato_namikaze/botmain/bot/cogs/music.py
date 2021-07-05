@@ -76,13 +76,18 @@ class Music(commands.Cog):
             raise NoChannelProvided
 
         await ctx.author.voice.channel.connect() #Joins author's voice channel
-        await ctx.send('```**Joined**```')
+        await ctx.send('```Joined```')
 
     @commands.command()
     async def leave(self,ctx):
         '''Disconnects from a voice channel'''
+        voice_state_me = ctx.me.voice
+
+        if voice_state_me is None:
+            return
+        
         try:
-            await ctx.send('```**Left**```')
+            await ctx.send('```Left```')
             await ctx.voice_client.disconnect()
         except:
             pass

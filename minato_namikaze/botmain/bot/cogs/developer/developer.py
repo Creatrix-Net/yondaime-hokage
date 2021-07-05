@@ -6,6 +6,7 @@ import textwrap
 import traceback
 from contextlib import redirect_stdout
 from pathlib import Path
+import sys
 
 import discord
 from discord.ext import commands
@@ -62,8 +63,8 @@ class Developer(commands.Cog):
             if command is None:
                 await ctx.send_help(ctx.command)
             else:
-
                 pass
+    
 
     @dev.group(name='sharedservers', usage="<user>")
     async def sharedservers(self, ctx, *, user: discord.Member):
@@ -81,20 +82,23 @@ class Developer(commands.Cog):
     async def createinvite(self, ctx, *, argument: int):
         '''Create an invite to the specified server'''
         try:
-            guild = self.bot.get_guild(int(argument))
-        except:
-            await ctx.send(embed=ErrorEmbed(description="Guild not found"))
-            return
-        try:
-            invite = (await guild.invites())[0]
-        except (IndexError, discord.Forbidden):
             try:
-                invite = (await guild.text_channels())[0].create_invite(max_age=120)
-            except (IndexError, discord.Forbidden):
-                await ctx.send(embed=ErrorEmbed(description="No permissions to create an invite link."))
+                guild = self.bot.get_guild(int(argument))
+            except:
+                await ctx.send(embed=ErrorEmbed(description="Guild not found"))
                 return
+            try:
+                invite = (await guild.invites())[0]
+            except:
+                try:
+                    invite = (await guild.text_channels())[0].create_invite(max_age=120)
+                except:
+                    await ctx.send(embed=ErrorEmbed(description="No permissions to create an invite link."))
+                    return
 
-        await ctx.send(embed=Embed(description=f"Here is the invite link: {invite.url}"))
+            await ctx.send(embed=Embed(description=f"Here is the invite link: {invite.url}"))
+        except:
+            await ctx.send(embed=ErrorEmbed(description='Sorry! This is not possible for this server!'))
 
     @dev.group(invoke_without_command=True, name='eval')
     @commands.check(owners)
@@ -187,6 +191,22 @@ class Developer(commands.Cog):
             await ctx.message.add_reaction('\u2049')  # x
         else:
             await ctx.message.add_reaction('\u2705')
+    
+    @dev.group(invoke_without_command=True)
+    @commands.check(owners)
+    async def get_all_cogs(self, ctx):
+        '''Get all the cogs list'''
+        cog_dir = Path(__file__).resolve(strict=True).parent.parent
+        cogs_list = []
+        for file in os.listdir(cog_dir):
+            if os.path.isdir(cog_dir / file):
+                for i in os.listdir(cog_dir / file):
+                    if i.endswith('.py'):
+                        cogs_list.append(f"```{file.strip(' ')}.{i[:-3]}```")
+            else:
+                if file.endswith('.py'):
+                    cogs_list.append(f'```{file[:-3]}```')
+        await ctx.send('\n'.join(cogs_list))
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
@@ -203,7 +223,7 @@ class Developer(commands.Cog):
     async def reload(self, ctx, name: str):
         """Reloads an extension. """
         try:
-            self.bot.reload_extension(f"cogs.{name}")
+            self.bot.reload_extension(f"botmain.bot.cogs.{name}")
             await ctx.message.add_reaction('🔄')
 
         except Exception as e:
@@ -214,10 +234,10 @@ class Developer(commands.Cog):
     async def unload(self, ctx, name: str):
         """Unloads an extension. """
         try:
-            self.bot.unload_extension(f"cogs.{name}")
+            self.bot.unload_extension(f"botmain.bot.cogs.{name}")
         except Exception as e:
             return await ctx.send(f"```py\n{e}```")
-        await ctx.send(f"📤 Unloaded extension **`cogs/{name}.py`**")
+        await ctx.send(f"📤 Unloaded extension **`botmain.bot.{name}.py`**")
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
@@ -232,16 +252,15 @@ class Developer(commands.Cog):
                     if i.endswith('.py'):
                         try:
                             self.bot.reload_extension(
-                                f"cogs.{file.strip(' ')}.{i[:-3]}")
+                                f"botmain.bot.cogs.{file.strip(' ')}.{i[:-3]}")
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
                 if file.endswith('.py'):
-                    if file != 'music1.py':
-                        try:
-                            self.bot.reload_extension(f'bot.cogs.{file[:-3]}')
-                        except Exception as e:
-                            return await ctx.send(f"```py\n{e}```")
+                    try:
+                        self.bot.reload_extension(f'botmain.bot.cogs.{file[:-3]}')
+                    except Exception as e:
+                        return await ctx.send(f"```py\n{e}```")
 
         if error_collection:
             output = "\n".join(
@@ -257,13 +276,13 @@ class Developer(commands.Cog):
     @commands.check(owners)
     async def sync(self, ctx):
         """Sync with GitHub and reload all the cogs"""
-        embed = discord.Embed(
+        embed = Embed(
             title="Syncing...", description=":joy: Syncing and reloading cogs.")
         embed.set_footer(text=f"{ctx.author} | Minato Namikaze")
         msg = await ctx.send(embed=embed)
         async with ctx.channel.typing():
             output = sp.getoutput('git pull')
-        embed = discord.Embed(
+        embed = Embed(
             title="Synced", description="Synced with GitHub and reloaded all the cogs.")
         # Reload Cogs as well
         cog_dir = Path(__file__).resolve(strict=True).parent.parent
@@ -274,16 +293,15 @@ class Developer(commands.Cog):
                     if i.endswith('.py'):
                         try:
                             self.bot.reload_extension(
-                                f"cogs.{file.strip(' ')}.{i[:-3]}")
+                                f"botmain.bot.cogs.{file.strip(' ')}.{i[:-3]}")
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
                 if file.endswith('.py'):
-                    if file != 'music1.py':
-                        try:
-                            self.bot.reload_extension(f'bot.cogs.{file[:-3]}')
-                        except Exception as e:
-                            return await ctx.send(f"```py\n{e}```")
+                    try:
+                        self.bot.reload_extension(f'botmain.bot.cogs.{file[:-3]}')
+                    except Exception as e:
+                        return await ctx.send(f"```py\n{e}```")
 
         if error_collection:
             err = "\n".join(
@@ -294,12 +312,6 @@ class Developer(commands.Cog):
             )
 
         await msg.edit(embed=embed)
-
-    # @dev.group(invoke_without_command=True)
-    # @commands.check(owners)
-    # async def sendguildmessages(self,ctx):
-    #     m = WhoMenu(bot=self.bot)
-    #     await m.start(ctx)
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)

@@ -46,7 +46,7 @@ def get_prefix(bot, message):
 
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
-bot = commands.Bot(
+bot = commands.AutoShardedBot(
     command_prefix = get_prefix,
     intents = intents, 
     help_command = HelpClassPretty(
@@ -64,7 +64,8 @@ bot = commands.Bot(
         everyone=False
     ),
     case_insensitive=True,
-    description="Hi I am **Minato Namikaze**, Yondaime Hokage"
+    description="Hi I am **Minato Namikaze**, Yondaime Hokage",
+    owner_id=571889108046184449
 )
 slash = SlashCommand(bot, sync_commands=True)
 

@@ -1,5 +1,10 @@
 import discord
 from discord.ext import commands
+import platform
+import psutil
+
+
+from ...lib import Embed, get_user
 
 
 class MySupport(commands.Cog, name="My Support"):
@@ -23,7 +28,6 @@ class MySupport(commands.Cog, name="My Support"):
     @commands.command(name="stats", description="A usefull command that displays bot statistics.")
     async def stats(self, ctx):
         '''Get the stats for the me'''
-        print(self.bot.owner_id)
         pythonVersion = platform.python_version()
         dpyVersion = discord.__version__
         serverCount = len(self.bot.guilds)
@@ -32,7 +36,7 @@ class MySupport(commands.Cog, name="My Support"):
         embed = Embed(
             title=f"{self.bot.user.name} Stats",
             description="\uFEFF",
-            colour=ctx.author.colour,
+            colour=ctx.author.colour or discord.Color.random(),
             timestamp=ctx.message.created_at,
         )
 
@@ -44,7 +48,7 @@ class MySupport(commands.Cog, name="My Support"):
         embed.add_field(name="**Total Guilds:**", value=serverCount+1)
         embed.add_field(name="**Total Users:**", value=memberCount)
         embed.add_field(name="**Bot Developers:**",
-                        value="[DHRUVA SHAW#0550](https://discord.com/users/571889108046184449/)")
+                        value=f"[{get_user(self.bot.owner_id)}](https://discord.com/users/{self.bot.owner_id}/)")
         embed.add_field(name="**More Info:**",
                         value="[Click Here](https://statcord.com/bot/779559821162315787)")
         embed.add_field(name="**Incidents/Maintenance Reports:**",
@@ -55,6 +59,8 @@ class MySupport(commands.Cog, name="My Support"):
                          icon_url=self.bot.user.avatar_url)
 
         await ctx.send(embed=embed)
+    
+        
 
 def setup(bot):
     bot.add_cog(MySupport(bot))

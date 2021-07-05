@@ -22,7 +22,7 @@ class Music(commands.Cog):
         Coroutine called before command invocation.
         We mainly just want to check whether the user is in the players controller channel.
         """
-        if ctx.command.name == 'join':
+        if ctx.command.name in ('join', 'leave'):
             return
         voice_state_author = ctx.author.voice
         voice_state_me = ctx.me.voice

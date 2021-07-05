@@ -7,7 +7,7 @@ from typing import Optional, Iterator, Sequence
 
 from discord.ext import commands
 
-from ..lib.data.braille import (
+from ...lib.data.braille import (
     contractions,
     letters,
     numbers,

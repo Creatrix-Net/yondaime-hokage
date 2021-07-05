@@ -3,11 +3,9 @@ import time
 from os.path import join
 from pathlib import Path
 
-import async_cleverbot as ac
 import discord
 import dotenv
 import sentry_sdk
-from asyncdagpi import Client
 from discord.ext import commands
 from discord_slash import SlashCommand
 from pathlib import Path
@@ -85,7 +83,6 @@ bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir ,'minato'))]
 
 @bot.event
 async def on_ready():
-    current_time = time.time()
     DiscordComponents(bot)
     cog_dir = Path(__file__).resolve(strict=True).parent / join('botmain','bot','cogs')
     for filename in os.listdir(cog_dir):
@@ -96,6 +93,7 @@ async def on_ready():
         else:
             if filename.endswith('.py'):
                 bot.load_extension(f'botmain.bot.cogs.{filename[:-3]}')
+    current_time = time.time()
     difference = int(round(current_time - bot.start_time))
     stats = bot.get_channel(819128718152695878)
     e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",color=discord.Colour.random())

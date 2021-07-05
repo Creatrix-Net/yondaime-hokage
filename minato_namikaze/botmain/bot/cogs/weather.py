@@ -26,9 +26,7 @@ class UnitConverter(Converter):
         return new_units
 
 
-class Weather(commands.Cog):
-    """Get weather data from https://openweathermap.org"""
-    
+class Weather(commands.Cog):    
     def __init__(self, bot):
         self.bot = bot
         default = {"units": None}
@@ -37,6 +35,7 @@ class Weather(commands.Cog):
             "metric": {"code": ["m", "c"], "speed": "km/h", "temp": " °C"},
             "kelvin": {"code": ["k", "s"], "speed": "km/h", "temp": " K"},
         }
+        self.description = 'Get weather data from https://openweathermap.org'
 
     @commands.group(name="weather", aliases=["we"], invoke_without_command=True)
     @commands.bot_has_permissions(embed_links=True)
@@ -44,7 +43,7 @@ class Weather(commands.Cog):
         """
         Display weather in a given location
         `location` must take the form of `city, Country Code`
-        example: `[p]weather New York,US`
+        example: `)weather New York,US`
         """
         await ctx.trigger_typing()
         await self.get_weather(ctx, location=location)
@@ -55,7 +54,7 @@ class Weather(commands.Cog):
         """
         Display weather in a given location
         `zipcode` must be a valid ZIP code or `ZIP code, Country Code` (assumes US otherwise)
-        example: `[p]weather zip 20500`
+        example: `)weather zip 700082`
         """
         await ctx.trigger_typing()
         await self.get_weather(ctx, zipcode=zipcode)
@@ -67,7 +66,7 @@ class Weather(commands.Cog):
         Display weather in a given location
         `cityid` must be a valid openweathermap city ID
         (get list here: <https://bulk.openweathermap.org/sample/city.list.json.gz>)
-        example: `[p]weather cityid 2172797`
+        example: `)weather cityid 2172797`
         """
         await ctx.trigger_typing()
         await self.get_weather(ctx, cityid=cityid)
@@ -79,7 +78,7 @@ class Weather(commands.Cog):
         Display weather in a given location
         `lat` and `lon` specify a precise point on Earth using the
         geographic coordinates specified by latitude (north-south) and longitude (east-west).
-        example: `[p]weather coordinates 35 139`
+        example: `)weather coordinates 35 139`
         """
         await ctx.trigger_typing()
         await self.get_weather(ctx, lat=lat, lon=lon)

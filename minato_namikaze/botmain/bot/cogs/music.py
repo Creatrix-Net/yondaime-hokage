@@ -66,17 +66,20 @@ class Music(commands.Cog):
 
     @commands.command()
     async def join(self,ctx):
-        '''Joins the voice channel'''        
-        voice_state_author = ctx.author.voice
-        voice_state_me = ctx.me.voice
-        if voice_state_author and voice_state_me and voice_state_author == voice_state_me:
-            return
+        '''Joins the voice channel'''  
+        try:      
+            voice_state_author = ctx.author.voice
+            voice_state_me = ctx.me.voice
+            if voice_state_author and voice_state_me and voice_state_author == voice_state_me:
+                return
 
-        if voice_state_author is None:
-            raise NoChannelProvided
+            if voice_state_author is None:
+                raise NoChannelProvided
 
-        await ctx.author.voice.channel.connect() #Joins author's voice channel
-        await ctx.send('```Joined```')
+            await ctx.author.voice.channel.connect() #Joins author's voice channel
+            await ctx.send('```Joined```')
+        except:
+            pass
 
     @commands.command()
     async def leave(self,ctx):

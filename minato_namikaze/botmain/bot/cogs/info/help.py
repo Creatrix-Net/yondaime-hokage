@@ -81,7 +81,7 @@ class Help(commands.Cog):
         if isinstance(error, commands.CheckFailure):
             await ctx.send(embed=errorembed(ctx))
 
-    @commands.command(description='Checks who still requires the support.')
+    @commands.command(description='Checks who still requires the support.', aliases=['check_who_require_support', 'cksupreq'])
     @commands.check(check_if_support_is_setup)
     async def chksupreq(self, ctx):
         role_sup = discord.utils.get(ctx.guild.roles, name="SupportRequired")

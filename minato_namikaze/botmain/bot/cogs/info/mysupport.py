@@ -2,9 +2,10 @@ import discord
 from discord.ext import commands
 import platform
 import psutil
-
+import DiscordUtils
 
 from ...lib import Embed, get_user
+from psutil._common import bytes2human
 
 
 class MySupport(commands.Cog, name="My Support"):
@@ -60,7 +61,22 @@ class MySupport(commands.Cog, name="My Support"):
 
         await ctx.send(embed=embed)
     
+    @commands.command(name="cpu_status", description="Display CPU stats of the bot.")
+    async def cpu_status(self, ctx):
+        '''Display CPU Stats'''
+        cpu=Embed(title='CPU Stats :computer:')
+        cpu.add_field(name='**CPU Usage** :alarm_clock:', value=f'{psutil.cpu_percent()} %', inline=True)
         
+        ram=Embed(title='RAM Stats :chart_with_upwards_trend:')
+        ram.add_field(name="**Total RAM :repeat_one:**", value=bytes2human(psutil.virtual_memory()[0]))
+        ram.add_field(name="**RAM Available :floppy_disk:**", value=bytes2human(psutil.virtual_memory()[1]))
+        ram.add_field(name="**RAM % use**", value=bytes2human(psutil.virtual_memory()[2]))
+        ram.add_field(name="**RAM Used :card_box:**", value=bytes2human(psutil.virtual_memory()[3]))
+        ram.add_field(name="**RAM :free:**", value=bytes2human(psutil.virtual_memory()[4]))
+        
+        paginator = DiscordUtils.Pagination.AutoEmbedPaginator(ctx)
+        await paginator.run([cpu, ram])
+                
 
 def setup(bot):
     bot.add_cog(MySupport(bot))

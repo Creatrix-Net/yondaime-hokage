@@ -217,6 +217,8 @@ class BotEventsCommands(commands.Cog):
             await ctx.channel.send(embed=e7, delete_after=self.delete_after_time)
 
         else:
+            if ctx.cog.qualified_name == 'Music':
+                return
             c = self.bot.get_channel(830366314761420821)
 
             haaha = ctx.author.avatar_url

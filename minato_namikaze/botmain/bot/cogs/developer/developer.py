@@ -324,28 +324,28 @@ class Developer(commands.Cog):
     async def stream(self, ctx, *, activity='placeholder (owner to lazy lol)'):
         '''Streaming Activity'''
         await self.bot.change_presence(activity=discord.Streaming(status=discord.Status.idle, name=activity, url="http://www.twitch.tv/transhelperdiscordbot"))
-        await ctx.send(f'Changed activity to **{activity}** using **Stream status**.')
+        await ctx.send(f'```diff\n- Changed activity to {activity} using Stream status.```')
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
     async def game(self, ctx, *, activity='placeholder (owner to lazy lol)'):
         '''Game Activity'''
         await self.bot.change_presence(status=discord.Status.idle, activity=discord.Game(name=activity))
-        await ctx.send(f'Changed activity to **{activity}** using **Game status**.')
+        await ctx.send(f'```md\n# Changed activity to {activity} using Game status.```')
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
     async def watching(self, ctx, *, activity='placeholder (owner to lazy lol)'):
         '''Watching activity'''
         await self.bot.change_presence(activity=discord.Activity(status=discord.Status.idle, type=discord.ActivityType.watching, name=activity))
-        await ctx.send(f'Changed activity to **{activity}** using **Watching status**.')
+        await ctx.send(f'```arm\nChanged activity to {activity} using Watching status.```')
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
     async def listening(self, ctx, *, activity='placeholder (owner to lazy lol)'):
         '''Listenting Activity'''
         await self.bot.change_presence(activity=discord.Activity(status=discord.Status.idle, type=discord.ActivityType.listening, name=activity))
-        await ctx.send(f'Changed activity to **{activity}** using **Listening status**.')
+        await ctx.send(f'```fix\nChanged activity to {activity} using Listening status.```')
 
 
 def setup(bot):

@@ -18,6 +18,7 @@ class VoteInfo(commands.Cog):
         self.void_bots_site = f'[Click Here](https://voidbots.net/bot/{self.bot.user.id}/)'
         self.fateslist_bots_site = '[Click Here](https://fateslist.xyz/minato/)'
         self.bladebot_bots_site = f'[Click Here](https://bladebotlist.xyz/bot/{self.bot.user.id}/)'
+        self.discordlistspacesite = f'[Click Here](https://discordlist.space/bot/{self.bot.user.id})'
 
     @commands.command()
     async def vote(self, ctx):
@@ -62,6 +63,10 @@ class VoteInfo(commands.Cog):
             g = requests.get(f'https://bladebotlist.xyz/api/bots/{self.bot.user.id}/votes/{member.id}',
                              )
             
+            h = requests.get(f'https://api.discordlist.space/v2/bots/{self.bot.user.id}/status/{member.id}',
+                            headers={"Authorization": botlist}
+            )
+            
             try:
                 a_list = True if a.json().get('voted') >= 1 else False
             except:
@@ -93,17 +98,39 @@ class VoteInfo(commands.Cog):
             except:
                 g1 = False
             
-            e.add_field(name='**TopGG**', value='Voted : ' + self.topgg_site if a_list else 'Not Voted : ' + self.topgg_site)
-            e.add_field(name='**BotsForDiscord**', value='Voted : ' +
-                        self.bfd_site if c_list else 'Not Voted : ' + self.bfd_site)
-            e.add_field(name='**DiscordBoats**', value='Voted : ' +
-                        self.discordboats_site if d_list else 'Not Voted : ' + self.discordboats_site)
-            e.add_field(name='**Void Bots**', value='Voted : ' +
-                        self.void_bots_site if e12 else 'Not Voted : ' + self.void_bots_site)
-            e.add_field(name='**Fates List**', value='Voted : ' +
-                        self.fateslist_bots_site if f1 else 'Not Voted : ' + self.fateslist_bots_site)
-            e.add_field(name='**BladeBotList**', value='Voted : ' +
-                        self.bladebot_bots_site if g1 else 'Not Voted : ' + self.bladebot_bots_site)
+            try:
+                h1 = h.json().get('upvoted', False)
+            except:
+                h1 = False
+            
+            e.add_field(
+                name='**TopGG**', 
+                value=f'Voted : {self.topgg_site}' if a_list else f'Not Voted : {self.topgg_site}'
+            )
+            e.add_field(
+                name='**BotsForDiscord**', 
+                value=f'Voted : {self.bfd_site}' if c_list else f'Not Voted : {self.bfd_site}'
+            )
+            e.add_field(
+                name='**DiscordBoats**', 
+                value=f'Voted : {self.discordboats_site}' if d_list else f'Not Voted : {self.discordboats_site}'
+            )
+            e.add_field(
+                name='**Void Bots**', 
+                value=f'Voted : {self.void_bots_site}' if e12 else f'Not Voted : {self.void_bots_site}'
+            )
+            e.add_field(
+                name='**Fates List**', 
+                value=f'Voted : {self.fateslist_bots_site}' if f1 else f'Not Voted : {self.fateslist_bots_site}'
+            )
+            e.add_field(
+                name='**BladeBotList**', 
+                value=f'Voted : {self.bladebot_bots_site}' if g1 else f'Not Voted : {self.bladebot_bots_site}'
+            )
+            e.add_field(
+                name='**DiscordListSpace**', 
+                value=f'Voted : {self.discordlistspacesite}' if g1 else f'Not Voted : {self.discordlistspacesite}'
+            )
 
             await ctx.send(embed=e)
 

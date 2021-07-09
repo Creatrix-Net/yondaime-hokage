@@ -49,7 +49,7 @@ class MySupport(commands.Cog, name="My Support"):
         embed.add_field(name="**Total Guilds:**", value=serverCount+1)
         embed.add_field(name="**Total Users:**", value=memberCount)
         embed.add_field(name="**Bot Developers:**",
-                        value=f"[{get_user(self.bot.owner_id)}](https://discord.com/users/{self.bot.owner_id}/)")
+                        value=f"[{get_user(self.bot.owner_id, ctx)}](https://discord.com/users/{self.bot.owner_id}/)")
         embed.add_field(name="**More Info:**",
                         value="[Click Here](https://statcord.com/bot/779559821162315787)")
         embed.add_field(name="**Incidents/Maintenance Reports:**",

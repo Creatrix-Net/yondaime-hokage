@@ -72,7 +72,6 @@ bot.version = str(token_get('BOT_VER'))
 bot.start_time = time.time()
 bot.github = token_get('GITHUB')
 bot.owner = token_get('OWNER')
-bot.music = DiscordUtils.Music()
 bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 
@@ -99,8 +98,11 @@ async def on_ready():
     e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",color=discord.Colour.random())
     e.set_thumbnail(url=bot.user.avatar_url)
     print('Started The Bot')
-
-    await stats.send(embed=e)
+    
+    try:
+        await stats.send(embed=e)
+    except:
+        pass
     await bot.change_presence(
         status=discord.Status.idle, 
         activity=discord.Activity(

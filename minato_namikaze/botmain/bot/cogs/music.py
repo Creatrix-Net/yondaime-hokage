@@ -15,6 +15,7 @@ class IncorrectChannelError(commands.CommandError):
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.bot.music = DiscordUtils.Music()
         self.description = 'Listen to some soothing music!'
     
     async def cog_before_invoke(self, ctx: commands.Context):

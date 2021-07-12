@@ -55,9 +55,8 @@ class BotEvents(commands.Cog):
                 embed.set_author(name=self.bot.user.name,
                                 icon_url=self.bot.user.avatar_url)
                 embed.set_footer(text=f"Welcome {member.name}")
-                await channel.send(member.mention)
                 
-                e = Embed(description=f'**{member}** was invited by **{inviter.inviter}** \n- **INVITE CODE: {inviter.code}**,\n- USES **{inviter.uses} uses**.')
+                e = Embed(member.mention, description=f'**{member}** was invited by **{inviter.inviter}** \n- **INVITE CODE: {inviter.code}**,\n- USES **{inviter.uses} uses**.')
                 await channel.send(embed=embed)
                 await channel.send(embed=e)
 

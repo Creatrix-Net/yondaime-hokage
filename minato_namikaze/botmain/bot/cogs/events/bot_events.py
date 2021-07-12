@@ -1,13 +1,34 @@
 import random
 from os.path import join
 from pathlib import Path
+from asyncio import sleep
+
 
 import discord
 from discord.ext import commands
 from datetime import datetime
+import DiscordUtils
 
 from ...lib import PostStats, get_bot_inviter, Embed, ErrorEmbed, get_welcome_channel, return_ban_channel, return_unban_channel
 
+
+class InviteTrackerForMyGuild:
+    def __init__(self, bot):
+        self._cache = bot._cache
+        self.bot = bot
+    
+    async def fetch_inviter_for_my_guild(self, member):
+        await sleep(self.bot.latency)
+        for new_invite in await member.guild.invites():
+            for cached_invite in self._cache[member.guild.id].values():
+                if new_invite.code == cached_invite.code and new_invite.uses - cached_invite.uses == 1 or cached_invite.revoked:
+                    if cached_invite.revoked:
+                        self._cache[member.guild.id].pop(cached_invite.code)
+                    elif new_invite.inviter == cached_invite.inviter:
+                        self._cache[member.guild.id][cached_invite.code] = new_invite
+                    else:
+                        self._cache[member.guild.id][cached_invite.code].uses += 1
+                    return cached_invite
 
 class BotEvents(commands.Cog):
     def __init__(self, bot):
@@ -15,6 +36,30 @@ class BotEvents(commands.Cog):
         self.minato_gif = bot.minato_gif
         self.minato_dir = bot.minato_dir
         self.posting = PostStats(self.bot)
+        self.tracker = InviteTrackerForMyGuild(bot)
+    
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        if member.guild.id == 747480356625711204:
+            inviter = await self.tracker.fetch_inviter_for_my_guild(member)
+            channel = discord.utils.get(
+                self.bot.get_all_channels(), id=747660913116577903)
+            if not member.bot:
+                embed = Embed(
+                    title=f"Welcome {member.name} !",
+                    description=f"Please {member.mention} goto <#777189846862266408> and get **supercool roles**",
+                    timestamp=datetime.utcnow(),
+                )
+                embed.set_image(url='https://i.imgur.com/mktY446.jpeg')
+                embed.set_thumbnail(url='https://i.imgur.com/SizgkEZ.png')
+                embed.set_author(name=self.bot.user.name,
+                                icon_url=self.bot.user.avatar_url)
+                embed.set_footer(text=f"Welcome {member.name}")
+                await channel.send(member.mention)
+                
+                e = Embed(description=f'**{member}** was invited by **{inviter.inviter}** \n- **INVITE CODE: {inviter.code}**,\n- USES **{inviter.uses} uses**.')
+                await channel.send(embed=embed)
+                await channel.send(embed=e)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):

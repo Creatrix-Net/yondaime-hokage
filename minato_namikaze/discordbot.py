@@ -23,6 +23,7 @@ intents.reactions = True
 intents.guilds = True
 intents.presences = False
 intents.integrations = True
+intents.members = True
 
 
 dotenv_file = os.path.join(Path(__file__).resolve().parent.parent / ".env")
@@ -37,7 +38,7 @@ sentry_link = token_get('SENTRY')
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
-    prefixes = [')', 'm!', 'minato', 'minato ', 'n!']
+    prefixes = [')', 'm!', 'minato', 'minato ']
 
     if not message.guild:
         return 'm!'
@@ -65,6 +66,7 @@ bot = commands.AutoShardedBot(
     description="Hi I am **Minato Namikaze**, Yondaime Hokage",
     owner_id=571889108046184449
 )
+bot._cache = {}
 slash = SlashCommand(bot, sync_commands=True)
 
 bot.version = str(token_get('BOT_VER'))
@@ -96,6 +98,14 @@ async def on_ready():
     stats = bot.get_channel(819128718152695878)
     e = discord.Embed(title=f"Bot Loaded!", description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",color=discord.Colour.random())
     e.set_thumbnail(url=bot.user.avatar_url)
+    
+    guild=bot.get_guild(747480356625711204)
+    try:
+        bot._cache[guild.id] = {}
+        for invite in await guild.invites():
+            bot._cache[guild.id][invite.code] = invite
+    except Forbidden:
+        pass
     print('Started The Bot')
     
     try:

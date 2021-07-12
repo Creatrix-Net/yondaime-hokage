@@ -61,6 +61,7 @@ class Random(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def magic(self, ctx, user: discord.Member = None):
+        '''See magic!'''
         user = user or ctx.author
         url = str(user.avatar_url_as(format="png", size=1024))
         img = await self.bot.dagpi.image_process(ImageFeatures.magik(), url)

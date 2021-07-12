@@ -34,7 +34,7 @@ class QuickPoll(commands.Cog):
                           description=question)
             await ctx.send(embed=embed)
             try:
-                message = await self.bot.wait_for('message', timeout=25, check=check)
+                message = await self.bot.wait_for('message', timeout=60, check=check)
                 if i==2:
                     try:
                         int(message.content)
@@ -51,18 +51,22 @@ class QuickPoll(commands.Cog):
                         for i in range(int(message.content)):
                             await ctx.send(f'**Option {i+1}**')
                             try:
-                                options_message = await self.bot.wait_for('message', timeout=25, check=check)
-                            except TimeoutError:
+                                options_message = await self.bot.wait_for('message', timeout=60, check=check)
+                            except:
                                 await ctx.send("You didn't answer the questions in Time")
                                 return
                             options.append(options_message.content)
                             
-            except TimeoutError:
+            except:
                 await ctx.send("You didn't answer the questions in Time")
                 return
             answers.append(message.content)
         
         question, description, poll_channel = answers[0], answers[1],answers[-1]
+        
+        if not isinstance(poll_channel, discord.TextChannel):
+            await ctx.send(embed=ErrorEmbed(description='Wrong text channel provided! Try again and mention the channel next time! :wink:'))
+            return
 
         if len(options) == 2 and options[0] == 'yes' and options[1] == 'no':
             reactions = ['✅', '❌']
@@ -73,7 +77,7 @@ class QuickPoll(commands.Cog):
         for x, option in enumerate(options):
             description += '\n\n {} {}'.format(reactions[x], option)
         embed = Embed(title=question, description=''.join(description))
-        react_message = await ctx.send(embed=embed)
+        react_message = await poll_channel.send(embed=embed)
         for reaction in reactions[:len(options)]:
             await react_message.add_reaction(reaction)
         embed.set_footer(text='Poll ID: {}'.format(react_message.id))

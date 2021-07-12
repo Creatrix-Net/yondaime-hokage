@@ -124,6 +124,7 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(kick_members=True)
     @commands.check(check_if_warning_system_setup)
     async def warn(self, ctx, member: Union[int, discord.Member], *, reason: str = None):
+        '''Warn a user'''
         member = get_user(member, ctx)
         e = ErrorEmbed(title='You have been warned!')
         e.add_field(name='**Responsible Moderator**:',
@@ -149,6 +150,7 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.check(check_if_warning_system_setup)
     async def warnlist(self, ctx, member: Optional[Union[int, discord.Member]] = None):
+        '''Get the no. of warns for a specified user'''
         member = get_user(member if member !=
                           None else ctx.message.author, ctx)
         e = Embed(title='Type the below message in the search bar')

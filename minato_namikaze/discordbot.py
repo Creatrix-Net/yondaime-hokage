@@ -37,7 +37,7 @@ sentry_link = token_get('SENTRY')
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
-    prefixes = [')', 'm!', 'minato', 'minato ']
+    prefixes = [')', 'm!', 'minato', 'minato ', 'n!']
 
     if not message.guild:
         return 'm!'
@@ -71,7 +71,6 @@ bot.version = str(token_get('BOT_VER'))
 
 bot.start_time = time.time()
 bot.github = token_get('GITHUB')
-bot.owner = token_get('OWNER')
 bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join('botmain','bot','discord_bot_images')
 

@@ -72,7 +72,7 @@ class Info(commands.Cog):
     '''
 
     @commands.command()
-    async def who(self, ctx):
+    async def privacy(self, ctx):
         '''Get the Privacy Policy'''
         m = PrivacyPolicy(bot=self.bot)
         await m.start(ctx)

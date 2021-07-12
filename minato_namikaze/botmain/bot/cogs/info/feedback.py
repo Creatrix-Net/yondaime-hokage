@@ -10,19 +10,24 @@ class Feedback(commands.Cog):
         self.description = 'Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server owner)'
     
     @command()
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    @commands.cooldown(1, 60, commands.BucketType.user)
     @commands.guild_only()
     @commands.check(check_if_feedback_system_setup)
     async def feedback(self, ctx, *, feed):
         '''Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server owner)'''
-        
+        await ctx.message.delete()
         channel = return_feedback_channel(ctx)
         
-        e = discord.Embed(title="Feedback sent!",
-                description=f"Your feedback '{feed}' has been sent!")
-        await ctx.send(embed=e)
+        e = Embed(
+            title="Feedback sent!",
+            description=f"Your feedback '{feed}' has been sent!",
+        )
+        await ctx.send(embed=e, delete_after=10)
+        
         e2 = discord.Embed(
-                title=f"{ctx.author} has sent feedback", description=f"{feed}")
+                title=f"{ctx.author} has sent feedback", description=f"{feed}",
+                colour=ctx.author.color or ctx.author.top_role.colour.value or discord.Color.random()
+            )
         await channel.send(embed=e2)
     
     

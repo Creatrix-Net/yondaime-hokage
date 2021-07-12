@@ -29,7 +29,10 @@ class Support(menus.Menu):
 
         overwrite_dict.update({
             discord.utils.get(
-                self.ctx.guild.roles, name="SupportRequired"): discord.PermissionOverwrite(read_messages=False)
+                self.ctx.guild.roles, name="SupportRequired"): discord.PermissionOverwrite(
+                    read_messages=True, read_message_history=True, send_messages=True, send_tts_messages=True, embed_links=True, attach_files=True, external_emojis=True
+                ),
+            self.ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False)
         })
 
         sup = await self.ctx.guild.create_text_channel(
@@ -42,11 +45,12 @@ class Support(menus.Menu):
         a = '**This channel** will be used as the **support channel** who needs support!'
         b = f'Once the member uses the **`)support` command** they will be given a role of **{sup_roles.mention}** to **access this channel**'
         c = 'Then you can use **`)resolved`** command if the **issue has been resolved!**'
+        d = 'Use `)chksupreq` to see **who still requires support**!'
 
         await self.channel.send(f'{sup.mention} channel **created** as the **support** channel for the {self.ctx.guild.name} server!')
         e = Embed(
             title='Important notes!',
-            description=f'- {a} \n -{b} \n -{c}'
+            description=f'- {a} \n -{b} \n -{c} \n -{d}'
         )
         message_embed = await sup.send(embed=e)
         await message_embed.pin()

@@ -88,92 +88,96 @@ class FunGames(commands.Cog):
     
     @commands.command()
     async def cointoss(self, ctx):
-        embed = Embed(
-            title=f":coin: {ctx.author.name}'s coin toss :coin:",
-            description="Pick heads or tails below!",
-        )
-
-        menu_components = [
-            [
-                Button(style=ButtonStyle.grey, label="Heads"),
-                Button(style=ButtonStyle.grey, label="Tails"),
-            ]
-        ]
-        heads_components = [
-            [
-                Button(style=ButtonStyle.green, label="Heads", disabled=True),
-                Button(style=ButtonStyle.red, label="Tails", disabled=True),
-            ],
-            Button(style=ButtonStyle.blue, label="Play Again?", disabled=False),
-        ]
-        tails_components = [
-            [
-                Button(style=ButtonStyle.red, label="Heads", disabled=True),
-                Button(style=ButtonStyle.green, label="Tails", disabled=True),
-            ],
-            Button(style=ButtonStyle.blue, label="Play Again?", disabled=False),
-        ]
-
-        if ctx.author.id in self.session_message:
-            msg = self.session_message[ctx.author.id]
-            await msg.edit(embed=embed, components=menu_components)
-        else:
-            msg = await ctx.send(embed=embed, components=menu_components)
-            self.session_message[ctx.author.id] = msg
-
-        def check(res):
-            return res.user.id == ctx.author.id and res.channel.id == ctx.channel.id
-
+        '''Toss a coin'''
         try:
-            res = await self.bot.wait_for("button_click", check=check, timeout=20)
-        except TimeoutError:
-            await msg.edit(
-                embed=ErrorEmbed(title="Timeout!", description="No-one reacted. :frowning2:"),
-                components=[
-                    Button(style=ButtonStyle.red, label="Oh-no! Timeout reached!", disabled=True)
-                ],
-            )
-            return
-
-        await res.respond(
-            type=7,
-            embed=Embed(
-                title=f"🪙 {ctx.author.name}'s coin toss 🪙",
-                description=f"You chose **{res.component.label.lower()}**!",
-            ),
-            components=menu_components,
-        )
-
-        game_choice = choice(["Heads", "Tails"])
-        await sleep(2)
-
-        if game_choice == res.component.label:
             embed = Embed(
-                title=f"🪙 {ctx.author.name}'s coin toss 🪙",
-                description=f"You chose **{res.component.label.lower()}**!\n\n> **YOU WIN!**",
-            )
-        else:
-            embed = ErrorEmbed(
-                title=f"🪙 {ctx.author.name}'s coin toss 🪙",
-                description=f"You chose **{res.component.label.lower()}**!\n\n> You lost.",
+                title=f":coin: {ctx.author.name}'s coin toss :coin:",
+                description="Pick heads or tails below!",
             )
 
-        await msg.edit(
-            embed=embed,
-            components=tails_components if game_choice == "Tails" else heads_components,
-        )
+            menu_components = [
+                [
+                    Button(style=ButtonStyle.grey, label="Heads"),
+                    Button(style=ButtonStyle.grey, label="Tails"),
+                ]
+            ]
+            heads_components = [
+                [
+                    Button(style=ButtonStyle.green, label="Heads", disabled=True),
+                    Button(style=ButtonStyle.red, label="Tails", disabled=True),
+                ],
+                Button(style=ButtonStyle.blue, label="Play Again?", disabled=False),
+            ]
+            tails_components = [
+                [
+                    Button(style=ButtonStyle.red, label="Heads", disabled=True),
+                    Button(style=ButtonStyle.green, label="Tails", disabled=True),
+                ],
+                Button(style=ButtonStyle.blue, label="Play Again?", disabled=False),
+            ]
 
-        try:
-            res = await self.bot.wait_for("button_click", check=check, timeout=20)
-        except TimeoutError:
-            await msg.delete()
-            del self.session_message[ctx.author.id]
-            return
+            if ctx.author.id in self.session_message:
+                msg = self.session_message[ctx.author.id]
+                await msg.edit(embed=embed, components=menu_components)
+            else:
+                msg = await ctx.send(embed=embed, components=menu_components)
+                self.session_message[ctx.author.id] = msg
 
-        await res.respond(type=6)
-        if res.component.label == "Play Again?":
-            self.session_message[ctx.author.id] = msg
-            await self.cointoss(ctx)
+            def check(res):
+                return res.user.id == ctx.author.id and res.channel.id == ctx.channel.id
+
+            try:
+                res = await self.bot.wait_for("button_click", check=check, timeout=20)
+            except TimeoutError:
+                await msg.edit(
+                    embed=ErrorEmbed(title="Timeout!", description="No-one reacted. :frowning2:"),
+                    components=[
+                        Button(style=ButtonStyle.red, label="Oh-no! Timeout reached!", disabled=True)
+                    ],
+                )
+                return
+
+            await res.respond(
+                type=7,
+                embed=Embed(
+                    title=f"🪙 {ctx.author.name}'s coin toss 🪙",
+                    description=f"You chose **{res.component.label.lower()}**!",
+                ),
+                components=menu_components,
+            )
+
+            game_choice = choice(["Heads", "Tails"])
+            await sleep(2)
+
+            if game_choice == res.component.label:
+                embed = Embed(
+                    title=f"🪙 {ctx.author.name}'s coin toss 🪙",
+                    description=f"You chose **{res.component.label.lower()}**!\n\n> **YOU WIN!**",
+                )
+            else:
+                embed = ErrorEmbed(
+                    title=f"🪙 {ctx.author.name}'s coin toss 🪙",
+                    description=f"You chose **{res.component.label.lower()}**!\n\n> You lost.",
+                )
+
+            await msg.edit(
+                embed=embed,
+                components=tails_components if game_choice == "Tails" else heads_components,
+            )
+
+            try:
+                res = await self.bot.wait_for("button_click", check=check, timeout=20)
+            except TimeoutError:
+                await msg.delete()
+                del self.session_message[ctx.author.id]
+                return
+
+            await res.respond(type=6)
+            if res.component.label == "Play Again?":
+                self.session_message[ctx.author.id] = msg
+                await self.cointoss(ctx)
+        except:
+            await ctx.send(embed=ErrorEmbed(description="Please run the command again!"))
 
 
 

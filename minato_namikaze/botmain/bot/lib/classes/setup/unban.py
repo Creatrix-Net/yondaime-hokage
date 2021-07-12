@@ -2,7 +2,7 @@ import discord
 from discord.ext import menus
 
 from ..embed import Embed
-from ...util import unban
+from ...util import unban as unbantopic
 
 
 class Unban(menus.Menu):
@@ -29,7 +29,8 @@ class Unban(menus.Menu):
             )
         unban = await self.ctx.guild.create_text_channel(
             "unban",
-            topic=unban,
+            overwrites={self.ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False)},
+            topic=unbantopic,
             category=discord.utils.get(
                 self.ctx.guild.categories,
                 name="Bingo Book")

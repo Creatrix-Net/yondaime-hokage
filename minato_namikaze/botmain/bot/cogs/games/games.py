@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 from ...lib.classes.games import *
+from ...lib import Embed, ErrorEmbed
+import time
 
 class Games(commands.Cog):
     def __init__(self, bot):
@@ -12,11 +14,13 @@ class Games(commands.Cog):
     async def tictactoe(self, ctx, member: discord.Member):
         '''Play Amazing Tictactoe Game'''
         if member == ctx.author or member.bot:
-            await ctx.send('*You cannot play this game yourself or with a bot*')
+            await ctx.send(embed=ErrorEmbed(description='*You cannot play this game yourself or with a bot*'))
             return
-        await ctx.send('*Positions are marked with 1,2,3.. just like 3x3 cube*')
-        await ctx.send(f'{ctx.author.mention} you are taking *cross*')
-        await ctx.send(f'{member.mention} you are taking *circle*')
+        await ctx.send(
+            embed=Embed(
+                description=f'*Positions are marked with 1,2,3.. just like 3x3 cube*\n{ctx.author.mention} you are taking *cross*\n{member.mention} you are taking *circle*'
+                )
+            )
         game = tictactoe.Tictactoe(
             cross  = ctx.author,   
             circle = member,
@@ -28,7 +32,7 @@ class Games(commands.Cog):
     async def connectfour(self, ctx, member: discord.Member):
         '''Play Amazing Connect Four Game'''
         if member == ctx.author or member.bot:
-            await ctx.send('*You cannot play this game yourself or with a bot*')
+            await ctx.send(embed=ErrorEmbed(description='*You cannot play this game yourself or with a bot*'))
             return
         await ctx.send('**Here is the link to know about** *Connect Four*:')
         await ctx.send('<https://en.wikipedia.org/wiki/Connect_Four#firstHeading>')
@@ -43,7 +47,7 @@ class Games(commands.Cog):
         
     @commands.command(aliases=['hg'])
     async def hangman(self, ctx):
-        
+        '''Play Hangman!'''
         await ctx.send('**Here is the link to know about** *Hangman*:')
         await ctx.send('<https://en.wikipedia.org/wiki/Hangman_(game)#Example_game>')
         
@@ -55,7 +59,6 @@ class Games(commands.Cog):
     @commands.command(aliases=['aki'])
     async def akinator(self, ctx):
         '''Play Akinator'''
-        import time
         await ctx.send('**Here is the link to know about** *Akinator*:')
         await ctx.send('<https://en.wikipedia.org/wiki/Akinator#Gameplay>')
         a = await ctx.send('**Now get ready for the game**')

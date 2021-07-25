@@ -68,7 +68,7 @@ class MenuHelp(DefaultMenu):
                     Button(
                         label = "Support Server",
                         style=ButtonStyle.URL,
-                        url="https://discord.gg/g9zQbjE73K",
+                        url="https://discord.gg/S8kzbBVN8b",
                         emoji = discord.utils.get(ctx.guild.emojis, id=848961696047300649)
                     ),
                 ]

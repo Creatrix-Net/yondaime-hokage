@@ -59,6 +59,32 @@ class BotEvents(commands.Cog):
                 e = Embed(description=f'**{member}** was invited by **{inviter.inviter}** \n- **INVITE CODE: {inviter.code}**,\n- USES **{inviter.uses} uses**.')
                 await channel.send(member.mention, embed=embed)
                 await channel.send(embed=e)
+                
+    @commands.Cog.listener()
+    async def on_invite_create(self, invite):
+        if invite.guild.id not in self._cache.keys() and invite.guild.id == 747480356625711204:
+            self.bot._cache[invite.guild.id] = {}
+        self.bot._cache[invite.guild.id][invite.code] = invite
+    
+    @commands.Cog.listener()
+    async def on_invite_delete(self, invite):
+        if invite.guild.id not in self._cache.keys():
+            return
+        ref_invite = self._cache[invite.guild.id][invite.code]
+        if (ref_invite.created_at.timestamp()+ref_invite.max_age > datetime.utcnow().timestamp() or ref_invite.max_age == 0) and ref_invite.max_uses > 0 and ref_invite.uses == ref_invite.max_uses-1:
+            try:
+                async for entry in invite.guild.audit_logs(limit=1, action=AuditLogAction.invite_delete):
+                    if entry.target.code != invite.code:
+                        self._cache[invite.guild.id][ref_invite.code].revoked = True
+                        return
+                else:
+                    self._cache[invite.guild.id][ref_invite.code].revoked = True
+                    return
+            except Forbidden:
+                self._cache[invite.guild.id][ref_invite.code].revoked = True
+                return
+        else:
+            self._cache[invite.guild.id].pop(invite.code)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):

@@ -164,7 +164,9 @@ class BotEvents(commands.Cog):
             if user.avatar_url:
                 e.set_thumbnail(url=user.avatar_url)
             await ban.send(embed=e)
-            await user.send(f'You were **banned** from **{guild.name}**',embed=e)
+            try:
+                await user.send(f'You were **banned** from **{guild.name}**',embed=e)
+            except: pass
 
     # unban
     @commands.Cog.listener()
@@ -187,7 +189,9 @@ class BotEvents(commands.Cog):
             if mod:
                 e.add_field(name='**Responsible Moderator** :', value=mod, inline=True)
             await unban.send(embed=e)
-            await user.send(f'You were **unbanned** from **{guild.name}** ! :tada:',embed=e)
+            try:
+                await user.send(f'You were **unbanned** from **{guild.name}** ! :tada:',embed=e)
+            except: pass
 
     # on message event
     @commands.Cog.listener()

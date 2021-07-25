@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from ...lib import (Embed, ErrorEmbed, check_if_warning_system_setup,
-                    get_roles, get_user, return_warning_channel)
+                    get_roles, get_user, return_warning_channel, return_ban_channel)
 
 
 class Moderation(commands.Cog):
@@ -51,14 +51,17 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.Member, *, reason=None):
+    async def ban(self, ctx, member: Union[int, discord.Member], *, reason=None):
         '''A command which bans a given user'''
+        member = get_user(member, ctx)
         await ctx.guild.ban(user=member, reason=reason)
 
-        embed = Embed(
+        embed = ErrorEmbed(
             title=f"{ctx.author.name} banned: {member.name}", description=reason
         )
         await ctx.send(embed=embed)
+        if reason:
+            await return_ban_channel(ctx, ctx.guild).send(ErrorEmbed(description=reason))
 
     @commands.command(
         name="unban",

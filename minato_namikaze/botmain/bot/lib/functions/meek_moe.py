@@ -16,6 +16,7 @@ async def meek_api(name: str):
     try:
         if name == 'miku' and l:
             data = await session.get(l + name if l == 'https://api.meek.moe/' else 'https://mikuapi.predeactor.net/random')
+            url = await data.json()
         else:
             data = await session.get(l + name)
             url = await data.json()

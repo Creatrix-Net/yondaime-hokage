@@ -37,6 +37,7 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         '''A command which kicks a given user'''
+        await ctx.message.delete()
         await ctx.guild.kick(user=member, reason=reason)
 
         embed = Embed(
@@ -53,15 +54,22 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: Union[int, discord.Member], *, reason=None):
         '''A command which bans a given user'''
+        await ctx.message.delete()
         member = get_user(member, ctx)
-        await ctx.guild.ban(user=member, reason=reason)
+        if ctx.message.author == member or ctx.message.author.id == member:
+            await ctx.send(embed=ErrorEmbed(description='You **can\'t ban yourself**!'))
+            return
+        try:
+            await ctx.guild.ban(user=member, reason=reason)
+        except:
+            await ctx.send(embed=ErrorEmbed(description='Can\'t ban the memeber. Please make sure **my role is at the top**!'), delete_after=4)
+            return
 
         embed = ErrorEmbed(
             title=f"{ctx.author.name} banned: {member.name}", description=reason
         )
         await ctx.send(embed=embed)
-        if reason:
-            await return_ban_channel(ctx, ctx.guild).send(ErrorEmbed(description=reason))
+        
 
     @commands.command(
         name="unban",
@@ -70,27 +78,70 @@ class Moderation(commands.Cog):
     )
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def unban(self, ctx, *, member: Union[str, int, discord.Member]):
+    async def unban(self, ctx, *,member: Union[str, int, discord.Member]):
         '''A command which unbans a given user'''
         await ctx.message.delete()
+        try:
+            member = member.strip(' ').strip('\n')
+        except:
+            pass
+        if member.isdigit():
+            member = int(member)
+        if ctx.message.author == member or ctx.message.author.id == member:
+            await ctx.send(embed=ErrorEmbed(description='You **can\'t unban yourself**! '))
+            return
+        
         banned_users = await ctx.guild.bans()
-        member_name, member_discriminator = member.split('#')
+        if isinstance(member, str):
+            member_name, member_discriminator = member.split('#')
+        
+        #ask reason function
+        async def reason(ctx):
+            question = await ctx.send(
+                ctx.message.author.mention, 
+                embed=Embed(
+                    description='Would you like to give any **reason for this unban**? \nIf there isn\'t any reason then type **(no/skip)**'
+                    )
+                )
+            try:
+                reason_content = await self.bot.wait_for('message', timeout=25, check=lambda m:m.author == ctx.author and m.channel == ctx.channel)
+            except TimeoutError:
+                await ctx.send('Okay! **There won\'t be any reason**.',delete_after=3)
+            await question.delete()
+            return reason_content.content.capitalize() if reason_content.content.lower() not in ('skip','no') else None
+        
+        n=0
         for ban_entry in banned_users:
             user = ban_entry.user
             e = Embed(title='Unbanned!',
                       description=f'**Unbanned**: {user.mention}')
             if isinstance(member, str):
                 if (user.name, user.discriminator) == (member_name, member_discriminator):
-                    await ctx.guild.unban(user)
+                    reason_unban = await reason(ctx)
+                    await ctx.guild.unban(user, reason=reason_unban)
                     await ctx.channel.send(embed=e)
+                    n+=1
+                    return
+                    
             elif isinstance(member, int):
                 if user.id == int(member):
-                    await ctx.guild.unban(user)
+                    reason_unban = await reason(ctx)
+                    await ctx.guild.unban(user, reason=reason_unban)
                     await ctx.channel.send(embed=e)
+                    n+=1
+                    return
+                    
             else:
                 if user == member:
-                    await ctx.guild.unban(user)
+                    reason_unban = await reason(ctx)
+                    await ctx.guild.unban(user, reason=reason_unban)
                     await ctx.channel.send(embed=e)
+                    n+=1
+                    return
+        if n == 0:
+            await ctx.send(embed=ErrorEmbed(description=f'The **{member}** isn\'t there in the **ban list**'))
+            return
+                    
 
     @commands.command(
         name="purge",
@@ -101,7 +152,8 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(manage_messages=True)
     async def purge(self, ctx, amount=5):
         '''A command which purges the channel it is called in'''
-        await ctx.channel.purge(limit=amount + 1)
+        await ctx.message.delete()
+        await ctx.channel.purge(limit=amount)
         embed = Embed(
             title=f"{ctx.author.name} purged: {ctx.channel.name}",
             description=f"{amount} messages were cleared",
@@ -128,6 +180,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_warning_system_setup)
     async def warn(self, ctx, member: Union[int, discord.Member], *, reason: str = None):
         '''Warn a user'''
+        await ctx.message.delete()
         member = get_user(member, ctx)
         e = ErrorEmbed(title='You have been warned!')
         e.add_field(name='**Responsible Moderator**:',
@@ -135,7 +188,7 @@ class Moderation(commands.Cog):
         if reason:
             e.add_field(name='**Reason**:', value=reason, inline=True)
 
-        warning_channel = return_warning_channel(ctx)
+        warning_channel = _warning_channel(ctx)
         await member.send(embed=e)
         await warning_channel.send(embed=e, content=member.mention)
         await ctx.send(f'{member.mention} has been **warned** by you ||{ctx.author.mention}||', delete_after=10)
@@ -162,7 +215,7 @@ class Moderation(commands.Cog):
         e.set_image(url="attachment://search.png")
         await ctx.send(file=search_image, embed=e)
 
-        warning_channel = return_warning_channel(ctx)
+        warning_channel = _warning_channel(ctx)
         message = f'mentions: {member}  in: {warning_channel}'
         await ctx.send(message)
 

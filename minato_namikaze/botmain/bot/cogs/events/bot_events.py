@@ -134,7 +134,7 @@ class BotEvents(commands.Cog):
                 e34.set_thumbnail(url=guild.icon_url)
             if guild.banner:
                 e34.set_image(url=guild.banner_url_as(format="png"))
-            c = self.bot.get_channel(813954921782706227)
+            c = self.bot.get_channel(813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
             e34.add_field(name='**Total Members**', value=guild.member_count)
             e34.add_field(name='**Bots**',
                         value=sum(1 for member in guild.members if member.bot))
@@ -156,7 +156,7 @@ class BotEvents(commands.Cog):
                 e34.set_thumbnail(url=guild.icon_url)
             if guild.banner:
                 e34.set_image(url=guild.banner_url_as(format="png"))
-            c = self.bot.get_channel(813954921782706227)
+            c = self.bot.get_channel(813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
             e34.add_field(name='**Total Members**', value=guild.member_count)
             e34.add_field(name='**Bots**',
                         value=sum(1 for member in guild.members if member.bot))
@@ -173,20 +173,21 @@ class BotEvents(commands.Cog):
     @commands.Cog.listener()
     async def on_member_ban(self, guild, user):
         ban = return_ban_channel(guild=guild)
-        mod = False
+        event = False
         try:
-            async for i in guild.audit_logs(limit=1):
-                mod = i.user
+            event = await guild.audit_logs().find(lambda x: x.action is discord.AuditLogAction.ban)
         except:
-            mod = False
+            event = False
         if ban:
             e = ErrorEmbed(
                     title='**Ban**', 
                     description=f'**{user.mention}** was banned!',
                 )
             e.add_field(name='**Banned User** :', value=user, inline=True)
-            if mod:
-                e.add_field(name='**Responsible Moderator** :', value=mod, inline=True)
+            if event:
+                e.add_field(name='**Responsible Moderator** :', value=event.user, inline=True)
+                if event.reason:
+                    e.add_field(name='**Reason** :', value=event.reason)
             if user.avatar_url:
                 e.set_thumbnail(url=user.avatar_url)
             await ban.send(embed=e)
@@ -198,12 +199,11 @@ class BotEvents(commands.Cog):
     @commands.Cog.listener()
     async def on_member_unban(self, guild, user):
         unban = return_unban_channel(guild=guild)
-        mod = False
+        event = False
         try:
-            async for i in guild.audit_logs(limit=1):
-                mod = i.user
+            event = await guild.audit_logs().find(lambda x: x.action is discord.AuditLogAction.unban)
         except:
-            mod = False
+            event = False
         if unban:
             e = Embed(
                     title='**Unban** :tada:', 
@@ -212,8 +212,10 @@ class BotEvents(commands.Cog):
             if user.avatar_url:
                 e.set_thumbnail(url=user.avatar_url)
             e.add_field(name='**Unbanned User** :', value=user, inline=True)
-            if mod:
-                e.add_field(name='**Responsible Moderator** :', value=mod, inline=True)
+            if event:
+                e.add_field(name='**Responsible Moderator** :', value=event.user, inline=True)
+                if event.reason:
+                    e.add_field(name='**Reason** :', value=event.reason)
             await unban.send(embed=e)
             try:
                 await user.send(f'You were **unbanned** from **{guild.name}** ! :tada:',embed=e)

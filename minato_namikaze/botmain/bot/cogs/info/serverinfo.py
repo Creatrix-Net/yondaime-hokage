@@ -5,7 +5,7 @@ import time
 import discord
 from discord import Spotify
 from discord.ext import commands
-from ...lib import PrivacyPolicy
+from ...lib import PrivacyPolicy, Embed
 
 
 class Info(commands.Cog):
@@ -22,12 +22,12 @@ class Info(commands.Cog):
     @commands.guild_only()
     async def serverdump(self, ctx):
         '''Dumps server name to the developer'''
-        c = self.bot.get_channel(813954921782706227)
-        if ctx.guild.id == 747480356625711204:
+        c = self.bot.get_channel(813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
+        if ctx.guild.id in (747480356625711204, 869085099470225508):
             b = await ctx.send('** Okay updating info ! **')
             n=1
             for guild in ctx.bot.guilds:
-                e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color= 0x2ecc71)
+                e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color=discord.Color.green())
                 if guild.icon:
                     e.set_thumbnail(url=guild.icon_url)
                 if guild.banner:
@@ -96,13 +96,13 @@ class Info(commands.Cog):
     async def ping(self, ctx):
         '''Get the Latency'''
         starttime = time.time()
-        msg = await ctx.send("Ping...")
+        msg = await ctx.send(":ping_pong: Ping... :ping_pong:")
         async with ctx.channel.typing():
-            e = discord.Embed(
-                title="Pong!", description=f"Heartbeat : {round(self.bot.latency * 1000, 2)} ms")
+            e = Embed(
+                title=":ping_pong: Pong! :ping_pong:", description=f"Heartbeat : {round(self.bot.latency * 1000, 2)} ms")
             endtime = time.time()
             difference = float(int(starttime - endtime))
-            e.add_field(name="Script Speed", value=f"{difference}ms")
+            e.add_field(name=":inbox_tray: Script Speed :outbox_tray:", value=f"{difference}ms")
             await msg.edit(content="", embed=e)
 
     @commands.command()

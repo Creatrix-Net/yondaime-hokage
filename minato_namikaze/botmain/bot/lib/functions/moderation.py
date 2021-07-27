@@ -8,7 +8,7 @@ def check_if_warning_system_setup(ctx):
     if discord.utils.get(ctx.guild.text_channels, topic=warns):
         return True
     else:
-        False
+        return False
 
 #checks support
 def check_if_support_is_setup(ctx):

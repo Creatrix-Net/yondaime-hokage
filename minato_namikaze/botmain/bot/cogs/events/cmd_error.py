@@ -37,13 +37,13 @@ class BotEventsCommands(commands.Cog):
 
         elif isinstance(error, commands.BotMissingPermissions):
             e = ErrorEmbed(
-                description=f"I **need** the following **permissions**: **{' '.join(error.missing_perms)}**"
+                description=error
             )
             await ctx.send(embed=e, delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.MissingPermissions):
             e = ErrorEmbed(
-                description=f"You **need** the following **permissions**: **{' '.join(error.missing_perms)}** to run this command!"
+                description=error
             )
             await ctx.send(embed=e, delete_after=self.delete_after_time)
 

@@ -12,7 +12,8 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Some simple moderation commands'
-
+    
+    #setdelay
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     @commands.guild_only()
@@ -26,7 +27,8 @@ class Moderation(commands.Cog):
             message = f"Reset Slowmode of channel {ctx.channel.name}"
         await ctx.channel.edit(slowmode_delay=seconds)
         await ctx.send(f"{message}")
-
+    
+    #kick
     @commands.command(
         name="kick",
         description="A command which kicks a given user",
@@ -43,7 +45,8 @@ class Moderation(commands.Cog):
         embed = Embed(
             title=f"{ctx.author.name} kicked: {member.name}", description=reason)
         await ctx.send(embed=embed)
-
+    
+    #ban
     @commands.command(
         name="ban",
         description="A command which bans a given user",
@@ -69,8 +72,106 @@ class Moderation(commands.Cog):
             title=f"{ctx.author.name} banned: {member.name}", description=reason
         )
         await ctx.send(embed=embed)
-        
+    
+    #banlist
+    @commands.command(
+        name="banlist",
+        description="Shows list of users who have been banned! Or position of a specified user who was banned!",
+        usage="Optional[<member.id> or <member.mention> or <member.name.with.tag>]",
+    )
+    @commands.bot_has_permissions()
+    @commands.guild_only()
+    @commands.has_guild_permissions(ban_members=True)
+    async def banlist(self, ctx, *, member: Optional[Union[str, int, discord.Member]]):
+        banned_users = list(i for i in await ctx.guild.bans())
+        if not member:
+            if len(banned_users) == 0:
+                await ctx.send(embed=Embed(description='There is **no-one who is banned**! :zero: people are **banned**'))
+                return
+            l_no = 0
+            embed = []
+            if len(banned_users) > 10:
+                for i in range(len(banned_users)//10):
+                    description = ''
+                    for l in range(10):
+                        try:
+                            description += f'\n{l_no+1}. - **{banned_users[l_no].user}** : ID [ **{banned_users[l_no].user.id}** ] '
+                            l_no += 1
+                        except:
+                            pass
 
+                    e = ErrorEmbed(
+                        title='Those who were banned are:',
+                        description=description
+                    )
+                    embed.append(e)
+
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('⏭️', "last")
+
+                await paginator.run(embed)
+            else:
+                description = ''
+                for k,i in enumerate(banned_users):
+                    description += f'\n{k+1}. - **{i.user}** : ID [ **{banned_users[k].user.id}** ] '
+                e = ErrorEmbed(
+                        title='Those who were banned are:',
+                        description=description
+                    )
+                embed.append(e)
+                await ctx.send(embed=e)
+                return
+        else:
+            if member.isdigit():
+                member = int(member)
+            if isinstance(member, str):
+                member_name, member_discriminator = member.split('#')
+            
+            n=0
+            for i,ban_entry in enumerate(banned_users):
+                user = ban_entry.user
+                e=ErrorEmbed(topic=f'About the ban {member}')
+                if isinstance(member, str):
+                    if (user.name, user.discriminator) == (member_name, member_discriminator):
+                        if ban_entry.reason:
+                            e.add_field(name='**Reason**',value=ban_entry.reason,inline=True)
+                        e.add_field(name='**Position**', value=i+1,inline=True)
+                        e.add_field(name='**Banned User Name**', value=ban_entry.user,inline=True)
+                        e.set_thumbnail(url=ban_entry.user.avatar_url)
+                        await ctx.channel.send(embed=e)
+                        n+=1
+                        return
+                        
+                elif isinstance(member, int):
+                    if user.id == int(member):
+                        if ban_entry.reason:
+                            e.add_field(name='**Reason**',value=ban_entry.reason,inline=True)
+                        e.add_field(name='**Position**', value=i+1,inline=True)
+                        e.add_field(name='**Banned User Name**', value=ban_entry.user,inline=True)
+                        e.set_thumbnail(url=ban_entry.user.avatar_url)
+                        await ctx.channel.send(embed=e)
+                        n+=1
+                        return
+                        
+                else:
+                    if user == member:
+                        if ban_entry.reason:
+                            e.add_field(name='**Reason**',value=ban_entry.reason,inline=True)
+                        e.add_field(name='**Position**', value=i+1,inline=True)
+                        e.add_field(name='**Banned User Name**', value=ban_entry.user,inline=True)
+                        e.set_thumbnail(url=ban_entry.user.avatar_url)
+                        await ctx.channel.send(embed=e)
+                        n+=1
+                        return
+            if n == 0:
+                await ctx.send(embed=ErrorEmbed(description=f'The **{member}** isn\'t there in the **ban list**'))
+                return
+
+    #Unban
     @commands.command(
         name="unban",
         description="A command which unbans a given user",

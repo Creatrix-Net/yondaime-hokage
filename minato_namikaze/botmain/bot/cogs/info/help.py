@@ -103,7 +103,7 @@ class Help(commands.Cog):
         l_no = 0
         if len(l) == 0:
             e = Embed(
-                description='Those who still **require support** are **None**! :joy:',
+                description='Those who still **require support** are **None**! :tada:',
             )
             await ctx.send(embed=e)
             return

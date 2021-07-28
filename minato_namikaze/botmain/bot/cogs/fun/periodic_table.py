@@ -2,13 +2,13 @@ from typing import List, Tuple
 
 import aiohttp
 import discord
+import DiscordUtils
+from discord.ext import commands
 from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
 from mendeleev import element as ELEMENTS
 
 from ...lib.data import IMAGES, LATTICES, UNITS
-from discord.ext import commands
-import DiscordUtils
 
 
 class ElementConverter(Converter):
@@ -18,13 +18,15 @@ class ElementConverter(Converter):
         result = None
         if argument.isdigit():
             if int(argument) > 118 or int(argument) < 1:
-                raise BadArgument("`{}` is not a valid element!".format(argument))
+                raise BadArgument(
+                    "`{}` is not a valid element!".format(argument))
             result = ELEMENTS(int(argument))
         else:
             try:
                 result = ELEMENTS(argument.title())
             except Exception:
-                raise BadArgument("`{}` is not a valid element!".format(argument))
+                raise BadArgument(
+                    "`{}` is not a valid element!".format(argument))
         if not result:
             raise BadArgument("`{}` is not a valid element!".format(argument))
         return result
@@ -50,7 +52,8 @@ class MeasurementConverter(Converter):
                 elif argument.lower() in k:
                     result.append((k, v["name"], v["units"]))
         if not result:
-            raise BadArgument("`{}` is not a valid measurement!".format(argument))
+            raise BadArgument(
+                "`{}` is not a valid measurement!".format(argument))
         return result
 
 
@@ -71,25 +74,29 @@ class Elements(commands.Cog):
     def get_xray_wavelength(element: ELEMENTS) -> str:
         try:
             ka = 1239.84 / (
-                13.6057 * ((element.atomic_number - 1) ** 2) * ((1 / 1 ** 2) - (1 / 2 ** 2))
+                13.6057 * ((element.atomic_number - 1) ** 2) *
+                ((1 / 1 ** 2) - (1 / 2 ** 2))
             )
         except Exception:
             ka = ""
         try:
             kb = 1239.84 / (
-                13.6057 * ((element.atomic_number - 1) ** 2) * ((1 / 1 ** 2) - (1 / 3 ** 2))
+                13.6057 * ((element.atomic_number - 1) ** 2) *
+                ((1 / 1 ** 2) - (1 / 3 ** 2))
             )
         except Exception:
             kb = ""
         try:
             la = 1239.84 / (
-                13.6057 * ((element.atomic_number - 7.4) ** 2) * ((1 / 1 ** 2) - (1 / 2 ** 3))
+                13.6057 * ((element.atomic_number - 7.4) ** 2) *
+                ((1 / 1 ** 2) - (1 / 2 ** 3))
             )
         except Exception:
             la = ""
         try:
             lb = 1239.84 / (
-                13.6057 * ((element.atomic_number - 7.4) ** 2) * ((1 / 1 ** 2) - (1 / 2 ** 4))
+                13.6057 * ((element.atomic_number - 7.4) ** 2) *
+                ((1 / 1 ** 2) - (1 / 2 ** 4))
             )
         except Exception:
             lb = ""
@@ -181,13 +188,15 @@ class Elements(commands.Cog):
             x = getattr(element, attr, "")
             if x:
                 embed.add_field(name=name[0], value=f"{x} {name[1]}")
-        embed.add_field(name="X-ray Fluorescence", value=self.get_xray_wavelength(element))
+        embed.add_field(name="X-ray Fluorescence",
+                        value=self.get_xray_wavelength(element))
         discovery = (
             f"{element.discoverers} ({element.discovery_year}) in {element.discovery_location}"
         )
         embed.add_field(name="Discovery", value=discovery)
 
         return embed
+
 
 def setup(bot):
     bot.add_cog(Elements(bot))

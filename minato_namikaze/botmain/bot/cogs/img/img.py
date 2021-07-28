@@ -1,13 +1,13 @@
+import datetime
 import os
 from asyncio import sleep
 from io import FileIO
 
 import discord
-from asyncdagpi import ImageFeatures
+from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
-import datetime
-from asyncdagpi import Client
+
 from ...lib import dagpi
 
 
@@ -18,26 +18,27 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
         self.description = 'Some fun Image Manipulation Commands'
 
-    @commands.command( usage='<member.mention>')
+    @commands.command(usage='<member.mention>')
     async def wni(self, ctx, *, member: discord.Member = ''):
         '''Prove that you are not sus!'''
         if member == '@everyone':
             await ctx.send(f'** <@{ctx.author.id}> yes yes bro!!! Everyone is not sus!**')
             return
-        elif type(member)== discord.Member:
-            desc=f'** {member}  was not the imposter**'
-        elif member!='':
-            desc=f'** {member}  was not the imposter**'
+        elif type(member) == discord.Member:
+            desc = f'** {member}  was not the imposter**'
+        elif member != '':
+            desc = f'** {member}  was not the imposter**'
         else:
-            desc=(f'** <@{ctx.author.id}> yes ma boi you are not __sus__!!**')
-        
+            desc = (
+                f'** <@{ctx.author.id}> yes ma boi you are not __sus__!!**')
+
         file_path = self.DEFAULT_GIF_LIST_PATH / "amoungus_friends.png"
-        file=discord.File(file_path)
-        
-        embed = discord.Embed(description=desc,timestamp=datetime.datetime.utcnow())
+        file = discord.File(file_path)
+
+        embed = discord.Embed(
+            description=desc, timestamp=datetime.datetime.utcnow())
         embed.set_image(url=f"attachment://{file_path}")
         await ctx.send(file=file, embed=embed)
-
 
     @commands.command(usage='<member.mention>')
     async def wi(self, ctx, *, member: discord.Member = ''):
@@ -46,28 +47,30 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             desc = f'Hmmmmmmm ** <@{ctx.author.id}> , Hey guys <@{ctx.author.id}> is the sus !!!**'
             await ctx.send(desc)
             text = f'{ctx.author.display_name}  is the imposter'
-        elif type(member)== discord.Member:
+        elif type(member) == discord.Member:
             desc = f'** {member.mention}  is the imposter**'
             text = f'{member.display_name}  is the imposter'
-        elif member!='':
+        elif member != '':
             desc = f'** {member}  is the imposter**'
             text = f'{member}  is the imposter'
         else:
             await ctx.send(f'** <@{ctx.author.id}> why you being __sus__ ! **')
             return
-        
-        embed = discord.Embed(description=desc,timestamp=datetime.datetime.utcnow())
-        
-        img = Image.open(FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("amongus.png")))
+
+        embed = discord.Embed(
+            description=desc, timestamp=datetime.datetime.utcnow())
+
+        img = Image.open(FileIO(self.DEFAULT_GIF_LIST_PATH /
+                         os.path.join("amongus.png")))
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("Arial.ttf")), 60)
+        font = ImageFont.truetype(
+            FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("Arial.ttf")), 60)
         draw.text((250, 300), text, font=font, fill="red", align="right")
         img.save("wi.png")
         embed.set_image(url=f"attachment://wi.png")
-        await ctx.send(file=discord.File("wi.png"),embed=embed)
+        await ctx.send(file=discord.File("wi.png"), embed=embed)
         await sleep(3)
         os.remove("wi.png")
-
 
     @commands.command(usage='<member.mention>')
     async def triggered(self, ctx, member: discord.Member = None):
@@ -171,7 +174,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="Here You Go! Filter used is gay!")
         e.set_image(url=f"attachment://rainbow.{img.format}")
         await ctx.send(embed=e, file=e2file)
-    
+
     @commands.command()
     async def gay(self, ctx, member: discord.Member = None):
         '''Seperate yourself/others and mark them/yourself as gay!'''
@@ -184,7 +187,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="There you go gay!")
         e.set_image(url=f"attachment://gay.{img.format}")
         await ctx.send(embed=e, file=e2file)
-    
+
     @commands.command()
     async def trash(self, ctx, member: discord.Member = None):
         '''Puts trash into trashbin'''
@@ -197,8 +200,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="There you go piece of Trash!")
         e.set_image(url=f"attachment://trash.{img.format}")
         await ctx.send(embed=e, file=e2file)
-    
-    @commands.command(aliases=['delete_trash','dt'])
+
+    @commands.command(aliases=['delete_trash', 'dt'])
     async def delete(self, ctx, member: discord.Member = None):
         '''Removes trash from bin'''
         if member is None:
@@ -210,7 +213,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="There you go piece of trash removed!")
         e.set_image(url=f"attachment://delete.{img.format}")
         await ctx.send(embed=e, file=e2file)
-    
+
     @commands.command()
     async def angel(self, ctx, member: discord.Member = None):
         '''Be an Angel'''
@@ -223,7 +226,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="Our dear Angel!")
         e.set_image(url=f"attachment://angel.{img.format}")
         await ctx.send(embed=e, file=e2file)
-    
+
     @commands.command()
     async def satan(self, ctx, member: discord.Member = None):
         '''Be the Devil'''
@@ -236,8 +239,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="Satan!!!")
         e.set_image(url=f"attachment://satan.{img.format}")
         await ctx.send(embed=e, file=e2file)
-    
-    @commands.command(aliases=['chp','chpaint','charcoal_paint','charcoalp'])
+
+    @commands.command(aliases=['chp', 'chpaint', 'charcoal_paint', 'charcoalp'])
     async def charcoal(self, ctx, member: discord.Member = None):
         '''Get your pfp beautiful charcoal paint'''
         if member is None:
@@ -249,7 +252,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="There you go your lovely charcoal paintaing")
         e.set_image(url=f"attachment://charcoal.{img.format}")
         await ctx.send(embed=e, file=e2file)
-    
+
     @commands.command()
     async def hitler(self, ctx, member: discord.Member = None):
         '''Hail Hitler'''
@@ -262,7 +265,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="Worse than Hitler!!!")
         e.set_image(url=f"attachment://hitler.{img.format}")
         await ctx.send(embed=e, file=e2file)
-    
+
     @commands.command(usage="<member.mention> (Optional)")
     async def wasted(self, ctx, member: discord.Member = None):
         '''GTA V wasted screen'''
@@ -275,7 +278,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = discord.Embed(title="Wasted! :skull_crossbones:")
         e.set_image(url=f"attachment://wasted.{img.format}")
         await ctx.send(embed=e, file=e2file)
-    
+
     @commands.command(usage="<member.mention> (Optional)")
     async def bomb(self, ctx, member: discord.Member = None):
         '''Bomb someone'''
@@ -288,6 +291,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e2file = discord.File(fp=img.image, filename=f"wasted.{img.format}")
         e.set_image(url=f"attachment://bomb.{img.format}")
         await ctx.send(embed=e, file=e2file)
+
 
 def setup(bot):
     bot.add_cog(ImageManipulation(bot))

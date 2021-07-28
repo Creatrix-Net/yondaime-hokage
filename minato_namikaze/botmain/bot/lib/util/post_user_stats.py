@@ -1,16 +1,18 @@
 import random
 from os.path import join
 from pathlib import Path
-from .vars import *
-from ..classes.embed import Embed
+
 import aiohttp
+
+from ..classes.embed import Embed
+from .vars import *
 
 
 class PostStats:
     def __init__(self, bot):
         self.bot = bot
 
-    async def post(self,url, headers, data: dict = None, json: dict = None):
+    async def post(self, url, headers, data: dict = None, json: dict = None):
         session = aiohttp.ClientSession()
         request_made = await session.post(url, headers=headers, json=data or json)
         await session.close()
@@ -21,7 +23,7 @@ class PostStats:
         members = len(set(self.bot.get_all_members()))
 
         imageslistdir = Path(__file__).resolve(
-            strict=True).parent.parent / join('text','images_list.txt')
+            strict=True).parent.parent / join('text', 'images_list.txt')
         filepointer = open(imageslistdir)
         imageslist = filepointer.readlines()
 
@@ -76,7 +78,7 @@ class PostStats:
 
         r = self.bot.get_channel(822472454030229545)
         e1 = Embed(title='Status posted successfully',
-                           description=f'[Widgets Link]({website}widgets) [Invite Stats](https://minatonamikaze-invites.herokuapp.com/)')
+                   description=f'[Widgets Link]({website}widgets) [Invite Stats](https://minatonamikaze-invites.herokuapp.com/)')
         e1.set_image(url=random.choice(imageslist).strip('\n'))
         e1.set_thumbnail(url=self.bot.user.avatar_url)
         e1.add_field(
@@ -103,5 +105,5 @@ class PostStats:
             k.status)+f' : [BladeBotList](https://bladebotlist.xyz/bot/{self.bot.user.id}/)')
         e1.add_field(name='DiscordLabs', value=str(
             j.status)+f' : [DiscordLabs](https://bots.discordlabs.org/bot/{self.bot.user.id})')
-        
+
         await r.send(embed=e1)

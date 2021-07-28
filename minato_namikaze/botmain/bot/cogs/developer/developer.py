@@ -2,11 +2,11 @@ import inspect
 import io
 import os
 import subprocess as sp
+import sys
 import textwrap
 import traceback
 from contextlib import redirect_stdout
 from pathlib import Path
-import sys
 
 import discord
 from discord.ext import commands
@@ -64,7 +64,6 @@ class Developer(commands.Cog):
                 await ctx.send_help(ctx.command)
             else:
                 pass
-    
 
     @dev.group(name='sharedservers', usage="<user>")
     async def sharedservers(self, ctx, *, user: discord.Member):
@@ -191,7 +190,7 @@ class Developer(commands.Cog):
             await ctx.message.add_reaction('\u2049')  # x
         else:
             await ctx.message.add_reaction('\u2705')
-    
+
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def get_all_cogs(self, ctx):
@@ -258,7 +257,8 @@ class Developer(commands.Cog):
             else:
                 if file.endswith('.py'):
                     try:
-                        self.bot.reload_extension(f'botmain.bot.cogs.{file[:-3]}')
+                        self.bot.reload_extension(
+                            f'botmain.bot.cogs.{file[:-3]}')
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 
@@ -299,7 +299,8 @@ class Developer(commands.Cog):
             else:
                 if file.endswith('.py'):
                     try:
-                        self.bot.reload_extension(f'botmain.bot.cogs.{file[:-3]}')
+                        self.bot.reload_extension(
+                            f'botmain.bot.cogs.{file[:-3]}')
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 

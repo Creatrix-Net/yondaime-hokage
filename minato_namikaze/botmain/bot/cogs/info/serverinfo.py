@@ -5,7 +5,8 @@ import time
 import discord
 from discord import Spotify
 from discord.ext import commands
-from ...lib import PrivacyPolicy, Embed
+
+from ...lib import Embed, PrivacyPolicy
 
 
 class Info(commands.Cog):
@@ -13,7 +14,7 @@ class Info(commands.Cog):
         self.bot = bot
         self.bot.start_time = bot.start_time
         self.bot.github = bot.github
-        
+
         self.description = "Get's the Information about the server"
 
     @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
@@ -22,38 +23,45 @@ class Info(commands.Cog):
     @commands.guild_only()
     async def serverdump(self, ctx):
         '''Dumps server name to the developer'''
-        c = self.bot.get_channel(813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
+        c = self.bot.get_channel(
+            813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
         if ctx.guild.id in (747480356625711204, 869085099470225508):
             b = await ctx.send('** Okay updating info ! **')
-            n=1
+            n = 1
             for guild in ctx.bot.guilds:
-                e = discord.Embed(title=f'In **{guild.name}**',description='Was added' , color=discord.Color.green())
+                e = discord.Embed(
+                    title=f'In **{guild.name}**', description='Was added', color=discord.Color.green())
                 if guild.icon:
                     e.set_thumbnail(url=guild.icon_url)
                 if guild.banner:
                     e.set_image(url=guild.banner_url_as(format="png"))
-                n+=1
-                e.add_field(name='**Total Members**',value=guild.member_count)
-                e.add_field(name='**Bots**',value=sum(1 for member in guild.members if member.bot))
-                e.add_field(name="**Region**", value=str(guild.region).capitalize(), inline=True)
+                n += 1
+                e.add_field(name='**Total Members**', value=guild.member_count)
+                e.add_field(
+                    name='**Bots**', value=sum(1 for member in guild.members if member.bot))
+                e.add_field(name="**Region**",
+                            value=str(guild.region).capitalize(), inline=True)
                 e.add_field(name="**Server ID**", value=guild.id, inline=True)
                 await c.send(embed=e)
             await c.send(f'In total {n} servers')
             await ctx.send('**Updated ! Please check the <#813954921782706227>**')
         else:
             a = await ctx.send('**Sending the info to my developer**')
-            e = discord.Embed(title=f'In **{ctx.guild.name}**',description=f'Bumped by **{ctx.message.author}**' , color= 0x2ecc71)
+            e = discord.Embed(
+                title=f'In **{ctx.guild.name}**', description=f'Bumped by **{ctx.message.author}**', color=0x2ecc71)
             if ctx.guild.icon:
                 e.set_thumbnail(url=ctx.guild.icon_url)
             if ctx.guild.banner:
                 e.set_image(url=ctx.guild.banner_url_as(format="png"))
-            e.add_field(name='**Total Members**',value=ctx.guild.member_count)
-            e.add_field(name='**Bots**',value=sum(1 for member in ctx.guild.members if member.bot))
-            e.add_field(name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
+            e.add_field(name='**Total Members**', value=ctx.guild.member_count)
+            e.add_field(
+                name='**Bots**', value=sum(1 for member in ctx.guild.members if member.bot))
+            e.add_field(name="**Region**",
+                        value=str(ctx.guild.region).capitalize(), inline=True)
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await c.send(embed=e)
             await ctx.send(f'Sent the info to developer that "**I am in __{ctx.guild.name}__ guild**" , {ctx.author.mention} 😉')
-            
+
     '''
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):
@@ -76,13 +84,14 @@ class Info(commands.Cog):
         '''Get the Privacy Policy'''
         m = PrivacyPolicy(bot=self.bot)
         await m.start(ctx)
-    
+
     @commands.command()
     async def uptime(self, ctx):
         '''Get the uptime in hours for me'''
         current_time = time.time()
         difference = int(round(current_time - self.bot.start_time))
-        text = str(datetime.timedelta(seconds=difference)) + ' mins' if str(datetime.timedelta(seconds=difference))[0]=='0' or str(datetime.timedelta(seconds=difference))[0:1]!='00' else ' hours'
+        text = str(datetime.timedelta(seconds=difference)) + ' mins' if str(datetime.timedelta(seconds=difference)
+                                                                            )[0] == '0' or str(datetime.timedelta(seconds=difference))[0:1] != '00' else ' hours'
         embed = discord.Embed(colour=ctx.message.author.top_role.colour)
         embed.add_field(name="Uptime", value=text)
         embed.set_footer(text=f"{ctx.author} | {self.bot.user}")
@@ -90,7 +99,7 @@ class Info(commands.Cog):
             await ctx.send(embed=embed)
         except discord.HTTPException:
             await ctx.send("Current uptime: " + text)
-        
+
     # @cog_ext.cog_slash(name="ping")
     @commands.command()
     async def ping(self, ctx):
@@ -102,7 +111,8 @@ class Info(commands.Cog):
                 title=":ping_pong: Pong! :ping_pong:", description=f"Heartbeat : {round(self.bot.latency * 1000, 2)} ms")
             endtime = time.time()
             difference = float(int(starttime - endtime))
-            e.add_field(name=":inbox_tray: Script Speed :outbox_tray:", value=f"{difference}ms")
+            e.add_field(name=":inbox_tray: Script Speed :outbox_tray:",
+                        value=f"{difference}ms")
             await msg.edit(content="", embed=e)
 
     @commands.command()
@@ -151,12 +161,15 @@ class Info(commands.Cog):
 
             embed.add_field(name="**Server Name**",
                             value=ctx.guild.name, inline=True)
-            embed.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
+            embed.add_field(name="**Server ID**",
+                            value=ctx.guild.id, inline=True)
             embed.add_field(
                 name="**Members**", value=ctx.guild.member_count, inline=True)
             embed.add_field(name="**Bots**", value=find_bots, inline=True)
-            embed.add_field(name="**Owner**", value=ctx.guild.owner, inline=True)
-            embed.add_field(name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
+            embed.add_field(name="**Owner**",
+                            value=ctx.guild.owner, inline=True)
+            embed.add_field(
+                name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
             await ctx.send(embed=embed)
 
     @server.command(name="server_icon", aliases=["icon"])

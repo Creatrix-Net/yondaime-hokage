@@ -1,5 +1,5 @@
-from discord import embeds
 import discord
+from discord import embeds
 
 
 class Embed(embeds.Embed):

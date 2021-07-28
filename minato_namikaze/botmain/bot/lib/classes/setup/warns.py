@@ -1,8 +1,8 @@
 import discord
 from discord.ext import menus
 
-from ..embed import Embed
 from ...util import warns
+from ..embed import Embed
 
 
 class Warns(menus.Menu):
@@ -30,7 +30,8 @@ class Warns(menus.Menu):
         unban = await self.ctx.guild.create_text_channel(
             "warns",
             topic=warns,
-            overwrites={self.ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False)},
+            overwrites={self.ctx.guild.default_role: discord.PermissionOverwrite(
+                read_messages=False, send_messages=False)},
             category=discord.utils.get(
                 self.ctx.guild.categories,
                 name="Bingo Book")

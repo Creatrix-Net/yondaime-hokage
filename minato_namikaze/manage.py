@@ -3,6 +3,7 @@
 import os
 import sys
 
+
 def main():
     """Run administrative tasks."""
     global sentry_link

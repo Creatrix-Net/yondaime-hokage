@@ -1,19 +1,16 @@
 import asyncio
 import random
 import time
-
-import discord
-from discord.ext import commands
-from discord.ext.commands.cooldowns import BucketType
-import async_cleverbot as ac
-
-from discord_components import DiscordComponents, Button, ButtonStyle
-
 from asyncio import TimeoutError, sleep
 from random import choice
 
+import async_cleverbot as ac
+import discord
+from discord.ext import commands
+from discord.ext.commands.cooldowns import BucketType
+from discord_components import Button, ButtonStyle, DiscordComponents
 
-from ...lib import chatbot, Embed, ErrorEmbed
+from ...lib import Embed, ErrorEmbed, chatbot
 
 
 class FunGames(commands.Cog):
@@ -84,8 +81,7 @@ class FunGames(commands.Cog):
             await user.send(f"Firstly, Random chose 2 so you get this DM, Secondly, Well Done! You completed it in ```{end - start:.3f}``` seconds.")
         else:
             pass
-    
-    
+
     @commands.command()
     async def cointoss(self, ctx):
         '''Toss a coin'''
@@ -103,17 +99,23 @@ class FunGames(commands.Cog):
             ]
             heads_components = [
                 [
-                    Button(style=ButtonStyle.green, label="Heads", disabled=True),
-                    Button(style=ButtonStyle.red, label="Tails", disabled=True),
+                    Button(style=ButtonStyle.green,
+                           label="Heads", disabled=True),
+                    Button(style=ButtonStyle.red,
+                           label="Tails", disabled=True),
                 ],
-                Button(style=ButtonStyle.blue, label="Play Again?", disabled=False),
+                Button(style=ButtonStyle.blue,
+                       label="Play Again?", disabled=False),
             ]
             tails_components = [
                 [
-                    Button(style=ButtonStyle.red, label="Heads", disabled=True),
-                    Button(style=ButtonStyle.green, label="Tails", disabled=True),
+                    Button(style=ButtonStyle.red,
+                           label="Heads", disabled=True),
+                    Button(style=ButtonStyle.green,
+                           label="Tails", disabled=True),
                 ],
-                Button(style=ButtonStyle.blue, label="Play Again?", disabled=False),
+                Button(style=ButtonStyle.blue,
+                       label="Play Again?", disabled=False),
             ]
 
             if ctx.author.id in self.session_message:
@@ -130,9 +132,11 @@ class FunGames(commands.Cog):
                 res = await self.bot.wait_for("button_click", check=check, timeout=20)
             except TimeoutError:
                 await msg.edit(
-                    embed=ErrorEmbed(title="Timeout!", description="No-one reacted. :frowning2:"),
+                    embed=ErrorEmbed(
+                        title="Timeout!", description="No-one reacted. :frowning2:"),
                     components=[
-                        Button(style=ButtonStyle.red, label="Oh-no! Timeout reached!", disabled=True)
+                        Button(style=ButtonStyle.red,
+                               label="Oh-no! Timeout reached!", disabled=True)
                     ],
                 )
                 return
@@ -178,7 +182,6 @@ class FunGames(commands.Cog):
                 await self.cointoss(ctx)
         except:
             await ctx.send(embed=ErrorEmbed(description="Please run the command again!"))
-
 
 
 def setup(bot):

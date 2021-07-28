@@ -1,9 +1,10 @@
-from pathlib import Path
 import os
+from pathlib import Path
+
 import dj_database_url
 import dotenv
 from django.contrib.messages import constants as messages
-    
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -54,7 +55,7 @@ WSGI_APPLICATION = 'bot.wsgi.application'
 dotenv_file = os.path.join(BASE_DIR.parent, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
-    SECRET_KEY = os.environ.get('SECRET_KEY','SECTECT_KEY')
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'SECTECT_KEY')
     PRODUCTION_SERVER = False
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
     DEBUG = True
@@ -75,7 +76,7 @@ else:
     MIDDLEWARE = [MIDDLEWARE[0]] + \
         ['whitenoise.middleware.WhiteNoiseMiddleware']+MIDDLEWARE[1:]
     INSTALLED_APPS = INSTALLED_APPS[0:-1] + \
-        ['whitenoise.runserver_nostatic',]+[INSTALLED_APPS[-1]]
+        ['whitenoise.runserver_nostatic', ]+[INSTALLED_APPS[-1]]
 
 
 # Password validation
@@ -104,11 +105,7 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Kolkata'
 
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
+USE_TZ = USE_L10N = USE_I18N = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -120,9 +117,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 
-#Overiding a message tag
+# Overiding a message tag
 MESSAGE_TAGS = {
-    messages.ERROR : 'danger'
+    messages.ERROR: 'danger'
 }
 
 if PRODUCTION_SERVER:

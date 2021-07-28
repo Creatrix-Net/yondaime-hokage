@@ -1,5 +1,6 @@
 from random import choice
 
+
 def emoji_random_func(bot):
     guild = bot.get_guild(747480356625711204)
     guild_emojis = choice(guild.emojis)

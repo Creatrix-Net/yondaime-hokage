@@ -1,14 +1,14 @@
 import datetime
+from random import choice
 from typing import Literal, Optional
 from urllib.parse import urlencode
 
 import aiohttp
 import discord
+from discord.ext import commands
 from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
 
-from discord.ext import commands
-from random import choice
 
 class UnitConverter(Converter):
     async def convert(self, ctx: commands.Context, argument: str) -> Optional[str]:
@@ -22,11 +22,12 @@ class UnitConverter(Converter):
         elif argument.lower() in ["clear", "none"]:
             new_units = None
         else:
-            raise BadArgument("`{units}` is not a vaild option!").format(units=argument)
+            raise BadArgument("`{units}` is not a vaild option!").format(
+                units=argument)
         return new_units
 
 
-class Weather(commands.Cog):    
+class Weather(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         default = {"units": None}
@@ -83,7 +84,6 @@ class Weather(commands.Cog):
         await ctx.trigger_typing()
         await self.get_weather(ctx, lat=lat, lon=lon)
 
-
     async def get_weather(
         self,
         ctx: commands.Context,
@@ -109,7 +109,8 @@ class Weather(commands.Cog):
             params["lon"] = str(lon)
         else:
             params["q"] = str(location)
-        url = "https://api.openweathermap.org/data/2.5/weather?{0}".format(urlencode(params))
+        url = "https://api.openweathermap.org/data/2.5/weather?{0}".format(
+            urlencode(params))
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 data = await resp.json()
@@ -129,7 +130,8 @@ class Weather(commands.Cog):
             country = ""
         lat, lon = data["coord"]["lat"], data["coord"]["lon"]
         condition = ", ".join(info["main"] for info in data["weather"])
-        windspeed = str(data["wind"]["speed"]) + " " + self.unit[units]["speed"]
+        windspeed = str(data["wind"]["speed"]) + \
+            " " + self.unit[units]["speed"]
         if units == "kelvin":
             currenttemp = abs(currenttemp - 273.15)
             mintemp = abs(maxtemp - 273.15)
@@ -142,7 +144,8 @@ class Weather(commands.Cog):
         ).strftime("%H:%M")
         embed = discord.Embed(colour=discord.Colour.blue())
         if len(city) and len(country):
-            embed.add_field(name="🌍 **Location**", value="{0}, {1}".format(city, country))
+            embed.add_field(name="🌍 **Location**",
+                            value="{0}, {1}".format(city, country))
         else:
             embed.add_field(
                 name="\N{EARTH GLOBE AMERICAS} **Location**", value="*Unavailable*"
@@ -154,7 +157,8 @@ class Weather(commands.Cog):
         embed.add_field(
             name="\N{FACE WITH COLD SWEAT} **Humidity**", value=data["main"]["humidity"]
         )
-        embed.add_field(name="\N{DASH SYMBOL} **Wind Speed**", value="{0}".format(windspeed))
+        embed.add_field(
+            name="\N{DASH SYMBOL} **Wind Speed**", value="{0}".format(windspeed))
         embed.add_field(
             name="\N{THERMOMETER} **Temperature**",
             value="{0:.2f}{1}".format(currenttemp, self.unit[units]["temp"]),
@@ -165,10 +169,13 @@ class Weather(commands.Cog):
                 mintemp, self.unit[units]["temp"], maxtemp, self.unit[units]["temp"]
             ),
         )
-        embed.add_field(name="\N{SUNRISE OVER MOUNTAINS} **Sunrise**", value=sunrise)
-        embed.add_field(name="\N{SUNSET OVER BUILDINGS} **Sunset**", value=sunset)
+        embed.add_field(
+            name="\N{SUNRISE OVER MOUNTAINS} **Sunrise**", value=sunrise)
+        embed.add_field(
+            name="\N{SUNSET OVER BUILDINGS} **Sunset**", value=sunset)
         embed.set_footer(text="Powered by https://openweathermap.org")
         await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Weather(bot))

@@ -12,13 +12,13 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Setups up the server for feedback, ban and unban logs and also setups the channel and roles to create a support management system for the server.'
-    
+
     def pin_img(self):
         file_pin = discord.File(
-                    join(self.bot.minato_dir, 'discord', 'pin.png'), filename='pin.png'
-                )
+            join(self.bot.minato_dir, 'discord', 'pin.png'), filename='pin.png'
+        )
         return file_pin
-    
+
     @commands.command(name='setup', description="Easy setup for the server")
     @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
@@ -27,7 +27,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await ctx.message.delete()
         commanwaitingtime = 60.0
         waitingtime_bet_mesg = 3.0
-            
+
         embed = Embed(description='Please **check** the **channel pins**')
         embed.set_image(url="attachment://pin.png")
 
@@ -43,7 +43,6 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             if not support_channel and support_channel_roles:
                 await ctx.guild.create_role(name="SupportRequired")
-                
 
             await feed_channel.send(file=self.pin_img(), embed=embed)
             time.sleep(1)
@@ -70,7 +69,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Feedback
             if not feed_channel:
-                m = Feedback(bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Feedback(
+                    bot=self.bot, timeout=commanwaitingtime, channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
@@ -79,7 +79,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Support
             if not support_channel:
-                m = Support(bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Support(
+                    bot=self.bot, timeout=commanwaitingtime, channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
@@ -97,19 +98,21 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # UnBan
             if not unban_channel:
-                m = Unban(bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Unban(bot=self.bot, timeout=commanwaitingtime,
+                          channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
                 file = discord.File(
-                join(self.bot.minato_dir, 'discord', 'pin.png'), filename='pin.png'
-            )
+                    join(self.bot.minato_dir, 'discord', 'pin.png'), filename='pin.png'
+                )
                 await unban_channel.send(file=self.pin_img(), embed=embed)
                 await ctx.send(f'Channel for **logging unbans already there**! {unban_channel.mention}', delete_after=5)
 
             # Warns
             if not warns_channel:
-                m = Warns(bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Warns(bot=self.bot, timeout=commanwaitingtime,
+                          channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:

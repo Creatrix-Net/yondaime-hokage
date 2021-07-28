@@ -1,8 +1,9 @@
 
-from discord.ext import menus
-import discord
 import random
 from asyncio import sleep as sl
+
+import discord
+from discord.ext import menus
 
 
 class VotingMenu(menus.Menu):
@@ -11,15 +12,15 @@ class VotingMenu(menus.Menu):
         self.bot = bot
         self.bot.owner = "[DHRUVA SHAW#0550](https://discord.com/users/571889108046184449/)"
 
-    async def send_initial_message(self, ctx, channel): 
+    async def send_initial_message(self, ctx, channel):
         e = discord.Embed(title="I see you want vote!",
                           description=f"{ctx.author.mention}, maybe react with your choice :)")
         return await channel.send(embed=e)
 
     @menus.button('\N{WHITE HEAVY CHECK MARK}')
     async def on_check_mark(self, payload):
-        
-        topgg =  '\n - **[TopGG](https://top.gg/bot/779559821162315787)** '
+
+        topgg = '\n - **[TopGG](https://top.gg/bot/779559821162315787)** '
         Discordbotlist = '\n - **[Discordbotlist](https://discordbotlist.com/bots/minato-namikaze)**'
         Discordlist = '   \n - **[Discordlist.Space](https://discordlist.space/bot/779559821162315787/upvote)**'
         BotsForDiscord = '\n - **[BotsForDiscord](https://botsfordiscord.com/bot/779559821162315787/vote)**'
@@ -28,10 +29,10 @@ class VotingMenu(menus.Menu):
         fateslist = '\n - **[Fates List](https://fateslist.xyz/bot/779559821162315787/vote)**'
         voidbots = '\n - **[Void Bots](https://voidbots.net/bot/779559821162315787/vote)**'
         bladebotlist = '\n - **[BladeBotList](https://bladebotlist.xyz/bot/779559821162315787/vote)**'
-        
+
         e1 = discord.Embed(title="Thanks!",
-            description=f"Thanks {self.ctx.author.mention}! Here's the links:{topgg}{Discordbotlist}{Discordlist}{BotsForDiscord}{Boats}{Space}{fateslist}{voidbots}{bladebotlist}\n**[DisbotList](https://disbotlist.xyz/bot/779559821162315787/vote)**"
-        )
+                           description=f"Thanks {self.ctx.author.mention}! Here's the links:{topgg}{Discordbotlist}{Discordlist}{BotsForDiscord}{Boats}{Space}{fateslist}{voidbots}{bladebotlist}\n**[DisbotList](https://disbotlist.xyz/bot/779559821162315787/vote)**"
+                           )
         await self.message.edit(content="", embed=e1)
         self.stop()
 

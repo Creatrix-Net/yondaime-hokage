@@ -4,7 +4,9 @@ import discord
 import DiscordUtils
 from discord.ext import commands
 
-from ...lib import Embed, ErrorEmbed, check_if_support_is_setup, get_user, return_support_channel
+from ...lib import (Embed, ErrorEmbed, check_if_support_is_setup, get_user,
+                    return_support_channel)
+
 
 def if_inside_support_channel(ctx):
     if check_if_support_is_setup(ctx):
@@ -15,11 +17,13 @@ def if_inside_support_channel(ctx):
     else:
         return False
 
+
 def errorembed(ctx):
-        return ErrorEmbed(
-            title=f'No support system setup for the {ctx.guild.name}',
-            description='An admin can always setup the **support system** using `)setup` command'
-        )
+    return ErrorEmbed(
+        title=f'No support system setup for the {ctx.guild.name}',
+        description='An admin can always setup the **support system** using `)setup` command'
+    )
+
 
 class Help(commands.Cog):
     def __init__(self, bot):
@@ -33,7 +37,7 @@ class Help(commands.Cog):
     async def support(self, ctx):
         '''Open support ticket if enabled by the server admins'''
         chan = return_support_channel(ctx)
-        
+
         if ctx.message.author == ctx.guild.owner:
             await ctx.send(f'{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:')
             return
@@ -83,7 +87,7 @@ class Help(commands.Cog):
             )
             await ctx.send(embed=e)
             return
-        
+
         await member.send(f'Hope your issue has been resolved in {ctx.guild.name}, {member.mention}')
         await ctx.send(f'The issue/query for {member.mention} has been set to resolved!')
         await member.remove_roles(discord.utils.get(ctx.guild.roles, name="SupportRequired"))
@@ -94,7 +98,7 @@ class Help(commands.Cog):
             await ctx.send(embed=ErrorEmbed(description='This command can be run **inside only servers\'s support channel**.'))
 
     @commands.command(description='Checks who still requires the support.', aliases=['check_who_require_support', 'cksupreq'])
-    @commands.check(if_inside_support_channel) 
+    @commands.check(if_inside_support_channel)
     async def chksupreq(self, ctx):
         '''Checks who still requires the support.'''
         role_sup = discord.utils.get(ctx.guild.roles, name="SupportRequired")
@@ -133,12 +137,12 @@ class Help(commands.Cog):
             await paginator.run(embed)
         else:
             description = ''
-            for k,i in enumerate(l):
+            for k, i in enumerate(l):
                 description += f'\n**({k+1}.)** -  {l[k].mention}'
             e = Embed(
-                    title='Those who still require support:',
-                    description=description
-                )
+                title='Those who still require support:',
+                description=description
+            )
             embed.append(e)
             await ctx.send(embed=e)
             return

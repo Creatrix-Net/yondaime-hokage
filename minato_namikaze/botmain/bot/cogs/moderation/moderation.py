@@ -5,15 +5,16 @@ import discord
 from discord.ext import commands
 
 from ...lib import (Embed, ErrorEmbed, check_if_warning_system_setup,
-                    get_roles, get_user, return_warning_channel, return_ban_channel)
+                    get_roles, get_user, return_ban_channel,
+                    return_warning_channel)
 
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Some simple moderation commands'
-    
-    #setdelay
+
+    # setdelay
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     @commands.guild_only()
@@ -27,8 +28,8 @@ class Moderation(commands.Cog):
             message = f"Reset Slowmode of channel {ctx.channel.name}"
         await ctx.channel.edit(slowmode_delay=seconds)
         await ctx.send(f"{message}")
-    
-    #kick
+
+    # kick
     @commands.command(
         name="kick",
         description="A command which kicks a given user",
@@ -45,8 +46,8 @@ class Moderation(commands.Cog):
         embed = Embed(
             title=f"{ctx.author.name} kicked: {member.name}", description=reason)
         await ctx.send(embed=embed)
-    
-    #ban
+
+    # ban
     @commands.command(
         name="ban",
         description="A command which bans a given user",
@@ -72,8 +73,8 @@ class Moderation(commands.Cog):
             title=f"{ctx.author.name} banned: {member.name}", description=reason
         )
         await ctx.send(embed=embed)
-    
-    #banlist
+
+    # banlist
     @commands.command(
         name="banlist",
         description="Shows list of users who have been banned! Or position of a specified user who was banned!",
@@ -116,12 +117,12 @@ class Moderation(commands.Cog):
                 await paginator.run(embed)
             else:
                 description = ''
-                for k,i in enumerate(banned_users):
+                for k, i in enumerate(banned_users):
                     description += f'\n{k+1}. - **{i.user}** : ID [ **{banned_users[k].user.id}** ] '
                 e = ErrorEmbed(
-                        title='Those who were banned are:',
-                        description=description
-                    )
+                    title='Those who were banned are:',
+                    description=description
+                )
                 embed.append(e)
                 await ctx.send(embed=e)
                 return
@@ -130,48 +131,57 @@ class Moderation(commands.Cog):
                 member = int(member)
             if isinstance(member, str):
                 member_name, member_discriminator = member.split('#')
-            
-            n=0
-            for i,ban_entry in enumerate(banned_users):
+
+            n = 0
+            for i, ban_entry in enumerate(banned_users):
                 user = ban_entry.user
-                e=ErrorEmbed(topic=f'About the ban {member}')
+                e = ErrorEmbed(topic=f'About the ban {member}')
                 if isinstance(member, str):
                     if (user.name, user.discriminator) == (member_name, member_discriminator):
                         if ban_entry.reason:
-                            e.add_field(name='**Reason**',value=ban_entry.reason,inline=True)
-                        e.add_field(name='**Position**', value=i+1,inline=True)
-                        e.add_field(name='**Banned User Name**', value=ban_entry.user,inline=True)
+                            e.add_field(name='**Reason**',
+                                        value=ban_entry.reason, inline=True)
+                        e.add_field(name='**Position**',
+                                    value=i+1, inline=True)
+                        e.add_field(name='**Banned User Name**',
+                                    value=ban_entry.user, inline=True)
                         e.set_thumbnail(url=ban_entry.user.avatar_url)
                         await ctx.channel.send(embed=e)
-                        n+=1
+                        n += 1
                         return
-                        
+
                 elif isinstance(member, int):
                     if user.id == int(member):
                         if ban_entry.reason:
-                            e.add_field(name='**Reason**',value=ban_entry.reason,inline=True)
-                        e.add_field(name='**Position**', value=i+1,inline=True)
-                        e.add_field(name='**Banned User Name**', value=ban_entry.user,inline=True)
+                            e.add_field(name='**Reason**',
+                                        value=ban_entry.reason, inline=True)
+                        e.add_field(name='**Position**',
+                                    value=i+1, inline=True)
+                        e.add_field(name='**Banned User Name**',
+                                    value=ban_entry.user, inline=True)
                         e.set_thumbnail(url=ban_entry.user.avatar_url)
                         await ctx.channel.send(embed=e)
-                        n+=1
+                        n += 1
                         return
-                        
+
                 else:
                     if user == member:
                         if ban_entry.reason:
-                            e.add_field(name='**Reason**',value=ban_entry.reason,inline=True)
-                        e.add_field(name='**Position**', value=i+1,inline=True)
-                        e.add_field(name='**Banned User Name**', value=ban_entry.user,inline=True)
+                            e.add_field(name='**Reason**',
+                                        value=ban_entry.reason, inline=True)
+                        e.add_field(name='**Position**',
+                                    value=i+1, inline=True)
+                        e.add_field(name='**Banned User Name**',
+                                    value=ban_entry.user, inline=True)
                         e.set_thumbnail(url=ban_entry.user.avatar_url)
                         await ctx.channel.send(embed=e)
-                        n+=1
+                        n += 1
                         return
             if n == 0:
                 await ctx.send(embed=ErrorEmbed(description=f'The **{member}** isn\'t there in the **ban list**'))
                 return
 
-    #Unban
+    # Unban
     @commands.command(
         name="unban",
         description="A command which unbans a given user",
@@ -179,7 +189,7 @@ class Moderation(commands.Cog):
     )
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def unban(self, ctx, *,member: Union[str, int, discord.Member]):
+    async def unban(self, ctx, *, member: Union[str, int, discord.Member]):
         '''A command which unbans a given user'''
         await ctx.message.delete()
         try:
@@ -191,27 +201,27 @@ class Moderation(commands.Cog):
         if ctx.message.author == member or ctx.message.author.id == member:
             await ctx.send(embed=ErrorEmbed(description='You **can\'t unban yourself**! '))
             return
-        
+
         banned_users = await ctx.guild.bans()
         if isinstance(member, str):
             member_name, member_discriminator = member.split('#')
-        
-        #ask reason function
+
+        # ask reason function
         async def reason(ctx):
             question = await ctx.send(
-                ctx.message.author.mention, 
+                ctx.message.author.mention,
                 embed=Embed(
                     description='Would you like to give any **reason for this unban**? \nIf there isn\'t any reason then type **(no/skip)**'
-                    )
                 )
+            )
             try:
-                reason_content = await self.bot.wait_for('message', timeout=25, check=lambda m:m.author == ctx.author and m.channel == ctx.channel)
+                reason_content = await self.bot.wait_for('message', timeout=25, check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
             except TimeoutError:
-                await ctx.send('Okay! **There won\'t be any reason**.',delete_after=3)
+                await ctx.send('Okay! **There won\'t be any reason**.', delete_after=3)
             await question.delete()
-            return reason_content.content.capitalize() if reason_content.content.lower() not in ('skip','no') else None
-        
-        n=0
+            return reason_content.content.capitalize() if reason_content.content.lower() not in ('skip', 'no') else None
+
+        n = 0
         for ban_entry in banned_users:
             user = ban_entry.user
             e = Embed(title='Unbanned!',
@@ -221,28 +231,27 @@ class Moderation(commands.Cog):
                     reason_unban = await reason(ctx)
                     await ctx.guild.unban(user, reason=reason_unban)
                     await ctx.channel.send(embed=e)
-                    n+=1
+                    n += 1
                     return
-                    
+
             elif isinstance(member, int):
                 if user.id == int(member):
                     reason_unban = await reason(ctx)
                     await ctx.guild.unban(user, reason=reason_unban)
                     await ctx.channel.send(embed=e)
-                    n+=1
+                    n += 1
                     return
-                    
+
             else:
                 if user == member:
                     reason_unban = await reason(ctx)
                     await ctx.guild.unban(user, reason=reason_unban)
                     await ctx.channel.send(embed=e)
-                    n+=1
+                    n += 1
                     return
         if n == 0:
             await ctx.send(embed=ErrorEmbed(description=f'The **{member}** isn\'t there in the **ban list**'))
             return
-                    
 
     @commands.command(
         name="purge",

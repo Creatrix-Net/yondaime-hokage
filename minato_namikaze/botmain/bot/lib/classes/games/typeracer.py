@@ -6,7 +6,7 @@ from datetime import datetime as dt
 from io import BytesIO
 from math import ceil
 from typing import SupportsFloat, Union
-from io import BytesIO
+
 import aiohttp
 import discord
 from discord.ext import commands

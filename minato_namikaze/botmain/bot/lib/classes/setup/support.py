@@ -31,8 +31,9 @@ class Support(menus.Menu):
             discord.utils.get(
                 self.ctx.guild.roles, name="SupportRequired"): discord.PermissionOverwrite(
                     read_messages=True, read_message_history=True, send_messages=True, send_tts_messages=True, embed_links=True, attach_files=True, external_emojis=True
-                ),
-            self.ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False)
+            ),
+            self.ctx.guild.default_role: discord.PermissionOverwrite(
+                read_messages=False, send_messages=False)
         })
 
         sup = await self.ctx.guild.create_text_channel(

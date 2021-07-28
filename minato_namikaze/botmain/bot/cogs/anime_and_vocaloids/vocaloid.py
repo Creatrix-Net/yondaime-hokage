@@ -2,6 +2,7 @@ from discord.ext import commands
 
 from ...lib.functions import meek_api
 
+
 class Vocaloid(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

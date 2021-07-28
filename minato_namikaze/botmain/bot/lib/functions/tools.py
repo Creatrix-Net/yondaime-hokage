@@ -1,5 +1,8 @@
 import time
+
+
 import discord
+
 
 async def create_paginator(bot, ctx, pages):
     msg = await ctx.send(embed=pages[0])
@@ -18,9 +21,11 @@ async def create_paginator(bot, ctx, pages):
                 "page": 0,
                 "all_pages": [page.to_dict() for page in pages],
             },
-        },
+        }
+
     )
-    
+
+
 async def get_welcome_channel(guild: discord.Guild, bot: discord.Client, inviter_or_guild_owner: discord.User):
     try:
         return guild.system_channel

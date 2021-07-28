@@ -3,21 +3,14 @@ import hashlib
 import re
 from string import ascii_lowercase as lc
 from string import ascii_uppercase as uc
-from typing import Optional, Iterator, Sequence
+from typing import Iterator, Optional, Sequence
 
 from discord.ext import commands
 
-from ...lib.data.braille import (
-    contractions,
-    letters,
-    numbers,
-    punctuation,
-    r_contractions,
-    r_letters,
-    r_numbers,
-    r_punctuation,
-    dna,
-)
+from ...lib.data.braille import (contractions, dna, letters, numbers,
+                                 punctuation, r_contractions, r_letters,
+                                 r_numbers, r_punctuation)
+
 
 def pagify(
     text: str,
@@ -135,7 +128,8 @@ class Encoding(commands.Cog):
         """
         Encode text into binary sequences of 8
         """
-        ascii_bin = " ".join(bin(x)[2:].zfill(8) for x in message.encode("utf-8"))
+        ascii_bin = " ".join(bin(x)[2:].zfill(8)
+                             for x in message.encode("utf-8"))
         await ctx.send(ascii_bin)
 
     @_decode.command(name="binary")
@@ -145,7 +139,8 @@ class Encoding(commands.Cog):
         """
         try:
             message = re.sub(r"[\s]+", "", message)
-            bin_ascii = "".join([chr(int(message[i : i + 8], 2)) for i in range(0, len(message), 8)])
+            bin_ascii = "".join([chr(int(message[i: i + 8], 2))
+                                for i in range(0, len(message), 8)])
             await ctx.send(bin_ascii)
         except Exception:
             await ctx.send("That does not look like valid binary.")
@@ -166,7 +161,7 @@ class Encoding(commands.Cog):
         try:
             message = re.sub(r"[\s]+", "", message)
             ascii_bin = "".join(
-                chr(int("0x" + message[x : x + 2], 16)) for x in range(0, len(message), 2)
+                chr(int("0x" + message[x: x + 2], 16)) for x in range(0, len(message), 2)
             )
             await ctx.send(ascii_bin)
         except Exception:
@@ -252,7 +247,8 @@ class Encoding(commands.Cog):
             if letter.isdigit():
                 message = message.replace(letter, chr(10300) + numbers[letter])
             if letter.isupper():
-                message = message.replace(letter, chr(10272) + letters[letter.lower()])
+                message = message.replace(letter, chr(
+                    10272) + letters[letter.lower()])
             if letter in letters:
                 message = message.replace(letter, letters[letter])
             if letter in punctuation:
@@ -276,11 +272,13 @@ class Encoding(commands.Cog):
                 replacement = "capital"
                 continue
             if replacement == "number":
-                message = message.replace(chr(10300) + letter, r_numbers[letter])
+                message = message.replace(
+                    chr(10300) + letter, r_numbers[letter])
                 replacement = ""
                 continue
             if replacement == "capital":
-                message = message.replace(chr(10272) + letter, r_letters[letter].upper())
+                message = message.replace(
+                    chr(10272) + letter, r_letters[letter].upper())
                 replacement = ""
                 continue
         for letter in message:
@@ -327,8 +325,9 @@ class Encoding(commands.Cog):
         """
         dna = {"00": "A", "01": "T", "10": "G", "11": "C"}
         message = message.strip(" ")
-        binary = " ".join(bin(x)[2:].zfill(8) for x in message.encode("utf-8")).replace(" ", "")
-        binlist = [binary[i : i + 2] for i in range(0, len(binary), 2)]
+        binary = " ".join(bin(x)[2:].zfill(8)
+                          for x in message.encode("utf-8")).replace(" ", "")
+        binlist = [binary[i: i + 2] for i in range(0, len(binary), 2)]
         newmsg = ""
         count = 0
         for letter in binlist:
@@ -355,7 +354,8 @@ class Encoding(commands.Cog):
                 replacement += dna[character][i]
             try:
                 n = int("0b" + replacement, 2)
-                mapping[i] = n.to_bytes((n.bit_length() + 7) // 8, "big").decode("utf8", "ignore")
+                mapping[i] = n.to_bytes(
+                    (n.bit_length() + 7) // 8, "big").decode("utf8", "ignore")
             except TypeError:
                 pass
             replacement = ""
@@ -366,6 +366,7 @@ class Encoding(commands.Cog):
             num += 1
         for page in pagify(new_msg, shorten_by=20):
             await ctx.send(f"```\n{page}\n```")
-            
+
+
 def setup(bot):
     bot.add_cog(Encoding(bot))

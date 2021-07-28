@@ -2,25 +2,24 @@ import asyncio
 import io
 import os
 import platform
-from random import choice
-
 import random
+from random import choice
+from typing import Optional, Union
 
 import discord
 from asyncdagpi import ImageFeatures
 from discord.ext import commands, owoify
-from discord.ext import commands
 from gtts import gTTS
 from PIL import Image
-from ...lib import TimeConverter, Embed, insults, get_user
-from typing import Optional, Union
+
+from ...lib import Embed, TimeConverter, get_user, insults
 
 
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Some random fun and usefull commands.'
-    
+
     @commands.command(aliases=["takeitback"], usage='<member.mention>')
     async def insult(self, ctx, user: Optional[Union[int, discord.Member]] = None):
         """
@@ -32,16 +31,14 @@ class Random(commands.Cog):
             if user.id == self.bot.user.id:
                 user = ctx.message.author
                 bot_msg = [
-                    
-                        " How original. No one else had thought of trying to **get the bot to insult itself**. \nI applaud your creativity. \nYawn. **Perhaps this is why you don't have friends**. \n\nYou don't add anything new to any conversation. \n**You are more of a bot than me, predictable answers, and absolutely dull to have an actual conversation with.**"
-                    ,
-                    
-                        "Just remember I am **Konohagakure Yellow Falsh** and **Konohagakure FOURTH HOKAGE**"
-                    ,
+
+                    " How original. No one else had thought of trying to **get the bot to insult itself**. \nI applaud your creativity. \nYawn. **Perhaps this is why you don't have friends**. \n\nYou don't add anything new to any conversation. \n**You are more of a bot than me, predictable answers, and absolutely dull to have an actual conversation with.**",
+
+                    "Just remember I am **Konohagakure Yellow Falsh** and **Konohagakure FOURTH HOKAGE**",
                 ]
-                e=Embed(title='⚠️', description=choice(bot_msg))
+                e = Embed(title='⚠️', description=choice(bot_msg))
                 e.set_image(url='https://i.imgur.com/45CUkfq.jpeg')
-                await ctx.send(ctx.author.mention,embed=e)
+                await ctx.send(ctx.author.mention, embed=e)
 
             else:
                 await ctx.send(
@@ -49,8 +46,7 @@ class Random(commands.Cog):
                     embed=Embed(title='⚠️', description=choice(insults))
                 )
         else:
-            await ctx.send(ctx.message.author.mention,embed=Embed(title='⚠️', description=choice(insults)))
-        
+            await ctx.send(ctx.message.author.mention, embed=Embed(title='⚠️', description=choice(insults)))
 
     @commands.command(usage='{text}')
     async def owoify(self, ctx, text):
@@ -106,7 +102,7 @@ class Random(commands.Cog):
         '''A simple reminder'''
         if int(time) < 12*60*60:
             e = Embed(title="I will remind you!",
-                              descripition=f"I will you remind you in {int(time)/3600} minutes!")
+                      descripition=f"I will you remind you in {int(time)/3600} minutes!")
             await ctx.send(embed=e)
             await asyncio.sleep(int(time))
             e2 = Embed(

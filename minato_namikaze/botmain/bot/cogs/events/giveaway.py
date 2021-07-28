@@ -6,7 +6,7 @@ from discord.ext import commands
 from discord.ext.commands import (Cog, MissingPermissions, command,
                                   has_permissions)
 
-from ...lib import convert, Embed
+from ...lib import Embed, convert
 
 
 class Giveaway(Cog):

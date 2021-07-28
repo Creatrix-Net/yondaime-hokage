@@ -1,14 +1,17 @@
 import os
 from pathlib import Path
-
-import dotenv
 from typing import List
 
+import dotenv
 
 with open(os.path.join(Path(__file__).resolve().parent.parent, 'text', 'insult.txt')) as f:
-    insults: List[str] = list(map(lambda a: a.strip(' ').strip('\n').strip('\'').strip('"').strip('\\'), f.read().split(',')))
+    insults: List[str] = list(map(lambda a: a.strip(' ').strip(
+        '\n').strip('\'').strip('"').strip('\\'), f.read().split(',')))
 
-dotenv_file = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(__file__).resolve(
+).parent.parent.parent.parent.parent.parent / ".env"
+
+
 def token_get(tokenname):
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
@@ -25,7 +28,7 @@ dblst = token_get('DISCORDBOTLIST')
 discordbotsgg = token_get('DISCORDBOTSGG')
 topken = token_get('TOPGG')
 bfd = token_get('BOTSFORDISCORD')
-botlist = token_get('BOTLISTSPACE') #discordlistspace
+botlist = token_get('BOTLISTSPACE')  # discordlistspace
 discordboats = token_get('DISCORDBOATS')
 voidbot = token_get('VOIDBOT')
 fateslist = token_get('FATESLIST')

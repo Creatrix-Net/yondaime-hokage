@@ -1,8 +1,8 @@
 import discord
 from discord.ext import menus
 
-from ..embed import Embed
 from ...util import ban
+from ..embed import Embed
 
 
 class Ban(menus.Menu):
@@ -29,7 +29,8 @@ class Ban(menus.Menu):
         ban_channel = await self.ctx.guild.create_text_channel(
             "ban",
             topic=ban,
-            overwrites={self.ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False)},
+            overwrites={self.ctx.guild.default_role: discord.PermissionOverwrite(
+                read_messages=False, send_messages=False)},
             category=discord.utils.get(
                 self.ctx.guild.categories,
                 name="Bingo Book")

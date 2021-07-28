@@ -1,22 +1,24 @@
-import discord
-from discord.ext import commands
 import platform
-import psutil
+
+import discord
 import DiscordUtils
+import psutil
+from discord.ext import commands
+from psutil._common import bytes2human
 
 from ...lib import Embed, get_user
-from psutil._common import bytes2human
 
 
 class MySupport(commands.Cog, name="My Support"):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Having problems with me? Then you can get the help here.'
-    
+
     @commands.command(description='Generates my invite link for your server')
     async def inviteme(self, ctx):
         '''Generates my invite link for your server'''
-        embed=discord.Embed(title='**Invite Link**',description=f'[My Invite Link!](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot)')
+        embed = discord.Embed(
+            title='**Invite Link**', description=f'[My Invite Link!](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot)')
         embed.set_thumbnail(url=ctx.bot.user.avatar_url)
         await ctx.send(embed=embed)
 
@@ -25,7 +27,7 @@ class MySupport(commands.Cog, name="My Support"):
         '''Generates my support server invite'''
         await ctx.send('**Here you go, my support server invite**')
         await ctx.send('https://discord.gg/S8kzbBVN8b')
-    
+
     @commands.command(name="stats", description="A usefull command that displays bot statistics.")
     async def stats(self, ctx):
         '''Get the stats for the me'''
@@ -60,23 +62,29 @@ class MySupport(commands.Cog, name="My Support"):
                          icon_url=self.bot.user.avatar_url)
 
         await ctx.send(embed=embed)
-    
+
     @commands.command(name="cpu_status", description="Display CPU stats of the bot.")
     async def cpu_status(self, ctx):
         '''Display CPU Stats'''
-        cpu=Embed(title='CPU Stats :computer:')
-        cpu.add_field(name='**CPU Usage** :alarm_clock:', value=f'{psutil.cpu_percent()} %', inline=True)
-        
-        ram=Embed(title='RAM Stats :chart_with_upwards_trend:')
-        ram.add_field(name="**Total RAM :repeat_one:**", value=bytes2human(psutil.virtual_memory()[0]))
-        ram.add_field(name="**RAM Available :floppy_disk:**", value=bytes2human(psutil.virtual_memory()[1]))
-        ram.add_field(name="**RAM % use**", value=bytes2human(psutil.virtual_memory()[2]))
-        ram.add_field(name="**RAM Used :card_box:**", value=bytes2human(psutil.virtual_memory()[3]))
-        ram.add_field(name="**RAM :free:**", value=bytes2human(psutil.virtual_memory()[4]))
-        
+        cpu = Embed(title='CPU Stats :computer:')
+        cpu.add_field(name='**CPU Usage** :alarm_clock:',
+                      value=f'{psutil.cpu_percent()} %', inline=True)
+
+        ram = Embed(title='RAM Stats :chart_with_upwards_trend:')
+        ram.add_field(name="**Total RAM :repeat_one:**",
+                      value=bytes2human(psutil.virtual_memory()[0]))
+        ram.add_field(name="**RAM Available :floppy_disk:**",
+                      value=bytes2human(psutil.virtual_memory()[1]))
+        ram.add_field(name="**RAM % use**",
+                      value=bytes2human(psutil.virtual_memory()[2]))
+        ram.add_field(name="**RAM Used :card_box:**",
+                      value=bytes2human(psutil.virtual_memory()[3]))
+        ram.add_field(name="**RAM :free:**",
+                      value=bytes2human(psutil.virtual_memory()[4]))
+
         paginator = DiscordUtils.Pagination.AutoEmbedPaginator(ctx)
         await paginator.run([cpu, ram])
-                
+
 
 def setup(bot):
     bot.add_cog(MySupport(bot))

@@ -1,5 +1,6 @@
 import discord
-from .vars import warns, support, ban, unban, feedback
+
+from .vars import ban, feedback, support, unban, warns
 
 
 def perms_dict(ctx):
@@ -46,7 +47,7 @@ async def channel_creation(ctx):
         )
     else:
         unban_channel = False
-    
+
     # Warns
     if discord.utils.get(ctx.guild.text_channels, topic=warns):
         warns_channel = discord.utils.get(
@@ -68,8 +69,8 @@ async def channel_creation(ctx):
     support_channel_roles = discord.utils.get(ctx.guild.roles, name="SupportRequired") if discord.utils.get(
         ctx.guild.roles, name="SupportRequired") else False
 
-    if isinstance(support_channel,bool) or isinstance(unban,bool) or isinstance(ban,bool) or isinstance(feed_channel,bool) or isinstance(warns,bool):
-        if isinstance(category,bool):
+    if isinstance(support_channel, bool) or isinstance(unban, bool) or isinstance(ban, bool) or isinstance(feed_channel, bool) or isinstance(warns, bool):
+        if isinstance(category, bool):
             category = await ctx.guild.create_category("Admin / Feedback", overwrites=overwrite_dict, reason="To log the admin and feedback events")
 
     # Bot Setup
@@ -78,4 +79,4 @@ async def channel_creation(ctx):
     else:
         botask = False
 
-    return feed_channel, support_channel, support_channel_roles, ban_channel, unban_channel, warns_channel,botask
+    return feed_channel, support_channel, support_channel_roles, ban_channel, unban_channel, warns_channel, botask

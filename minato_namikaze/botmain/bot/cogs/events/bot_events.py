@@ -1,22 +1,23 @@
 import random
+from asyncio import sleep
+from datetime import datetime
 from os.path import join
 from pathlib import Path
-from asyncio import sleep
-
 
 import discord
-from discord.ext import commands
-from datetime import datetime
 import DiscordUtils
+from discord.ext import commands
 
-from ...lib import PostStats, get_bot_inviter, Embed, ErrorEmbed, get_welcome_channel, return_ban_channel, return_unban_channel
+from ...lib import (Embed, ErrorEmbed, PostStats, get_bot_inviter,
+                    get_welcome_channel, return_ban_channel,
+                    return_unban_channel)
 
 
 class InviteTrackerForMyGuild:
     def __init__(self, bot):
         self._cache = bot._cache
         self.bot = bot
-    
+
     async def fetch_inviter_for_my_guild(self, member):
         await sleep(self.bot.latency)
         for new_invite in await member.guild.invites():
@@ -30,6 +31,7 @@ class InviteTrackerForMyGuild:
                         self._cache[member.guild.id][cached_invite.code].uses += 1
                     return cached_invite
 
+
 class BotEvents(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -37,7 +39,7 @@ class BotEvents(commands.Cog):
         self.minato_dir = bot.minato_dir
         self.posting = PostStats(self.bot)
         self.tracker = InviteTrackerForMyGuild(bot)
-    
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         if member.guild.id == 747480356625711204:
@@ -53,19 +55,23 @@ class BotEvents(commands.Cog):
                 embed.set_image(url='https://i.imgur.com/mktY446.jpeg')
                 embed.set_thumbnail(url='https://i.imgur.com/SizgkEZ.png')
                 embed.set_author(name=self.bot.user.name,
-                                icon_url=self.bot.user.avatar_url)
+                                 icon_url=self.bot.user.avatar_url)
                 embed.set_footer(text=f"Welcome {member.name}")
-                
-                e = Embed(description=f'**{member}** was invited by **{inviter.inviter}** \n- **INVITE CODE: {inviter.code}**,\n- USES **{inviter.uses} uses**.')
+
+                e = Embed(
+                    description=f'**{member}** was invited by **{inviter.inviter}** \n- **INVITE CODE: {inviter.code}**,\n- USES **{inviter.uses} uses**.')
                 await channel.send(member.mention, embed=embed)
                 await channel.send(embed=e)
-                
+
     @commands.Cog.listener()
     async def on_invite_create(self, invite):
-        if invite.guild.id not in self._cache.keys() and invite.guild.id == 747480356625711204:
-            self.bot._cache[invite.guild.id] = {}
-        self.bot._cache[invite.guild.id][invite.code] = invite
-    
+        try:
+            if invite.guild.id not in self._cache.keys() and invite.guild.id == 747480356625711204:
+                self.bot._cache[invite.guild.id] = {}
+            self.bot._cache[invite.guild.id][invite.code] = invite
+        except:
+            pass
+
     @commands.Cog.listener()
     async def on_invite_delete(self, invite):
         if invite.guild.id not in self._cache.keys():
@@ -95,15 +101,15 @@ class BotEvents(commands.Cog):
             file = discord.File(
                 join(self.minato_dir, 'minato', img), filename=img)
             await welcome_channel.send('https://i.imgur.com/j6j7ob7.mp4')
-            
+
             f = open(Path(__file__).resolve(
-                strict=True).parent.parent.parent / join('lib', 'text','welcome_message.txt'), 'r')
-            
+                strict=True).parent.parent.parent / join('lib', 'text', 'welcome_message.txt'), 'r')
+
             f1 = f.read()
             description = f1.format(
-                guild.name, 
-                self.bot.user.mention, 
-                self.bot.user.mention, 
+                guild.name,
+                self.bot.user.mention,
+                self.bot.user.mention,
                 self.bot.user.mention,
                 inviter_or_guild_owner.mention
             )
@@ -114,7 +120,7 @@ class BotEvents(commands.Cog):
             )
             e.set_author(
                 name=self.bot.user,
-                icon_url = self.bot.user.avatar_url
+                icon_url=self.bot.user.avatar_url
             )
             e.set_thumbnail(
                 url=self.bot.user.avatar_url
@@ -122,11 +128,11 @@ class BotEvents(commands.Cog):
             e.set_image(
                 url=f"attachment://{img}"
             )
-            await welcome_channel.send(file=file,embed=e)
+            await welcome_channel.send(file=file, embed=e)
         except:
             pass
-        
-        #Send it to server count channel the support server
+
+        # Send it to server count channel the support server
         try:
             e34 = discord.Embed(title=f'{guild.name}',
                                 color=discord.Color.green(), description='Added')
@@ -134,12 +140,13 @@ class BotEvents(commands.Cog):
                 e34.set_thumbnail(url=guild.icon_url)
             if guild.banner:
                 e34.set_image(url=guild.banner_url_as(format="png"))
-            c = self.bot.get_channel(813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
+            c = self.bot.get_channel(
+                813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
             e34.add_field(name='**Total Members**', value=guild.member_count)
             e34.add_field(name='**Bots**',
-                        value=sum(1 for member in guild.members if member.bot))
+                          value=sum(1 for member in guild.members if member.bot))
             e34.add_field(name="**Region**",
-                        value=str(guild.region).capitalize(), inline=True)
+                          value=str(guild.region).capitalize(), inline=True)
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(embed=e34)
             await c.send(f'We are now currently at **{len(self.bot.guilds)+1} servers**')
@@ -156,12 +163,13 @@ class BotEvents(commands.Cog):
                 e34.set_thumbnail(url=guild.icon_url)
             if guild.banner:
                 e34.set_image(url=guild.banner_url_as(format="png"))
-            c = self.bot.get_channel(813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
+            c = self.bot.get_channel(
+                813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
             e34.add_field(name='**Total Members**', value=guild.member_count)
             e34.add_field(name='**Bots**',
-                        value=sum(1 for member in guild.members if member.bot))
+                          value=sum(1 for member in guild.members if member.bot))
             e34.add_field(name="**Region**",
-                        value=str(guild.region).capitalize(), inline=True)
+                          value=str(guild.region).capitalize(), inline=True)
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(embed=e34)
             await c.send(f'We are now currently at **{len(self.bot.guilds)+1} servers**')
@@ -180,20 +188,22 @@ class BotEvents(commands.Cog):
             event = False
         if ban:
             e = ErrorEmbed(
-                    title='**Ban**', 
-                    description=f'**{user.mention}** was banned!',
-                )
+                title='**Ban**',
+                description=f'**{user.mention}** was banned!',
+            )
             e.add_field(name='**Banned User** :', value=user, inline=True)
             if event:
-                e.add_field(name='**Responsible Moderator** :', value=event.user, inline=True)
+                e.add_field(name='**Responsible Moderator** :',
+                            value=event.user, inline=True)
                 if event.reason:
                     e.add_field(name='**Reason** :', value=event.reason)
             if user.avatar_url:
                 e.set_thumbnail(url=user.avatar_url)
             await ban.send(embed=e)
             try:
-                await user.send(f'You were **banned** from **{guild.name}**',embed=e)
-            except: pass
+                await user.send(f'You were **banned** from **{guild.name}**', embed=e)
+            except:
+                pass
 
     # unban
     @commands.Cog.listener()
@@ -206,20 +216,22 @@ class BotEvents(commands.Cog):
             event = False
         if unban:
             e = Embed(
-                    title='**Unban** :tada:', 
-                    description=f'**{user.mention}** was unbanned! :tada:'
-                )
+                title='**Unban** :tada:',
+                description=f'**{user.mention}** was unbanned! :tada:'
+            )
             if user.avatar_url:
                 e.set_thumbnail(url=user.avatar_url)
             e.add_field(name='**Unbanned User** :', value=user, inline=True)
             if event:
-                e.add_field(name='**Responsible Moderator** :', value=event.user, inline=True)
+                e.add_field(name='**Responsible Moderator** :',
+                            value=event.user, inline=True)
                 if event.reason:
                     e.add_field(name='**Reason** :', value=event.reason)
             await unban.send(embed=e)
             try:
-                await user.send(f'You were **unbanned** from **{guild.name}** ! :tada:',embed=e)
-            except: pass
+                await user.send(f'You were **unbanned** from **{guild.name}** ! :tada:', embed=e)
+            except:
+                pass
 
     # on message event
     @commands.Cog.listener()

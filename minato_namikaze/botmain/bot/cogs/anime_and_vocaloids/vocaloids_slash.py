@@ -3,6 +3,7 @@ from discord_slash import SlashContext, cog_ext
 
 from ...lib import meek_api
 
+
 class VocaloidSlash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

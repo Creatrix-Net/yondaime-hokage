@@ -4,7 +4,4 @@ from django.shortcuts import render
 
 
 def keep_alive(request):
-    src = '<title>Minato Namikaze</title><script src="https://discordbotlist.com/widget/index.js" async></script></head>'
-    htm1 = '<h1><dbl-stat bot-id="minato-namikaze" stat="guilds">Loading...</dbl-stat> guilds</h1>'
-    html2 = '<br/><h1><dbl-stat bot-id="minato-namikaze" stat="users">Loading...</dbl-stat> users</h1>'
-    return HttpResponse(src+htm1+html2)
+    return HttpResponse('<a href="https://discordbotlist.com/bots/779559821162315787"><img src="https://discordbotlist.com/api/v1/bots/779559821162315787/widget"></a>')

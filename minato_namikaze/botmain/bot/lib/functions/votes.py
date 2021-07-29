@@ -101,7 +101,7 @@ def voteddiscordlistspace(ctx):
     return h1
 
 
-def generatevoteembed(ctx, sitename: str):
+def generatevoteembed(ctx, *argv):
     list_dict = {
         'top.gg': 'https://top.gg/images/dblnew.png',
         'discordlist.space': 'https://discordlist.space/img/apple-touch-icon.png',
@@ -120,18 +120,33 @@ def generatevoteembed(ctx, sitename: str):
         'bladebotlist': f'https://bladebotlist.xyz/bot/{ctx.bot.user.id}',
         'voidbots': f'https://voidbots.net/bot/{ctx.bot.user.id}/',
     }
-    e = ErrorEmbed(
-        title='Vote Locked!',
-        description=f'''You didn\'t vote for me in **[{sitename.capitalize()}]({site_dict[sitename.lower()]})** :angry:. The `{ctx.prefix}{ctx.command.name}` is **vote locked**.
-        [Click Here]({site_dict[sitename.lower()]}) to __vote__ for me in **{sitename.capitalize()}** :wink:.
-        ''',
-        timestamp=ctx.message.created_at,
-    )
-    e.set_thumbnail(url=list_dict[sitename.lower()])
-    e.set_author(
-        name=ctx.message.author,
-        url=site_dict[sitename.lower()],
-        icon_url = ctx.message.author.avatar_url
-    )
-    e.set_footer(text=f'Vote for us in {sitename.lower()} and then enjoy the `{ctx.command.name}` command.')
+    if isinstance(argv[0], str):
+        e = ErrorEmbed(
+            title='Vote Locked!',
+            description=f'''You didn\'t vote for me in **[{argv[0].capitalize()}]({site_dict[argv[0].lower()]})** :angry:. The `{ctx.prefix}{ctx.command.name}` is **vote locked**.
+            [Click Here]({site_dict[argv[0].lower()]}) to __vote__ for me in **{argv[0].capitalize()}** :wink:.
+            ''',
+            timestamp=ctx.message.created_at,
+        )
+        e.set_thumbnail(url=list_dict[argv[0].lower()])
+        e.set_author(
+            name=ctx.message.author,
+            url=site_dict[argv[0].lower()],
+            icon_url = ctx.message.author.avatar_url
+        )
+        e.set_footer(text=f'Vote for us in {argv[0].lower()} and then enjoy the `{ctx.command.name}` command.')
+    else:
+        join_string = "\n・"
+        e = ErrorEmbed(
+            title='Vote Locked!',
+            description=f'You need to **vote for me** in the **following botlists** :smile: :\n・{join_string.join(list(f"**[{i.capitalize()}]({site_dict[i.lower()]})**" for i in argv[0]))}',
+            timestamp=ctx.message.created_at
+        )
+        e.set_author(
+            name=ctx.message.author,
+            url=website,
+            icon_url = ctx.message.author.avatar_url
+        )
+        e.set_thumbnail(url=ctx.message.author.avatar_url)
+        e.set_footer(text=f'Vote for us in the above mentioned botlists and then enjoy the `{ctx.command.name}` command.')
     return e

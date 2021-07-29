@@ -40,10 +40,10 @@ class PostStats:
                                      'Content-Type': 'application/json'},
                             json={'server_count': guildsno}
                             )
-        d = await self.post(f'https://api.botlist.space/v1/bots/{self.bot.user.id}',
+        d = await self.post(f'https://api.discordlist.space/v2/bots/{self.bot.user.id}',
                             headers={'Authorization': botlist,
                                      'Content-Type': 'application/json'},
-                            json={'server_count': guildsno}
+                            json={'serverCount': guildsno, 'active': True}
                             )
         e = await self.post(f'https://discord.boats/api/bot/{self.bot.user.id}',
                             headers={'Authorization': discordboats},

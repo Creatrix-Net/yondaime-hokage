@@ -4,3 +4,4 @@ from .moderation import *
 from .owneronly import *
 from .tools import *
 from .user import *
+from .votes import *

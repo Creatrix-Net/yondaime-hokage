@@ -53,11 +53,13 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
         likes_rank = waifu['like_rank']
         trash_rank = waifu['trash_rank']
         anime = waifu['appearances'][0]['name']
+        url = waifu['url']
 
         e = Embed(title=name)
         e.add_field(name="**Anime**", value=anime, inline=True)
         e.add_field(name="**:heartbeat:**", value=likes_rank, inline=True)
         e.add_field(name="**:wastebasket:**", value=trash_rank, inline=True)
+        e.add_field(name="**:link:**", value=f'[Know More]({url})')
         e.set_image(url=pic)
         e.set_footer(text=f'React with any emoji in 30 sec to claim him/her')
         return e, name

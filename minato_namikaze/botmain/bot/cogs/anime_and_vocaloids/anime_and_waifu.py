@@ -5,7 +5,7 @@ import DiscordUtils
 from discord.ext import commands
 from mal import Anime, AnimeSearch, Manga, MangaSearch
 
-from ...lib import Embed
+from ...lib import Embed, votedVoidBots, votedTopgg, votedbotsfordiscord, voteddiscordboats, votedfateslist, votedbladebotlist, voteddiscordlistspace, generatevoteembed
 
 
 def format_related_anime_manga(dict_related_anime):
@@ -48,6 +48,7 @@ class AnimeandManga(commands.Cog, name='Anime and Manga'):
         aliases=['anisearch', 'animesearchbyname',
                  'anime_search_by_name', 'searchanime', 'searchani']
     )
+    @commands.check(votedVoidBots)
     async def animesearch(self, ctx, *, anime_name: str):
         '''Searches Anime from MAL and displays the first 10 search result.'''
         search = AnimeSearch(str(anime_name).strip(' ').lower())
@@ -82,6 +83,11 @@ class AnimeandManga(commands.Cog, name='Anime and Manga'):
 
         paginator = DiscordUtils.Pagination.AutoEmbedPaginator(ctx)
         await paginator.run(embeds)
+    
+    @animesearch.error
+    async def error_handler(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send(embed=generatevoteembed(ctx, 'voidbots'))
 
     # about anime
     @commands.command(
@@ -90,6 +96,7 @@ class AnimeandManga(commands.Cog, name='Anime and Manga'):
         aliases=['aniabout', 'animeabout', 'anime_about_by_mal_id',
                  'knowanime', 'aboutani', 'anime']
     )
+    @commands.check(votedTopgg)
     async def aboutanime(self, ctx, mal_id: int):
         '''Displays about the anime using the MAL ANIME ID. get it by using animesearch command.'''
         message = await ctx.send(':mag: Searching...', delete_after=5)
@@ -191,6 +198,11 @@ class AnimeandManga(commands.Cog, name='Anime and Manga'):
         for i in embeds:
             await ctx.send(embed=i)
             time.sleep(0.5)
+    
+    @aboutanime.error
+    async def error_handler(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send(embed=generatevoteembed(ctx, 'top.gg'))
 
     # search manga
     @commands.command(
@@ -199,6 +211,7 @@ class AnimeandManga(commands.Cog, name='Anime and Manga'):
         aliases=['magsearch', 'mangasearchbyname',
                  'manga_search_by_name', 'searchmanga', 'searchmag']
     )
+    @commands.check(votedbotsfordiscord)
     async def mangasearch(self, ctx, *, manga_name: str):
         '''Searches Manga from MAL and displays the first 10 search result.'''
         search = MangaSearch(str(manga_name).strip(' ').lower())
@@ -233,15 +246,21 @@ class AnimeandManga(commands.Cog, name='Anime and Manga'):
 
         paginator = DiscordUtils.Pagination.AutoEmbedPaginator(ctx)
         await paginator.run(embeds)
+    
+    @mangasearch.error
+    async def error_handler(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send(embed=generatevoteembed(ctx, 'botsfordiscord'))
+
 
     # about manga
-
     @commands.command(
         description='Displays about the manga using the MAL MANGA ID. get it by using mangasearch command.',
         usage='<mal.id>',
         aliases=['magabout', 'mangaabout', 'manga_about_by_mal_id',
                  'knowmanga', 'aboutmag', 'manga']
     )
+    @commands.check(voteddiscordboats)
     async def aboutmanga(self, ctx, mal_id: int):
         '''Displays about the manga using the MAL MANGA ID. get it by using mangasearch command.'''
         message = await ctx.send(':mag: Searching...', delete_after=5)
@@ -302,6 +321,11 @@ class AnimeandManga(commands.Cog, name='Anime and Manga'):
         for i in embeds:
             await ctx.send(embed=i)
             time.sleep(0.5)
+    
+    @mangasearch.error
+    async def error_handler(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send(embed=generatevoteembed(ctx, 'discord.boats'))
 
 
 def setup(bot):

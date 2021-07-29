@@ -4,8 +4,12 @@ from typing import Optional
 import DiscordUtils
 from discord.ext import commands
 from mal import Anime, AnimeSearch, Manga, MangaSearch
+from asyncdagpi import Client
 
-from ...lib import Embed, votedVoidBots, votedTopgg, votedbotsfordiscord, voteddiscordboats, votedfateslist, votedbladebotlist, voteddiscordlistspace, generatevoteembed
+from ...lib import (Embed, dagpi, generatevoteembed, votedbladebotlist,
+                    votedbotsfordiscord, voteddiscordboats,
+                    voteddiscordlistspace, votedfateslist, votedTopgg,
+                    votedVoidBots)
 
 
 def format_related_anime_manga(dict_related_anime):
@@ -36,10 +40,27 @@ def format_manga_characters(character):
     return character_string
 
 
-class AnimeandManga(commands.Cog, name='Anime and Manga'):
+class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
     def __init__(self, bot):
         self.bot = bot
-        self.description = 'Some anime and manga related commands (vote locked).'
+        self.bot.dagpi = Client(dagpi)
+        self.description = 'Some anime, manga and waifu related commands (vote locked).'
+    
+    async def get_waifu(self):
+        waifu = await  self.bot.dagpi.waifu()
+        pic = waifu['display_picture']
+        name = waifu['name']
+        likes_rank = waifu['like_rank']
+        trash_rank = waifu['trash_rank']
+        anime = waifu['appearances'][0]['name']
+
+        e = Embed(title=name)
+        e.add_field(name="**Anime**", value=anime, inline=True)
+        e.add_field(name="**:heartbeat:**", value=likes_rank, inline=True)
+        e.add_field(name="**:wastebasket:**", value=trash_rank, inline=True)
+        e.set_image(url=pic)
+        e.set_footer(text=f'React with any emoji in 30 sec to claim him/her')
+        return e, name
 
     # search anime
     @commands.command(
@@ -317,7 +338,30 @@ class AnimeandManga(commands.Cog, name='Anime and Manga'):
         for i in embeds:
             await ctx.send(embed=i)
             time.sleep(0.5)
+    
+    @commands.command(aliases=['w', 'wfu', 'wa'])
+    @commands.cooldown(1, 2, commands.BucketType.guild)
+    async def waifu(self, ctx):
+        '''Get random waifu and marry them! UwU!'''
+        async with ctx.typing():
+            if not votedfateslist(ctx) and not votedbladebotlist(ctx) and not votedVoidBots(ctx):
+                votes_list=[votedfateslist(ctx), votedbladebotlist(ctx), votedVoidBots(ctx)]
+                votes_list_name = ['fateslist', 'bladebotlist', 'voidbots']
+                await ctx.send(embed=generatevoteembed(ctx,[votes_list_name[i] for i,k in enumerate(votes_list) if not k]))
+                return
+            waifu = await self.get_waifu()
+            message = await ctx.send(embed=waifu[0])
+            await message.add_reaction('💓')
+
+        def check(reaction, user):
+            return user != self.bot.user and message.id == reaction.message.id
+
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', timeout=30.0, check=check)
+            await ctx.send(f':sparkling_heart: **{user.mention}** has *married* **{waifu[-1]}**! UwU :ring:')
+        except asyncio.TimeoutError:
+            pass
 
 
 def setup(bot):
-    bot.add_cog(AnimeandManga(bot))
+    bot.add_cog(AnimeaMangaandWaifu(bot))

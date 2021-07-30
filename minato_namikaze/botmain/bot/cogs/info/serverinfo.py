@@ -113,6 +113,7 @@ class Info(commands.Cog):
             difference = float(int(starttime - endtime))
             e.add_field(name=":inbox_tray: Script Speed :outbox_tray:",
                         value=f"{difference}ms")
+            e.set_image(url='https://cdn.discordapp.com/attachments/777918705098686465/870692724880334878/pong_9.gif')
             await msg.edit(content="", embed=e)
 
     @commands.command()
@@ -186,11 +187,11 @@ class Info(commands.Cog):
         """ Get the current banner image """
         if not ctx.guild.banner:
             return await ctx.send("This server does not have a banner...")
-        e = discord.Embed(title=f"ℹ Banner for {ctx.guild}")
+        e = Embed(title=f"ℹ Banner for {ctx.guild}")
         e.set_image(url=ctx.guild.banner_url_as(format='png'))
         await ctx.send(embed=e)
 
-    @commands.command()
+    @commands.command(aliases=['whois','who'])
     @commands.guild_only()
     async def user(self, ctx, *, user: discord.Member = None):
         """ Get user information """

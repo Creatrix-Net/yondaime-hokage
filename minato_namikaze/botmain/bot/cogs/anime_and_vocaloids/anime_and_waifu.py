@@ -1,4 +1,4 @@
-import time
+import time, discord
 from typing import Optional
 
 import DiscordUtils
@@ -6,7 +6,7 @@ from discord.ext import commands
 from mal import Anime, AnimeSearch, Manga, MangaSearch
 from asyncdagpi import Client
 
-from ...lib import (Embed, dagpi, generatevoteembed, votedbladebotlist,
+from ...lib import (Embed, ErrorEmbed, dagpi, generatevoteembed, votedbladebotlist,
                     votedbotsfordiscord, voteddiscordboats,
                     voteddiscordlistspace, votedfateslist, votedTopgg,
                     votedVoidBots)
@@ -363,6 +363,80 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
             await ctx.send(f':sparkling_heart: **{user.mention}** has *married* **{waifu[-1]}**! UwU :ring:')
         except asyncio.TimeoutError:
             pass
+    
+    @commands.command(aliases=['wtp','whatsthatpokemon'])
+    @commands.cooldown(1, 2, commands.BucketType.guild)
+    async def whosthatpokemon(self, ctx):
+        async with ctx.typing():
+            if not voteddiscordlistspace(ctx) and not votedTopgg(ctx):
+                votes_list=[voteddiscordlistspace(ctx), votedTopgg(ctx)]
+                votes_list_name = ['discordlist.space', 'top.gg']
+                await ctx.send(embed=generatevoteembed(ctx,[votes_list_name[i] for i,k in enumerate(votes_list) if not k]))
+                return
+        async with ctx.typing():        
+            wtp = await self.bot.dagpi.wtp()
+            question = wtp.question
+            answer = wtp.name.lower()
+            
+            e = Embed(title='Who\'s That Pokemon?', timestamp=ctx.message.created_at)
+            e.set_footer(text=f'{ctx.message.author} reply within 30secs to answer.', icon_url=ctx.message.author.avatar_url)
+            e.set_image(url=question)
+            
+            question_message = await ctx.send('You have 3 chances, **Chance: 1/3**',embed=e)
+        
+        answerembed = discord.Embed(
+            title = f'The Pokemon is: {wtp.name.capitalize()}',
+            description = f"```Here is the Info\n\nAbilities: {f', '.join(list(map(lambda x: x.capitalize(),wtp.abilities)))}```",
+            timestamp=ctx.message.created_at
+        )
+        answerembed.add_field(name='**Height**', value=f'{round(wtp.height)}m')
+        answerembed.add_field(name='**Weight**', value=f'{round(wtp.weight)} kg')
+        answerembed.add_field(name=':id:', value=wtp.id)
+        answerembed.set_image(url=wtp.answer)
+        answerembed.set_footer(text=wtp.name.capitalize(), icon_url=wtp.answer)
+        answerembed.set_author(name=wtp.name.capitalize(), url=wtp.link, icon_url=wtp.answer)
+        for i in range(3):
+            try:
+                answer_content = await self.bot.wait_for('message', timeout=30, check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
+                time.sleep(0.8)
+                if answer_content.content.lower() != answer:
+                    try:
+                        await answer_content.delete()
+                    except:
+                        pass
+                    await ctx.send(embed=ErrorEmbed(description='Please try again! :no_entry:'), delete_after=3)
+                    await question_message.edit(content=f'You have {3-(i+1)} chances, **Chance: {i+1}/3**',embed=e)
+                    pass
+                elif answer_content.content.lower() == answer:
+                    try:
+                        await answer_content.delete()
+                    except:
+                        pass
+                    answerembed.color = discord.Color.green()
+                    await question_message.edit(content=f'**Yes you guessed it right!** in {i+1} chance(s), {ctx.author.mention}',embed=answerembed)
+                    return
+                elif i+1 == 3 and answer_content.content.lower() != answer:
+                    try:
+                        await answer_content.delete()
+                    except:
+                        pass
+                    answerembed.color = discord.Color.red()
+                    await question_message.edit(content=f'Well you couldn\'t **guess it right in 3 chances**. Here is your **answer**!, {ctx.author.mention}',embed=answerembed)
+                    return
+            except TimeoutError:
+                try:
+                    await answer_content.delete()
+                except:
+                    pass
+                await ctx.send(embed=ErrorEmbed(description='Well you didn\'t atleast once.\n Thus I won\'t be telling you the answer! :rofl:. **Baka**'))
+                return
+        try:
+            await answer_content.delete()
+        except:
+            pass
+        answerembed.color = discord.Color.red()
+        await question_message.edit(content=f'Well you couldn\'t **guess it right in 3 chances**. Here is your **answer**!, {ctx.author.mention}',embed=answerembed)
+        return
 
 
 def setup(bot):

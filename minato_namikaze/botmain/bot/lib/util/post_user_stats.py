@@ -44,7 +44,7 @@ class PostStats:
                             json={'server_count': guildsno}
                             )
         d = await self.post(f'https://api.discordlist.space/v2/bots/{self.bot.user.id}',
-                            headers={'Authorization': botlist,
+                            headers={'Authorization': f'Bot {botlist}',
                                      'Content-Type': 'application/json'},
                             json={'serverCount': guildsno, 'active': True}
                             )

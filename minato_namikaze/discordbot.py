@@ -13,7 +13,7 @@ from discord_components import DiscordComponents
 from discord_slash import SlashCommand
 from pypresence import Presence
 
-from botmain.bot.lib import HelpClassPretty, MenuHelp
+from botmain.bot.lib import HelpClassPretty, MenuHelp, PostStats
 
 intents = discord.Intents.all()
 intents.reactions = True
@@ -129,6 +129,10 @@ async def on_ready():
             name='over Naruto'
         )
     )
+    
+    await PostStats(bot).post_guild_stats_all()
+    
+    print('Status Posted')
 
 
 sentry_sdk.init(

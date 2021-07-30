@@ -38,7 +38,7 @@ class BotEvents(commands.Cog):
         self.minato_gif = bot.minato_gif
         self.minato_dir = bot.minato_dir
         self.posting = PostStats(self.bot)
-        self.tracker = InviteTrackerForMyGuild(bot)
+        self.tracker = InviteTrackerForMyGuild(bot)   
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -150,9 +150,9 @@ class BotEvents(commands.Cog):
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(embed=e34)
             await c.send(f'We are now currently at **{len(self.bot.guilds)+1} servers**')
-            await self.posting.post_guild_stats_all()
         except:
             pass
+        await self.posting.post_guild_stats_all()
 
     # when bot leaves the server
     @commands.Cog.listener()
@@ -173,9 +173,9 @@ class BotEvents(commands.Cog):
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(embed=e34)
             await c.send(f'We are now currently at **{len(self.bot.guilds)+1} servers**')
-            await self.posting.post_guild_stats_all()
         except:
             pass
+        await self.posting.post_guild_stats_all()
 
     # ban
     @commands.Cog.listener()

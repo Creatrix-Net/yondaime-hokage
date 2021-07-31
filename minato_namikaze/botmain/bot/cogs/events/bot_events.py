@@ -100,8 +100,7 @@ class BotEvents(commands.Cog):
             img = random.choice(self.minato_gif)
             file = discord.File(
                 join(self.minato_dir, 'minato', img), filename=img)
-            await welcome_channel.send('https://i.imgur.com/j6j7ob7.mp4')
-
+            
             f = open(Path(__file__).resolve(
                 strict=True).parent.parent.parent / join('lib', 'text', 'welcome_message.txt'), 'r')
 
@@ -128,7 +127,7 @@ class BotEvents(commands.Cog):
             e.set_image(
                 url=f"attachment://{img}"
             )
-            await welcome_channel.send(file=file, embed=e)
+            await welcome_channel.send(content='https://i.imgur.com/j6j7ob7.mp4', file=file, embed=e)
         except:
             pass
 
@@ -148,8 +147,7 @@ class BotEvents(commands.Cog):
             e34.add_field(name="**Region**",
                           value=str(guild.region).capitalize(), inline=True)
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
-            await c.send(embed=e34)
-            await c.send(f'We are now currently at **{len(self.bot.guilds)+1} servers**')
+            await c.send(content=f'We are now currently at **{len(self.bot.guilds)+1} servers**',embed=e34)
         except:
             pass
         await self.posting.post_guild_stats_all()
@@ -171,8 +169,7 @@ class BotEvents(commands.Cog):
             e34.add_field(name="**Region**",
                           value=str(guild.region).capitalize(), inline=True)
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
-            await c.send(embed=e34)
-            await c.send(f'We are now currently at **{len(self.bot.guilds)+1} servers**')
+            await c.send(content=f'We are now currently at **{len(self.bot.guilds)+1} servers**',embed=e34)
         except:
             pass
         await self.posting.post_guild_stats_all()

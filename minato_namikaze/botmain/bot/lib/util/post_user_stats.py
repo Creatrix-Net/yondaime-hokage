@@ -1,16 +1,42 @@
 import random
 from os.path import join
 from pathlib import Path
+import time
 
 import aiohttp
 
 from ..classes.embed import Embed
 from .vars import *
 
-
 class PostStats:
     def __init__(self, bot):
         self.bot = bot
+    
+    async def post_commands(self):
+        dict_append = []
+        for i in self.bot.commands:
+            tuple_notes = (i.description.lower(), i.short_doc.lower())
+            parameters = list(j for j in i.clean_params)
+            dict_append = {
+                'cmd_name': i.cog_name,
+                'friendly_name': i.qualified_name,
+                'description': i.description,
+                'cmd_groups': i.parents+[i.cog_name] if i.cog_name else i.parents,
+                'examples': [i.usage],
+                'cmd_type': 0,
+                'notes': ['Vote locked'] if 'vote locked' in tuple_notes or 'votes lock' in tuple_notes or 'vote lock' in tuple_notes else []
+            }
+            commands_list.append(dict_append)
+        for i in commands_list:
+            j = await self.post(
+                f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands',
+                headers={"Authorization": fateslist,
+                "Content-Type": "application/json"},
+                json=i
+            )
+            print(j, j.status)
+            time.sleep(0.5)
+            
 
     async def post(self, url, headers, data: dict = None, json: dict = None):
         try:
@@ -96,8 +122,10 @@ class PostStats:
         e1.add_field(name='Space Bots', value=f'{h} : [Space Bots](https://space-bot-list.xyz/bots/{self.bot.user.id})')
 
         e1.add_field(name='Void Bots', value=f'{i} : [Void Bots](https://voidbots.net/bot/{self.bot.user.id}/)')
-        e1.add_field(name='Fates List', value=f'{j} : [Fates List](https://fateslist.xyz/hatsune-miku/)')
+        e1.add_field(name='Fates List', value=f'{j} : [Fates List](https://fateslist.xyz/minato/)')
         e1.add_field(name='BladeBotList', value=f'{k} : [BladeBotList](https://bladebotlist.xyz/bot/{self.bot.user.id}/)')
         e1.add_field(name='DiscordLabs', value=f'{l} : [DiscordLabs](https://bots.discordlabs.org/bot/{self.bot.user.id})')
-
-        await r.send(embed=e1)
+        try:
+            await r.send(embed=e1)
+        except:
+            pass

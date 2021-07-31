@@ -3,6 +3,7 @@ import random
 import time
 from asyncio import TimeoutError, sleep
 from random import choice
+from string import ascii_letters
 
 import async_cleverbot as ac
 import discord
@@ -10,7 +11,7 @@ from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 from discord_components import Button, ButtonStyle, DiscordComponents
 
-from ...lib import Embed, ErrorEmbed, chatbot
+from ...lib import Embed, ErrorEmbed, chatbot, generatevoteembed, votedTopgg
 
 
 class FunGames(commands.Cog):
@@ -23,7 +24,11 @@ class FunGames(commands.Cog):
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
     @commands.command(aliases=['cb'])
     async def chatbot(self, ctx):
-        '''Talk with me!'''
+        '''Talk with me! (Vote Locked)'''
+        async with ctx.typing():
+            if not votedTopgg(ctx):
+                await ctx.send(embed=generatevoteembed(ctx,'top.gg'))
+                return
         lis = "cancel"
         transmit = True
         await ctx.send(f'Chatbot Started!\nType the following items `{lis}` to end.')
@@ -40,7 +45,7 @@ class FunGames(commands.Cog):
                     await ctx.send(f"{left.text}... Waiting... OH you said cancel, bye!")
                 else:
                     async with ctx.channel.typing():
-                        response = await self.bot.chatbot.ask(m.content)
+                        response = await self.bot.chatbot.ask(m.content if len(nm.content) >= 3 else f'{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}')
                         await ctx.send(response.text)
 
     @commands.max_concurrency(1, per=commands.BucketType.channel)

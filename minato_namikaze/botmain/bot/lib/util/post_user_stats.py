@@ -34,7 +34,7 @@ class PostStats:
                 "Content-Type": "application/json"},
                 json=i
             )
-            print(j, j.status)
+            print(j)
             time.sleep(0.5)
             
 

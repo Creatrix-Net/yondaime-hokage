@@ -22,8 +22,9 @@ class PostStats:
                 'friendly_name': i.qualified_name,
                 'description': i.description,
                 'cmd_groups': i.parents+[i.cog_name] if i.cog_name else i.parents,
-                'examples': [i.usage],
+                'examples': [i.usage if i.usage else ''],
                 'cmd_type': 0,
+                'args': parameters,
                 'notes': ['Vote locked'] if 'vote locked' in tuple_notes or 'votes lock' in tuple_notes or 'vote lock' in tuple_notes else []
             }
             commands_list.append(dict_append)

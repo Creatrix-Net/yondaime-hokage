@@ -114,7 +114,7 @@ async def on_ready():
         bot._cache[guild.id] = {}
         for invite in await guild.invites():
             bot._cache[guild.id][invite.code] = invite
-    except Forbidden:
+    except:
         pass
     print('Started The Bot')
 
@@ -131,8 +131,10 @@ async def on_ready():
     )
     
     await PostStats(bot).post_guild_stats_all()
-    
     print('Status Posted')
+    
+    await PostStats(bot).post_commands()
+    print('Commands Status Posted')
 
 
 sentry_sdk.init(

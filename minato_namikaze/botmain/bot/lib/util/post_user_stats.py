@@ -13,7 +13,7 @@ class PostStats:
         self.bot = bot
     
     async def post_commands(self):
-        dict_append = []
+        commands_list = []
         for i in self.bot.commands:
             tuple_notes = (i.description.lower(), i.short_doc.lower())
             parameters = list(j for j in i.clean_params)

@@ -7,6 +7,7 @@ import aiohttp
 
 from ..classes.embed import Embed
 from .vars import *
+import asyncio, requests
 
 class PostStats:
     def __init__(self, bot):
@@ -15,36 +16,73 @@ class PostStats:
     async def post_commands(self):
         commands_list = []
         for i in self.bot.commands:
-            tuple_notes = (i.description.lower(), i.short_doc.lower())
-            parameters = list(j for j in i.clean_params)
+            tuple_notes = str(i.description) if i.description != '' else str(i.short_doc)
+            parameters = list(f'<{j}>' for j in i.clean_params)
             dict_append = {
-                'cmd_name': i.cog_name,
-                'friendly_name': i.qualified_name,
-                'description': i.description,
+                'cmd_name': i.name,
+                'vote_locked': True if 'vote locked' in tuple_notes or 'votes lock' in tuple_notes or 'vote lock' in tuple_notes else False,
+                'description': str(i.description) if i.description != '' else str(i.short_doc),
                 'cmd_groups': i.parents+[i.cog_name] if i.cog_name else i.parents,
-                'examples': [i.usage if i.usage else ''],
                 'cmd_type': 0,
-                'args': parameters,
-                'notes': ['Vote locked'] if 'vote locked' in tuple_notes or 'votes lock' in tuple_notes or 'vote lock' in tuple_notes else []
             }
+            if i.usage:
+                dict_append.update({'examples': [f'){i.name} '+i.usage]})
+            if len(parameters) > 0:
+                dict_append.update({'args': parameters})
             commands_list.append(dict_append)
         for i in commands_list:
             j = await self.post(
-                f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands',
+                f'https://fateslist.xyz/api/v2/bots/779559821162315787/commands',
                 headers={"Authorization": fateslist,
                 "Content-Type": "application/json"},
-                json=i
+                json=i,
+                getrequestobj=True
             )
-            print(j)
-            time.sleep(0.5)
-            
+            if isinstance(j, int):
+                print(j, 'The site is down thus can\'t post the commands now')
+                break
+            if j.status == 429:
+                from re import findall
+                json_reason = await j.json()
+                temp = findall(r'\d+', json_reason.get('reason'))
+                res = list(map(int, temp))
+                await asyncio.sleep(res[0])
+                k = await self.post(
+                    f'https://fateslist.xyz/api/v2/bots/779559821162315787/commands',
+                    headers={"Authorization": fateslist,
+                    "Content-Type": "application/json"},
+                    json=i,
+            )
+            else:
+                await asyncio.sleep(15)
+        allcmd = requests.get(
+            f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands',
+            headers={"Authorization": fateslist,"Content-Type": "application/json"}
+        )
+        try:
+            allcmd1 = allcmd.json()
+        except:
+            return
+        all_cogs = list(self.bot.cogs.keys())
+        for i in allcmd1:
+            for j in allcmd1.get(i):
+                if j.get('cmd_name') in allcmd1:
+                    requests.delete(
+                        f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands/{j.get("id")}',
+                        headers={"Authorization": fateslist,"Content-Type": "application/json"}
+                    )
+                    await asyncio.sleep(15)
 
-    async def post(self, url, headers, data: dict = None, json: dict = None):
+
+    async def post(self, url, headers, data: dict = None, json: dict = None, getrequestobj=False):
         try:
             session = aiohttp.ClientSession()
             request_made = await session.post(url, headers=headers, json=data or json)
             await session.close()
-            return request_made.status
+            if getrequestobj:
+                return request_made
+            else:
+                return request_made.status
         except:
             return 503
 

@@ -11,8 +11,7 @@ from pathlib import Path
 import discord
 from discord.ext import commands
 
-from ...lib import create_paginator
-from ...lib.classes.embed import Embed, ErrorEmbed
+from ...lib import *
 
 
 class Developer(commands.Cog):
@@ -64,6 +63,37 @@ class Developer(commands.Cog):
                 await ctx.send_help(ctx.command)
             else:
                 pass
+    
+    @dev.group(name='postcommand', alisases=['postfates'])
+    async def post_commands_to_fates_list(self, ctx):
+        '''Post all the commands to FATES LIST'''
+        import time
+        start_time=time.time()
+        await self.bot.change_presence(
+            status=discord.Status.dnd,
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name='over Naruto'
+            )
+        )
+        post_start =  await ctx.send('Posting :outbox_tray:')
+        await PostStats(self.bot).post_commands()
+        await post_start.edit(
+            content=f'Posted! :inbox_tray: {ctx.message.author.mention}',
+            embed=discord.Embed(
+                title='Commands Posted!',
+                description=f'**Time taken**: {start_time-time.time()} sec',
+                timestamp=ctx.message.created_at,
+                color=discord.Color.random()
+            )
+        )
+        await self.bot.change_presence(
+            status=discord.Status.idle,
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name='over Naruto'
+            )
+        )
 
     @dev.group(name='sharedservers', usage="<user>")
     async def sharedservers(self, ctx, *, user: discord.Member):

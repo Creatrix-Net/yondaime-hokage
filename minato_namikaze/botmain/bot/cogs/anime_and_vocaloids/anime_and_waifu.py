@@ -66,13 +66,13 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
 
     # search anime
     @commands.command(
-        description='Searches Anime from MAL and displays the first 10 search result.',
+        description='Searches Anime from MAL and displays the first 10 search result. (vote locked)',
         usage='<anime.name>',
         aliases=['anisearch', 'animesearchbyname',
                  'anime_search_by_name', 'searchanime', 'searchani']
     )
     async def animesearch(self, ctx, *, anime_name: str):
-        '''Searches Anime from MAL and displays the first 10 search result.'''
+        '''Searches Anime from MAL and displays the first 10 search result. (vote locked)'''
         if not votedVoidBots(ctx):
             await ctx.send(embed=generatevoteembed(ctx, 'voidbots'))
             return
@@ -113,13 +113,13 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
 
     # about anime
     @commands.command(
-        description='Displays about the anime using the MAL ANIME ID. get it by using animesearch command.',
+        description='Displays about the anime using the MAL ANIME ID. get it by using animesearch command. (vote locked)',
         usage='<mal.id>',
         aliases=['aniabout', 'animeabout', 'anime_about_by_mal_id',
                  'knowanime', 'aboutani', 'anime']
     )
     async def aboutanime(self, ctx, mal_id: int):
-        '''Displays about the anime using the MAL ANIME ID. get it by using animesearch command.'''
+        '''Displays about the anime using the MAL ANIME ID. get it by using animesearch command. (vote locked)'''
         if not votedTopgg(ctx):
             await ctx.send(embed=generatevoteembed(ctx, 'top.gg'))
             return
@@ -226,13 +226,13 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
 
     # search manga
     @commands.command(
-        description='Searches Manga from MAL and displays the first 10 search result.',
+        description='Searches Manga from MAL and displays the first 10 search result. (vote locked)',
         usage='<manga.name>',
         aliases=['magsearch', 'mangasearchbyname',
                  'manga_search_by_name', 'searchmanga', 'searchmag']
     )
     async def mangasearch(self, ctx, *, manga_name: str):
-        '''Searches Manga from MAL and displays the first 10 search result.'''
+        '''Searches Manga from MAL and displays the first 10 search result. (vote locked)'''
         if not votedbotsfordiscord(ctx):
             await ctx.send(embed=generatevoteembed(ctx, 'botsfordiscord'))
             return
@@ -272,13 +272,13 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
 
     # about manga
     @commands.command(
-        description='Displays about the manga using the MAL MANGA ID. get it by using mangasearch command.',
+        description='Displays about the manga using the MAL MANGA ID. get it by using mangasearch command. (vote locked)',
         usage='<mal.id>',
         aliases=['magabout', 'mangaabout', 'manga_about_by_mal_id',
                  'knowmanga', 'aboutmag', 'manga']
     )
     async def aboutmanga(self, ctx, mal_id: int):
-        '''Displays about the manga using the MAL MANGA ID. get it by using mangasearch command.'''
+        '''Displays about the manga using the MAL MANGA ID. get it by using mangasearch command. (vote locked)'''
         if not voteddiscordboats(ctx):
             await ctx.send(embed=generatevoteembed(ctx, 'discord.boats'))
             return
@@ -344,7 +344,7 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
     @commands.command(aliases=['w', 'wfu', 'wa'])
     @commands.cooldown(1, 2, commands.BucketType.guild)
     async def waifu(self, ctx):
-        '''Get random waifu and marry them! UwU!'''
+        '''Get random waifu and marry them! UwU! (vote locked)'''
         async with ctx.typing():
             if not votedfateslist(ctx) and not votedbladebotlist(ctx) and not votedVoidBots(ctx):
                 votes_list=[votedfateslist(ctx), votedbladebotlist(ctx), votedVoidBots(ctx)]
@@ -367,6 +367,7 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
     @commands.command(aliases=['wtp','whatsthatpokemon'])
     @commands.cooldown(1, 2, commands.BucketType.guild)
     async def whosthatpokemon(self, ctx):
+        '''Play Who\'s That Pokemon? (vote locked)'''
         async with ctx.typing():
             if not voteddiscordlistspace(ctx) and not votedTopgg(ctx):
                 votes_list=[voteddiscordlistspace(ctx), votedTopgg(ctx)]

@@ -133,8 +133,9 @@ async def on_ready():
     await PostStats(bot).post_guild_stats_all()
     print('Status Posted')
     
-    await PostStats(bot).post_commands()
-    print('Commands Status Posted')
+    if bot.local:
+        await PostStats(bot).post_commands()
+        print('Commands Status Posted')
 
 
 sentry_sdk.init(

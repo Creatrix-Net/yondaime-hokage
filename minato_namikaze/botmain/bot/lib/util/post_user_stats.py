@@ -13,6 +13,27 @@ class PostStats:
     def __init__(self, bot):
         self.bot = bot
     
+    async def delete_commands(self):
+        try:
+            allcmd = requests.get(
+                f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands',
+                headers={"Authorization": fateslist,"Content-Type": "application/json"}
+            )
+            if allcmd.status_code != 404:
+                for i in allcmd1:
+                    for j in allcmd1.get(i):
+                        requests.delete(
+                            f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands/{j.get("id")}',
+                            headers={"Authorization": fateslist,"Content-Type": "application/json"}
+                        )
+                        await asyncio.sleep(5)
+                return True
+            else:
+                return False
+            return True
+        except:
+            return False
+    
     async def post_commands(self):
         commands_list = []
         for i in self.bot.commands:
@@ -54,24 +75,25 @@ class PostStats:
                     json=i,
             )
             else:
-                await asyncio.sleep(15)
-        allcmd = requests.get(
-            f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands',
-            headers={"Authorization": fateslist,"Content-Type": "application/json"}
-        )
+                await asyncio.sleep(5)
         try:
-            allcmd1 = allcmd.json()
+            allcmd = requests.get(
+                f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands',
+                headers={"Authorization": fateslist,"Content-Type": "application/json"}
+            )
+            if allcmd.status_code != 404:
+                allcmd1 = allcmd.json()
+                all_cogs = list(self.bot.cogs.keys())
+                for i in allcmd1:
+                    for j in allcmd1.get(i):
+                        if j.get('cmd_name') in all_cogs:
+                            requests.delete(
+                                f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands/{j.get("id")}',
+                                headers={"Authorization": fateslist,"Content-Type": "application/json"}
+                            )
+                            await asyncio.sleep(5)
         except:
-            return
-        all_cogs = list(self.bot.cogs.keys())
-        for i in allcmd1:
-            for j in allcmd1.get(i):
-                if j.get('cmd_name') in allcmd1:
-                    requests.delete(
-                        f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands/{j.get("id")}',
-                        headers={"Authorization": fateslist,"Content-Type": "application/json"}
-                    )
-                    await asyncio.sleep(15)
+            pass
 
 
     async def post(self, url, headers, data: dict = None, json: dict = None, getrequestobj=False):

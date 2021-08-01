@@ -134,7 +134,7 @@ async def on_ready():
     print('Status Posted')
     
     if not bot.local:
-        await self.bot.change_presence(
+        await bot.change_presence(
             status=discord.Status.dnd,
             activity=discord.Activity(
                 type=discord.ActivityType.watching,

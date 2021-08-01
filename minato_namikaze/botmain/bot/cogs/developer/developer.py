@@ -64,7 +64,7 @@ class Developer(commands.Cog):
             else:
                 pass
     
-    @dev.group(name='postcommand', alisases=['postfates'])
+    @dev.group(name='postcommand', alisases=['postfates','post_commands_to_fates_list'])
     async def post_commands_to_fates_list(self, ctx):
         '''Post all the commands to FATES LIST'''
         import time
@@ -82,9 +82,41 @@ class Developer(commands.Cog):
             content=f'Posted! :inbox_tray: {ctx.message.author.mention}',
             embed=discord.Embed(
                 title='Commands Posted!',
-                description=f'**Time taken**: {start_time-time.time()} sec',
+                description=f'**Time taken**: {round(time.time()-start_time)} sec',
                 timestamp=ctx.message.created_at,
                 color=discord.Color.random()
+            )
+        )
+        await self.bot.change_presence(
+            status=discord.Status.idle,
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name='over Naruto'
+            )
+        )
+    
+    
+    @dev.group(name='deletecommand', alisases=['postfates','deletefateslistcommand'])
+    async def deletefateslistcommand(self, ctx):
+        '''Deletes all the commands from FATES LIST'''
+        import time
+        start_time=time.time()
+        await self.bot.change_presence(
+            status=discord.Status.dnd,
+            activity=discord.CustomActivity(
+                name='Internal Cleanup!',
+                emoji=':broom:',
+                type=discord.ActivityType.playing,
+            )
+        )
+        post_start =  await ctx.send('Deleting :broom:')
+        await PostStats(self.bot).delete_commands()
+        await post_start.edit(
+            content=f'Deleted! :wastebasket: {ctx.message.author.mention}',
+            embed=Embed(
+                title='Commands Deleted!',
+                description=f'**Time taken**: {start_time-time.time()} sec',
+                timestamp=ctx.message.created_at,
             )
         )
         await self.bot.change_presence(

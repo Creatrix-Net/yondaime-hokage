@@ -133,9 +133,23 @@ async def on_ready():
     await PostStats(bot).post_guild_stats_all()
     print('Status Posted')
     
-    if bot.local:
+    if not bot.local:
+        await self.bot.change_presence(
+            status=discord.Status.dnd,
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name='over Naruto'
+            )
+        )
         await PostStats(bot).post_commands()
         print('Commands Status Posted')
+        await bot.change_presence(
+        status=discord.Status.idle,
+        activity=discord.Activity(
+            type=discord.ActivityType.watching,
+            name='over Naruto'
+        )
+    )
 
 
 sentry_sdk.init(

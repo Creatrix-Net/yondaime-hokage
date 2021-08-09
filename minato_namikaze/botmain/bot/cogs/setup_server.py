@@ -1,5 +1,4 @@
 import asyncio
-import time
 from os.path import join
 
 import discord
@@ -45,15 +44,15 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 await ctx.guild.create_role(name="SupportRequired")
 
             await feed_channel.send(file=self.pin_img(), embed=embed)
-            time.sleep(1)
+            await asyncio.sleep(1)
             await support_channel.send(file=self.pin_img(), embed=embed)
-            time.sleep(1)
+            await asyncio.sleep(1)
             await ban_channel.send(file=self.pin_img(), embed=embed)
-            time.sleep(1)
+            await asyncio.sleep(1)
             await unban_channel.send(file=self.pin_img(), embed=embed)
-            time.sleep(1)
+            await asyncio.sleep(1)
             await warns_channel.send(file=self.pin_img(), embed=embed)
-            time.sleep(1)
+            await asyncio.sleep(1)
             await ctx.send(embed=e)
 
         else:
@@ -124,7 +123,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             gb = await botask.send(30)
             for i in range(1, 30):
                 await gb.edit(content=30-i)
-                time.sleep(1)
+                await asyncio.sleep(1)
             await botask.delete()
 
 

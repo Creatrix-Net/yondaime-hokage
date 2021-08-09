@@ -5,6 +5,7 @@ import subprocess as sp
 import sys
 import textwrap
 import traceback
+import time
 from contextlib import redirect_stdout
 from pathlib import Path
 
@@ -67,7 +68,6 @@ class Developer(commands.Cog):
     @dev.group(name='postcommand', alisases=['postfates','post_commands_to_fates_list'])
     async def post_commands_to_fates_list(self, ctx):
         '''Post all the commands to FATES LIST'''
-        import time
         start_time=time.time()
         await self.bot.change_presence(
             status=discord.Status.dnd,
@@ -99,7 +99,6 @@ class Developer(commands.Cog):
     @dev.group(name='deletecommand', alisases=['postfates','deletefateslistcommand'])
     async def deletefateslistcommand(self, ctx):
         '''Deletes all the commands from FATES LIST'''
-        import time
         start_time=time.time()
         await self.bot.change_presence(
             status=discord.Status.dnd,

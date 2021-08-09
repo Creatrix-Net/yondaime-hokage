@@ -46,3 +46,9 @@ support = 'This channel will be used as a support channel for this server.'
 ban = 'This channel will be used to log the server bans.'
 unban = 'Unbans of the server will be logged here.'
 feedback = 'This channel will be used to log the feedbacks given by members.'
+
+shinobi_character_channel = 869433768593719327
+welcome_channel = 747660913116577903
+roles_channel = 777189846862266408
+
+error_logs_channel = 830366314761420821

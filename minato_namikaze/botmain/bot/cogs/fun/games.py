@@ -1,10 +1,11 @@
-import time
+import asyncio
 
 import discord
 from discord.ext import commands
 
 from ...lib import Embed, ErrorEmbed
 from ...lib.classes.games import *
+from typing import Union
 
 
 class Games(commands.Cog):
@@ -14,8 +15,9 @@ class Games(commands.Cog):
 
     @commands.command(aliases=['tc'], usage='<other player.mention>')
     @commands.guild_only()
-    async def tictactoe(self, ctx, member: discord.Member):
+    async def tictactoe(self, ctx, member: Union[int, discord.Member]):
         '''Play Amazing Tictactoe Game'''
+        member = get_user(member, ctx)
         if member == ctx.author or member.bot:
             await ctx.send(embed=ErrorEmbed(description='*You cannot play this game yourself or with a bot*'))
             return
@@ -32,8 +34,9 @@ class Games(commands.Cog):
 
     @commands.command(aliases=['connect_four', 'c4', 'cf'], usage='<other player.mention>')
     @commands.guild_only()
-    async def connectfour(self, ctx, member: discord.Member):
+    async def connectfour(self, ctx, member:  Union[int, discord.Member]):
         '''Play Amazing Connect Four Game'''
+        member = get_user(member, ctx)
         if member == ctx.author or member.bot:
             await ctx.send(embed=ErrorEmbed(description='*You cannot play this game yourself or with a bot*'))
             return
@@ -60,11 +63,11 @@ class Games(commands.Cog):
         '''Play Akinator'''
         await ctx.send(embed=Embed(description='**Here is the link to know about** *Akinator*: [Click Here](<https://en.wikipedia.org/wiki/Akinator#Gameplay>)'))
         a = await ctx.send('**Now get ready for the game**')
-        time.sleep(1)
+        await asyncio.sleep(1)
         await a.edit(content='Starting in 5 seconds')
         for i in range(4):
             await a.edit(content=4-i)
-            time.sleep(1)
+            await asyncio.sleep(1)
         await a.delete()
         game = aki.Akinator()
         await game.start(ctx)

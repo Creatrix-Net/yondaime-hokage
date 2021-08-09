@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import time
+import asyncio
 
 import discord
 from discord.ext import commands
@@ -184,7 +184,7 @@ class QuickPoll(commands.Cog):
                 for i, j in question_message:
                     await i.delete()
                     await j.delete()
-                    time.sleep(0.5)
+                    await asyncio.sleep(0.5)
                 return
             answers.append(message.content)
             message_tuple.append((question_message, message))
@@ -192,7 +192,7 @@ class QuickPoll(commands.Cog):
         for i, j in question_message:
             await i.delete()
             await j.delete()
-            time.sleep(0.5)
+            await asyncio.sleep(0.5)
 
         first = Page(title='(Strawpoll) '+title,
                      description=description, color=discord.Color.random())

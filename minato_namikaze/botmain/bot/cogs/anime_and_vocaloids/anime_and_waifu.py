@@ -1,4 +1,5 @@
 import time, discord
+import asyncio
 from typing import Optional
 
 import DiscordUtils
@@ -221,7 +222,7 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
         await ctx.send(embed=e)
         for i in embeds:
             await ctx.send(embed=i)
-            time.sleep(0.5)
+            await asyncio.sleep(0.5)
 
 
     # search manga
@@ -339,7 +340,7 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
         await ctx.send(embed=e)
         for i in embeds:
             await ctx.send(embed=i)
-            time.sleep(0.5)
+            await asyncio.sleep(0.5)
     
     @commands.command(aliases=['w', 'wfu', 'wa'])
     @commands.cooldown(1, 2, commands.BucketType.guild)
@@ -399,7 +400,7 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
         for i in range(3):
             try:
                 answer_content = await self.bot.wait_for('message', timeout=30, check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
-                time.sleep(0.8)
+                await asyncio.sleep(0.8)
                 if answer_content.content.lower() != answer:
                     try:
                         await answer_content.delete()

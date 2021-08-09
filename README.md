@@ -37,5 +37,3 @@
 * [DIscord Extreme List](https://discordextremelist.xyz/en-US/servers/747480356625711204)
 
 ***
-
-![Namikaze Family](https://media.discordapp.net/attachments/777918705098686465/813086521481232414/image0.jpg)

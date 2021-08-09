@@ -1,4 +1,5 @@
-import random
+import random, discord
+from .vars import uchiha2_emoji,uchiha1_emoji,senju2_emoji,senju1_emoji,server_id
 
 def convert(time):
     pos = ["s", "m", "h", "d"]
@@ -37,3 +38,16 @@ def return_random_5characters(characters: dict) -> dict:
         random.choice(keys),
         random.choice(keys)
     ]
+
+def return_uchiha_emoji(ctx):
+    return discord.utils.get(
+        ctx.bot.get_guild(server_id).emojis, 
+        id=random.choice([uchiha1_emoji,uchiha2_emoji])
+        )
+
+def return_senju_emoji(ctx):
+    return discord.utils.get(
+        ctx.bot.get_guild(server_id).emojis, 
+        id=random.choice([senju1_emoji,senju2_emoji]
+            )
+        )

@@ -9,6 +9,7 @@ from pretty_help.pretty_help import Paginator
 
 from ..classes import Embed
 from ..functions import emoji_random_func
+from ..util import server_id
 
 
 class CustomHelpPaginator(Paginator):
@@ -72,8 +73,7 @@ class MenuHelp(DefaultMenu):
                     label="Support Server",
                     style=ButtonStyle.URL,
                     url="https://discord.gg/S8kzbBVN8b",
-                    emoji=discord.utils.get(
-                        ctx.guild.emojis, id=848961696047300649)
+                    emoji=discord.utils.get(ctx.bot.get_guild(server_id).emojis, id=help_smile_emoji)
                 ),
             ]
         )

@@ -53,11 +53,37 @@ roles_channel = 777189846862266408
 
 error_logs_channel = 830366314761420821
 
-senju1_emoji=874291190516809778
-senju2_emoji=874291334733783110
-
-uchiha1_emoji=874290679122128986
-uchiha2_emoji=874290969175019570
-
 server_id = 747480356625711204
+testing_server_id = 869085099470225508
+
 help_smile_emoji = 848961696047300649
+
+character_side_exclude = [
+    'anbu',
+    'iwagakure',
+    'kumogakure',
+    'kirigakure',
+    'otogakure',
+    'sunagakure',
+    'akatsuki',
+    'konohagakure'
+]
+
+name_exclusion = character_side_exclude + [
+    'naruto',
+    'sasuke'
+    'jiraya',
+    'namikaze',
+    'sarutobi',
+    'yamanaka',
+    'akimichi',
+    'aburame',
+    'uzumaki',
+    'hyuga',
+    'otsutsuki',
+    'nara',
+    'senju',
+    'uchiha',
+    'kakashi',
+    'sakura'
+]

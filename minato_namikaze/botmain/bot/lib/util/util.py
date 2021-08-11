@@ -1,5 +1,5 @@
 import random, discord
-from .vars import uchiha2_emoji,uchiha1_emoji,senju2_emoji,senju1_emoji,server_id
+from .vars import testing_server_id,server_id, character_side_exclude, name_exclusion
 
 def convert(time):
     pos = ["s", "m", "h", "d"]
@@ -39,15 +39,22 @@ def return_random_5characters(characters: dict) -> dict:
         random.choice(keys)
     ]
 
-def return_uchiha_emoji(ctx):
-    return discord.utils.get(
-        ctx.bot.get_guild(server_id).emojis, 
-        id=random.choice([uchiha1_emoji,uchiha2_emoji])
-        )
+def format_character_name(character_name: str) -> str:
+    if character_name.split('(')[-1].strip(' ').strip(')').lower() in character_side_exclude:
+        return character_name.split('(')[0].strip(' ').title()
+    return character_name.strip(' ').title()
 
-def return_senju_emoji(ctx):
-    return discord.utils.get(
-        ctx.bot.get_guild(server_id).emojis, 
-        id=random.choice([senju1_emoji,senju2_emoji]
-            )
-        )
+
+def return_matching_emoji(ctx,name):
+    def emoji_predicate(emoji, name):
+        return emoji.name.lower() in name
+    if name.split('(')[-1].strip(' ').strip(')').lower() in character_side_exclude:
+        name = name.split('(')[-1].strip(' ').strip(')').lower()
+        for i in ctx.bot.get_guild(testing_server_id).emojis:
+            if emoji_predicate(i, name):
+                return i
+    else:
+        name = name.lower().strip(' ').lower()
+        for i in ctx.bot.get_guild(testing_server_id).emojis:
+            if emoji_predicate(i, name):
+                return i

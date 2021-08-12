@@ -151,7 +151,7 @@ class Developer(commands.Cog):
                 invite = (await guild.invites())[0]
             except:
                 try:
-                    invite = (await guild.text_channels())[0].create_invite(max_age=120)
+                    invite = await guild.text_channels[0].create_invite(max_age=120, max_uses=1)
                 except:
                     await ctx.send(embed=ErrorEmbed(description="No permissions to create an invite link."))
                     return

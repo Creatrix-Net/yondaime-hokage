@@ -3,7 +3,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
-from dpymenus import Page, Poll
+from ..dpymenus import Page, Poll
 
 from ..lib import Embed, ErrorEmbed, convert
 

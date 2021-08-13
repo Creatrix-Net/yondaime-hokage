@@ -10,7 +10,7 @@ import dotenv
 import sentry_sdk
 from discord.ext import commands
 from discord_components import DiscordComponents
-from discord_slash import SlashCommand
+from dislash import *
 from pypresence import Presence
 
 from botmain.bot.lib import HelpClassPretty, MenuHelp, PostStats
@@ -69,7 +69,7 @@ bot = commands.AutoShardedBot(
     owner_id=571889108046184449
 )
 bot._cache = {}
-slash = SlashCommand(bot, sync_commands=True)
+SlashClient(bot)
 
 bot.version = str(token_get('BOT_VER'))
 bot.local = ast.literal_eval(token_get('LOCAL').capitalize())
@@ -102,11 +102,10 @@ async def on_ready():
                 bot.load_extension(f'botmain.bot.cogs.{filename[:-3]}')
     current_time = time.time()
     difference = int(round(current_time - bot.start_time))
-    stats = bot.get_channel(
-        819128718152695878) if not bot.local else bot.get_channel(869238107118112810)
+    stats = bot.get_channel(819128718152695878) if not bot.local else bot.get_channel(869238107118112810)
     e = discord.Embed(title=f"Bot Loaded!",
                       description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)", color=discord.Colour.random())
-    e.set_thumbnail(url=bot.user.avatar_url)
+    e.set_thumbnail(url=bot.user.avatar.url)
 
     guild = bot.get_guild(
         747480356625711204) if not bot.local else bot.get_channel(869238107118112810)

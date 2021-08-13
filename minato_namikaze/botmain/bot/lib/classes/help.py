@@ -3,13 +3,13 @@ from typing import List, Union
 
 import discord
 from discord.ext import commands
-from discord_components import Button, ButtonStyle, DiscordComponents
+from dislash import Button, ButtonStyle, ActionRow
 from pretty_help import DefaultMenu, PrettyHelp
 from pretty_help.pretty_help import Paginator
 
 from ..classes import Embed
 from ..functions import emoji_random_func
-from ..util import server_id
+from ..util import server_id, help_smile_emoji
 
 
 class CustomHelpPaginator(Paginator):
@@ -69,12 +69,16 @@ class MenuHelp(DefaultMenu):
         message: discord.Message = await destination.send(
             embed=pages[0],
             components=[
-                Button(
-                    label="Support Server",
-                    style=ButtonStyle.URL,
-                    url="https://discord.gg/S8kzbBVN8b",
-                    emoji=discord.utils.get(ctx.bot.get_guild(server_id).emojis, id=help_smile_emoji)
-                ),
+                ActionRow(
+                    Button(
+                        label="Support Server",
+                        style=ButtonStyle.link,
+                        url="https://discord.gg/S8kzbBVN8b",
+                        emoji=discord.PartialEmoji.from_str(
+                            discord.utils.get(ctx.bot.get_guild(server_id).emojis, id=help_smile_emoji)
+                        )
+                    ),
+                )
             ]
         )
 

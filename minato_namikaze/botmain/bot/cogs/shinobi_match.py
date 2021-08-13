@@ -47,7 +47,7 @@ class Shinobi(commands.Cog, name="Shinobi Match"):
             content=ctx.author.mention,
             components=player_init_select
         )
-        interaction = await ctx.bot.wait_for("select_option", check = lambda i: i.component[0].value == "A")
+        interaction = await ctx.bot.wait_for("select_option", check = lambda i: i.placeholder == "Select your fighter Shinobi")
         await interaction.respond(content = f"{interaction.component[0].label} selected!")
 
 def setup(bot):

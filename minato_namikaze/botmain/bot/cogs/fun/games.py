@@ -1,11 +1,11 @@
 import asyncio
+from typing import Union
 
 import discord
 from discord.ext import commands
 
 from ...lib import Embed, ErrorEmbed
 from ...lib.classes.games import *
-from typing import Union
 
 
 class Games(commands.Cog):

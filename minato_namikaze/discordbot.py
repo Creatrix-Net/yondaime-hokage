@@ -8,12 +8,11 @@ import discord
 import DiscordUtils
 import dotenv
 import sentry_sdk
+from botmain.bot.lib import HelpClassPretty, MenuHelp, PostStats
 from discord.ext import commands
 from discord_components import DiscordComponents
 from discord_slash import SlashCommand
 from pypresence import Presence
-
-from botmain.bot.lib import HelpClassPretty, MenuHelp, PostStats
 
 intents = discord.Intents.all()
 intents.reactions = True

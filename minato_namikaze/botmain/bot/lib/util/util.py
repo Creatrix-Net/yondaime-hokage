@@ -1,5 +1,9 @@
-import random, discord
-from .vars import testing_server_id,server_id, character_side_exclude, name_exclusion
+import random
+
+import discord
+
+from .vars import character_side_exclude, name_exclusion, server_id, testing_server_id
+
 
 def convert(time):
     pos = ["s", "m", "h", "d"]

@@ -1,13 +1,15 @@
+import asyncio
 import random
+import time
 from os.path import join
 from pathlib import Path
-import time
 
 import aiohttp
+import requests
 
 from ..classes.embed import Embed
 from .vars import *
-import asyncio, requests
+
 
 class PostStats:
     def __init__(self, bot):

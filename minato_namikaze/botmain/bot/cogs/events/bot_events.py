@@ -8,9 +8,15 @@ import discord
 import DiscordUtils
 from discord.ext import commands
 
-from ...lib import (Embed, ErrorEmbed, PostStats, get_bot_inviter,
-                    get_welcome_channel, return_ban_channel,
-                    return_unban_channel)
+from ...lib import (
+    Embed,
+    ErrorEmbed,
+    PostStats,
+    get_bot_inviter,
+    get_welcome_channel,
+    return_ban_channel,
+    return_unban_channel,
+)
 
 
 class InviteTrackerForMyGuild:

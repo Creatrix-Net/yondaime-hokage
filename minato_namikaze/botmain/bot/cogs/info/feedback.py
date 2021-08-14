@@ -2,8 +2,12 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import command
 
-from ...lib import (Embed, ErrorEmbed, check_if_feedback_system_setup,
-                    return_feedback_channel)
+from ...lib import (
+    Embed,
+    ErrorEmbed,
+    check_if_feedback_system_setup,
+    return_feedback_channel,
+)
 
 
 class Feedback(commands.Cog):

@@ -4,9 +4,15 @@ from typing import Optional, Union
 import discord
 from discord.ext import commands
 
-from ...lib import (Embed, ErrorEmbed, check_if_warning_system_setup,
-                    get_roles, get_user, return_ban_channel,
-                    return_warning_channel)
+from ...lib import (
+    Embed,
+    ErrorEmbed,
+    check_if_warning_system_setup,
+    get_roles,
+    get_user,
+    return_ban_channel,
+    return_warning_channel,
+)
 
 
 class Moderation(commands.Cog):

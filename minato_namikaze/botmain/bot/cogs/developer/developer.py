@@ -4,8 +4,8 @@ import os
 import subprocess as sp
 import sys
 import textwrap
-import traceback
 import time
+import traceback
 from contextlib import redirect_stdout
 from pathlib import Path
 

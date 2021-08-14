@@ -7,9 +7,17 @@ from typing import Iterator, Optional, Sequence
 
 from discord.ext import commands
 
-from ...lib.data.braille import (contractions, dna, letters, numbers,
-                                 punctuation, r_contractions, r_letters,
-                                 r_numbers, r_punctuation)
+from ...lib.data.braille import (
+    contractions,
+    dna,
+    letters,
+    numbers,
+    punctuation,
+    r_contractions,
+    r_letters,
+    r_numbers,
+    r_punctuation,
+)
 
 
 def pagify(

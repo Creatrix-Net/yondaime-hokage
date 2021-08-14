@@ -9,7 +9,7 @@ from pretty_help.pretty_help import Paginator
 
 from ..classes import Embed
 from ..functions import emoji_random_func
-from ..util import server_id, help_smile_emoji
+from ..util import help_smile_emoji, server_id
 
 
 class CustomHelpPaginator(Paginator):

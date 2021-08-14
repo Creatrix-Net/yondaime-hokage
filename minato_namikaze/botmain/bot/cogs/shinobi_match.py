@@ -1,9 +1,18 @@
-from ..lib import shinobi_character_channel, humanize_attachments, return_random_5characters, get_user, format_character_name, return_matching_emoji
 from typing import Union
-from discord_components import Select, SelectOption
 
 import discord
 from discord.ext import commands
+from discord_components import Select, SelectOption
+
+from ..lib import (
+    format_character_name,
+    get_user,
+    humanize_attachments,
+    return_matching_emoji,
+    return_random_5characters,
+    shinobi_character_channel,
+)
+
 
 class Shinobi(commands.Cog, name="Shinobi Match"):
     def __init__(self, bot):

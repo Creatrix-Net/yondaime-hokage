@@ -4,8 +4,13 @@ import discord
 import DiscordUtils
 from discord.ext import commands
 
-from ...lib import (Embed, ErrorEmbed, check_if_support_is_setup, get_user,
-                    return_support_channel)
+from ...lib import (
+    Embed,
+    ErrorEmbed,
+    check_if_support_is_setup,
+    get_user,
+    return_support_channel,
+)
 
 
 def if_inside_support_channel(ctx):

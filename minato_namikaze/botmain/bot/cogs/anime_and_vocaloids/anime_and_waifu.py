@@ -1,16 +1,26 @@
-import time, discord
 import asyncio
+import time
 from typing import Optional
 
+import discord
 import DiscordUtils
+from asyncdagpi import Client
 from discord.ext import commands
 from mal import Anime, AnimeSearch, Manga, MangaSearch
-from asyncdagpi import Client
 
-from ...lib import (Embed, ErrorEmbed, dagpi, generatevoteembed, votedbladebotlist,
-                    votedbotsfordiscord, voteddiscordboats,
-                    voteddiscordlistspace, votedfateslist, votedTopgg,
-                    votedVoidBots)
+from ...lib import (
+    Embed,
+    ErrorEmbed,
+    dagpi,
+    generatevoteembed,
+    votedbladebotlist,
+    votedbotsfordiscord,
+    voteddiscordboats,
+    voteddiscordlistspace,
+    votedfateslist,
+    votedTopgg,
+    votedVoidBots,
+)
 
 
 def format_related_anime_manga(dict_related_anime):

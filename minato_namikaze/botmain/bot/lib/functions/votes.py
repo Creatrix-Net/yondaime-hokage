@@ -1,6 +1,8 @@
 import requests
-from ..util.vars import *
+
 from ..classes import ErrorEmbed
+from ..util.vars import *
+
 
 def votedVoidBots(ctx):
     e1 = requests.get(f'http://api.voidbots.net/bot/voted/{ctx.bot.user.id}/{ctx.message.author.id}',

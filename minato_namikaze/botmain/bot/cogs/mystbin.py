@@ -1,9 +1,8 @@
 import random
 
 import discord
-from discord.ext import commands
-
 import mystbin
+from discord.ext import commands
 
 
 class MystbinApi(commands.Cog):

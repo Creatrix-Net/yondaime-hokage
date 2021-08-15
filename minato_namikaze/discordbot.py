@@ -151,10 +151,6 @@ async def on_ready():
     )
 
 
-sentry_sdk.init(
-    sentry_link,
-    traces_sample_rate=1.0
-)
 try:
     division_by_zero = 1 / 0
 except:
@@ -181,4 +177,9 @@ if bot.local:
         pass
 
 if __name__ == '__main__':
+    sentry_sdk.init(
+        sentry_link,
+        traces_sample_rate=1.0,
+        debug=True,
+    )
     bot.run(TOKEN)

@@ -1,13 +1,25 @@
 import discord
 from discord.ext import commands
+import sentry_sdk
 
-from ...lib import Embed, ErrorEmbed
+from ...lib import Embed, ErrorEmbed, sentry_link
 
 
 class BotEventsCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.delete_after_time = 5
+    
+    @commands.Cog.listener()
+    async def on_command_error(self, event_method, *args, **kwargs):
+        sentry_sdk.init(
+            sentry_link,
+            traces_sample_rate=1.0,
+            max_breadcrumbs=50,
+            debug=True,
+        )
+        raise
+        
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):

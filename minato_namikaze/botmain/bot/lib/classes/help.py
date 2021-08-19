@@ -4,7 +4,6 @@ from typing import List, Union
 import discord
 from discord.ui import Button
 from discord.ext import commands
-from dislash import Button, ButtonStyle, ActionRow
 from pretty_help import DefaultMenu, PrettyHelp
 from pretty_help.pretty_help import Paginator
 

@@ -2,6 +2,7 @@ import asyncio
 from typing import List, Union
 
 import discord
+from discord.ui import Button
 from discord.ext import commands
 from dislash import Button, ButtonStyle, ActionRow
 from pretty_help import DefaultMenu, PrettyHelp
@@ -68,18 +69,14 @@ class MenuHelp(DefaultMenu):
         total = len(pages)
         message: discord.Message = await destination.send(
             embed=pages[0],
-            components=[
-                ActionRow(
+            view = discord.ui.View(children=[
                     Button(
                         label="Support Server",
-                        style=ButtonStyle.link,
+                        style=discord.ButtonStyle.link,
                         url="https://discord.gg/S8kzbBVN8b",
-                        emoji=discord.PartialEmoji.from_str(
-                            discord.utils.get(ctx.bot.get_guild(server_id).emojis, id=help_smile_emoji)
-                        )
-                    ),
+                        emoji=discord.utils.get(ctx.bot.get_guild(server_id).emojis, id=help_smile_emoji)
                 )
-            ]
+            ])
         )
 
         if total > 1:

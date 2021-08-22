@@ -5,6 +5,8 @@ from ..util.vars import *
 
 
 def votedVoidBots(ctx):
+    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (747480356625711204, 853549974212837376):
+        return True
     e1 = requests.get(f'http://api.voidbots.net/bot/voted/{ctx.bot.user.id}/{ctx.message.author.id}',
                       headers={"Authorization": voidbot}
                       )
@@ -18,6 +20,8 @@ def votedVoidBots(ctx):
 
 
 def votedTopgg(ctx):
+    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (747480356625711204, 853549974212837376):
+        return True
     a = requests.get(
         f'https://top.gg/api/bots/{ctx.bot.user.id}/check',
         params={'userId': ctx.message.author.id},
@@ -35,6 +39,8 @@ def votedTopgg(ctx):
 
 
 def votedbotsfordiscord(ctx):
+    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (747480356625711204, 853549974212837376):
+        return True
     c = requests.get(f'https://botsfordiscord.com/api/bot/{ctx.bot.user.id}/votes',
                      headers={'Authorization': bfd,
                               'Content-Type': 'application/json'},
@@ -50,6 +56,8 @@ def votedbotsfordiscord(ctx):
 
 
 def voteddiscordboats(ctx):
+    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (747480356625711204, 853549974212837376):
+        return True
     d = requests.get(f'https://discord.boats/api/bot/{ctx.bot.user.id}/voted',
                     params={'id': ctx.message.author.id}
                     )
@@ -63,6 +71,8 @@ def voteddiscordboats(ctx):
 
 
 def votedfateslist(ctx):
+    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (747480356625711204, 853549974212837376):
+        return True
     f = requests.get(f'https://fateslist.xyz/api/v2/bots/{ctx.bot.user.id}/votes',
                      headers={"Authorization": fateslist},
                      params={'user_id': ctx.message.author.id}
@@ -77,6 +87,8 @@ def votedfateslist(ctx):
 
 
 def votedbladebotlist(ctx):
+    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (747480356625711204, 853549974212837376):
+        return True
     g = requests.get(
         f'https://bladebotlist.xyz/api/bots/{ctx.bot.user.id}/votes/{ctx.message.author.id}',
     )
@@ -90,6 +102,8 @@ def votedbladebotlist(ctx):
 
 
 def voteddiscordlistspace(ctx):
+    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (747480356625711204, 853549974212837376):
+        return True
     h = requests.get(
         f'https://api.discordlist.space/v2/bots/{ctx.bot.user.id}/status/{ctx.message.author.id}',
         headers={"Authorization": botlist}

@@ -122,7 +122,7 @@ class PostStats:
 
         a = await self.post(f'https://top.gg/api/bots/{self.bot.user.id}/stats',
                             headers={'Authorization': topken},
-                            data={'server_count': guildsno,"shard_count":shards
+                            data={'server_count': guildsno,"shard_count":shards}
                             )
         b = await self.post(f'https://discordbotlist.com/api/v1/bots/{self.bot.user.id}/stats',
                             headers={'Authorization': dblst},

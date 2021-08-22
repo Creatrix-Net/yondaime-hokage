@@ -215,6 +215,7 @@ class BotEventsCommands(commands.Cog):
             e7.set_thumbnail(url=f"https://i.imgur.com/1zey3je.jpg")
             e7.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e7, delete_after=self.delete_after_time)
+            raise error
 
         else:
             if ctx.cog.qualified_name == 'Music':

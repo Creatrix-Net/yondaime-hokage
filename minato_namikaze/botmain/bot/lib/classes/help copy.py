@@ -2,18 +2,19 @@ import asyncio
 from typing import List, Union
 
 import discord
+from discord.ui import Button
 from discord.ext import commands
 from pretty_help import DefaultMenu, PrettyHelp
 from pretty_help.pretty_help import Paginator
 
 from ..classes import Embed
 from ..functions import emoji_random_func
-from ..util import help_smile_emoji, server_id
-from .buttons_class import SupportServerButton, Google
+from ..util import server_id, help_smile_emoji
+
 
 class CustomHelpPaginator(Paginator):
     def add_cog(
-        self, title: Union[str, commands.Cog], commands_list: List[commands.Command],bot=None
+        self, title: Union[str, commands.Cog], commands_list: List[commands.Command], bot=None
     ):
         cog = isinstance(title, commands.Cog)
         if not commands_list:
@@ -45,6 +46,17 @@ class CustomHelpPaginator(Paginator):
         )
         self._add_page(page)
 
+    @staticmethod
+    def __command_info(command: Union[commands.Command, commands.Group]):
+        info = ""
+        if command.description:
+            info += command.description + "\n\n"
+        if command.help:
+            info += command.help
+        if not info:
+            info = "None"
+        return info
+
 
 class MenuHelp(DefaultMenu):
     async def send_pages(
@@ -54,7 +66,17 @@ class MenuHelp(DefaultMenu):
         pages: List[discord.Embed],
     ):
         total = len(pages)
-        message: discord.Message = await destination.send(embed=pages[0], view=Google())
+        message: discord.Message = await destination.send(
+            embed=pages[0],
+            view = discord.ui.View(children=[
+                    Button(
+                        label="Support Server",
+                        style=discord.ButtonStyle.link,
+                        url="https://discord.gg/S8kzbBVN8b",
+                        emoji=discord.utils.get(ctx.bot.get_guild(server_id).emojis, id=help_smile_emoji)
+                )
+            ],timeout=None)
+        )
 
         if total > 1:
             bot: commands.Bot = ctx.bot
@@ -116,18 +138,17 @@ class MenuHelp(DefaultMenu):
 class HelpClassPretty(PrettyHelp):
     def __init__(self, **options):
         super().__init__(**options)
-        self.paginator = CustomHelpPaginator(
+        self.paginator = Paginator(
             color=self.color, show_index=options.pop("show_index", True)
         )
-    
-    def get_ending_note(self):
-        """Returns help command's ending note. This is mainly useful to override for i18n purposes."""
-        note = self.ending_note or (
-            "Type {help.invoked_with} command for more info on a command.\n"
-            "You can also type {help.invoked_with} category for more info on a category."
-        )
-        return note.format(ctx=self.context, help=self)
-    
+        
+    async def send_command_help(self, command: commands.Command):
+        filtered = await self.filter_commands([command])
+        if filtered:
+            self.paginator.add_command(
+                command, self.get_command_signature(command), self.context.bot)
+            await self.send_pages()
+
     async def send_bot_help(self, mapping: dict):
         bot = self.context.bot
         channel = self.get_destination()
@@ -139,10 +160,11 @@ class HelpClassPretty(PrettyHelp):
                 else bot.commands
             )
             for cmd in await self.filter_commands(
-                help_filtered, sort=self.sort_commands,
+                help_filtered,
+                sort=self.sort_commands,
             ):
                 mapping[cmd.cog].append(cmd)
-            self.paginator.add_cog(self.no_category, mapping.pop(None), bot=self.context.bot)
+            self.paginator.add_cog(self.no_category, mapping.pop(None), bot)
             sorted_map = sorted(
                 mapping.items(),
                 key=lambda cg: cg[0].qualified_name
@@ -151,5 +173,14 @@ class HelpClassPretty(PrettyHelp):
             )
             for cog, command_list in sorted_map:
                 self.paginator.add_cog(cog, command_list, bot)
-            self.paginator.add_index(f'self.index_title {emoji_random_func(bot)}', bot)
+            self.paginator.add_index(
+                self.show_index, self.index_title + ' ' + emoji_random_func(bot), bot)
+        await self.send_pages()
+
+    async def send_cog_help(self, cog: commands.Cog):
+        async with self.get_destination().typing():
+            filtered = await self.filter_commands(
+                cog.get_commands(), sort=self.sort_commands
+            )
+            self.paginator.add_cog(cog, filtered, self.context.bot)
         await self.send_pages()

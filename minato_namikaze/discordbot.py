@@ -57,7 +57,7 @@ bot = commands.AutoShardedBot(
             page_right=":thiccguy:852872039874428939",
             remove=":sus:852797247304761405",
             active_time=60.0
-        )
+        ),
     ),
     allowed_mentions=discord.AllowedMentions(
         users=True,

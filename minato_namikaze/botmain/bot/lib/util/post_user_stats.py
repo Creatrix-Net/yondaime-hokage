@@ -167,6 +167,10 @@ class PostStats:
                             headers={"Authorization": discordlabs,
                                      "Content-Type": "application/json"},
                             json={"server_count": guildsno})
+        m = await self.post(f'https://api.infinitybotlist.com/bots/{self.bot.user.id}/stats',
+                            headers={"Authorization": infinity},
+                            json={"servers": guildsno, "botid":self.bot.user.id}
+                           )
 
         r = self.bot.get_channel(822472454030229545 if not self.bot.local else 870561578347540490)
         e1 = Embed(title='Status posted successfully',
@@ -188,6 +192,7 @@ class PostStats:
         e1.add_field(name='Fates List', value=f'{j} : [Fates List](https://fateslist.xyz/minato/)')
         e1.add_field(name='BladeBotList', value=f'{k} : [BladeBotList](https://bladebotlist.xyz/bot/{self.bot.user.id}/)')
         e1.add_field(name='DiscordLabs', value=f'{l} : [DiscordLabs](https://bots.discordlabs.org/bot/{self.bot.user.id})')
+        e1.add_field(name='Infinity Botlist', value=f'{m} : [Infinity Botlist](https://botlist.site/bots/{self.bot.user.id})')
         try:
             await r.send(embed=e1)
         except:

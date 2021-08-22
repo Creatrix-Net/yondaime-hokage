@@ -87,3 +87,5 @@ name_exclusion = character_side_exclude + [
     'kakashi',
     'sakura'
 ]
+
+sentry_link = token_get('SENTRY')

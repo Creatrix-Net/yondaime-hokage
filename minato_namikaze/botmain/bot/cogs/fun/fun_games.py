@@ -45,7 +45,7 @@ class FunGames(commands.Cog):
                     await ctx.send(f"{left.text}... Waiting... OH you said cancel, bye!")
                 else:
                     async with ctx.channel.typing():
-                        response = await self.bot.chatbot.ask(m.content if len(nm.content) >= 3 else f'{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}')
+                        response = await self.bot.chatbot.ask(m.content if len(m.content) >= 3 else f'{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}')
                         await ctx.send(response.text)
 
     @commands.max_concurrency(1, per=commands.BucketType.channel)

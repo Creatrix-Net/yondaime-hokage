@@ -35,6 +35,7 @@ fateslist = token_get('FATESLIST')
 bladebot = token_get('BLADEBOT')
 spacebot = token_get('SPACEBOT')
 discordlabs = token_get('DISCORDLABS')
+infinity = token_get('INFINITY')
 
 version = token_get('VERSION')
 

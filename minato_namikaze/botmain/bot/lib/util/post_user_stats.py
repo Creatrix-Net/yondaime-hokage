@@ -167,7 +167,7 @@ class PostStats:
                             headers={"Authorization": discordlabs,
                                      "Content-Type": "application/json"},
                             json={"server_count": guildsno})
-        m = await self.post(f'https://api.infinitybotlist.com/bots/{self.bot.user.id}/stats',
+        m = await self.post(f'https://api.infinitybotlist.com/bot/{self.bot.user.id}',
                             headers={"Authorization": infinity},
                             json={"servers": guildsno, "botid":self.bot.user.id}
                            )

@@ -34,6 +34,5 @@
 * [TopGG](https://top.gg/servers/747480356625711204)
 * [Disboard](https://disboard.org/server/747480356625711204)
 * [Discord Bot List](https://discordbotlist.com/servers/konohagakure)
-* [DIscord Extreme List](https://discordextremelist.xyz/en-US/servers/747480356625711204)
 
 ***

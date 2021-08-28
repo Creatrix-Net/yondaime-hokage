@@ -21,3 +21,4 @@ statcord.py
 TenGiphPy
 youtube-dl
 youtube-search
+Pillow

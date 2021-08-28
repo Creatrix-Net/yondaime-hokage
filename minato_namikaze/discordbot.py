@@ -9,11 +9,11 @@ import DiscordUtils
 import dotenv
 import sentry_sdk
 from discord.ext import commands
-from discord_components import DiscordComponents
 from dislash import *
 from pypresence import Presence
 
-from botmain.bot.lib import HelpClassPretty, MenuHelp, PostStats
+from lib import HelpClassPretty, MenuHelp, PostStats
+from ..webserver.app import keep_alive
 
 intents = discord.Intents.all()
 intents.reactions = True
@@ -82,24 +82,23 @@ bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(
 
 
 bot.minato_dir = Path(__file__).resolve(strict=True).parent / \
-    join('botmain', 'bot', 'discord_bot_images')
+    join('discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir, 'minato'))]
 
 
 @bot.event
 async def on_ready():
-    DiscordComponents(bot)
     cog_dir = Path(__file__).resolve(strict=True).parent / \
-        join('botmain', 'bot', 'cogs')
+        join('cogs')
     for filename in os.listdir(cog_dir):
         if os.path.isdir(cog_dir / filename):
             for i in os.listdir(cog_dir / filename):
                 if i.endswith('.py'):
                     bot.load_extension(
-                        f'botmain.bot.cogs.{filename.strip(" ")}.{i[:-3]}')
+                        f'cogs.{filename.strip(" ")}.{i[:-3]}')
         else:
             if filename.endswith('.py'):
-                bot.load_extension(f'botmain.bot.cogs.{filename[:-3]}')
+                bot.load_extension(f'cogs.{filename[:-3]}')
     current_time = time.time()
     difference = int(round(current_time - bot.start_time))
     stats = bot.get_channel(819128718152695878) if not bot.local else bot.get_channel(869238107118112810)
@@ -174,11 +173,19 @@ if bot.local:
             small_text="Minato Namikaze",
             buttons=[{"label": "Invite", "url": "https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&scope=bot%20applications.commands"},
                      {"label": "Website",
-                         "url": 'https://dhruvacube.github.io/yondaime-hokage/'}
+                         "url": 'https://minato-namikaze.readthedocs.io/en/latest/'}
                      ]
         )
     except:
         pass
 
 if __name__ == '__main__':
-    bot.run(TOKEN)
+    keep_alive()
+    try:
+        bot.run(TOKEN)
+    except discord.PrivilegedIntentsRequired:
+        print(
+            "[Login Failure] You need to enable the server members intent on the Discord Developers Portal."
+        )
+    except discord.errors.LoginFailure:
+        print("[Login Failure] The token inserted in config.ini is invalid.")

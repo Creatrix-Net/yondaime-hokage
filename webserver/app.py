@@ -14,4 +14,9 @@ async def hello(request):
 app = web.Application()
 app.add_routes(routes)
 
-web.run_app(app,port=80,host='127.0.0.1')
+def run():
+    web.run_app(app,port=80,host='127.0.0.1')
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()

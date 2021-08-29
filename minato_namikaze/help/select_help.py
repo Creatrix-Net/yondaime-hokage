@@ -322,6 +322,7 @@ class PrettyHelp(HelpCommand):
                 if isinstance(cg[0], commands.Cog)
                 else str(cg[0]),
             )
+            print(sorted_map)
             for cog, command_list in sorted_map:
                 self.paginator.add_cog(cog, command_list)
             self.paginator.add_index(self.index_title, bot)

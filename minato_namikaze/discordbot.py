@@ -59,12 +59,13 @@ bot = commands.AutoShardedBot(
             active_time=60.0
         ),
     ),
+    enable_debug_events=True,
     allowed_mentions=discord.AllowedMentions(
         users=True,
-        roles=False,
-        everyone=False
+        roles=True,
+        everyone=True
     ),
-    case_insensitive=True,
+    case_insensitive=False,
     description="Hi I am **Minato Namikaze**, Yondaime Hokage",
     owner_id=571889108046184449
 )
@@ -182,7 +183,7 @@ if bot.local:
 if __name__ == '__main__':
     keep_alive()
     try:
-        bot.run(TOKEN)
+        bot.run(TOKEN, reconnect=True)
     except discord.PrivilegedIntentsRequired:
         print(
             "[Login Failure] You need to enable the server members intent on the Discord Developers Portal."

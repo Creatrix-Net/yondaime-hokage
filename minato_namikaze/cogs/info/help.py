@@ -25,11 +25,15 @@ def errorembed(ctx):
     )
 
 
-class Help(commands.Cog):
+class Support(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Displays the support command for the server, this can only be used if the server owner has enabled it.'
-
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{HEADPHONE}')
+    
     @commands.command(description='Open support ticket if enabled by the server admins')
     @commands.cooldown(1, 120, commands.BucketType.user)
     @commands.check(check_if_support_is_setup)
@@ -154,4 +158,4 @@ class Help(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Help(bot))
+    bot.add_cog(Support(bot))

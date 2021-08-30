@@ -28,6 +28,10 @@ class Invites(commands.Cog):
         self.bot.loop.create_task(self.__ainit__())
 
         self.description = 'Get invites information about the server'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{LINK SYMBOL}')
 
     async def __ainit__(self):
         # wait until the bots internal cache is ready

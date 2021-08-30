@@ -26,6 +26,10 @@ class Snipe(commands.Cog):
             if (self.eval(before.content, after.content) >= 10) and (
                     len(before.content) > len(after.content)):
                 self.snipes[before.channel.id] = [before, after]
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{DIRECT HIT}')
 
     def sanitise(self, string):
         if len(string) > 1024:

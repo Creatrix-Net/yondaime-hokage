@@ -20,6 +20,10 @@ class Music(commands.Cog):
         self.bot = bot
         self.bot.music = DiscordUtils.Music()
         self.description = 'Listen to some soothing music!'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{MUSIC NATURAL SIGN}')
 
     async def cog_before_invoke(self, ctx: commands.Context):
         """

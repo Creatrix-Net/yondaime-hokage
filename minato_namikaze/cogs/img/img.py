@@ -17,6 +17,10 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         self.bot.dagpi = Client(dagpi)
         self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
         self.description = 'Some fun Image Manipulation Commands'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{FRAME WITH PICTURE}')
 
     @commands.command(usage='<member.mention>')
     async def wni(self, ctx, *, member: discord.Member = ''):

@@ -20,6 +20,10 @@ class FunGames(commands.Cog):
         self.bot.chatbot = ac.Cleverbot(f"{chatbot}")
         self.description = 'A simple reaction game and also here you can chat with me!'
         self.session_message = {}
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{TWO SPEECH BUBBLES}')
 
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
     @commands.command(aliases=['cb'])

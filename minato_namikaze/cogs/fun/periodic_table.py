@@ -61,6 +61,10 @@ class Elements(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Display information from the periodic table of elements'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{TEST TUBE}')
 
     @staticmethod
     def get_lattice_string(element: ELEMENTS) -> str:

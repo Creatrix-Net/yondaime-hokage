@@ -10,6 +10,10 @@ class Feedback(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server owner)'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{MEMO}')
 
     @command()
     @commands.cooldown(1, 60, commands.BucketType.user)

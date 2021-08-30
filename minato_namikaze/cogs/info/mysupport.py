@@ -13,6 +13,10 @@ class MySupport(commands.Cog, name="My Support"):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Having problems with me? Then you can get the help here.'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{SQUARED SOS}')
 
     @commands.command(description='Generates my invite link for your server')
     async def inviteme(self, ctx):

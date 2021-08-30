@@ -13,6 +13,10 @@ class Fun(commands.Cog):
         self.bot = bot
         self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
         self.description = 'Some fun Roleplay Commands'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{FACE WITH TEARS OF JOY}')
 
     # 8ball
     @commands.command(name='8ball', usage='<question>')

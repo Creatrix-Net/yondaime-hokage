@@ -16,6 +16,10 @@ class Info(commands.Cog):
         self.bot.github = bot.github
 
         self.description = "Get's the Information about the server"
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{INFORMATION SOURCE}')
 
     @commands.command(name='serverdump', description='Sends info to my developer that you have added me')
     @commands.cooldown(1, 1080, commands.BucketType.guild)

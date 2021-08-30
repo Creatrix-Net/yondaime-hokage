@@ -11,6 +11,10 @@ class MystbinApi(commands.Cog):
         self.bot = bot
         self.bot.mystbin_client = mystbin.Client()
         self.description = 'Use Mystbin using their API'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{PERSONAL COMPUTER}')
 
     @commands.command(aliases=["myst"], usage='<code>/<text>')
     async def mystbin(self, ctx, *, text):

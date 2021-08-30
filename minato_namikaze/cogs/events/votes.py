@@ -19,6 +19,10 @@ class VoteInfo(commands.Cog):
         self.fateslist_bots_site = '[Click Here](https://fateslist.xyz/minato/)'
         self.bladebot_bots_site = f'[Click Here](https://bladebotlist.xyz/bot/{self.bot.user.id}/)'
         self.discordlistspacesite = f'[Click Here](https://discordlist.space/bot/{self.bot.user.id})'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{BALLOT BOX WITH BALLOT}')
 
     @commands.command()
     async def vote(self, ctx):

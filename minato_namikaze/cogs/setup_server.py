@@ -11,7 +11,11 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Setups up the server for feedback, ban and unban logs and also setups the channel and roles to create a support management system for the server.'
-
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{HAMMER AND WRENCH}')
+    
     def pin_img(self):
         file_pin = discord.File(
             join(self.bot.minato_dir, 'discord', 'pin.png'), filename='pin.png'

@@ -58,6 +58,10 @@ class Encoding(commands.Cog):
         # G = 10
         # C = 11
         # T = 01
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{NUMBER SIGN}')
 
     def search_words(self, data: str) -> bool:
         count = 0

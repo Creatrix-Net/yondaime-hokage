@@ -19,6 +19,10 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Some random fun and usefull commands.'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{GAME DIE}')
 
     @commands.command(aliases=["takeitback"], usage='<member.mention>')
     async def insult(self, ctx, user: Optional[Union[int, discord.Member]] = None):
@@ -143,11 +147,6 @@ class Random(commands.Cog):
     async def hi(self, ctx):
         '''Say Hi'''
         await ctx.send("hi.")
-
-    @commands.command()
-    async def gaymeter(self, ctx):
-        '''Gaymeter! Lol!'''
-        await ctx.send(f"You are {random.randint(1, 100)}% gay")
 
 
 def setup(bot):

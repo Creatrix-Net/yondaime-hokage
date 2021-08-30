@@ -17,6 +17,10 @@ class OwnerOnly(commands.Cog):
         self.bot = bot
         self.appleapiisbad = True
         self.description = 'Some commands which is only restricted to server owners.'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{CROWN}')
 
     def owners(ctx):
         return ctx.author.id == ctx.guild.owner_id

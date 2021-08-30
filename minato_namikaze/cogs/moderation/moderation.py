@@ -13,6 +13,10 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'Some simple moderation commands'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='discord_certified_moderator', id=876846223926128701)
 
     # setdelay
     @commands.command()

@@ -18,8 +18,11 @@ from ...lib import *
 class Developer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.appleapiisbad = True
         self.description = 'These set of commands are only locked to the developer'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{GEAR}\ufe0f')
 
     def owners(ctx):
         return ctx.author.id == 571889108046184449

@@ -10,6 +10,10 @@ class Shinobi(commands.Cog, name="Shinobi Match"):
         self.bot = bot
         self.description = 'Fight like a shinobi with your friends'
     
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{WRESTLERS}')
+    
     @commands.command(aliases=["shm", "sh_match", "match", "shinobi"])
     @commands.is_owner()
     async def shinobi_match(self, ctx, member: Union[int, discord.Member]):

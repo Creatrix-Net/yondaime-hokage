@@ -37,6 +37,10 @@ class Weather(commands.Cog):
             "kelvin": {"code": ["k", "s"], "speed": "km/h", "temp": " K"},
         }
         self.description = 'Get weather data from https://openweathermap.org'
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name='\N{SUN BEHIND CLOUD}')
 
     @commands.group(name="weather", aliases=["we"], invoke_without_command=True)
     @commands.bot_has_permissions(embed_links=True)

@@ -10,12 +10,12 @@ from ..classes.embed import Embed, ErrorEmbed
 async def meek_api(name: str):
     session = aiohttp.ClientSession()
 
-    l = choice(['https://api.meek.moe/', 'https://mikuapi.predeactor.net/random',
+    l = choice(['https://api.meek.moe/', 'https://miku-for.us/api/v2/random',
                False]) if name.lower() == 'miku' else 'https://api.meek.moe/'
     e = Embed(title=name.capitalize())
     try:
         if name == 'miku' and l:
-            data = await session.get(l + name if l == 'https://api.meek.moe/' else 'https://mikuapi.predeactor.net/random')
+            data = await session.get(l + name if l == 'https://api.meek.moe/' else 'https://miku-for.us/api/v2/random')
             url = await data.json()
         else:
             data = await session.get(l + name)

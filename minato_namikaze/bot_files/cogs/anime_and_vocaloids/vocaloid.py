@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 
 from ...lib.functions import meek_api
 

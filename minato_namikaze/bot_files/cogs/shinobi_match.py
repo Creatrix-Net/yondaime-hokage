@@ -1,6 +1,5 @@
 from ..lib import shinobi_character_channel, humanize_attachments, return_random_5characters, get_user, format_character_name, return_matching_emoji
 from typing import Union
-from discord_components import Select, SelectOption
 
 import discord
 from discord.ext import commands
@@ -12,13 +11,13 @@ class Shinobi(commands.Cog, name="Shinobi Match"):
     
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name='\N{WRESTLERS}')
+        return discord.PartialEmoji(name='\N{MARTIAL ARTS UNIFORM}')
     
+    '''
     @commands.command(aliases=["shm", "sh_match", "match", "shinobi"])
     @commands.is_owner()
     async def shinobi_match(self, ctx, member: Union[int, discord.Member]):
-        '''Have shinobi match with your friend'''
-        member = get_user(member, ctx)
+s        member = get_user(member, ctx)
         a=self.bot.get_channel(shinobi_character_channel)
         characters = {}
         async for i in a.history(limit=None,oldest_first=True):
@@ -53,6 +52,7 @@ class Shinobi(commands.Cog, name="Shinobi Match"):
         )
         interaction = await ctx.bot.wait_for("select_option", check = lambda i: i.placeholder == "Select your fighter Shinobi")
         await interaction.respond(content = f"{interaction.component[0].label} selected!")
+    '''
 
 def setup(bot):
     bot.add_cog(Shinobi(bot))

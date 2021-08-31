@@ -276,7 +276,7 @@ class Developer(commands.Cog):
     async def load(self, ctx, name: str):
         """Loads an extension. """
         try:
-            self.bot.load_extension(f"cogs.{name}")
+            self.bot.load_extension(f"bot_files.cogs.{name}")
         except Exception as e:
             return await ctx.send(f"```py\n{e}```")
         await ctx.send(f"Loaded extension **`cogs/{name}.py`**")
@@ -286,7 +286,7 @@ class Developer(commands.Cog):
     async def reload(self, ctx, name: str):
         """Reloads an extension. """
         try:
-            self.bot.reload_extension(f"botmain.bot.cogs.{name}")
+            self.bot.reload_extension(f"bot_files.cogs.{name}")
             await ctx.message.add_reaction('🔄')
 
         except Exception as e:
@@ -297,10 +297,10 @@ class Developer(commands.Cog):
     async def unload(self, ctx, name: str):
         """Unloads an extension. """
         try:
-            self.bot.unload_extension(f"botmain.bot.cogs.{name}")
+            self.bot.unload_extension(f"bot_files.cogs.{name}")
         except Exception as e:
             return await ctx.send(f"```py\n{e}```")
-        await ctx.send(f"📤 Unloaded extension **`botmain.bot.{name}.py`**")
+        await ctx.send(f"📤 Unloaded extension **`{name}.py`**")
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
@@ -315,14 +315,14 @@ class Developer(commands.Cog):
                     if i.endswith('.py'):
                         try:
                             self.bot.reload_extension(
-                                f"botmain.bot.cogs.{file.strip(' ')}.{i[:-3]}")
+                                f"bot_files.cogs.{file.strip(' ')}.{i[:-3]}")
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
                 if file.endswith('.py'):
                     try:
                         self.bot.reload_extension(
-                            f'botmain.bot.cogs.{file[:-3]}')
+                            f'bot_files.cogs.{file[:-3]}')
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 
@@ -357,14 +357,14 @@ class Developer(commands.Cog):
                     if i.endswith('.py'):
                         try:
                             self.bot.reload_extension(
-                                f"botmain.bot.cogs.{file.strip(' ')}.{i[:-3]}")
+                                f"bot_files.cogs.{file.strip(' ')}.{i[:-3]}")
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
                 if file.endswith('.py'):
                     try:
                         self.bot.reload_extension(
-                            f'botmain.bot.cogs.{file[:-3]}')
+                            f'bot_files.cogs.{file[:-3]}')
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 

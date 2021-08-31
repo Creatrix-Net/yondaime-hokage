@@ -15,7 +15,7 @@ class Games(commands.Cog):
     
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name='\N{CHECKER BOARD}')
+        return discord.PartialEmoji(name='\N{FLYING DISC}')
 
     @commands.command(aliases=['tc'], usage='<other player.mention>')
     @commands.guild_only()

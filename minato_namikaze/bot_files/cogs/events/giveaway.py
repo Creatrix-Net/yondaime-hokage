@@ -5,6 +5,7 @@ from random import choice
 from discord.ext import commands
 from discord.ext.commands import (Cog, MissingPermissions, command,
                                   has_permissions)
+import discord
 
 from ...lib import Embed, convert
 

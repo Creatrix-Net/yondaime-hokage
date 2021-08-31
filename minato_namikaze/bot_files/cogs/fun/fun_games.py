@@ -9,7 +9,6 @@ import async_cleverbot as ac
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
-from discord_components import Button, ButtonStyle, DiscordComponents
 
 from ...lib import Embed, ErrorEmbed, chatbot, generatevoteembed, votedTopgg
 
@@ -23,7 +22,7 @@ class FunGames(commands.Cog):
     
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name='\N{TWO SPEECH BUBBLES}')
+        return discord.PartialEmoji(name='\N{SPEECH BALLOON}')
 
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
     @commands.command(aliases=['cb'])
@@ -91,9 +90,9 @@ class FunGames(commands.Cog):
         else:
             pass
 
+'''
     @commands.command()
     async def cointoss(self, ctx):
-        '''Toss a coin'''
         try:
             embed = Embed(
                 title=f":coin: {ctx.author.name}'s coin toss :coin:",
@@ -191,6 +190,7 @@ class FunGames(commands.Cog):
                 await self.cointoss(ctx)
         except:
             await ctx.send(embed=ErrorEmbed(description="Please run the command again!"))
+'''
 
 
 def setup(bot):

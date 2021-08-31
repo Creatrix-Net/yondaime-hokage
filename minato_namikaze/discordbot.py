@@ -12,8 +12,7 @@ from discord.ext import commands
 from dislash import *
 from pypresence import Presence
 
-from lib import HelpClassPretty, MenuHelp, PostStats
-from ..webserver.app import keep_alive
+from bot_files.lib import PostStats, PaginatedHelpCommand
 
 intents = discord.Intents.all()
 intents.reactions = True
@@ -50,15 +49,7 @@ def get_prefix(bot, message):
 bot = commands.AutoShardedBot(
     command_prefix=get_prefix,
     intents=intents,
-    help_command=HelpClassPretty(
-        show_index=True,
-        menu=MenuHelp(
-            page_left=":pikawalk:852872040016248863",
-            page_right=":thiccguy:852872039874428939",
-            remove=":sus:852797247304761405",
-            active_time=60.0
-        ),
-    ),
+    help_command=PaginatedHelpCommand(),
     enable_debug_events=True,
     allowed_mentions=discord.AllowedMentions(
         users=True,
@@ -70,7 +61,6 @@ bot = commands.AutoShardedBot(
     owner_id=571889108046184449
 )
 bot._cache = {}
-SlashClient(bot)
 
 bot.version = str(token_get('BOT_VER'))
 bot.local = ast.literal_eval(token_get('LOCAL').capitalize())
@@ -83,23 +73,22 @@ bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(
 
 
 bot.minato_dir = Path(__file__).resolve(strict=True).parent / \
-    join('discord_bot_images')
+    join('bot_files','discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir, 'minato'))]
 
 
 @bot.event
 async def on_ready():
     cog_dir = Path(__file__).resolve(strict=True).parent / \
-        join('cogs')
+        join('bot_files','cogs')
     for filename in os.listdir(cog_dir):
         if os.path.isdir(cog_dir / filename):
             for i in os.listdir(cog_dir / filename):
                 if i.endswith('.py'):
-                    bot.load_extension(
-                        f'cogs.{filename.strip(" ")}.{i[:-3]}')
+                    bot.load_extension(f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
         else:
             if filename.endswith('.py'):
-                bot.load_extension(f'cogs.{filename[:-3]}')
+                bot.load_extension(f'bot_files.cogs.{filename[:-3]}')
     current_time = time.time()
     difference = int(round(current_time - bot.start_time))
     stats = bot.get_channel(819128718152695878) if not bot.local else bot.get_channel(869238107118112810)
@@ -181,7 +170,6 @@ if bot.local:
         pass
 
 if __name__ == '__main__':
-    keep_alive()
     try:
         bot.run(TOKEN, reconnect=True)
     except discord.PrivilegedIntentsRequired:

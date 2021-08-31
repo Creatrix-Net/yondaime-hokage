@@ -1,5 +1,5 @@
 import base64
-import hashlib
+import hashlib, discord
 import re
 from string import ascii_lowercase as lc
 from string import ascii_uppercase as uc
@@ -61,7 +61,7 @@ class Encoding(commands.Cog):
     
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name='\N{NUMBER SIGN}')
+        return discord.PartialEmoji(name='#️⃣')
 
     def search_words(self, data: str) -> bool:
         count = 0

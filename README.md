@@ -21,16 +21,18 @@
 
 ***
 
+## Widgets
 
-BotList Name | Widgets
-------------     | -------------
-Discord Bot List |  [![Discord Bots](https://discordbotlist.com/api/v1/bots/779559821162315787/widget)](https://discordbotlist.com/bots/779559821162315787)
-Top.GG           | [![Discord Bots](https://top.gg/api/widget/779559821162315787.svg)](https://top.gg/bot/779559821162315787)
-Bots For Discord | [![Bots for Discord](https://botsfordiscord.com/api/bot/779559821162315787/widget)](https://botsfordiscord.com/bots/779559821162315787)
-Discord Boats    | [![Discord Boats](https://discord.boats/api/widget/779559821162315787)](https://discord.boats/bot/779559821162315787)
-Discordlist Space| [![Discordlist Space](https://api.discordlist.space/v2/bots/779559821162315787/widget?background=7289DA&radius=10 "Minato Namikaze's Widget")](https://discordlist.space/bot/779559821162315787/)
-Fates List       | [![Fates List](https://fateslist.xyz/api/bots/779559821162315787/widget?format=png "Minato Namikaze's Widget")](https://fateslist.xyz/bot/779559821162315787/)
-Infinity BotList | [![Infinity Bot List Widget](https://infinitybotlist.com/bots/779559821162315787/widget?size=large)](https://infinitybotlist.com/bots/779559821162315787)
+BotList Name     | Widgets       | Voting Links
+------------     | ------------- | ------------- 
+Discord Bot List | <a href="https://discordbotlist.com/bots/779559821162315787" target="_blank"><img src="https://discordbotlist.com/api/v1/bots/779559821162315787/widget"></a> | [Click Here](https://discordbotlist.com/bots/minato-namikaze/upvote)
+Top.GG           | <a href="https://top.gg/bot/779559821162315787"  target="_blank"><img src="https://top.gg/api/widget/779559821162315787.svg" alt="Minato Namikaze" /></a> | [Click Here](https://top.gg/bot/779559821162315787/vote)
+Bots For Discord | <a href="https://discords.com/bots/bots/779559821162315787" target="_blank"><img src="https://discords.com/bots/api/bot/779559821162315787/widget" title="Visit Minato Namikaze listed on Discords.com!" alt="Minato Namikaze's Widget Failed to Load" /></a> | [Click Here](https://discords.com/bots/bot/779559821162315787/vote)
+Discord Boats    | <a href="https://discord.boats/bot/779559821162315787" target="_blank"><img src="https://discord.boats/api/widget/779559821162315787" title="Visit Minato Namikaze listed on Discord Boats!" alt="Minato Namikaze's Widget Failed to Load" /></a>  | [Click Here](https://discord.boats/bot/779559821162315787)
+Discordlist Space | <a href="https://discordlist.space/bot/779559821162315787" target="_blank"><img src="https://api.discordlist.space/v2/bots/779559821162315787/widget?background=7289DA&radius=6" title="Visit Minato Namikaze listed on Discordlist Space!" alt="Minato Namikaze's Widget Failed to Load" /></a> | [Click Here](https://discordlist.space/bot/779559821162315787/upvote)
+Void Bots        | <a href="https://voidbots.net/bot/779559821162315787" target="_blank"><img src="https://voidbots.net/api/embed/779559821162315787?theme=dark" width="300" /></a> | [Click Here](https://voidbots.net/bot/779559821162315787/vote)
+Fates List       | <a href="https://fateslist.xyz/bot/779559821162315787" target="_blank"><img src="https://fateslist.xyz/api/bots/779559821162315787/widget?format=png" /></a> | [Click Here](https://fateslist.xyz/bot/779559821162315787/vote)
+Infinity Botlist       | <a href="https://botlist.site/bots/779559821162315787" target="_blank"><img src="https://infinitybotlist.com/bots/779559821162315787/widget?size=large" /></a> | [Click Here](https://infinitybotlist.com/bots/779559821162315787/vote)
 
 ***
 

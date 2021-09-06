@@ -8,8 +8,6 @@ Electronegativity scale formulas
 import math
 from typing import List
 
-import numpy as np
-
 from .utils import n_effective
 
 
@@ -85,7 +83,7 @@ def martynov_batsanov(ionization_energies: List[float]) -> float:
     - :math:`I_{k}` is the :math:`k` th ionization potential.
     """
 
-    return np.sqrt(np.array(ionization_energies).mean())
+    return math.sqrt(abs(sum(ionization_energies)/len(ionization_energies)))
 
 
 def mulliken(

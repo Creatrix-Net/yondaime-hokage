@@ -8,7 +8,7 @@
 from typing import Any, Dict, List, Tuple
 from operator import attrgetter
 
-import numpy as np
+import math
 from sqlalchemy import Column, Boolean, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship, reconstructor
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -302,9 +302,9 @@ class Element(Base):
             else:
                 return "{aw:.3f}".format(aw=self.atomic_weight)
         else:
-            dec = np.abs(
-                np.floor(np.log10(np.abs(self.atomic_weight_uncertainty)))
-            ).astype(int)
+            dec = int(abs(
+                math.floor(math.log10(abs(self.atomic_weight_uncertainty)))
+            ))
             dec = min(dec, 5)
             if self.is_radioactive:
                 return "[{aw:.{dec}f}]".format(aw=self.atomic_weight, dec=dec)
@@ -597,16 +597,6 @@ class Element(Base):
         "Pauling's electronegativity"
         return self.en_pauling
 
-    def electronegativity_sanderson(self, radius="covalent_radius_pyykko") -> float:
-        """
-        Sanderson electronegativity
-        Args:
-            radius : radius to use in the calculation
-        """
-        # estimate the radius of a corresponding noble gas
-        noble_gas_radius = estimate_from_group(self.atomic_number, radius)
-        return sanderson(getattr(self, radius), noble_gas_radius)
-
     def nvalence(self, method=None) -> int:
         """
         Return the number of valence electrons
@@ -660,40 +650,6 @@ def fetch_attrs_for_group(attrs: List[str], group: int = 18) -> Tuple[List[Any]]
     results = tuple([getattr(member, attr) for member in members] for attr in attrs)
     session.close()
     return results
-
-
-def estimate_from_group(
-    atomic_number, attr_name, group: int = 18, deg: int = 1
-) -> float:
-    """
-    Evaluate a value `attribute` for element by interpolation or
-    extrapolation of the data points from elements from `group`.
-    Args:
-        atomic_number: value for which the property will be evaluated
-        attr_name: attribute to be estimated
-        group: periodic table group number
-        deg: degree of the polynomial used in the extrapolation beyond
-            the provided data points
-    """
-
-    xref, yref = fetch_attrs_for_group(["atomic_number", attr_name], group=group)
-
-    x = atomic_number
-    xref = np.array(xref)
-    yref = np.array(yref)
-    if xref.min() <= x <= xref.max():
-        return np.interp([x], xref, yref)
-
-    if x < xref.min():
-        xslice = xref[:3]
-        yslice = yref[:3]
-    elif x > xref.max():
-        xslice = xref[-3:]
-        yslice = yref[-3:]
-
-    fit = np.polyfit(xslice, yslice, deg)
-    fn = np.poly1d(fit)
-    return fn(x)
 
 
 class IonicRadius(Base):

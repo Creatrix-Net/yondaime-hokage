@@ -12,7 +12,6 @@ gTTS
 mal-api
 mystbin.py
 PyNaCl
-pypresence
 python-dotenv
 pytz
 sentry-sdk
@@ -22,3 +21,4 @@ TenGiphPy
 youtube-dl
 youtube-search
 Pillow
+orjson

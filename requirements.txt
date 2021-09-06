@@ -29,7 +29,6 @@ Pillow==8.3.1
 psutil==5.8.0
 pycparser==2.20
 PyNaCl==1.4.0
-pypresence==4.2.0
 python-dotenv==0.19.0
 pytz==2021.1
 requests==2.26.0

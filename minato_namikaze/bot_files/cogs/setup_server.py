@@ -10,7 +10,7 @@ from ..lib import *
 class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot):
         self.bot = bot
-        self.description = 'Setups up the server for feedback, ban and unban logs and also setups the channel and roles to create a support management system for the server.'
+        self.description = 'Do some necessary setup through an interactive mode.'
     
     @property
     def display_emoji(self) -> discord.PartialEmoji:

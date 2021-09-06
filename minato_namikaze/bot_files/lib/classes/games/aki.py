@@ -5,19 +5,19 @@ import discord
 from akinator.async_aki import Akinator as _Akinator_
 from discord.ext import commands
 
-YES = "✅"
-NO = "❌"
-IDK = "🤷"
-P = "🤔"
-PN = "😔"
-STOP = "⏹️"
+YES = "\U00002705"
+NO = "\U0000274c"
+IDK = "\U0001f937"
+P = "\U0001f614"
+PN = "\U0001f614"
+STOP = "\U000023f9"
 
 
 class Akinator:
 
     def __init__(self):
         self.aki = _Akinator_()
-        self.bar_emojis = ("  ", "██")
+        self.bar_emojis = ("  ", "\U00002588")
         self.guess = None
         self.bar = ""
         self.message = None

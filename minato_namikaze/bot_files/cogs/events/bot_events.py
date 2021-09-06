@@ -21,15 +21,18 @@ class InviteTrackerForMyGuild:
     async def fetch_inviter_for_my_guild(self, member):
         await sleep(self.bot.latency)
         for new_invite in await member.guild.invites():
-            for cached_invite in self._cache[member.guild.id].values():
-                if new_invite.code == cached_invite.code and new_invite.uses - cached_invite.uses == 1 or cached_invite.revoked:
-                    if cached_invite.revoked:
-                        self._cache[member.guild.id].pop(cached_invite.code)
-                    elif new_invite.inviter == cached_invite.inviter:
-                        self._cache[member.guild.id][cached_invite.code] = new_invite
-                    else:
-                        self._cache[member.guild.id][cached_invite.code].uses += 1
-                    return cached_invite
+            try:
+                for cached_invite in self._cache[member.guild.id].values():
+                    if new_invite.code == cached_invite.code and new_invite.uses - cached_invite.uses == 1 or cached_invite.revoked:
+                        if cached_invite.revoked:
+                            self._cache[member.guild.id].pop(cached_invite.code)
+                        elif new_invite.inviter == cached_invite.inviter:
+                            self._cache[member.guild.id][cached_invite.code] = new_invite
+                        else:
+                            self._cache[member.guild.id][cached_invite.code].uses += 1
+                        return cached_invite
+            except KeyError:
+                pass
 
 
 class BotEvents(commands.Cog):

@@ -10,9 +10,8 @@ import dotenv
 import sentry_sdk
 from discord.ext import commands
 from dislash import *
-from pypresence import Presence
 
-from bot_files.lib import PostStats, PaginatedHelpCommand
+from bot_files.lib import PostStats, PaginatedHelpCommand, format_dt
 
 intents = discord.Intents.all()
 intents.reactions = True
@@ -57,7 +56,6 @@ bot = commands.AutoShardedBot(
         everyone=True
     ),
     case_insensitive=False,
-    description="Hi I am **Minato Namikaze**, Yondaime Hokage",
     owner_id=571889108046184449
 )
 bot._cache = {}
@@ -65,9 +63,8 @@ bot._cache = {}
 bot.version = str(token_get('BOT_VER'))
 bot.local = ast.literal_eval(token_get('LOCAL').capitalize())
 
-bot.start_time = time.time()
+bot.start_time = discord.utils.utcnow()
 bot.github = token_get('GITHUB')
-bot.description = "Myself **Minato Namikaze** Aka **Yondaime Hokage** 私の湊波風別名第四火影"
 bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(
     strict=True).parent / join('botmain', 'bot', 'discord_bot_images')
 
@@ -75,6 +72,7 @@ bot.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(
 bot.minato_dir = Path(__file__).resolve(strict=True).parent / \
     join('bot_files','discord_bot_images')
 bot.minato_gif = [f for f in os.listdir(join(bot.minato_dir, 'minato'))]
+bot.uptime = format_dt(bot.start_time,'R')
 
 
 @bot.event
@@ -89,8 +87,7 @@ async def on_ready():
         else:
             if filename.endswith('.py'):
                 bot.load_extension(f'bot_files.cogs.{filename[:-3]}')
-    current_time = time.time()
-    difference = int(round(current_time - bot.start_time))
+    difference = int(round(time.time() - bot.start_time.timestamp()))
     stats = bot.get_channel(819128718152695878) if not bot.local else bot.get_channel(869238107118112810)
     e = discord.Embed(title=f"Bot Loaded!",
                       description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)", color=discord.Colour.random())
@@ -150,6 +147,7 @@ except:
     pass
 
 if bot.local:
+    from pypresence import Presence
     try:
         client_id = '779559821162315787'
         RPC = Presence(client_id)

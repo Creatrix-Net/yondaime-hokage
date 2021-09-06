@@ -7,6 +7,7 @@ import discord
 import inspect
 from .time_class import *
 from .paginator import *
+from ..util import github
 
 
 class GroupHelpPageSource(menus.ListPageSource):
@@ -54,7 +55,7 @@ class HelpSelectMenu(discord.ui.Select['HelpMenu']):
         for cog, commands in self.commands.items():
             if not commands:
                 continue
-            description = cog.description.split('\n', 1)[0][:100] or None
+            description = cog.description.split('\n', 1)[0] or None
             emoji = getattr(cog, 'display_emoji', None)
             self.add_option(label=cog.qualified_name, value=cog.qualified_name, description=description, emoji=emoji)
 
@@ -116,10 +117,10 @@ class FrontPageSource(menus.PageSource):
             embed.add_field(
                 name='Who are you?',
                 value=(
-                    "I'm a bot made by Danny#0007. I'm the oldest running Discord bot! I've been running since "
-                    f'{created_at}. I have features such as moderation, tags, starboard, and more. You can get more '
-                    'information on my commands by using the dropdown below.\n\n'
-                    "I'm also open source. You can see my code on [GitHub](https://github.com/Rapptz/RoboDanny)!"
+                    ":pray: Konichiwa :pray:, myself **Minato Namikaze**, **Konohagakure <:uzumaki_naruto:874930645405675521> Yondaime Hokage**"
+                    f'I joined discord on {created_at}. I try my best to do every work of a **hokage**. You can get more '
+                    'information on my commands by using the *dropdown* below.\n\n'
+                    f"I'm also open source. You can see my code on [GitHub]({github})!"
                 ),
                 inline=False,
             )
@@ -172,14 +173,6 @@ class PaginatedHelpCommand(commands.HelpCommand):
                 'help': 'Shows help about the bot, a command, or a category',
             }
         )
-
-    async def on_help_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandInvokeError):
-            # Ignore missing permission errors
-            if isinstance(error.original, discord.HTTPException) and error.original.code == 50013:
-                return
-
-            await ctx.send(str(error.original))
 
     def get_command_signature(self, command):
         parent = command.full_parent_name

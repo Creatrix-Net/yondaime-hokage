@@ -9,7 +9,7 @@ from ...lib import (Embed, ErrorEmbed, check_if_feedback_system_setup,
 class Feedback(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.description = 'Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server owner)'
+        self.description = "Sends your feedback about the server to owner. (This can only be done if it's enabled by the owner)"
     
     @property
     def display_emoji(self) -> discord.PartialEmoji:

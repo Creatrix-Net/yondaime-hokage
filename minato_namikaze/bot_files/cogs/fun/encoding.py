@@ -61,7 +61,7 @@ class Encoding(commands.Cog):
     
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name='#️⃣')
+        return discord.PartialEmoji(name='\N{NUMBER SIGN}\U000020e3')
 
     def search_words(self, data: str) -> bool:
         count = 0

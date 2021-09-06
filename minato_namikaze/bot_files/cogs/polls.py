@@ -3,7 +3,6 @@ import asyncio
 
 import discord
 from discord.ext import commands
-from ..dpymenus import Page, Poll
 
 from ..lib import Embed, ErrorEmbed, convert
 
@@ -11,7 +10,34 @@ from ..lib import Embed, ErrorEmbed, convert
 class QuickPoll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.reactions = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟']
+        self.reactions = [
+            "\N{REGIONAL INDICATOR SYMBOL LETTER A}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER B}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER C}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER D}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER E}", 
+            "\N{REGIONAL INDICATOR SYMBOL LETTER F}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER G}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER H}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER I}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER J}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER K}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER L}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER M}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER N}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER O}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER P}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER Q}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER R}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER S}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER T}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER U}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER V}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER W}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER X}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER Y}",
+            "\N{REGIONAL INDICATOR SYMBOL LETTER Z}"
+        ]
     
     @property
     def display_emoji(self) -> discord.PartialEmoji:
@@ -49,7 +75,7 @@ class QuickPoll(commands.Cog):
                     if int(message.content) < 2:
                         await ctx.send(embed=ErrorEmbed(description=f'The no. of options cannot be **less than 2**, Please **rerun the command again**!'))
                         return
-                    elif int(message.content) > 10:
+                    elif int(message.content) > len(self.reactions):
                         await ctx.send(embed=ErrorEmbed(description=f'The no. of options cannot be **greater than 10**, Please **rerun the command again**!'))
                         return
                     else:
@@ -74,7 +100,7 @@ class QuickPoll(commands.Cog):
             return
 
         if len(options) == 2 and options[0] == 'yes' and options[1] == 'no':
-            reactions = ['✅', '❌']
+            reactions = ['\U00002705', '\U0000274c']
         else:
             reactions = self.reactions
 
@@ -122,10 +148,10 @@ class QuickPoll(commands.Cog):
             ' ') for x in embed.description.split('\n') if x.strip('\n').strip(' ') != '']
         opt_dict = {}
         for x in unformatted_options:
-            if x[0] != '🔟':
-                opt_dict.update({x[0]: x[4:]})
-            else:
-                opt_dict.update({x[0]: x[1:]})
+            # if x[0] != '🔟':
+            #     opt_dict.update({x[0]: x[4:]})
+            # else:
+            opt_dict.update({x[0]: x[1:]})
 
         # add the bot's ID to the list of voters to exclude it's votes
         voters = [self.bot.user.id]
@@ -146,74 +172,83 @@ class QuickPoll(commands.Cog):
         embed.set_footer(text='Poll ID: {}'.format(id))
         await ctx.send(embed=embed_result)
 
-    @commands.command(pass_context=True, aliases=['stf', '2poll'], usage='<emoji_option1> <emoji_option2>')
-    async def strawpolls(self, ctx, emoji_option1: discord.Emoji, emoji_option2: discord.Emoji):
-        '''Create straw polls easily'''
-        def check(m):
-            return m.author == ctx.author and m.channel == ctx.channel
+    @commands.command()
+    @commands.guild_only()
+    async def strawpoll(self, ctx, *, question):
+        """Interactively creates a poll with the following question.
 
-        questions = [
-            'What should be the **strawpoll title**?',
-            'Write the **description** of the strawpoll.',
-            "Till when this poll will be active, (s|m) (10 mins is max)"
-        ]
+        To vote, use reactions!
+        
+        Also can't use the tally command here
+        """
+
+        # a list of messages to delete when we're all done
+        messages = [ctx.message]
         answers = []
-        message_tuple = []
-        title, description, poll_time = answers[0], answers[1], answers[2]
 
-        time = convert(poll_time)
+        def check(m):
+            return m.author == ctx.author and m.channel == ctx.channel and len(m.content) <= 100
 
-        # Check if Time is valid
-        if time == -1:
-            await ctx.send("The Time format was wrong", delete_after=5)
-            return
-        elif time == -2:
-            await ctx.send("The Time was not conventional number", delete_after=5)
-            return
-        elif time > 600:
-            await ctx.send("The Time should not be more than 10mins", delete_after=5)
-            return
+        for i in range(20):
+            messages.append(await ctx.send(f'Say poll option or {ctx.prefix}cancel to publish poll.'))
 
-        for i, question in enumerate(questions):
-            embed = Embed(title=f"Question {i+1}",
-                          description=question)
-            question_message = await ctx.send(embed=embed)
             try:
-                message = await self.bot.wait_for('message', timeout=25, check=check)
-            except TimeoutError:
-                await ctx.send("You didn't answer the questions in Time", delete_after=10)
-                await question_message.delete()
-                await message.delete()
-                for i, j in question_message:
-                    await i.delete()
-                    await j.delete()
-                    await asyncio.sleep(0.5)
-                return
-            answers.append(message.content)
-            message_tuple.append((question_message, message))
+                entry = await self.bot.wait_for('message', check=check, timeout=60.0)
+            except asyncio.TimeoutError:
+                break
 
-        for i, j in question_message:
-            await i.delete()
-            await j.delete()
-            await asyncio.sleep(0.5)
+            messages.append(entry)
 
-        first = Page(title='(Strawpoll) '+title,
-                     description=description, color=discord.Color.random())
-        first.set_footer(
-            text='Only vote once! Your vote won\'t count if you cheat!')
-        first.buttons([emoji_option1, emoji_option2])
-        first.on_next(self.finish)
+            if entry.clean_content.startswith(f'{ctx.prefix}cancel'):
+                break
 
-        second = Page(title='(Strawpoll) '+title,
-                      description=f'Results are in!', color=discord.Color.green())
+            answers.append((to_emoji(i), entry.clean_content))
 
-        menu = Poll(ctx).set_timeout(int(time)).add_pages([first, second])
-        await menu.open()
+        try:
+            await ctx.channel.delete_messages(messages)
+        except:
+            pass # oh well
 
-    @staticmethod
-    async def finish(menu):
-        await menu.generate_results_page()
-        await menu.next()
+        answer = '\n'.join(f'{keycap}: {content}' for keycap, content in answers)
+        actual_poll = await ctx.send(f'{ctx.author} asks: {question}\n\n{answer}')
+        for emoji, _ in answers:
+            await actual_poll.add_reaction(emoji)
+
+    @strawpoll.error
+    async def poll_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            return await ctx.send(embed=ErrorEmbed(description='Missing the question.'),delete_after=5)
+
+    @commands.command()
+    @commands.guild_only()
+    async def quickpoll(self, ctx, *questions_and_choices: str):
+        """Makes a poll quickly.
+
+        The first argument is the question and the rest are the choices.
+        
+        Also can't use the tally command here
+        """
+        if len(questions_and_choices) < 3:
+            return await ctx.send('Need at least 1 question with 2 choices.')
+        elif len(questions_and_choices) > 21:
+            return await ctx.send('You can only have up to 20 choices.')
+
+        perms = ctx.channel.permissions_for(ctx.me)
+        if not (perms.read_message_history or perms.add_reactions):
+            return await ctx.send('Need Read Message History and Add Reactions permissions.')
+
+        question = questions_and_choices[0]
+        choices = [(to_emoji(e), v) for e, v in enumerate(questions_and_choices[1:])]
+
+        try:
+            await ctx.message.delete()
+        except:
+            pass
+
+        body = "\n".join(f"{key}: {c}" for key, c in choices)
+        poll = await ctx.send(f'{ctx.author} asks: {question}\n\n{body}')
+        for emoji, _ in choices:
+            await poll.add_reaction(emoji)
 
 
 def setup(bot):

@@ -7,3 +7,4 @@ from .econf import *
 from .electronegativity import *
 from .models import *
 from .utils import *
+from .mendeleev import *

@@ -3,7 +3,7 @@
 
 # -*- coding: utf-8 -*-
 
-from .db import get_all_elements
+from .mendeleev import get_all_elements
 
 _elements = {x.symbol: x for x in get_all_elements()}
 

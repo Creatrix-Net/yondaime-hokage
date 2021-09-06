@@ -173,7 +173,7 @@ class PostStats:
         e1 = Embed(title='Status posted successfully',
                    description=f'[Widgets Link]({website}widgets) [Invite Stats](https://minatonamikaze-invites.herokuapp.com/)')
         e1.set_image(url=random.choice(imageslist).strip('\n'))
-        e1.set_thumbnail(url=self.bot.user.avatar_url)
+        e1.set_thumbnail(url=self.bot.user.avatar.url)
         
         
         e1.add_field(name='TopGG', value=f'{a} : [TopGG](https://top.gg/bot/{self.bot.user.id})')

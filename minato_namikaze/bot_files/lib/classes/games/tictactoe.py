@@ -3,9 +3,9 @@ from typing import Optional, Union
 import discord
 from discord.ext import commands
 
-BLANK = "⬛"
-CIRCLE = "⭕"
-CROSS = "❌"
+BLANK = "\U0001f533"
+CIRCLE = "\U0000274c"
+CROSS = "\U0000274c"
 
 
 class Tictactoe:
@@ -17,18 +17,27 @@ class Tictactoe:
         self.turn = self.cross
         self.winner = None
         self.message = None
-        self._controls = ['1️⃣', '2️⃣', '3️⃣',
-                          '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣']
+        self._controls = [
+            '\N{DIGIT ONE}\U000020e3', 
+            '\N{DIGIT TWO}\U000020e3', 
+            '\N{DIGIT THREE}\U000020e3',
+            '\N{DIGIT FOUR}\U000020e3', 
+            '\N{DIGIT FIVE}\U000020e3', 
+            '\N{DIGIT SIX}\U000020e3', 
+            '\N{DIGIT SEVEN}\U000020e3', 
+            '\N{DIGIT EIGHT}\U000020e3', 
+            '\N{DIGIT NINE}\U000020e3'
+        ]
         self._conversion = {
-            '1️⃣': (0, 0),
-            '2️⃣': (0, 1),
-            '3️⃣': (0, 2),
-            '4️⃣': (1, 0),
-            '5️⃣': (1, 1),
-            '6️⃣': (1, 2),
-            '7️⃣': (2, 0),
-            '8️⃣': (2, 1),
-            '9️⃣': (2, 2),
+            '\N{DIGIT ONE}\U000020e3': (0, 0),
+            '\N{DIGIT TWO}\U000020e3': (0, 1),
+            '\N{DIGIT THREE}\U000020e3': (0, 2),
+            '\N{DIGIT FOUR}\U000020e3': (1, 0),
+            '\N{DIGIT FIVE}\U000020e3': (1, 1),
+            '\N{DIGIT SIX}\U000020e3': (1, 2),
+            '\N{DIGIT SEVEN}\U000020e3': (2, 0),
+            '\N{DIGIT EIGHT}\U000020e3': (2, 1),
+            '\N{DIGIT NINE}\U000020e3': (2, 2),
         }
         self._EmojiToPlayer = {
             CIRCLE: self.circle,

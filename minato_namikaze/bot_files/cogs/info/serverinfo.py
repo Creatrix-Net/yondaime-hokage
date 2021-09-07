@@ -6,7 +6,7 @@ import discord
 from discord import Spotify
 from discord.ext import commands
 
-from ...lib import Embed, PrivacyPolicy
+from ...lib import Embed
 
 
 class Info(commands.Cog):
@@ -82,51 +82,6 @@ class Info(commands.Cog):
                 e = discord.Embed(title="❌ Nope, the user (you or another) aren't listening to Spotify", description=f"User {user.name} isn't listening to Spotify")
                 return await ctx.send(embed=e)
     '''
-
-    @commands.command()
-    async def privacy(self, ctx):
-        '''Get the Privacy Policy'''
-        m = PrivacyPolicy(bot=self.bot)
-        await m.start(ctx)
-
-    @commands.command()
-    async def uptime(self, ctx):
-        '''Get the uptime in hours for me'''
-        current_time = time.time()
-        difference = int(round(current_time - self.bot.start_time))
-        text = str(datetime.timedelta(seconds=difference)) + ' mins' if str(datetime.timedelta(seconds=difference)
-                                                                            )[0] == '0' or str(datetime.timedelta(seconds=difference))[0:1] != '00' else ' hours'
-        embed = discord.Embed(colour=ctx.message.author.top_role.colour)
-        embed.add_field(name="Uptime", value=text)
-        embed.set_footer(text=f"{ctx.author} | {self.bot.user}")
-        try:
-            await ctx.send(embed=embed)
-        except discord.HTTPException:
-            await ctx.send("Current uptime: " + text)
-
-    # @cog_ext.cog_slash(name="ping")
-    @commands.command()
-    async def ping(self, ctx):
-        '''Get the Latency'''
-        starttime = time.time()
-        msg = await ctx.send(":ping_pong: Ping... :ping_pong:")
-        async with ctx.channel.typing():
-            e = Embed(
-                title=":ping_pong: Pong! :ping_pong:", description=f"Heartbeat : {round(self.bot.latency * 1000, 2)} ms")
-            endtime = time.time()
-            difference = float(int(starttime - endtime))
-            e.add_field(name=":inbox_tray: Script Speed :outbox_tray:",
-                        value=f"{difference}ms")
-            e.set_image(url='https://cdn.discordapp.com/attachments/777918705098686465/870692724880334878/pong_9.gif')
-            await msg.edit(content="", embed=e)
-
-    @commands.command()
-    async def source(self, ctx):
-        """ Displays source code """
-        source_url = self.bot.github
-        e = discord.Embed(title="You didn't provide a command (because you cant), so here's the source!",
-                          description=f"[Source]({source_url})")
-        await ctx.send(embed=e)
 
     @commands.command()
     @commands.guild_only()

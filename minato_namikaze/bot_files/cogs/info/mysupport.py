@@ -1,13 +1,10 @@
-import platform
 
 import discord, datetime
-import DiscordUtils
 import psutil, pygit2, itertools
 from discord.ext import commands
-from psutil._common import bytes2human
 import pkg_resources
 
-from ...lib import Embed, get_user, get_or_fetch_member
+from ...lib import Embed, get_user, get_or_fetch_member, PrivacyPolicy
 from ...lib import time_class as time
 
 
@@ -36,7 +33,7 @@ class MySupport(commands.Cog, name="My Support"):
         commits = list(itertools.islice(repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count))
         return '\n'.join(self.format_commit(c) for c in commits)
     
-    @commands.command()
+    @commands.command(aliases=['stats'])
     async def about(self, ctx):
         """Tells you information about the bot itself."""
 
@@ -78,8 +75,25 @@ class MySupport(commands.Cog, name="My Support"):
         embed.add_field(name='Process', value=f'{memory_usage:.2f} MiB\n{cpu_usage:.2f}% CPU')
 
         version = pkg_resources.get_distribution('discord.py').version
-        embed.add_field(name='Guilds', value=guilds)
-        embed.add_field(name='Uptime', value=self.bot.uptime)
+        embed.add_field(
+            name='Guilds', 
+            value=guilds
+        )
+        embed.add_field(
+            name='Uptime', 
+            value=self.bot.uptime
+        )
+        embed.add_field(
+            name="**Bot Developers:**",
+            value=f"[{get_user(self.bot.owner_id, ctx)}](https://discord.com/users/{self.bot.owner_id}/)"
+        )
+        embed.add_field(
+            name="**More Info:**",
+            value="[Click Here](https://statcord.com/bot/779559821162315787)"
+        )
+        embed.add_field(
+            name="**Incidents/Maintenance Reports:**",
+            value="[Click Here](https://minatonamikaze.statuspage.io/)")
         embed.set_footer(text=f'Made with discord.py v{version}', icon_url='http://i.imgur.com/5BFecvA.png')
         embed.timestamp = discord.utils.utcnow()
         await ctx.send(embed=embed)
@@ -97,63 +111,68 @@ class MySupport(commands.Cog, name="My Support"):
         '''Generates my support server invite'''
         await ctx.send('**Here you go, my support server invite**')
         await ctx.send('https://discord.gg/S8kzbBVN8b')
+    
+    @commands.command()
+    async def privacy(self, ctx):
+        '''Get the Privacy Policy'''
+        m = PrivacyPolicy(bot=self.bot)
+        await m.start(ctx)
+    
+    @commands.command()
+    async def ping(self, ctx):
+        '''Get the Latency'''
+        starttime = time.time()
+        msg = await ctx.send(":ping_pong: Ping... :ping_pong:")
+        async with ctx.channel.typing():
+            e = Embed(
+                title=":ping_pong: Pong! :ping_pong:", description=f"Heartbeat : {round(self.bot.latency * 1000, 2)} ms")
+            endtime = time.time()
+            difference = float(int(starttime - endtime))
+            e.add_field(name=":inbox_tray: Script Speed :outbox_tray:",
+                        value=f"{difference}ms")
+            e.set_image(url='https://cdn.discordapp.com/attachments/777918705098686465/870692724880334878/pong_9.gif')
+            await msg.edit(content="", embed=e)
+    
+    
+    @commands.command()
+    async def source(self, ctx, *, command: str = None):
+        """Displays my full source code or for a specific command.
+        To display the source code of a subcommand you can separate it by
+        periods, e.g. tag.create for the create subcommand of the tag command
+        or by spaces.
+        """
+        source_url = 'https://github.com/Rapptz/RoboDanny'
+        branch = 'master'
+        if command is None:
+            return await ctx.send(source_url)
 
-    @commands.command(name="stats", description="A usefull command that displays bot statistics.")
-    async def stats(self, ctx):
-        '''Get the stats for the me'''
-        pythonVersion = platform.python_version()
-        dpyVersion = discord.__version__
-        serverCount = len(self.bot.guilds)
-        memberCount = len(set(self.bot.get_all_members()))
+        if command == 'help':
+            src = type(self.bot.help_command)
+            module = src.__module__
+            filename = inspect.getsourcefile(src)
+        else:
+            obj = self.bot.get_command(command.replace('.', ' '))
+            if obj is None:
+                return await ctx.send('Could not find command.')
 
-        embed = Embed(
-            title=f"{self.bot.user.name} Stats",
-            description="\uFEFF",
-            colour=ctx.author.colour or discord.Color.random(),
-            timestamp=ctx.message.created_at,
-        )
+            # since we found the command we're looking for, presumably anyway, let's
+            # try to access the code itself
+            src = obj.callback.__code__
+            module = obj.callback.__module__
+            filename = src.co_filename
 
-        embed.set_thumbnail(url=self.bot.user.avatar_url)
+        lines, firstlineno = inspect.getsourcelines(src)
+        if not module.startswith('discord'):
+            # not a built-in command
+            location = os.path.relpath(filename).replace('\\', '/')
+        else:
+            location = module.replace('.', '/') + '.py'
+            source_url = 'https://github.com/Rapptz/discord.py'
+            branch = 'master'
 
-        embed.add_field(name="**Bot Version:**", value=self.bot.version)
-        embed.add_field(name="**Python Version:**", value=pythonVersion)
-        embed.add_field(name="**Discord.Py Version**", value=dpyVersion)
-        embed.add_field(name="**Total Guilds:**", value=serverCount+1)
-        embed.add_field(name="**Total Users:**", value=memberCount)
-        embed.add_field(name="**Bot Developers:**",
-                        value=f"[{get_user(self.bot.owner_id, ctx)}](https://discord.com/users/{self.bot.owner_id}/)")
-        embed.add_field(name="**More Info:**",
-                        value="[Click Here](https://statcord.com/bot/779559821162315787)")
-        embed.add_field(name="**Incidents/Maintenance Reports:**",
-                        value="[Click Here](https://minatonamikaze.statuspage.io/)")
-
-        embed.set_footer(text=f"{ctx.author} | {self.bot.user.name}")
-        embed.set_author(name=self.bot.user.name,
-                         icon_url=self.bot.user.avatar_url)
-
-        await ctx.send(embed=embed)
-
-    @commands.command(name="cpu_status", description="Display CPU stats of the bot.")
-    async def cpu_status(self, ctx):
-        '''Display CPU Stats'''
-        cpu = Embed(title='CPU Stats :computer:')
-        cpu.add_field(name='**CPU Usage** :alarm_clock:',
-                      value=f'{psutil.cpu_percent()} %', inline=True)
-
-        ram = Embed(title='RAM Stats :chart_with_upwards_trend:')
-        ram.add_field(name="**Total RAM :repeat_one:**",
-                      value=bytes2human(psutil.virtual_memory()[0]))
-        ram.add_field(name="**RAM Available :floppy_disk:**",
-                      value=bytes2human(psutil.virtual_memory()[1]))
-        ram.add_field(name="**RAM % use**",
-                      value=bytes2human(psutil.virtual_memory()[2]))
-        ram.add_field(name="**RAM Used :card_box:**",
-                      value=bytes2human(psutil.virtual_memory()[3]))
-        ram.add_field(name="**RAM :free:**",
-                      value=bytes2human(psutil.virtual_memory()[4]))
-
-        paginator = DiscordUtils.Pagination.AutoEmbedPaginator(ctx)
-        await paginator.run([cpu, ram])
+        final_url = f'<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>'
+        await ctx.send(final_url)
+    
 
 
 def setup(bot):

@@ -5,7 +5,6 @@ from os.path import join
 from pathlib import Path
 
 import discord
-import DiscordUtils
 import dotenv
 import sentry_sdk
 from discord.ext import commands
@@ -29,21 +28,17 @@ def token_get(tokenname):
         dotenv.load_dotenv(dotenv_file)
     return os.environ.get(tokenname, 'False').strip('\n')
 
-
-TOKEN = token_get('TOKEN')
-sentry_link = token_get('SENTRY')
-
-
-def get_prefix(bot, message):
+def get_prefix(self, bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
-
     prefixes = [')', 'm!', 'minato', 'minato ']
-
     if not message.guild:
         return 'm!'
 
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
+
+TOKEN = token_get('TOKEN')
+sentry_link = token_get('SENTRY')
 
 bot = commands.AutoShardedBot(
     command_prefix=get_prefix,

@@ -39,7 +39,7 @@ spotify==0.10.2
 statcord.py==3.1.0
 TenGiphPy==2.5.0
 typing-extensions==3.10.0.2
-urllib3==1.26.6
+urllib3==1.26.7
 yarl==1.6.3
 youtube-dl==2021.6.6
 youtube-search==2.1.0

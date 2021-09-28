@@ -1,6 +1,5 @@
 import discord
-
-from .vars import ban, feedback, support, unban, warns
+from .vars import SetupVars
 
 
 def perms_dict(ctx):
@@ -22,46 +21,46 @@ async def channel_creation(ctx):
         ctx.guild.categories, name="Admin / Feedback") else False
 
     # Feedback Channel
-    if discord.utils.get(ctx.guild.text_channels, topic=feedback):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.feedback.name):
         feed_channel = discord.utils.get(
             ctx.guild.text_channels,
-            topic=feedback
+            topic=SetupVars.feedback.name
         )
     else:
         feed_channel = False
 
     # Ban
-    if discord.utils.get(ctx.guild.text_channels, topic=ban):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.ban.name):
         ban_channel = discord.utils.get(
             ctx.guild.text_channels,
-            topic=ban
+            topic=SetupVars.ban.name
         )
     else:
         ban_channel = False
 
     # Unban
-    if discord.utils.get(ctx.guild.text_channels, topic=unban):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.unban.name):
         unban_channel = discord.utils.get(
             ctx.guild.text_channels,
-            topic=unban,
+            topic=SetupVars.unban.name,
         )
     else:
         unban_channel = False
 
     # Warns
-    if discord.utils.get(ctx.guild.text_channels, topic=warns):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.warns.name):
         warns_channel = discord.utils.get(
             ctx.guild.text_channels,
-            topic=warns,
+            topic=SetupVars.warns.name,
         )
     else:
         warns_channel = False
 
     # Support
-    if discord.utils.get(ctx.guild.text_channels, topic=support):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.support.name):
         support_channel = discord.utils.get(
             ctx.guild.text_channels,
-            topic=support
+            topic=SetupVars.support.name
         )
     else:
         support_channel = False

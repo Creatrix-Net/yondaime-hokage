@@ -1,5 +1,5 @@
 import random, discord
-from .vars import testing_server_id,server_id, character_side_exclude, name_exclusion
+from .vars import ChannelAndMessageId
 
 def convert(time):
     pos = ["s", "m", "h", "d"]
@@ -40,7 +40,7 @@ def return_random_5characters(characters: dict) -> dict:
     ]
 
 def format_character_name(character_name: str) -> str:
-    if character_name.split('(')[-1].strip(' ').strip(')').lower() in character_side_exclude:
+    if character_name.split('(')[-1].strip(' ').strip(')').lower() in ChannelAndMessageId.character_side_exclude.name:
         return character_name.split('(')[0].strip(' ').title()
     return character_name.strip(' ').title()
 
@@ -48,13 +48,13 @@ def format_character_name(character_name: str) -> str:
 def return_matching_emoji(ctx,name):
     def emoji_predicate(emoji, name):
         return emoji.name.lower() in name
-    if name.split('(')[-1].strip(' ').strip(')').lower() in character_side_exclude:
+    if name.split('(')[-1].strip(' ').strip(')').lower() in ChannelAndMessageId.character_side_exclude.name:
         name = name.split('(')[-1].strip(' ').strip(')').lower()
-        for i in ctx.bot.get_guild(testing_server_id).emojis:
+        for i in ctx.bot.get_guild(ChannelAndMessageId.testing_server_id.name).emojis:
             if emoji_predicate(i, name):
                 return i
     else:
         name = name.lower().strip(' ').lower()
-        for i in ctx.bot.get_guild(testing_server_id).emojis:
+        for i in ctx.bot.get_guild(ChannelAndMessageId.testing_server_id.name).emojis:
             if emoji_predicate(i, name):
                 return i

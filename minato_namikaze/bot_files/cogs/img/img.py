@@ -40,7 +40,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         file = discord.File(file_path)
 
         embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow()())
+            description=desc, timestamp=discord.utils.utcnow())
         embed.set_image(url=f"attachment://{file_path}")
         await ctx.send(file=file, embed=embed)
 
@@ -62,7 +62,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             return
 
         embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow()())
+            description=desc, timestamp=discord.utils.utcnow())
 
         img = Image.open(FileIO(self.DEFAULT_GIF_LIST_PATH /
                          os.path.join("amongus.png")))

@@ -79,7 +79,7 @@ class Fun(commands.Cog):
             await ctx.send(file=file, embed=embed)
         else:
             user = member
-            url = str(user.avatar.with_format("png").with_size(10))
+            url = str(user.avatar.with_format("png").with_size(1024))
             img = await self.bot.dagpi.image_process(ImageFeatures.slap(), url2=str(ctx.author.with_format("png").with_size(1024).url), url=url)
             e2file = discord.File(fp=img.image, filename=f"slap.{img.format}")
             e = discord.Embed(description=desc)

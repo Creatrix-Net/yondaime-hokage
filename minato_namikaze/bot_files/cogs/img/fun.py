@@ -43,7 +43,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'spank'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=datetime.datetime.utcnow())
+            description=desc, timestamp=discord.utils.utcnow()())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,
@@ -70,7 +70,7 @@ class Fun(commands.Cog):
                 join(self.DEFAULT_GIF_LIST_PATH, 'slap'))]
 
             embed = discord.Embed(
-                description=desc, timestamp=datetime.datetime.utcnow())
+                description=desc, timestamp=discord.utils.utcnow()())
             image_name = random.choice(onlyfiles)
 
             file = discord.File(
@@ -79,8 +79,8 @@ class Fun(commands.Cog):
             await ctx.send(file=file, embed=embed)
         else:
             user = member
-            url = str(user.avatar_url_as(format="png", size=1024))
-            img = await self.bot.dagpi.image_process(ImageFeatures.slap(), url2=str(ctx.author.avatar_url_as(format="png", size=1024)), url=url)
+            url = str(user.avatar.with_format("png").with_size(10))
+            img = await self.bot.dagpi.image_process(ImageFeatures.slap(), url2=str(ctx.author.with_format("png").with_size(1024).url), url=url)
             e2file = discord.File(fp=img.image, filename=f"slap.{img.format}")
             e = discord.Embed(description=desc)
             e.set_image(url=f"attachment://slap.{img.format}")
@@ -103,7 +103,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'hug'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=datetime.datetime.utcnow())
+            description=desc, timestamp=discord.utils.utcnow()())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,
@@ -128,7 +128,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'poke'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=datetime.datetime.utcnow())
+            description=desc, timestamp=discord.utils.utcnow()())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,
@@ -153,7 +153,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'high5'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=datetime.datetime.utcnow())
+            description=desc, timestamp=discord.utils.utcnow()())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,
@@ -177,7 +177,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'party'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=datetime.datetime.utcnow())
+            description=desc, timestamp=discord.utils.utcnow()())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,
@@ -191,7 +191,7 @@ class Fun(commands.Cog):
         if member is None:
             member = ctx.author
 
-        url = str(member.avatar_url_as(format="png", size=1024))
+        url = str(member.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.petpet(), url)
         e2file = discord.File(fp=img.image, filename=f"petpet.{img.format}")
         e = discord.Embed(title="UwU Pat!")

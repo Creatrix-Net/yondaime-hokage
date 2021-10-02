@@ -99,7 +99,7 @@ class Snipe(commands.Cog):
         if type(snipe) == list:  # edit snipe
             emb.set_author(
                 name=str(snipe[0].author),
-                icon_url=snipe[0].author.avatar_url)
+                icon_url=snipe[0].authoravatar.url)
             emb.colour = snipe[0].author.colour
             emb.add_field(
                 name='Before',
@@ -113,13 +113,13 @@ class Snipe(commands.Cog):
         else:  # delete snipe
             emb.set_author(
                 name=str(snipe.author),
-                icon_url=snipe.author.avatar_url)
+                icon_url=snipe.authoravatar.url)
             emb.description = self.sanitise(snipe.content)
             emb.colour = snipe.author.colour
             emb.timestamp = snipe.created_at
         emb.set_footer(
             text=f'Message sniped by {str(ctx.author)}',
-            icon_url=ctx.author.avatar_url)
+            icon_url=ctx.authoravatar.url)
         await ctx.send(embed=emb)
         self.snipes[ctx.channel.id] = None
 

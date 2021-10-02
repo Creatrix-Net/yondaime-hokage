@@ -385,7 +385,7 @@ class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
             answer = wtp.name.lower()
             
             e = Embed(title='Who\'s That Pokemon?', timestamp=ctx.message.created_at)
-            e.set_footer(text=f'{ctx.message.author} reply within 30secs to answer.', icon_url=ctx.message.author.avatar_url)
+            e.set_footer(text=f'{ctx.message.author} reply within 30secs to answer.', icon_url=ctx.message.authoravatar.url)
             e.set_image(url=question)
             
             question_message = await ctx.send('You have 3 chances, **Chance: 1/3**',embed=e)

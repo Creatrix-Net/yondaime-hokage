@@ -58,7 +58,7 @@ class BotEvents(commands.Cog):
                 embed.set_image(url='https://i.imgur.com/mktY446.jpeg')
                 embed.set_thumbnail(url='https://i.imgur.com/SizgkEZ.png')
                 embed.set_author(name=self.bot.user.name,
-                                 icon_url=self.bot.user.avatar_url)
+                                 icon_url=self.bot.user.avatar.url)
                 embed.set_footer(text=f"Welcome {member.name}")
 
                 e = Embed(
@@ -122,10 +122,10 @@ class BotEvents(commands.Cog):
             )
             e.set_author(
                 name=self.bot.user,
-                icon_url=self.bot.user.avatar_url
+                icon_url=self.bot.user.avatar.url
             )
             e.set_thumbnail(
-                url=self.bot.user.avatar_url
+                url=self.bot.user.avatar.url
             )
             e.set_image(
                 url=f"attachment://{img}"
@@ -139,9 +139,9 @@ class BotEvents(commands.Cog):
             e34 = discord.Embed(title=f'{guild.name}',
                                 color=discord.Color.green(), description='Added')
             if guild.icon:
-                e34.set_thumbnail(url=guild.icon_url)
+                e34.set_thumbnail(url=guild.icon.url)
             if guild.banner:
-                e34.set_image(url=guild.banner_url_as(format="png"))
+                e34.set_image(url=guild.banner.with_format("png").url)
             c = self.bot.get_channel(
                 813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
             e34.add_field(name='**Total Members**', value=guild.member_count)
@@ -161,9 +161,9 @@ class BotEvents(commands.Cog):
         try:
             e34 = ErrorEmbed(title=f'{guild.name}', description='Left')
             if guild.icon:
-                e34.set_thumbnail(url=guild.icon_url)
+                e34.set_thumbnail(url=guild.icon.url)
             if guild.banner:
-                e34.set_image(url=guild.banner_url_as(format="png"))
+                e34.set_image(url=guild.banner.with_format("png").url)
             c = self.bot.get_channel(
                 813954921782706227) if not self.bot.local else self.bot.get_channel(869238107524968479)
             e34.add_field(name='**Total Members**', value=guild.member_count)
@@ -197,8 +197,8 @@ class BotEvents(commands.Cog):
                             value=event.user, inline=True)
                 if event.reason:
                     e.add_field(name='**Reason** :', value=event.reason)
-            if user.avatar_url:
-                e.set_thumbnail(url=user.avatar_url)
+            if user.avatar.url:
+                e.set_thumbnail(url=user.avatar.url)
             await ban.send(embed=e)
             try:
                 await user.send(f'You were **banned** from **{guild.name}**', embed=e)
@@ -219,8 +219,8 @@ class BotEvents(commands.Cog):
                 title='**Unban** :tada:',
                 description=f'**{user.mention}** was unbanned! :tada:'
             )
-            if user.avatar_url:
-                e.set_thumbnail(url=user.avatar_url)
+            if user.avatar.url:
+                e.set_thumbnail(url=user.avatar.url)
             e.add_field(name='**Unbanned User** :', value=user, inline=True)
             if event:
                 e.add_field(name='**Responsible Moderator** :',

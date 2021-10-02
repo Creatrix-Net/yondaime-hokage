@@ -103,7 +103,7 @@ class MySupport(commands.Cog, name="My Support"):
         '''Generates my invite link for your server'''
         embed = discord.Embed(
             title='**Invite Link**', description=f'[My Invite Link!](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot)')
-        embed.set_thumbnail(url=ctx.bot.user.avatar_url)
+        embed.set_thumbnail(url=ctx.bot.user.avatar.url)
         await ctx.send(embed=embed)
 
     @commands.command(description='Generates my support server invite')

@@ -43,7 +43,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'spank'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow()())
+            description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,
@@ -70,7 +70,7 @@ class Fun(commands.Cog):
                 join(self.DEFAULT_GIF_LIST_PATH, 'slap'))]
 
             embed = discord.Embed(
-                description=desc, timestamp=discord.utils.utcnow()())
+                description=desc, timestamp=discord.utils.utcnow())
             image_name = random.choice(onlyfiles)
 
             file = discord.File(
@@ -103,7 +103,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'hug'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow()())
+            description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,
@@ -128,7 +128,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'poke'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow()())
+            description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,
@@ -153,7 +153,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'high5'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow()())
+            description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,
@@ -177,7 +177,7 @@ class Fun(commands.Cog):
             join(self.DEFAULT_GIF_LIST_PATH, 'party'))]
 
         embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow()())
+            description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(join(self.DEFAULT_GIF_LIST_PATH,

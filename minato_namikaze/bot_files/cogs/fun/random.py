@@ -63,7 +63,7 @@ class Random(commands.Cog):
     async def magic(self, ctx, user: discord.Member = None):
         '''See magic!'''
         user = user or ctx.author
-        url = str(user.avatar_url_as(format="png", size=1024))
+        url = str(user.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.magik(), url)
         e2file = discord.File(fp=img.image, filename=f"magik.{img.format}")
         e = Embed(title="Magik!")

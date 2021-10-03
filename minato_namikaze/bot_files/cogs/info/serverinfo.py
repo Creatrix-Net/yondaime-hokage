@@ -36,9 +36,9 @@ class Info(commands.Cog):
                 e = discord.Embed(
                     title=f'In **{guild.name}**', description='Was added', color=discord.Color.green())
                 if guild.icon:
-                    e.set_thumbnail(url=guild.icon_url)
+                    e.set_thumbnail(url=guild.icon.url)
                 if guild.banner:
-                    e.set_image(url=guild.banner_url_as(format="png"))
+                    e.set_image(url=guild.banner.with_format("png").url)
                 n += 1
                 e.add_field(name='**Total Members**', value=guild.member_count)
                 e.add_field(
@@ -54,9 +54,9 @@ class Info(commands.Cog):
             e = discord.Embed(
                 title=f'In **{ctx.guild.name}**', description=f'Bumped by **{ctx.message.author}**', color=0x2ecc71)
             if ctx.guild.icon:
-                e.set_thumbnail(url=ctx.guild.icon_url)
+                e.set_thumbnail(url=ctx.guild.icon.url)
             if ctx.guild.banner:
-                e.set_image(url=ctx.guild.banner_url_as(format="png"))
+                e.set_image(url=ctx.guild.banner.with_format("png").url)
             e.add_field(name='**Total Members**', value=ctx.guild.member_count)
             e.add_field(
                 name='**Bots**', value=sum(1 for member in ctx.guild.members if member.bot))
@@ -89,7 +89,7 @@ class Info(commands.Cog):
         """ Get the avatar of you or someone else """
         user = user or ctx.author
         e = discord.Embed(title=f"Avatar for {user.name}")
-        e.set_image(url=user.avatar_url)
+        e.set_image(url=user.avatar.url)
         await ctx.send(embed=e)
 
     @commands.command()
@@ -101,7 +101,7 @@ class Info(commands.Cog):
 
         embed = discord.Embed(
             title=f'**{user}**', description=f'{user} joined **{ctx.guild.name}** at \n{user.joined_at}')
-        embed.set_image(url=user.avatar_url)
+        embed.set_image(url=user.avatar.url)
         await ctx.send(embed=embed)
 
     @commands.group()
@@ -115,9 +115,9 @@ class Info(commands.Cog):
                 title=f"ℹ Information About **{ctx.guild.name}**", description=None)
 
             if ctx.guild.icon:
-                embed.set_thumbnail(url=ctx.guild.icon_url)
+                embed.set_thumbnail(url=ctx.guild.icon.url)
             if ctx.guild.banner:
-                embed.set_image(url=ctx.guild.banner_url_as(format="png"))
+                embed.set_image(url=ctx.guild.banner.with_format("png").url)
 
             embed.add_field(name="**Server Name**",
                             value=ctx.guild.name, inline=True)
@@ -138,7 +138,7 @@ class Info(commands.Cog):
         """ Get the current server icon """
         if not ctx.guild.icon:
             return await ctx.send("This server does not have a avatar...")
-        await ctx.send(f"Avatar of **{ctx.guild.name}**\n{ctx.guild.icon_url_as(size=1024)}")
+        await ctx.send(f"Avatar of **{ctx.guild.name}**\n{ctx.guild.icon.with_size(1024).url}")
 
     @server.command(name="banner")
     @commands.guild_only()
@@ -147,7 +147,7 @@ class Info(commands.Cog):
         if not ctx.guild.banner:
             return await ctx.send("This server does not have a banner...")
         e = Embed(title=f"ℹ Banner for {ctx.guild}")
-        e.set_image(url=ctx.guild.banner_url_as(format='png'))
+        e.set_image(url=ctx.guild.banner.with_format("png").url)
         await ctx.send(embed=e)
 
     @commands.command(aliases=['whois','who'])
@@ -163,7 +163,7 @@ class Info(commands.Cog):
         content2 = f"ℹ About **{user.id}**"
         embed = discord.Embed(
             title=content2, colour=user.top_role.colour.value)
-        embed.set_thumbnail(url=user.avatar_url)
+        embed.set_thumbnail(url=user.avatar.url)
 
         embed.add_field(name="Full name", value=user, inline=True)
         embed.add_field(name="Nickname", value=user.nick if hasattr(

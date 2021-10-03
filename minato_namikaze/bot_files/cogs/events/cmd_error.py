@@ -222,7 +222,7 @@ class BotEventsCommands(commands.Cog):
                 return
             c = self.bot.get_channel(830366314761420821)
 
-            haaha = ctx.author.avatar_url
+            haaha = ctx.author.avatar.url
             e9 = ErrorEmbed(
                 title="Oh no there was some error", description=f"`{error}`")
             e9.add_field(name="**Command Error Caused By**",
@@ -238,9 +238,9 @@ class BotEventsCommands(commands.Cog):
             e = Embed(
                 title=f'In **{ctx.guild.name}**', description=f'User affected {ctx.message.author}')
             if ctx.guild.icon:
-                e.set_thumbnail(url=ctx.guild.icon_url)
+                e.set_thumbnail(url=ctx.guild.icon.url)
             if ctx.guild.banner:
-                e.set_image(url=ctx.guild.banner_url_as(format="png"))
+                e.set_image(url=ctx.guild.banner.with_format("png").url)
             e.add_field(name='**Total Members**', value=ctx.guild.member_count)
             e.add_field(
                 name='**Bots**', value=sum(1 for member in ctx.guild.members if member.bot))

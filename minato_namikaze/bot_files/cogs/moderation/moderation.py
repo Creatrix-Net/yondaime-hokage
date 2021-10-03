@@ -145,7 +145,7 @@ class Moderation(commands.Cog):
                                     value=i+1, inline=True)
                         e.add_field(name='**Banned User Name**',
                                     value=ban_entry.user, inline=True)
-                        e.set_thumbnail(url=ban_entry.user.avatar_url)
+                        e.set_thumbnail(url=ban_entry.user.avatar.url)
                         await ctx.channel.send(embed=e)
                         n += 1
                         return
@@ -159,7 +159,7 @@ class Moderation(commands.Cog):
                                     value=i+1, inline=True)
                         e.add_field(name='**Banned User Name**',
                                     value=ban_entry.user, inline=True)
-                        e.set_thumbnail(url=ban_entry.user.avatar_url)
+                        e.set_thumbnail(url=ban_entry.user.avatar.url)
                         await ctx.channel.send(embed=e)
                         n += 1
                         return
@@ -173,7 +173,7 @@ class Moderation(commands.Cog):
                                     value=i+1, inline=True)
                         e.add_field(name='**Banned User Name**',
                                     value=ban_entry.user, inline=True)
-                        e.set_thumbnail(url=ban_entry.user.avatar_url)
+                        e.set_thumbnail(url=ban_entry.user.avatar.url)
                         await ctx.channel.send(embed=e)
                         n += 1
                         return

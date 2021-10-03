@@ -41,7 +41,7 @@ class VoteInfo(commands.Cog):
                 title=f'{member.display_name} vote stats for me',
                 description=f'{member.mention} here your voting stats for last 12hours'
             )
-            e.set_thumbnail(url=member.avatar_url)
+            e.set_thumbnail(url=member.avatar.url)
             a = requests.get(
                 f'https://top.gg/api/bots/{self.bot.user.id}/check',
                 params={'userId': member.id},

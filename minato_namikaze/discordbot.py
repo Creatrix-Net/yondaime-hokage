@@ -82,7 +82,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         try:
             
             sentry_sdk.init(
-                link = Tokens.sentry_link.value,
+                Tokens.sentry_link.value,
                 traces_sample_rate=1.0,
                 integrations=[AioHttpIntegration(), ThreadingIntegration(), LoggingIntegration(), ModulesIntegration()]
             )

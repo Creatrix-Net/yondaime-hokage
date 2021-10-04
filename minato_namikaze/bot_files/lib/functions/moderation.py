@@ -4,19 +4,19 @@ import discord
 from discord.ext import commands
 
 from ..classes import ErrorEmbed
-from ..util import ban, feedback, support, unban, warns
+from ..util import SetupVars
 
 
 #checks warns
 def check_if_warning_system_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic=warns):
+    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.warns.value):
         return True
     else:
         return False
 
 #checks support
 def check_if_support_is_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic=support):
+    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.support.value):
         support_channel = True
     else:
         support_channel = False
@@ -24,40 +24,40 @@ def check_if_support_is_setup(ctx):
 
 #checks ban
 def check_if_ban_channel_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic=ban):
+    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.ban.value):
         return True
     else:
         return False
 
 #checks unban
 def check_if_unban_channel_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic=unban):
+    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.unban.value):
         return True
     else:
         return False
 
 #check feedback
 def check_if_feedback_system_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic=feedback):
+    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.feedback.value):
         return True
     else:
         return False
 
 #return warns
 def return_warning_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=warns)
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.warns.value)
 
 def return_ban_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=ban)
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.ban.value)
 
 def return_unban_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=unban)
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.unban.value)
 
 def return_feedback_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=feedback)
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.feedback.value)
 
 def return_support_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic=support)
+    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.support.value)
 
 
 

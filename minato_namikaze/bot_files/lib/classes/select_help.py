@@ -7,7 +7,7 @@ import discord
 import inspect
 from .time_class import *
 from .paginator import *
-from ..util import github
+from ..util import LinksAndVars
 
 
 class GroupHelpPageSource(menus.ListPageSource):
@@ -120,7 +120,7 @@ class FrontPageSource(menus.PageSource):
                     ":pray: Konichiwa :pray:, myself **Minato Namikaze**, **Konohagakure <:uzumaki_naruto:874930645405675521> Yondaime Hokage**"
                     f'I joined discord on {created_at}. I try my best to do every work of a **hokage**. You can get more '
                     'information on my commands by using the *dropdown* below.\n\n'
-                    f"I'm also open source. You can see my code on [GitHub]({github})!"
+                    f"I'm also open source. You can see my code on [GitHub]({LinksAndVars.github.value})!"
                 ),
                 inline=False,
             )

@@ -80,11 +80,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     
     def run(self):
         try:
-
+            
             sentry_sdk.init(
-                "https://mydsn@sentry.io/123",
+                link = Tokens.sentry_link.value,
                 traces_sample_rate=1.0,
-                integrations=[AioHttpIntegration(), ThreadingIntegration(), LoggingIntegration(), ModulesIntegration(), ModulesIntegration()]
+                integrations=[AioHttpIntegration(), ThreadingIntegration(), LoggingIntegration(), ModulesIntegration()]
             )
             log.info('Sentry Setup Done')
             

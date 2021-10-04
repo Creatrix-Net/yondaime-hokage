@@ -1,9 +1,10 @@
 import discord
 from discord.ext import menus
 
-from ...util import ban
+from ...util import SetupVars
 from ..embed import Embed
 
+ban = SetupVars.ban.value
 
 class Ban(menus.Menu):
     def __init__(self, bot, timeout, channel):
@@ -28,7 +29,7 @@ class Ban(menus.Menu):
             )
         ban_channel = await self.ctx.guild.create_text_channel(
             "ban",
-            topic=ban,
+            topic = ban,
             overwrites={self.ctx.guild.default_role: discord.PermissionOverwrite(
                 read_messages=False, send_messages=False)},
             category=discord.utils.get(

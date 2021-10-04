@@ -1,7 +1,7 @@
 import discord
 from discord.ext import menus
 
-from ...util import feedback
+from ...util import SetupVars
 from ..embed import Embed
 
 
@@ -22,7 +22,7 @@ class Feedback(menus.Menu):
     async def on_add(self, payload):
         feed = await self.ctx.guild.create_text_channel(
             "Feedback",
-            topic=feedback,
+            topic = SetupVars.feedback.value,
             overwrites={self.ctx.guild.default_role: discord.PermissionOverwrite(
                 read_messages=False, send_messages=False)},
             category=discord.utils.get(

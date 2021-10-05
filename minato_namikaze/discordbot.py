@@ -1,16 +1,22 @@
-from discord.ext import commands
-import ast
 import os
+import ast
 import time
-from os.path import join
-from pathlib import Path
-import discord
 import dotenv
+import discord
 import logging
+import sentry_sdk
+from pathlib import Path
+from os.path import join
+from discord.utils import format_dt
+from discord.ext import commands
+from sentry_sdk.integrations.aiohttp import AioHttpIntegration
+from sentry_sdk.integrations.threading import ThreadingIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.modules import ModulesIntegration
 
-from bot_files.lib import var, Embed
+from bot_files.lib import Tokens, Embed, PostStats
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 dotenv_file = os.path.join(Path(__file__).resolve().parent.parent / ".env")
@@ -54,7 +60,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         
         super().__init__(
             command_prefix=self.get_prefix,
-            description=description,
+            description = "Konichiwa, myself Minato Namikaze, Konohagakure Yondaime Hokage, I try my best to do every work as a Hokage!",
             chunk_guilds_at_startup=False,
             heartbeat_timeout=150.0,
             allowed_mentions=allowed_mentions,
@@ -74,13 +80,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     
     def run(self):
         try:
-            import sentry_sdk
-            from sentry_sdk.integrations import AioHttpIntegration
-
+            
             sentry_sdk.init(
-                sentry_link,
+                Tokens.sentry_link.value,
                 traces_sample_rate=1.0,
-                integrations=[AioHttpIntegration(), ThreadingIntegration(), LoggingIntegration(), ModulesIntegration(), ModulesIntegration()]
+                integrations=[AioHttpIntegration(), ThreadingIntegration(), LoggingIntegration(), ModulesIntegration()]
             )
             log.info('Sentry Setup Done')
             
@@ -110,7 +114,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                     pass
     
             log.info('Bot will now start')
-            super().run(var.Tokens.token, reconnect=True)
+            super().run(Tokens.token.value, reconnect=True)
         except discord.PrivilegedIntentsRequired:
             log.critical(
                 "[Login Failure] You need to enable the server members intent on the Discord Developers Portal."
@@ -187,4 +191,4 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             )
 
 if __name__ == "__main__":
-    MinatoNamikazeBot.run()
+    MinatoNamikazeBot().run()

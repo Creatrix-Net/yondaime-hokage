@@ -7,7 +7,7 @@ import logging
 import sentry_sdk
 from pathlib import Path
 from os.path import join
-from discord.utils import format_dt
+from bot_files.lib import format_dt
 from discord.ext import commands
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
@@ -123,8 +123,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             log.critical("[Login Failure] The token initialsed in environment(or .env file) is invalid.")
         except KeyboardInterrupt:
             log.critical('The bot is shutting down since force shutdown was initiated.')
-        except:
-            log.critical('An exception occured, %s', Exception)
+        except Exception as e:
+            log.critical('An exception occured, %s', e)
     
     
     async def on_ready(self):

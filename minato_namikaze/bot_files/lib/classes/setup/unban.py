@@ -1,7 +1,7 @@
 import discord
 from discord.ext import menus
 
-from ...util import unban as unbantopic
+from ...util import SetupVars
 from ..embed import Embed
 
 
@@ -31,7 +31,7 @@ class Unban(menus.Menu):
             "unban",
             overwrites={self.ctx.guild.default_role: discord.PermissionOverwrite(
                 read_messages=False, send_messages=False)},
-            topic=unbantopic,
+            topic= SetupVars.unban.value,
             category=discord.utils.get(
                 self.ctx.guild.categories,
                 name="Bingo Book")

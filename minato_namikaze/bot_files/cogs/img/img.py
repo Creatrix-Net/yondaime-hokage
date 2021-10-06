@@ -8,13 +8,13 @@ from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
 
-from ...lib import dagpi
+from ...lib import Tokens
 
 
 class ImageManipulation(commands.Cog, name="Image Manipulation"):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.dagpi = Client(dagpi)
+        self.bot.dagpi = Client(Tokens.dagpi.value)
         self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
         self.description = 'Some fun Image Manipulation Commands'
     

@@ -8,8 +8,7 @@ import dotenv
 import re
 
 
-dotenv_file = Path(__file__).resolve(
-).parent.parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):

@@ -19,4 +19,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint `ls -R|grep .py$|xargs`
+        pylint `ls -R|grep .py$|xargs` --ignore=[.github, .gitattributes, .gitignore, CODE_OF_CONDUCT.md, CONTRIBUTING.md, LICENSE, Procfile, README.md, example.env, requirements.txt, requirements.txt, discord_bot_images]

@@ -1,0 +1,10 @@
+documentation:
+  - README.md
+  
+wontfix: [CONTRIBUTING.md, CODE_OF_CONDUCT.md, LICENSE]
+
+dependencies: [requirements]
+
+help wanted: ['minato_namikaze/bot_files/*']
+
+bug: [discordbot.py]

@@ -7,7 +7,7 @@ from discord.ext import commands
 from mal import Anime, AnimeSearch, Manga, MangaSearch
 from asyncdagpi import Client
 
-from ...lib import (Embed, ErrorEmbed, dagpi, generatevoteembed, votedbladebotlist,
+from ...lib import (Embed, ErrorEmbed, Tokens, generatevoteembed, votedbladebotlist,
                     votedbotsfordiscord, voteddiscordboats,
                     voteddiscordlistspace, votedfateslist, votedTopgg,
                     votedVoidBots)
@@ -44,7 +44,7 @@ def format_manga_characters(character):
 class AnimeaMangaandWaifu(commands.Cog, name='Anime, Manga and Waifu'):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.dagpi = Client(dagpi)
+        self.bot.dagpi = Client(Tokens.dagpi.value)
         self.description = 'Some anime, manga and waifu related commands (vote locked).'
     
     @property

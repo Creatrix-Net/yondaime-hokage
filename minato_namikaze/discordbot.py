@@ -63,9 +63,12 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             description = "Konichiwa, myself Minato Namikaze, Konohagakure Yondaime Hokage, I try my best to do every work as a Hokage!",
             chunk_guilds_at_startup=False,
             heartbeat_timeout=150.0,
+            pm_help=None,
+            help_attrs=dict(hidden=True),
             allowed_mentions=allowed_mentions,
             intents=intents,
             enable_debug_events=True,
+            help_command=PaginatedHelpCommand()
         )
     
     def get_prefix(self, bot, message):

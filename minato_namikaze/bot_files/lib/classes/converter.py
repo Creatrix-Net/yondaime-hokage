@@ -1,6 +1,6 @@
 import re
 import argparse
-import enum
+import discord
 
 from discord.ext import commands
 

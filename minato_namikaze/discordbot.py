@@ -14,7 +14,7 @@ from sentry_sdk.integrations.threading import ThreadingIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
 
-from bot_files.lib import Tokens, Embed, PostStats
+from bot_files.lib import Tokens, Embed, PostStats, PaginatedHelpCommand
 
 log = logging.getLogger(__name__)
 

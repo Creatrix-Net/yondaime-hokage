@@ -89,7 +89,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://triggered.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.command(cooldown_after_parsing=True, usage='<discord.member.to.send> <your.message>')
+    @commands.command(cooldown_after_parsing=True, usage='[discord.member.to.send] <your.message>')
     async def message(self, ctx, member: discord.Member = None, *, text):
         '''Send a fake Discord message'''
         if member is None:

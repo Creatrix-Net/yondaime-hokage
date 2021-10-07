@@ -10,13 +10,13 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 
-from ...lib import Embed, ErrorEmbed, chatbot, generatevoteembed, votedTopgg
+from ...lib import Embed, ErrorEmbed, Tokens, generatevoteembed, votedTopgg
 
 
 class FunGames(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.chatbot = ac.Cleverbot(f"{chatbot}")
+        self.bot.chatbot = ac.Cleverbot(f"{Tokens.chatbot.value}")
         self.description = 'A simple reaction game and also here you can chat with me!'
         self.session_message = {}
     

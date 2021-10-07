@@ -4,14 +4,26 @@ import discord
 
 
 async def get_dm(user: Optional[Union[int, discord.Member]], ctx=None):
-    if isinstance(user, int):
-        user = ctx.bot.get_user(user)
+    try:
+        if isinstance(user, int):
+            user = get_or_fetch_member(user, ctx.guild)
+        else:
+            user = get_or_fetch_member(user.id, ctx.guild)
+    except:
+        if isinstance(user, int):
+            user = ctx.bot.get_user(user)
     return user.dm_channel if user.dm_channel else await user.create_dm()
 
 
 def get_user(user: Union[int, discord.Member], ctx=None):
-    if isinstance(user, int):
-        user = ctx.bot.get_user(user)
+    try:
+        if isinstance(user, int):
+            user = get_or_fetch_member(user, ctx.guild)
+        else:
+            user = get_or_fetch_member(user.id, ctx.guild)
+    except:
+        if isinstance(user, int):
+            user = ctx.bot.get_user(user)
     return user
 
 

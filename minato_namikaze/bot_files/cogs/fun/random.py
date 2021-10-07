@@ -8,11 +8,13 @@ from typing import Optional, Union
 
 import discord
 from asyncdagpi import ImageFeatures
+
+import mystbin
 from discord.ext import commands, owoify
 from gtts import gTTS
 from PIL import Image
 
-from ...lib import Embed, TimeConverter, get_user, insults
+from ...lib import Embed, TimeConverter, get_user, LinksAndVars
 
 
 class Random(commands.Cog):
@@ -47,10 +49,10 @@ class Random(commands.Cog):
             else:
                 await ctx.send(
                     f'{user.mention} was **insulted** by {ctx.message.author.mention}',
-                    embed=Embed(title='⚠️', description=choice(insults))
+                    embed=Embed(title='⚠️', description=choice(LinksAndVars.insults.value))
                 )
         else:
-            await ctx.send(ctx.message.author.mention, embed=Embed(title='⚠️', description=choice(insults)))
+            await ctx.send(ctx.message.author.mention, embed=Embed(title='⚠️', description=choice(LinksAndVars.insults.value)))
 
     @commands.command(usage='{text}')
     async def owoify(self, ctx, text):
@@ -143,10 +145,34 @@ class Random(commands.Cog):
         em.set_image(url='attachment://color.png')
         await ctx.send(file=discord.File(file, 'color.png'), embed=em)
 
-    @commands.command()
-    async def hi(self, ctx):
-        '''Say Hi'''
-        await ctx.send("hi.")
+    @commands.command(aliases=["myst"], usage='<code>/<text>')
+    async def mystbin(self, ctx, *, text):
+        '''Generate an Mystbin for yourself'''
+        paste = await self.bot.mystbin_client.post(f"{text}", syntax="python")
+        e = discord.Embed(title="I have created a mystbin link for you!",
+                          description=f"[Click Here]({paste.url})")
+        await ctx.send(embed=e)
+
+    @commands.command(aliases=["getmyst"], usage='<mystbin_id>')
+    async def getmystbin(self, ctx, id):
+        '''Get your Mystbi using your id'''
+        try:
+            get_paste = await self.bot.mystbin_client.get(f"https://mystb.in/{id}")
+            lis = ["awesome", "bad", "good"]
+            content = get_paste.content
+            lencontent = len(content)
+            if lencontent > 1080:
+                e = discord.Embed(title=f"I have found this, but the content is to big!",
+                                  description=f"The content is shown here:  [Link]({get_paste.url})")
+                await ctx.send(embed=e)
+            else:
+                e2 = discord.Embed(
+                    title=f"I have found this, is it {random.choice(lis)}?", description=f"{content}")
+                await ctx.send(embed=e2)
+        except mystbin.BadPasteID:
+            await ctx.send(f"Hmmm.. id : {id} isn't found, try again?")
+    
+    
 
 
 def setup(bot):

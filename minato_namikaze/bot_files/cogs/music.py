@@ -211,7 +211,7 @@ class Music(commands.Cog):
         await ctx.send(f"Changed volume for {song.name} to {volume*100}%")
 
     @commands.command(usage='<song.index.value>')
-    async def remove(self, ctx, index):
+    async def remove_song(self, ctx, index):
         '''Song the specified song using its index value'''
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         song = await player.remove_from_queue(int(index))

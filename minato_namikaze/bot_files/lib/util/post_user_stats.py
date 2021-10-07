@@ -171,7 +171,7 @@ class PostStats:
 
         r = self.bot.get_channel(822472454030229545 if not self.bot.local else 870561578347540490)
         e1 = Embed(title='Status posted successfully',
-                   description=f'[Widgets Link]({website}widgets) [Invite Stats](https://minatonamikaze-invites.herokuapp.com/)')
+                   description=f'[Widgets Link](https://minato-namikaze.readthedocs.io/en/latest/#widgets) [Invite Stats](https://minatonamikaze-invites.herokuapp.com/)')
         e1.set_image(url=random.choice(imageslist).strip('\n'))
         e1.set_thumbnail(url=self.bot.user.avatar.url)
         

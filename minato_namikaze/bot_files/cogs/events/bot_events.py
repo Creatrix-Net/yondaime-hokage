@@ -82,7 +82,7 @@ class BotEvents(commands.Cog):
         ref_invite = self._cache[invite.guild.id][invite.code]
         if (ref_invite.created_at.timestamp()+ref_invite.max_age > datetime.utcnow().timestamp() or ref_invite.max_age == 0) and ref_invite.max_uses > 0 and ref_invite.uses == ref_invite.max_uses-1:
             try:
-                async for entry in invite.guild.audit_logs(limit=1, action=AuditLogAction.invite_delete):
+                async for entry in invite.guild.audit_logs(limit=1, action=discord.AuditLogAction.invite_delete):
                     if entry.target.code != invite.code:
                         self._cache[invite.guild.id][ref_invite.code].revoked = True
                         return

@@ -104,33 +104,37 @@ class Info(commands.Cog):
         embed.set_image(url=user.avatar.url)
         await ctx.send(embed=embed)
 
-    @commands.group()
+
+    @commands.group(aliases = ['serverinfo'])
     @commands.guild_only()
     async def server(self, ctx):
+
         """ Check info about current server """
         if ctx.invoked_subcommand is None:
             find_bots = sum(1 for member in ctx.guild.members if member.bot)
 
             embed = discord.Embed(
-                title=f"ℹ Information About **{ctx.guild.name}**", description=None)
+                title=f"Server: __{ctx.guild.name}__ Info", 
+                color = ctx.author.top_role.color,
+                description = f"🆔 Server ID: `{ctx.guild.id}`")
 
             if ctx.guild.icon:
                 embed.set_thumbnail(url=ctx.guild.icon.url)
             if ctx.guild.banner:
                 embed.set_image(url=ctx.guild.banner.with_format("png").url)
 
-            embed.add_field(name="**Server Name**",
-                            value=ctx.guild.name, inline=True)
-            embed.add_field(name="**Server ID**",
-                            value=ctx.guild.id, inline=True)
-            embed.add_field(
-                name="**Members**", value=ctx.guild.member_count, inline=True)
-            embed.add_field(name="**Bots**", value=find_bots, inline=True)
-            embed.add_field(name="**Owner**",
-                            value=ctx.guild.owner, inline=True)
-            embed.add_field(
-                name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True)
+            embed.add_field(name = "<:ServerOwner:864765886916067359> Owner", value = ctx.guild.owner)
+            embed.add_field(name = "🌍 Region", value = str(ctx.guild.region).capitalize())
+            embed.add_field(name = "👥 Members", value = ctx.guild.member_count)
+            embed.add_field(name = "🤖 Bots", value = find_bots)
+            embed.add_field(name = f"🎭 Roles", value = f"{len(ctx.guild.roles)}")
+            embed.add_field(name = f"⭐ Emotes", value = f"{len(ctx.guild.emojis)}/{ctx.guild.emoji_limit}")
+            
+            date = ctx.guild.created_at.timestamp()
+            embed.add_field(name=f"📆 Created On", value=f"<t:{round(date)}:D>")
+            
             await ctx.send(embed=embed)
+
 
     @server.command(name="server_icon", aliases=["icon"])
     @commands.guild_only()
@@ -150,26 +154,53 @@ class Info(commands.Cog):
         e.set_image(url=ctx.guild.banner.with_format("png").url)
         await ctx.send(embed=e)
 
-    @commands.command(aliases=['whois','who'])
+    @commands.command(aliases=['whois','who', 'userinfo'])
     @commands.guild_only()
     async def user(self, ctx, *, user: discord.Member = None):
         """ Get user information """
         user = user or ctx.author
 
+        """ to fetch user (for banner)"""
+        uuser = await self.bot.fetch_user(user.id)
+
+
+        """ to get status of user with emoji """
+        status = ""
+        s = user.status
+        if s == discord.Status.online:
+            status += "<:online:885521973965357066>"
+        if s == discord.Status.offline:
+            status += "<:offline:885522151866777641>"
+        if s == discord.Status.idle:
+            status += "<:idle:885522083545772032>"
+        if s == discord.Status.dnd:
+            status += "<:dnd:885522031536394320>"
+
+
         show_roles = ', '.join(
             [f"<@&{x.id}>" for x in sorted(user.roles, key=lambda x: x.position,
                                            reverse=True) if x.id != ctx.guild.default_role.id]
         ) if len(user.roles) > 1 else 'None'
-        content2 = f"ℹ About **{user.id}**"
+
+
         embed = discord.Embed(
-            title=content2, colour=user.top_role.colour.value)
+            title = f"{status} {user.display_name}'s Info.",
+            colour=user.top_role.colour.value,
+            description = f"🆔 User ID: `{user.id}`")
         embed.set_thumbnail(url=user.avatar.url)
 
-        embed.add_field(name="Full name", value=user, inline=True)
-        embed.add_field(name="Nickname", value=user.nick if hasattr(
-            user, "nick") else "None", inline=True)
-        embed.add_field(name="Roles", value=show_roles, inline=False)
-        embed.add_field(name="Joined", value=f"{user.joined_at}")
+        embed.add_field(name="🔹 User", value=user, inline=True)
+        embed.add_field(name="✏️ Name", value = user.display_name)
+        embed.add_field(name="🔸 Roles", value=show_roles, inline=False)
+
+        joined = user.joined_at.timestamp()
+        embed.add_field(name="📅 Joined On", value=f"<t:{round(joined)}:D>")
+
+        created = user.created_at.timestamp()
+        embed.add_field(name=f"📅 Created On" , value=f"<t:{round(created)}:D>")
+        
+        if uuser.banner:
+            embed.set_image(url = uuser.banner)
 
         await ctx.send(embed=embed)
 

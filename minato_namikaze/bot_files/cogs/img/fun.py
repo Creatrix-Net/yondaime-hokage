@@ -6,6 +6,7 @@ from os.path import join
 import discord
 from asyncdagpi import ImageFeatures
 from discord.ext import commands
+from typing import Optional
 
 
 class Fun(commands.Cog):
@@ -28,10 +29,10 @@ class Fun(commands.Cog):
             await ctx.send(ball.response(question))
 
     # spank
-    @commands.command(usage='<member.mention>')
-    async def spank(self, ctx, member: discord.Member = ''):
+    @commands.command(usage='[member.mention]')
+    async def spank(self, ctx, member: Optional[discord.Member]):
         '''Spank someone'''
-        if member == '':
+        if member == None:
             desc = f'** <@{ctx.author.id}> spanks themselves !!! LOL!**'
         elif member in ['@everyone', '@here']:
             await ctx.send(f'** <@{ctx.author.id}> why would you spank @everyone? **')
@@ -54,9 +55,9 @@ class Fun(commands.Cog):
     # slap
 
     @commands.command(usage='<member.mention>')
-    async def slap(self, ctx, member: discord.Member = ''):
+    async def slap(self, ctx, member: Optional[discord.Member]):
         '''Slap someone'''
-        if member == '':
+        if member == None:
             desc = f'** <@{ctx.author.id}> slaps themselves !!! LOL!**'
         elif member in ['@everyone', '@here']:
             await ctx.send(f'** <@{ctx.author.id}> why would you slap @everyone? **')
@@ -80,7 +81,7 @@ class Fun(commands.Cog):
         else:
             user = member
             url = str(user.avatar.with_format("png").with_size(1024))
-            img = await self.bot.dagpi.image_process(ImageFeatures.slap(), url2=str(ctx.author.with_format("png").with_size(1024).url), url=url)
+            img = await self.bot.dagpi.image_process(ImageFeatures.slap(), url2=str(ctx.author.avatar.with_format("png").with_size(1024).url), url=url)
             e2file = discord.File(fp=img.image, filename=f"slap.{img.format}")
             e = discord.Embed(description=desc)
             e.set_image(url=f"attachment://slap.{img.format}")
@@ -88,10 +89,10 @@ class Fun(commands.Cog):
 
     # hug
 
-    @commands.command(usage='<member.mention>')
-    async def hug(self, ctx, member: discord.Member = ''):
+    @commands.command(usage='[member.mention]')
+    async def hug(self, ctx, member: Optional[discord.Member]):
         '''Hug someone'''
-        if member == '':
+        if member == None:
             desc = f'** <@{ctx.author.id}> hugs themselves :heart: :heart: :heart: :heart: **'
         elif member in ['@everyone', '@here']:
             await ctx.send(f'** <@{ctx.author.id}> why would you hug @everyone? **')
@@ -113,10 +114,10 @@ class Fun(commands.Cog):
 
     # poke
 
-    @commands.command(usage='<member.mention>')
-    async def poke(self, ctx, member: discord.Member = ''):
+    @commands.command(usage='[member.mention]')
+    async def poke(self, ctx, member: Optional[discord.Member]):
         '''Poke someone'''
-        if member == '':
+        if member == None:
             desc = f'** <@{ctx.author.id}> pokes themselves! **'
         elif member in ['@everyone', '@here']:
             await ctx.send(f'** <@{ctx.author.id}> why would you poke @everyone? **')
@@ -138,10 +139,10 @@ class Fun(commands.Cog):
 
     # poke
 
-    @commands.command(usage='<member.mention>')
-    async def high5(self, ctx, member: discord.Member = ''):
+    @commands.command(usage='[member.mention]')
+    async def high5(self, ctx, member: Optional[discord.Member]):
         '''Do a highfive'''
-        if member == '':
+        if member == None:
             desc = f'**<@{ctx.author.id}> high-fives **'
         elif member in ['@everyone', '@here']:
             desc = f'**@everyone <@{ctx.author.id}> high-fives **'
@@ -162,10 +163,10 @@ class Fun(commands.Cog):
         await ctx.send(file=file, embed=embed)
 
     # party
-    @commands.command(usage='<member.mention>')
-    async def party(self, ctx, member: discord.Member = ''):
+    @commands.command(usage='[member.mention]')
+    async def party(self, ctx, member: Optional[discord.Member]):
         '''Party with someone'''
-        if member == '':
+        if member == None:
             desc = f'**<@{ctx.author.id}> is partying !!**'
         elif member in ['@everyone', '@here']:
             desc = f'**@everyone <@{ctx.author.id}> is partying!! come join them !! **'
@@ -185,13 +186,13 @@ class Fun(commands.Cog):
         embed.set_image(url=f"attachment://{image_name}")
         await ctx.send(file=file, embed=embed)
 
-    @commands.command(usage='<member.mention>')
-    async def pat(self, ctx, member: discord.Member = None):
+    @commands.command(usage='[member.mention]')
+    async def pat(self, ctx, member: Optional[discord.Member]):
         '''Pat someone, UwU!'''
         if member is None:
             member = ctx.author
 
-        url = str(member.with_format("png").with_size(1024).url)
+        url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.petpet(), url)
         e2file = discord.File(fp=img.image, filename=f"petpet.{img.format}")
         e = discord.Embed(title="UwU Pat!")

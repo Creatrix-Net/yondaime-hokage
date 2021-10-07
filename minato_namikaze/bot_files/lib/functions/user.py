@@ -6,9 +6,9 @@ import discord
 async def get_dm(user: Optional[Union[int, discord.Member]], ctx=None):
     try:
         if isinstance(user, int):
-            user = get_or_fetch_member(user, ctx.guild)
+            user = get_or_fetch_member(user, ctx.guild, ctx)
         else:
-            user = get_or_fetch_member(user.id, ctx.guild)
+            user = get_or_fetch_member(user.id, ctx.guild, ctx)
     except:
         if isinstance(user, int):
             user = ctx.bot.get_user(user)
@@ -18,9 +18,9 @@ async def get_dm(user: Optional[Union[int, discord.Member]], ctx=None):
 def get_user(user: Union[int, discord.Member], ctx=None):
     try:
         if isinstance(user, int):
-            user = get_or_fetch_member(user, ctx.guild)
+            user = get_or_fetch_member(user, ctx.guild, ctx)
         else:
-            user = get_or_fetch_member(user.id, ctx.guild)
+            user = get_or_fetch_member(user.id, ctx.guild, ctx)
     except:
         if isinstance(user, int):
             user = ctx.bot.get_user(user)
@@ -42,7 +42,7 @@ async def get_bot_inviter(guild: discord.Guild, bot: discord.Client):
 
 
 
-async def get_or_fetch_member(guild, member_id):
+async def get_or_fetch_member(guild, member_id, ctx):
     """Looks up a member in cache or fetches if not found.
     Parameters
     -----------
@@ -59,7 +59,7 @@ async def get_or_fetch_member(guild, member_id):
     if member is not None:
         return member
     
-    shard = self.get_shard(guild.shard_id)
+    shard = ctx.bot.get_shard(guild.shard_id)
     if shard.is_ws_ratelimited():
         try:
             member = await guild.fetch_member(member_id)
@@ -73,7 +73,7 @@ async def get_or_fetch_member(guild, member_id):
         return None
     return members[0]
 
-async def resolve_member_ids(guild, member_ids):
+async def resolve_member_ids(guild, member_ids, ctx = None):
     """Bulk resolves member IDs to member instances, if possible.
     Members that can't be resolved are discarded from the list.
     This is done lazily using an asynchronous iterator.
@@ -99,7 +99,7 @@ async def resolve_member_ids(guild, member_ids):
 
     total_need_resolution = len(needs_resolution)
     if total_need_resolution == 1:
-        shard = self.get_shard(guild.shard_id)
+        shard = ctx.bot.get_shard(guild.shard_id)
         if shard.is_ws_ratelimited():
             try:
                 member = await guild.fetch_member(needs_resolution[0])

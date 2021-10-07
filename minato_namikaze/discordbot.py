@@ -25,7 +25,15 @@ def token_get(tokenname):
         dotenv.load_dotenv(dotenv_file)
     return os.environ.get(tokenname, 'False').strip('\n')
 
+def get_prefix(bot, message):
+        """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
+        prefixes = [')', 'm!', 'minato', 'minato ']
+
+        if not message.guild:
+            return 'm!'
+
+        return commands.when_mentioned_or(*prefixes)(bot, message)
 
 class MinatoNamikazeBot(commands.AutoShardedBot):
     def __init__(self):
@@ -59,7 +67,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.uptime = format_dt(self.start_time,'R')
         
         super().__init__(
-            command_prefix=self.get_prefix,
+            command_prefix=get_prefix,
             description = "Konichiwa, myself Minato Namikaze, Konohagakure Yondaime Hokage, I try my best to do every work as a Hokage!",
             chunk_guilds_at_startup=False,
             heartbeat_timeout=150.0,
@@ -70,16 +78,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             enable_debug_events=True,
             help_command=PaginatedHelpCommand()
         )
-    
-    def get_prefix(self, bot, message):
-        """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
-
-        prefixes = [')', 'm!', 'minato', 'minato ']
-
-        if not message.guild:
-            return 'm!'
-
-        return commands.when_mentioned_or(*prefixes)(bot, message)
     
     def run(self):
         try:

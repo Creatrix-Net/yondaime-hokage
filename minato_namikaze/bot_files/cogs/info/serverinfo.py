@@ -169,8 +169,8 @@ class Info(commands.Cog):
                 name="<:ServerOwner:864765886916067359> Owner", value=ctx.guild.owner
             )
             embed.add_field(name="🌍 Region", value=str(ctx.guild.region).capitalize())
-            embed.add_field(name="Verification Level", value=verif_lvl)
-            embed.add_field(name="Content Filter", value=content_filter)
+            embed.add_field(name="✔️ Verification Level", value=verif_lvl)
+            embed.add_field(name="⚠️ Content Filter", value=content_filter)
             embed.add_field(name="👥 Members", value=ctx.guild.member_count)
             embed.add_field(name="🤖 Bots", value=find_bots)
             embed.add_field(name=f"🎭 Roles", value=f"{len(ctx.guild.roles)}")

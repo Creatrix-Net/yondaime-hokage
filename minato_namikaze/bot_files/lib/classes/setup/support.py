@@ -1,7 +1,7 @@
 import discord
 from discord.ext import menus
 
-from ...util import perms_dict, SetupVars
+from ...util import SetupVars, perms_dict
 from ..embed import Embed
 
 

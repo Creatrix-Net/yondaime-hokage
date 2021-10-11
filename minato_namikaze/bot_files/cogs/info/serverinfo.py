@@ -1,12 +1,14 @@
 # Discord Imports
 import datetime
 import time
+from datetime import timezone
+import re
 
 import discord
 from discord import Spotify
 from discord.ext import commands
 
-from ...lib import Embed
+from ...lib import Embed, filter_invites
 
 
 class Info(commands.Cog):
@@ -208,6 +210,26 @@ class Info(commands.Cog):
     async def user(self, ctx, *, user: discord.Member = None):
         """ Get user information """
         user = user or ctx.author
+        names, nicks = await self.get_names_and_nicks(user)
+
+        """Timestamp stuff"""
+        dt = user.joined_at
+        dt1 = user.created_at
+        unix_ts_utc = dt.replace(tzinfo=timezone.utc).timestamp()
+        unix_ts_utc1 = dt1.replace(tzinfo=timezone.utc).timestamp()
+        user_c_converter = int(unix_ts_utc1)
+        user_j_converter = int(unix_ts_utc)
+
+        since_created = "<t:{}:R>".format(user_c_converter)
+        if user.joined_at is not None:
+            since_joined = "<t:{}:R>".format(user_j_converter)
+            user_joined = "<t:{}:D>".format(user_j_converter)
+        else:
+            since_joined = "?"
+            user_joined = ("Unknown")
+        user_created = "<t:{}:D>".format(user_c_converter)
+        created_on = ("{} - ({})\n").format(since_created, user_created)
+        joined_on = ("{} - ({})\n").format(since_joined, user_joined)
 
         """ to fetch user (for banner)"""
         uuser = await self.bot.fetch_user(user.id)
@@ -244,14 +266,23 @@ class Info(commands.Cog):
         embed.set_thumbnail(url=user.avatar.url)
 
         embed.add_field(name="🔹 User", value=user, inline=True)
+
+        if names:
+            name_name = "**Previous Names:**" if len(names) > 1 else "**Previous Name:**"
+            name_val = filter_invites(", ".join(names))
+
+        else:
+            name_val = ""
+
         embed.add_field(name="✏️ Name", value=user.display_name)
+
+        embed.add_field(name=name_name, value=name_val)
+
         embed.add_field(name="🔸 Roles", value=show_roles, inline=False)
 
-        joined = user.joined_at.timestamp()
-        embed.add_field(name="📅 Joined On", value=f"<t:{round(joined)}:D>")
+        embed.add_field(name="📅 Joined On", value=joined_on)
 
-        created = user.created_at.timestamp()
-        embed.add_field(name=f"📅 Created On", value=f"<t:{round(created)}:D>")
+        embed.add_field(name=f"📅 Created On", value=created_on)
 
         if uuser.banner:
             embed.set_image(url=uuser.banner)

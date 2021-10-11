@@ -17,27 +17,33 @@ class FunGames(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.chatbot = ac.Cleverbot(f"{Tokens.chatbot.value}")
-        self.description = 'A simple reaction game and also here you can chat with me!'
+        self.description = "A simple reaction game and also here you can chat with me!"
         self.session_message = {}
-    
+
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name='\N{SPEECH BALLOON}')
+        return discord.PartialEmoji(name="\N{SPEECH BALLOON}")
 
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
-    @commands.command(aliases=['cb'])
+    @commands.command(aliases=["cb"])
     async def chatbot(self, ctx):
-        '''Talk with me! (Vote Locked)'''
+        """Talk with me! (Vote Locked)"""
         async with ctx.typing():
             if not votedTopgg(ctx):
-                await ctx.send(embed=generatevoteembed(ctx,'top.gg'))
+                await ctx.send(embed=generatevoteembed(ctx, "top.gg"))
                 return
         lis = "cancel"
         transmit = True
-        await ctx.send(f'Chatbot Started!\nType the following items `{lis}` to end.')
+        await ctx.send(f"Chatbot Started!\nType the following items `{lis}` to end.")
         while transmit is True:
             try:
-                m = await self.bot.wait_for('message', timeout=30, check=lambda m: (ctx.author == m.author and ctx.channel == m.channel))
+                m = await self.bot.wait_for(
+                    "message",
+                    timeout=30,
+                    check=lambda m: (
+                        ctx.author == m.author and ctx.channel == m.channel
+                    ),
+                )
             except asyncio.TimeoutError:
                 await ctx.send("I'm bored now, you should of been quicker...")
                 transmit = False
@@ -45,10 +51,16 @@ class FunGames(commands.Cog):
                 if m.content.lower() == lis:
                     transmit = False
                     left = await self.bot.chatbot.ask("bye")
-                    await ctx.send(f"{left.text}... Waiting... OH you said cancel, bye!")
+                    await ctx.send(
+                        f"{left.text}... Waiting... OH you said cancel, bye!"
+                    )
                 else:
                     async with ctx.channel.typing():
-                        response = await self.bot.chatbot.ask(m.content if len(m.content) >= 3 else f'{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}')
+                        response = await self.bot.chatbot.ask(
+                            m.content
+                            if len(m.content) >= 3
+                            else f"{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}"
+                        )
                         await ctx.send(response.text)
 
     @commands.max_concurrency(1, per=commands.BucketType.channel)
@@ -61,7 +73,8 @@ class FunGames(commands.Cog):
         lis = ["this mighty", "this weak", "this amazing"]
         reaction = random.choices(cookies, weights=[0.9, 0.1], k=1)[0]
         embed = discord.Embed(
-            description=f"So, {random.choice(lis)} fighter has challenged people to a game of....Cookie? Okay then get ready!")
+            description=f"So, {random.choice(lis)} fighter has challenged people to a game of....Cookie? Okay then get ready!"
+        )
         message = await ctx.send(embed=embed)
         await asyncio.sleep(4)
         for i in reversed(range(1, 4)):
@@ -76,21 +89,33 @@ class FunGames(commands.Cog):
                 "reaction_add",
                 check=lambda _reaction, user: _reaction.message.guild == ctx.guild
                 and _reaction.message.channel == ctx.message.channel
-                and _reaction.message == message and str(_reaction.emoji) == reaction and user != ctx.bot.user
+                and _reaction.message == message
+                and str(_reaction.emoji) == reaction
+                and user != ctx.bot.user
                 and not user.bot,
-                timeout=60,)
+                timeout=60,
+            )
         except asyncio.TimeoutError:
-            return await message.edit(embed=discord.Embed(description="No one ate the cookie..."))
+            return await message.edit(
+                embed=discord.Embed(description="No one ate the cookie...")
+            )
         end = time.perf_counter()
-        await message.edit(embed=discord.Embed(description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"))
+        await message.edit(
+            embed=discord.Embed(
+                description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"
+            )
+        )
         lis3 = ["1", "2"]
         choice = random.choice(lis3)
         if choice == 2:
-            await user.send(f"Firstly, Random chose 2 so you get this DM, Secondly, Well Done! You completed it in ```{end - start:.3f}``` seconds.")
+            await user.send(
+                f"Firstly, Random chose 2 so you get this DM, Secondly, Well Done! You completed it in ```{end - start:.3f}``` seconds."
+            )
         else:
             pass
 
-'''
+
+"""
     @commands.command()
     async def cointoss(self, ctx):
         try:
@@ -190,7 +215,7 @@ class FunGames(commands.Cog):
                 await self.cointoss(ctx)
         except:
             await ctx.send(embed=ErrorEmbed(description="Please run the command again!"))
-'''
+"""
 
 
 def setup(bot):

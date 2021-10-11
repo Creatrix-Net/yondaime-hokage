@@ -1,8 +1,31 @@
 import random
 
 import discord
+import re
 
 from .vars import ChannelAndMessageId
+
+INVITE_URL_RE = re.compile(r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I)
+
+
+def filter_invites(to_filter: str) -> str:
+    """Get a string with discord invites sanitized.
+
+    Will match any discord.gg, discordapp.com/invite, discord.com/invite, discord.me, or discord.io/discord.li
+    invite URL.
+
+    Parameters
+    ----------
+    to_filter : str
+        The string to filter.
+
+    Returns
+    -------
+    str
+        The sanitized string.
+
+    """
+    return INVITE_URL_RE.sub("[SANITIZED INVITE]", to_filter)
 
 
 def convert(time):

@@ -1,4 +1,5 @@
-# Discord Imports
+from __future__ import annotations
+
 import datetime
 import time
 
@@ -66,7 +67,6 @@ class Info(commands.Cog):
             await c.send(embed=e)
             await ctx.send(f'Sent the info to developer that "**I am in __{ctx.guild.name}__ guild**" , {ctx.author.mention} 😉')
 
-    '''
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):
         if user is None:
@@ -81,7 +81,6 @@ class Info(commands.Cog):
             else:
                 e = discord.Embed(title="❌ Nope, the user (you or another) aren't listening to Spotify", description=f"User {user.name} isn't listening to Spotify")
                 return await ctx.send(embed=e)
-    '''
 
     @commands.command()
     @commands.guild_only()
@@ -116,22 +115,22 @@ class Info(commands.Cog):
             embed = discord.Embed(
                 title=f"Server: __{ctx.guild.name}__ Info", 
                 color = ctx.author.top_role.color,
-                description = f"🆔 Server ID: `{ctx.guild.id}`")
+                description = f":id: Server ID: `{ctx.guild.id}`")
 
             if ctx.guild.icon:
                 embed.set_thumbnail(url=ctx.guild.icon.url)
             if ctx.guild.banner:
-                embed.set_image(url=ctx.guild.banner.with_format("png").url)
+                embed.set_image(url=ctx.guild.banner.with_size(1024).with_format("png").url)
 
-            embed.add_field(name = "<:ServerOwner:864765886916067359> Owner", value = ctx.guild.owner)
-            embed.add_field(name = "🌍 Region", value = str(ctx.guild.region).capitalize())
-            embed.add_field(name = "👥 Members", value = ctx.guild.member_count)
-            embed.add_field(name = "🤖 Bots", value = find_bots)
-            embed.add_field(name = f"🎭 Roles", value = f"{len(ctx.guild.roles)}")
-            embed.add_field(name = f"⭐ Emotes", value = f"{len(ctx.guild.emojis)}/{ctx.guild.emoji_limit}")
+            embed.add_field(name = ":crown: Owner", value = ctx.guild.owner)
+            embed.add_field(name = ":earth_africa: Region", value = str(ctx.guild.region).capitalize())
+            embed.add_field(name = ":busts_in_silhouette: Members", value = ctx.guild.member_count)
+            embed.add_field(name = ":robot: Bots", value = find_bots)
+            embed.add_field(name = f":performing_arts: Roles", value = f"{len(ctx.guild.roles)}")
+            embed.add_field(name = f":star: Emotes", value = f"{len(ctx.guild.emojis)}/{ctx.guild.emoji_limit}")
             
             date = ctx.guild.created_at.timestamp()
-            embed.add_field(name=f"📆 Created On", value=f"<t:{round(date)}:D>")
+            embed.add_field(name=f":calendar: Created On", value=f"<t:{round(date)}:D>")
             
             await ctx.send(embed=embed)
 

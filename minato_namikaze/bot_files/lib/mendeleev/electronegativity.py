@@ -10,7 +10,6 @@ from typing import List
 
 from .utils import n_effective
 
-
 # Rydberg constant
 RY = 13.605693009
 

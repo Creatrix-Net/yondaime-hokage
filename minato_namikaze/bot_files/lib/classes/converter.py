@@ -1,7 +1,7 @@
-import re
 import argparse
-import discord
+import re
 
+import discord
 from discord.ext import commands
 
 time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")

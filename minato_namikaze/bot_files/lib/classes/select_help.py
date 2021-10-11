@@ -2,12 +2,15 @@
 This code has been fully copied from here https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/paginator.py
 '''
 from __future__ import annotations
-from discord.ext import commands, menus
-import discord
+
 import inspect
-from .time_class import *
-from .paginator import *
+
+import discord
+from discord.ext import commands, menus
+
 from ..util import LinksAndVars
+from .paginator import *
+from .time_class import *
 
 
 class GroupHelpPageSource(menus.ListPageSource):

@@ -1,9 +1,9 @@
+from collections import Counter
 from os.path import join
 from typing import Optional, Union
 
 import discord
 from discord.ext import commands
-from collections import Counter
 
 from ...lib import *
 
@@ -11,11 +11,13 @@ from ...lib import *
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.description = 'Some simple moderation commands'
-    
+        self.description = "Some simple moderation commands"
+
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name='discord_certified_moderator', id=876846223926128701)
+        return discord.PartialEmoji(
+            name="discord_certified_moderator", id=876846223926128701
+        )
 
     # setdelay
     @commands.command()
@@ -25,7 +27,9 @@ class Moderation(commands.Cog):
         """Sets Slowmode Of A Channel"""
         currentslow = ctx.channel.slowmode_delay
         if currentslow == seconds:
-            return await ctx.send(f"Sorry, But this channel already has {seconds} set as the delay! (I don't want to waste my api calls lmao)")
+            return await ctx.send(
+                f"Sorry, But this channel already has {seconds} set as the delay! (I don't want to waste my api calls lmao)"
+            )
         message = f"Set the slowmode delay in this channel to {seconds} seconds!"
         if seconds == 0:
             message = f"Reset Slowmode of channel {ctx.channel.name}"
@@ -42,11 +46,12 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
-        '''A command which kicks a given user'''
+        """A command which kicks a given user"""
         await ctx.guild.kick(user=member, reason=reason)
 
         embed = Embed(
-            title=f"{ctx.author.name} kicked: {member.name}", description=reason)
+            title=f"{ctx.author.name} kicked: {member.name}", description=reason
+        )
         await ctx.send(embed=embed)
 
     # ban
@@ -58,15 +63,26 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def ban(self, ctx, member: Union[MemberID, discord.Member], *, reason: ActionReason =None):
-        '''A command which bans a given user'''
+    async def ban(
+        self,
+        ctx,
+        member: Union[MemberID, discord.Member],
+        *,
+        reason: ActionReason = None,
+    ):
+        """A command which bans a given user"""
         if ctx.message.author == member or ctx.message.author.id == member:
-            await ctx.send(embed=ErrorEmbed(description='You **can\'t ban yourself**!'))
+            await ctx.send(embed=ErrorEmbed(description="You **can't ban yourself**!"))
             return
         try:
             await ctx.guild.ban(user=member, reason=reason)
         except:
-            await ctx.send(embed=ErrorEmbed(description='Can\'t ban the memeber. Please make sure **my role is at the top**!'), delete_after=4)
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description="Can't ban the memeber. Please make sure **my role is at the top**!"
+                ),
+                delete_after=4,
+            )
             return
 
         embed = ErrorEmbed(
@@ -87,41 +103,43 @@ class Moderation(commands.Cog):
         banned_users = list(i for i in await ctx.guild.bans())
         if not member:
             if len(banned_users) == 0:
-                await ctx.send(embed=Embed(description='There is **no-one who is banned**! :zero: people are **banned**'))
+                await ctx.send(
+                    embed=Embed(
+                        description="There is **no-one who is banned**! :zero: people are **banned**"
+                    )
+                )
                 return
             l_no = 0
             embed = []
             if len(banned_users) > 10:
-                for i in range(len(banned_users)//10):
-                    description = ''
+                for i in range(len(banned_users) // 10):
+                    description = ""
                     for l in range(10):
                         try:
-                            description += f'\n{l_no+1}. - **{banned_users[l_no].user}** : ID [ **{banned_users[l_no].user.id}** ] '
+                            description += f"\n{l_no+1}. - **{banned_users[l_no].user}** : ID [ **{banned_users[l_no].user.id}** ] "
                             l_no += 1
                         except:
                             pass
 
                     e = ErrorEmbed(
-                        title='Those who were banned are:',
-                        description=description
+                        title="Those who were banned are:", description=description
                     )
                     embed.append(e)
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx)
-                paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⏪', "back")
-                paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('⏩', "next")
-                paginator.add_reaction('⏭️', "last")
+                paginator.add_reaction("⏮️", "first")
+                paginator.add_reaction("⏪", "back")
+                paginator.add_reaction("🔐", "lock")
+                paginator.add_reaction("⏩", "next")
+                paginator.add_reaction("⏭️", "last")
 
                 await paginator.run(embed)
             else:
-                description = ''
+                description = ""
                 for k, i in enumerate(banned_users):
-                    description += f'\n{k+1}. - **{i.user}** : ID [ **{banned_users[k].user.id}** ] '
+                    description += f"\n{k+1}. - **{i.user}** : ID [ **{banned_users[k].user.id}** ] "
                 e = ErrorEmbed(
-                    title='Those who were banned are:',
-                    description=description
+                    title="Those who were banned are:", description=description
                 )
                 embed.append(e)
                 await ctx.send(embed=e)
@@ -130,21 +148,27 @@ class Moderation(commands.Cog):
             if member.isdigit():
                 member = int(member)
             if isinstance(member, str):
-                member_name, member_discriminator = member.split('#')
+                member_name, member_discriminator = member.split("#")
 
             n = 0
             for i, ban_entry in enumerate(banned_users):
                 user = ban_entry.user
-                e = ErrorEmbed(topic=f'About the ban {member}')
+                e = ErrorEmbed(topic=f"About the ban {member}")
                 if isinstance(member, str):
-                    if (user.name, user.discriminator) == (member_name, member_discriminator):
+                    if (user.name, user.discriminator) == (
+                        member_name,
+                        member_discriminator,
+                    ):
                         if ban_entry.reason:
-                            e.add_field(name='**Reason**',
-                                        value=ban_entry.reason, inline=True)
-                        e.add_field(name='**Position**',
-                                    value=i+1, inline=True)
-                        e.add_field(name='**Banned User Name**',
-                                    value=ban_entry.user, inline=True)
+                            e.add_field(
+                                name="**Reason**", value=ban_entry.reason, inline=True
+                            )
+                        e.add_field(name="**Position**", value=i + 1, inline=True)
+                        e.add_field(
+                            name="**Banned User Name**",
+                            value=ban_entry.user,
+                            inline=True,
+                        )
                         e.set_thumbnail(url=ban_entry.user.avatar.url)
                         await ctx.channel.send(embed=e)
                         n += 1
@@ -153,12 +177,15 @@ class Moderation(commands.Cog):
                 elif isinstance(member, int):
                     if user.id == int(member):
                         if ban_entry.reason:
-                            e.add_field(name='**Reason**',
-                                        value=ban_entry.reason, inline=True)
-                        e.add_field(name='**Position**',
-                                    value=i+1, inline=True)
-                        e.add_field(name='**Banned User Name**',
-                                    value=ban_entry.user, inline=True)
+                            e.add_field(
+                                name="**Reason**", value=ban_entry.reason, inline=True
+                            )
+                        e.add_field(name="**Position**", value=i + 1, inline=True)
+                        e.add_field(
+                            name="**Banned User Name**",
+                            value=ban_entry.user,
+                            inline=True,
+                        )
                         e.set_thumbnail(url=ban_entry.user.avatar.url)
                         await ctx.channel.send(embed=e)
                         n += 1
@@ -167,21 +194,28 @@ class Moderation(commands.Cog):
                 else:
                     if user == member:
                         if ban_entry.reason:
-                            e.add_field(name='**Reason**',
-                                        value=ban_entry.reason, inline=True)
-                        e.add_field(name='**Position**',
-                                    value=i+1, inline=True)
-                        e.add_field(name='**Banned User Name**',
-                                    value=ban_entry.user, inline=True)
+                            e.add_field(
+                                name="**Reason**", value=ban_entry.reason, inline=True
+                            )
+                        e.add_field(name="**Position**", value=i + 1, inline=True)
+                        e.add_field(
+                            name="**Banned User Name**",
+                            value=ban_entry.user,
+                            inline=True,
+                        )
                         e.set_thumbnail(url=ban_entry.user.avatar.url)
                         await ctx.channel.send(embed=e)
                         n += 1
                         return
             if n == 0:
-                await ctx.send(embed=ErrorEmbed(description=f'The **{member}** isn\'t there in the **ban list**'))
+                await ctx.send(
+                    embed=ErrorEmbed(
+                        description=f"The **{member}** isn't there in the **ban list**"
+                    )
+                )
                 return
-    
-    #Soft Ban
+
+    # Soft Ban
     @commands.command()
     @commands.guild_only()
     @has_permissions(kick_members=True)
@@ -198,11 +232,11 @@ class Moderation(commands.Cog):
         """
 
         if reason is None:
-            reason = f'Action done by {ctx.author} (ID: {ctx.author.id})'
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
         await ctx.guild.ban(member, reason=reason)
         await ctx.guild.unban(member, reason=reason)
-        await ctx.send('\N{OK HAND SIGN}')
+        await ctx.send("\N{OK HAND SIGN}")
 
     # Unban
     @commands.command()
@@ -220,95 +254,111 @@ class Moderation(commands.Cog):
         """
 
         if reason is None:
-            reason = f'Action done by {ctx.author} (ID: {ctx.author.id})'
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
         await ctx.guild.unban(member.user, reason=reason)
         if member.reason:
-            await ctx.send(f'Unbanned {member.user} (ID: {member.user.id}), previously banned for {member.reason}.')
+            await ctx.send(
+                f"Unbanned {member.user} (ID: {member.user.id}), previously banned for {member.reason}."
+            )
         else:
-            await ctx.send(f'Unbanned {member.user} (ID: {member.user.id}).')
-        
-    #Add Roles
-    @commands.command(pass_context=True, usage="<member.mention> <role>", alias=['add_roles'])
+            await ctx.send(f"Unbanned {member.user} (ID: {member.user.id}).")
+
+    # Add Roles
+    @commands.command(
+        pass_context=True, usage="<member.mention> <role>", alias=["add_roles"]
+    )
     @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
-    async def ar(self, ctx, member: Optional[Union[int, discord.Member]], role: Union[int, discord.Role]):
-        '''Add roles'''
-        member = get_user(member if member !=
-                          None else ctx.message.author, ctx)
+    async def ar(
+        self,
+        ctx,
+        member: Optional[Union[int, discord.Member]],
+        role: Union[int, discord.Role],
+    ):
+        """Add roles"""
+        member = get_user(member if member != None else ctx.message.author, ctx)
         role = get_roles(role, ctx)
         await member.add_roles(role)
         e = Embed(
-            title="Added Roles", description=f"I have added the roles '{role.mention}' for {member.mention}!"
+            title="Added Roles",
+            description=f"I have added the roles '{role.mention}' for {member.mention}!",
         )
         await ctx.send(embed=e)
-    
-    #Warn
-    @commands.command(pass_context=True, usage='<member.mention> <optional: reason>')
+
+    # Warn
+    @commands.command(pass_context=True, usage="<member.mention> <optional: reason>")
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
     @commands.check(check_if_warning_system_setup)
-    async def warn(self, ctx, member: Union[int, discord.Member], *, reason: str = None):
-        '''Warn a user'''
+    async def warn(
+        self, ctx, member: Union[int, discord.Member], *, reason: str = None
+    ):
+        """Warn a user"""
         member = get_user(member, ctx)
-        e = ErrorEmbed(title='You have been warned!')
-        e.add_field(name='**Responsible Moderator**:',
-                    value=ctx.message.author.mention, inline=True)
+        e = ErrorEmbed(title="You have been warned!")
+        e.add_field(
+            name="**Responsible Moderator**:",
+            value=ctx.message.author.mention,
+            inline=True,
+        )
         if reason:
-            e.add_field(name='**Reason**:', value=reason, inline=True)
+            e.add_field(name="**Reason**:", value=reason, inline=True)
 
         warning_channel = _warning_channel(ctx)
         await member.send(embed=e)
         await warning_channel.send(embed=e, content=member.mention)
-        await ctx.send(f'{member.mention} has been **warned** by you ||{ctx.author.mention}||', delete_after=10)
+        await ctx.send(
+            f"{member.mention} has been **warned** by you ||{ctx.author.mention}||",
+            delete_after=10,
+        )
 
     @warn.error
     async def warn_handler(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             e = ErrorEmbed(
-                title=f'No warning system setup for the {ctx.guild.name}',
-                description='You can always setup the **warning system** using `)setup` command'
+                title=f"No warning system setup for the {ctx.guild.name}",
+                description="You can always setup the **warning system** using `)setup` command",
             )
             await ctx.send(embed=e)
 
-    @commands.command(pass_context=True, usage='<member.mention>')
+    @commands.command(pass_context=True, usage="<member.mention>")
     @commands.guild_only()
     @commands.check(check_if_warning_system_setup)
     async def warnlist(self, ctx, member: Optional[Union[int, discord.Member]] = None):
-        '''Get the no. of warns for a specified user'''
-        member = get_user(member if member !=
-                          None else ctx.message.author, ctx)
-        e = Embed(title='Type the below message in the search bar')
+        """Get the no. of warns for a specified user"""
+        member = get_user(member if member != None else ctx.message.author, ctx)
+        e = Embed(title="Type the below message in the search bar")
         search_image = discord.File(
-            join(self.bot.minato_dir, 'discord', 'search.png'), filename='search.png')
+            join(self.bot.minato_dir, "discord", "search.png"), filename="search.png"
+        )
         e.set_image(url="attachment://search.png")
         await ctx.send(file=search_image, embed=e)
 
         warning_channel = _warning_channel(ctx)
-        message = f'mentions: {member}  in: {warning_channel}'
+        message = f"mentions: {member}  in: {warning_channel}"
         await ctx.send(message)
 
     @warnlist.error
     async def warnlist_handler(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             e = ErrorEmbed(
-                title=f'No warning system setup for the {ctx.guild.name}',
-                description='You/Admin can always setup the **warning system** using `)setup` command'
+                title=f"No warning system setup for the {ctx.guild.name}",
+                description="You/Admin can always setup the **warning system** using `)setup` command",
             )
             await ctx.send(embed=e)
-    
-    
-    #RDanny code from here
+
+    # RDanny code from here
     async def _basic_cleanup_strategy(self, ctx, search):
         count = 0
         async for msg in ctx.history(limit=search, before=ctx.message):
             if msg.author == ctx.me and not (msg.mentions or msg.role_mentions):
                 await msg.delete()
                 count += 1
-        return { 'Bot': count }
+        return {"Bot": count}
 
     async def _complex_cleanup_strategy(self, ctx, search):
-        prefixes = tuple(self.bot.get_guild_prefixes(ctx.guild)) # thanks startswith
+        prefixes = tuple(self.bot.get_guild_prefixes(ctx.guild))  # thanks startswith
 
         def check(m):
             return m.author == ctx.me or m.content.startswith(prefixes)
@@ -320,12 +370,14 @@ class Moderation(commands.Cog):
         prefixes = tuple(self.bot.get_guild_prefixes(ctx.guild))
 
         def check(m):
-            return (m.author == ctx.me or m.content.startswith(prefixes)) and not (m.mentions or m.role_mentions)
+            return (m.author == ctx.me or m.content.startswith(prefixes)) and not (
+                m.mentions or m.role_mentions
+            )
 
         deleted = await ctx.channel.purge(limit=search, check=check, before=ctx.message)
         return Counter(m.author.display_name for m in deleted)
-    
-    @commands.command(aliases=['newmembers'])
+
+    @commands.command(aliases=["newmembers"])
     @commands.guild_only()
     async def newusers(self, ctx, *, count=5):
         """Tells you the newest members of the server.
@@ -340,16 +392,18 @@ class Moderation(commands.Cog):
         if not ctx.guild.chunked:
             members = await ctx.guild.chunk(cache=True)
 
-        members = sorted(ctx.guild.members, key=lambda m: m.joined_at, reverse=True)[:count]
+        members = sorted(ctx.guild.members, key=lambda m: m.joined_at, reverse=True)[
+            :count
+        ]
 
-        e = discord.Embed(title='New Members', colour=discord.Colour.green())
+        e = discord.Embed(title="New Members", colour=discord.Colour.green())
 
         for member in members:
-            body = f'Joined {time.format_relative(member.joined_at)}\nCreated {time.format_relative(member.created_at)}'
-            e.add_field(name=f'{member} (ID: {member.id})', value=body, inline=False)
+            body = f"Joined {time.format_relative(member.joined_at)}\nCreated {time.format_relative(member.created_at)}"
+            e.add_field(name=f"{member} (ID: {member.id})", value=body, inline=False)
 
         await ctx.send(embed=e)
-    
+
     @commands.command()
     async def cleanup(self, ctx, search=100):
         """Cleans up the bot's messages from the channel.
@@ -383,12 +437,12 @@ class Moderation(commands.Cog):
         deleted = sum(spammers.values())
         messages = [f'{deleted} message{" was" if deleted == 1 else "s were"} removed.']
         if deleted:
-            messages.append('')
+            messages.append("")
             spammers = sorted(spammers.items(), key=lambda t: t[1], reverse=True)
-            messages.extend(f'- **{author}**: {count}' for author, count in spammers)
+            messages.extend(f"- **{author}**: {count}" for author, count in spammers)
 
-        await ctx.send('\n'.join(messages), delete_after=10)
-    
+        await ctx.send("\n".join(messages), delete_after=10)
+
     @commands.command(
         name="simeplepurge",
         description="A command which purges the channel it is called in",
@@ -397,15 +451,15 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
     async def purge(self, ctx, amount=5):
-        '''A command which purges the channel it is called in'''
+        """A command which purges the channel it is called in"""
         await ctx.channel.purge(limit=amount)
         embed = Embed(
             title=f"{ctx.author.name} purged: {ctx.channel.name}",
             description=f"{amount} messages were cleared",
         )
         await ctx.send(embed=embed, delete_after=4)
-    
-    @commands.group(aliases=['purge'])
+
+    @commands.group(aliases=["purge"])
     @commands.guild_only()
     @has_permissions(manage_messages=True)
     async def remove(self, ctx):
@@ -424,7 +478,7 @@ class Moderation(commands.Cog):
 
     async def do_removal(self, ctx, limit, predicate, *, before=None, after=None):
         if limit > 2000:
-            return await ctx.send(f'Too many messages to search given ({limit}/2000)')
+            return await ctx.send(f"Too many messages to search given ({limit}/2000)")
 
         if before is None:
             before = ctx.message
@@ -435,24 +489,26 @@ class Moderation(commands.Cog):
             after = discord.Object(id=after)
 
         try:
-            deleted = await ctx.channel.purge(limit=limit, before=before, after=after, check=predicate)
+            deleted = await ctx.channel.purge(
+                limit=limit, before=before, after=after, check=predicate
+            )
         except discord.Forbidden as e:
-            return await ctx.send('I do not have permissions to delete messages.')
+            return await ctx.send("I do not have permissions to delete messages.")
         except discord.HTTPException as e:
-            return await ctx.send(f'Error: {e} (try a smaller search?)')
+            return await ctx.send(f"Error: {e} (try a smaller search?)")
 
         spammers = Counter(m.author.display_name for m in deleted)
         deleted = len(deleted)
         messages = [f'{deleted} message{" was" if deleted == 1 else "s were"} removed.']
         if deleted:
-            messages.append('')
+            messages.append("")
             spammers = sorted(spammers.items(), key=lambda t: t[1], reverse=True)
-            messages.extend(f'**{name}**: {count}' for name, count in spammers)
+            messages.extend(f"**{name}**: {count}" for name, count in spammers)
 
-        to_send = '\n'.join(messages)
+        to_send = "\n".join(messages)
 
         if len(to_send) > 2000:
-            await ctx.send(f'Successfully removed {deleted} messages.', delete_after=10)
+            await ctx.send(f"Successfully removed {deleted} messages.", delete_after=10)
         else:
             await ctx.send(to_send, delete_after=10)
 
@@ -469,9 +525,11 @@ class Moderation(commands.Cog):
     @remove.command()
     async def images(self, ctx, search=100):
         """Removes messages that have embeds or attachments."""
-        await self.do_removal(ctx, search, lambda e: len(e.embeds) or len(e.attachments))
+        await self.do_removal(
+            ctx, search, lambda e: len(e.embeds) or len(e.attachments)
+        )
 
-    @remove.command(name='all')
+    @remove.command(name="all")
     async def _remove_all(self, ctx, search=100):
         """Removes all messages."""
         await self.do_removal(ctx, search, lambda e: True)
@@ -488,34 +546,37 @@ class Moderation(commands.Cog):
         The substring must be at least 3 characters long.
         """
         if len(substr) < 3:
-            await ctx.send('The substring length must be at least 3 characters.')
+            await ctx.send("The substring length must be at least 3 characters.")
         else:
             await self.do_removal(ctx, 100, lambda e: substr in e.content)
 
-    @remove.command(name='bot', aliases=['bots'])
+    @remove.command(name="bot", aliases=["bots"])
     async def _bot(self, ctx, prefix=None, search=100):
         """Removes a bot user's messages and messages with their optional prefix."""
 
         def predicate(m):
-            return (m.webhook_id is None and m.author.bot) or (prefix and m.content.startswith(prefix))
+            return (m.webhook_id is None and m.author.bot) or (
+                prefix and m.content.startswith(prefix)
+            )
 
         await self.do_removal(ctx, search, predicate)
 
-    @remove.command(name='emoji', aliases=['emojis'])
+    @remove.command(name="emoji", aliases=["emojis"])
     async def _emoji(self, ctx, search=100):
         """Removes all messages containing custom emoji."""
-        custom_emoji = re.compile(r'<a?:[a-zA-Z0-9\_]+:([0-9]+)>')
+        custom_emoji = re.compile(r"<a?:[a-zA-Z0-9\_]+:([0-9]+)>")
+
         def predicate(m):
             return custom_emoji.search(m.content)
 
         await self.do_removal(ctx, search, predicate)
 
-    @remove.command(name='reactions')
+    @remove.command(name="reactions")
     async def _reactions(self, ctx, search=100):
         """Removes all reactions from messages that have them."""
 
         if search > 2000:
-            return await ctx.send(f'Too many messages to search for ({search}/2000)')
+            return await ctx.send(f"Too many messages to search for ({search}/2000)")
 
         total_reactions = 0
         async for message in ctx.history(limit=search, before=ctx.message):
@@ -523,7 +584,7 @@ class Moderation(commands.Cog):
                 total_reactions += sum(r.count for r in message.reactions)
                 await message.clear_reactions()
 
-        await ctx.send(f'Successfully removed {total_reactions} reactions.')
+        await ctx.send(f"Successfully removed {total_reactions} reactions.")
 
     @remove.command()
     async def custom(self, ctx, *, args: str):
@@ -557,20 +618,26 @@ class Moderation(commands.Cog):
         `--not`: Use logical NOT for all options.
         """
         parser = Arguments(add_help=False, allow_abbrev=False)
-        parser.add_argument('--user', nargs='+')
-        parser.add_argument('--contains', nargs='+')
-        parser.add_argument('--starts', nargs='+')
-        parser.add_argument('--ends', nargs='+')
-        parser.add_argument('--or', action='store_true', dest='_or')
-        parser.add_argument('--not', action='store_true', dest='_not')
-        parser.add_argument('--emoji', action='store_true')
-        parser.add_argument('--bot', action='store_const', const=lambda m: m.author.bot)
-        parser.add_argument('--embeds', action='store_const', const=lambda m: len(m.embeds))
-        parser.add_argument('--files', action='store_const', const=lambda m: len(m.attachments))
-        parser.add_argument('--reactions', action='store_const', const=lambda m: len(m.reactions))
-        parser.add_argument('--search', type=int)
-        parser.add_argument('--after', type=int)
-        parser.add_argument('--before', type=int)
+        parser.add_argument("--user", nargs="+")
+        parser.add_argument("--contains", nargs="+")
+        parser.add_argument("--starts", nargs="+")
+        parser.add_argument("--ends", nargs="+")
+        parser.add_argument("--or", action="store_true", dest="_or")
+        parser.add_argument("--not", action="store_true", dest="_not")
+        parser.add_argument("--emoji", action="store_true")
+        parser.add_argument("--bot", action="store_const", const=lambda m: m.author.bot)
+        parser.add_argument(
+            "--embeds", action="store_const", const=lambda m: len(m.embeds)
+        )
+        parser.add_argument(
+            "--files", action="store_const", const=lambda m: len(m.attachments)
+        )
+        parser.add_argument(
+            "--reactions", action="store_const", const=lambda m: len(m.reactions)
+        )
+        parser.add_argument("--search", type=int)
+        parser.add_argument("--after", type=int)
+        parser.add_argument("--before", type=int)
 
         try:
             args = parser.parse_args(shlex.split(args))
@@ -592,7 +659,7 @@ class Moderation(commands.Cog):
             predicates.append(args.reactions)
 
         if args.emoji:
-            custom_emoji = re.compile(r'<:(\w+):(\d+)>')
+            custom_emoji = re.compile(r"<:(\w+):(\d+)>")
             predicates.append(lambda m: custom_emoji.search(m.content))
 
         if args.user:
@@ -612,12 +679,15 @@ class Moderation(commands.Cog):
             predicates.append(lambda m: any(sub in m.content for sub in args.contains))
 
         if args.starts:
-            predicates.append(lambda m: any(m.content.startswith(s) for s in args.starts))
+            predicates.append(
+                lambda m: any(m.content.startswith(s) for s in args.starts)
+            )
 
         if args.ends:
             predicates.append(lambda m: any(m.content.endswith(s) for s in args.ends))
 
         op = all if not args._or else any
+
         def predicate(m):
             r = op(p(m) for p in predicates)
             if args._not:
@@ -631,8 +701,10 @@ class Moderation(commands.Cog):
         if args.search is None:
             args.search = 100
 
-        args.search = max(0, min(2000, args.search)) # clamp from 0-2000
-        await self.do_removal(ctx, args.search, predicate, before=args.before, after=args.after)
+        args.search = max(0, min(2000, args.search))  # clamp from 0-2000
+        await self.do_removal(
+            ctx, args.search, predicate, before=args.before, after=args.after
+        )
 
 
 def setup(bot):

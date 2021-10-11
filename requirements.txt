@@ -6,7 +6,7 @@ asyncdagpi==3.3.4
 attrs==21.2.0
 backoff==1.11.1
 beautifulsoup4==4.9.3
-certifi==2021.5.30
+certifi==2021.10.8
 cffi==1.14.6
 chardet==4.0.0
 charset-normalizer==2.0.4

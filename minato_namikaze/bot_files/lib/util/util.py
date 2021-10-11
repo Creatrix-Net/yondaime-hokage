@@ -1,5 +1,9 @@
-import random, discord
+import random
+
+import discord
+
 from .vars import ChannelAndMessageId
+
 
 def convert(time):
     pos = ["s", "m", "h", "d"]

@@ -1,8 +1,8 @@
 # Code written here is not mine.
 # Its taken from https://github.com/lmmentel/mendeleev
 
-from typing import Union, Tuple
 import math
+from typing import Tuple, Union
 
 
 def coeffs(a: int, b: int = 2) -> Tuple[int]:

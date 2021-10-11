@@ -1,22 +1,25 @@
-from aiohttp import web
+import os
 from pathlib import Path
 from threading import Thread
-import os
+
+from aiohttp import web
 
 BASE_DIR = Path(__file__).resolve().parent
 routes = web.RouteTableDef()
 
-@routes.get('/', allow_head=False)
+
+@routes.get("/", allow_head=False)
 async def hello(request):
-    return web.FileResponse(
-        BASE_DIR / os.path.join('templates/index.html')
-    )
+    return web.FileResponse(BASE_DIR / os.path.join("templates/index.html"))
+
 
 app = web.Application()
 app.add_routes(routes)
 
+
 def run():
-    web.run_app(app,port=80,host='127.0.0.1')
+    web.run_app(app, port=80, host="127.0.0.1")
+
 
 def keep_alive():
     t = Thread(target=run)

@@ -110,6 +110,19 @@ class Info(commands.Cog):
     async def server(self, ctx):
 
         """ Check info about current server """
+        guild = ctx.guild
+        levels = {
+            "None - No criteria set.": discord.VerificationLevel.none,
+            "Low - Member must have a verified email on their Discord account.": discord.VerificationLevel.low,
+            "Medium - Member must have a verified email and be registered on Discord for more than five minutes.": discord.VerificationLevel.medium,
+            "High - Member must have a verified email, be registered on Discord for more than five minutes, and be a member of the guild itself for more than ten minutes.": discord.VerificationLevel.high,
+            "Extreme - Member must have a verified phone on their Discord account.": discord.VerificationLevel.highest,
+        }
+        filters = {
+            "Disabled - The guild does not have the content filter enabled.": discord.ContentFilter.disabled,
+            "No Role - The guild has the content filter enabled for members without a role.": discord.ContentFilter.no_role,
+            "All Members - The guild has the content filter enabled for every member.": discord.ContentFilter.all_members,
+        }
         if ctx.invoked_subcommand is None:
             find_bots = sum(1 for member in ctx.guild.members if member.bot)
 
@@ -123,16 +136,51 @@ class Info(commands.Cog):
             if ctx.guild.banner:
                 embed.set_image(url=ctx.guild.banner.with_format("png").url)
 
-            embed.add_field(name = "<:ServerOwner:864765886916067359> Owner", value = ctx.guild.owner)
-            embed.add_field(name = "🌍 Region", value = str(ctx.guild.region).capitalize())
-            embed.add_field(name = "👥 Members", value = ctx.guild.member_count)
-            embed.add_field(name = "🤖 Bots", value = find_bots)
-            embed.add_field(name = f"🎭 Roles", value = f"{len(ctx.guild.roles)}")
-            embed.add_field(name = f"⭐ Emotes", value = f"{len(ctx.guild.emojis)}/{ctx.guild.emoji_limit}")
-            
+            verif_lvl = "None"
+            for text, dvl in levels.items():
+                if dvl is guild.verification_level:
+                    verif_lvl = text
+            for response, filt in filters.items():
+                if filt is guild.explicit_content_filter:
+                    content_fiter = response
+            embed.add_field(
+                name="<:ServerOwner:864765886916067359> Owner",
+                value=ctx.guild.owner
+            )
+            embed.add_field(
+                name="🌍 Region", 
+                value=str(ctx.guild.region).capitalize()
+            )
+            embed.add_field(
+                name="Verification Level",
+                value=verif_lvl
+            )
+            embed.add_field(
+                name="Content Filter",
+                value=content_filter
+            )
+            embed.add_field(
+                name="👥 Members",
+                value=ctx.guild.member_count
+            )
+            embed.add_field(
+                name="🤖 Bots",
+                value=find_bots
+            )
+            embed.add_field(
+                name=f"🎭 Roles",
+                value=f"{len(ctx.guild.roles)}"
+            )
+            embed.add_field(
+                name=f"⭐ Emotes",
+                value=f"{len(ctx.guild.emojis)}/{ctx.guild.emoji_limit}"
+            )
+
             date = ctx.guild.created_at.timestamp()
-            embed.add_field(name=f"📆 Created On", value=f"<t:{round(date)}:D>")
-            
+            embed.add_field(
+                name=f"📆 Created On",
+                value=f"<t:{round(date)}:D>"
+            )
             await ctx.send(embed=embed)
 
 

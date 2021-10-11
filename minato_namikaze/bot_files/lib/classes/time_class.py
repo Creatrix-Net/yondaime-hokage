@@ -2,11 +2,14 @@
 This code has been fully copied from here https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/paginator.py
 '''
 import datetime
+import re
+
 import parsedatetime as pdt
 from dateutil.relativedelta import relativedelta
 from discord.ext import commands
-import re
-from ..functions import plural, human_join, format_dt as format_dt
+
+from ..functions import format_dt as format_dt
+from ..functions import human_join, plural
 
 # Monkey patch mins and secs into the units
 units = pdt.pdtLocales['en_US'].units

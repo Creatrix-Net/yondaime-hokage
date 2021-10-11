@@ -1,6 +1,8 @@
-import time
-import discord
 import datetime
+import time
+
+import discord
+
 
 async def get_welcome_channel(guild: discord.Guild, bot: discord.Client, inviter_or_guild_owner: discord.User):
     try:

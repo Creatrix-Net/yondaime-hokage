@@ -5,30 +5,29 @@
 
 """module specifying the database models"""
 
-from typing import Any, Dict, List, Tuple
-from operator import attrgetter
-
 import math
-from sqlalchemy import Column, Boolean, Integer, String, Float, ForeignKey
-from sqlalchemy.orm import relationship, reconstructor
+from operator import attrgetter
+from typing import Any, Dict, List, Tuple
+
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
+from sqlalchemy.orm import reconstructor, relationship
 
+from .db import get_session
+from .econf import ORBITALS, ElectronicConfiguration, get_l
 from .electronegativity import (
     allred_rochow,
     cottrell_sutton,
     gordy,
-    nagle,
     li_xue,
     martynov_batsanov,
     mulliken,
+    nagle,
     sanderson,
 )
-from .db import get_session
-from .econf import ElectronicConfiguration, get_l, ORBITALS
 from .utils import coeffs
-
 
 __all__ = [
     "Element",

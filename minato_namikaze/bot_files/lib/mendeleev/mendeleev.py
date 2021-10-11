@@ -7,7 +7,6 @@ import six
 from .db import get_session
 from .models import Element
 
-
 __all__ = [
     "get_all_elements",
     "element",

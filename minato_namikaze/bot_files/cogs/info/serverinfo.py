@@ -210,7 +210,7 @@ class Info(commands.Cog):
     async def user(self, ctx, *, user: discord.Member = None):
         """ Get user information """
         user = user or ctx.author
-        names, nicks = await self.get_names_and_nicks(user)
+        names, nicks= await self.get_names_and_nicks(user)
 
         """Timestamp stuff"""
         dt = user.joined_at
@@ -228,7 +228,7 @@ class Info(commands.Cog):
             since_joined = "?"
             user_joined = ("Unknown")
         user_created = "<t:{}:D>".format(user_c_converter)
-        created_on = ("{} - ({})\n").format(since_created, user_created)
+        created_on = ("{} - ({})").format(since_created, user_created)
         joined_on = ("{} - ({})\n").format(since_joined, user_joined)
 
         """ to fetch user (for banner)"""
@@ -270,19 +270,59 @@ class Info(commands.Cog):
         if names:
             name_name = "**Previous Names:**" if len(names) > 1 else "**Previous Name:**"
             name_val = filter_invites(", ".join(names))
+            prev_names_val = "{}\n{}".format(
+                name_name,
+                name_val,
+            )
 
         else:
-            name_val = ""
+            prev_names_val = ""
 
-        embed.add_field(name="✏️ Name", value=user.display_name)
+        if nicks:
+            nick_name = "**Previous Nicknames:**" if len(nicks) > 1 else "**Previous Nickname:**"
+            nick_val = filter_invites(", ".join(nicks))
+            prev_nicks_val = "{}\n{}\n".format(
+                nick_name,
+                nick_val,
+            )
 
-        embed.add_field(name=name_name, value=name_val)
+        else:
+            prev_nicks_val = ""
 
-        embed.add_field(name="🔸 Roles", value=show_roles, inline=False)
+        embed.add_field(
+            name="**__User info__**",
+            value=(
+            "🔸 Roles: {}\n"
+            "📅 Joined On {}"
+            "{}"
+            ).format(
+                show_roles,
+                joined_on,
+                prev_nicks_val
+            )
+        )
+        embed.add_field(
+            name="**__Member Info__**",
+            value=(
+                "✏️ Name: {}\n"
+                "{}: {}\n"
+                "📅 Created On: {}"
+            ).format(
+                user.display_name,
+                prev_names_val,
+                created_on
+            )
+        )
 
-        embed.add_field(name="📅 Joined On", value=joined_on)
+        # embed.add_field(name="✏️ Name", value=user.display_name)
 
-        embed.add_field(name=f"📅 Created On", value=created_on)
+        # embed.add_field(name=name_name, value=name_val)
+
+        # embed.add_field(name="🔸 Roles", value=show_roles, inline=False)
+
+        # embed.add_field(name="📅 Joined On", value=joined_on)
+
+        # embed.add_field(name=f"📅 Created On", value=created_on)
 
         if uuser.banner:
             embed.set_image(url=uuser.banner)

@@ -580,7 +580,7 @@ class Moderation(commands.Cog):
 
         total_reactions = 0
         async for message in ctx.history(limit=search, before=ctx.message):
-            if len(message.reactions):
+            if message.reactions:
                 total_reactions += sum(r.count for r in message.reactions)
                 await message.clear_reactions()
 

@@ -72,7 +72,8 @@ class Encoding(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{NUMBER SIGN}\U000020e3")
 
-    def search_words(self, data: str) -> bool:
+    @staticmethod
+    def search_words(data: str) -> bool:
         count = 0
         try:
             for char in data:
@@ -304,7 +305,8 @@ class Encoding(commands.Cog):
 
         await ctx.send(message[:2000])
 
-    def rot_encode(self, n: int, text: str) -> str:
+    @staticmethod
+    def rot_encode(n: int, text: str) -> str:
         """
         https://stackoverflow.com/questions/47580337/short-rot-n-decode-function-in-python
         """

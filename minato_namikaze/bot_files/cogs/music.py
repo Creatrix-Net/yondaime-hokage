@@ -73,7 +73,8 @@ class Music(commands.Cog):
 
         return True
 
-    def songembed(self, song):
+    @staticmethod
+    def songembed(song):
         e = Embed()
         e.set_thumbnail(url=song.thumbnail)
         e.set_image(url=song.thumbnail)

@@ -32,7 +32,8 @@ class Snipe(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{DIRECT HIT}")
 
-    def sanitise(self, string):
+    @staticmethod
+    def sanitise(string):
         if len(string) > 1024:
             string = string[0:1021] + "..."
         string = re.sub(invitere2, "[INVITE REDACTED]", string)

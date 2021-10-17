@@ -71,7 +71,7 @@ class Moderation(commands.Cog):
         reason: ActionReason = None,
     ):
         """A command which bans a given user"""
-        if ctx.message.author == member or ctx.message.author.id == member:
+        if member in (ctx.message.author, ctx.message.author.id):
             await ctx.send(embed=ErrorEmbed(description="You **can't ban yourself**!"))
             return
         try:

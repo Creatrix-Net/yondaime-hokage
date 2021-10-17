@@ -51,7 +51,8 @@ class TypeRacer:
         'night', 'real', 'life', 'few', 'north'
     )
 
-    def _tr_img(self, text: str, font: str):
+    @staticmethod
+    def _tr_img(text: str, font: str):
         text = "\n".join(textwrap.wrap(text, width=25))
         height = ceil(len(text) / 25) * 70
         image = Image.new("RGBA", (640, height), 0)

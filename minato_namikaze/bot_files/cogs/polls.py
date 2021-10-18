@@ -193,7 +193,8 @@ class QuickPoll(commands.Cog):
                 reactors = await reaction.users().flatten()
                 for reactor in reactors:
                     if reactor.id not in voters:
-                        tally[str(self.reactions.index(reaction.emoji) + 1)] += 1
+                        tally[str(self.reactions.index(
+                            reaction.emoji) + 1)] += 1
                         voters.append(reactor.id)
 
         embed_result = Embed(
@@ -255,7 +256,8 @@ class QuickPoll(commands.Cog):
         except:
             pass  # oh well
 
-        answer = "\n".join(f"{keycap}: {content}" for keycap, content in answers)
+        answer = "\n".join(
+            f"{keycap}: {content}" for keycap, content in answers)
         actual_poll = await ctx.send(f"{ctx.author} asks: {question}\n\n{answer}")
         for emoji, _ in answers:
             await actual_poll.add_reaction(emoji)
@@ -288,7 +290,8 @@ class QuickPoll(commands.Cog):
             )
 
         question = questions_and_choices[0]
-        choices = [(to_emoji(e), v) for e, v in enumerate(questions_and_choices[1:])]
+        choices = [(to_emoji(e), v)
+                   for e, v in enumerate(questions_and_choices[1:])]
 
         try:
             await ctx.message.delete()

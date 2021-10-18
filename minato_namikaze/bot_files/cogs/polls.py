@@ -187,7 +187,7 @@ class QuickPoll(commands.Cog):
 
         # add the bot's ID to the list of voters to exclude it's votes
         voters = [self.bot.user.id]
-        tally = {x: 0 for x in opt_dict.keys()}
+        tally = {x: 0 for x in opt_dict}
         for reaction in poll_message.reactions:
             if reaction.emoji in self.reactions:
                 reactors = await reaction.users().flatten()

@@ -280,7 +280,8 @@ class Moderation(commands.Cog):
         role: Union[int, discord.Role],
     ):
         """Add roles"""
-        member = get_user(member if member is not None else ctx.message.author, ctx)
+        member = get_user(
+            member if member is not None else ctx.message.author, ctx)
         role = get_roles(role, ctx)
         await member.add_roles(role)
         e = Embed(
@@ -330,7 +331,8 @@ class Moderation(commands.Cog):
     @commands.check(check_if_warning_system_setup)
     async def warnlist(self, ctx, member: Optional[Union[int, discord.Member]] = None):
         """Get the no. of warns for a specified user"""
-        member = get_user(member if member is not None else ctx.message.author, ctx)
+        member = get_user(
+            member if member is not None else ctx.message.author, ctx)
         e = Embed(title="Type the below message in the search bar")
         search_image = discord.File(
             join(self.bot.minato_dir, "discord", "search.png"), filename="search.png"

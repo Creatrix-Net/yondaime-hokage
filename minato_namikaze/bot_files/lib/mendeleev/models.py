@@ -320,7 +320,7 @@ class Element(Base):
 
     @hybrid_method
     def hardness(self, charge: int = 0) -> float:
-        """
+        r"""
         Return the absolute hardness, calculated as
         Args:
           charge:  Charge of the cation for which the hardness will be calculated
@@ -354,7 +354,7 @@ class Element(Base):
 
     @hybrid_method
     def softness(self, charge: int = 0) -> float:
-        """
+        r"""
         Return the absolute softness, calculated as
         Args:
           charge: Charge of the cation for which the hardness will be calculated
@@ -420,7 +420,7 @@ class Element(Base):
             raise ValueError("<method> should be one of {}".format("slater, clementi"))
 
     def electrophilicity(self) -> float:
-        """
+        r"""
         Calculate electrophilicity index
         .. math::
            \\omega = \\frac{\\mu}{2\eta}
@@ -533,7 +533,7 @@ class Element(Base):
         }
 
     def electronegativity_martynov_batsanov(self) -> float:
-        """
+        r"""
         Calculates the electronegativity value according to Martynov and
         Batsanov as the average of the ionization energies of the valence
         electrons
@@ -560,7 +560,7 @@ class Element(Base):
         missing_is_zero: bool = False,
         allow_negative_ea: bool = False,
     ) -> float:
-        """
+        r"""
         Return the absolute electronegativity (Mulliken scale), calculated as
         Args:
             charge: charge of the ion

@@ -7,23 +7,22 @@ BLANK = "⬛"
 
 
 class ConnectFour:
-
     def __init__(self, *, red: discord.Member, blue: discord.Member):
         self.red_player = red
         self.blue_player = blue
         self.board = [[BLANK for __ in range(7)] for __ in range(6)]
-        self._controls = ('1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣')
+        self._controls = ("1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣")
         self.turn = self.red_player
         self.message = None
         self.winner = None
         self._conversion = {
-            '1️⃣': 0,
-            '2️⃣': 1,
-            '3️⃣': 2,
-            '4️⃣': 3,
-            '5️⃣': 4,
-            '6️⃣': 5,
-            '7️⃣': 6,
+            "1️⃣": 0,
+            "2️⃣": 1,
+            "3️⃣": 2,
+            "4️⃣": 3,
+            "5️⃣": 4,
+            "6️⃣": 5,
+            "7️⃣": 6,
         }
         self._PlayerToEmoji = {
             self.red_player: RED,
@@ -70,31 +69,53 @@ class ConnectFour:
 
         for x in range(6):
             for i in range(4):
-                if (self.board[x][i] == self.board[x][i+1] == self.board[x][i+2] == self.board[x][i+3]) and self.board[x][i] != BLANK:
+                if (
+                    self.board[x][i]
+                    == self.board[x][i + 1]
+                    == self.board[x][i + 2]
+                    == self.board[x][i + 3]
+                ) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         for x in range(3):
             for i in range(7):
-                if (self.board[x][i] == self.board[x+1][i] == self.board[x+2][i] == self.board[x+3][i]) and self.board[x][i] != BLANK:
+                if (
+                    self.board[x][i]
+                    == self.board[x + 1][i]
+                    == self.board[x + 2][i]
+                    == self.board[x + 3][i]
+                ) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         for x in range(3):
             for i in range(4):
-                if (self.board[x][i] == self.board[x + 1][i + 1] == self.board[x + 2][i + 2] == self.board[x + 3][i + 3]) and self.board[x][i] != BLANK:
+                if (
+                    self.board[x][i]
+                    == self.board[x + 1][i + 1]
+                    == self.board[x + 2][i + 2]
+                    == self.board[x + 3][i + 3]
+                ) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         for x in range(5, 2, -1):
             for i in range(4):
-                if (self.board[x][i] == self.board[x - 1][i + 1] == self.board[x - 2][i + 2] == self.board[x - 3][i + 3]) and self.board[x][i] != BLANK:
+                if (
+                    self.board[x][i]
+                    == self.board[x - 1][i + 1]
+                    == self.board[x - 2][i + 2]
+                    == self.board[x - 3][i + 3]
+                ) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         return False
 
-    async def start(self, ctx: commands.Context, *, remove_reaction_after: bool = False, **kwargs):
+    async def start(
+        self, ctx: commands.Context, *, remove_reaction_after: bool = False, **kwargs
+    ):
 
         embed = await self.make_embed()
         self.message = await ctx.send(self.BoardString(), embed=embed, **kwargs)
@@ -105,7 +126,12 @@ class ConnectFour:
         while True:
 
             def check(reaction, user):
-                return str(reaction.emoji) in self._controls and user == self.turn and reaction.message == self.message and self.board[0][self._conversion[str(reaction.emoji)]] == BLANK
+                return (
+                    str(reaction.emoji) in self._controls
+                    and user == self.turn
+                    and reaction.message == self.message
+                    and self.board[0][self._conversion[str(reaction.emoji)]] == BLANK
+                )
 
             reaction, user = await ctx.bot.wait_for("reaction_add", check=check)
 

@@ -85,16 +85,12 @@ class VoteInfo(commands.Cog):
             )
 
             try:
-                a_list = True if a.json().get("voted") >= 1 else False
+                a_list = a.json().get("voted") >= 1
             except:
                 a_list = False
 
             try:
-                c_list = (
-                    True
-                    if str(member.id) in c.json().get("hasVoted24", False)
-                    else False
-                )
+                c_list = str(member.id) in c.json().get("hasVoted24", False)
             except:
                 c_list = False
 

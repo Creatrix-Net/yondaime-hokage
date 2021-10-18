@@ -52,7 +52,8 @@ def element(ids: Union[int, str]) -> Element:
         return _get_element(ids)
     else:
         raise ValueError(
-            "Expected a <list>, <tuple>, <str> or <int>, got: {0:s}".format(type(ids))
+            "Expected a <list>, <tuple>, <str> or <int>, got: {0:s}".format(
+                type(ids))
         )
 
 
@@ -72,7 +73,8 @@ def _get_element(ids):
     elif isinstance(ids, int):
         return session.query(Element).filter(Element.atomic_number == ids).one()
     else:
-        raise ValueError("Expecting a <str> or <int>, got: {0:s}".format(type(ids)))
+        raise ValueError(
+            "Expecting a <str> or <int>, got: {0:s}".format(type(ids)))
 
 
 def get_all_elements():

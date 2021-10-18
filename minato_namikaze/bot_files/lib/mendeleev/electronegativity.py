@@ -111,7 +111,7 @@ def mulliken(
             and allow_negative_ea
         ):
             return (ionization_energy + electron_affinity) * 0.5
-        elif electron_affinity is not None or missing_is_zero:
+        if electron_affinity is not None or missing_is_zero:
             return ionization_energy * 0.5
     else:
         return None

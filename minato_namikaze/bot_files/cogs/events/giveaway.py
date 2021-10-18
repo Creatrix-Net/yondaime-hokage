@@ -91,7 +91,7 @@ class Giveaway(Cog):
         if time == -1:
             await ctx.send("The Time format was wrong")
             return
-        elif time == -2:
+        if time == -2:
             await ctx.send("The Time was not conventional number")
             return
         prize = answers[2]
@@ -185,42 +185,41 @@ class Giveaway(Cog):
                 f"https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}"
             )
             return
-        else:  # len(users) > 0
-            winner = choice(users)
-            winnerEmbed = Embed(
-                title="🎉🎉 Giveaway Time !! 🎉🎉",
-                description=f"🎁 Win a Prize today",
-                colour=0x00FFFF,
-            )
-            try:
-                winnerEmbed.set_footer(text=msg_embd_field["footer"]["text"])
-            except:
-                pass
-            winnerEmbed.add_field(
-                name=f"🎉 Congratulations On Winning Giveaway 🎉", value=winner.mention
-            )
-            winnerEmbed.set_image(
-                url="https://firebasestorage.googleapis.com/v0/b/sociality-a732c.appspot.com/o/Loli.png?alt=media&token=ab5c8924-9a14-40a9-97b8-dba68b69195d"
-            )
-            try:
-                if role:
-                    winnerEmbed.add_field(name="Role Required", value=role)
-            except:
-                pass
-            try:
-                if task:
-                    winnerEmbed.add_field(
-                        name=":checkered_flag: Tasks", value=task)
-            except:
-                pass
-            await msg.edit(embed=winnerEmbed)
-            await channel.send(
-                f"🎉 Congratulations **{winner.mention}** on winning the Giveaway 🎉"
-            )
-            await ctx.send(
-                f"https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}"
-            )
-            return
+        winner = choice(users)
+        winnerEmbed = Embed(
+            title="🎉🎉 Giveaway Time !! 🎉🎉",
+            description=f"🎁 Win a Prize today",
+            colour=0x00FFFF,
+        )
+        try:
+            winnerEmbed.set_footer(text=msg_embd_field["footer"]["text"])
+        except:
+            pass
+        winnerEmbed.add_field(
+            name=f"🎉 Congratulations On Winning Giveaway 🎉", value=winner.mention
+        )
+        winnerEmbed.set_image(
+            url="https://firebasestorage.googleapis.com/v0/b/sociality-a732c.appspot.com/o/Loli.png?alt=media&token=ab5c8924-9a14-40a9-97b8-dba68b69195d"
+        )
+        try:
+            if role:
+                winnerEmbed.add_field(name="Role Required", value=role)
+        except:
+            pass
+        try:
+            if task:
+                winnerEmbed.add_field(
+                    name=":checkered_flag: Tasks", value=task)
+        except:
+            pass
+        await msg.edit(embed=winnerEmbed)
+        await channel.send(
+            f"🎉 Congratulations **{winner.mention}** on winning the Giveaway 🎉"
+        )
+        await ctx.send(
+            f"https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}"
+        )
+        return
 
     @command(
         name="giftdel",

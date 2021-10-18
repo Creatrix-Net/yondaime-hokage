@@ -132,7 +132,7 @@ class Developer(commands.Cog):
         """Get a list of servers the bot shares with the user."""
         guilds = [
             f"{guild.name} `{guild.id}` ({guild.member_count} members)"
-            for guild in [guild for guild in user.mutual_guilds]
+            for guild in list(user.mutual_guilds)
         ]
 
         await self._send_guilds(ctx, guilds, "Shared Servers")

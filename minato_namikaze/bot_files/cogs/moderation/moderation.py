@@ -100,7 +100,7 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
     async def banlist(self, ctx, *, member: Optional[Union[str, int, discord.Member]]):
-        banned_users = [i for i in await ctx.guild.bans()]
+        banned_users = list(await ctx.guild.bans())
         if not member:
             if len(banned_users) == 0:
                 await ctx.send(

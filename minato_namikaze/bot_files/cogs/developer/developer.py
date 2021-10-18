@@ -34,7 +34,7 @@ class Developer(commands.Cog):
 
         all_pages = []
 
-        for chunk in [guilds[i : i + 20] for i in range(0, len(guilds), 20)]:
+        for chunk in [guilds[i: i + 20] for i in range(0, len(guilds), 20)]:
             page = Embed(title=title)
 
             for guild in chunk:
@@ -160,7 +160,8 @@ class Developer(commands.Cog):
                     return
 
             await ctx.send(
-                embed=Embed(description=f"Here is the invite link: {invite.url}")
+                embed=Embed(
+                    description=f"Here is the invite link: {invite.url}")
             )
         except:
             await ctx.send(
@@ -280,7 +281,7 @@ class Developer(commands.Cog):
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def load(self, ctx, name: str):
-        """Loads an extension. """
+        """Loads an extension."""
         try:
             self.bot.load_extension(f"bot_files.cogs.{name}")
         except Exception as e:
@@ -290,7 +291,7 @@ class Developer(commands.Cog):
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def reload(self, ctx, name: str):
-        """Reloads an extension. """
+        """Reloads an extension."""
         try:
             self.bot.reload_extension(f"bot_files.cogs.{name}")
             await ctx.message.add_reaction("🔄")
@@ -301,7 +302,7 @@ class Developer(commands.Cog):
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def unload(self, ctx, name: str):
-        """Unloads an extension. """
+        """Unloads an extension."""
         try:
             self.bot.unload_extension(f"bot_files.cogs.{name}")
         except Exception as e:
@@ -311,7 +312,7 @@ class Developer(commands.Cog):
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
     async def reloadall(self, ctx):
-        """Reloads all extensions. """
+        """Reloads all extensions."""
 
         cog_dir = Path(__file__).resolve(strict=True).parent.parent
         error_collection = []
@@ -328,7 +329,8 @@ class Developer(commands.Cog):
             else:
                 if file.endswith(".py"):
                     try:
-                        self.bot.reload_extension(f"bot_files.cogs.{file[:-3]}")
+                        self.bot.reload_extension(
+                            f"bot_files.cogs.{file[:-3]}")
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 
@@ -373,7 +375,8 @@ class Developer(commands.Cog):
             else:
                 if file.endswith(".py"):
                     try:
-                        self.bot.reload_extension(f"bot_files.cogs.{file[:-3]}")
+                        self.bot.reload_extension(
+                            f"bot_files.cogs.{file[:-3]}")
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 

@@ -14,7 +14,6 @@ STOP = "\U000023f9"
 
 
 class Akinator:
-
     def __init__(self):
         self.aki = _Akinator_()
         self.bar_emojis = ("  ", "\U00002588")
@@ -22,16 +21,10 @@ class Akinator:
         self.bar = ""
         self.message = None
         self.questions = 0
-        self.mapping = {
-            YES: "y",
-            NO: "n",
-            IDK: "i",
-            P: "p",
-            PN: "pn"
-        }
+        self.mapping = {YES: "y", NO: "n", IDK: "i", P: "p", PN: "pn"}
 
     def build_bar(self) -> str:
-        prog = round(self.aki.progression/8)
+        prog = round(self.aki.progression / 8)
         emp, full = self.bar_emojis
         self.bar = f"[`{full*prog}{emp*(10-prog)}`]"
         return self.bar
@@ -46,7 +39,7 @@ class Akinator:
                 f"Progression-Level: {self.aki.progression}\n```\n"
                 f"{self.build_bar()}"
             ),
-            color=discord.Color.random()
+            color=discord.Color.random(),
         )
         embed.add_field(name="- Question -", value=self.aki.question)
         embed.set_footer(
@@ -61,14 +54,25 @@ class Akinator:
         embed = discord.Embed()
         embed.title = "Character Guesser Engine Results"
         embed.description = f"Total Questions: `{self.questions}`"
-        embed.add_field(name="Character Guessed",
-                        value=f"\n**Name:** {self.guess['name']}\n{self.guess['description']}")
-        embed.set_image(url=self.guess['absolute_picture_path'])
+        embed.add_field(
+            name="Character Guessed",
+            value=f"\n**Name:** {self.guess['name']}\n{self.guess['description']}",
+        )
+        embed.set_image(url=self.guess["absolute_picture_path"])
         embed.set_footer(text="Was I correct?")
 
         return embed
 
-    async def start(self, ctx: commands.Context, remove_reaction_after: bool = False, win_at_: int = 80, timeout: int = None, delete_button: bool = False, child_mode: bool = True, **kwargs):
+    async def start(
+        self,
+        ctx: commands.Context,
+        remove_reaction_after: bool = False,
+        win_at_: int = 80,
+        timeout: int = None,
+        delete_button: bool = False,
+        child_mode: bool = True,
+        **kwargs,
+    ):
 
         await self.aki.start_game(child_mode=child_mode)
 
@@ -84,10 +88,15 @@ class Akinator:
 
             def check(reaction, user):
                 if reaction.message == self.message and user == ctx.author:
-                    return str(reaction.emoji) in self.mapping or str(reaction.emoji) == STOP
+                    return (
+                        str(reaction.emoji) in self.mapping
+                        or str(reaction.emoji) == STOP
+                    )
 
             try:
-                reaction, __ = await ctx.bot.wait_for('reaction_add', timeout=timeout, check=check)
+                reaction, __ = await ctx.bot.wait_for(
+                    "reaction_add", timeout=timeout, check=check
+                )
             except asyncio.TimeoutError:
                 return
 

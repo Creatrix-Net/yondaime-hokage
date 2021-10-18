@@ -1,8 +1,8 @@
 # Discord Imports
 import datetime
+import re
 import time
 from datetime import timezone
-import re
 
 import discord
 from discord import Spotify
@@ -108,7 +108,7 @@ class Info(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def avatar(self, ctx, *, user: discord.Member = None):
-        """ Get the avatar of you or someone else """
+        """Get the avatar of you or someone else"""
         user = user or ctx.author
         e = discord.Embed(title=f"Avatar for {user.name}")
         e.set_image(url=user.avatar.url)
@@ -117,7 +117,7 @@ class Info(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def joinedat(self, ctx, *, user: discord.Member = None):
-        """ Check when a user joined the current server """
+        """Check when a user joined the current server"""
         if user is None:
             user = ctx.author
 
@@ -131,8 +131,7 @@ class Info(commands.Cog):
     @commands.group(aliases=["serverinfo"])
     @commands.guild_only()
     async def server(self, ctx):
-
-        """ Check info about current server """
+        """Check info about current server"""
         guild = ctx.guild
         levels = {
             "None - No criteria set.": discord.VerificationLevel.none,
@@ -170,7 +169,8 @@ class Info(commands.Cog):
             embed.add_field(
                 name="<:ServerOwner:864765886916067359> Owner", value=ctx.guild.owner
             )
-            embed.add_field(name="🌍 Region", value=str(ctx.guild.region).capitalize())
+            embed.add_field(name="🌍 Region", value=str(
+                ctx.guild.region).capitalize())
             embed.add_field(name="✔️ Verification Level", value=verif_lvl)
             embed.add_field(name="⚠️ Content Filter", value=content_filter)
             embed.add_field(name="👥 Members", value=ctx.guild.member_count)
@@ -188,7 +188,7 @@ class Info(commands.Cog):
     @server.command(name="server_icon", aliases=["icon"])
     @commands.guild_only()
     async def server_icon(self, ctx):
-        """ Get the current server icon """
+        """Get the current server icon"""
         if not ctx.guild.icon:
             return await ctx.send("This server does not have a avatar...")
         await ctx.send(
@@ -198,7 +198,7 @@ class Info(commands.Cog):
     @server.command(name="banner")
     @commands.guild_only()
     async def server_banner(self, ctx):
-        """ Get the current banner image """
+        """Get the current banner image"""
         if not ctx.guild.banner:
             return await ctx.send("This server does not have a banner...")
         e = Embed(title=f"ℹ Banner for {ctx.guild}")
@@ -208,10 +208,9 @@ class Info(commands.Cog):
     @commands.command(aliases=["whois", "who", "userinfo"])
     @commands.guild_only()
     async def user(self, ctx, *, user: discord.Member = None):
-        """ Get user information """
+        """Get user information"""
         user = user or ctx.author
-        names, nicks= await self.get_names_and_nicks(user)
-
+        names, nicks = await self.get_names_and_nicks(user)
         """Timestamp stuff"""
         dt = user.joined_at
         dt1 = user.created_at
@@ -226,14 +225,12 @@ class Info(commands.Cog):
             user_joined = "<t:{}:D>".format(user_j_converter)
         else:
             since_joined = "?"
-            user_joined = ("Unknown")
+            user_joined = "Unknown"
         user_created = "<t:{}:D>".format(user_c_converter)
         created_on = ("{} - ({})").format(since_created, user_created)
         joined_on = ("{} - ({})\n").format(since_joined, user_joined)
-
         """ to fetch user (for banner)"""
         uuser = await self.bot.fetch_user(user.id)
-
         """ to get status of user with emoji """
         status = ""
         s = user.status
@@ -268,7 +265,10 @@ class Info(commands.Cog):
         embed.add_field(name="🔹 User", value=user, inline=True)
 
         if names:
-            name_name = "**Previous Names:**" if len(names) > 1 else "**Previous Name:**"
+            name_name = (
+                "**Previous Names:**" if len(
+                    names) > 1 else "**Previous Name:**"
+            )
             name_val = filter_invites(", ".join(names))
             prev_names_val = "{}\n{}".format(
                 name_name,
@@ -279,7 +279,11 @@ class Info(commands.Cog):
             prev_names_val = ""
 
         if nicks:
-            nick_name = "**Previous Nicknames:**" if len(nicks) > 1 else "**Previous Nickname:**"
+            nick_name = (
+                "**Previous Nicknames:**"
+                if len(nicks) > 1
+                else "**Previous Nickname:**"
+            )
             nick_val = filter_invites(", ".join(nicks))
             prev_nicks_val = "{}\n{}\n".format(
                 nick_name,
@@ -291,27 +295,15 @@ class Info(commands.Cog):
 
         embed.add_field(
             name="**__User info__**",
-            value=(
-            "🔸 Roles: {}\n"
-            "📅 Joined On {}"
-            "{}"
-            ).format(
-                show_roles,
-                joined_on,
-                prev_nicks_val
-            )
+            value=("🔸 Roles: {}\n" "📅 Joined On {}" "{}").format(
+                show_roles, joined_on, prev_nicks_val
+            ),
         )
         embed.add_field(
             name="**__Member Info__**",
-            value=(
-                "✏️ Name: {}\n"
-                "{}: {}\n"
-                "📅 Created On: {}"
-            ).format(
-                user.display_name,
-                prev_names_val,
-                created_on
-            )
+            value=("✏️ Name: {}\n" "{}: {}\n" "📅 Created On: {}").format(
+                user.display_name, prev_names_val, created_on
+            ),
         )
 
         # embed.add_field(name="✏️ Name", value=user.display_name)

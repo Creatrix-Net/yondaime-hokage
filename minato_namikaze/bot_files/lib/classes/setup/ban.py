@@ -6,6 +6,7 @@ from ..embed import Embed
 
 ban = SetupVars.ban.value
 
+
 class Ban(menus.Menu):
     def __init__(self, bot, timeout, channel):
         super().__init__(timeout=timeout)
@@ -18,34 +19,40 @@ class Ban(menus.Menu):
         embed.add_field(name="No", value=":negative_squared_cross_mark:")
         return await channel.send(embed=embed)
 
-    @menus.button('\N{WHITE HEAVY CHECK MARK}')
+    @menus.button("\N{WHITE HEAVY CHECK MARK}")
     async def on_add(self, payload):
-        bingo = discord.utils.get(self.ctx.guild.categories, name="Bingo Book") if discord.utils.get(
-            self.ctx.guild.categories, name="Bingo Book") else False
+        bingo = (
+            discord.utils.get(self.ctx.guild.categories, name="Bingo Book")
+            if discord.utils.get(self.ctx.guild.categories, name="Bingo Book")
+            else False
+        )
         if not bingo:
             bingo = await self.ctx.guild.create_category(
-                "Bingo Book",
-                reason="To log the the bans and unban events + warns"
+                "Bingo Book", reason="To log the the bans and unban events + warns"
             )
         ban_channel = await self.ctx.guild.create_text_channel(
             "ban",
-            topic = ban,
-            overwrites={self.ctx.guild.default_role: discord.PermissionOverwrite(
-                read_messages=False, send_messages=False)},
+            topic=ban,
+            overwrites={
+                self.ctx.guild.default_role: discord.PermissionOverwrite(
+                    read_messages=False, send_messages=False
+                )
+            },
             category=discord.utils.get(
-                self.ctx.guild.categories,
-                name="Bingo Book")
+                self.ctx.guild.categories, name="Bingo Book"),
         )
 
-        await self.channel.send(f'{ban_channel.mention} channel **created** for logging the **ban** of the {self.ctx.guild.name} server.')
-        e = Embed(
-            description='This channel will be used to log the server bans.'
+        await self.channel.send(
+            f"{ban_channel.mention} channel **created** for logging the **ban** of the {self.ctx.guild.name} server."
         )
+        e = Embed(description="This channel will be used to log the server bans.")
         a = await ban_channel.send(embed=e)
         await a.pin()
         return
 
-    @menus.button('\N{NEGATIVE SQUARED CROSS MARK}')
+    @menus.button("\N{NEGATIVE SQUARED CROSS MARK}")
     async def on_stop(self, payload):
-        await self.channel.send(f'**Okay** no logging system for the **{self.ctx.guild.name}** bans will be there')
+        await self.channel.send(
+            f"**Okay** no logging system for the **{self.ctx.guild.name}** bans will be there"
+        )
         return

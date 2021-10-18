@@ -110,7 +110,8 @@ class Support(commands.Cog):
         member = get_user(member, ctx)
         if member.bot:
             await ctx.send(
-                embed=ErrorEmbed(description=f"{member.mention} is a bot! :robot:")
+                embed=ErrorEmbed(
+                    description=f"{member.mention} is a bot! :robot:")
             )
             return
         elif (
@@ -191,7 +192,8 @@ class Support(commands.Cog):
             description = ""
             for k, i in enumerate(l):
                 description += f"\n**({k+1}.)** -  {l[k].mention}"
-            e = Embed(title="Those who still require support:", description=description)
+            e = Embed(title="Those who still require support:",
+                      description=description)
             embed.append(e)
             await ctx.send(embed=e)
             return

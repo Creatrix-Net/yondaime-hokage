@@ -144,7 +144,8 @@ class Encoding(commands.Cog):
         """
         Encode text into binary sequences of 8
         """
-        ascii_bin = " ".join(bin(x)[2:].zfill(8) for x in message.encode("utf-8"))
+        ascii_bin = " ".join(bin(x)[2:].zfill(8)
+                             for x in message.encode("utf-8"))
         await ctx.send(ascii_bin)
 
     @_decode.command(name="binary")
@@ -155,7 +156,8 @@ class Encoding(commands.Cog):
         try:
             message = re.sub(r"[\s]+", "", message)
             bin_ascii = "".join(
-                [chr(int(message[i : i + 8], 2)) for i in range(0, len(message), 8)]
+                [chr(int(message[i: i + 8], 2))
+                 for i in range(0, len(message), 8)]
             )
             await ctx.send(bin_ascii)
         except Exception:
@@ -177,7 +179,7 @@ class Encoding(commands.Cog):
         try:
             message = re.sub(r"[\s]+", "", message)
             ascii_bin = "".join(
-                chr(int("0x" + message[x : x + 2], 16))
+                chr(int("0x" + message[x: x + 2], 16))
                 for x in range(0, len(message), 2)
             )
             await ctx.send(ascii_bin)
@@ -266,7 +268,8 @@ class Encoding(commands.Cog):
             if letter.isdigit():
                 message = message.replace(letter, chr(10300) + numbers[letter])
             if letter.isupper():
-                message = message.replace(letter, chr(10272) + letters[letter.lower()])
+                message = message.replace(letter, chr(
+                    10272) + letters[letter.lower()])
             if letter in letters:
                 message = message.replace(letter, letters[letter])
             if letter in punctuation:
@@ -290,7 +293,8 @@ class Encoding(commands.Cog):
                 replacement = "capital"
                 continue
             if replacement == "number":
-                message = message.replace(chr(10300) + letter, r_numbers[letter])
+                message = message.replace(
+                    chr(10300) + letter, r_numbers[letter])
                 replacement = ""
                 continue
             if replacement == "capital":
@@ -347,7 +351,7 @@ class Encoding(commands.Cog):
         binary = " ".join(bin(x)[2:].zfill(8) for x in message.encode("utf-8")).replace(
             " ", ""
         )
-        binlist = [binary[i : i + 2] for i in range(0, len(binary), 2)]
+        binlist = [binary[i: i + 2] for i in range(0, len(binary), 2)]
         newmsg = ""
         count = 0
         for letter in binlist:

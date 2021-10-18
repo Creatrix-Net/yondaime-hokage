@@ -41,7 +41,6 @@ async def get_bot_inviter(guild: discord.Guild, bot: discord.Client):
         return guild.owner
 
 
-
 async def get_or_fetch_member(guild, member_id, ctx):
     """Looks up a member in cache or fetches if not found.
     Parameters
@@ -58,7 +57,7 @@ async def get_or_fetch_member(guild, member_id, ctx):
     member = guild.get_member(member_id)
     if member is not None:
         return member
-    
+
     shard = ctx.bot.get_shard(guild.shard_id)
     if shard.is_ws_ratelimited():
         try:
@@ -73,7 +72,8 @@ async def get_or_fetch_member(guild, member_id, ctx):
         return None
     return members[0]
 
-async def resolve_member_ids(guild, member_ids, ctx = None):
+
+async def resolve_member_ids(guild, member_ids, ctx=None):
     """Bulk resolves member IDs to member instances, if possible.
     Members that can't be resolved are discarded from the list.
     This is done lazily using an asynchronous iterator.
@@ -108,18 +108,24 @@ async def resolve_member_ids(guild, member_ids, ctx = None):
             else:
                 yield member
         else:
-            members = await guild.query_members(limit=1, user_ids=needs_resolution, cache=True)
+            members = await guild.query_members(
+                limit=1, user_ids=needs_resolution, cache=True
+            )
             if members:
                 yield members[0]
     elif total_need_resolution <= 100:
         # Only a single resolution call needed here
-        resolved = await guild.query_members(limit=100, user_ids=needs_resolution, cache=True)
+        resolved = await guild.query_members(
+            limit=100, user_ids=needs_resolution, cache=True
+        )
         for member in resolved:
             yield member
     else:
         # We need to chunk these in bits of 100...
         for index in range(0, total_need_resolution, 100):
-            to_resolve = needs_resolution[index : index + 100]
-            members = await guild.query_members(limit=100, user_ids=to_resolve, cache=True)
+            to_resolve = needs_resolution[index: index + 100]
+            members = await guild.query_members(
+                limit=100, user_ids=to_resolve, cache=True
+            )
             for member in members:
                 yield member

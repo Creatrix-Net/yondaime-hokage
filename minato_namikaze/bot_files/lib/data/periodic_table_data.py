@@ -2,7 +2,10 @@
 LATTICES = {
     "BCC": ("Body Centered Cubic", "https://en.wikipedia.org/wiki/Body_centered_cubic"),
     "FCC": ("Face Centered Cubic", "https://en.wikipedia.org/wiki/Face_centered_cubic"),
-    "HCP": ("Hexagonal Close Packed", "https://en.wikipedia.org/wiki/Hexagonal_close_packed"),
+    "HCP": (
+        "Hexagonal Close Packed",
+        "https://en.wikipedia.org/wiki/Hexagonal_close_packed",
+    ),
     "ORC": ("Orthorhombic", "https://en.wikipedia.org/wiki/Orthorhombic"),
     "TET": ("Tetragonal", "https://en.wikipedia.org/wiki/Tetragonal"),
     "RHL": ("Rhombohedral", "https://en.wikipedia.org/wiki/Trigonal"),
@@ -147,13 +150,28 @@ UNITS = {
     "block": {"name": "Block in periodic table", "units": ""},
     "boiling_point": {"name": "Boiling temperature", "units": "K"},
     "c6": {"name": "C_6 dispersion coefficient", "units": "a.u."},
-    "c6_gb": {"name": "C_6 dispersion coefficient in a.u. (Gould & Bučko)", "units": "a.u."},
+    "c6_gb": {
+        "name": "C_6 dispersion coefficient in a.u. (Gould & Bučko)",
+        "units": "a.u.",
+    },
     "cas": {"name": "Chemical Abstract Service identifier", "units": ""},
     "covalent_radius_bragg": {"name": "Covalent radius by Bragg", "units": "pm"},
-    "covalent_radius_cordero": {"name": "Covalent radius by Cerdero et al.", "units": "pm"},
-    "covalent_radius_pyykko": {"name": "Covalent radius by Pyykko et al.", "units": "pm"},
-    "covalent_radius_pyykko_double": {"name": "Covalent radius by Pyykko et al.", "units": "pm"},
-    "covalent_radius_pyykko_triple": {"name": "Covalent radius by Pyykko et al.", "units": "pm"},
+    "covalent_radius_cordero": {
+        "name": "Covalent radius by Cerdero et al.",
+        "units": "pm",
+    },
+    "covalent_radius_pyykko": {
+        "name": "Covalent radius by Pyykko et al.",
+        "units": "pm",
+    },
+    "covalent_radius_pyykko_double": {
+        "name": "Covalent radius by Pyykko et al.",
+        "units": "pm",
+    },
+    "covalent_radius_pyykko_triple": {
+        "name": "Covalent radius by Pyykko et al.",
+        "units": "pm",
+    },
     "covalent_radius_slater": {"name": "Covalent radius by Slater", "units": "pm"},
     "cpk_color": {"name": "Element colour in CPK convention", "units": ""},
     "density": {"name": "Density at 295K", "units": "g/cm³"},
@@ -188,7 +206,10 @@ UNITS = {
     "melting_point": {"name": "Melting temperature", "units": "K"},
     "mendeleev_number": {"name": "Mendeleev number", "units": ""},
     "metallic_radius": {"name": "Single-bond metallic radius", "units": "pm"},
-    "metallic_radius_c12": {"name": "Metallic radius with 12 nearest neighbors", "units": "pm"},
+    "metallic_radius_c12": {
+        "name": "Metallic radius with 12 nearest neighbors",
+        "units": "pm",
+    },
     "molcas_gv_color": {"name": "Colour in MOLCAS GV convention", "units": ""},
     "name": {"name": "Name", "units": ""},
     "name_origin": {"name": "Name Origin", "units": ""},
@@ -202,19 +223,37 @@ UNITS = {
     "sources": {"name": "Sources", "units": ""},
     "specific_heat": {"name": "Specific heat at 20 C", "units": "J/(g mol)"},
     "symbol": {"name": "Symbol", "units": ""},
-    "thermal_conductivity": {"name": "Thermal conductivity at 25 C", "units": "W/(m K)"},
+    "thermal_conductivity": {
+        "name": "Thermal conductivity at 25 C",
+        "units": "W/(m K)",
+    },
     "uses": {"name": "Uses", "units": ""},
     "vdw_radius": {"name": "Van der Waals radius", "units": "pm"},
-    "vdw_radius_alvarez": {"name": "Van der Waals radius according to Alvarez", "units": "pm"},
-    "vdw_radius_batsanov": {"name": "Van der Waals radius according to Batsanov", "units": "pm"},
-    "vdw_radius_bondi": {"name": "Van der Waals radius according to Bondi", "units": "pm"},
-    "vdw_radius_dreiding": {"name": "Van der Waals radius from the DREIDING FF", "units": "pm"},
+    "vdw_radius_alvarez": {
+        "name": "Van der Waals radius according to Alvarez",
+        "units": "pm",
+    },
+    "vdw_radius_batsanov": {
+        "name": "Van der Waals radius according to Batsanov",
+        "units": "pm",
+    },
+    "vdw_radius_bondi": {
+        "name": "Van der Waals radius according to Bondi",
+        "units": "pm",
+    },
+    "vdw_radius_dreiding": {
+        "name": "Van der Waals radius from the DREIDING FF",
+        "units": "pm",
+    },
     "vdw_radius_mm3": {"name": "Van der Waals radius from the MM3 FF", "units": "pm"},
     "vdw_radius_rt": {
         "name": "Van der Waals radius according to Rowland and Taylor",
         "units": "pm",
     },
-    "vdw_radius_truhlar": {"name": "Van der Waals radius according to Truhlar", "units": "pm"},
+    "vdw_radius_truhlar": {
+        "name": "Van der Waals radius according to Truhlar",
+        "units": "pm",
+    },
     "vdw_radius_uff": {"name": "Van der Waals radius from the UFF", "units": "pm"},
     "xrf": {"name": "X-Ray Fluorescence", "units": "nm"},
 }

@@ -67,7 +67,6 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> slaps {member.mention} !!! Damm! **"
         else:
             desc = f"** <@{ctx.author.id}> slaps themselves !!! LOL! **"
-        import random
 
         if member == "" or random.choice([True, False]):
             onlyfiles = [f for f in listdir(

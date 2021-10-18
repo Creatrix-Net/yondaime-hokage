@@ -7,59 +7,61 @@ from typing import List, Union
 
 import dotenv
 
-dotenv_file = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(__file__).resolve(
+).parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
-    return os.environ.get(tokenname, 'False').strip('\n')
+    return os.environ.get(tokenname, "False").strip("\n")
+
 
 class BotList(enum.Enum):
-    dblst = token_get('DISCORDBOTLIST')
-    discordbotsgg = token_get('DISCORDBOTSGG')
-    topken = token_get('TOPGG')
-    bfd = token_get('BOTSFORDISCORD')
-    botlist = token_get('BOTLISTSPACE')  # discordlistspace
-    discordboats = token_get('DISCORDBOATS')
-    voidbot = token_get('VOIDBOT')
-    fateslist = token_get('FATESLIST')
-    bladebot = token_get('BLADEBOT')
-    spacebot = token_get('SPACEBOT')
-    discordlabs = token_get('DISCORDLABS')
-    infinity = token_get('INFINITY')
+    dblst = token_get("DISCORDBOTLIST")
+    discordbotsgg = token_get("DISCORDBOTSGG")
+    topken = token_get("TOPGG")
+    bfd = token_get("BOTSFORDISCORD")
+    botlist = token_get("BOTLISTSPACE")  # discordlistspace
+    discordboats = token_get("DISCORDBOATS")
+    voidbot = token_get("VOIDBOT")
+    fateslist = token_get("FATESLIST")
+    bladebot = token_get("BLADEBOT")
+    spacebot = token_get("SPACEBOT")
+    discordlabs = token_get("DISCORDLABS")
+    infinity = token_get("INFINITY")
 
 
 class ShinobiMatch(list, enum.Enum):
     character_side_exclude = [
-        'anbu',
-        'iwagakure',
-        'kumogakure',
-        'kirigakure',
-        'otogakure',
-        'sunagakure',
-        'akatsuki',
-        'konohagakure'
+        "anbu",
+        "iwagakure",
+        "kumogakure",
+        "kirigakure",
+        "otogakure",
+        "sunagakure",
+        "akatsuki",
+        "konohagakure",
     ]
 
     name_exclusion = character_side_exclude + [
-        'naruto',
-        'sasuke'
-        'jiraya',
-        'namikaze',
-        'sarutobi',
-        'yamanaka',
-        'akimichi',
-        'aburame',
-        'uzumaki',
-        'hyuga',
-        'otsutsuki',
-        'nara',
-        'senju',
-        'uchiha',
-        'kakashi',
-        'sakura'
+        "naruto",
+        "sasuke" "jiraya",
+        "namikaze",
+        "sarutobi",
+        "yamanaka",
+        "akimichi",
+        "aburame",
+        "uzumaki",
+        "hyuga",
+        "otsutsuki",
+        "nara",
+        "senju",
+        "uchiha",
+        "kakashi",
+        "sakura",
     ]
+
 
 @enum.unique
 class ChannelAndMessageId(enum.IntEnum):
@@ -74,29 +76,41 @@ class ChannelAndMessageId(enum.IntEnum):
 
     help_smile_emoji = 848961696047300649
 
+
 class Tokens(enum.Enum):
-    statcord = token_get('STATCORD')
-    dagpi = token_get('DAGPI')
-    chatbot = token_get('CHATBOTTOKEN')
-    sentry_link = token_get('SENTRY')
-    token = token_get('TOKEN')
+    statcord = token_get("STATCORD")
+    dagpi = token_get("DAGPI")
+    chatbot = token_get("CHATBOTTOKEN")
+    sentry_link = token_get("SENTRY")
+    token = token_get("TOKEN")
+
 
 class LinksAndVars(enum.Enum):
-    website = token_get('WEBSITE')
-    
-    github = token_get('GITHUB')
-    github_branch = 'master'
-    
-    version = token_get('VERSION')
+    website = token_get("WEBSITE")
+
+    github = token_get("GITHUB")
+    github_branch = "master"
+
+    version = token_get("VERSION")
     timeout = 3.0
-    
-    with open(os.path.join(Path(__file__).resolve().parent.parent, 'text', 'insult.txt')) as f:
-        insults: List[str] = list(map(lambda a: a.strip(' ').strip('\n').strip('\'').strip('"').strip('\\'), f.read().split(',')))
+
+    with open(
+        os.path.join(Path(__file__).resolve().parent.parent,
+                     "text", "insult.txt")
+    ) as f:
+        insults: List[str] = list(
+            map(
+                lambda a: a.strip(" ").strip("\n").strip(
+                    "'").strip('"').strip("\\"),
+                f.read().split(","),
+            )
+        )
+
 
 @enum.unique
 class SetupVars(str, enum.Enum):
-    warns = 'Warning of the server members will be logged here.'
-    support = 'This channel will be used as a support channel for this server.'
-    ban = 'This channel will be used to log the server bans.'
-    unban = 'Unbans of the server will be logged here.'
-    feedback = 'This channel will be used to log the feedbacks given by members.'
+    warns = "Warning of the server members will be logged here."
+    support = "This channel will be used as a support channel for this server."
+    ban = "This channel will be used to log the server bans."
+    unban = "Unbans of the server will be logged here."
+    feedback = "This channel will be used to log the feedbacks given by members."

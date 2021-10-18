@@ -69,7 +69,7 @@ def li_xue(ionization_energy: float, radius: float, valence_pqn: int) -> float:
 
 
 def martynov_batsanov(ionization_energies: List[float]) -> float:
-    """
+    r"""
     Calculates the electronegativity value according to Martynov and
     Batsanov as the average of the ionization energies of the valence
     electrons
@@ -91,7 +91,7 @@ def mulliken(
     missing_is_zero: bool = False,
     allow_negative_ea: bool = False,
 ) -> float:
-    """
+    r"""
     Return the absolute electronegativity (Mulliken scale), calculated as
     Args:
         ionization_energy: ionization energy
@@ -131,7 +131,7 @@ def nagle(nvalence: int, polarizability: float) -> float:
 
 
 def sanderson(radius: float, noble_gas_radius: float) -> float:
-    """
+    r"""
     Calculate Sanderson's electronegativity
     Args:
         radius: radius value for the element
@@ -145,7 +145,7 @@ def sanderson(radius: float, noble_gas_radius: float) -> float:
 
 
 def generic(zeff: float, radius: float, rpow: float = 1, apow: float = 1) -> float:
-    """
+    r"""
     Calculate the electronegativity from a general formula
     Args:
         zeff: effective nuclear charge

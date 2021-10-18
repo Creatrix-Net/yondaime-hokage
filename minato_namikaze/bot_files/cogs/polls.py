@@ -96,9 +96,7 @@ class QuickPoll(commands.Cog):
                                 "message", timeout=60, check=check
                             )
                         except:
-                            await ctx.send(
-                                "You didn't answer the questions in Time"
-                            )
+                            await ctx.send("You didn't answer the questions in Time")
                             return
                         options.append(options_message.content)
 

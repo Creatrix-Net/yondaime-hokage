@@ -23,13 +23,15 @@ from ...lib.data.braille import (
 
 def pagify(
     text: str,
-    delims: Sequence[str] = ["\n"],
+    delims: Sequence[str] = None,
     *,
     priority: bool = False,
     escape_mass_mentions: bool = True,
     shorten_by: int = 8,
     page_length: int = 2000,
 ) -> Iterator[str]:
+    if delims is None:
+        delims = ["\n"]
     in_text = text
     page_length -= shorten_by
     while len(in_text) > page_length:

@@ -249,10 +249,7 @@ class ElectronicConfiguration(object):
         if block == "d":
             if method == "simple":
                 return 2
-            return (
-                self.conf[(self.max_n(), "s")] +
-                self.conf[(self.max_n() - 1, "d")]
-            )
+            return self.conf[(self.max_n(), "s")] + self.conf[(self.max_n() - 1, "d")]
         elif block == "f":
             return 2
         else:

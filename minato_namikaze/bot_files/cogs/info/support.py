@@ -17,8 +17,7 @@ def if_inside_support_channel(ctx):
     if check_if_support_is_setup(ctx):
         if ctx.message.channel == return_support_channel(ctx):
             return True
-        else:
-            return False
+        return False
     else:
         return False
 
@@ -52,7 +51,7 @@ class Support(commands.Cog):
                 f"{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:"
             )
             return
-        elif chan == ctx.message.channel:
+        if chan == ctx.message.channel:
             await ctx.send(
                 embed=ErrorEmbed(
                     description=f"{ctx.message.author.mention} This command can't be run inside the {chan.mention}"
@@ -60,7 +59,7 @@ class Support(commands.Cog):
                 delete_after=4,
             )
             return
-        elif (
+        if (
             discord.utils.get(ctx.guild.roles, name="SupportRequired")
             in ctx.message.author.roles
         ):
@@ -70,25 +69,24 @@ class Support(commands.Cog):
                 )
             )
             return
-        else:
-            channel = ctx.channel
-            await ctx.message.author.add_roles(
-                discord.utils.get(ctx.guild.roles, name="SupportRequired")
+        channel = ctx.channel
+        await ctx.message.author.add_roles(
+            discord.utils.get(ctx.guild.roles, name="SupportRequired")
+        )
+        if channel.guild is ctx.guild:
+            per = ctx.author.mention
+            e = Embed(
+                title="Help Required",
+                description=f"{per} in {channel.mention} needs support!",
             )
-            if channel.guild is ctx.guild:
-                per = ctx.author.mention
-                e = Embed(
-                    title="Help Required",
-                    description=f"{per} in {channel.mention} needs support!",
-                )
-                await chan.send("@here", embed=e)
-                await ctx.send(f"**Help Desk** has been has been notifed!")
-                e = Embed(
-                    title="Support Requirement Registered",
-                    description=f"Your need for the support in **{ctx.guild.name}** has been registered",
-                )
-                await ctx.message.author.send("Hello", embed=e)
-                return
+            await chan.send("@here", embed=e)
+            await ctx.send(f"**Help Desk** has been has been notifed!")
+            e = Embed(
+                title="Support Requirement Registered",
+                description=f"Your need for the support in **{ctx.guild.name}** has been registered",
+            )
+            await ctx.message.author.send("Hello", embed=e)
+            return
 
     @support.error
     async def error_handler(self, ctx, error):
@@ -114,7 +112,7 @@ class Support(commands.Cog):
                     description=f"{member.mention} is a bot! :robot:")
             )
             return
-        elif (
+        if (
             not discord.utils.get(ctx.guild.roles, name="SupportRequired")
             in member.roles
         ):

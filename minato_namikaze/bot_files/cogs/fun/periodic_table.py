@@ -73,8 +73,7 @@ class Elements(commands.Cog):
         if element.lattice_structure:
             name, link = LATTICES[element.lattice_structure]
             return "[{}]({})".format(name, link)
-        else:
-            return ""
+        return ""
 
     @staticmethod
     def get_xray_wavelength(element: ELEMENTS) -> str:
@@ -133,19 +132,18 @@ class Elements(commands.Cog):
         """
         if not measurement:
             return await ctx.send(embed=await self.element_embed(element))
-        else:
-            msg = f"{element.name}: "
-            for m in measurement:
-                extra_1 = ""
-                extra_2 = ""
-                data = getattr(element, m[0], "")
-                if m[0] == "lattice_structure":
-                    extra_1, extra_2 = LATTICES[element.lattice_structure]
-                if m[0] == "xrf":
-                    extra_2 = self.get_xray_wavelength(element)
+        msg = f"{element.name}: "
+        for m in measurement:
+            extra_1 = ""
+            extra_2 = ""
+            data = getattr(element, m[0], "")
+            if m[0] == "lattice_structure":
+                extra_1, extra_2 = LATTICES[element.lattice_structure]
+            if m[0] == "xrf":
+                extra_2 = self.get_xray_wavelength(element)
 
-                msg += f"{m[1]} {data} {extra_1} {extra_2} {m[2]}\n"
-            await ctx.send(msg)
+            msg += f"{m[1]} {data} {extra_1} {extra_2} {m[2]}\n"
+        await ctx.send(msg)
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)

@@ -36,8 +36,7 @@ class PostStats:
                         )
                         await asyncio.sleep(5)
                 return True
-            else:
-                return False
+            return False
             return True
         except:
             return False
@@ -131,8 +130,7 @@ class PostStats:
             await session.close()
             if getrequestobj:
                 return request_made
-            else:
-                return request_made.status
+            return request_made.status
         except:
             return 503
 

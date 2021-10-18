@@ -58,9 +58,8 @@ class Snipe(commands.Cog):
             if dp[n - 1][m - 1] == -1:
                 dp[n][m] = self.minDis(s1, s2, n - 1, m - 1, dp)
                 return dp[n][m]
-            else:
-                dp[n][m] = dp[n - 1][m - 1]
-                return dp[n][m]
+            dp[n][m] = dp[n - 1][m - 1]
+            return dp[n][m]
 
         # If characters are nt equal, we need to
         # find the minimum cost out of all 3 operations.

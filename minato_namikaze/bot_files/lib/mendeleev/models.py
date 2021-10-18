@@ -287,8 +287,7 @@ class Element(Base):
         lwithabu = [i for i in self.isotopes if i.abundance is not None]
         if lwithabu:
             return max(lwithabu, key=attrgetter("abundance")).mass_number
-        else:
-            return self.isotopes[0].mass_number
+        return self.isotopes[0].mass_number
 
     def mass_str(self) -> str:
         """String representation of atomic weight"""
@@ -296,16 +295,14 @@ class Element(Base):
         if self.atomic_weight_uncertainty is None:
             if self.is_radioactive:
                 return "[{aw:.0f}]".format(aw=self.atomic_weight)
-            else:
-                return "{aw:.3f}".format(aw=self.atomic_weight)
+            return "{aw:.3f}".format(aw=self.atomic_weight)
         else:
             dec = int(
                 abs(math.floor(math.log10(abs(self.atomic_weight_uncertainty)))))
             dec = min(dec, 5)
             if self.is_radioactive:
                 return "[{aw:.{dec}f}]".format(aw=self.atomic_weight, dec=dec)
-            else:
-                return "{aw:.{dec}f}".format(aw=self.atomic_weight, dec=dec)
+            return "{aw:.{dec}f}".format(aw=self.atomic_weight, dec=dec)
 
     @hybrid_property
     def covalent_radius(self) -> float:
@@ -334,16 +331,14 @@ class Element(Base):
                 and self.electron_affinity is not None
             ):
                 return (self.ionenergies[1] - self.electron_affinity) * 0.5
-            else:
-                return None
+            return None
         elif charge > 0:
             if (
                 self.ionenergies.get(charge + 1, None) is not None
                 and self.ionenergies.get(charge, None) is not None
             ):
                 return (self.ionenergies[charge + 1] - self.ionenergies[charge]) * 0.5
-            else:
-                return None
+            return None
         elif charge < 0:
             raise ValueError(
                 "Charge has to be a non-negative integer, got: {}".format(
@@ -366,8 +361,7 @@ class Element(Base):
 
         if eta is None:
             return None
-        else:
-            return 1.0 / (2.0 * eta)
+        return 1.0 / (2.0 * eta)
 
     def zeff(
         self, n: int = None, o: str = None, method: str = "slater", alle: bool = False
@@ -411,12 +405,11 @@ class Element(Base):
 
         if method.lower() == "slater":
             return self.atomic_number - self.ec.slater_screening(n=n, o=o, alle=alle)
-        elif method.lower() == "clementi":
+        if method.lower() == "clementi":
             sc = self.sconst.get((n, o), None)
             if sc is not None:
                 return self.atomic_number - self.sconst.get((n, o), None)
-            else:
-                return sc
+            return sc
         else:
             raise ValueError(
                 "<method> should be one of {}".format("slater, clementi"))
@@ -433,8 +426,7 @@ class Element(Base):
 
         if ip is not None and ea is not None:
             return (ip + ea) ** 2 / (8.0 * (ip - ea))
-        else:
-            return None
+        return None
 
     def electronegativity_scales(self, name: str = None) -> List[str]:
         "Available electronegativity scales"
@@ -456,10 +448,9 @@ class Element(Base):
         if name:
             if name in scales:
                 return scales[name]
-            else:
-                raise ValueError(
-                    f"scale: '{name}' not found, available scales are: {', '.join(scales.keys())}"
-                )
+            raise ValueError(
+                f"scale: '{name}' not found, available scales are: {', '.join(scales.keys())}"
+            )
 
         return list(sorted(scales.keys()))
 
@@ -553,8 +544,7 @@ class Element(Base):
 
         if all(ionenergies):
             return martynov_batsanov(ionenergies)
-        else:
-            return None
+        return None
 
     def electronegativity_mulliken(
         self,

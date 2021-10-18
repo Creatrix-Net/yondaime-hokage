@@ -82,26 +82,25 @@ class QuickPoll(commands.Cog):
                             )
                         )
                         return
-                    elif int(message.content) > len(self.reactions):
+                    if int(message.content) > len(self.reactions):
                         await ctx.send(
                             embed=ErrorEmbed(
                                 description=f"The no. of options cannot be **greater than 10**, Please **rerun the command again**!"
                             )
                         )
                         return
-                    else:
-                        for i in range(int(message.content)):
-                            await ctx.send(f"**Option {i+1}**")
-                            try:
-                                options_message = await self.bot.wait_for(
-                                    "message", timeout=60, check=check
-                                )
-                            except:
-                                await ctx.send(
-                                    "You didn't answer the questions in Time"
-                                )
-                                return
-                            options.append(options_message.content)
+                    for i in range(int(message.content)):
+                        await ctx.send(f"**Option {i+1}**")
+                        try:
+                            options_message = await self.bot.wait_for(
+                                "message", timeout=60, check=check
+                            )
+                        except:
+                            await ctx.send(
+                                "You didn't answer the questions in Time"
+                            )
+                            return
+                        options.append(options_message.content)
 
             except:
                 await ctx.send("You didn't answer the questions in Time")
@@ -159,19 +158,18 @@ class QuickPoll(commands.Cog):
         if poll_message.author == ctx.message.author:
             await ctx.send(embed=error_message)
             return
-        elif embed.title.startswith("(Strawpoll)") or embed.title.startswith(
+        if embed.title.startswith("(Strawpoll)") or embed.title.startswith(
             "Results of the poll"
         ):
             await ctx.send(embed=error_message)
             return
-        else:
-            try:
-                if embed.footer.text.startswith("Poll ID:"):
-                    await ctx.send(embed=error_message)
-                    return
-            except:
+        try:
+            if embed.footer.text.startswith("Poll ID:"):
                 await ctx.send(embed=error_message)
                 return
+        except:
+            await ctx.send(embed=error_message)
+            return
 
         unformatted_options = [
             x.strip("\n").strip(" ")
@@ -280,7 +278,7 @@ class QuickPoll(commands.Cog):
         """
         if len(questions_and_choices) < 3:
             return await ctx.send("Need at least 1 question with 2 choices.")
-        elif len(questions_and_choices) > 21:
+        if len(questions_and_choices) > 21:
             return await ctx.send("You can only have up to 20 choices.")
 
         perms = ctx.channel.permissions_for(ctx.me)

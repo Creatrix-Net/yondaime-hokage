@@ -30,7 +30,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
                 f"** <@{ctx.author.id}> yes yes bro!!! Everyone is not sus!**"
             )
             return
-        elif type(member) is discord.Member:
+        if type(member) is discord.Member:
             desc = f"** {member}  was not the imposter**"
         elif member != "":
             desc = f"** {member}  was not the imposter**"

@@ -33,7 +33,7 @@ class Fun(commands.Cog):
     @commands.command(usage="[member.mention]")
     async def spank(self, ctx, member: Optional[discord.Member]):
         """Spank someone"""
-        if member == None:
+        if member is None:
             desc = f"** <@{ctx.author.id}> spanks themselves !!! LOL!**"
         elif member in ["@everyone", "@here"]:
             await ctx.send(f"** <@{ctx.author.id}> why would you spank @everyone? **")
@@ -59,7 +59,7 @@ class Fun(commands.Cog):
     @commands.command(usage="<member.mention>")
     async def slap(self, ctx, member: Optional[discord.Member]):
         """Slap someone"""
-        if member == None:
+        if member is None:
             desc = f"** <@{ctx.author.id}> slaps themselves !!! LOL!**"
         elif member in ["@everyone", "@here"]:
             await ctx.send(f"** <@{ctx.author.id}> why would you slap @everyone? **")
@@ -102,7 +102,7 @@ class Fun(commands.Cog):
     @commands.command(usage="[member.mention]")
     async def hug(self, ctx, member: Optional[discord.Member]):
         """Hug someone"""
-        if member == None:
+        if member is None:
             desc = f"** <@{ctx.author.id}> hugs themselves :heart: :heart: :heart: :heart: **"
         elif member in ["@everyone", "@here"]:
             await ctx.send(f"** <@{ctx.author.id}> why would you hug @everyone? **")
@@ -128,7 +128,7 @@ class Fun(commands.Cog):
     @commands.command(usage="[member.mention]")
     async def poke(self, ctx, member: Optional[discord.Member]):
         """Poke someone"""
-        if member == None:
+        if member is None:
             desc = f"** <@{ctx.author.id}> pokes themselves! **"
         elif member in ["@everyone", "@here"]:
             await ctx.send(f"** <@{ctx.author.id}> why would you poke @everyone? **")
@@ -154,7 +154,7 @@ class Fun(commands.Cog):
     @commands.command(usage="[member.mention]")
     async def high5(self, ctx, member: Optional[discord.Member]):
         """Do a highfive"""
-        if member == None:
+        if member is None:
             desc = f"**<@{ctx.author.id}> high-fives **"
         elif member in ["@everyone", "@here"]:
             desc = f"**@everyone <@{ctx.author.id}> high-fives **"
@@ -179,7 +179,7 @@ class Fun(commands.Cog):
     @commands.command(usage="[member.mention]")
     async def party(self, ctx, member: Optional[discord.Member]):
         """Party with someone"""
-        if member == None:
+        if member is None:
             desc = f"**<@{ctx.author.id}> is partying !!**"
         elif member in ["@everyone", "@here"]:
             desc = f"**@everyone <@{ctx.author.id}> is partying!! come join them !! **"

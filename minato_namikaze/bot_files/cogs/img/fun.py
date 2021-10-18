@@ -41,8 +41,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> spanks {member.mention} !!! Damm! **"
         else:
             desc = f"** <@{ctx.author.id}> spanks themselves !!! LOL! **"
-        onlyfiles = list(listdir(
-            join(self.DEFAULT_GIF_LIST_PATH, "spank")))
+        onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "spank")))
 
         embed = discord.Embed(
             description=desc, timestamp=discord.utils.utcnow())
@@ -69,8 +68,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> slaps themselves !!! LOL! **"
 
         if member == "" or random.choice([True, False]):
-            onlyfiles = list(listdir(
-                join(self.DEFAULT_GIF_LIST_PATH, "slap")))
+            onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "slap")))
 
             embed = discord.Embed(
                 description=desc, timestamp=discord.utils.utcnow())
@@ -109,8 +107,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> hugs {member.mention} !!! :heart: :heart: :heart: **"
         else:
             desc = f"** <@{ctx.author.id}> hugs themselves !!! :heart: :heart: :heart: :heart: **"
-        onlyfiles = list(listdir(
-            join(self.DEFAULT_GIF_LIST_PATH, "hug")))
+        onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "hug")))
 
         embed = discord.Embed(
             description=desc, timestamp=discord.utils.utcnow())
@@ -135,8 +132,7 @@ class Fun(commands.Cog):
             desc = f"** {member} <@{ctx.author.id}> pokes you !!! **"
         else:
             desc = f"** <@{ctx.author.id}> hugs themselves !!! **"
-        onlyfiles = list(listdir(
-            join(self.DEFAULT_GIF_LIST_PATH, "poke")))
+        onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "poke")))
 
         embed = discord.Embed(
             description=desc, timestamp=discord.utils.utcnow())
@@ -161,8 +157,7 @@ class Fun(commands.Cog):
             desc = f"**<@{ctx.author.id}> high fives {member.mention} !!! **"
         else:
             desc = f"**<@{ctx.author.id}> high-fives **"
-        onlyfiles = list(listdir(
-            join(self.DEFAULT_GIF_LIST_PATH, "high5")))
+        onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "high5")))
 
         embed = discord.Embed(
             description=desc, timestamp=discord.utils.utcnow())
@@ -186,8 +181,7 @@ class Fun(commands.Cog):
             desc = f"**<@{ctx.author.id}> parties with {member.mention} !!! Yaay !!! **"
         else:
             desc = f"**<@{ctx.author.id}> is partying !!!**"
-        onlyfiles = list(listdir(
-            join(self.DEFAULT_GIF_LIST_PATH, "party")))
+        onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "party")))
 
         embed = discord.Embed(
             description=desc, timestamp=discord.utils.utcnow())

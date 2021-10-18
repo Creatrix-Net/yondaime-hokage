@@ -19,11 +19,10 @@ def get_l(subshell):
 
     if subshell.lower() in ORBITALS:
         return ORBITALS.index(subshell.lower())
-    else:
-        raise ValueError(
-            'wrong subshell label: "{}",'.format(subshell)
-            + " should be one of: {}".format(", ".join(ORBITALS))
-        )
+    raise ValueError(
+        'wrong subshell label: "{}",'.format(subshell)
+        + " should be one of: {}".format(", ".join(ORBITALS))
+    )
 
 
 def subshell_degeneracy(subshell):
@@ -49,11 +48,10 @@ def shell_capactity(shell):
 
     if shell.upper() in SHELLS:
         return 2 * (SHELLS.index(shell.upper()) + 1) ** 2
-    else:
-        raise ValueError(
-            'wrong shell label: "{}",'.format(shell)
-            + " should be one of: {}".format(", ".join(SHELLS))
-        )
+    raise ValueError(
+        'wrong shell label: "{}",'.format(shell)
+        + " should be one of: {}".format(", ".join(SHELLS))
+    )
 
 
 class ElectronicConfiguration(object):
@@ -237,26 +235,24 @@ class ElectronicConfiguration(object):
 
         if wrt.lower() == "order":
             return list(self.conf.items())[-1]
-        elif wrt.lower() == "aufbau":
+        if wrt.lower() == "aufbau":
             return sorted(
                 self.conf.items(), key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])
             )[-1]
-        else:
-            raise ValueError("wrong <wrt>: {}".format(wrt))
+        raise ValueError("wrong <wrt>: {}".format(wrt))
 
     def nvalence(self, block, method=None):
         "Return the number of valence electrons"
 
         if block in ["s", "p"]:
             return sum(v for k, v in self.conf.items() if k[0] == self.max_n())
-        elif block == "d":
+        if block == "d":
             if method == "simple":
                 return 2
-            else:
-                return (
-                    self.conf[(self.max_n(), "s")] +
-                    self.conf[(self.max_n() - 1, "d")]
-                )
+            return (
+                self.conf[(self.max_n(), "s")] +
+                self.conf[(self.max_n() - 1, "d")]
+            )
         elif block == "f":
             return 2
         else:

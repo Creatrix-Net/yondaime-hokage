@@ -11,8 +11,7 @@ from ..util import SetupVars
 def check_if_warning_system_setup(ctx):
     if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.warns.value):
         return True
-    else:
-        return False
+    return False
 
 
 # checks support
@@ -28,24 +27,21 @@ def check_if_support_is_setup(ctx):
 def check_if_ban_channel_setup(ctx):
     if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.ban.value):
         return True
-    else:
-        return False
+    return False
 
 
 # checks unban
 def check_if_unban_channel_setup(ctx):
     if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.unban.value):
         return True
-    else:
-        return False
+    return False
 
 
 # check feedback
 def check_if_feedback_system_setup(ctx):
     if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.feedback.value):
         return True
-    else:
-        return False
+    return False
 
 
 # return warns

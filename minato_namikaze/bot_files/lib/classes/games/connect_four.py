@@ -65,7 +65,7 @@ class ConnectFour:
 
     async def GameOver(self) -> bool:
 
-        if all([i != BLANK for i in self.board[0]]):
+        if all(i != BLANK for i in self.board[0]):
             return True
 
         for x in range(6):

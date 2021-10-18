@@ -98,7 +98,7 @@ class Snipe(commands.Cog):
         if snipe is None:
             return await ctx.send("No snipes in this channel!")
         emb = discord.Embed()
-        if type(snipe) == list:  # edit snipe
+        if type(snipe) is list:  # edit snipe
             emb.set_author(
                 name=str(snipe[0].author), icon_url=snipe[0].author.avatar.url
             )

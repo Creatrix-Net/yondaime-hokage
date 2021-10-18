@@ -37,7 +37,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> spanks themselves !!! LOL!**"
         elif member in ["@everyone", "@here"]:
             await ctx.send(f"** <@{ctx.author.id}> why would you spank @everyone? **")
-        elif type(member) == discord.Member:
+        elif type(member) is discord.Member:
             desc = f"** <@{ctx.author.id}> spanks {member.mention} !!! Damm! **"
         else:
             desc = f"** <@{ctx.author.id}> spanks themselves !!! LOL! **"
@@ -63,7 +63,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> slaps themselves !!! LOL!**"
         elif member in ["@everyone", "@here"]:
             await ctx.send(f"** <@{ctx.author.id}> why would you slap @everyone? **")
-        elif type(member) == discord.Member:
+        elif type(member) is discord.Member:
             desc = f"** <@{ctx.author.id}> slaps {member.mention} !!! Damm! **"
         else:
             desc = f"** <@{ctx.author.id}> slaps themselves !!! LOL! **"
@@ -105,7 +105,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> hugs themselves :heart: :heart: :heart: :heart: **"
         elif member in ["@everyone", "@here"]:
             await ctx.send(f"** <@{ctx.author.id}> why would you hug @everyone? **")
-        elif type(member) == discord.Member:
+        elif type(member) is discord.Member:
             desc = f"** <@{ctx.author.id}> hugs {member.mention} !!! :heart: :heart: :heart: **"
         else:
             desc = f"** <@{ctx.author.id}> hugs themselves !!! :heart: :heart: :heart: :heart: **"
@@ -131,7 +131,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> pokes themselves! **"
         elif member in ["@everyone", "@here"]:
             await ctx.send(f"** <@{ctx.author.id}> why would you poke @everyone? **")
-        elif type(member) == discord.Member:
+        elif type(member) is discord.Member:
             desc = f"** {member} <@{ctx.author.id}> pokes you !!! **"
         else:
             desc = f"** <@{ctx.author.id}> hugs themselves !!! **"
@@ -157,7 +157,7 @@ class Fun(commands.Cog):
             desc = f"**<@{ctx.author.id}> high-fives **"
         elif member in ["@everyone", "@here"]:
             desc = f"**@everyone <@{ctx.author.id}> high-fives **"
-        elif type(member) == discord.Member:
+        elif type(member) is discord.Member:
             desc = f"**<@{ctx.author.id}> high fives {member.mention} !!! **"
         else:
             desc = f"**<@{ctx.author.id}> high-fives **"
@@ -182,7 +182,7 @@ class Fun(commands.Cog):
             desc = f"**<@{ctx.author.id}> is partying !!**"
         elif member in ["@everyone", "@here"]:
             desc = f"**@everyone <@{ctx.author.id}> is partying!! come join them !! **"
-        elif type(member) == discord.Member:
+        elif type(member) is discord.Member:
             desc = f"**<@{ctx.author.id}> parties with {member.mention} !!! Yaay !!! **"
         else:
             desc = f"**<@{ctx.author.id}> is partying !!!**"

@@ -30,7 +30,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
                 f"** <@{ctx.author.id}> yes yes bro!!! Everyone is not sus!**"
             )
             return
-        elif type(member) == discord.Member:
+        elif type(member) is discord.Member:
             desc = f"** {member}  was not the imposter**"
         elif member != "":
             desc = f"** {member}  was not the imposter**"
@@ -52,7 +52,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             desc = f"Hmmmmmmm ** <@{ctx.author.id}> , Hey guys <@{ctx.author.id}> is the sus !!!**"
             await ctx.send(desc)
             text = f"{ctx.author.display_name}  is the imposter"
-        elif type(member) == discord.Member:
+        elif type(member) is discord.Member:
             desc = f"** {member.mention}  is the imposter**"
             text = f"{member.display_name}  is the imposter"
         elif member != "":

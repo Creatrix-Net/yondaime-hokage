@@ -249,7 +249,8 @@ class Invites(commands.Cog):
             return
 
         # if you got here there are invites in the cache
-        embed = discord.Embed(colour=discord.Colour.green(), title="Most used invites")
+        embed = discord.Embed(colour=discord.Colour.green(),
+                              title="Most used invites")
         # sort the invites by the amount of uses
         # by default this would make it in increasing
         # order so we pass True to the reverse kwarg
@@ -261,7 +262,8 @@ class Invites(commands.Cog):
         # list comp on the sorted invites and then
         # join it into one string with str.join
         description = "\n".join(
-            [f"{i + 1}. {invites[i].code} - {invites[i].uses}" for i in range(amount)]
+            [f"{i + 1}. {invites[i].code} - {invites[i].uses}" for i in range(
+                amount)]
         )
         embed.description = description
         # if there are more than 10 invites

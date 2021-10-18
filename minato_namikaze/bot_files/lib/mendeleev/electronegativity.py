@@ -1,6 +1,5 @@
 # Code written here is not mine.
 # Its taken from https://github.com/lmmentel/mendeleev
-
 """
 Electronegativity scale formulas
 """
@@ -82,7 +81,7 @@ def martynov_batsanov(ionization_energies: List[float]) -> float:
     - :math:`I_{k}` is the :math:`k` th ionization potential.
     """
 
-    return math.sqrt(abs(sum(ionization_energies)/len(ionization_energies)))
+    return math.sqrt(abs(sum(ionization_energies) / len(ionization_energies)))
 
 
 def mulliken(

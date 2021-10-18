@@ -33,7 +33,8 @@ class MySupport(commands.Cog, name="My Support"):
         )
 
         # [`hash`](url) message (offset)
-        offset = time.format_relative(commit_time.astimezone(datetime.timezone.utc))
+        offset = time.format_relative(
+            commit_time.astimezone(datetime.timezone.utc))
         return f"[`{short_sha2}`](https://github.com/The-4th-Hokage/yondaime-hokage/commit/{commit.hex}) {short} ({offset})"
 
     def get_last_commits(self, count=3):

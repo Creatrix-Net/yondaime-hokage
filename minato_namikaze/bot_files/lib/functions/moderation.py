@@ -7,58 +7,81 @@ from ..classes import ErrorEmbed
 from ..util import SetupVars
 
 
-#checks warns
+# checks warns
 def check_if_warning_system_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.warns.value):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.warns.value):
         return True
     else:
         return False
 
-#checks support
+
+# checks support
 def check_if_support_is_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.support.value):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.support.value):
         support_channel = True
     else:
         support_channel = False
     return support_channel
 
-#checks ban
+
+# checks ban
 def check_if_ban_channel_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.ban.value):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.ban.value):
         return True
     else:
         return False
 
-#checks unban
+
+# checks unban
 def check_if_unban_channel_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.unban.value):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.unban.value):
         return True
     else:
         return False
 
-#check feedback
+
+# check feedback
 def check_if_feedback_system_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic = SetupVars.feedback.value):
+    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.feedback.value):
         return True
     else:
         return False
 
-#return warns
-def return_warning_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.warns.value)
 
-def return_ban_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.ban.value)
+# return warns
+def return_warning_channel(ctx=None, guild=None):
+    return discord.utils.get(
+        ctx.guild.text_channels if ctx else guild.text_channels,
+        topic=SetupVars.warns.value,
+    )
 
-def return_unban_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.unban.value)
 
-def return_feedback_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.feedback.value)
+def return_ban_channel(ctx=None, guild=None):
+    return discord.utils.get(
+        ctx.guild.text_channels if ctx else guild.text_channels,
+        topic=SetupVars.ban.value,
+    )
 
-def return_support_channel(ctx = None, guild = None):
-    return discord.utils.get(ctx.guild.text_channels if ctx else guild.text_channels, topic = SetupVars.support.value)
 
+def return_unban_channel(ctx=None, guild=None):
+    return discord.utils.get(
+        ctx.guild.text_channels if ctx else guild.text_channels,
+        topic=SetupVars.unban.value,
+    )
+
+
+def return_feedback_channel(ctx=None, guild=None):
+    return discord.utils.get(
+        ctx.guild.text_channels if ctx else guild.text_channels,
+        topic=SetupVars.feedback.value,
+    )
+
+
+def return_support_channel(ctx=None, guild=None):
+    return discord.utils.get(
+        ctx.guild.text_channels if ctx else guild.text_channels,
+        topic=SetupVars.support.value,
+    )
 
 
 # The permission system of the bot is based on a "just works" basis
@@ -69,18 +92,24 @@ def return_support_channel(ctx = None, guild = None):
 # admin (Administrator). Having these signify certain bypasses.
 # Of course, the owner will always be able to execute commands.
 
+
 async def check_permissions(ctx, perms, *, check=all):
     is_owner = await ctx.bot.is_owner(ctx.author)
     if is_owner:
         return True
 
     resolved = ctx.channel.permissions_for(ctx.author)
-    return check(getattr(resolved, name, None) == value for name, value in perms.items())
+    return check(
+        getattr(resolved, name, None) == value for name, value in perms.items()
+    )
+
 
 def has_permissions(*, check=all, **perms):
     async def pred(ctx):
         return await check_permissions(ctx, perms, check=check)
+
     return commands.check(pred)
+
 
 async def check_guild_permissions(ctx, perms, *, check=all):
     is_owner = await ctx.bot.is_owner(ctx.author)
@@ -91,36 +120,52 @@ async def check_guild_permissions(ctx, perms, *, check=all):
         return False
 
     resolved = ctx.author.guild_permissions
-    return check(getattr(resolved, name, None) == value for name, value in perms.items())
+    return check(
+        getattr(resolved, name, None) == value for name, value in perms.items()
+    )
+
 
 def has_guild_permissions(*, check=all, **perms):
     async def pred(ctx):
         return await check_guild_permissions(ctx, perms, check=check)
+
     return commands.check(pred)
+
 
 # These do not take channel overrides into account
 
+
 def is_mod():
     async def pred(ctx):
-        return await check_guild_permissions(ctx, {'manage_guild': True})
+        return await check_guild_permissions(ctx, {"manage_guild": True})
+
     return commands.check(pred)
+
 
 def is_admin():
     async def pred(ctx):
-        return await check_guild_permissions(ctx, {'administrator': True})
+        return await check_guild_permissions(ctx, {"administrator": True})
+
     return commands.check(pred)
 
+
 def mod_or_permissions(**perms):
-    perms['manage_guild'] = True
+    perms["manage_guild"] = True
+
     async def predicate(ctx):
         return await check_guild_permissions(ctx, perms, check=any)
+
     return commands.check(predicate)
 
+
 def admin_or_permissions(**perms):
-    perms['administrator'] = True
+    perms["administrator"] = True
+
     async def predicate(ctx):
         return await check_guild_permissions(ctx, perms, check=any)
+
     return commands.check(predicate)
+
 
 def is_in_guilds(*guild_ids):
     def predicate(ctx):
@@ -128,5 +173,5 @@ def is_in_guilds(*guild_ids):
         if guild is None:
             return False
         return guild.id in guild_ids
-    return commands.check(predicate)
 
+    return commands.check(predicate)

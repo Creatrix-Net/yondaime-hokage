@@ -1,6 +1,5 @@
 # Code written here is not mine.
 # Its taken from https://github.com/lmmentel/mendeleev
-
 """
 Class abstracting the elctronic configuration
 """
@@ -91,10 +90,12 @@ class ElectronicConfiguration(object):
             self.parse(str(value))
         elif isinstance(value, dict):
             self._conf = OrderedDict(
-                sorted(value.items(), key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0]))
+                sorted(value.items(), key=lambda x: (
+                    x[0][0] + get_l(x[0][1]), x[0][0]))
             )
         else:
-            raise ValueError("<conf> should be str or dict, got {}".format(type(value)))
+            raise ValueError(
+                "<conf> should be str or dict, got {}".format(type(value)))
 
     @property
     def atomre(self):
@@ -118,7 +119,8 @@ class ElectronicConfiguration(object):
     def shellre(self, value):
 
         if value is None:
-            self._shellre = re.compile(r"(?P<n>\d)(?P<o>[spdfghijk])(?P<e>\d+)?")
+            self._shellre = re.compile(
+                r"(?P<n>\d)(?P<o>[spdfghijk])(?P<e>\d+)?")
         else:
             self._shellre = re.compile(value)
 
@@ -140,7 +142,8 @@ class ElectronicConfiguration(object):
                 if self.shellre.match(o)
             ]
             core = OrderedDict(
-                [((int(n), o), (int(e) if e is not None else 1)) for (n, o, e) in core]
+                [((int(n), o), (int(e) if e is not None else 1))
+                 for (n, o, e) in core]
             )
 
         valence = [
@@ -149,7 +152,8 @@ class ElectronicConfiguration(object):
             if self.shellre.match(o)
         ]
         valence = OrderedDict(
-            [((int(n), o), (int(e) if e is not None else 1)) for (n, o, e) in valence]
+            [((int(n), o), (int(e) if e is not None else 1))
+             for (n, o, e) in valence]
         )
 
         self._conf = OrderedDict(list(core.items()) + list(valence.items()))
@@ -180,7 +184,8 @@ class ElectronicConfiguration(object):
 
         _, core_conf = self.get_largest_core()
 
-        valence = OrderedDict(set(self.conf.items()) - set(core_conf.conf.items()))
+        valence = OrderedDict(set(self.conf.items()) -
+                              set(core_conf.conf.items()))
 
         return ElectronicConfiguration(valence)
 
@@ -249,7 +254,8 @@ class ElectronicConfiguration(object):
                 return 2
             else:
                 return (
-                    self.conf[(self.max_n(), "s")] + self.conf[(self.max_n() - 1, "d")]
+                    self.conf[(self.max_n(), "s")] +
+                    self.conf[(self.max_n() - 1, "d")]
                 )
         elif block == "f":
             return 2
@@ -303,7 +309,8 @@ class ElectronicConfiguration(object):
             ssd = subshell_degeneracy(orb)
 
             if nele == ssc:
-                so[(n, orb)] = {"pairs": ssd, "alpha": ssd, "beta": ssd, "unpaired": 0}
+                so[(n, orb)] = {"pairs": ssd, "alpha": ssd,
+                                "beta": ssd, "unpaired": 0}
             else:
                 pairs = (nele % ssd) * (nele // ssd)
                 alpha = nele - pairs
@@ -350,20 +357,25 @@ class ElectronicConfiguration(object):
         if o in ["s", "p"]:
             # get the number of valence electrons - 1
             vale = float(
-                sum(v for k, v in self.conf.items() if k[0] == n and k[1] in ["s", "p"])
+                sum(v for k, v in self.conf.items()
+                    if k[0] == n and k[1] in ["s", "p"])
                 - ne
             )
             n1 = sum(v * 0.85 for k, v in self.conf.items() if k[0] == n - 1)
-            n2 = sum(float(v) for k, v in self.conf.items() if k[0] in range(1, n - 1))
+            n2 = sum(float(v)
+                     for k, v in self.conf.items() if k[0] in range(1, n - 1))
 
         elif o in ["d", "f"]:
             # get the number of valence electrons - 1
             vale = float(
-                sum(v for k, v in self.conf.items() if k[0] == n and k[1] == o) - ne
+                sum(v for k, v in self.conf.items()
+                    if k[0] == n and k[1] == o) - ne
             )
 
-            n1 = sum(float(v) for k, v in self.conf.items() if k[0] == n and k[1] != o)
-            n2 = sum(float(v) for k, v in self.conf.items() if k[0] in range(1, n))
+            n1 = sum(float(v)
+                     for k, v in self.conf.items() if k[0] == n and k[1] != o)
+            n2 = sum(float(v)
+                     for k, v in self.conf.items() if k[0] in range(1, n))
 
         else:
             raise ValueError("wrong valence subshell: ", o)

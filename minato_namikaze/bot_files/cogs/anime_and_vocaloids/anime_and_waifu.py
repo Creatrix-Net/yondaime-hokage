@@ -161,22 +161,29 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             name=":japanese_castle: **Title in Japanese**",
             value=f"{anime.title_japanese}",
         )
-        e.add_field(name="**Title Synonyms**", value=" ,".join(anime.title_synonyms))
+        e.add_field(name="**Title Synonyms**",
+                    value=" ,".join(anime.title_synonyms))
         e.add_field(name=":star: **Score**", value=f"{anime.score} :star:")
         e.add_field(name=":dividers: **Type**", value=anime.type)
-        e.add_field(name=":link: **MAL Url**", value=f"[CLICK HERE]({anime.url})")
+        e.add_field(name=":link: **MAL Url**",
+                    value=f"[CLICK HERE]({anime.url})")
         e.add_field(name=":id: **MAL ID**", value=anime.mal_id)
-        e.add_field(name=":hourglass_flowing_sand: **Status**", value=anime.status)
-        e.add_field(name=":arrow_right: **Genre**", value=" ,".join(anime.genres))
+        e.add_field(name=":hourglass_flowing_sand: **Status**",
+                    value=anime.status)
+        e.add_field(name=":arrow_right: **Genre**",
+                    value=" ,".join(anime.genres))
         e.add_field(name=":trophy: **Rank**", value=anime.rank)
         e.add_field(name="**Popularity**", value=f"#{anime.popularity}")
-        e.add_field(name=":minidisc: **No. of Episodes**", value=anime.episodes)
+        e.add_field(name=":minidisc: **No. of Episodes**",
+                    value=anime.episodes)
         e.add_field(name="**Premire(d)**", value=anime.premiered)
-        e.add_field(name=":calendar_spiral: **Air(ed/ing)**", value=anime.aired)
+        e.add_field(name=":calendar_spiral: **Air(ed/ing)**",
+                    value=anime.aired)
         e.add_field(name="**Broadcast**", value=anime.broadcast)
         e.add_field(name="**Producers**", value=" ,".join(anime.producers))
         e.add_field(name="**Licensors**", value=" ,".join(anime.licensors))
-        e.add_field(name=":microphone2: **Studios**", value=" ,".join(anime.studios))
+        e.add_field(name=":microphone2: **Studios**",
+                    value=" ,".join(anime.studios))
         e.add_field(name=":information_source: **Source**", value=anime.source)
         e.add_field(name=":stopwatch: **Duration**", value=anime.duration)
         e.add_field(name="**Rating**", value=anime.rating)
@@ -188,7 +195,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         else:
             e1 = Embed(
                 title="Related Anime",
-                description=format_related_anime_manga(anime.related_anime)[:4096],
+                description=format_related_anime_manga(
+                    anime.related_anime)[:4096],
             )
             e1.set_footer(
                 text=f"{anime.title_japanese} | {anime.mal_id} | {anime.score} stars",
@@ -226,7 +234,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             )
             embeds.append(e1)
         if len(format_staff(anime.staff)) <= 700:
-            e.add_field(name=":factory_worker: Staff", value=format_staff(anime.staff))
+            e.add_field(name=":factory_worker: Staff",
+                        value=format_staff(anime.staff))
         else:
             e1 = Embed(
                 title=":factory_worker: Staff",
@@ -340,13 +349,17 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             name=":japanese_castle: **Title in Japanese**",
             value=f"{manga.title_japanese}",
         )
-        e.add_field(name="**Title Synonyms**", value=" ,".join(manga.title_synonyms))
+        e.add_field(name="**Title Synonyms**",
+                    value=" ,".join(manga.title_synonyms))
         e.add_field(name=":star: **Score**", value=f"{manga.score} :star:")
         e.add_field(name=":dividers: **Type**", value=manga.type)
-        e.add_field(name=":link: **MAL Url**", value=f"[CLICK HERE]({manga.url})")
+        e.add_field(name=":link: **MAL Url**",
+                    value=f"[CLICK HERE]({manga.url})")
         e.add_field(name=":id: **MAL ID**", value=manga.mal_id)
-        e.add_field(name=":hourglass_flowing_sand: **Status**", value=manga.status)
-        e.add_field(name=":arrow_right: **Genre**", value=" ,".join(manga.genres))
+        e.add_field(name=":hourglass_flowing_sand: **Status**",
+                    value=manga.status)
+        e.add_field(name=":arrow_right: **Genre**",
+                    value=" ,".join(manga.genres))
         e.add_field(name=":trophy: **Rank**", value=manga.rank)
         e.add_field(name="**Popularity**", value=f"#{manga.popularity}")
         e.add_field(name=":book: **No. of Chapters**", value=manga.chapters)
@@ -377,7 +390,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         else:
             e1 = Embed(
                 title="Related Manga",
-                description=format_related_anime_manga(manga.related_manga)[:4096],
+                description=format_related_anime_manga(
+                    manga.related_manga)[:4096],
             )
             e1.set_footer(
                 text=f"{manga.title_japanese} | {manga.mal_id} | {manga.score} stars",
@@ -413,7 +427,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 await ctx.send(
                     embed=generatevoteembed(
                         ctx,
-                        [votes_list_name[i] for i, k in enumerate(votes_list) if not k],
+                        [votes_list_name[i]
+                            for i, k in enumerate(votes_list) if not k],
                     )
                 )
                 return
@@ -445,7 +460,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 await ctx.send(
                     embed=generatevoteembed(
                         ctx,
-                        [votes_list_name[i] for i, k in enumerate(votes_list) if not k],
+                        [votes_list_name[i]
+                            for i, k in enumerate(votes_list) if not k],
                     )
                 )
                 return
@@ -454,7 +470,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             question = wtp.question
             answer = wtp.name.lower()
 
-            e = Embed(title="Who's That Pokemon?", timestamp=ctx.message.created_at)
+            e = Embed(title="Who's That Pokemon?",
+                      timestamp=ctx.message.created_at)
             e.set_footer(
                 text=f"{ctx.message.author} reply within 30secs to answer.",
                 icon_url=ctx.message.author.avatar.url,
@@ -471,7 +488,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             timestamp=ctx.message.created_at,
         )
         answerembed.add_field(name="**Height**", value=f"{round(wtp.height)}m")
-        answerembed.add_field(name="**Weight**", value=f"{round(wtp.weight)} kg")
+        answerembed.add_field(
+            name="**Weight**", value=f"{round(wtp.weight)} kg")
         answerembed.add_field(name=":id:", value=wtp.id)
         answerembed.set_image(url=wtp.answer)
         answerembed.set_footer(text=wtp.name.capitalize(), icon_url=wtp.answer)
@@ -492,7 +510,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                     except:
                         pass
                     await ctx.send(
-                        embed=ErrorEmbed(description="Please try again! :no_entry:"),
+                        embed=ErrorEmbed(
+                            description="Please try again! :no_entry:"),
                         delete_after=3,
                     )
                     await question_message.edit(

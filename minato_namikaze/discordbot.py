@@ -17,7 +17,6 @@ from sentry_sdk.integrations.threading import ThreadingIntegration
 
 log = logging.getLogger(__name__)
 
-
 dotenv_file = os.path.join(Path(__file__).resolve().parent.parent / ".env")
 
 
@@ -66,7 +65,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.minato_dir = Path(__file__).resolve(strict=True).parent / join(
             "bot_files", "discord_bot_images"
         )
-        self.minato_gif = [f for f in os.listdir(join(self.minato_dir, "minato"))]
+        self.minato_gif = [f for f in os.listdir(
+            join(self.minato_dir, "minato"))]
         self.uptime = format_dt(self.start_time, "R")
 
         super().__init__(
@@ -142,12 +142,14 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 "[Login Failure] The token initialsed in environment(or .env file) is invalid."
             )
         except KeyboardInterrupt:
-            log.critical("The bot is shutting down since force shutdown was initiated.")
+            log.critical(
+                "The bot is shutting down since force shutdown was initiated.")
         except Exception as e:
             log.critical("An exception occured, %s", e)
 
     async def on_ready(self):
-        cog_dir = Path(__file__).resolve(strict=True).parent / join("bot_files", "cogs")
+        cog_dir = Path(__file__).resolve(strict=True).parent / \
+            join("bot_files", "cogs")
         for filename in os.listdir(cog_dir):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):

@@ -9,7 +9,6 @@ CROSS = "\U0000274c"
 
 
 class Tictactoe:
-
     def __init__(self, cross: discord.Member, circle: discord.Member) -> None:
         self.cross = cross
         self.circle = circle
@@ -18,26 +17,26 @@ class Tictactoe:
         self.winner = None
         self.message = None
         self._controls = [
-            '\N{DIGIT ONE}\U000020e3', 
-            '\N{DIGIT TWO}\U000020e3', 
-            '\N{DIGIT THREE}\U000020e3',
-            '\N{DIGIT FOUR}\U000020e3', 
-            '\N{DIGIT FIVE}\U000020e3', 
-            '\N{DIGIT SIX}\U000020e3', 
-            '\N{DIGIT SEVEN}\U000020e3', 
-            '\N{DIGIT EIGHT}\U000020e3', 
-            '\N{DIGIT NINE}\U000020e3'
+            "\N{DIGIT ONE}\U000020e3",
+            "\N{DIGIT TWO}\U000020e3",
+            "\N{DIGIT THREE}\U000020e3",
+            "\N{DIGIT FOUR}\U000020e3",
+            "\N{DIGIT FIVE}\U000020e3",
+            "\N{DIGIT SIX}\U000020e3",
+            "\N{DIGIT SEVEN}\U000020e3",
+            "\N{DIGIT EIGHT}\U000020e3",
+            "\N{DIGIT NINE}\U000020e3",
         ]
         self._conversion = {
-            '\N{DIGIT ONE}\U000020e3': (0, 0),
-            '\N{DIGIT TWO}\U000020e3': (0, 1),
-            '\N{DIGIT THREE}\U000020e3': (0, 2),
-            '\N{DIGIT FOUR}\U000020e3': (1, 0),
-            '\N{DIGIT FIVE}\U000020e3': (1, 1),
-            '\N{DIGIT SIX}\U000020e3': (1, 2),
-            '\N{DIGIT SEVEN}\U000020e3': (2, 0),
-            '\N{DIGIT EIGHT}\U000020e3': (2, 1),
-            '\N{DIGIT NINE}\U000020e3': (2, 2),
+            "\N{DIGIT ONE}\U000020e3": (0, 0),
+            "\N{DIGIT TWO}\U000020e3": (0, 1),
+            "\N{DIGIT THREE}\U000020e3": (0, 2),
+            "\N{DIGIT FOUR}\U000020e3": (1, 0),
+            "\N{DIGIT FIVE}\U000020e3": (1, 1),
+            "\N{DIGIT SIX}\U000020e3": (1, 2),
+            "\N{DIGIT SEVEN}\U000020e3": (2, 0),
+            "\N{DIGIT EIGHT}\U000020e3": (2, 1),
+            "\N{DIGIT NINE}\U000020e3": (2, 2),
         }
         self._EmojiToPlayer = {
             CIRCLE: self.circle,
@@ -84,24 +83,39 @@ class Tictactoe:
 
         for i in range(3):
 
-            if (self.board[i][0] == self.board[i][1] == self.board[i][2]) and self.board[i][0] != BLANK:
+            if (
+                self.board[i][0] == self.board[i][1] == self.board[i][2]
+            ) and self.board[i][0] != BLANK:
                 self.winner = self._EmojiToPlayer[self.board[i][0]]
                 return True
-            if (self.board[0][i] == self.board[1][i] == self.board[2][i]) and self.board[0][i] != BLANK:
+            if (
+                self.board[0][i] == self.board[1][i] == self.board[2][i]
+            ) and self.board[0][i] != BLANK:
                 self.winner = self._EmojiToPlayer[self.board[0][i]]
                 return True
 
-        if (self.board[0][0] == self.board[1][1] == self.board[2][2]) and self.board[0][0] != BLANK:
+        if (self.board[0][0] == self.board[1][1] == self.board[2][2]) and self.board[0][
+            0
+        ] != BLANK:
             self.winner = self._EmojiToPlayer[self.board[0][0]]
             return True
 
-        if (self.board[0][2] == self.board[1][1] == self.board[2][0]) and self.board[0][2] != BLANK:
+        if (self.board[0][2] == self.board[1][1] == self.board[2][0]) and self.board[0][
+            2
+        ] != BLANK:
             self.winner = self._EmojiToPlayer[self.board[0][2]]
             return True
 
         return False
 
-    async def start(self, ctx: commands.Context, *, remove_reaction_after: bool = False, return_after_block: int = None, **kwargs):
+    async def start(
+        self,
+        ctx: commands.Context,
+        *,
+        remove_reaction_after: bool = False,
+        return_after_block: int = None,
+        **kwargs,
+    ):
         embed = await self.make_embed()
         self.message = await ctx.send(self.BoardString(), embed=embed, **kwargs)
 
@@ -111,7 +125,11 @@ class Tictactoe:
         while True:
 
             def check(reaction, user):
-                return str(reaction.emoji) in self._controls and user == self.turn and reaction.message == self.message
+                return (
+                    str(reaction.emoji) in self._controls
+                    and user == self.turn
+                    and reaction.message == self.message
+                )
 
             reaction, user = await ctx.bot.wait_for("reaction_add", check=check)
 

@@ -52,7 +52,8 @@ def element(ids: Union[int, str]) -> Element:
         return _get_element(ids)
     else:
         raise ValueError(
-            "Expected a <list>, <tuple>, <str> or <int>, got: {0:s}".format(type(ids))
+            "Expected a <list>, <tuple>, <str> or <int>, got: {0:s}".format(
+                type(ids))
         )
 
 
@@ -72,7 +73,8 @@ def _get_element(ids):
     elif isinstance(ids, int):
         return session.query(Element).filter(Element.atomic_number == ids).one()
     else:
-        raise ValueError("Expecting a <str> or <int>, got: {0:s}".format(type(ids)))
+        raise ValueError(
+            "Expecting a <str> or <int>, got: {0:s}".format(type(ids)))
 
 
 def get_all_elements():
@@ -106,7 +108,7 @@ def ids_to_attr(ids, attr="atomic_number"):
 
 
 def deltaN(id1, id2, charge1=0, charge2=0, missingIsZero=True):
-    """
+    r"""
     Calculate the approximate fraction of transferred electrons between
     elements or ions `id1` and `id2` with charges `charge1` and `charge2`
     respectively according to the expression

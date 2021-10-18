@@ -2,7 +2,6 @@
 # Its taken from https://github.com/lmmentel/mendeleev
 
 # -*- coding: utf-8 -*-
-
 """module specifying the database models"""
 
 import math
@@ -38,7 +37,6 @@ __all__ = [
     "Series",
     "ScreeningConstant",
 ]
-
 
 Base = declarative_base()
 
@@ -301,9 +299,8 @@ class Element(Base):
             else:
                 return "{aw:.3f}".format(aw=self.atomic_weight)
         else:
-            dec = int(abs(
-                math.floor(math.log10(abs(self.atomic_weight_uncertainty)))
-            ))
+            dec = int(
+                abs(math.floor(math.log10(abs(self.atomic_weight_uncertainty)))))
             dec = min(dec, 5)
             if self.is_radioactive:
                 return "[{aw:.{dec}f}]".format(aw=self.atomic_weight, dec=dec)
@@ -320,7 +317,7 @@ class Element(Base):
 
     @hybrid_method
     def hardness(self, charge: int = 0) -> float:
-        """
+        r"""
         Return the absolute hardness, calculated as
         Args:
           charge:  Charge of the cation for which the hardness will be calculated
@@ -349,12 +346,13 @@ class Element(Base):
                 return None
         elif charge < 0:
             raise ValueError(
-                "Charge has to be a non-negative integer, got: {}".format(charge)
+                "Charge has to be a non-negative integer, got: {}".format(
+                    charge)
             )
 
     @hybrid_method
     def softness(self, charge: int = 0) -> float:
-        """
+        r"""
         Return the absolute softness, calculated as
         Args:
           charge: Charge of the cation for which the hardness will be calculated
@@ -400,13 +398,16 @@ class Element(Base):
         if n is None:
             n = self.ec.max_n()
         elif not isinstance(n, int):
-            raise ValueError("<n> should be an integer, got: {}".format(type(n)))
+            raise ValueError(
+                "<n> should be an integer, got: {}".format(type(n)))
 
         if o is None:
             # take the shell with max `l` for a given `n`
-            o = ORBITALS[max(get_l(x[1]) for x in self.ec.conf.keys() if x[0] == n)]
+            o = ORBITALS[max(get_l(x[1])
+                             for x in self.ec.conf.keys() if x[0] == n)]
         elif o not in ORBITALS:
-            raise ValueError("<s> should be one of {}".format(", ".join(ORBITALS)))
+            raise ValueError(
+                "<s> should be one of {}".format(", ".join(ORBITALS)))
 
         if method.lower() == "slater":
             return self.atomic_number - self.ec.slater_screening(n=n, o=o, alle=alle)
@@ -417,10 +418,11 @@ class Element(Base):
             else:
                 return sc
         else:
-            raise ValueError("<method> should be one of {}".format("slater, clementi"))
+            raise ValueError(
+                "<method> should be one of {}".format("slater, clementi"))
 
     def electrophilicity(self) -> float:
-        """
+        r"""
         Calculate electrophilicity index
         .. math::
            \\omega = \\frac{\\mu}{2\eta}
@@ -533,7 +535,7 @@ class Element(Base):
         }
 
     def electronegativity_martynov_batsanov(self) -> float:
-        """
+        r"""
         Calculates the electronegativity value according to Martynov and
         Batsanov as the average of the ionization energies of the valence
         electrons
@@ -560,7 +562,7 @@ class Element(Base):
         missing_is_zero: bool = False,
         allow_negative_ea: bool = False,
     ) -> float:
-        """
+        r"""
         Return the absolute electronegativity (Mulliken scale), calculated as
         Args:
             charge: charge of the ion
@@ -580,7 +582,8 @@ class Element(Base):
             ea = self.ionenergies.get(charge, None)
         else:
             raise ValueError(
-                "Charge has to be a non-negative integer, got: {}".format(charge)
+                "Charge has to be a non-negative integer, got: {}".format(
+                    charge)
             )
         return mulliken(
             ip, ea, missing_is_zero=missing_is_zero, allow_negative_ea=allow_negative_ea
@@ -610,7 +613,8 @@ class Element(Base):
 
         oxide_coeffs = [coeffs(ox) for ox in self.oxistates if ox > 0]
         # convert to strings and replace 1 with empty string
-        normal_coeffs = [[str(c) if c != 1 else "" for c in t] for t in oxide_coeffs]
+        normal_coeffs = [[str(c) if c != 1 else "" for c in t]
+                         for t in oxide_coeffs]
         return [f"{self.symbol}{cme}O{co}" for cme, co in normal_coeffs]
 
     def __str__(self):
@@ -646,7 +650,8 @@ def fetch_attrs_for_group(attrs: List[str], group: int = 18) -> Tuple[List[Any]]
         .all()
     )
 
-    results = tuple([getattr(member, attr) for member in members] for attr in attrs)
+    results = tuple([getattr(member, attr)
+                    for member in members] for attr in attrs)
     session.close()
     return results
 

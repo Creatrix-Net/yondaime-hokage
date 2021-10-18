@@ -121,7 +121,7 @@ class Hangman:
             "z",
         ]
         self.word = random.choice(list(english_words_set)).lower()
-        self.letters = [l for l in self.word]
+        self.letters = list(self.word)
         self.correct = [r"\_" for __ in self.word]
         self.wrong_letters = []
         self._embed = discord.Embed(title="HANGMAN")

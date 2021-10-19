@@ -270,13 +270,15 @@ class Info(commands.Cog):
                     names) > 1 else "**Previous Name:**"
             )
             name_val = filter_invites(", ".join(names))
-            prev_names_val = "{}\n{}".format(
+            """prev_names_val = "{}\n{}".format(
                 name_name,
                 name_val,
             )
+            """
+            prev_names_val = [name_name,name_val]
 
         else:
-            prev_names_val = ""
+            prev_names_val = [' ',' ']
 
         if nicks:
             nick_name = (
@@ -285,15 +287,13 @@ class Info(commands.Cog):
                 else "**Previous Nickname:**"
             )
             nick_val = filter_invites(", ".join(nicks))
-            '''prev_nicks_val = "{}\n{}\n".format(
+            prev_nicks_val = "{}\n{}\n".format(
                 nick_name,
                 nick_val,
             )
-            prev_nicks_val = prev_nicks_val.split()'''
-            prev_nicks_val=[nick_name,nick_val]
-
+            
         else:
-            prev_nicks_val = [' ',' ']
+            prev_nicks_val = ' '
         
 
         embed.add_field(

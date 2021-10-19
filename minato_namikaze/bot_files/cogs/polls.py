@@ -45,8 +45,9 @@ class QuickPoll(commands.Cog):
 
     @commands.command(pass_context=True, aliases=["poll", "polls"])
     async def polltime(self, ctx):
-        """Create polls easily"""
-
+        """
+        Create polls easily
+        """
         def check(m):
             return m.author == ctx.author and m.channel == ctx.channel
 
@@ -216,7 +217,6 @@ class QuickPoll(commands.Cog):
 
         Also can't use the tally command here
         """
-
         # a list of messages to delete when we're all done
         messages = [ctx.message]
         answers = []

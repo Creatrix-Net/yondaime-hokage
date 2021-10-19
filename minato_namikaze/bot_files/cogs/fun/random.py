@@ -100,7 +100,7 @@ class Random(commands.Cog):
             await msg.edit(content="", embed=e)
 
         else:
-            if not colour in col:
+            if colour not in col:
                 if url is None:
                     url = ""
                 colour = f"{colour} {url}"

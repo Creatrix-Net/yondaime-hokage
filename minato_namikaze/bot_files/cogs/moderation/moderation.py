@@ -233,7 +233,6 @@ class Moderation(commands.Cog):
 
         To use this command you must have Kick Members permissions.
         """
-
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
@@ -255,7 +254,6 @@ class Moderation(commands.Cog):
 
         To use this command you must have Ban Members permissions.
         """
-
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
@@ -426,7 +424,6 @@ class Moderation(commands.Cog):
         Members with Manage Messages can search up to 1000 messages.
         Members without can search up to 25 messages.
         """
-
         strategy = self._basic_cleanup_strategy
         is_mod = ctx.channel.permissions_for(ctx.author).manage_messages
         if ctx.channel.permissions_for(ctx.me).manage_messages:
@@ -482,7 +479,6 @@ class Moderation(commands.Cog):
         When the command is done doing its work, you will get a message
         detailing which users got removed and how many messages got removed.
         """
-
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
@@ -586,7 +582,6 @@ class Moderation(commands.Cog):
     @remove.command(name="reactions")
     async def _reactions(self, ctx, search=100):
         """Removes all reactions from messages that have them."""
-
         if search > 2000:
             return await ctx.send(f"Too many messages to search for ({search}/2000)")
 

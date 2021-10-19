@@ -182,7 +182,7 @@ def generatevoteembed(ctx, *argv):
         join_string = "\n・"
         e = ErrorEmbed(
             title="Vote Locked!",
-            description=f'You need to **vote for me** in the **following botlists** :smile: :\n・{join_string.join(list(f"**[{i.capitalize()}]({site_dict[i.lower()]})**" for i in argv[0]))}',
+            description=f'You need to **vote for me** in the **following botlists** :smile: :\n・{join_string.join([f"**[{i.capitalize()}]({site_dict[i.lower()]})**" for i in argv[0]])}',
             timestamp=ctx.message.created_at,
         )
         e.set_author(

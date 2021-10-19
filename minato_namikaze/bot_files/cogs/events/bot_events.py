@@ -135,11 +135,11 @@ class BotEvents(commands.Cog):
             file = discord.File(
                 join(self.minato_dir, "minato", img), filename=img)
 
-            f = open(
+            with open(
                 Path(__file__).resolve(strict=True).parent.parent.parent
                 / join("lib", "text", "welcome_message.txt"),
                 "r",
-            )
+            ) as f
 
             f1 = f.read()
             description = f1.format(

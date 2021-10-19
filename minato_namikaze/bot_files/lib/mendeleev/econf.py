@@ -15,8 +15,9 @@ SHELLS = ("K", "L", "M", "N", "O", "P", "Q")
 
 
 def get_l(subshell):
-    "Return the orbital angular momentum quantum number for a given subshell"
-
+    """
+    Return the orbital angular momentum quantum number for a given subshell
+    """
     if subshell.lower() in ORBITALS:
         return ORBITALS.index(subshell.lower())
     raise ValueError(
@@ -26,8 +27,9 @@ def get_l(subshell):
 
 
 def subshell_degeneracy(subshell):
-    "Return the degeneracy of a given subshell"
-
+    """
+    Return the degeneracy of a given subshell
+    """
     return 2 * get_l(subshell) + 1
 
 
@@ -35,7 +37,6 @@ def subshell_capacity(subshell):
     """
     Return the subshell capacity (max number of electrons)
     """
-
     return 2 * subshell_degeneracy(subshell)
 
 
@@ -45,7 +46,6 @@ def shell_capactity(shell):
     The capacity is :math:`N=2n^{2}`, where :math:`n` is the principal
     quantum number.
     """
-
     if shell.upper() in SHELLS:
         return 2 * (SHELLS.index(shell.upper()) + 1) ** 2
     raise ValueError(
@@ -55,8 +55,9 @@ def shell_capactity(shell):
 
 
 class ElectronicConfiguration(object):
-    """Electronic configuration handler"""
-
+    """
+    Electronic configuration handler
+    """
     noble = OrderedDict(
         [
             ("He", "1s2"),
@@ -76,13 +77,16 @@ class ElectronicConfiguration(object):
 
     @property
     def conf(self):
-        "Return the configuration"
+        """
+        Return the configuration
+        """
         return self._conf
 
     @conf.setter
     def conf(self, value):
-        "Setter method for initializing the configuration"
-
+        """
+        Setter method for initializing the configuration
+        """
         if isinstance(value, six.string_types):
             self.confstr = value
             self.parse(str(value))
@@ -97,7 +101,9 @@ class ElectronicConfiguration(object):
 
     @property
     def atomre(self):
-        "Regular expression for atomic symbols"
+        """
+        Regular expression for atomic symbols
+        """
         return self._atomre
 
     @atomre.setter
@@ -110,7 +116,9 @@ class ElectronicConfiguration(object):
 
     @property
     def shellre(self):
-        "Regular expression for the shell"
+        """
+        Regular expression for the shell
+        """
         return self._shellre
 
     @shellre.setter
@@ -127,7 +135,6 @@ class ElectronicConfiguration(object):
         Parse a ``string`` with electronic configuration into an
         ``OrderedDict`` representation
         """
-
         core = {}
         citems = string.split()
 
@@ -162,7 +169,6 @@ class ElectronicConfiguration(object):
         configuration and return the symbol of the corresponding noble
         gas element.
         """
-
         confset = set(self.conf.items())
 
         for s, conf in reversed(ElectronicConfiguration.noble.items()):
@@ -179,7 +185,6 @@ class ElectronicConfiguration(object):
         Find the valence configuration i.e. remove the largest noble gas
         core from the current configuration and return the result.
         """
-
         _, core_conf = self.get_largest_core()
 
         valence = OrderedDict(set(self.conf.items()) -
@@ -188,7 +193,9 @@ class ElectronicConfiguration(object):
         return ElectronicConfiguration(valence)
 
     def sort(self, inplace=True):
-        "Sort the occupations OD"
+        """
+        Sort the occupations OD
+        """
         if inplace:
             self.conf = OrderedDict(
                 sorted(
@@ -203,20 +210,24 @@ class ElectronicConfiguration(object):
             )
 
     def electrons_per_shell(self):
-        "Return number of electrons per shell as dict"
-
+        """
+        Return number of electrons per shell as dict
+        """
         return {
             s: sum(v for k, v in self.conf.items() if k[0] == n)
             for n, s in zip(range(1, self.max_n() + 1), SHELLS)
         }
 
     def shell2int(self):
-        "configuration as list of tuples (n, l, e)"
+        """
+        configuration as list of tuples (n, l, e)
+        """
         return [(x[0], get_l(x[1]), x[2]) for x in self.conf]
 
     def max_n(self):
-        "Return the largest value of principal quantum number for the atom"
-
+        """
+        Return the largest value of principal quantum number for the atom
+        """
         return max(shell[0] for shell in self.conf.keys())
 
     def max_l(self, n):
@@ -227,12 +238,12 @@ class ElectronicConfiguration(object):
             n : int
                 Principal quantum number
         """
-
         return ORBITALS[max(get_l(x[1]) for x in self.conf.keys() if x[0] == n)]
 
     def last_subshell(self, wrt="order"):
-        "Return the valence shell"
-
+        """
+        Return the valence shel
+        """
         if wrt.lower() == "order":
             return list(self.conf.items())[-1]
         if wrt.lower() == "aufbau":
@@ -242,8 +253,9 @@ class ElectronicConfiguration(object):
         raise ValueError("wrong <wrt>: {}".format(wrt))
 
     def nvalence(self, block, method=None):
-        "Return the number of valence electrons"
-
+        """
+        Return the number of valence electrons
+        """
         if block in ["s", "p"]:
             return sum(v for k, v in self.conf.items() if k[0] == self.max_n())
         if block == "d":
@@ -256,13 +268,15 @@ class ElectronicConfiguration(object):
             raise ValueError("wrong block: {}".format(block))
 
     def ne(self):
-        "Return the number of electrons"
-
+        """
+        Return the number of electrons
+        """
         return sum(list(self.conf.values()))
 
     def unpaired_electrons(self):
-        "Return the number of unpaired electrons"
-
+        """
+        Return the number of unpaired electrons
+        """
         so = self.spin_occupations()
 
         return sum(v["unpaired"] for v in so.values())
@@ -270,8 +284,8 @@ class ElectronicConfiguration(object):
     def ionize(self, n=1):
         """
         Remove `n` electrons from and return a new `ElectronicConfiguration`
-        object"""
-
+        object
+        """
         newec = ElectronicConfiguration(str(self.__str__()))
 
         for _ in range(n):
@@ -293,7 +307,6 @@ class ElectronicConfiguration(object):
         For each subshell calculate the number of `alpha`, `beta` electrons,
         electron pairs and unpaired electrons
         """
-
         so = OrderedDict()
 
         for (n, orb), nele in self.conf.items():
@@ -324,7 +337,6 @@ class ElectronicConfiguration(object):
         Return the magnetic moment insluding only spin of the electrons
         and not the angular momentum
         """
-
         ue = self.unpaired_electrons()
 
         return math.sqrt(ue * (ue + 2))
@@ -344,7 +356,6 @@ class ElectronicConfiguration(object):
             Use all the valence electrons, i.e. calculate screening for
             an extra electron
         """
-
         ne = 0 if alle else 1
         coeff = 0.3 if n == 1 else 0.35
         if o in ["s", "p"]:
@@ -376,8 +387,7 @@ class ElectronicConfiguration(object):
         return n1 + n2 + vale * coeff
 
     def to_str(self):
-        "Return a string with the configuration"
-
+        '''Return a string with the configuration'''
         return " ".join(
             "{n:d}{s:s}{e:d}".format(n=k[0], s=k[1], e=v) for k, v in self.conf.items()
         )
@@ -396,7 +406,6 @@ def get_spin_strings(sodict, average=True):
     spin strings as numpy arrays
     This should be called for valence only
     """
-
     alphas = []
     betas = []
 
@@ -412,8 +421,7 @@ def get_spin_strings(sodict, average=True):
 
 
 def print_spin_occupations(sodict, average=True):
-    "Pretty format for the spin occupations"
-
+    '''Pretty format for the spin occupations'''
     alphas = []
     betas = []
 

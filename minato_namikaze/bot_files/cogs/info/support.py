@@ -133,7 +133,7 @@ class Support(commands.Cog):
             discord.utils.get(ctx.guild.roles, name="SupportRequired")
         )
 
-    @resolved.error
+    @resolved.error @chksupreq.error
     async def error_handler(self, ctx, error):
         if (
             isinstance(error, commands.CheckFailure)
@@ -194,21 +194,7 @@ class Support(commands.Cog):
                       description=description)
             embed.append(e)
             await ctx.send(embed=e)
-            return
-
-    @chksupreq.error
-    async def error_handler(self, ctx, error):
-        if (
-            isinstance(error, commands.CheckFailure)
-            and not isinstance(error, commands.MissingPermissions)
-            and not isinstance(error, commands.BotMissingPermissions)
-        ):
-            await ctx.send(
-                embed=ErrorEmbed(
-                    description="This command can be run **inside only servers's support channel**."
-                )
-            )
-
+            return   
 
 def setup(bot):
     bot.add_cog(Support(bot))

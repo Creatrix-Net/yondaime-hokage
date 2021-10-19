@@ -32,7 +32,7 @@ async def meek_api(name: str):
         imageslistdir = Path(__file__).resolve(strict=True).parent.parent / join(
             "text", "vocaloid_images.txt"
         )
-        filepointer = open(imageslistdir)
+        with open(imageslistdir) as filepointer
         imageslist = filepointer.readlines()
         if name == "miku":
             e.set_image(url=choice(imageslist))

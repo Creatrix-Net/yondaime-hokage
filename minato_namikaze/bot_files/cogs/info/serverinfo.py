@@ -285,13 +285,16 @@ class Info(commands.Cog):
                 else "**Previous Nickname:**"
             )
             nick_val = filter_invites(", ".join(nicks))
-            prev_nicks_val = "{}\n{}\n".format(
+            '''prev_nicks_val = "{}\n{}\n".format(
                 nick_name,
                 nick_val,
             )
+            prev_nicks_val = prev_nicks_val.split()'''
+            prev_nicks_val=[nick_name,nick_val]
 
         else:
-            prev_nicks_val = ""
+            prev_nicks_val = [' ',' ']
+        
 
         embed.add_field(
             name="**__User info__**",
@@ -302,7 +305,7 @@ class Info(commands.Cog):
         embed.add_field(
             name="**__Member Info__**",
             value=("✏️ Name: {}\n" "{}: {}\n" "📅 Created On: {}").format(
-                user.display_name, prev_names_val, created_on
+                user.display_name, prev_names_val[0],prev_names_val[1], created_on
             ),
         )
 

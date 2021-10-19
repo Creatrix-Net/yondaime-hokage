@@ -3,7 +3,6 @@ import io
 import os
 import platform
 import random
-from random import choice
 from typing import Optional, Union
 
 import discord
@@ -39,7 +38,7 @@ class Random(commands.Cog):
                     " How original. No one else had thought of trying to **get the bot to insult itself**. \nI applaud your creativity. \nYawn. **Perhaps this is why you don't have friends**. \n\nYou don't add anything new to any conversation. \n**You are more of a bot than me, predictable answers, and absolutely dull to have an actual conversation with.**",
                     "Just remember I am **Konohagakure Yellow Falsh** and **Konohagakure FOURTH HOKAGE**",
                 ]
-                e = Embed(title="⚠️", description=choice(bot_msg))
+                e = Embed(title="⚠️", description=random.choice(bot_msg))
                 e.set_image(url="https://i.imgur.com/45CUkfq.jpeg")
                 await ctx.send(ctx.author.mention, embed=e)
 
@@ -47,13 +46,13 @@ class Random(commands.Cog):
                 await ctx.send(
                     f"{user.mention} was **insulted** by {ctx.message.author.mention}",
                     embed=Embed(
-                        title="⚠️", description=choice(LinksAndVars.insults.value)
+                        title="⚠️", description=random.choice(LinksAndVars.insults.value)
                     ),
                 )
         else:
             await ctx.send(
                 ctx.message.author.mention,
-                embed=Embed(title="⚠️", description=choice(
+                embed=Embed(title="⚠️", description=random.choice(
                     LinksAndVars.insults.value)),
             )
 

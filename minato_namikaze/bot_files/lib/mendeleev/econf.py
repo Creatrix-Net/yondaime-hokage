@@ -250,10 +250,9 @@ class ElectronicConfiguration(object):
             if method == "simple":
                 return 2
             return self.conf[(self.max_n(), "s")] + self.conf[(self.max_n() - 1, "d")]
-        elif block == "f":
+        if block == "f":
             return 2
-        else:
-            raise ValueError("wrong block: {}".format(block))
+        raise ValueError("wrong block: {}".format(block))
 
     def ne(self):
         "Return the number of electrons"

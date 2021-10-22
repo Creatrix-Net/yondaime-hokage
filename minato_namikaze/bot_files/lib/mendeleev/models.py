@@ -296,8 +296,7 @@ class Element(Base):
             if self.is_radioactive:
                 return "[{aw:.0f}]".format(aw=self.atomic_weight)
             return "{aw:.3f}".format(aw=self.atomic_weight)
-        dec = int(
-            abs(math.floor(math.log10(abs(self.atomic_weight_uncertainty)))))
+        dec = int(abs(math.floor(math.log10(abs(self.atomic_weight_uncertainty)))))
         dec = min(dec, 5)
         if self.is_radioactive:
             return "[{aw:.{dec}f}]".format(aw=self.atomic_weight, dec=dec)

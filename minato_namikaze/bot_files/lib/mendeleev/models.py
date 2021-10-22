@@ -296,13 +296,12 @@ class Element(Base):
             if self.is_radioactive:
                 return "[{aw:.0f}]".format(aw=self.atomic_weight)
             return "{aw:.3f}".format(aw=self.atomic_weight)
-        else:
-            dec = int(
-                abs(math.floor(math.log10(abs(self.atomic_weight_uncertainty)))))
-            dec = min(dec, 5)
-            if self.is_radioactive:
-                return "[{aw:.{dec}f}]".format(aw=self.atomic_weight, dec=dec)
-            return "{aw:.{dec}f}".format(aw=self.atomic_weight, dec=dec)
+        dec = int(
+            abs(math.floor(math.log10(abs(self.atomic_weight_uncertainty)))))
+        dec = min(dec, 5)
+        if self.is_radioactive:
+            return "[{aw:.{dec}f}]".format(aw=self.atomic_weight, dec=dec)
+        return "{aw:.{dec}f}".format(aw=self.atomic_weight, dec=dec)
 
     @hybrid_property
     def covalent_radius(self) -> float:
@@ -332,14 +331,14 @@ class Element(Base):
             ):
                 return (self.ionenergies[1] - self.electron_affinity) * 0.5
             return None
-        elif charge > 0:
+        if charge > 0:
             if (
                 self.ionenergies.get(charge + 1, None) is not None
                 and self.ionenergies.get(charge, None) is not None
             ):
                 return (self.ionenergies[charge + 1] - self.ionenergies[charge]) * 0.5
             return None
-        elif charge < 0:
+        if charge < 0:
             raise ValueError(
                 "Charge has to be a non-negative integer, got: {}".format(
                     charge)
@@ -410,9 +409,8 @@ class Element(Base):
             if sc is not None:
                 return self.atomic_number - self.sconst.get((n, o), None)
             return sc
-        else:
-            raise ValueError(
-                "<method> should be one of {}".format("slater, clementi"))
+        raise ValueError(
+            "<method> should be one of {}".format("slater, clementi"))
 
     def electrophilicity(self) -> float:
         r"""

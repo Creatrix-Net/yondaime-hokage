@@ -68,11 +68,10 @@ def _get_element(ids):
         if len(ids) <= 3 and ids.lower() != "tin":
             return session.query(Element).filter(Element.symbol == str(ids)).one()
         return session.query(Element).filter(Element.name == str(ids)).one()
-    elif isinstance(ids, int):
+    if isinstance(ids, int):
         return session.query(Element).filter(Element.atomic_number == ids).one()
-    else:
-        raise ValueError(
-            "Expecting a <str> or <int>, got: {0:s}".format(type(ids)))
+    raise ValueError(
+        "Expecting a <str> or <int>, got: {0:s}".format(type(ids)))
 
 
 def get_all_elements():

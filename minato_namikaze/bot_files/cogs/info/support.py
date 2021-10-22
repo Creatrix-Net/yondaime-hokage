@@ -18,8 +18,7 @@ def if_inside_support_channel(ctx):
         if ctx.message.channel == return_support_channel(ctx):
             return True
         return False
-    else:
-        return False
+    return False
 
 
 def errorembed(ctx):

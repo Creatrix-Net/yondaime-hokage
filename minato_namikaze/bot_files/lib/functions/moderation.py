@@ -16,7 +16,10 @@ def check_if_warning_system_setup(ctx):
 
 # checks support
 def check_if_support_is_setup(ctx):
-    support_channel = bool(discord.utils.get(ctx.guild.text_channels, topic=SetupVars.support.value))
+    support_channel = bool(
+        discord.utils.get(ctx.guild.text_channels,
+                          topic=SetupVars.support.value)
+    )
     return support_channel
 
 

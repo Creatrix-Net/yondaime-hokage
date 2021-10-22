@@ -66,15 +66,13 @@ class Tictactoe:
 
         if emoji not in self._controls:
             raise KeyError("Provided emoji is not one of the valid controls")
-
-        else:
-            x, y = self._conversion[emoji]
-            piece = self._PlayerToEmoji[user]
-            self.board[x][y] = piece
-            self.turn = self.circle if user == self.cross else self.cross
-            self._conversion.pop(emoji)
-            self._controls.remove(emoji)
-            return self.board
+        x, y = self._conversion[emoji]
+        piece = self._PlayerToEmoji[user]
+        self.board[x][y] = piece
+        self.turn = self.circle if user == self.cross else self.cross
+        self._conversion.pop(emoji)
+        self._controls.remove(emoji)
+        return self.board
 
     async def GameOver(self) -> bool:
 

@@ -61,7 +61,9 @@ class MemberID(commands.Converter):
                     )()
 
         if not can_execute_action(ctx, ctx.author, member):
-            raise commands.BadArgument("You cannot do this action on this user due to role hierarchy.")
+            raise commands.BadArgument(
+                "You cannot do this action on this user due to role hierarchy."
+            )
         return member
 
 
@@ -72,13 +74,17 @@ class BannedMember(commands.Converter):
             try:
                 return await ctx.guild.fetch_ban(discord.Object(id=member_id))
             except discord.NotFound:
-                raise commands.BadArgument("This member has not been banned before.") from None
+                raise commands.BadArgument(
+                    "This member has not been banned before."
+                ) from None
 
         ban_list = await ctx.guild.bans()
-        entity = discord.utils.find(lambda u: str(u.user) == argument, ban_list)
+        entity = discord.utils.find(
+            lambda u: str(u.user) == argument, ban_list)
 
         if entity is None:
-            raise commands.BadArgument("This member has not been banned before.")
+            raise commands.BadArgument(
+                "This member has not been banned before.")
         return entity
 
 
@@ -88,7 +94,9 @@ class ActionReason(commands.Converter):
 
         if len(ret) > 512:
             reason_max = 512 - len(ret) + len(argument)
-            raise commands.BadArgument(f"Reason is too long ({len(argument)}/{reason_max})")
+            raise commands.BadArgument(
+                f"Reason is too long ({len(argument)}/{reason_max})"
+            )
         return ret
 
 

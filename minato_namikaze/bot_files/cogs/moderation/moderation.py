@@ -1,11 +1,24 @@
 from collections import Counter
 from os.path import join
 from typing import Optional, Union
+import re
 
 import discord
 from discord.ext import commands
+import datetime
 
-from ...lib import *
+from ...lib import (
+    ErrorEmbed,
+    ActionReason,
+    MemberID,
+    BannedMember,
+    get_user,
+    check_if_warning_system_setup,
+    return_warning_channel,
+    Arguments,
+    PostStats,
+    create_paginator
+    )
 
 
 class Moderation(commands.Cog):
@@ -19,14 +32,14 @@ class Moderation(commands.Cog):
             name="discord_certified_moderator", id=876846223926128701
         )
 
-    # setdelay
+    # set delay
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     @commands.guild_only()
     async def setdelay(self, ctx, seconds: int):
         """Sets Slowmode Of A Channel"""
-        currentslow = ctx.channel.slowmode_delay
-        if currentslow == seconds:
+        current_slow = ctx.channel.slowmode_delay
+        if current_slow == seconds:
             return await ctx.send(
                 f"Sorry, But this channel already has {seconds} set as the delay! (I don't want to waste my api calls lmao)"
             )
@@ -49,7 +62,7 @@ class Moderation(commands.Cog):
         """A command which kicks a given user"""
         await ctx.guild.kick(user=member, reason=reason)
 
-        embed = Embed(
+        embed = discord.Embed(
             title=f"{ctx.author.name} kicked: {member.name}", description=reason
         )
         await ctx.send(embed=embed)
@@ -63,9 +76,7 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def ban(
-        self,
-        ctx,
+    async def ban(self, ctx,
         member: Union[MemberID, discord.Member],
         *,
         reason: ActionReason = None,
@@ -79,7 +90,7 @@ class Moderation(commands.Cog):
         except:
             await ctx.send(
                 embed=ErrorEmbed(
-                    description="Can't ban the memeber. Please make sure **my role is at the top**!"
+                    description="Can't ban the member. Please make sure **my role is at the top**!"
                 ),
                 delete_after=4,
             )
@@ -104,13 +115,13 @@ class Moderation(commands.Cog):
         if not member:
             if len(banned_users) == 0:
                 await ctx.send(
-                    embed=Embed(
-                        description="There is **no-one who is banned**! :zero: people are **banned**"
+                    embed= discord.Embed(
+                        description="There is **no-one banned**! :zero: people are **banned**"
                     )
                 )
                 return
             l_no = 0
-            embed = []
+            pages = []
             if len(banned_users) > 10:
                 for i in range(len(banned_users) // 10):
                     description = ""
@@ -121,10 +132,10 @@ class Moderation(commands.Cog):
                         except:
                             pass
 
-                    e = ErrorEmbed(
+                    embed = ErrorEmbed(
                         title="Those who were banned are:", description=description
                     )
-                    embed.append(e)
+                    pages.append(embed)
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx)
                 paginator.add_reaction("⏮️", "first")
@@ -133,16 +144,16 @@ class Moderation(commands.Cog):
                 paginator.add_reaction("⏩", "next")
                 paginator.add_reaction("⏭️", "last")
 
-                await paginator.run(embed)
+                await paginator.run(pages)
             else:
                 description = ""
                 for k, i in enumerate(banned_users):
                     description += f"\n{k+1}. - **{i.user}** : ID [ **{banned_users[k].user.id}** ] "
-                e = ErrorEmbed(
+                embed = ErrorEmbed(
                     title="Those who were banned are:", description=description
                 )
-                embed.append(e)
-                await ctx.send(embed=e)
+                pages.append(embed)
+                await ctx.send(embed=embed)
                 return
         else:
             if member.isdigit():
@@ -153,61 +164,61 @@ class Moderation(commands.Cog):
             n = 0
             for i, ban_entry in enumerate(banned_users):
                 user = ban_entry.user
-                e = ErrorEmbed(topic=f"About the ban {member}")
+                embed = ErrorEmbed(topic=f"About the ban {member}")
                 if isinstance(member, str):
                     if (user.name, user.discriminator) == (
                         member_name,
                         member_discriminator,
                     ):
                         if ban_entry.reason:
-                            e.add_field(
+                            embed.add_field(
                                 name="**Reason**", value=ban_entry.reason, inline=True
                             )
-                        e.add_field(name="**Position**",
+                        embed.add_field(name="**Position**",
                                     value=i + 1, inline=True)
-                        e.add_field(
+                        embed.add_field(
                             name="**Banned User Name**",
                             value=ban_entry.user,
                             inline=True,
                         )
-                        e.set_thumbnail(url=ban_entry.user.avatar.url)
-                        await ctx.channel.send(embed=e)
+                        embed.set_thumbnail(url=ban_entry.user.avatar.url)
+                        await ctx.channel.send(embed=embed)
                         n += 1
                         return
 
                 elif isinstance(member, int):
                     if user.id == int(member):
                         if ban_entry.reason:
-                            e.add_field(
+                            embed.add_field(
                                 name="**Reason**", value=ban_entry.reason, inline=True
                             )
-                        e.add_field(name="**Position**",
+                        embed.add_field(name="**Position**",
                                     value=i + 1, inline=True)
-                        e.add_field(
+                        embed.add_field(
                             name="**Banned User Name**",
                             value=ban_entry.user,
                             inline=True,
                         )
-                        e.set_thumbnail(url=ban_entry.user.avatar.url)
-                        await ctx.channel.send(embed=e)
+                        embed.set_thumbnail(url=ban_entry.user.avatar.url)
+                        await ctx.channel.send(embed=embed)
                         n += 1
                         return
 
                 else:
                     if user == member:
                         if ban_entry.reason:
-                            e.add_field(
+                            embed.add_field(
                                 name="**Reason**", value=ban_entry.reason, inline=True
                             )
-                        e.add_field(name="**Position**",
+                        embed.add_field(name="**Position**",
                                     value=i + 1, inline=True)
-                        e.add_field(
+                        embed.add_field(
                             name="**Banned User Name**",
                             value=ban_entry.user,
                             inline=True,
                         )
-                        e.set_thumbnail(url=ban_entry.user.avatar.url)
-                        await ctx.channel.send(embed=e)
+                        embed.set_thumbnail(url=ban_entry.user.avatar.url)
+                        await ctx.channel.send(embed=embed)
                         n += 1
                         return
             if n == 0:
@@ -268,36 +279,28 @@ class Moderation(commands.Cog):
             await ctx.send(f"Unbanned {member.user} (ID: {member.user.id}).")
 
     # Add Roles
-    @commands.command(
-        pass_context=True, usage="<member.mention> <role>", alias=["add_roles"]
-    )
+    @commands.command(pass_context=True, usage="<member.mention> <role>", alias=["add_roles"])
     @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
-    async def ar(
-        self,
-        ctx,
-        member: Optional[Union[int, discord.Member]],
-        role: Union[int, discord.Role],
-    ):
-        """Add roles"""
-        member = get_user(
-            member if member is not None else ctx.message.author, ctx)
+    async def ar(self, ctx, member: Optional[Union[int, discord.Member]], role: Union[int, discord.Role]):
+        """Adds a role to a given user"""
+        if member is None:
+            member = ctx.message.author
+        member = get_user(member, ctx)
         role = get_roles(role, ctx)
         await member.add_roles(role)
-        e = Embed(
+        embed = discord.Embed(
             title="Added Roles",
-            description=f"I have added the roles '{role.mention}' for {member.mention}!",
+            description=f"I have added the role '{role.mention}' to {member.mention}!",
         )
-        await ctx.send(embed=e)
+        await ctx.send(embed=embed)
 
     # Warn
     @commands.command(pass_context=True, usage="<member.mention> <optional: reason>")
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
     @commands.check(check_if_warning_system_setup)
-    async def warn(
-        self, ctx, member: Union[int, discord.Member], *, reason: str = None
-    ):
+    async def warn(self, ctx, member: Union[int, discord.Member], *, reason: str = None):
         """Warn a user"""
         member = get_user(member, ctx)
         e = ErrorEmbed(title="You have been warned!")
@@ -333,12 +336,12 @@ class Moderation(commands.Cog):
         """Get the no. of warns for a specified user"""
         member = get_user(
             member if member is not None else ctx.message.author, ctx)
-        e = Embed(title="Type the below message in the search bar")
+        embed = discord.Embed(title="Type the below message in the search bar")
         search_image = discord.File(
             join(self.bot.minato_dir, "discord", "search.png"), filename="search.png"
         )
-        e.set_image(url="attachment://search.png")
-        await ctx.send(file=search_image, embed=e)
+        embed.set_image(url="attachment://search.png")
+        await ctx.send(file=search_image, embed=embed)
 
         warning_channel = _warning_channel(ctx)
         message = f"mentions: {member}  in: {warning_channel}"
@@ -353,6 +356,36 @@ class Moderation(commands.Cog):
             )
             await ctx.send(embed=e)
 
+    @commands.command(aliases=["newmembers"])
+    @commands.guild_only()
+    async def newusers(self, ctx, *, count: Optional[int] = 5):
+        """
+        Tells you the newest members of the server.
+
+        This is useful to check if any suspicious members have
+        joined.
+
+        The count parameter clamps the number in between 5 - 25
+        """
+        count = max(min(count, 25), 5)
+
+        if not ctx.guild.chunked:
+            members = await ctx.guild.chunk(cache=True)
+
+        members = sorted(ctx.guild.members, key=lambda m: m.joined_at, reverse=True)[
+            :count
+        ]
+
+        embed = discord.Embed(title="New Members", colour=discord.Colour.green())
+
+        for member in members:
+            joined = member.joined_at.strftime('%a, %d %B %Y %I:%M:%S %fms %Z')
+            created = member.created_at.strftime('%a, %d %B %Y %I:%M:%S %fms %Z')
+            body = f"Joined: {joined}\nCreated: {created}"
+            embed.add_field(name=f"{member} (ID: {member.id})", value=body, inline=False)
+
+        await ctx.send(embed=embed)
+
     # RDanny code from here
     async def _basic_cleanup_strategy(self, ctx, search):
         count = 0
@@ -363,8 +396,7 @@ class Moderation(commands.Cog):
         return {"Bot": count}
 
     async def _complex_cleanup_strategy(self, ctx, search):
-        prefixes = tuple(self.bot.get_guild_prefixes(
-            ctx.guild))  # thanks startswith
+        prefixes = tuple(self.bot.get_guild_prefixes(ctx.guild))  # thanks startswith
 
         def check(m):
             return m.author == ctx.me or m.content.startswith(prefixes)
@@ -377,39 +409,11 @@ class Moderation(commands.Cog):
 
         def check(m):
             return (m.author == ctx.me or m.content.startswith(prefixes)) and not (
-                m.mentions or m.role_mentions
+                    m.mentions or m.role_mentions
             )
 
         deleted = await ctx.channel.purge(limit=search, check=check, before=ctx.message)
         return Counter(m.author.display_name for m in deleted)
-
-    @commands.command(aliases=["newmembers"])
-    @commands.guild_only()
-    async def newusers(self, ctx, *, count=5):
-        """Tells you the newest members of the server.
-
-        This is useful to check if any suspicious members have
-        joined.
-
-        The count parameter can only be up to 25.
-        """
-        count = max(min(count, 25), 5)
-
-        if not ctx.guild.chunked:
-            members = await ctx.guild.chunk(cache=True)
-
-        members = sorted(ctx.guild.members, key=lambda m: m.joined_at, reverse=True)[
-            :count
-        ]
-
-        e = discord.Embed(title="New Members", colour=discord.Colour.green())
-
-        for member in members:
-            body = f"Joined {time.format_relative(member.joined_at)}\nCreated {time.format_relative(member.created_at)}"
-            e.add_field(name=f"{member} (ID: {member.id})",
-                        value=body, inline=False)
-
-        await ctx.send(embed=e)
 
     @commands.command()
     async def cleanup(self, ctx, search=100):
@@ -463,7 +467,7 @@ class Moderation(commands.Cog):
     async def purge(self, ctx, amount=5):
         """A command which purges the channel it is called in"""
         await ctx.channel.purge(limit=amount)
-        embed = Embed(
+        embed = discord.Embed(
             title=f"{ctx.author.name} purged: {ctx.channel.name}",
             description=f"{amount} messages were cleared",
         )
@@ -473,7 +477,8 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @has_permissions(manage_messages=True)
     async def remove(self, ctx):
-        """Removes messages that meet a criteria.
+        """
+        Removes messages that meet a criteria.
 
         In order to use this command, you must have Manage Messages permissions.
         Note that the bot needs Manage Messages as well. These commands cannot
@@ -600,7 +605,8 @@ class Moderation(commands.Cog):
 
     @remove.command()
     async def custom(self, ctx, *, args: str):
-        """A more advanced purge command.
+        """
+        A more advanced purge command.
 
         This command uses a powerful "command line" syntax.
         Most options support multiple values to indicate 'any' match.

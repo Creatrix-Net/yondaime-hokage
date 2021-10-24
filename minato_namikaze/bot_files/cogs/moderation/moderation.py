@@ -1,24 +1,24 @@
+import datetime
+import re
 from collections import Counter
 from os.path import join
 from typing import Optional, Union
-import re
 
 import discord
 from discord.ext import commands
-import datetime
 
 from ...lib import (
-    ErrorEmbed,
     ActionReason,
-    MemberID,
-    BannedMember,
-    get_user,
-    check_if_warning_system_setup,
-    return_warning_channel,
     Arguments,
+    BannedMember,
+    ErrorEmbed,
+    MemberID,
     PostStats,
-    create_paginator
-    )
+    check_if_warning_system_setup,
+    create_paginator,
+    get_user,
+    return_warning_channel,
+)
 
 
 class Moderation(commands.Cog):
@@ -76,7 +76,9 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def ban(self, ctx,
+    async def ban(
+        self,
+        ctx,
         member: Union[MemberID, discord.Member],
         *,
         reason: ActionReason = None,
@@ -115,7 +117,7 @@ class Moderation(commands.Cog):
         if not member:
             if len(banned_users) == 0:
                 await ctx.send(
-                    embed= discord.Embed(
+                    embed=discord.Embed(
                         description="There is **no-one banned**! :zero: people are **banned**"
                     )
                 )
@@ -175,7 +177,7 @@ class Moderation(commands.Cog):
                                 name="**Reason**", value=ban_entry.reason, inline=True
                             )
                         embed.add_field(name="**Position**",
-                                    value=i + 1, inline=True)
+                                        value=i + 1, inline=True)
                         embed.add_field(
                             name="**Banned User Name**",
                             value=ban_entry.user,
@@ -193,7 +195,7 @@ class Moderation(commands.Cog):
                                 name="**Reason**", value=ban_entry.reason, inline=True
                             )
                         embed.add_field(name="**Position**",
-                                    value=i + 1, inline=True)
+                                        value=i + 1, inline=True)
                         embed.add_field(
                             name="**Banned User Name**",
                             value=ban_entry.user,
@@ -211,7 +213,7 @@ class Moderation(commands.Cog):
                                 name="**Reason**", value=ban_entry.reason, inline=True
                             )
                         embed.add_field(name="**Position**",
-                                    value=i + 1, inline=True)
+                                        value=i + 1, inline=True)
                         embed.add_field(
                             name="**Banned User Name**",
                             value=ban_entry.user,
@@ -279,10 +281,17 @@ class Moderation(commands.Cog):
             await ctx.send(f"Unbanned {member.user} (ID: {member.user.id}).")
 
     # Add Roles
-    @commands.command(pass_context=True, usage="<member.mention> <role>", alias=["add_roles"])
+    @commands.command(
+        pass_context=True, usage="<member.mention> <role>", alias=["add_roles"]
+    )
     @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
-    async def ar(self, ctx, member: Optional[Union[int, discord.Member]], role: Union[int, discord.Role]):
+    async def ar(
+        self,
+        ctx,
+        member: Optional[Union[int, discord.Member]],
+        role: Union[int, discord.Role],
+    ):
         """Adds a role to a given user"""
         if member is None:
             member = ctx.message.author
@@ -300,7 +309,9 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
     @commands.check(check_if_warning_system_setup)
-    async def warn(self, ctx, member: Union[int, discord.Member], *, reason: str = None):
+    async def warn(
+        self, ctx, member: Union[int, discord.Member], *, reason: str = None
+    ):
         """Warn a user"""
         member = get_user(member, ctx)
         e = ErrorEmbed(title="You have been warned!")
@@ -376,13 +387,17 @@ class Moderation(commands.Cog):
             :count
         ]
 
-        embed = discord.Embed(title="New Members", colour=discord.Colour.green())
+        embed = discord.Embed(title="New Members",
+                              colour=discord.Colour.green())
 
         for member in members:
-            joined = member.joined_at.strftime('%a, %d %B %Y %I:%M:%S %fms %Z')
-            created = member.created_at.strftime('%a, %d %B %Y %I:%M:%S %fms %Z')
+            joined = member.joined_at.strftime("%a, %d %B %Y %I:%M:%S %fms %Z")
+            created = member.created_at.strftime(
+                "%a, %d %B %Y %I:%M:%S %fms %Z")
             body = f"Joined: {joined}\nCreated: {created}"
-            embed.add_field(name=f"{member} (ID: {member.id})", value=body, inline=False)
+            embed.add_field(
+                name=f"{member} (ID: {member.id})", value=body, inline=False
+            )
 
         await ctx.send(embed=embed)
 
@@ -396,7 +411,8 @@ class Moderation(commands.Cog):
         return {"Bot": count}
 
     async def _complex_cleanup_strategy(self, ctx, search):
-        prefixes = tuple(self.bot.get_guild_prefixes(ctx.guild))  # thanks startswith
+        prefixes = tuple(self.bot.get_guild_prefixes(
+            ctx.guild))  # thanks startswith
 
         def check(m):
             return m.author == ctx.me or m.content.startswith(prefixes)
@@ -409,7 +425,7 @@ class Moderation(commands.Cog):
 
         def check(m):
             return (m.author == ctx.me or m.content.startswith(prefixes)) and not (
-                    m.mentions or m.role_mentions
+                m.mentions or m.role_mentions
             )
 
         deleted = await ctx.channel.purge(limit=search, check=check, before=ctx.message)

@@ -4,7 +4,8 @@ from typing import Optional, Union
 import re
 
 import discord
-from discord.ext import *
+from discord.ext import commands
+import datetime
 
 from ...lib import (
     ErrorEmbed,
@@ -16,8 +17,7 @@ from ...lib import (
     return_warning_channel,
     Arguments,
     PostStats,
-    create_paginator,
-
+    create_paginator
     )
 
 
@@ -379,7 +379,9 @@ class Moderation(commands.Cog):
         embed = discord.Embed(title="New Members", colour=discord.Colour.green())
 
         for member in members:
-            body = f"Joined {time.format_relative(member.joined_at)}\nCreated {time.format_relative(member.created_at)}"
+            joined = member.joined_at.strftime('%a, %d %B %Y %I:%M:%S %fms %Z')
+            created = member.created_at.strftime('%a, %d %B %Y %I:%M:%S %fms %Z')
+            body = f"Joined: {joined}\nCreated: {created}"
             embed.add_field(name=f"{member} (ID: {member.id})", value=body, inline=False)
 
         await ctx.send(embed=embed)

@@ -17,8 +17,8 @@ from ...lib import (
     check_if_warning_system_setup,
     create_paginator,
     get_user,
+    has_permissions,
     return_warning_channel,
-    has_permissions
 )
 
 

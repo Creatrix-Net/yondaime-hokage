@@ -18,6 +18,7 @@ from ...lib import (
     create_paginator,
     get_user,
     return_warning_channel,
+    has_permissions
 )
 
 

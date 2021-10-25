@@ -68,7 +68,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.minato_gif = [f for f in os.listdir(
             join(self.minato_dir, "minato"))]
         self.uptime = format_dt(self.start_time, "R")
-
         super().__init__(
             command_prefix=get_prefix,
             description="Konichiwa, myself Minato Namikaze, Konohagakure Yondaime Hokage, I try my best to do every work as a Hokage!",

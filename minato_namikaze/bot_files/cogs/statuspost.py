@@ -8,12 +8,10 @@ class StatcordPost(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.key = Tokens.statcord.value
-        self.api = statcord.Client(self.bot, self.key)
-        self.api.start_loop()
+        self.api = statcord.StatcordClient(self.bot, self.key)
 
-    @commands.Cog.listener()
-    async def on_command(self, ctx):
-        self.api.command_run(ctx)
+    def cog_unload(self):
+        self.statcord_client.close()
 
 
 def setup(bot):

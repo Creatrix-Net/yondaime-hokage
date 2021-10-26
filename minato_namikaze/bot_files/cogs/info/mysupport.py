@@ -49,7 +49,6 @@ class MySupport(commands.Cog, name="My Support"):
     @commands.command(aliases=["stats"])
     async def about(self, ctx):
         """Tells you information about the bot itself."""
-
         revision = self.get_last_commits()
         embed = discord.Embed(description="Latest Changes:\n" + revision)
         embed.title = "Official Bot Server Invite"

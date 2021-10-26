@@ -216,7 +216,6 @@ class QuickPoll(commands.Cog):
 
         Also can't use the tally command here
         """
-
         # a list of messages to delete when we're all done
         messages = [ctx.message]
         answers = []

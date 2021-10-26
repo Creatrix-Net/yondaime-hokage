@@ -4,6 +4,7 @@ import os
 import time
 from os.path import join
 from pathlib import Path
+from webserver import keep_alive
 
 import discord
 import dotenv
@@ -130,6 +131,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                     pass
 
             log.info("Bot will now start")
+            keep_alive()
             super().run(Tokens.token.value, reconnect=True)
         except discord.PrivilegedIntentsRequired:
             log.critical(

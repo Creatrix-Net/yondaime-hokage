@@ -21,7 +21,6 @@ def allred_rochow(zeff: float, radius: float) -> float:
         zeff: effective nuclear charge
         radius: value of the radius
     """
-
     return zeff / math.pow(radius, 2)
 
 
@@ -33,7 +32,6 @@ def cottrell_sutton(zeff: float, radius: float) -> float:
         zeff: effective nuclear charge
         radius: value of the radius
     """
-
     return math.sqrt(zeff / radius)
 
 
@@ -45,7 +43,6 @@ def gordy(zeff: float, radius: float) -> float:
         zeff: effective nuclear charge
         radius: value of the radius
     """
-
     return zeff / radius
 
 
@@ -58,7 +55,6 @@ def li_xue(ionization_energy: float, radius: float, valence_pqn: int) -> float:
         radius: Type of radius to be used in the calculation, either `crystal_radius` as recommended in the paper or `ionic_radius`
         valence_pqn: valence principal quantum number
     """
-
     return (
         n_effective(valence_pqn, source="zhang")
         * math.sqrt(ionization_energy / RY)
@@ -80,7 +76,6 @@ def martynov_batsanov(ionization_energies: List[float]) -> float:
     - :math:`n_{v}` is the number of valence electrons and
     - :math:`I_{k}` is the :math:`k` th ionization potential.
     """
-
     return math.sqrt(abs(sum(ionization_energies) / len(ionization_energies)))
 
 
@@ -103,7 +98,6 @@ def mulliken(
     - :math:`I` is the ionization energy,
     - :math:`A` is the electron affinity
     """
-
     if ionization_energy is not None:
         if (
             electron_affinity is not None
@@ -125,7 +119,6 @@ def nagle(nvalence: int, polarizability: float) -> float:
         nvalence: number of valence electrons
         polarizability: dipole polarizability
     """
-
     return math.pow(nvalence / polarizability, 1.0 / 3.0)
 
 
@@ -139,7 +132,6 @@ def sanderson(radius: float, noble_gas_radius: float) -> float:
     .. math::
         \chi = \\frac{AD}{AD_{\\text{ng}}}
     """
-
     return math.pow(noble_gas_radius / radius, 3)
 
 
@@ -158,5 +150,4 @@ def generic(zeff: float, radius: float, rpow: float = 1, apow: float = 1) -> flo
     - :math:`r` is the covalent radius
     - :math:`\\alpha,\\beta` parameters
     """
-
     return math.pow(zeff / math.pow(radius, rpow), apow)

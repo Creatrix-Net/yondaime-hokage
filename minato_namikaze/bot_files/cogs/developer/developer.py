@@ -313,7 +313,6 @@ class Developer(commands.Cog):
     @commands.check(owners)
     async def reloadall(self, ctx):
         """Reloads all extensions."""
-
         cog_dir = Path(__file__).resolve(strict=True).parent.parent
         error_collection = []
         for file in os.listdir(cog_dir):

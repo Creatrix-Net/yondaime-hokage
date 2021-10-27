@@ -2,7 +2,6 @@ import asyncio
 import io
 import os
 import platform
-import random
 from random import choice
 from typing import Optional, Union
 
@@ -189,7 +188,7 @@ class Random(commands.Cog):
                 await ctx.send(embed=e)
             else:
                 e2 = discord.Embed(
-                    title=f"I have found this, is it {random.choice(lis)}?",
+                    title=f"I have found this, is it {choice(lis)}?",
                     description=f"{content}",
                 )
                 await ctx.send(embed=e2)

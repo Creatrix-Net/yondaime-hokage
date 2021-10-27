@@ -27,8 +27,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Prove that you are not sus!"""
         if member == "@everyone":
             await ctx.send(
-                f"** <@{ctx.author.id}> yes yes bro!!! Everyone is not sus!**"
-            )
+                f"** <@{ctx.author.id}> yes yes bro!!! Everyone is not sus!**")
             return
         if type(member) is discord.Member:
             desc = f"** {member}  was not the imposter**"
@@ -40,7 +39,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         file_path = self.DEFAULT_GIF_LIST_PATH / "amoungus_friends.png"
         file = discord.File(file_path)
 
-        embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(description=desc,
+                              timestamp=discord.utils.utcnow())
         embed.set_image(url=f"attachment://{file_path}")
         await ctx.send(file=file, embed=embed)
 
@@ -61,15 +61,14 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             await ctx.send(f"** <@{ctx.author.id}> why you being __sus__ ! **")
             return
 
-        embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(description=desc,
+                              timestamp=discord.utils.utcnow())
 
         img = Image.open(
-            FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("amongus.png"))
-        )
+            FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("amongus.png")))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype(
-            FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("Arial.ttf")), 60
-        )
+            FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("Arial.ttf")), 60)
         draw.text((250, 300), text, font=font, fill="red", align="right")
         img.save("wi.png")
         embed.set_image(url=f"attachment://wi.png")
@@ -84,15 +83,15 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             member = ctx.author
 
         url = str(member.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.triggered(), url)
+        img = await self.bot.dagpi.image_process(ImageFeatures.triggered(),
+                                                 url)
         e2file = discord.File(fp=img.image, filename=f"triggered.{img.format}")
         e = discord.Embed(title="Here You Go! Filter used is triggered!")
         e.set_image(url=f"attachment://triggered.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.command(
-        cooldown_after_parsing=True, usage="[discord.member.to.send] <your.message>"
-    )
+    @commands.command(cooldown_after_parsing=True,
+                      usage="[discord.member.to.send] <your.message>")
     async def message(self, ctx, member: discord.Member = None, *, text):
         """Send a fake Discord message"""
         if member is None:
@@ -101,18 +100,22 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         uname = member.display_name
         text = str(text)
         pfp = str(member.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(
-            ImageFeatures.discord(), url=pfp, username=uname, text=text
-        )
+        img = await self.bot.dagpi.image_process(ImageFeatures.discord(),
+                                                 url=pfp,
+                                                 username=uname,
+                                                 text=text)
         e2file = discord.File(fp=img.image, filename=f"message.{img.format}")
         e = discord.Embed(title="Here You Go! Message Sent!")
         e.set_image(url=f"attachment://message.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.command(
-        cooldown_after_parsing=True, usage="<member.mention> <captcha.text>"
-    )
-    async def captcha(self, ctx, member: discord.Member = None, *, text="Detect Face"):
+    @commands.command(cooldown_after_parsing=True,
+                      usage="<member.mention> <captcha.text>")
+    async def captcha(self,
+                      ctx,
+                      member: discord.Member = None,
+                      *,
+                      text="Detect Face"):
         """Captcha v3 Image mockup"""
         if member is None:
             member = ctx.author
@@ -123,10 +126,11 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             await ctx.send("Maybe text length something smaller then 13?")
         else:
             pfp = str(member.avatar.with_format("png").with_size(1024).url)
-            img = await self.bot.dagpi.image_process(
-                ImageFeatures.captcha(), url=pfp, text=text
-            )
-            e2file = discord.File(fp=img.image, filename=f"captcha.{img.format}")
+            img = await self.bot.dagpi.image_process(ImageFeatures.captcha(),
+                                                     url=pfp,
+                                                     text=text)
+            e2file = discord.File(fp=img.image,
+                                  filename=f"captcha.{img.format}")
             e = discord.Embed(title="Here You Go! Another Captcha?")
             e.set_image(url=f"attachment://captcha.{img.format}")
             await ctx.send(file=e2file, embed=e)
@@ -247,7 +251,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://satan.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.command(aliases=["chp", "chpaint", "charcoal_paint", "charcoalp"])
+    @commands.command(
+        aliases=["chp", "chpaint", "charcoal_paint", "charcoalp"])
     async def charcoal(self, ctx, member: discord.Member = None):
         """Get your pfp beautiful charcoal paint"""
         if member is None:

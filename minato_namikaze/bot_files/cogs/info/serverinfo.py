@@ -297,7 +297,7 @@ class Info(commands.Cog):
             name="**__Member Info__**",
             value=("✏️ Name: {}\n"
                    "{}: {}\n"
-                   "📅 Created On: {}").format(user.display_name,
+                   "📅 Created On: {}").format(user.display_name, user.display_name,
                                               prev_names_val, created_on),
         )
 

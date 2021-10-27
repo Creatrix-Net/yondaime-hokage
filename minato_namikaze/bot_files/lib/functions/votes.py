@@ -35,7 +35,10 @@ def votedTopgg(ctx):
         headers={"Authorization": topken},
     )
     try:
-        a_list = True if a.json().get("voted") >= 1 else False
+        if a.json().get("voted") >= 1:
+            a_list = True
+        else:
+            a_list = False
     except requests.exceptions.ConnectionError:
         a_list = True
     except:
@@ -54,11 +57,10 @@ def votedbotsfordiscord(ctx):
         headers={"Authorization": bfd, "Content-Type": "application/json"},
     )
     try:
-        c_list = (
-            True
-            if str(ctx.message.author.id) in c.json().get("hasVoted24", False)
-            else False
-        )
+        if str(ctx.message.author.id) in c.json().get("hasVoted24", False):
+            c_list = True
+        else:
+            c_list = False
     except requests.exceptions.ConnectionError:
         c_list = True
     except:

@@ -47,6 +47,6 @@ statcord @ git+https://github.com/The-4th-Hokage/betterstatcord.py.git@master
 TenGiphPy==2.5.0
 typing-extensions==3.10.0.2
 urllib3==1.26.6
-yarl==1.6.3
+yarl==1.7.0
 youtube-dl==2021.6.6
 youtube-search==2.1.0

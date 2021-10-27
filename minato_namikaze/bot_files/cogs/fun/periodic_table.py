@@ -18,15 +18,13 @@ class ElementConverter(Converter):
         result = None
         if argument.isdigit():
             if int(argument) > 118 or int(argument) < 1:
-                raise BadArgument(
-                    "`{}` is not a valid element!".format(argument))
+                raise BadArgument("`{}` is not a valid element!".format(argument))
             result = ELEMENTS(int(argument))
         else:
             try:
                 result = ELEMENTS(argument.title())
             except Exception:
-                raise BadArgument(
-                    "`{}` is not a valid element!".format(argument))
+                raise BadArgument("`{}` is not a valid element!".format(argument))
         if not result:
             raise BadArgument("`{}` is not a valid element!".format(argument))
         return result
@@ -54,8 +52,7 @@ class MeasurementConverter(Converter):
                 elif argument.lower() in k:
                     result.append((k, v["name"], v["units"]))
         if not result:
-            raise BadArgument(
-                "`{}` is not a valid measurement!".format(argument))
+            raise BadArgument("`{}` is not a valid measurement!".format(argument))
         return result
 
 

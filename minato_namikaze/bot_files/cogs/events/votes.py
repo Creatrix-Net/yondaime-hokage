@@ -59,8 +59,7 @@ class VoteInfo(commands.Cog):
             )
             c = requests.get(
                 f"https://botsfordiscord.com/api/bot/{self.bot.user.id}/votes",
-                headers={"Authorization": bfd,
-                         "Content-Type": "application/json"},
+                headers={"Authorization": bfd, "Content-Type": "application/json"},
             )
             d = requests.get(
                 f"https://discord.boats/api/bot/{self.bot.user.id}/voted",

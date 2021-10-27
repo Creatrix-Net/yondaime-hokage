@@ -191,8 +191,7 @@ class BotEventsCommands(commands.Cog):
                 title="Oh no, I guess I have not been given proper access! Or some internal error",
                 description=f"`{error}`",
             )
-            e7.add_field(name="Command Error Caused By:",
-                         value=f"{ctx.command}")
+            e7.add_field(name="Command Error Caused By:", value=f"{ctx.command}")
             e7.add_field(name="By", value=f"{ctx.author.name}")
             e7.set_thumbnail(url=f"https://i.imgur.com/1zey3je.jpg")
             e7.set_footer(text=f"{ctx.author.name}")
@@ -208,8 +207,7 @@ class BotEventsCommands(commands.Cog):
             e9 = ErrorEmbed(
                 title="Oh no there was some error", description=f"`{error}`"
             )
-            e9.add_field(name="**Command Error Caused By**",
-                         value=f"{ctx.command}")
+            e9.add_field(name="**Command Error Caused By**", value=f"{ctx.command}")
             e9.add_field(
                 name="**By**",
                 value=f"**ID** : {ctx.author.id}, **Name** : {ctx.author.name}",

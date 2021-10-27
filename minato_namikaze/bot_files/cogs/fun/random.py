@@ -53,8 +53,7 @@ class Random(commands.Cog):
         else:
             await ctx.send(
                 ctx.message.author.mention,
-                embed=Embed(title="⚠️", description=choice(
-                    LinksAndVars.insults.value)),
+                embed=Embed(title="⚠️", description=choice(LinksAndVars.insults.value)),
             )
 
     @commands.command(usage="{text}")

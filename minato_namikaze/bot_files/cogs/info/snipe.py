@@ -106,8 +106,7 @@ class Snipe(commands.Cog):
             )
             emb.timestamp = snipe[0].created_at
         else:  # delete snipe
-            emb.set_author(name=str(snipe.author),
-                           icon_url=snipe.author.avatar.url)
+            emb.set_author(name=str(snipe.author), icon_url=snipe.author.avatar.url)
             emb.description = self.sanitise(snipe.content)
             emb.colour = snipe.author.colour
             emb.timestamp = snipe.created_at

@@ -53,8 +53,7 @@ class OwnerOnly(commands.Cog):
             ) as r:
                 res = await r.read()
             embed.set_image(url="attachment://ss.png")
-            embed.set_footer(
-                text=f"{ctx.author} | Minato Namikaze | {current_time} ")
+            embed.set_footer(text=f"{ctx.author} | Minato Namikaze | {current_time} ")
             await ctx.send(
                 file=discord.File(io.BytesIO(res), filename="ss.png"), embed=embed
             )

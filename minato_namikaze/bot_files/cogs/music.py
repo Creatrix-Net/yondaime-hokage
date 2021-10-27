@@ -126,8 +126,7 @@ class Music(commands.Cog):
         e = Embed()
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         if not player:
-            player = self.bot.music.create_player(
-                ctx, ffmpeg_error_betterfix=True)
+            player = self.bot.music.create_player(ctx, ffmpeg_error_betterfix=True)
         if not ctx.voice_client.is_playing():
             await player.queue(url, search=True)
             song = await player.play()
@@ -136,8 +135,7 @@ class Music(commands.Cog):
             e.add_field(
                 name=f"**{song.channel}**", value=f"[Click Here]({song.channel_url})"
             )
-            e.add_field(name=f"**{song.name}**",
-                        value=f"[Click Here]({song.url})")
+            e.add_field(name=f"**{song.name}**", value=f"[Click Here]({song.url})")
             e.set_image(url=song.thumbnail)
         else:
             song = await player.queue(url, search=True)
@@ -146,8 +144,7 @@ class Music(commands.Cog):
             e.add_field(
                 name=f"**{song.channel}**", value=f"[Click Here]({song.channel_url})"
             )
-            e.add_field(name=f"**{song.name}**",
-                        value=f"[Click Here]({song.url})")
+            e.add_field(name=f"**{song.name}**", value=f"[Click Here]({song.url})")
             e.set_image(url=song.thumbnail)
         await ctx.send(embed=e)
 

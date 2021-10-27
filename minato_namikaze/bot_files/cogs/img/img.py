@@ -40,8 +40,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         file_path = self.DEFAULT_GIF_LIST_PATH / "amoungus_friends.png"
         file = discord.File(file_path)
 
-        embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
         embed.set_image(url=f"attachment://{file_path}")
         await ctx.send(file=file, embed=embed)
 
@@ -62,8 +61,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             await ctx.send(f"** <@{ctx.author.id}> why you being __sus__ ! **")
             return
 
-        embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
 
         img = Image.open(
             FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("amongus.png"))
@@ -128,8 +126,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             img = await self.bot.dagpi.image_process(
                 ImageFeatures.captcha(), url=pfp, text=text
             )
-            e2file = discord.File(
-                fp=img.image, filename=f"captcha.{img.format}")
+            e2file = discord.File(fp=img.image, filename=f"captcha.{img.format}")
             e = discord.Embed(title="Here You Go! Another Captcha?")
             e.set_image(url=f"attachment://captcha.{img.format}")
             await ctx.send(file=e2file, embed=e)

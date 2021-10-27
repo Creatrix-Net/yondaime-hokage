@@ -43,8 +43,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> spanks themselves !!! LOL! **"
         onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "spank")))
 
-        embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(
@@ -70,8 +69,7 @@ class Fun(commands.Cog):
         if member == "" or random.choice([True, False]):
             onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "slap")))
 
-            embed = discord.Embed(
-                description=desc, timestamp=discord.utils.utcnow())
+            embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
             image_name = random.choice(onlyfiles)
 
             file = discord.File(
@@ -85,8 +83,7 @@ class Fun(commands.Cog):
             url = str(user.avatar.with_format("png").with_size(1024))
             img = await self.bot.dagpi.image_process(
                 ImageFeatures.slap(),
-                url2=str(ctx.author.avatar.with_format(
-                    "png").with_size(1024).url),
+                url2=str(ctx.author.avatar.with_format("png").with_size(1024).url),
                 url=url,
             )
             e2file = discord.File(fp=img.image, filename=f"slap.{img.format}")
@@ -109,8 +106,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> hugs themselves !!! :heart: :heart: :heart: :heart: **"
         onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "hug")))
 
-        embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(
@@ -134,8 +130,7 @@ class Fun(commands.Cog):
             desc = f"** <@{ctx.author.id}> hugs themselves !!! **"
         onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "poke")))
 
-        embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(
@@ -159,8 +154,7 @@ class Fun(commands.Cog):
             desc = f"**<@{ctx.author.id}> high-fives **"
         onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "high5")))
 
-        embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(
@@ -183,8 +177,7 @@ class Fun(commands.Cog):
             desc = f"**<@{ctx.author.id}> is partying !!!**"
         onlyfiles = list(listdir(join(self.DEFAULT_GIF_LIST_PATH, "party")))
 
-        embed = discord.Embed(
-            description=desc, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(description=desc, timestamp=discord.utils.utcnow())
         image_name = random.choice(onlyfiles)
 
         file = discord.File(

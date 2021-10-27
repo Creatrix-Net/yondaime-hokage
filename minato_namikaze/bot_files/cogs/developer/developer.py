@@ -34,7 +34,7 @@ class Developer(commands.Cog):
 
         all_pages = []
 
-        for chunk in [guilds[i: i + 20] for i in range(0, len(guilds), 20)]:
+        for chunk in [guilds[i : i + 20] for i in range(0, len(guilds), 20)]:
             page = Embed(title=title)
 
             for guild in chunk:
@@ -160,8 +160,7 @@ class Developer(commands.Cog):
                     return
 
             await ctx.send(
-                embed=Embed(
-                    description=f"Here is the invite link: {invite.url}")
+                embed=Embed(description=f"Here is the invite link: {invite.url}")
             )
         except:
             await ctx.send(
@@ -328,8 +327,7 @@ class Developer(commands.Cog):
             else:
                 if file.endswith(".py"):
                     try:
-                        self.bot.reload_extension(
-                            f"bot_files.cogs.{file[:-3]}")
+                        self.bot.reload_extension(f"bot_files.cogs.{file[:-3]}")
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 
@@ -374,8 +372,7 @@ class Developer(commands.Cog):
             else:
                 if file.endswith(".py"):
                     try:
-                        self.bot.reload_extension(
-                            f"bot_files.cogs.{file[:-3]}")
+                        self.bot.reload_extension(f"bot_files.cogs.{file[:-3]}")
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 

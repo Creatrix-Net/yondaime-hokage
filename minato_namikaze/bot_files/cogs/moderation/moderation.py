@@ -177,8 +177,7 @@ class Moderation(commands.Cog):
                             embed.add_field(
                                 name="**Reason**", value=ban_entry.reason, inline=True
                             )
-                        embed.add_field(name="**Position**",
-                                        value=i + 1, inline=True)
+                        embed.add_field(name="**Position**", value=i + 1, inline=True)
                         embed.add_field(
                             name="**Banned User Name**",
                             value=ban_entry.user,
@@ -195,8 +194,7 @@ class Moderation(commands.Cog):
                             embed.add_field(
                                 name="**Reason**", value=ban_entry.reason, inline=True
                             )
-                        embed.add_field(name="**Position**",
-                                        value=i + 1, inline=True)
+                        embed.add_field(name="**Position**", value=i + 1, inline=True)
                         embed.add_field(
                             name="**Banned User Name**",
                             value=ban_entry.user,
@@ -213,8 +211,7 @@ class Moderation(commands.Cog):
                             embed.add_field(
                                 name="**Reason**", value=ban_entry.reason, inline=True
                             )
-                        embed.add_field(name="**Position**",
-                                        value=i + 1, inline=True)
+                        embed.add_field(name="**Position**", value=i + 1, inline=True)
                         embed.add_field(
                             name="**Banned User Name**",
                             value=ban_entry.user,
@@ -346,8 +343,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_warning_system_setup)
     async def warnlist(self, ctx, member: Optional[Union[int, discord.Member]] = None):
         """Get the no. of warns for a specified user"""
-        member = get_user(
-            member if member is not None else ctx.message.author, ctx)
+        member = get_user(member if member is not None else ctx.message.author, ctx)
         embed = discord.Embed(title="Type the below message in the search bar")
         search_image = discord.File(
             join(self.bot.minato_dir, "discord", "search.png"), filename="search.png"
@@ -388,13 +384,11 @@ class Moderation(commands.Cog):
             :count
         ]
 
-        embed = discord.Embed(title="New Members",
-                              colour=discord.Colour.green())
+        embed = discord.Embed(title="New Members", colour=discord.Colour.green())
 
         for member in members:
             joined = member.joined_at.strftime("%a, %d %B %Y %I:%M:%S %fms %Z")
-            created = member.created_at.strftime(
-                "%a, %d %B %Y %I:%M:%S %fms %Z")
+            created = member.created_at.strftime("%a, %d %B %Y %I:%M:%S %fms %Z")
             body = f"Joined: {joined}\nCreated: {created}"
             embed.add_field(
                 name=f"{member} (ID: {member.id})", value=body, inline=False
@@ -412,8 +406,7 @@ class Moderation(commands.Cog):
         return {"Bot": count}
 
     async def _complex_cleanup_strategy(self, ctx, search):
-        prefixes = tuple(self.bot.get_guild_prefixes(
-            ctx.guild))  # thanks startswith
+        prefixes = tuple(self.bot.get_guild_prefixes(ctx.guild))  # thanks startswith
 
         def check(m):
             return m.author == ctx.me or m.content.startswith(prefixes)
@@ -463,14 +456,11 @@ class Moderation(commands.Cog):
 
         spammers = await strategy(ctx, search)
         deleted = sum(spammers.values())
-        messages = [
-            f'{deleted} message{" was" if deleted == 1 else "s were"} removed.']
+        messages = [f'{deleted} message{" was" if deleted == 1 else "s were"} removed.']
         if deleted:
             messages.append("")
-            spammers = sorted(spammers.items(),
-                              key=lambda t: t[1], reverse=True)
-            messages.extend(
-                f"- **{author}**: {count}" for author, count in spammers)
+            spammers = sorted(spammers.items(), key=lambda t: t[1], reverse=True)
+            messages.extend(f"- **{author}**: {count}" for author, count in spammers)
 
         await ctx.send("\n".join(messages), delete_after=10)
 
@@ -531,12 +521,10 @@ class Moderation(commands.Cog):
 
         spammers = Counter(m.author.display_name for m in deleted)
         deleted = len(deleted)
-        messages = [
-            f'{deleted} message{" was" if deleted == 1 else "s were"} removed.']
+        messages = [f'{deleted} message{" was" if deleted == 1 else "s were"} removed.']
         if deleted:
             messages.append("")
-            spammers = sorted(spammers.items(),
-                              key=lambda t: t[1], reverse=True)
+            spammers = sorted(spammers.items(), key=lambda t: t[1], reverse=True)
             messages.extend(f"**{name}**: {count}" for name, count in spammers)
 
         to_send = "\n".join(messages)
@@ -660,8 +648,7 @@ class Moderation(commands.Cog):
         parser.add_argument("--or", action="store_true", dest="_or")
         parser.add_argument("--not", action="store_true", dest="_not")
         parser.add_argument("--emoji", action="store_true")
-        parser.add_argument("--bot", action="store_const",
-                            const=lambda m: m.author.bot)
+        parser.add_argument("--bot", action="store_const", const=lambda m: m.author.bot)
         parser.add_argument(
             "--embeds", action="store_const", const=lambda m: len(m.embeds)
         )
@@ -712,8 +699,7 @@ class Moderation(commands.Cog):
             predicates.append(lambda m: m.author in users)
 
         if args.contains:
-            predicates.append(lambda m: any(
-                sub in m.content for sub in args.contains))
+            predicates.append(lambda m: any(sub in m.content for sub in args.contains))
 
         if args.starts:
             predicates.append(
@@ -721,8 +707,7 @@ class Moderation(commands.Cog):
             )
 
         if args.ends:
-            predicates.append(lambda m: any(m.content.endswith(s)
-                              for s in args.ends))
+            predicates.append(lambda m: any(m.content.endswith(s) for s in args.ends))
 
         op = all if not args._or else any
 

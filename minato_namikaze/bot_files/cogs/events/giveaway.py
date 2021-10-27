@@ -208,8 +208,7 @@ class Giveaway(Cog):
             pass
         try:
             if task:
-                winnerEmbed.add_field(
-                    name=":checkered_flag: Tasks", value=task)
+                winnerEmbed.add_field(name=":checkered_flag: Tasks", value=task)
         except:
             pass
         await msg.edit(embed=winnerEmbed)
@@ -246,8 +245,7 @@ class Giveaway(Cog):
                 f"https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}"
             )
         except:
-            embed = Embed(title="Failure!",
-                          description="Cannot cancel Giveaway")
+            embed = Embed(title="Failure!", description="Cannot cancel Giveaway")
             await ctx.send(emebed=embed)
 
 

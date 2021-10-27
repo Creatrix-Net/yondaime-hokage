@@ -169,8 +169,7 @@ class Info(commands.Cog):
             embed.add_field(
                 name="<:ServerOwner:864765886916067359> Owner", value=ctx.guild.owner
             )
-            embed.add_field(name="🌍 Region", value=str(
-                ctx.guild.region).capitalize())
+            embed.add_field(name="🌍 Region", value=str(ctx.guild.region).capitalize())
             embed.add_field(name="✔️ Verification Level", value=verif_lvl)
             embed.add_field(name="⚠️ Content Filter", value=content_filter)
             embed.add_field(name="👥 Members", value=ctx.guild.member_count)
@@ -266,8 +265,7 @@ class Info(commands.Cog):
 
         if names:
             name_name = (
-                "**Previous Names:**" if len(
-                    names) > 1 else "**Previous Name:**"
+                "**Previous Names:**" if len(names) > 1 else "**Previous Name:**"
             )
             name_val = filter_invites(", ".join(names))
             prev_names_val = "{}\n{}".format(

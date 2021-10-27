@@ -22,8 +22,7 @@ class UnitConverter(Converter):
         elif argument.lower() in ["clear", "none"]:
             new_units = None
         else:
-            raise BadArgument("`{units}` is not a vaild option!").format(
-                units=argument)
+            raise BadArgument("`{units}` is not a vaild option!").format(units=argument)
         return new_units
 
 
@@ -137,8 +136,7 @@ class Weather(commands.Cog):
             country = ""
         lat, lon = data["coord"]["lat"], data["coord"]["lon"]
         condition = ", ".join(info["main"] for info in data["weather"])
-        windspeed = str(data["wind"]["speed"]) + \
-            " " + self.unit[units]["speed"]
+        windspeed = str(data["wind"]["speed"]) + " " + self.unit[units]["speed"]
         if units == "kelvin":
             currenttemp = abs(currenttemp - 273.15)
             mintemp = abs(maxtemp - 273.15)
@@ -178,10 +176,8 @@ class Weather(commands.Cog):
                 mintemp, self.unit[units]["temp"], maxtemp, self.unit[units]["temp"]
             ),
         )
-        embed.add_field(
-            name="\N{SUNRISE OVER MOUNTAINS} **Sunrise**", value=sunrise)
-        embed.add_field(
-            name="\N{SUNSET OVER BUILDINGS} **Sunset**", value=sunset)
+        embed.add_field(name="\N{SUNRISE OVER MOUNTAINS} **Sunrise**", value=sunrise)
+        embed.add_field(name="\N{SUNSET OVER BUILDINGS} **Sunset**", value=sunset)
         embed.set_footer(text="Powered by https://openweathermap.org")
         await ctx.send(embed=embed)
 

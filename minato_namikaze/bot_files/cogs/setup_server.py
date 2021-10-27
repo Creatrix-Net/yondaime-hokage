@@ -97,8 +97,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Feedback
             if not feed_channel:
-                m = Feedback(
-                    bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Feedback(bot=self.bot, timeout=commanwaitingtime, channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
@@ -110,8 +109,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Support
             if not support_channel:
-                m = Support(
-                    bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Support(bot=self.bot, timeout=commanwaitingtime, channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
@@ -135,8 +133,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # UnBan
             if not unban_channel:
-                m = Unban(bot=self.bot, timeout=commanwaitingtime,
-                          channel=botask)
+                m = Unban(bot=self.bot, timeout=commanwaitingtime, channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
@@ -151,8 +148,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Warns
             if not warns_channel:
-                m = Warns(bot=self.bot, timeout=commanwaitingtime,
-                          channel=botask)
+                m = Warns(bot=self.bot, timeout=commanwaitingtime, channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:

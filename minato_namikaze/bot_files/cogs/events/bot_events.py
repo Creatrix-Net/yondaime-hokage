@@ -35,8 +35,7 @@ class InviteTrackerForMyGuild:
                         or cached_invite.revoked
                     ):
                         if cached_invite.revoked:
-                            self._cache[member.guild.id].pop(
-                                cached_invite.code)
+                            self._cache[member.guild.id].pop(cached_invite.code)
                         elif new_invite.inviter == cached_invite.inviter:
                             self._cache[member.guild.id][
                                 cached_invite.code
@@ -132,8 +131,7 @@ class BotEvents(commands.Cog):
         )
         try:
             img = random.choice(self.minato_gif)
-            file = discord.File(
-                join(self.minato_dir, "minato", img), filename=img)
+            file = discord.File(join(self.minato_dir, "minato", img), filename=img)
 
             f = open(
                 Path(__file__).resolve(strict=True).parent.parent.parent

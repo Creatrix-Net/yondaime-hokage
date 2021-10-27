@@ -17,9 +17,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
 
     def pin_img(self):
-        file_pin = discord.File(
-            join(self.bot.minato_dir, "discord", "pin.png"), filename="pin.png"
-        )
+        file_pin = discord.File(join(self.bot.minato_dir, "discord",
+                                     "pin.png"),
+                                filename="pin.png")
         return file_pin
 
     @commands.command(name="setup", description="Easy setup for the server")
@@ -45,13 +45,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             botask,
         ) = await channel_creation(ctx)
 
-        if (
-            feed_channel
-            and support_channel
-            and ban_channel
-            and unban_channel
-            and warns_channel
-        ):
+        if (feed_channel and support_channel and ban_channel and unban_channel
+                and warns_channel):
             e = Embed(
                 title="You have already configured your server mate!",
                 description=f"Please head over to {feed_channel.mention} {support_channel.mention} {ban_channel.mention} {unban_channel.mention} {warns_channel.mention}",
@@ -77,27 +72,26 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             if not botask:
                 botask = await ctx.guild.create_text_channel(
                     "Bot Setup",
-                    category=discord.utils.get(
-                        ctx.guild.categories, name="Admin / Feedback"
-                    ),
+                    category=discord.utils.get(ctx.guild.categories,
+                                               name="Admin / Feedback"),
                 )
                 await ctx.send(
                     f"**{botask.mention}** channel is **created** please head over there for the server setup of the bot!",
                     delete_after=8,
                 )
-                await ctx.send(
-                    f"Roles having access to {botask.mention} are", delete_after=8
-                )
+                await ctx.send(f"Roles having access to {botask.mention} are",
+                               delete_after=8)
                 for i in admin_roles:
                     await ctx.send(f"{i.mention}", delete_after=10)
             else:
-                await ctx.send(
-                    f"Please head over the {botask.mention}", delete_after=10
-                )
+                await ctx.send(f"Please head over the {botask.mention}",
+                               delete_after=10)
 
             # Feedback
             if not feed_channel:
-                m = Feedback(bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Feedback(bot=self.bot,
+                             timeout=commanwaitingtime,
+                             channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
@@ -109,7 +103,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Support
             if not support_channel:
-                m = Support(bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Support(bot=self.bot,
+                            timeout=commanwaitingtime,
+                            channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
@@ -121,7 +117,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Ban
             if not ban_channel:
-                m = Ban(bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Ban(bot=self.bot,
+                        timeout=commanwaitingtime,
+                        channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
@@ -133,13 +131,15 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # UnBan
             if not unban_channel:
-                m = Unban(bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Unban(bot=self.bot,
+                          timeout=commanwaitingtime,
+                          channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
-                file = discord.File(
-                    join(self.bot.minato_dir, "discord", "pin.png"), filename="pin.png"
-                )
+                file = discord.File(join(self.bot.minato_dir, "discord",
+                                         "pin.png"),
+                                    filename="pin.png")
                 await unban_channel.send(file=self.pin_img(), embed=embed)
                 await ctx.send(
                     f"Channel for **logging unbans already there**! {unban_channel.mention}",
@@ -148,7 +148,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Warns
             if not warns_channel:
-                m = Warns(bot=self.bot, timeout=commanwaitingtime, channel=botask)
+                m = Warns(bot=self.bot,
+                          timeout=commanwaitingtime,
+                          channel=botask)
                 await m.start(ctx, channel=botask)
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:

@@ -50,7 +50,9 @@ class Giveaway(Cog):
             embed = Embed(title=f"Question {i+1}", description=question)
             await ctx.send(embed=embed)
             try:
-                message = await self.bot.wait_for("message", timeout=25, check=check)
+                message = await self.bot.wait_for("message",
+                                                  timeout=25,
+                                                  check=check)
             except TimeoutError:
                 await ctx.send("You didn't answer the questions in Time")
                 return
@@ -164,9 +166,8 @@ class Giveaway(Cog):
                 if role in i.roles:
                     users.append(i)
         if len(users) <= 0:
-            emptyEmbed = Embed(
-                title="🎉🎉 Giveaway Time !! 🎉🎉", description=f"🎁 Win a Prize today"
-            )
+            emptyEmbed = Embed(title="🎉🎉 Giveaway Time !! 🎉🎉",
+                               description=f"🎁 Win a Prize today")
             try:
                 emptyEmbed.add_field(name="Hosted By:", value=host)
             except:
@@ -195,9 +196,8 @@ class Giveaway(Cog):
             winnerEmbed.set_footer(text=msg_embd_field["footer"]["text"])
         except:
             pass
-        winnerEmbed.add_field(
-            name=f"🎉 Congratulations On Winning Giveaway 🎉", value=winner.mention
-        )
+        winnerEmbed.add_field(name=f"🎉 Congratulations On Winning Giveaway 🎉",
+                              value=winner.mention)
         winnerEmbed.set_image(
             url="https://firebasestorage.googleapis.com/v0/b/sociality-a732c.appspot.com/o/Loli.png?alt=media&token=ab5c8924-9a14-40a9-97b8-dba68b69195d"
         )
@@ -208,7 +208,8 @@ class Giveaway(Cog):
             pass
         try:
             if task:
-                winnerEmbed.add_field(name=":checkered_flag: Tasks", value=task)
+                winnerEmbed.add_field(name=":checkered_flag: Tasks",
+                                      value=task)
         except:
             pass
         await msg.edit(embed=winnerEmbed)
@@ -245,7 +246,8 @@ class Giveaway(Cog):
                 f"https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}"
             )
         except:
-            embed = Embed(title="Failure!", description="Cannot cancel Giveaway")
+            embed = Embed(title="Failure!",
+                          description="Cannot cancel Giveaway")
             await ctx.send(emebed=embed)
 
 

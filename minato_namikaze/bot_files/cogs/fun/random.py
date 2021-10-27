@@ -26,7 +26,9 @@ class Random(commands.Cog):
         return discord.PartialEmoji(name="\N{GAME DIE}")
 
     @commands.command(aliases=["takeitback"], usage="<member.mention>")
-    async def insult(self, ctx, user: Optional[Union[int, discord.Member]] = None):
+    async def insult(self,
+                     ctx,
+                     user: Optional[Union[int, discord.Member]] = None):
         """
         Insult a user
         `user` the user you would like to insult
@@ -46,14 +48,15 @@ class Random(commands.Cog):
             else:
                 await ctx.send(
                     f"{user.mention} was **insulted** by {ctx.message.author.mention}",
-                    embed=Embed(
-                        title="⚠️", description=choice(LinksAndVars.insults.value)
-                    ),
+                    embed=Embed(title="⚠️",
+                                description=choice(
+                                    LinksAndVars.insults.value)),
                 )
         else:
             await ctx.send(
                 ctx.message.author.mention,
-                embed=Embed(title="⚠️", description=choice(LinksAndVars.insults.value)),
+                embed=Embed(title="⚠️",
+                            description=choice(LinksAndVars.insults.value)),
             )
 
     @commands.command(usage="{text}")
@@ -78,14 +81,12 @@ class Random(commands.Cog):
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx, colour="255-255-255", *, url=None):
         """Generates easy QR Code"""
-        colours = dict(
-            [
-                ("255-255-255", "255-255-255"),
-                ("black", "0-0-0"),
-                ("red", "FF0000"),
-                ("blue", "00f"),
-            ]
-        )
+        colours = dict([
+            ("255-255-255", "255-255-255"),
+            ("black", "0-0-0"),
+            ("red", "FF0000"),
+            ("blue", "00f"),
+        ])
         col = ["black", "red", "blue"]
         if colour == "255-255-255":
             col = ["255-255-255", "red", "blue"]
@@ -111,7 +112,8 @@ class Random(commands.Cog):
             else:
                 pass
 
-    @commands.command(usage="<time> <reminder> (Time needs to be in seconds...)")
+    @commands.command(
+        usage="<time> <reminder> (Time needs to be in seconds...)")
     async def remind(self, ctx, time: TimeConverter, *, reminder):
         """A simple reminder"""
         if int(time) < 12 * 60 * 60:
@@ -149,9 +151,8 @@ class Random(commands.Cog):
         await asyncio.sleep(5)
         os.remove("tts.mp3")
 
-    @commands.command(
-        aliases=["color", "colour", "sc"], usage="<hexadecimal colour code>"
-    )
+    @commands.command(aliases=["color", "colour", "sc"],
+                      usage="<hexadecimal colour code>")
     async def show_color(self, ctx, *, color: discord.Colour):
         """Enter a color and you will see it!"""
         file = io.BytesIO()
@@ -175,7 +176,8 @@ class Random(commands.Cog):
     async def getmystbin(self, ctx, id):
         """Get your Mystbi using your id"""
         try:
-            get_paste = await self.bot.mystbin_client.get(f"https://mystb.in/{id}")
+            get_paste = await self.bot.mystbin_client.get(
+                f"https://mystb.in/{id}")
             lis = ["awesome", "bad", "good"]
             content = get_paste.content
             lencontent = len(content)

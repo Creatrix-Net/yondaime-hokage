@@ -32,11 +32,8 @@ class Info(commands.Cog):
     @commands.guild_only()
     async def serverdump(self, ctx):
         """Dumps server name to the developer"""
-        c = (
-            self.bot.get_channel(813954921782706227)
-            if not self.bot.local
-            else self.bot.get_channel(869238107524968479)
-        )
+        c = (self.bot.get_channel(813954921782706227) if not self.bot.local
+             else self.bot.get_channel(869238107524968479))
         if ctx.guild.id in (747480356625711204, 869085099470225508):
             b = await ctx.send("** Okay updating info ! **")
             n = 1
@@ -56,13 +53,14 @@ class Info(commands.Cog):
                     name="**Bots**",
                     value=sum(1 for member in guild.members if member.bot),
                 )
-                e.add_field(
-                    name="**Region**", value=str(guild.region).capitalize(), inline=True
-                )
+                e.add_field(name="**Region**",
+                            value=str(guild.region).capitalize(),
+                            inline=True)
                 e.add_field(name="**Server ID**", value=guild.id, inline=True)
                 await c.send(embed=e)
             await c.send(f"In total {n} servers")
-            await ctx.send("**Updated ! Please check the <#813954921782706227>**")
+            await ctx.send(
+                "**Updated ! Please check the <#813954921782706227>**")
         else:
             a = await ctx.send("**Sending the info to my developer**")
             e = discord.Embed(
@@ -79,9 +77,9 @@ class Info(commands.Cog):
                 name="**Bots**",
                 value=sum(1 for member in ctx.guild.members if member.bot),
             )
-            e.add_field(
-                name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True
-            )
+            e.add_field(name="**Region**",
+                        value=str(ctx.guild.region).capitalize(),
+                        inline=True)
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await c.send(embed=e)
             await ctx.send(
@@ -134,16 +132,24 @@ class Info(commands.Cog):
         """Check info about current server"""
         guild = ctx.guild
         levels = {
-            "None - No criteria set.": discord.VerificationLevel.none,
-            "Low - Member must have a verified email on their Discord account.": discord.VerificationLevel.low,
-            "Medium - Member must have a verified email and be registered on Discord for more than five minutes.": discord.VerificationLevel.medium,
-            "High - Member must have a verified email, be registered on Discord for more than five minutes, and be a member of the guild itself for more than ten minutes.": discord.VerificationLevel.high,
-            "Extreme - Member must have a verified phone on their Discord account.": discord.VerificationLevel.highest,
+            "None - No criteria set.":
+            discord.VerificationLevel.none,
+            "Low - Member must have a verified email on their Discord account.":
+            discord.VerificationLevel.low,
+            "Medium - Member must have a verified email and be registered on Discord for more than five minutes.":
+            discord.VerificationLevel.medium,
+            "High - Member must have a verified email, be registered on Discord for more than five minutes, and be a member of the guild itself for more than ten minutes.":
+            discord.VerificationLevel.high,
+            "Extreme - Member must have a verified phone on their Discord account.":
+            discord.VerificationLevel.highest,
         }
         filters = {
-            "Disabled - The guild does not have the content filter enabled.": discord.ContentFilter.disabled,
-            "No Role - The guild has the content filter enabled for members without a role.": discord.ContentFilter.no_role,
-            "All Members - The guild has the content filter enabled for every member.": discord.ContentFilter.all_members,
+            "Disabled - The guild does not have the content filter enabled.":
+            discord.ContentFilter.disabled,
+            "No Role - The guild has the content filter enabled for members without a role.":
+            discord.ContentFilter.no_role,
+            "All Members - The guild has the content filter enabled for every member.":
+            discord.ContentFilter.all_members,
         }
         if ctx.invoked_subcommand is None:
             find_bots = sum(1 for member in ctx.guild.members if member.bot)
@@ -166,10 +172,10 @@ class Info(commands.Cog):
             for response, filt in filters.items():
                 if filt is guild.explicit_content_filter:
                     content_fiter = response
-            embed.add_field(
-                name="<:ServerOwner:864765886916067359> Owner", value=ctx.guild.owner
-            )
-            embed.add_field(name="🌍 Region", value=str(ctx.guild.region).capitalize())
+            embed.add_field(name="<:ServerOwner:864765886916067359> Owner",
+                            value=ctx.guild.owner)
+            embed.add_field(name="🌍 Region",
+                            value=str(ctx.guild.region).capitalize())
             embed.add_field(name="✔️ Verification Level", value=verif_lvl)
             embed.add_field(name="⚠️ Content Filter", value=content_filter)
             embed.add_field(name="👥 Members", value=ctx.guild.member_count)
@@ -242,17 +248,11 @@ class Info(commands.Cog):
         if s == discord.Status.dnd:
             status += "<:dnd:885522031536394320>"
 
-        show_roles = (
-            ", ".join(
-                [
-                    f"<@&{x.id}>"
-                    for x in sorted(user.roles, key=lambda x: x.position, reverse=True)
-                    if x.id != ctx.guild.default_role.id
-                ]
-            )
-            if len(user.roles) > 1
-            else "None"
-        )
+        show_roles = (", ".join([
+            f"<@&{x.id}>"
+            for x in sorted(user.roles, key=lambda x: x.position, reverse=True)
+            if x.id != ctx.guild.default_role.id
+        ]) if len(user.roles) > 1 else "None")
 
         embed = discord.Embed(
             title=f"{status} {user.display_name}'s Info.",
@@ -264,9 +264,8 @@ class Info(commands.Cog):
         embed.add_field(name="🔹 User", value=user, inline=True)
 
         if names:
-            name_name = (
-                "**Previous Names:**" if len(names) > 1 else "**Previous Name:**"
-            )
+            name_name = ("**Previous Names:**"
+                         if len(names) > 1 else "**Previous Name:**")
             name_val = filter_invites(", ".join(names))
             prev_names_val = "{}\n{}".format(
                 name_name,
@@ -277,11 +276,8 @@ class Info(commands.Cog):
             prev_names_val = ""
 
         if nicks:
-            nick_name = (
-                "**Previous Nicknames:**"
-                if len(nicks) > 1
-                else "**Previous Nickname:**"
-            )
+            nick_name = ("**Previous Nicknames:**"
+                         if len(nicks) > 1 else "**Previous Nickname:**")
             nick_val = filter_invites(", ".join(nicks))
             prev_nicks_val = "{}\n{}\n".format(
                 nick_name,
@@ -293,15 +289,16 @@ class Info(commands.Cog):
 
         embed.add_field(
             name="**__User info__**",
-            value=("🔸 Roles: {}\n" "📅 Joined On {}" "{}").format(
-                show_roles, joined_on, prev_nicks_val
-            ),
+            value=("🔸 Roles: {}\n"
+                   "📅 Joined On {}"
+                   "{}").format(show_roles, joined_on, prev_nicks_val),
         )
         embed.add_field(
             name="**__Member Info__**",
-            value=("✏️ Name: {}\n" "{}: {}\n" "📅 Created On: {}").format(
-                user.display_name, prev_names_val, created_on
-            ),
+            value=("✏️ Name: {}\n"
+                   "{}: {}\n"
+                   "📅 Created On: {}").format(user.display_name,
+                                              prev_names_val, created_on),
         )
 
         # embed.add_field(name="✏️ Name", value=user.display_name)

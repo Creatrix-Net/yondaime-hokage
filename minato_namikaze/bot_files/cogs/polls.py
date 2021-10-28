@@ -226,7 +226,7 @@ class QuickPoll(commands.Cog):
             if entry.clean_content.startswith(f"{ctx.prefix}cancel"):
                 break
 
-            answers.append((to_emoji(i), entry.clean_content))
+            answers.append(i, entry.clean_content)
 
         try:
             await ctx.channel.delete_messages(messages)
@@ -250,7 +250,8 @@ class QuickPoll(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def quickpoll(self, ctx, *questions_and_choices: str):
-        """Makes a poll quickly.
+        """
+        Makes a poll quickly.
 
         The first argument is the question and the rest are the choices.
 
@@ -267,8 +268,7 @@ class QuickPoll(commands.Cog):
                 "Need Read Message History and Add Reactions permissions.")
 
         question = questions_and_choices[0]
-        choices = [(to_emoji(e), v)
-                   for e, v in enumerate(questions_and_choices[1:])]
+        choices = [(e, v) for e, v in enumerate(questions_and_choices[1:])]
 
         try:
             await ctx.message.delete()

@@ -83,8 +83,8 @@ class BotEvents(commands.Cog):
         try:
             if (invite.guild.id not in self._cache.keys()
                     and invite.guild.id == 747480356625711204):
-                self.bot._cache[invite.guild.id] = {}
-            self.bot._cache[invite.guild.id][invite.code] = invite
+                self._cache[invite.guild.id] = {}
+            self._cache[invite.guild.id][invite.code] = invite
         except:
             pass
 

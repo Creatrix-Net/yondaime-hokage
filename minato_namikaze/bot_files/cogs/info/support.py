@@ -84,7 +84,7 @@ class Support(commands.Cog):
             return
 
     @support.error
-    async def error_handler(self, ctx, error):
+    async def support_error_handler(self, ctx, error):
         if (isinstance(error, commands.CheckFailure)
                 and not isinstance(error, commands.MissingPermissions)
                 and not isinstance(error, commands.BotMissingPermissions)):
@@ -120,7 +120,7 @@ class Support(commands.Cog):
             discord.utils.get(ctx.guild.roles, name="SupportRequired"))
 
     @resolved.error
-    async def error_handler(self, ctx, error):
+    async def resolved_error_handler(self, ctx, error):
         if (isinstance(error, commands.CheckFailure)
                 and not isinstance(error, commands.MissingPermissions)
                 and not isinstance(error, commands.BotMissingPermissions)):
@@ -177,7 +177,7 @@ class Support(commands.Cog):
             return
 
     @chksupreq.error
-    async def error_handler(self, ctx, error):
+    async def chksupreq_error_handler(self, ctx, error):
         if (isinstance(error, commands.CheckFailure)
                 and not isinstance(error, commands.MissingPermissions)
                 and not isinstance(error, commands.BotMissingPermissions)):

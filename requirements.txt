@@ -22,7 +22,7 @@ english-words==1.0.4
 ffmpeg==1.4
 greenlet==1.1.2
 gTTS==2.2.3
-idna==3.2
+idna==3.3
 mal-api==0.4.0
 multidict==5.1.0
 mystbin.py==2.1.3

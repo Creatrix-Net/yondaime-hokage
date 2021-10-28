@@ -171,7 +171,7 @@ class Info(commands.Cog):
                     verif_lvl = text
             for response, filt in filters.items():
                 if filt is guild.explicit_content_filter:
-                    content_fiter = response
+                    content_filter = response
             embed.add_field(name="<:ServerOwner:864765886916067359> Owner",
                             value=ctx.guild.owner)
             embed.add_field(name="🌍 Region",

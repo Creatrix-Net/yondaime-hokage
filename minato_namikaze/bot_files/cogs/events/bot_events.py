@@ -108,7 +108,7 @@ class BotEvents(commands.Cog):
                     self._cache[invite.guild.id][
                         ref_invite.code].revoked = True
                     return
-            except Forbidden:
+            except discord.Forbidden:
                 self._cache[invite.guild.id][ref_invite.code].revoked = True
                 return
         else:

@@ -178,7 +178,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 self._cache[guild.id][invite.code] = invite
         except:
             pass
-        log.critical("Started The Bot")
+        log.info("Started The Bot")
 
         try:
             await stats.send(embed=e)
@@ -191,7 +191,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         )
 
         await PostStats(self).post_guild_stats_all()
-        log.critical("Status Posted")
+        log.info("Status Posted")
 
         if not self.local:
             await self.change_presence(
@@ -200,7 +200,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                                           name="over Naruto"),
             )
             await PostStats(self).post_commands()
-            log.critical("Commands Status Posted")
+            log.info("Commands Status Posted")
 
             await self.change_presence(
                 status=discord.Status.idle,

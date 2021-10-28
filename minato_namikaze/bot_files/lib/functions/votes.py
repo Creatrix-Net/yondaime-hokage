@@ -5,9 +5,10 @@ from ..util.vars import *
 
 
 def votedVoidBots(ctx):
-    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (
-        747480356625711204,
-        853549974212837376,
+    if ctx.author.id in (ctx.bot.owner_id,
+                         837223478934896670) or ctx.guild.id in (
+                             747480356625711204,
+                             853549974212837376,
     ):
         return True
     e1 = requests.get(
@@ -24,9 +25,10 @@ def votedVoidBots(ctx):
 
 
 def votedTopgg(ctx):
-    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (
-        747480356625711204,
-        853549974212837376,
+    if ctx.author.id in (ctx.bot.owner_id,
+                         837223478934896670) or ctx.guild.id in (
+                             747480356625711204,
+                             853549974212837376,
     ):
         return True
     a = requests.get(
@@ -44,14 +46,18 @@ def votedTopgg(ctx):
 
 
 def votedbotsfordiscord(ctx):
-    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (
-        747480356625711204,
-        853549974212837376,
+    if ctx.author.id in (ctx.bot.owner_id,
+                         837223478934896670) or ctx.guild.id in (
+                             747480356625711204,
+                             853549974212837376,
     ):
         return True
     c = requests.get(
         f"https://botsfordiscord.com/api/bot/{ctx.bot.user.id}/votes",
-        headers={"Authorization": bfd, "Content-Type": "application/json"},
+        headers={
+            "Authorization": bfd,
+            "Content-Type": "application/json"
+        },
     )
     try:
         c_list = str(ctx.message.author.id) in c.json().get("hasVoted24")
@@ -63,9 +69,10 @@ def votedbotsfordiscord(ctx):
 
 
 def voteddiscordboats(ctx):
-    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (
-        747480356625711204,
-        853549974212837376,
+    if ctx.author.id in (ctx.bot.owner_id,
+                         837223478934896670) or ctx.guild.id in (
+                             747480356625711204,
+                             853549974212837376,
     ):
         return True
     d = requests.get(
@@ -82,9 +89,10 @@ def voteddiscordboats(ctx):
 
 
 def votedfateslist(ctx):
-    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (
-        747480356625711204,
-        853549974212837376,
+    if ctx.author.id in (ctx.bot.owner_id,
+                         837223478934896670) or ctx.guild.id in (
+                             747480356625711204,
+                             853549974212837376,
     ):
         return True
     f = requests.get(
@@ -102,9 +110,10 @@ def votedfateslist(ctx):
 
 
 def votedbladebotlist(ctx):
-    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (
-        747480356625711204,
-        853549974212837376,
+    if ctx.author.id in (ctx.bot.owner_id,
+                         837223478934896670) or ctx.guild.id in (
+                             747480356625711204,
+                             853549974212837376,
     ):
         return True
     g = requests.get(
@@ -120,9 +129,10 @@ def votedbladebotlist(ctx):
 
 
 def voteddiscordlistspace(ctx):
-    if ctx.author.id in (ctx.bot.owner_id, 837223478934896670) or ctx.guild.id in (
-        747480356625711204,
-        853549974212837376,
+    if ctx.author.id in (ctx.bot.owner_id,
+                         837223478934896670) or ctx.guild.id in (
+                             747480356625711204,
+                             853549974212837376,
     ):
         return True
     h = requests.get(
@@ -141,8 +151,10 @@ def voteddiscordlistspace(ctx):
 def generatevoteembed(ctx, *argv):
     list_dict = {
         "top.gg": "https://top.gg/images/dblnew.png",
-        "discordlist.space": "https://discordlist.space/img/apple-touch-icon.png",
-        "botsfordiscord": "https://botsfordiscord.com/img/favicons/apple-touch-icon-57x57.png",
+        "discordlist.space":
+        "https://discordlist.space/img/apple-touch-icon.png",
+        "botsfordiscord":
+        "https://botsfordiscord.com/img/favicons/apple-touch-icon-57x57.png",
         "discord.boats": "https://discord.boats/apple-icon-57x57.png",
         "fateslist": "https://fateslist.xyz/static/botlisticon.webp",
         "bladebotlist": "https://bladebotlist.xyz/img/logo.png",
@@ -150,7 +162,8 @@ def generatevoteembed(ctx, *argv):
     }
     site_dict = {
         "top.gg": f"https://top.gg/bot/{ctx.bot.user.id}",
-        "discordlist.space": f"https://discordlist.space/bot/{ctx.bot.user.id}",
+        "discordlist.space":
+        f"https://discordlist.space/bot/{ctx.bot.user.id}",
         "botsfordiscord": f"https://botsfordiscord.com/bot/{ctx.bot.user.id}",
         "discord.boats": f"https://discord.boats/bot/{ctx.bot.user.id}",
         "fateslist": f"https://fateslist.xyz/bot/{ctx.bot.user.id}",
@@ -181,9 +194,9 @@ def generatevoteembed(ctx, *argv):
             description=f'You need to **vote for me** in the **following botlists** :smile: :\n・{join_string.join([f"**[{i.capitalize()}]({site_dict[i.lower()]})**" for i in argv[0]])}',
             timestamp=ctx.message.created_at,
         )
-        e.set_author(
-            name=ctx.message.author, url=website, icon_url=ctx.message.author.avatar_url
-        )
+        e.set_author(name=ctx.message.author,
+                     url=website,
+                     icon_url=ctx.message.author.avatar_url)
         e.set_thumbnail(url=ctx.message.author.avatar_url)
         e.set_footer(
             text=f"Vote for us in the above mentioned botlists and then enjoy the `{ctx.command.name}` command."

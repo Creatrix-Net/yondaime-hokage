@@ -80,10 +80,10 @@ async def channel_creation(ctx):
 
     if (
         isinstance(support_channel, bool)
-        or isinstance(unban, bool)
-        or isinstance(ban, bool)
+        or isinstance(unban_channel, bool)
+        or isinstance(ban_channel, bool)
         or isinstance(feed_channel, bool)
-        or isinstance(warns, bool)
+        or isinstance(warns_channel, bool)
     ):
         if isinstance(category, bool):
             category = await ctx.guild.create_category(

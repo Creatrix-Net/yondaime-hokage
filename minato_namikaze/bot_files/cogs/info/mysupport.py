@@ -1,5 +1,7 @@
 import datetime
+import inspect
 import itertools
+import os
 
 import discord
 import pkg_resources

@@ -1,10 +1,12 @@
 import datetime
 import re
+import shlex
 from collections import Counter
 from os.path import join
 from typing import Optional, Union
 
 import discord
+import DiscordUtils
 from discord.ext import commands
 
 from ...lib import (
@@ -16,6 +18,7 @@ from ...lib import (
     PostStats,
     check_if_warning_system_setup,
     create_paginator,
+    get_roles,
     get_user,
     has_permissions,
     return_warning_channel,
@@ -330,7 +333,7 @@ class Moderation(commands.Cog):
         if reason:
             e.add_field(name="**Reason**:", value=reason, inline=True)
 
-        warning_channel = _warning_channel(ctx)
+        warning_channel = return_warning_channel(ctx)
         await member.send(embed=e)
         await warning_channel.send(embed=e, content=member.mention)
         await ctx.send(
@@ -363,7 +366,7 @@ class Moderation(commands.Cog):
         embed.set_image(url="attachment://search.png")
         await ctx.send(file=search_image, embed=embed)
 
-        warning_channel = _warning_channel(ctx)
+        warning_channel = return_warning_channel(ctx)
         message = f"mentions: {member}  in: {warning_channel}"
         await ctx.send(message)
 

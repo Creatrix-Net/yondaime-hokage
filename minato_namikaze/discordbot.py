@@ -14,7 +14,6 @@ from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
-from webserver import keep_alive
 
 log = logging.getLogger(__name__)
 
@@ -134,7 +133,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                     pass
 
             log.info("Bot will now start")
-            keep_alive()
             super().run(Tokens.token.value, reconnect=True)
         except discord.PrivilegedIntentsRequired:
             log.critical(

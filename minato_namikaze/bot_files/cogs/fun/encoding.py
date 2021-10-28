@@ -20,13 +20,18 @@ from ...lib.data.braille import (
     r_punctuation,
 )
 
-def escape(text: str, *, mass_mentions: bool = False, formatting: bool = False) -> str:
+
+def escape(text: str,
+           *,
+           mass_mentions: bool = False,
+           formatting: bool = False) -> str:
     if mass_mentions:
         text = text.replace("@everyone", "@\u200beveryone")
         text = text.replace("@here", "@\u200bhere")
     if formatting:
         text = discord.utils.escape_markdown(text)
     return text
+
 
 def pagify(
     text: str,

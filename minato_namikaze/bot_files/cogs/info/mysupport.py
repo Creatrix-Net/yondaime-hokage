@@ -4,7 +4,7 @@ import itertools
 import discord
 import pkg_resources
 import psutil
-import pygit2
+import pygit2, inspect, os
 from discord.ext import commands
 
 from ...lib import Embed, PrivacyPolicy, get_or_fetch_member, get_user

@@ -1,10 +1,12 @@
-import datetime, DiscordUtils
-import re, shlex
+import datetime
+import re
+import shlex
 from collections import Counter
 from os.path import join
 from typing import Optional, Union
 
 import discord
+import DiscordUtils
 from discord.ext import commands
 
 from ...lib import (
@@ -16,9 +18,10 @@ from ...lib import (
     PostStats,
     check_if_warning_system_setup,
     create_paginator,
+    get_roles,
     get_user,
     has_permissions,
-    return_warning_channel,get_roles
+    return_warning_channel,
 )
 
 

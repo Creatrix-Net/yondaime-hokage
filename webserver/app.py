@@ -18,9 +18,12 @@ app.add_routes(routes)
 
 
 def run():
-    web.run_app(app, port=80, host="127.0.0.1")
+    web.run_app(app)
 
 
 def keep_alive():
     t = Thread(target=run)
     t.start()
+
+if __name__ == "__main__":
+    run()

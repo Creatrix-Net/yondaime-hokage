@@ -35,7 +35,7 @@ def votedTopgg(ctx):
         headers={"Authorization": topken},
     )
     try:
-        a_list = True if a.json().get("voted") >= 1 else False
+        a_list = a.json().get("voted", False)
     except requests.exceptions.ConnectionError:
         a_list = True
     except:
@@ -54,11 +54,7 @@ def votedbotsfordiscord(ctx):
         headers={"Authorization": bfd, "Content-Type": "application/json"},
     )
     try:
-        c_list = (
-            True
-            if str(ctx.message.author.id) in c.json().get("hasVoted24", False)
-            else False
-        )
+        c_list = str(ctx.message.author.id) in c.json().get("hasVoted24")
     except requests.exceptions.ConnectionError:
         c_list = True
     except:
@@ -182,7 +178,7 @@ def generatevoteembed(ctx, *argv):
         join_string = "\n・"
         e = ErrorEmbed(
             title="Vote Locked!",
-            description=f'You need to **vote for me** in the **following botlists** :smile: :\n・{join_string.join(list(f"**[{i.capitalize()}]({site_dict[i.lower()]})**" for i in argv[0]))}',
+            description=f'You need to **vote for me** in the **following botlists** :smile: :\n・{join_string.join([f"**[{i.capitalize()}]({site_dict[i.lower()]})**" for i in argv[0]])}',
             timestamp=ctx.message.created_at,
         )
         e.set_author(

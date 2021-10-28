@@ -28,7 +28,7 @@ multidict==5.1.0
 mystbin.py==2.1.3
 orjson==3.6.3
 parsedatetime==2.6
-Pillow==8.3.2
+Pillow==8.4.0
 psutil==5.8.0
 pycparser==2.20
 pygit2==1.7.0

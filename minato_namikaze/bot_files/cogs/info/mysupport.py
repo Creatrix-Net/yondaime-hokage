@@ -1,10 +1,12 @@
 import datetime
+import inspect
 import itertools
+import os
 
 import discord
 import pkg_resources
 import psutil
-import pygit2, inspect, os
+import pygit2
 from discord.ext import commands
 
 from ...lib import Embed, PrivacyPolicy, get_or_fetch_member, get_user

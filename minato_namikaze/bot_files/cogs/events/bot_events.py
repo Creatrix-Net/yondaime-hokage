@@ -271,15 +271,12 @@ class BotEvents(commands.Cog):
     # on message event
     @commands.Cog.listener()
     async def on_message(self, message):
-        if (
-            (self.bot.user.mentioned_in(message) and
+        if (self.bot.user.mentioned_in(message) and
                 message.mention_everyone is False and message.content.lower()
                 in ("<@!779559821162315787>", "<@779559821162315787>")
-            or
-                message.content.lower() in ("<@!779559821162315787> prefix",
-                                            "<@779559821162315787> prefix"))
-            and not message.author.bot
-        ):
+                or message.content.lower() in
+            ("<@!779559821162315787> prefix",
+             "<@779559821162315787> prefix")) and not message.author.bot:
             await message.channel.send(
                 "The prefix is **)** ,A full list of all commands is available by typing ```)help```"
             )

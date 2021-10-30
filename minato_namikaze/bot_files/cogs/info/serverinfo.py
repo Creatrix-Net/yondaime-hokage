@@ -180,14 +180,14 @@ class Info(commands.Cog):
             embed.add_field(name="⚠️ Content Filter", value=content_filter)
             embed.add_field(name="👥 Members", value=ctx.guild.member_count)
             embed.add_field(name="🤖 Bots", value=find_bots)
-            embed.add_field(name=f"🎭 Roles", value=f"{len(ctx.guild.roles)}")
+            embed.add_field(name="🎭 Roles", value=f"{len(ctx.guild.roles)}")
             embed.add_field(
-                name=f"⭐ Emotes",
+                name="⭐ Emotes",
                 value=f"{len(ctx.guild.emojis)}/{ctx.guild.emoji_limit}",
             )
 
             date = ctx.guild.created_at.timestamp()
-            embed.add_field(name=f"📆 Created On", value=f"<t:{round(date)}:D>")
+            embed.add_field(name="📆 Created On", value=f"<t:{round(date)}:D>")
             await ctx.send(embed=embed)
 
     @server.command(name="server_icon", aliases=["icon"])

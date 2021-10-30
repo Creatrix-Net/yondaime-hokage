@@ -71,7 +71,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("Arial.ttf")), 60)
         draw.text((250, 300), text, font=font, fill="red", align="right")
         img.save("wi.png")
-        embed.set_image(url=f"attachment://wi.png")
+        embed.set_image(url="attachment://wi.png")
         await ctx.send(file=discord.File("wi.png"), embed=embed)
         await sleep(3)
         os.remove("wi.png")

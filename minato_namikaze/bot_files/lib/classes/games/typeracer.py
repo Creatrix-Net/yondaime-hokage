@@ -332,13 +332,12 @@ class TypeRacer:
     ):
 
         if mode == "sentence":
-            async with aiohttp.ClientSession() as session:
-                async with session.get(self.SENTENCE_URL) as r:
-                    if r.status in range(200, 299):
-                        text = await r.json()
-                        text = text["content"]
-                    else:
-                        return await ctx.send("Oops an error occured")
+            async with aiohttp.ClientSession() as session, session.get(self.SENTENCE_URL) as r:
+                if r.status in range(200, 299):
+                    text = await r.json()
+                    text = text["content"]
+                else:
+                    return await ctx.send("Oops an error occured")
         elif mode == "random":
             text = " ".join(
                 [random.choice(self.GRAMMAR_WORDS).lower() for _ in range(15)]

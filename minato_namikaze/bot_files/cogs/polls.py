@@ -268,7 +268,7 @@ class QuickPoll(commands.Cog):
                 "Need Read Message History and Add Reactions permissions.")
 
         question = questions_and_choices[0]
-        choices = [(e, v) for e, v in enumerate(questions_and_choices[1:])]
+        choices = list(enumerate(questions_and_choices[1:]))
 
         try:
             await ctx.message.delete()

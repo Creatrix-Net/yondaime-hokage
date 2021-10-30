@@ -380,7 +380,7 @@ class Developer(commands.Cog):
     @commands.check(owners)
     async def changestat(self, ctx):
         """Change the bot status"""
-        await ctx.send(f"Hi yeah")
+        await ctx.send("Hi yeah")
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)

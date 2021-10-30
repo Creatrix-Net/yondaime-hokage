@@ -76,12 +76,12 @@ class QuickPoll(commands.Cog):
                         return
                     if int(message.content) < 2:
                         await ctx.send(embed=ErrorEmbed(
-                            description=f"The no. of options cannot be **less than 2**, Please **rerun the command again**!"
+                            description="The no. of options cannot be **less than 2**, Please **rerun the command again**!"
                         ))
                         return
                     if int(message.content) > len(self.reactions):
                         await ctx.send(embed=ErrorEmbed(
-                            description=f"The no. of options cannot be **greater than 10**, Please **rerun the command again**!"
+                            description="The no. of options cannot be **greater than 10**, Please **rerun the command again**!"
                         ))
                         return
                     for i in range(int(message.content)):

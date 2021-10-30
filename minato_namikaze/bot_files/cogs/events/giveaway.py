@@ -167,7 +167,7 @@ class Giveaway(Cog):
                     users.append(i)
         if len(users) <= 0:
             emptyEmbed = Embed(title="🎉🎉 Giveaway Time !! 🎉🎉",
-                               description=f"🎁 Win a Prize today")
+                               description="🎁 Win a Prize today")
             try:
                 emptyEmbed.add_field(name="Hosted By:", value=host)
             except:
@@ -189,14 +189,14 @@ class Giveaway(Cog):
         winner = choice(users)
         winnerEmbed = Embed(
             title="🎉🎉 Giveaway Time !! 🎉🎉",
-            description=f"🎁 Win a Prize today",
+            description="🎁 Win a Prize today",
             colour=0x00FFFF,
         )
         try:
             winnerEmbed.set_footer(text=msg_embd_field["footer"]["text"])
         except:
             pass
-        winnerEmbed.add_field(name=f"🎉 Congratulations On Winning Giveaway 🎉",
+        winnerEmbed.add_field(name="🎉 Congratulations On Winning Giveaway 🎉",
                               value=winner.mention)
         winnerEmbed.set_image(
             url="https://firebasestorage.googleapis.com/v0/b/sociality-a732c.appspot.com/o/Loli.png?alt=media&token=ab5c8924-9a14-40a9-97b8-dba68b69195d"

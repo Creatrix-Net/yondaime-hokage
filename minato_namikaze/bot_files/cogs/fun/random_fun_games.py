@@ -182,7 +182,7 @@ class Random(commands.Cog):
             lencontent = len(content)
             if lencontent > 1080:
                 e = discord.Embed(
-                    title=f"I have found this, but the content is to big!",
+                    title="I have found this, but the content is to big!",
                     description=f"The content is shown here:  [Link]({get_paste.url})",
                 )
                 await ctx.send(embed=e)

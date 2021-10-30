@@ -133,7 +133,8 @@ class Weather(commands.Cog):
             params["q"] = str(location)
         url = "https://api.openweathermap.org/data/2.5/weather?{0}".format(
             urlencode(params))
-        async with aiohttp.ClientSession() as session, session.get(url) as resp:
+        async with aiohttp.ClientSession() as session, session.get(
+                url) as resp:
             data = await resp.json()
         try:
             if data["message"] == "city not found":

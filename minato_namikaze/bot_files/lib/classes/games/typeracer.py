@@ -286,9 +286,8 @@ class TypeRacer:
         buffer.seek(0)
         return buffer
 
-    async def wait_for_tr_response(
-        self, ctx: commands.Context, text: str, *, timeout: int, start
-    ):
+    async def wait_for_tr_response(self, ctx: commands.Context, text: str, *,
+                                   timeout: int, start):
 
         text = text.lower().replace("\n", " ").strip(".")
 
@@ -296,8 +295,8 @@ class TypeRacer:
             message = await ctx.bot.wait_for(
                 "message",
                 timeout=timeout,
-                check=lambda m: m.channel == ctx.channel
-                and m.content.lower().replace("\n", " ").strip(".") == text,
+                check=lambda m: m.channel == ctx.channel and m.content.lower().
+                replace("\n", " ").strip(".") == text,
             )
         except asyncio.TimeoutError:
             return await ctx.reply(
@@ -315,9 +314,8 @@ class TypeRacer:
         )
 
         await message.add_reaction("\U00002705")
-        await message.reply(
-            embed=embed, allowed_mentions=discord.AllowedMentions.none()
-        )
+        await message.reply(embed=embed,
+                            allowed_mentions=discord.AllowedMentions.none())
         return True
 
     async def start(
@@ -332,7 +330,8 @@ class TypeRacer:
     ):
 
         if mode == "sentence":
-            async with aiohttp.ClientSession() as session, session.get(self.SENTENCE_URL) as r:
+            async with aiohttp.ClientSession() as session, session.get(
+                    self.SENTENCE_URL) as r:
                 if r.status in range(200, 299):
                     text = await r.json()
                     text = text["content"]
@@ -340,25 +339,26 @@ class TypeRacer:
                     return await ctx.send("Oops an error occured")
         elif mode == "random":
             text = " ".join(
-                [random.choice(self.GRAMMAR_WORDS).lower() for _ in range(15)]
-            )
+                [random.choice(self.GRAMMAR_WORDS).lower() for _ in range(15)])
         else:
             raise TypeError(
                 "Invalid game mode , must be either 'random' or 'sentence'")
 
-        buffer = await ctx.bot.loop.run_in_executor(
-            None, self._tr_img, text, path_to_text_font
-        )
+        buffer = await ctx.bot.loop.run_in_executor(None, self._tr_img, text,
+                                                    path_to_text_font)
 
-        embed = discord.Embed(
-            title=embed_title, color=embed_color, timestamp=dt.utcnow()
-        )
+        embed = discord.Embed(title=embed_title,
+                              color=embed_color,
+                              timestamp=dt.utcnow())
         embed.set_image(url="attachment://tr.png")
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
 
         await ctx.send(embed=embed, file=discord.File(buffer, "tr.png"))
 
         start = time.perf_counter()
-        await self.wait_for_tr_response(ctx, text, start=start, timeout=timeout)
+        await self.wait_for_tr_response(ctx,
+                                        text,
+                                        start=start,
+                                        timeout=timeout)
 
         return True

@@ -77,7 +77,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         e.add_field(name="**:wastebasket:**", value=trash_rank, inline=True)
         e.add_field(name="**:link:**", value=f"[Know More]({url})")
         e.set_image(url=pic)
-        e.set_footer(text=f"React with any emoji in 30 sec to claim him/her")
+        e.set_footer(text="React with any emoji in 30 sec to claim him/her")
         return e, name
 
     # search anime
@@ -474,7 +474,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
         answerembed = discord.Embed(
             title=f"The Pokemon is: {wtp.name.capitalize()}",
-            description=f"```Here is the Info\n\nAbilities: {f', '.join(list(map(lambda x: x.capitalize(),wtp.abilities)))}```",
+            description=f"```Here is the Info\n\nAbilities: {', '.join(list(map(lambda x: x.capitalize(),wtp.abilities)))}```",
             timestamp=ctx.message.created_at,
         )
         answerembed.add_field(name="**Height**", value=f"{round(wtp.height)}m")

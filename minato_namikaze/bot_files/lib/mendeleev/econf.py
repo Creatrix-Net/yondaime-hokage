@@ -54,7 +54,7 @@ def shell_capactity(shell):
     )
 
 
-class ElectronicConfiguration(object):
+class ElectronicConfiguration:
     """Electronic configuration handler"""
 
     noble = OrderedDict(

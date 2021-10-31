@@ -19,10 +19,8 @@ def get_l(subshell):
 
     if subshell.lower() in ORBITALS:
         return ORBITALS.index(subshell.lower())
-    raise ValueError(
-        'wrong subshell label: "{}",'.format(subshell)
-        + " should be one of: {}".format(", ".join(ORBITALS))
-    )
+    raise ValueError('wrong subshell label: "{}",'.format(subshell) +
+                     " should be one of: {}".format(", ".join(ORBITALS)))
 
 
 def subshell_degeneracy(subshell):
@@ -47,26 +45,23 @@ def shell_capactity(shell):
     """
 
     if shell.upper() in SHELLS:
-        return 2 * (SHELLS.index(shell.upper()) + 1) ** 2
-    raise ValueError(
-        'wrong shell label: "{}",'.format(shell)
-        + " should be one of: {}".format(", ".join(SHELLS))
-    )
+        return 2 * (SHELLS.index(shell.upper()) + 1)**2
+    raise ValueError('wrong shell label: "{}",'.format(shell) +
+                     " should be one of: {}".format(", ".join(SHELLS)))
 
 
 class ElectronicConfiguration:
     """Electronic configuration handler"""
 
-    noble = OrderedDict(
-        [
-            ("He", "1s2"),
-            ("Ne", "1s2 2s2 2p6"),
-            ("Ar", "1s2 2s2 2p6 3s2 3p6"),
-            ("Kr", "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6"),
-            ("Xe", "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6"),
-            ("Rn", "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6"),
-        ]
-    )
+    noble = OrderedDict([
+        ("He", "1s2"),
+        ("Ne", "1s2 2s2 2p6"),
+        ("Ar", "1s2 2s2 2p6 3s2 3p6"),
+        ("Kr", "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6"),
+        ("Xe", "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6"),
+        ("Rn",
+         "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6"),
+    ])
 
     def __init__(self, conf=None, atomre=None, shellre=None):
 
@@ -88,12 +83,11 @@ class ElectronicConfiguration:
             self.parse(str(value))
         elif isinstance(value, dict):
             self._conf = OrderedDict(
-                sorted(value.items(), key=lambda x: (
-                    x[0][0] + get_l(x[0][1]), x[0][0]))
-            )
+                sorted(value.items(),
+                       key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])))
         else:
-            raise ValueError(
-                "<conf> should be str or dict, got {}".format(type(value)))
+            raise ValueError("<conf> should be str or dict, got {}".format(
+                type(value)))
 
     @property
     def atomre(self):
@@ -139,20 +133,15 @@ class ElectronicConfiguration:
                 for o in ElectronicConfiguration.noble[symbol].split()
                 if self.shellre.match(o)
             ]
-            core = OrderedDict(
-                [((int(n), o), (int(e) if e is not None else 1))
-                 for (n, o, e) in core]
-            )
+            core = OrderedDict([((int(n), o), (int(e) if e is not None else 1))
+                                for (n, o, e) in core])
 
         valence = [
-            self.shellre.match(o).group("n", "o", "e")
-            for o in citems
+            self.shellre.match(o).group("n", "o", "e") for o in citems
             if self.shellre.match(o)
         ]
-        valence = OrderedDict(
-            [((int(n), o), (int(e) if e is not None else 1))
-             for (n, o, e) in valence]
-        )
+        valence = OrderedDict([((int(n), o), (int(e) if e is not None else 1))
+                               for (n, o, e) in valence])
 
         self._conf = OrderedDict(list(core.items()) + list(valence.items()))
 
@@ -182,8 +171,8 @@ class ElectronicConfiguration:
 
         _, core_conf = self.get_largest_core()
 
-        valence = OrderedDict(set(self.conf.items()) -
-                              set(core_conf.conf.items()))
+        valence = OrderedDict(
+            set(self.conf.items()) - set(core_conf.conf.items()))
 
         return ElectronicConfiguration(valence)
 
@@ -191,23 +180,20 @@ class ElectronicConfiguration:
         "Sort the occupations OD"
         if inplace:
             self.conf = OrderedDict(
-                sorted(
-                    self.conf.items(), key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])
-                )
-            )
+                sorted(self.conf.items(),
+                       key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])))
         else:
             return OrderedDict(
-                sorted(
-                    self.conf.items(), key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])
-                )
-            )
+                sorted(self.conf.items(),
+                       key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])))
 
     def electrons_per_shell(self):
         "Return number of electrons per shell as dict"
 
         return {
             s: sum(v for k, v in self.conf.items() if k[0] == n)
-            for n, s in zip(range(1, self.max_n() + 1), SHELLS)
+            for n, s in zip(range(1,
+                                  self.max_n() + 1), SHELLS)
         }
 
     def shell2int(self):
@@ -228,7 +214,8 @@ class ElectronicConfiguration:
                 Principal quantum number
         """
 
-        return ORBITALS[max(get_l(x[1]) for x in self.conf.keys() if x[0] == n)]
+        return ORBITALS[max(
+            get_l(x[1]) for x in self.conf.keys() if x[0] == n)]
 
     def last_subshell(self, wrt="order"):
         "Return the valence shell"
@@ -236,9 +223,9 @@ class ElectronicConfiguration:
         if wrt.lower() == "order":
             return list(self.conf.items())[-1]
         if wrt.lower() == "aufbau":
-            return sorted(
-                self.conf.items(), key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])
-            )[-1]
+            return sorted(self.conf.items(),
+                          key=lambda x:
+                          (x[0][0] + get_l(x[0][1]), x[0][0]))[-1]
         raise ValueError("wrong <wrt>: {}".format(wrt))
 
     def nvalence(self, block, method=None):
@@ -249,7 +236,8 @@ class ElectronicConfiguration:
         if block == "d":
             if method == "simple":
                 return 2
-            return self.conf[(self.max_n(), "s")] + self.conf[(self.max_n() - 1, "d")]
+            return self.conf[(self.max_n(),
+                              "s")] + self.conf[(self.max_n() - 1, "d")]
         if block == "f":
             return 2
         raise ValueError("wrong block: {}".format(block))
@@ -301,8 +289,12 @@ class ElectronicConfiguration:
             ssd = subshell_degeneracy(orb)
 
             if nele == ssc:
-                so[(n, orb)] = {"pairs": ssd, "alpha": ssd,
-                                "beta": ssd, "unpaired": 0}
+                so[(n, orb)] = {
+                    "pairs": ssd,
+                    "alpha": ssd,
+                    "beta": ssd,
+                    "unpaired": 0
+                }
             else:
                 pairs = (nele % ssd) * (nele // ssd)
                 alpha = nele - pairs
@@ -350,24 +342,24 @@ class ElectronicConfiguration:
             # get the number of valence electrons - 1
             vale = float(
                 sum(v for k, v in self.conf.items()
-                    if k[0] == n and k[1] in ["s", "p"])
-                - ne
-            )
+                    if k[0] == n and k[1] in ["s", "p"]) - ne)
             n1 = sum(v * 0.85 for k, v in self.conf.items() if k[0] == n - 1)
-            n2 = sum(float(v)
-                     for k, v in self.conf.items() if k[0] in range(1, n - 1))
+            n2 = sum(
+                float(v) for k, v in self.conf.items()
+                if k[0] in range(1, n - 1))
 
         elif o in ["d", "f"]:
             # get the number of valence electrons - 1
             vale = float(
-                sum(v for k, v in self.conf.items()
-                    if k[0] == n and k[1] == o) - ne
-            )
+                sum(v
+                    for k, v in self.conf.items() if k[0] == n and k[1] == o) -
+                ne)
 
-            n1 = sum(float(v)
-                     for k, v in self.conf.items() if k[0] == n and k[1] != o)
-            n2 = sum(float(v)
-                     for k, v in self.conf.items() if k[0] in range(1, n))
+            n1 = sum(
+                float(v) for k, v in self.conf.items()
+                if k[0] == n and k[1] != o)
+            n2 = sum(
+                float(v) for k, v in self.conf.items() if k[0] in range(1, n))
 
         else:
             raise ValueError("wrong valence subshell: ", o)
@@ -377,9 +369,8 @@ class ElectronicConfiguration:
     def to_str(self):
         "Return a string with the configuration"
 
-        return " ".join(
-            "{n:d}{s:s}{e:d}".format(n=k[0], s=k[1], e=v) for k, v in self.conf.items()
-        )
+        return " ".join("{n:d}{s:s}{e:d}".format(n=k[0], s=k[1], e=v)
+                        for k, v in self.conf.items())
 
     def __repr__(self):
 
@@ -420,24 +411,18 @@ def print_spin_occupations(sodict, average=True):
         nss = subshell_degeneracy(orb)
         if average:
             fmt = "10.8f"
-            a = ", ".join(
-                "{0:{fmt}}".format(x, fmt=fmt) for x in [occ["alpha"] / nss] * nss
-            )
+            a = ", ".join("{0:{fmt}}".format(x, fmt=fmt)
+                          for x in [occ["alpha"] / nss] * nss)
 
-            b = ", ".join(
-                "{0:{fmt}}".format(x, fmt=fmt) for x in [occ["beta"] / nss] * nss
-            )
+            b = ", ".join("{0:{fmt}}".format(x, fmt=fmt)
+                          for x in [occ["beta"] / nss] * nss)
 
         else:
-            a = ", ".join(
-                "{0:3.1f}".format(x)
-                for x in [1] * occ["alpha"] + [0] * (nss - occ["alpha"])
-            )
+            a = ", ".join("{0:3.1f}".format(x) for x in [1] * occ["alpha"] +
+                          [0] * (nss - occ["alpha"]))
 
-            b = ", ".join(
-                "{0:3.1f}".format(x)
-                for x in [1] * occ["beta"] + [0] * (nss - occ["beta"])
-            )
+            b = ", ".join("{0:3.1f}".format(x) for x in [1] * occ["beta"] +
+                          [0] * (nss - occ["beta"]))
 
         alphas.append(a)
         betas.append(b)

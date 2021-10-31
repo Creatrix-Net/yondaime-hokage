@@ -80,7 +80,12 @@ class Random(commands.Cog):
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx, colour="255-255-255", *, url=None):
         """Generates easy QR Code"""
-        colours = {"255-255-255": "255-255-255", "black": "0-0-0", "red": "FF0000", "blue": "00f"}
+        colours = {
+            "255-255-255": "255-255-255",
+            "black": "0-0-0",
+            "red": "FF0000",
+            "blue": "00f",
+        }
         col = ["black", "red", "blue"]
         if colour == "255-255-255":
             col = ["255-255-255", "red", "blue"]

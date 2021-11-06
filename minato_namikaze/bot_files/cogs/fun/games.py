@@ -7,7 +7,6 @@ from discord.ext import commands
 from ...lib import Embed, ErrorEmbed
 from ...lib.classes.games import *
 
-
 class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -99,6 +98,30 @@ class Games(commands.Cog):
         await a.delete()
         game = aki.Akinator()
         await game.start(ctx)
+    
+    @commands.command()
+    async def youtube(self,ctx):
+        if check_if_user_joined_a_channel:
+            link = await self.togetherControl.create_link(ctx.author.voice.channel.id, 'youtube')
+            await ctx.send(f"Click the blue link!\n{link}")
+            return
+        e = ErrorEmbed(
+            title="No voice channel joined!",
+            description="You need to join the voice channel in order to use this command :)",
+        )
+        await ctx.send(embed=e)
+        
+    
+    @commands.command()
+    async def poker(self,ctx):
+        if check_if_user_joined_a_channel:
+            link = await self.togetherControl.create_link(ctx.author.voice.channel.id, 'poker')
+            await ctx.send(f"Click the blue link!\n{link}")
+        e = ErrorEmbed(
+            title="No voice channel joined!",
+            description="You need to join the voice channel in order to use this command :)",
+        )
+        await ctx.send(embed=e)
 
 
 def setup(bot):

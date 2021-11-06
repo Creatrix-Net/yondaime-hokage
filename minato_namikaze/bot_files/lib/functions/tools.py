@@ -1,7 +1,16 @@
 import datetime
 import time
-
 import discord
+
+
+def check_if_user_joined_a_channel(ctx):
+    try:
+        voice_state_author = ctx.author.voice
+        if voice_state_author is None:
+            return False
+        return True
+    except:
+        return False
 
 
 async def get_welcome_channel(

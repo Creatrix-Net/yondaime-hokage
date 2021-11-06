@@ -18,6 +18,7 @@
 
 - [Invite Now ](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDiscord%20Bot%20List%20%28Description%29)
 - [Website](https://minato-namikaze.rtfd.io)
+- [Discord Support Server](https://discord.gg/g9zQbjE73K)
 
 ***
 

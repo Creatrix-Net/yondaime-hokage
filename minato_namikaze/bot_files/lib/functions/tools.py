@@ -1,5 +1,6 @@
 import datetime
 import time
+
 import discord
 
 
@@ -13,9 +14,8 @@ def check_if_user_joined_a_channel(ctx):
         return False
 
 
-async def get_welcome_channel(
-    guild: discord.Guild, bot: discord.Client, inviter_or_guild_owner: discord.User
-):
+async def get_welcome_channel(guild: discord.Guild, bot: discord.Client,
+                              inviter_or_guild_owner: discord.User):
     try:
         return guild.system_channel
     except:

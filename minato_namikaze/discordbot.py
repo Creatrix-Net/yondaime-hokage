@@ -14,6 +14,7 @@ from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
+from discord_together import DiscordTogether
 
 log = logging.getLogger(__name__)
 
@@ -160,7 +161,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             else:
                 if filename.endswith(".py"):
                     self.load_extension(f"bot_files.cogs.{filename[:-3]}")
-
+        self.togetherControl = await DiscordTogether(Tokens.token.value) 
         difference = int(round(time.time() - self.start_time.timestamp()))
         stats = (self.get_channel(819128718152695878)
                  if not self.local else self.get_channel(869238107118112810))

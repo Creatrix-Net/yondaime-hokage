@@ -11,6 +11,7 @@ class BotEventsCommands(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
+        raise error
         if isinstance(error, commands.CommandOnCooldown):
             e1 = ErrorEmbed(title="Command Error!", description=f"`{error}`")
             e1.set_footer(text=f"{ctx.author.name}")
@@ -238,6 +239,7 @@ class BotEventsCommands(commands.Cog):
                 delete_after=self.delete_after_time,
             )
             await c.send(embed=e)
+            raise error
 
 
 def setup(bot):

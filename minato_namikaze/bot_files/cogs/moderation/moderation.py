@@ -761,9 +761,8 @@ class Moderation(commands.Cog):
                 return not r
             return r
 
-        if args.after:
-            if args.search is None:
-                args.search = 2000
+        if args.after and args.search is None:
+            args.search = 2000
 
         if args.search is None:
             args.search = 100

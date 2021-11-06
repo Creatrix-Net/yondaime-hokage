@@ -80,12 +80,12 @@ class Random(commands.Cog):
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx, colour="255-255-255", *, url=None):
         """Generates easy QR Code"""
-        colours = dict([
-            ("255-255-255", "255-255-255"),
-            ("black", "0-0-0"),
-            ("red", "FF0000"),
-            ("blue", "00f"),
-        ])
+        colours = {
+            "255-255-255": "255-255-255",
+            "black": "0-0-0",
+            "red": "FF0000",
+            "blue": "00f",
+        }
         col = ["black", "red", "blue"]
         if colour == "255-255-255":
             col = ["255-255-255", "red", "blue"]
@@ -182,7 +182,7 @@ class Random(commands.Cog):
             lencontent = len(content)
             if lencontent > 1080:
                 e = discord.Embed(
-                    title=f"I have found this, but the content is to big!",
+                    title="I have found this, but the content is to big!",
                     description=f"The content is shown here:  [Link]({get_paste.url})",
                 )
                 await ctx.send(embed=e)

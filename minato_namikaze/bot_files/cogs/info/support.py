@@ -75,7 +75,7 @@ class Support(commands.Cog):
                 description=f"{per} in {channel.mention} needs support!",
             )
             await chan.send("@here", embed=e)
-            await ctx.send(f"**Help Desk** has been has been notifed!")
+            await ctx.send("**Help Desk** has been has been notifed!")
             e = Embed(
                 title="Support Requirement Registered",
                 description=f"Your need for the support in **{ctx.guild.name}** has been registered",

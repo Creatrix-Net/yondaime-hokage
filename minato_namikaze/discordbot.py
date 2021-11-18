@@ -4,6 +4,12 @@ import os
 import time
 from os.path import join
 from pathlib import Path
+import asyncio
+
+try:
+    import uvloop
+except ImportError:
+    pass
 
 import discord
 import dotenv
@@ -211,4 +217,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
 
 if __name__ == "__main__":
+    try:
+        asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+        uvloop.install()
+    except: pass
     MinatoNamikazeBot().run()

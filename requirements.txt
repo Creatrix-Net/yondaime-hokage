@@ -1,4 +1,4 @@
-﻿aiohttp==3.8.0
+﻿aiohttp==3.8.1
 akinator.py==5.0.0
 async-cleverbot==0.2.2
 async-timeout==4.0.1

@@ -1,10 +1,10 @@
 import ast
+import asyncio
 import logging
 import os
 import time
 from os.path import join
 from pathlib import Path
-import asyncio
 
 try:
     import uvloop
@@ -220,5 +220,6 @@ if __name__ == "__main__":
     try:
         asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
         uvloop.install()
-    except: pass
+    except:
+        pass
     MinatoNamikazeBot().run()

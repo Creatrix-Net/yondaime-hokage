@@ -60,7 +60,8 @@ class Tags:
         server_id: Optional[int],
         tag_content: Optional[str],
     ):
-        pass
+        async for i in self.channel.history(limit=None):
+            pass
 
     async def save(self):
         global format_tag

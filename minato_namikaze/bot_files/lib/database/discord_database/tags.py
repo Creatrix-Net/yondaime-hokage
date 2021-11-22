@@ -57,6 +57,7 @@ class Tags:
     ):
         pass
 
-    def save(self):
+    async def save(self):
         global format_tag
-        pass
+        local_format_tag = str(format_tag).format(tag_name = self.tag_name, creator_snowflake_id = self.creator_snowflake_id, server_id = self.server_id, tag_content = self.tag_content)
+        await self.ctx.send(content=local_format_tag)

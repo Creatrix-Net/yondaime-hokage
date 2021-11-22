@@ -7,8 +7,8 @@ from typing import List, Union
 
 import dotenv
 
-dotenv_file = Path(__file__).resolve(
-).parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(
+    __file__).resolve().parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):
@@ -46,7 +46,8 @@ class ShinobiMatch(list, enum.Enum):
 
     name_exclusion = character_side_exclude + [
         "naruto",
-        "sasuke" "jiraya",
+        "sasuke"
+        "jiraya",
         "namikaze",
         "sarutobi",
         "yamanaka",
@@ -73,7 +74,7 @@ class ChannelAndMessageId(enum.IntEnum):
 
     server_id = 747480356625711204
     server_id2 = 869085099470225508
-    
+
     testing_server_id = 869085099470225508
     tags = 907215293896613928
 
@@ -98,16 +99,15 @@ class LinksAndVars(enum.Enum):
     timeout = 3.0
 
     with open(
-        os.path.join(Path(__file__).resolve().parent.parent,
-                     "text", "insult.txt")
-    ) as f:
+            os.path.join(
+                Path(__file__).resolve().parent.parent, "text",
+                "insult.txt")) as f:
         insults: List[str] = list(
             map(
-                lambda a: a.strip(" ").strip("\n").strip(
-                    "'").strip('"').strip("\\"),
+                lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip(
+                    "\\"),
                 f.read().split(","),
-            )
-        )
+            ))
 
 
 @enum.unique

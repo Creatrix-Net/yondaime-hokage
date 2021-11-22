@@ -71,4 +71,10 @@ class Tags:
             server_id=self.server_id,
             tag_content=self.tag_content,
         )
-        await self.channel.send(content=local_format_tag,allowed_mentions=discord.AllowedMentions(everyone=False,users=False,roles=False,replied_user=False))
+        await self.channel.send(
+            content=local_format_tag,
+            allowed_mentions=discord.AllowedMentions(everyone=False,
+                                                     users=False,
+                                                     roles=False,
+                                                     replied_user=False),
+        )

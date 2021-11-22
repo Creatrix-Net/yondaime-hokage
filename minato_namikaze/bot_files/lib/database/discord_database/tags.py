@@ -2,6 +2,7 @@ from typing import Optional, Union
 
 import discord
 from discord.ext.commands import Context
+from ..util import ChannelAndMessageId
 
 format_tag = """
 {tag_name}
@@ -35,9 +36,11 @@ class Tags:
         self.tag_content = tag_content
         self.tag_id = tag_id
         self.ctx = ctx
+        self.guild = ctx.bot.get_guild(ChannelAndMessageId.server_id2.value)
+        self.channel = discord.utils.get(guild.channels, id=ChannelAndMessageId.tags.value)
 
     async def edit(self, tag_content: str):
-        msg = await self.ctx.fetch_message(self.tag_id)
+        msg = await self.channel.fetch_message(self.tag_id)
         message_cleanlist = msg.content.split("\n")[:3] + [tag_content]
         await msg.edit(
             suppress=True,
@@ -60,4 +63,4 @@ class Tags:
     async def save(self):
         global format_tag
         local_format_tag = str(format_tag).format(tag_name = self.tag_name, creator_snowflake_id = self.creator_snowflake_id, server_id = self.server_id, tag_content = self.tag_content)
-        await self.ctx.send(content=local_format_tag)
+        await self.channel.send(content=local_format_tag)

@@ -72,7 +72,10 @@ class ChannelAndMessageId(enum.IntEnum):
     error_logs_channel = 830366314761420821
 
     server_id = 747480356625711204
+    server_id2 = 869085099470225508
+    
     testing_server_id = 869085099470225508
+    tags = 907215293896613928
 
     help_smile_emoji = 848961696047300649
 

@@ -389,7 +389,7 @@ class Developer(commands.Cog):
         await self.bot.change_presence(activity=discord.Streaming(
             status=discord.Status.idle,
             name=activity,
-            url="http://www.twitch.tv/transhelperdiscordbot",
+            url="https://www.twitch.tv/dhruvacube",
         ))
         await ctx.send(
             f"```diff\n- Changed activity to {activity} using Stream status.```"

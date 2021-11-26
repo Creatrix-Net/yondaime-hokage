@@ -60,8 +60,21 @@ class Tags:
         server_id: Optional[int],
         tag_content: Optional[str],
     ):
+        tags_found = []
         async for i in self.channel.history(limit=None):
-            pass
+            if tag_name:
+                if tag_name in i.content():
+                    tags_found.append(i)
+            if creator_snowflake_id:
+                if creator_snowflake_id in i.content():
+                    tags_found.append(i)
+            if server_id:
+                if server_id in i.content():
+                    tags_found.append(i)
+            if tag_content:
+                if tag_content in i.content():
+                    tags_found.append(i)
+        return tags_found
 
     async def save(self):
         global format_tag

@@ -1078,12 +1078,11 @@ class Tags(commands.Cog):
                 f'A tag with the name of "{tag}" does not exist or is not owned by you.'
             )
 
-        async with ctx.acquire():
-            async with ctx.db.transaction():
-                query = "UPDATE tags SET owner_id=$1 WHERE id=$2;"
-                await ctx.db.execute(query, member.id, row[0])
-                query = "UPDATE tag_lookup SET owner_id=$1 WHERE tag_id=$2;"
-                await ctx.db.execute(query, member.id, row[0])
+        async with ctx.acquire(), ctx.db.transaction():
+            query = "UPDATE tags SET owner_id=$1 WHERE id=$2;"
+            await ctx.db.execute(query, member.id, row[0])
+            query = "UPDATE tag_lookup SET owner_id=$1 WHERE tag_id=$2;"
+            await ctx.db.execute(query, member.id, row[0])
 
         await ctx.send(f"Successfully transferred tag ownership to {member}.")
 
@@ -1303,7 +1302,7 @@ class Tags(commands.Cog):
                 f"{chr(emoji + offset)}: {self.bot.get_user(owner_id) or owner_id} -- {total} tags ({uses} uses)"
             )
 
-        embed.add_field(name=f"Tag Creators",
+        embed.add_field(name="Tag Creators",
                         value="\n".join(values), inline=False)
         embed.set_footer(text="These statistics are for the tag box.")
         await ctx.send(embed=embed)

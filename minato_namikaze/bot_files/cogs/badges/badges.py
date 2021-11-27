@@ -1,18 +1,17 @@
 import asyncio
 import functools
 import sys
+import os
 from io import BytesIO
 from typing import Optional, Union, cast
 
 import aiohttp
 import discord
 from discord.ext import commands
-from ...lib import Badge, ImageWriter, generate
+from ...lib import Badge, ImageWriter, generate, BASE_DIR, Badges
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
 
-from .templates import blank_template
-
-# bundled_data_path
+# from .templates import blank_template
 
 
 class Badges(commands.Cog):
@@ -97,7 +96,7 @@ class Badges(commands.Cog):
         barcode = barcode.resize((555, 125), Image.ANTIALIAS)
         template.paste(barcode, (400, 520), barcode)
         # font for user information
-        font_loc = str(bundled_data_path(self) / "arial.ttf")
+        font_loc = BASE_DIR / os.path.join("lib", "data","arial.ttf")
         try:
             font1 = ImageFont.truetype(font_loc, 30)
             font2 = ImageFont.truetype(font_loc, 24)

@@ -145,7 +145,7 @@ class WrongCountryCodeError(BarcodeError):
     """
 
 
-class BaseWriter(object):
+class BaseWriter:
     """Baseclass for all writers.
     Initializes the basic writer options. Childclasses can add more
     attributes and can set them directly or using
@@ -409,7 +409,7 @@ else:
             return filename
 
 
-class Barcode(object):
+class Barcode:
 
     name = ""
 

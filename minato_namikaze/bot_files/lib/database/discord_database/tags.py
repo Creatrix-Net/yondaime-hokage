@@ -20,6 +20,9 @@ class Tags:
         "server_id",
         "tag_content",
         "tag_id",
+        "ctx",
+        "guild",
+        "channel"
     ]
 
     def __init__(

@@ -7,7 +7,7 @@ from typing import Optional, Union, cast
 import aiohttp
 import discord
 from discord.ext import commands
-from lib import Badge, ImageWriter, generate
+from ...lib import Badge, ImageWriter, generate
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
 
 from .templates import blank_template

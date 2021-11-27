@@ -180,7 +180,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             else self.get_channel(ChannelAndMessageId.restartlog_channel2.value)
         )
         e = Embed(
-            title=f"Bot Loaded!",
+            title="Bot Loaded!",
             description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
         )
         e.set_thumbnail(url=self.user.avatar.url)

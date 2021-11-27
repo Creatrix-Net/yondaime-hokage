@@ -1306,7 +1306,7 @@ class Tags(commands.Cog):
                 f"{chr(emoji + offset)}: {self.bot.get_user(owner_id) or owner_id} -- {total} tags ({uses} uses)"
             )
 
-        embed.add_field(name=f"Tag Creators",
+        embed.add_field(name="Tag Creators",
                         value="\n".join(values), inline=False)
         embed.set_footer(text="These statistics are for the tag box.")
         await ctx.send(embed=embed)

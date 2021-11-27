@@ -79,7 +79,6 @@ class Tags:
         return tags_found
 
     async def save(self):
-        global format_tag
         local_format_tag = str(format_tag).format(
             tag_name=self.tag_name,
             creator_snowflake_id=self.creator_snowflake_id,

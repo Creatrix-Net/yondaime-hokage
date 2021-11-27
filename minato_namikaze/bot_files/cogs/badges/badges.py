@@ -63,24 +63,24 @@ class Badges(commands.Cog):
         """Build the base template before determining animated or not"""
         if hasattr(user, "roles"):
             department = (
-                _("GENERAL SUPPORT")
+                "GENERAL SUPPORT"
                 if user.top_role.name == "@everyone"
                 else user.top_role.name.upper()
             )
             status = user.status
             level = str(len(user.roles))
         else:
-            department = _("GENERAL SUPPORT")
+            department = "GENERAL SUPPORT"
             status = "online"
             level = "1"
         if str(status) == "online":
-            status = _("ACTIVE")
+            status = "ACTIVE"
         if str(status) == "offline":
-            status = _("COMPLETING TASK")
+            status = "COMPLETING TASK"
         if str(status) == "idle":
-            status = _("AWAITING INSTRUCTIONS")
+            status = "AWAITING INSTRUCTIONS"
         if str(status) == "dnd":
-            status = _("MIA")
+            status = "MIA"
         barcode = BytesIO()
         log.debug(type(barcode))
         generate("code39", str(user.id), writer=ImageWriter(self), output=barcode)
@@ -118,7 +118,7 @@ class Badges(commands.Cog):
         # adds department from top role
         draw.text((250, 235), department, fill=fill, font=font2)
         # adds user level
-        draw.text((420, 475), _("LEVEL ") + level, fill="red", font=font1)
+        draw.text((420, 475), "LEVEL " + level, fill="red", font=font1)
         # adds user level
         if badge.badge_name != "discord" and user is discord.Member:
             draw.text((60, 585), str(user.joined_at), fill=fill, font=font2)
@@ -221,12 +221,12 @@ class Badges(commands.Cog):
             return
         badge_obj = await self.get_badge(badge, guild)
         if not badge_obj:
-            await ctx.send(_("`{}` is not an available badge.").format(badge))
+            await ctx.send("`{}` is not an available badge.".format(badge))
             return
         async with ctx.channel.typing():
             badge_img = await self.create_badge(user, badge_obj, False)
             if badge_img is None:
-                await ctx.send(_("Something went wrong sorry!"))
+                await ctx.send("Something went wrong sorry!")
                 return
             image = discord.File(badge_img, "badge.png")
             embed = discord.Embed(color=ctx.author.color)
@@ -249,12 +249,12 @@ class Badges(commands.Cog):
             return
         badge_obj = await self.get_badge(badge, guild)
         if not badge_obj:
-            await ctx.send(_("`{}` is not an available badge.").format(badge))
+            await ctx.send("`{}` is not an available badge.".format(badge))
             return
         async with ctx.channel.typing():
             badge_img = await self.create_badge(user, badge_obj, True)
             if badge_img is None:
-                await ctx.send(_("Something went wrong sorry!"))
+                await ctx.send("Something went wrong sorry!")
                 return
             image = discord.File(badge_img)
             badge_img.close()
@@ -266,6 +266,6 @@ class Badges(commands.Cog):
         List the available badges that can be created
         """
         global_badges = self.default_global
-        msg = _("__Global Badges__\n")
+        msg = "__Global Badges__\n"
         msg += ", ".join(badge["badge_name"] for badge in global_badges)
         await ctx.maybe_send_embed(msg)

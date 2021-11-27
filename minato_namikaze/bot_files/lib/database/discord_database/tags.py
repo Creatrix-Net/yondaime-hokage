@@ -62,18 +62,17 @@ class Tags:
     ):
         tags_found = []
         async for i in self.channel.history(limit=None):
-            if tag_name:
-                if tag_name in i.content():
-                    tags_found.append(i)
-            if creator_snowflake_id:
-                if creator_snowflake_id in i.content():
-                    tags_found.append(i)
-            if server_id:
-                if server_id in i.content():
-                    tags_found.append(i)
-            if tag_content:
-                if tag_content in i.content():
-                    tags_found.append(i)
+            if tag_name and tag_name in i.content():
+                tags_found.append(i)
+            if (
+                creator_snowflake_id
+                and creator_snowflake_id in i.content()
+            ):
+                tags_found.append(i)
+            if server_id and server_id in i.content():
+                tags_found.append(i)
+            if tag_content and tag_content in i.content():
+                tags_found.append(i)
         return tags_found
 
     async def save(self):

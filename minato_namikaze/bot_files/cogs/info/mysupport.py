@@ -28,11 +28,9 @@ class MySupport(commands.Cog, name="My Support"):
         short, _, _ = commit.message.partition("\n")
         short_sha2 = commit.hex[0:6]
         commit_tz = datetime.timezone(
-            datetime.timedelta(minutes=commit.commit_time_offset)
-        )
-        commit_time = datetime.datetime.fromtimestamp(commit.commit_time).astimezone(
-            commit_tz
-        )
+            datetime.timedelta(minutes=commit.commit_time_offset))
+        commit_time = datetime.datetime.fromtimestamp(
+            commit.commit_time).astimezone(commit_tz)
 
         # [`hash`](url) message (offset)
         offset = time.format_relative(
@@ -43,9 +41,8 @@ class MySupport(commands.Cog, name="My Support"):
         repo = pygit2.Repository(".git")
         commits = list(
             itertools.islice(
-                repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count
-            )
-        )
+                repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL),
+                count))
         return "\n".join(self.format_commit(c) for c in commits)
 
     @commands.command(aliases=["stats"])
@@ -81,18 +78,16 @@ class MySupport(commands.Cog, name="My Support"):
                 elif isinstance(channel, discord.VoiceChannel):
                     voice += 1
 
+        embed.add_field(name="Members",
+                        value=f"{total_members} total\n{total_unique} unique")
         embed.add_field(
-            name="Members", value=f"{total_members} total\n{total_unique} unique"
-        )
-        embed.add_field(
-            name="Channels", value=f"{text + voice} total\n{text} text\n{voice} voice"
-        )
+            name="Channels",
+            value=f"{text + voice} total\n{text} text\n{voice} voice")
 
-        memory_usage = self.process.memory_full_info().uss / 1024 ** 2
+        memory_usage = self.process.memory_full_info().uss / 1024**2
         cpu_usage = self.process.cpu_percent() / psutil.cpu_count()
-        embed.add_field(
-            name="Process", value=f"{memory_usage:.2f} MiB\n{cpu_usage:.2f}% CPU"
-        )
+        embed.add_field(name="Process",
+                        value=f"{memory_usage:.2f} MiB\n{cpu_usage:.2f}% CPU")
 
         version = pkg_resources.get_distribution("discord.py").version
         embed.add_field(name="Guilds", value=guilds)
@@ -152,9 +147,8 @@ class MySupport(commands.Cog, name="My Support"):
             )
             endtime = time.time()
             difference = float(int(starttime - endtime))
-            e.add_field(
-                name=":inbox_tray: Script Speed :outbox_tray:", value=f"{difference}ms"
-            )
+            e.add_field(name=":inbox_tray: Script Speed :outbox_tray:",
+                        value=f"{difference}ms")
             e.set_image(
                 url="https://cdn.discordapp.com/attachments/777918705098686465/870692724880334878/pong_9.gif"
             )

@@ -5,10 +5,10 @@ Which is itself a port of python-barcode which is no longer available
 """
 
 import gzip
+import logging
 import os
 import string
 import xml.dom
-import logging
 
 from redbot.core.data_manager import bundled_data_path
 
@@ -30,6 +30,7 @@ try:
 except NameError:
     _strbase = str
 
+
 def mm2px(mm, dpi=300):
     return (mm * dpi) / 25.4
 
@@ -46,10 +47,14 @@ def _set_attributes(element, **attributes):
 def create_svg_object():
     imp = xml.dom.getDOMImplementation()
     doctype = imp.createDocumentType(
-        "svg", "-//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"
+        "svg",
+        "-//W3C//DTD SVG 1.1//EN",
+        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd",
     )
     document = imp.createDocument(None, "svg", doctype)
-    _set_attributes(document.documentElement, version="1.1", xmlns="http://www.w3.org/2000/svg")
+    _set_attributes(
+        document.documentElement, version="1.1", xmlns="http://www.w3.org/2000/svg"
+    )
     return document
 
 
@@ -61,9 +66,12 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 MIN_SIZE = 0.2
 MIN_QUIET_ZONE = 2.54
 
-
 # Charsets for code 39
-REF = tuple(string.digits) + tuple(string.ascii_uppercase) + ("-", ".", " ", "$", "/", "+", "%")
+REF = (
+    tuple(string.digits)
+    + tuple(string.ascii_uppercase)
+    + ("-", ".", " ", "$", "/", "+", "%")
+)
 B = "1"
 E = "0"
 CODES = (
@@ -145,7 +153,7 @@ class WrongCountryCodeError(BarcodeError):
     """
 
 
-class BaseWriter(object):
+class BaseWriter:
     """Baseclass for all writers.
     Initializes the basic writer options. Childclasses can add more
     attributes and can set them directly or using
@@ -168,9 +176,14 @@ class BaseWriter(object):
             rendered output.
     """
 
-    def __init__(self, initialize=None, paint_module=None, paint_text=None, finish=None):
+    def __init__(
+        self, initialize=None, paint_module=None, paint_text=None, finish=None
+    ):
         self._callbacks = dict(
-            initialize=initialize, paint_module=paint_module, paint_text=paint_text, finish=finish
+            initialize=initialize,
+            paint_module=paint_module,
+            paint_text=paint_text,
+            finish=finish,
         )
         self.module_width = 10
         self.module_height = 10
@@ -280,12 +293,15 @@ class BaseWriter(object):
             # Add right quiet zone to every line, except last line, quiet zone already
             # provided with background, should it be removed complety?
             if (cc + 1) != len(code):
-                self._callbacks["paint_module"](xpos, ypos, self.quiet_zone, self.background)
+                self._callbacks["paint_module"](
+                    xpos, ypos, self.quiet_zone, self.background
+                )
             ypos += self.module_height
         if self.text and self._callbacks["paint_text"] is not None:
             ypos += self.text_distance
             if self.center_text:
-                xpos = bxs + ((bxe - bxs) / 2.0)  # better center position for text
+                # better center position for text
+                xpos = bxs + ((bxe - bxs) / 2.0)
             else:
                 xpos = bxs
             self._callbacks["paint_text"](xpos, ypos)
@@ -294,7 +310,9 @@ class BaseWriter(object):
 
 class SVGWriter(BaseWriter):
     def __init__(self):
-        BaseWriter.__init__(self, self._init, self._create_module, self._create_text, self._finish)
+        BaseWriter.__init__(
+            self, self._init, self._create_module, self._create_text, self._finish
+        )
         self.compress = False
         self.dpi = 25.4
         self._document = None
@@ -314,7 +332,9 @@ class SVGWriter(BaseWriter):
         _set_attributes(group, **attributes)
         self._group = self._root.appendChild(group)
         background = self._document.createElement("rect")
-        attributes = dict(width="100%", height="100%", style="fill:{0}".format(self.background))
+        attributes = dict(
+            width="100%", height="100%", style="fill:{0}".format(self.background)
+        )
         _set_attributes(background, **attributes)
         self._group.appendChild(background)
 
@@ -352,7 +372,9 @@ class SVGWriter(BaseWriter):
         if self.compress:
             return self._document.toxml(encoding="UTF-8")
         else:
-            return self._document.toprettyxml(indent=4 * " ", newl=os.linesep, encoding="UTF-8")
+            return self._document.toprettyxml(
+                indent=4 * " ", newl=os.linesep, encoding="UTF-8"
+            )
 
     def save(self, filename, output):
         if self.compress:
@@ -390,14 +412,20 @@ else:
         def _paint_module(self, xpos, ypos, width, color):
             size = [
                 (mm2px(xpos, self.dpi), mm2px(ypos, self.dpi)),
-                (mm2px(xpos + width, self.dpi), mm2px(ypos + self.module_height, self.dpi)),
+                (
+                    mm2px(xpos + width, self.dpi),
+                    mm2px(ypos + self.module_height, self.dpi),
+                ),
             ]
             self._draw.rectangle(size, outline=color, fill=color)
 
         def _paint_text(self, xpos, ypos):
             font = ImageFont.truetype(self.FONT, self.font_size * 2)
             width, height = font.getsize(self.text)
-            pos = (mm2px(xpos, self.dpi) - width // 2, mm2px(ypos, self.dpi) - height // 4)
+            pos = (
+                mm2px(xpos, self.dpi) - width // 2,
+                mm2px(ypos, self.dpi) - height // 4,
+            )
             self._draw.text(pos, self.text, font=font, fill=self.foreground)
 
         def _finish(self):
@@ -409,7 +437,7 @@ else:
             return filename
 
 
-class Barcode(object):
+class Barcode:
 
     name = ""
 
@@ -505,7 +533,8 @@ def check_code(code, name, allowed):
     if wrong:
         raise IllegalCharacterError(
             "The following characters are not "
-            "valid for {name}: {wrong}".format(name=name, wrong=", ".join(wrong))
+            "valid for {name}: {wrong}".format(
+                name=name, wrong=", ".join(wrong))
         )
 
 
@@ -561,7 +590,9 @@ def get_barcode(name, code=None, writer=None):
     try:
         barcode = Code39
     except KeyError:
-        raise BarcodeNotFoundError("The barcode {0!r} you requested is not " "known.".format(name))
+        raise BarcodeNotFoundError(
+            "The barcode {0!r} you requested is not " "known.".format(name)
+        )
     if code is not None:
         return barcode(code, writer)
     return barcode

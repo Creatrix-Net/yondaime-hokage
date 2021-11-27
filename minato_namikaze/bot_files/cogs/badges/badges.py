@@ -1,15 +1,16 @@
 import asyncio
 import functools
-import sys
 import os
+import sys
 from io import BytesIO
 from typing import Optional, Union, cast
 
 import aiohttp
 import discord
 from discord.ext import commands
-from ...lib import Badge, ImageWriter, generate, BASE_DIR, Badges
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
+
+from ...lib import Badge, ImageWriter, generate
 
 # from .templates import blank_template
 
@@ -52,20 +53,17 @@ class Badges(commands.Cog):
 
     async def dl_image(self, url: str) -> BytesIO:
         """Download bytes like object of user avatar"""
-        async with aiohttp.ClientSession() as session, session.get(str(url)) as resp:
+        async with aiohttp.ClientSession() as session, session.get(
+                str(url)) as resp:
             test = await resp.read()
             return BytesIO(test)
 
-    def make_template(
-        self, user: Union[discord.User, discord.Member], badge: Badge, template: Image
-    ) -> Image:
+    def make_template(self, user: Union[discord.User, discord.Member],
+                      badge: Badge, template: Image) -> Image:
         """Build the base template before determining animated or not"""
         if hasattr(user, "roles"):
-            department = (
-                "GENERAL SUPPORT"
-                if user.top_role.name == "@everyone"
-                else user.top_role.name.upper()
-            )
+            department = ("GENERAL SUPPORT" if user.top_role.name
+                          == "@everyone" else user.top_role.name.upper())
             status = user.status
             level = str(len(user.roles))
         else:
@@ -82,8 +80,10 @@ class Badges(commands.Cog):
             status = "MIA"
         barcode = BytesIO()
         log.debug(type(barcode))
-        generate("code39", str(user.id),
-                 writer=ImageWriter(self), output=barcode)
+        generate("code39",
+                 str(user.id),
+                 writer=ImageWriter(self),
+                 output=barcode)
         barcode = Image.open(barcode)
         barcode = self.remove_white_barcode(barcode)
         fill = (0, 0, 0)  # text colour fill
@@ -96,7 +96,7 @@ class Badges(commands.Cog):
         barcode = barcode.resize((555, 125), Image.ANTIALIAS)
         template.paste(barcode, (400, 520), barcode)
         # font for user information
-        font_loc = BASE_DIR / os.path.join("lib", "data","arial.ttf")
+        font_loc = BASE_DIR / os.path.join("lib", "data", "arial.ttf")
         try:
             font1 = ImageFont.truetype(font_loc, 30)
             font2 = ImageFont.truetype(font_loc, 24)
@@ -180,9 +180,10 @@ class Badges(commands.Cog):
     async def create_badge(self, user, badge, is_gif: bool):
         """Async create badges handler"""
         template_img = await self.dl_image(badge.file_name)
-        task = functools.partial(
-            self.make_template, user=user, badge=badge, template=template_img
-        )
+        task = functools.partial(self.make_template,
+                                 user=user,
+                                 badge=badge,
+                                 template=template_img)
         task = self.bot.loop.run_in_executor(None, task)
         try:
             template = await asyncio.wait_for(task, timeout=60)
@@ -191,9 +192,9 @@ class Badges(commands.Cog):
         if user.is_avatar_animated() and is_gif:
             url = user.avatar_url_as(format="gif")
             avatar = Image.open(await self.dl_image(url))
-            task = functools.partial(
-                self.make_animated_gif, template=template, avatar=avatar
-            )
+            task = functools.partial(self.make_animated_gif,
+                                     template=template,
+                                     avatar=avatar)
             task = self.bot.loop.run_in_executor(None, task)
             try:
                 temp = await asyncio.wait_for(task, timeout=60)
@@ -203,8 +204,9 @@ class Badges(commands.Cog):
         else:
             url = user.avatar_url_as(format="png")
             avatar = Image.open(await self.dl_image(url))
-            task = functools.partial(
-                self.make_badge, template=template, avatar=avatar)
+            task = functools.partial(self.make_badge,
+                                     template=template,
+                                     avatar=avatar)
             task = self.bot.loop.run_in_executor(None, task)
             try:
                 temp = await asyncio.wait_for(task, timeout=60)

@@ -7,8 +7,8 @@ from typing import List, Union
 
 import dotenv
 
-dotenv_file = Path(
-    __file__).resolve().parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(__file__).resolve(
+).parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):
@@ -17,7 +17,9 @@ def token_get(tokenname):
     return os.environ.get(tokenname, "False").strip("\n")
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent   #In minato_namikaze folder
+BASE_DIR = (
+    Path(__file__).resolve().parent.parent.parent.parent
+)  # In minato_namikaze folder
 
 
 class BotList(enum.Enum):
@@ -48,8 +50,7 @@ class ShinobiMatch(list, enum.Enum):
 
     name_exclusion = character_side_exclude + [
         "naruto",
-        "sasuke"
-        "jiraya",
+        "sasuke" "jiraya",
         "namikaze",
         "sarutobi",
         "yamanaka",
@@ -80,9 +81,9 @@ class ChannelAndMessageId(enum.IntEnum):
     tags = 907215293896613928
 
     help_smile_emoji = 848961696047300649
-    
-    restartlog_channel1=819128718152695878
-    restartlog_channel2=869238107118112810
+
+    restartlog_channel1 = 819128718152695878
+    restartlog_channel2 = 869238107118112810
 
 
 class Tokens(enum.Enum):
@@ -103,15 +104,16 @@ class LinksAndVars(enum.Enum):
     timeout = 3.0
 
     with open(
-            os.path.join(
-                Path(__file__).resolve().parent.parent, "text",
-                "insult.txt")) as f:
+        os.path.join(Path(__file__).resolve().parent.parent,
+                     "text", "insult.txt")
+    ) as f:
         insults: List[str] = list(
             map(
-                lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip(
-                    "\\"),
+                lambda a: a.strip(" ").strip("\n").strip(
+                    "'").strip('"').strip("\\"),
                 f.read().split(","),
-            ))
+            )
+        )
 
 
 @enum.unique

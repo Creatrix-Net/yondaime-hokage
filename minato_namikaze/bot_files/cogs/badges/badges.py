@@ -6,12 +6,13 @@ from typing import Optional, Union, cast
 
 import aiohttp
 import discord
-from PIL import Image, ImageDraw, ImageFont, ImageSequence
 from discord.ext import commands
-#bundled_data_path
-
 from lib import Badge, ImageWriter, generate
+from PIL import Image, ImageDraw, ImageFont, ImageSequence
+
 from .templates import blank_template
+
+# bundled_data_path
 
 
 class Badges(commands.Cog):
@@ -83,7 +84,8 @@ class Badges(commands.Cog):
             status = _("MIA")
         barcode = BytesIO()
         log.debug(type(barcode))
-        generate("code39", str(user.id), writer=ImageWriter(self), output=barcode)
+        generate("code39", str(user.id),
+                 writer=ImageWriter(self), output=barcode)
         barcode = Image.open(barcode)
         barcode = self.remove_white_barcode(barcode)
         fill = (0, 0, 0)  # text colour fill
@@ -110,7 +112,12 @@ class Badges(commands.Cog):
         # adds username
         draw.text((225, 330), str(user.display_name), fill=fill, font=font1)
         # adds ID Class
-        draw.text((225, 400), badge.code + "-" + str(user).split("#")[1], fill=fill, font=font1)
+        draw.text(
+            (225, 400),
+            badge.code + "-" + str(user).split("#")[1],
+            fill=fill,
+            font=font1,
+        )
         # adds user id
         draw.text((250, 115), str(user.id), fill=fill, font=font2)
         # adds user status
@@ -147,7 +154,12 @@ class Badges(commands.Cog):
             temp = BytesIO()
 
             temp2.save(
-                temp, format="GIF", save_all=True, append_images=img_list, duration=0, loop=0
+                temp,
+                format="GIF",
+                save_all=True,
+                append_images=img_list,
+                duration=0,
+                loop=0,
             )
             temp.name = "temp.gif"
             if sys.getsizeof(temp) > 7000000 and sys.getsizeof(temp) < 8000000:
@@ -170,7 +182,9 @@ class Badges(commands.Cog):
     async def create_badge(self, user, badge, is_gif: bool):
         """Async create badges handler"""
         template_img = await self.dl_image(badge.file_name)
-        task = functools.partial(self.make_template, user=user, badge=badge, template=template_img)
+        task = functools.partial(
+            self.make_template, user=user, badge=badge, template=template_img
+        )
         task = self.bot.loop.run_in_executor(None, task)
         try:
             template = await asyncio.wait_for(task, timeout=60)
@@ -179,7 +193,9 @@ class Badges(commands.Cog):
         if user.is_avatar_animated() and is_gif:
             url = user.avatar_url_as(format="gif")
             avatar = Image.open(await self.dl_image(url))
-            task = functools.partial(self.make_animated_gif, template=template, avatar=avatar)
+            task = functools.partial(
+                self.make_animated_gif, template=template, avatar=avatar
+            )
             task = self.bot.loop.run_in_executor(None, task)
             try:
                 temp = await asyncio.wait_for(task, timeout=60)
@@ -189,7 +205,8 @@ class Badges(commands.Cog):
         else:
             url = user.avatar_url_as(format="png")
             avatar = Image.open(await self.dl_image(url))
-            task = functools.partial(self.make_badge, template=template, avatar=avatar)
+            task = functools.partial(
+                self.make_badge, template=template, avatar=avatar)
             task = self.bot.loop.run_in_executor(None, task)
             try:
                 temp = await asyncio.wait_for(task, timeout=60)

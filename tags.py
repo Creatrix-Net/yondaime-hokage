@@ -1081,12 +1081,11 @@ class Tags(commands.Cog):
                 f'A tag with the name of "{tag}" does not exist or is not owned by you.'
             )
 
-        async with ctx.acquire():
-            async with ctx.db.transaction():
-                query = "UPDATE tags SET owner_id=$1 WHERE id=$2;"
-                await ctx.db.execute(query, member.id, row[0])
-                query = "UPDATE tag_lookup SET owner_id=$1 WHERE tag_id=$2;"
-                await ctx.db.execute(query, member.id, row[0])
+        async with ctx.acquire(), ctx.db.transaction():
+            query = "UPDATE tags SET owner_id=$1 WHERE id=$2;"
+            await ctx.db.execute(query, member.id, row[0])
+            query = "UPDATE tag_lookup SET owner_id=$1 WHERE tag_id=$2;"
+            await ctx.db.execute(query, member.id, row[0])
 
         await ctx.send(f"Successfully transferred tag ownership to {member}.")
 

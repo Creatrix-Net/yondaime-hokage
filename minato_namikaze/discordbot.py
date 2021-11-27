@@ -78,8 +78,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.minato_dir = Path(__file__).resolve(strict=True).parent / join(
             "bot_files", "discord_bot_images"
         )
-        self.minato_gif = [f for f in os.listdir(
-            join(self.minato_dir, "minato"))]
+        self.minato_gif = list(os.listdir(
+            join(self.minato_dir, "minato")))
         self.uptime = format_dt(self.start_time, "R")
         super().__init__(
             command_prefix=get_prefix,

@@ -21,7 +21,8 @@ class Badges(commands.Cog):
         default_global = {"badges": blank_template}
         self.description = "Create fun fake badges based on your discord profile"
 
-    def remove_white_barcode(self, img: Image) -> Image:
+    @staticmethod
+    def remove_white_barcode(img: Image) -> Image:
         """https://stackoverflow.com/questions/765736/using-pil-to-make-all-white-pixels-transparent"""
         img = img.convert("RGBA")
         datas = img.getdata()
@@ -36,7 +37,8 @@ class Badges(commands.Cog):
         img.putdata(newData)
         return img
 
-    def invert_barcode(self, img: Image) -> Image:
+    @staticmethod
+    def invert_barcode(img: Image) -> Image:
         """https://stackoverflow.com/questions/765736/using-pil-to-make-all-white-pixels-transparent"""
         img = img.convert("RGBA")
         datas = img.getdata()
@@ -51,7 +53,8 @@ class Badges(commands.Cog):
         img.putdata(newData)
         return img
 
-    async def dl_image(self, url: str) -> BytesIO:
+    @staticmethod
+    async def dl_image(url: str) -> BytesIO:
         """Download bytes like object of user avatar"""
         async with aiohttp.ClientSession() as session, session.get(
                 str(url)) as resp:
@@ -132,7 +135,8 @@ class Badges(commands.Cog):
         barcode.close()
         return template
 
-    def make_animated_gif(self, template: Image, avatar: BytesIO) -> BytesIO:
+    @staticmethod
+    def make_animated_gif(template: Image, avatar: BytesIO) -> BytesIO:
         """Create animated badge from gif avatar"""
         gif_list = [frame.copy() for frame in ImageSequence.Iterator(avatar)]
         img_list = []
@@ -164,7 +168,8 @@ class Badges(commands.Cog):
                 break
         return temp
 
-    def make_badge(self, template: Image, avatar: Image):
+    @staticmethod
+    def make_badge(template: Image, avatar: Image):
         """Create basic badge from regular avatar"""
         watermark = avatar.convert("RGBA")
         watermark.putalpha(128)

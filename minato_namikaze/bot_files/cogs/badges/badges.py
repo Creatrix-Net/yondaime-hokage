@@ -53,10 +53,9 @@ class Badges(commands.Cog):
 
     async def dl_image(self, url: str) -> BytesIO:
         """Download bytes like object of user avatar"""
-        async with aiohttp.ClientSession() as session:
-            async with session.get(str(url)) as resp:
-                test = await resp.read()
-                return BytesIO(test)
+        async with aiohttp.ClientSession() as session, session.get(str(url)) as resp:
+            test = await resp.read()
+            return BytesIO(test)
 
     def make_template(
         self, user: Union[discord.User, discord.Member], badge: Badge, template: Image

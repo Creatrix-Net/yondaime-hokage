@@ -259,8 +259,7 @@ class Tags(commands.Cog):
 
         if guild is None:
             return await con.fetchrow(query)
-        else:
-            return await con.fetchrow(query, guild.id)
+        return await con.fetchrow(query, guild.id)
 
     async def get_tag(self, guild_id, name, *, connection=None):
         def disambiguate(rows, query):
@@ -281,15 +280,14 @@ class Tags(commands.Cog):
         row = await con.fetchrow(query, guild_id, name)
         if row is None:
             query = """SELECT     tag_lookup.name
-                       FROM       tag_lookup
-                       WHERE      tag_lookup.location_id=$1 AND tag_lookup.name % $2
-                       ORDER BY   similarity(tag_lookup.name, $2) DESC
-                       LIMIT 3;
-                    """
+                               FROM       tag_lookup
+                               WHERE      tag_lookup.location_id=$1 AND tag_lookup.name % $2
+                               ORDER BY   similarity(tag_lookup.name, $2) DESC
+                               LIMIT 3;
+                            """
 
             return disambiguate(await con.fetch(query, guild_id, name), name)
-        else:
-            return row
+        return row
 
     async def create_tag(self, ctx, name, content):
         # due to our denormalized design, I need to insert the tag in two different
@@ -487,7 +485,7 @@ class Tags(commands.Cog):
         if msg.content == f"{ctx.prefix}abort":
             self.remove_in_progress_tag(ctx.guild.id, name)
             return await ctx.send("Aborting.")
-        elif msg.content:
+        if msg.content:
             clean_content = await commands.clean_content().convert(ctx, msg.content)
         else:
             # fast path I guess?
@@ -912,8 +910,7 @@ class Tags(commands.Cog):
         parser.add_argument("--text", action="store_true")
         if args is not None:
             return parser.parse_args(shlex.split(args))
-        else:
-            return parser.parse_args([])
+        return parser.parse_args([])
 
     async def _tag_all_text_mode(self, ctx):
         query = """SELECT tag_lookup.id,
@@ -1081,12 +1078,11 @@ class Tags(commands.Cog):
                 f'A tag with the name of "{tag}" does not exist or is not owned by you.'
             )
 
-        async with ctx.acquire():
-            async with ctx.db.transaction():
-                query = "UPDATE tags SET owner_id=$1 WHERE id=$2;"
-                await ctx.db.execute(query, member.id, row[0])
-                query = "UPDATE tag_lookup SET owner_id=$1 WHERE tag_id=$2;"
-                await ctx.db.execute(query, member.id, row[0])
+        async with ctx.acquire(), ctx.db.transaction():
+            query = "UPDATE tags SET owner_id=$1 WHERE id=$2;"
+            await ctx.db.execute(query, member.id, row[0])
+            query = "UPDATE tag_lookup SET owner_id=$1 WHERE tag_id=$2;"
+            await ctx.db.execute(query, member.id, row[0])
 
         await ctx.send(f"Successfully transferred tag ownership to {member}.")
 
@@ -1306,7 +1302,7 @@ class Tags(commands.Cog):
                 f"{chr(emoji + offset)}: {self.bot.get_user(owner_id) or owner_id} -- {total} tags ({uses} uses)"
             )
 
-        embed.add_field(name=f"Tag Creators",
+        embed.add_field(name="Tag Creators",
                         value="\n".join(values), inline=False)
         embed.set_footer(text="These statistics are for the tag box.")
         await ctx.send(embed=embed)

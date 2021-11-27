@@ -29,13 +29,12 @@ class Developer(commands.Cog):
 
     async def _send_guilds(self, ctx, guilds, title):
         if len(guilds) == 0:
-            await ctx.send(embed=ErrorEmbed(
-                description="No such guild was found."))
+            await ctx.send(embed=ErrorEmbed(description="No such guild was found."))
             return
 
         all_pages = []
 
-        for chunk in [guilds[i:i + 20] for i in range(0, len(guilds), 20)]:
+        for chunk in [guilds[i: i + 20] for i in range(0, len(guilds), 20)]:
             page = Embed(title=title)
 
             for guild in chunk:
@@ -69,15 +68,17 @@ class Developer(commands.Cog):
             else:
                 pass
 
-    @dev.group(name="postcommand",
-               alisases=["postfates", "post_commands_to_fates_list"])
+    @dev.group(
+        name="postcommand", alisases=["postfates", "post_commands_to_fates_list"]
+    )
     async def post_commands_to_fates_list(self, ctx):
         """Post all the commands to FATES LIST"""
         start_time = time.time()
         await self.bot.change_presence(
             status=discord.Status.dnd,
-            activity=discord.Activity(type=discord.ActivityType.watching,
-                                      name="over Naruto"),
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name="over Naruto"
+            ),
         )
         post_start = await ctx.send("Posting :outbox_tray:")
         await PostStats(self.bot).post_commands()
@@ -92,12 +93,12 @@ class Developer(commands.Cog):
         )
         await self.bot.change_presence(
             status=discord.Status.idle,
-            activity=discord.Activity(type=discord.ActivityType.watching,
-                                      name="over Naruto"),
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name="over Naruto"
+            ),
         )
 
-    @dev.group(name="deletecommand",
-               alisases=["postfates", "deletefateslistcommand"])
+    @dev.group(name="deletecommand", alisases=["postfates", "deletefateslistcommand"])
     async def deletefateslistcommand(self, ctx):
         """Deletes all the commands from FATES LIST"""
         start_time = time.time()
@@ -121,8 +122,9 @@ class Developer(commands.Cog):
         )
         await self.bot.change_presence(
             status=discord.Status.idle,
-            activity=discord.Activity(type=discord.ActivityType.watching,
-                                      name="over Naruto"),
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name="over Naruto"
+            ),
         )
 
     @dev.group(name="sharedservers", usage="<user>")
@@ -148,19 +150,25 @@ class Developer(commands.Cog):
                 invite = (await guild.invites())[0]
             except:
                 try:
-                    invite = (await guild.text_channels())[0].create_invite(
-                        max_age=120)
+                    invite = (await guild.text_channels())[0].create_invite(max_age=120)
                 except:
-                    await ctx.send(embed=ErrorEmbed(
-                        description="No permissions to create an invite link.")
+                    await ctx.send(
+                        embed=ErrorEmbed(
+                            description="No permissions to create an invite link."
+                        )
                     )
                     return
 
-            await ctx.send(embed=Embed(
-                description=f"Here is the invite link: {invite.url}"))
+            await ctx.send(
+                embed=Embed(
+                    description=f"Here is the invite link: {invite.url}")
+            )
         except:
-            await ctx.send(embed=ErrorEmbed(
-                description="Sorry! This is not possible for this server!"))
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description="Sorry! This is not possible for this server!"
+                )
+            )
 
     @dev.group(invoke_without_command=True, name="eval")
     @commands.check(owners)
@@ -221,8 +229,7 @@ class Developer(commands.Cog):
                 ret = await func()
         except Exception as e:
             value = stdout.getvalue()
-            err = await ctx.send(f"```py\n{value}{traceback.format_exc()}\n```"
-                                 )
+            err = await ctx.send(f"```py\n{value}{traceback.format_exc()}\n```")
         else:
             value = stdout.getvalue()
             if ret is None:
@@ -255,9 +262,10 @@ class Developer(commands.Cog):
         else:
             await ctx.message.add_reaction("\u2705")
 
+    @staticmethod
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
-    async def get_all_cogs(self, ctx):
+    async def get_all_cogs(ctx):
         """Get all the cogs list"""
         cog_dir = Path(__file__).resolve(strict=True).parent.parent
         cogs_list = []
@@ -314,7 +322,8 @@ class Developer(commands.Cog):
                     if i.endswith(".py"):
                         try:
                             self.bot.reload_extension(
-                                f"bot_files.cogs.{file.strip(' ')}.{i[:-3]}")
+                                f"bot_files.cogs.{file.strip(' ')}.{i[:-3]}"
+                            )
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
@@ -327,10 +336,12 @@ class Developer(commands.Cog):
 
         if error_collection:
             output = "\n".join(
-                [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection])
+                [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection]
+            )
             return await ctx.send(
                 f"Attempted to reload all extensions, was able to reload, "
-                f"however the following failed...\n\n{output}")
+                f"however the following failed...\n\n{output}"
+            )
 
         await ctx.send("**`Reloaded All Extentions`**")
 
@@ -338,15 +349,16 @@ class Developer(commands.Cog):
     @commands.check(owners)
     async def sync(self, ctx):
         """Sync with GitHub and reload all the cogs"""
-        embed = Embed(title="Syncing...",
-                      description=":joy: Syncing and reloading cogs.")
+        embed = Embed(
+            title="Syncing...", description=":joy: Syncing and reloading cogs."
+        )
         embed.set_footer(text=f"{ctx.author} | Minato Namikaze")
         msg = await ctx.send(embed=embed)
         async with ctx.channel.typing():
             output = sp.getoutput("git pull")
         embed = Embed(
-            title="Synced",
-            description="Synced with GitHub and reloaded all the cogs.")
+            title="Synced", description="Synced with GitHub and reloaded all the cogs."
+        )
         # Reload Cogs as well
         cog_dir = Path(__file__).resolve(strict=True).parent.parent
         error_collection = []
@@ -356,7 +368,8 @@ class Developer(commands.Cog):
                     if i.endswith(".py"):
                         try:
                             self.bot.reload_extension(
-                                f"bot_files.cogs.{file.strip(' ')}.{i[:-3]}")
+                                f"bot_files.cogs.{file.strip(' ')}.{i[:-3]}"
+                            )
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
@@ -369,16 +382,19 @@ class Developer(commands.Cog):
 
         if error_collection:
             err = "\n".join(
-                [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection])
+                [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection]
+            )
             return await ctx.send(
                 f"Attempted to reload all extensions, was able to reload, "
-                f"however the following failed...\n\n{err}")
+                f"however the following failed...\n\n{err}"
+            )
 
         await msg.edit(embed=embed)
 
+    @staticmethod
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
-    async def changestat(self, ctx):
+    async def changestat(ctx):
         """Change the bot status"""
         await ctx.send("Hi yeah")
 
@@ -386,11 +402,13 @@ class Developer(commands.Cog):
     @commands.check(owners)
     async def stream(self, ctx, *, activity="placeholder (owner to lazy lol)"):
         """Streaming Activity"""
-        await self.bot.change_presence(activity=discord.Streaming(
-            status=discord.Status.idle,
-            name=activity,
-            url="https://www.twitch.tv/dhruvacube",
-        ))
+        await self.bot.change_presence(
+            activity=discord.Streaming(
+                status=discord.Status.idle,
+                name=activity,
+                url="https://www.twitch.tv/dhruvacube",
+            )
+        )
         await ctx.send(
             f"```diff\n- Changed activity to {activity} using Stream status.```"
         )
@@ -399,39 +417,37 @@ class Developer(commands.Cog):
     @commands.check(owners)
     async def game(self, ctx, *, activity="placeholder (owner to lazy lol)"):
         """Game Activity"""
-        await self.bot.change_presence(status=discord.Status.idle,
-                                       activity=discord.Game(name=activity))
-        await ctx.send(
-            f"```md\n# Changed activity to {activity} using Game status.```")
+        await self.bot.change_presence(
+            status=discord.Status.idle, activity=discord.Game(name=activity)
+        )
+        await ctx.send(f"```md\n# Changed activity to {activity} using Game status.```")
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
-    async def watching(self,
-                       ctx,
-                       *,
-                       activity="placeholder (owner to lazy lol)"):
+    async def watching(self, ctx, *, activity="placeholder (owner to lazy lol)"):
         """Watching activity"""
-        await self.bot.change_presence(activity=discord.Activity(
-            status=discord.Status.idle,
-            type=discord.ActivityType.watching,
-            name=activity,
-        ))
+        await self.bot.change_presence(
+            activity=discord.Activity(
+                status=discord.Status.idle,
+                type=discord.ActivityType.watching,
+                name=activity,
+            )
+        )
         await ctx.send(
             f"```arm\nChanged activity to {activity} using Watching status.```"
         )
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
-    async def listening(self,
-                        ctx,
-                        *,
-                        activity="placeholder (owner to lazy lol)"):
+    async def listening(self, ctx, *, activity="placeholder (owner to lazy lol)"):
         """Listenting Activity"""
-        await self.bot.change_presence(activity=discord.Activity(
-            status=discord.Status.idle,
-            type=discord.ActivityType.listening,
-            name=activity,
-        ))
+        await self.bot.change_presence(
+            activity=discord.Activity(
+                status=discord.Status.idle,
+                type=discord.ActivityType.listening,
+                name=activity,
+            )
+        )
         await ctx.send(
             f"```fix\nChanged activity to {activity} using Listening status.```"
         )

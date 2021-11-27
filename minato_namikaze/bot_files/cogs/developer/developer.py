@@ -255,9 +255,10 @@ class Developer(commands.Cog):
         else:
             await ctx.message.add_reaction("\u2705")
 
+    @staticmethod
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
-    async def get_all_cogs(self, ctx):
+    async def get_all_cogs(ctx):
         """Get all the cogs list"""
         cog_dir = Path(__file__).resolve(strict=True).parent.parent
         cogs_list = []
@@ -376,9 +377,10 @@ class Developer(commands.Cog):
 
         await msg.edit(embed=embed)
 
+    @staticmethod
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
-    async def changestat(self, ctx):
+    async def changestat(ctx):
         """Change the bot status"""
         await ctx.send("Hi yeah")
 

@@ -32,11 +32,8 @@ class Info(commands.Cog):
     @commands.guild_only()
     async def serverdump(self, ctx):
         """Dumps server name to the developer"""
-        c = (
-            self.bot.get_channel(813954921782706227)
-            if not self.bot.local
-            else self.bot.get_channel(869238107524968479)
-        )
+        c = (self.bot.get_channel(813954921782706227) if not self.bot.local
+             else self.bot.get_channel(869238107524968479))
         if ctx.guild.id in (747480356625711204, 869085099470225508):
             b = await ctx.send("** Okay updating info ! **")
             n = 1
@@ -56,13 +53,14 @@ class Info(commands.Cog):
                     name="**Bots**",
                     value=sum(1 for member in guild.members if member.bot),
                 )
-                e.add_field(
-                    name="**Region**", value=str(guild.region).capitalize(), inline=True
-                )
+                e.add_field(name="**Region**",
+                            value=str(guild.region).capitalize(),
+                            inline=True)
                 e.add_field(name="**Server ID**", value=guild.id, inline=True)
                 await c.send(embed=e)
             await c.send(f"In total {n} servers")
-            await ctx.send("**Updated ! Please check the <#813954921782706227>**")
+            await ctx.send(
+                "**Updated ! Please check the <#813954921782706227>**")
         else:
             a = await ctx.send("**Sending the info to my developer**")
             e = discord.Embed(
@@ -79,27 +77,29 @@ class Info(commands.Cog):
                 name="**Bots**",
                 value=sum(1 for member in ctx.guild.members if member.bot),
             )
-            e.add_field(
-                name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True
-            )
+            e.add_field(name="**Region**",
+                        value=str(ctx.guild.region).capitalize(),
+                        inline=True)
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await c.send(embed=e)
             await ctx.send(
                 f'Sent the info to developer that "**I am in __{ctx.guild.name}__ guild**" , {ctx.author.mention} 😉'
             )
 
+    @staticmethod
     @commands.command()
     @commands.guild_only()
-    async def avatar(self, ctx, *, user: discord.Member = None):
+    async def avatar(ctx, *, user: discord.Member = None):
         """Get the avatar of you or someone else"""
         user = user or ctx.author
         e = discord.Embed(title=f"Avatar for {user.name}")
         e.set_image(url=user.avatar.url)
         await ctx.send(embed=e)
 
+    @staticmethod
     @commands.command()
     @commands.guild_only()
-    async def joinedat(self, ctx, *, user: discord.Member = None):
+    async def joinedat(ctx, *, user: discord.Member = None):
         """Check when a user joined the current server"""
         if user is None:
             user = ctx.author
@@ -111,22 +111,31 @@ class Info(commands.Cog):
         embed.set_image(url=user.avatar.url)
         await ctx.send(embed=embed)
 
+    @staticmethod
     @commands.group(aliases=["serverinfo"])
     @commands.guild_only()
-    async def server(self, ctx):
+    async def server(ctx):
         """Check info about current server"""
         guild = ctx.guild
         levels = {
-            "None - No criteria set.": discord.VerificationLevel.none,
-            "Low - Member must have a verified email on their Discord account.": discord.VerificationLevel.low,
-            "Medium - Member must have a verified email and be registered on Discord for more than five minutes.": discord.VerificationLevel.medium,
-            "High - Member must have a verified email, be registered on Discord for more than five minutes, and be a member of the guild itself for more than ten minutes.": discord.VerificationLevel.high,
-            "Extreme - Member must have a verified phone on their Discord account.": discord.VerificationLevel.highest,
+            "None - No criteria set.":
+            discord.VerificationLevel.none,
+            "Low - Member must have a verified email on their Discord account.":
+            discord.VerificationLevel.low,
+            "Medium - Member must have a verified email and be registered on Discord for more than five minutes.":
+            discord.VerificationLevel.medium,
+            "High - Member must have a verified email, be registered on Discord for more than five minutes, and be a member of the guild itself for more than ten minutes.":
+            discord.VerificationLevel.high,
+            "Extreme - Member must have a verified phone on their Discord account.":
+            discord.VerificationLevel.highest,
         }
         filters = {
-            "Disabled - The guild does not have the content filter enabled.": discord.ContentFilter.disabled,
-            "No Role - The guild has the content filter enabled for members without a role.": discord.ContentFilter.no_role,
-            "All Members - The guild has the content filter enabled for every member.": discord.ContentFilter.all_members,
+            "Disabled - The guild does not have the content filter enabled.":
+            discord.ContentFilter.disabled,
+            "No Role - The guild has the content filter enabled for members without a role.":
+            discord.ContentFilter.no_role,
+            "All Members - The guild has the content filter enabled for every member.":
+            discord.ContentFilter.all_members,
         }
         if ctx.invoked_subcommand is None:
             find_bots = sum(1 for member in ctx.guild.members if member.bot)
@@ -149,24 +158,19 @@ class Info(commands.Cog):
             for response, filt in filters.items():
                 if filt is guild.explicit_content_filter:
                     content_filter = response
-            embed.add_field(
-                name="<:ServerOwner:864765886916067359> Owner", value=ctx.guild.owner
-            )
-            embed.add_field(
-                name=":earth_africa: Region", value=str(ctx.guild.region).capitalize()
-            )
-            embed.add_field(
-                name=":heavy_check_mark: Verification Level", value=verif_lvl
-            )
+            embed.add_field(name="<:ServerOwner:864765886916067359> Owner",
+                            value=ctx.guild.owner)
+            embed.add_field(name=":earth_africa: Region",
+                            value=str(ctx.guild.region).capitalize())
+            embed.add_field(name=":heavy_check_mark: Verification Level",
+                            value=verif_lvl)
             embed.add_field(name=":warning: Content Filter",
                             value=content_filter)
-            embed.add_field(
-                name=":busts_in_silhouette: Members", value=ctx.guild.member_count
-            )
+            embed.add_field(name=":busts_in_silhouette: Members",
+                            value=ctx.guild.member_count)
             embed.add_field(name=":robot: Bots", value=find_bots)
-            embed.add_field(
-                name=":performing_arts: Roles", value=f"{len(ctx.guild.roles)}"
-            )
+            embed.add_field(name=":performing_arts: Roles",
+                            value=f"{len(ctx.guild.roles)}")
             embed.add_field(
                 name=":star: Emotes",
                 value=f"{len(ctx.guild.emojis)}/{ctx.guild.emoji_limit}",
@@ -177,9 +181,10 @@ class Info(commands.Cog):
                             value=f"<t:{round(date)}:D>")
             await ctx.send(embed=embed)
 
+    @staticmethod
     @server.command(name="server_icon", aliases=["icon"])
     @commands.guild_only()
-    async def server_icon(self, ctx):
+    async def server_icon(ctx):
         """Get the current server icon"""
         if not ctx.guild.icon:
             return await ctx.send("This server does not have a avatar...")
@@ -187,9 +192,10 @@ class Info(commands.Cog):
             f"Avatar of **{ctx.guild.name}**\n{ctx.guild.icon.with_size(1024).url}"
         )
 
+    @staticmethod
     @server.command(name="banner")
     @commands.guild_only()
-    async def server_banner(self, ctx):
+    async def server_banner(ctx):
         """Get the current banner image"""
         if not ctx.guild.banner:
             return await ctx.send("This server does not have a banner...")
@@ -234,17 +240,11 @@ class Info(commands.Cog):
         if s == discord.Status.dnd:
             status += "<:dnd:885522031536394320>"
 
-        show_roles = (
-            ", ".join(
-                [
-                    f"<@&{x.id}>"
-                    for x in sorted(user.roles, key=lambda x: x.position, reverse=True)
-                    if x.id != ctx.guild.default_role.id
-                ]
-            )
-            if len(user.roles) > 1
-            else "None"
-        )
+        show_roles = (", ".join([
+            f"<@&{x.id}>"
+            for x in sorted(user.roles, key=lambda x: x.position, reverse=True)
+            if x.id != ctx.guild.default_role.id
+        ]) if len(user.roles) > 1 else "None")
 
         embed = discord.Embed(
             title=f"{status} {user.display_name}'s Info.",
@@ -254,9 +254,11 @@ class Info(commands.Cog):
         embed.set_thumbnail(url=user.avatar.url)
 
         embed.add_field(name=":small_blue_diamond: User",
-                        value=user, inline=True)
+                        value=user,
+                        inline=True)
         embed.add_field(name=":small_blue_diamond: Nickname",
-                        value=user, inline=True)
+                        value=user,
+                        inline=True)
         embed.add_field(
             name="**__User info__**",
             value=(":date: Joined On {}").format(joined_on),
@@ -267,9 +269,9 @@ class Info(commands.Cog):
             value=(":date: Created On: {}").format(created_on),
             inline=True,
         )
-        embed.add_field(
-            name=":small_orange_diamond: Roles", value=show_roles, inline=False
-        )
+        embed.add_field(name=":small_orange_diamond: Roles",
+                        value=show_roles,
+                        inline=False)
         if uuser.banner:
             embed.set_image(url=uuser.banner)
 

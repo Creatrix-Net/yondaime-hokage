@@ -1,6 +1,5 @@
 import asyncio
 import functools
-import logging
 import sys
 from io import BytesIO
 from typing import Optional, Union, cast
@@ -8,22 +7,17 @@ from typing import Optional, Union, cast
 import aiohttp
 import discord
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
-from redbot.core import Config, commands
-from redbot.core.data_manager import bundled_data_path
+from discord.ext import commands
+#bundled_data_path
 
-from .badge_entry import Badge
-from .barcode import ImageWriter, generate
+from lib import Badge, ImageWriter, generate
 from .templates import blank_template
 
 
 class Badges(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, 1545487348434)
-        default_guild = {"badges": []}
         default_global = {"badges": blank_template}
-        self.config.register_global(**default_global)
-        self.config.register_guild(**default_guild)
         self.description = "Create fun fake badges based on your discord profile"
 
     def remove_white_barcode(self, img: Image) -> Image:
@@ -205,12 +199,8 @@ class Badges(commands.Cog):
         temp.seek(0)
         return temp
 
-    async def get_badge(self, badge_name: str, guild: Optional[discord.Guild] = None) -> Badge:
-        if guild is None:
-            guild_badges = []
-        else:
-            guild_badges = await self.config.guild(guild).badges()
-        all_badges = await self.config.badges() + guild_badges
+    async def get_badge(self, badge_name: str) -> Badge:
+        all_badges = self.default_global
         to_return = None
         for badge in all_badges:
             if badge_name.lower() in badge["badge_name"].lower():
@@ -275,14 +265,7 @@ class Badges(commands.Cog):
         """
         List the available badges that can be created
         """
-        # guild = ctx.message.guild
-        global_badges = await self.config.badges()
-        # guild_badges = await self.config.guild(guild).badges()
+        global_badges = self.default_global
         msg = _("__Global Badges__\n")
         msg += ", ".join(badge["badge_name"] for badge in global_badges)
-
-        # for badge in await self.config.badges():
-        # if guild_badges != []:
-        # badges = ", ".join(badge["badge_name"] for badge in guild_badges)
-        # em.add_field(name=_("Global Badges"), value=badges)
         await ctx.maybe_send_embed(msg)

@@ -159,7 +159,7 @@ class MySupport(commands.Cog, name="My Support"):
         periods, e.g. tag.create for the create subcommand of the tag command
         or by spaces.
         """
-        source_url = "https://github.com/Rapptz/RoboDanny"
+        source_url = "https://github.com/The-4th-Hokage/yondaime-hokage"
         branch = "master"
         if command is None:
             return await ctx.send(source_url)
@@ -185,7 +185,7 @@ class MySupport(commands.Cog, name="My Support"):
             location = os.path.relpath(filename).replace("\\", "/")
         else:
             location = module.replace(".", "/") + ".py"
-            source_url = "https://github.com/Rapptz/discord.py"
+            source_url = "https://github.com/StockerMC/discord.py"
             branch = "master"
 
         final_url = f"<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"

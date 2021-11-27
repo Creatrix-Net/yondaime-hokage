@@ -52,9 +52,9 @@ def get_prefix(bot, message):
 
 class MinatoNamikazeBot(commands.AutoShardedBot):
     def __init__(self):
-        allowed_mentions = discord.AllowedMentions(
-            roles=True, everyone=True, users=True
-        )
+        allowed_mentions = discord.AllowedMentions(roles=True,
+                                                   everyone=True,
+                                                   users=True)
         intents = discord.Intents(
             guilds=True,
             members=True,
@@ -71,15 +71,12 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         self.start_time = discord.utils.utcnow()
         self.github = token_get("GITHUB")
-        self.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(strict=True).parent / join(
-            "botmain", "bot", "discord_bot_images"
-        )
+        self.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(
+            strict=True).parent / join("botmain", "bot", "discord_bot_images")
 
         self.minato_dir = Path(__file__).resolve(strict=True).parent / join(
-            "bot_files", "discord_bot_images"
-        )
-        self.minato_gif = list(os.listdir(
-            join(self.minato_dir, "minato")))
+            "bot_files", "discord_bot_images")
+        self.minato_gif = list(os.listdir(join(self.minato_dir, "minato")))
         self.uptime = format_dt(self.start_time, "R")
         super().__init__(
             command_prefix=get_prefix,
@@ -126,12 +123,16 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                         small_text="Minato Namikaze",
                         buttons=[
                             {
-                                "label": "Invite",
-                                "url": "https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&scope=bot%20applications.commands",
+                                "label":
+                                "Invite",
+                                "url":
+                                "https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&scope=bot%20applications.commands",
                             },
                             {
-                                "label": "Website",
-                                "url": "https://minato-namikaze.readthedocs.io/en/latest/",
+                                "label":
+                                "Website",
+                                "url":
+                                "https://minato-namikaze.readthedocs.io/en/latest/",
                             },
                         ],
                     )
@@ -160,36 +161,33 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             log.critical("An exception occured, %s", e)
 
     async def on_ready(self):
-        cog_dir = Path(__file__).resolve(strict=True).parent / \
-            join("bot_files", "cogs")
+        cog_dir = Path(__file__).resolve(strict=True).parent / join(
+            "bot_files", "cogs")
         for filename in os.listdir(cog_dir):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
                     if i.endswith(".py") and i.lower() != "__init__.py":
                         self.load_extension(
-                            f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}'
-                        )
+                            f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
             else:
-                if filename.endswith(".py") and filename.lower() != "__init__.py":
+                if filename.endswith(
+                        ".py") and filename.lower() != "__init__.py":
                     self.load_extension(f"bot_files.cogs.{filename[:-3]}")
         self.togetherControl = await DiscordTogether(Tokens.token.value)
         difference = int(round(time.time() - self.start_time.timestamp()))
-        stats = (
-            self.get_channel(ChannelAndMessageId.restartlog_channel1.value)
-            if not self.local
-            else self.get_channel(ChannelAndMessageId.restartlog_channel2.value)
-        )
+        stats = (self.get_channel(
+            ChannelAndMessageId.restartlog_channel1.value)
+            if not self.local else self.get_channel(
+            ChannelAndMessageId.restartlog_channel2.value))
         e = Embed(
             title="Bot Loaded!",
             description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
         )
         e.set_thumbnail(url=self.user.avatar.url)
 
-        guild = (
-            self.get_guild(ChannelAndMessageId.server_id.value)
-            if not self.local
-            else self.get_channel(ChannelAndMessageId.restartlog_channel2.value)
-        )
+        guild = (self.get_guild(ChannelAndMessageId.server_id.value)
+                 if not self.local else self.get_channel(
+                     ChannelAndMessageId.restartlog_channel2.value))
         try:
             self._cache[guild.id] = {}
             for invite in await guild.invites():
@@ -204,9 +202,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             pass
         await self.change_presence(
             status=discord.Status.idle,
-            activity=discord.Activity(
-                type=discord.ActivityType.watching, name="over Naruto"
-            ),
+            activity=discord.Activity(type=discord.ActivityType.watching,
+                                      name="over Naruto"),
         )
 
         await PostStats(self).post_guild_stats_all()
@@ -215,18 +212,16 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         if not self.local:
             await self.change_presence(
                 status=discord.Status.dnd,
-                activity=discord.Activity(
-                    type=discord.ActivityType.watching, name="over Naruto"
-                ),
+                activity=discord.Activity(type=discord.ActivityType.watching,
+                                          name="over Naruto"),
             )
             await PostStats(self).post_commands()
             log.info("Commands Status Posted")
 
             await self.change_presence(
                 status=discord.Status.idle,
-                activity=discord.Activity(
-                    type=discord.ActivityType.watching, name="over Naruto"
-                ),
+                activity=discord.Activity(type=discord.ActivityType.watching,
+                                          name="over Naruto"),
             )
 
 

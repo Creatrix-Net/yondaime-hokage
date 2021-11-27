@@ -88,18 +88,20 @@ class Info(commands.Cog):
                 f'Sent the info to developer that "**I am in __{ctx.guild.name}__ guild**" , {ctx.author.mention} 😉'
             )
 
+    @staticmethod
     @commands.command()
     @commands.guild_only()
-    async def avatar(self, ctx, *, user: discord.Member = None):
+    async def avatar(ctx, *, user: discord.Member = None):
         """Get the avatar of you or someone else"""
         user = user or ctx.author
         e = discord.Embed(title=f"Avatar for {user.name}")
         e.set_image(url=user.avatar.url)
         await ctx.send(embed=e)
 
+    @staticmethod
     @commands.command()
     @commands.guild_only()
-    async def joinedat(self, ctx, *, user: discord.Member = None):
+    async def joinedat(ctx, *, user: discord.Member = None):
         """Check when a user joined the current server"""
         if user is None:
             user = ctx.author
@@ -111,9 +113,10 @@ class Info(commands.Cog):
         embed.set_image(url=user.avatar.url)
         await ctx.send(embed=embed)
 
+    @staticmethod
     @commands.group(aliases=["serverinfo"])
     @commands.guild_only()
-    async def server(self, ctx):
+    async def server(ctx):
         """Check info about current server"""
         guild = ctx.guild
         levels = {
@@ -177,9 +180,10 @@ class Info(commands.Cog):
                             value=f"<t:{round(date)}:D>")
             await ctx.send(embed=embed)
 
+    @staticmethod
     @server.command(name="server_icon", aliases=["icon"])
     @commands.guild_only()
-    async def server_icon(self, ctx):
+    async def server_icon(ctx):
         """Get the current server icon"""
         if not ctx.guild.icon:
             return await ctx.send("This server does not have a avatar...")
@@ -187,9 +191,10 @@ class Info(commands.Cog):
             f"Avatar of **{ctx.guild.name}**\n{ctx.guild.icon.with_size(1024).url}"
         )
 
+    @staticmethod
     @server.command(name="banner")
     @commands.guild_only()
-    async def server_banner(self, ctx):
+    async def server_banner(ctx):
         """Get the current banner image"""
         if not ctx.guild.banner:
             return await ctx.send("This server does not have a banner...")

@@ -289,7 +289,8 @@ class Tags(commands.Cog):
             return disambiguate(await con.fetch(query, guild_id, name), name)
         return row
 
-    async def create_tag(self, ctx, name, content):
+    @staticmethod
+    async def create_tag(ctx, name, content):
         # due to our denormalized design, I need to insert the tag in two different
         # tables, make sure it's in a transaction so if one of the inserts fail I
         # can act upon it
@@ -378,9 +379,10 @@ class Tags(commands.Cog):
 
         await self.create_tag(ctx, name, content)
 
+    @staticmethod
     @tag.command()
     @suggest_box()
-    async def alias(self, ctx, new_name: TagName, *, old_name: TagName):
+    async def alias(ctx, new_name: TagName, *, old_name: TagName):
         """Creates an alias for a pre-existing tag.
         You own the tag alias. However, when the original
         tag is deleted the alias is deleted as well.
@@ -502,12 +504,14 @@ class Tags(commands.Cog):
         finally:
             self.remove_in_progress_tag(ctx.guild.id, name)
 
+    @staticmethod
     @make.error
-    async def tag_make_error(self, ctx, error):
+    async def tag_make_error(ctx, error):
         if isinstance(error, commands.TooManyArguments):
             await ctx.send(f"Please call just {ctx.prefix}tag make")
 
-    async def guild_tag_stats(self, ctx):
+    @staticmethod
+    async def guild_tag_stats(ctx):
         # I'm not sure on how to do this with a single query
         # so I'm splitting it up into different queries
 
@@ -603,7 +607,8 @@ class Tags(commands.Cog):
 
         await ctx.send(embed=e)
 
-    async def member_tag_stats(self, ctx, member):
+    @staticmethod
+    async def member_tag_stats(ctx, member):
         e = discord.Embed(colour=discord.Colour.blurple())
         e.set_author(name=str(member), icon_url=member.display_avatar.url)
         e.set_footer(text="These statistics are server-specific.")
@@ -667,10 +672,11 @@ class Tags(commands.Cog):
         else:
             await self.member_tag_stats(ctx, member)
 
+    @staticmethod
     @tag.command()
     @suggest_box()
     async def edit(
-        self, ctx, name: TagName(lower=True), *, content: commands.clean_content
+        ctx, name: TagName(lower=True), *, content: commands.clean_content
     ):
         """Modifies an existing tag that you own.
         This command completely replaces the original text. If
@@ -873,9 +879,10 @@ class Tags(commands.Cog):
         first_step = discord.utils.escape_markdown(tag["content"])
         await ctx.safe_send(first_step.replace("<", "\\<"), escape_mentions=False)
 
+    @staticmethod
     @tag.command(name="list")
     @suggest_box()
-    async def _list(self, ctx, *, member: TagMember = None):
+    async def _list(ctx, *, member: TagMember = None):
         """Lists all the tags that belong to you or someone else."""
 
         member = member or ctx.author
@@ -973,10 +980,11 @@ class Tags(commands.Cog):
         else:
             await ctx.send("This server has no server-specific tags.")
 
+    @staticmethod
     @tag.command()
     @suggest_box()
     @checks.has_guild_permissions(manage_messages=True)
-    async def purge(self, ctx, member: TagMember):
+    async def purge(ctx, member: TagMember):
         """Removes all server-specific tags by a user.
         You must have server-wide Manage Messages permissions to use this.
         """
@@ -1003,9 +1011,10 @@ class Tags(commands.Cog):
             f"Successfully removed all {count} tags that belong to {member}."
         )
 
+    @staticmethod
     @tag.command()
     @suggest_box()
-    async def search(self, ctx, *, query: commands.clean_content):
+    async def search(ctx, *, query: commands.clean_content):
         """Searches for a tag.
         The query must be at least 3 characters.
         """
@@ -1062,9 +1071,10 @@ class Tags(commands.Cog):
 
             await ctx.send("Successfully transferred tag ownership to you.")
 
+    @staticmethod
     @tag.command()
     @suggest_box()
-    async def transfer(self, ctx, member: discord.Member, *, tag: TagName):
+    async def transfer(ctx, member: discord.Member, *, tag: TagName):
         """Transfers a tag to another member.
         You must own the tag before doing this.
         """
@@ -1086,9 +1096,10 @@ class Tags(commands.Cog):
 
         await ctx.send(f"Successfully transferred tag ownership to {member}.")
 
+    @staticmethod
     @tag.group()
     @can_use_box()
-    async def box(self, ctx):
+    async def box(ctx):
         """The tag box is where global tags are stored.
         The tags in the box are not part of your server's tag list
         unless you explicitly enable them. As a result, only those
@@ -1101,8 +1112,9 @@ class Tags(commands.Cog):
         if ctx.invoked_subcommand is None or ctx.subcommand_passed == "box":
             await ctx.send_help("tag box")
 
+    @staticmethod
     @box.command(name="put")
-    async def box_put(self, ctx, name: TagName, *, content: commands.clean_content):
+    async def box_put(ctx, name: TagName, *, content: commands.clean_content):
         """Puts a tag in the tag box.
         These are global tags that anyone can opt-in to receiving
         via the "tag box take" subcommand.
@@ -1137,8 +1149,9 @@ class Tags(commands.Cog):
 
         await ctx.invoke(self.create, name=tag["name"], content=tag["content"])
 
+    @staticmethod
     @box.command(name="show", aliases=["get"])
-    async def box_show(self, ctx, *, name: TagName(lower=True)):
+    async def box_show(ctx, *, name: TagName(lower=True)):
         """Shows a tag from the tag box."""
 
         query = "SELECT name, content FROM tags WHERE LOWER(name)=$1 AND location_id IS NULL;"
@@ -1153,9 +1166,10 @@ class Tags(commands.Cog):
         query = "UPDATE tags SET uses = uses + 1 WHERE name=$1 AND location_id IS NULL;"
         await ctx.db.execute(query, tag["name"])
 
+    @staticmethod
     @box.command(name="edit", aliases=["change"])
     async def box_edit(
-        self, ctx, name: TagName(lower=True), *, content: commands.clean_content
+        ctx, name: TagName(lower=True), *, content: commands.clean_content
     ):
         """Edits tag from the tag box.
         You must own the tag to edit it.
@@ -1171,8 +1185,9 @@ class Tags(commands.Cog):
         else:
             await ctx.send("Successfully edited tag.")
 
+    @staticmethod
     @box.command(name="delete", aliases=["remove"])
-    async def box_delete(self, ctx, *, name: TagName(lower=True)):
+    async def box_delete(ctx, *, name: TagName(lower=True)):
         """Deletes a tag from the tag box.
         You must own the tag to delete it.
         Deleting the tag does not affect tags where people
@@ -1223,8 +1238,9 @@ class Tags(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @staticmethod
     @box.command(name="search")
-    async def box_search(self, ctx, *, query: commands.clean_content):
+    async def box_search(ctx, *, query: commands.clean_content):
         """Searches for a tag in the tag box.
         The query must be at least 3 characters long.
         """
@@ -1307,8 +1323,9 @@ class Tags(commands.Cog):
         embed.set_footer(text="These statistics are for the tag box.")
         await ctx.send(embed=embed)
 
+    @staticmethod
     @box.command(name="list")
-    async def box_list(self, ctx, *, user: discord.User = None):
+    async def box_list(ctx, *, user: discord.User = None):
         """Lists all the tags in the box that belong to you or someone else.
         Unlike the regular tag list command, this one is sorted by uses.
         """

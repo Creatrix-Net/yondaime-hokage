@@ -17,6 +17,9 @@ def token_get(tokenname):
     return os.environ.get(tokenname, "False").strip("\n")
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent   #In minato_namikaze folder
+
+
 class BotList(enum.Enum):
     dblst = token_get("DISCORDBOTLIST")
     discordbotsgg = token_get("DISCORDBOTSGG")
@@ -27,7 +30,6 @@ class BotList(enum.Enum):
     voidbot = token_get("VOIDBOT")
     fateslist = token_get("FATESLIST")
     bladebot = token_get("BLADEBOT")
-    spacebot = token_get("SPACEBOT")
     discordlabs = token_get("DISCORDLABS")
     infinity = token_get("INFINITY")
 
@@ -75,10 +77,12 @@ class ChannelAndMessageId(enum.IntEnum):
     server_id = 747480356625711204
     server_id2 = 869085099470225508
 
-    testing_server_id = 869085099470225508
     tags = 907215293896613928
 
     help_smile_emoji = 848961696047300649
+    
+    restartlog_channel1=819128718152695878
+    restartlog_channel2=869238107118112810
 
 
 class Tokens(enum.Enum):

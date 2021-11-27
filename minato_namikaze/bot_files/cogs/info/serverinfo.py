@@ -8,7 +8,7 @@ import discord
 from discord import Spotify
 from discord.ext import commands
 
-from ...lib import Embed, filter_invites
+from ...lib import Embed
 
 
 class Info(commands.Cog):
@@ -86,23 +86,6 @@ class Info(commands.Cog):
                 f'Sent the info to developer that "**I am in __{ctx.guild.name}__ guild**" , {ctx.author.mention} 😉'
             )
 
-    """
-    @commands.command()
-    async def spotify(self, ctx, user: discord.Member=None):
-        if user is None:
-            user = ctx.author 
-        for activity in user.activities:
-            if isinstance(activity, Spotify):
-                w = discord.Embed(title="Oooo, what a party!", description=f"{user.name} is listening to Spotify, let's see what!")
-                w.add_field(name="**Listening to**", value=f"{activity.title}")
-                w.add_field(name="**By**", value=f"{activity.artist}")
-                w.set_thumbnail(url=activity.album_cover_url)
-                return await ctx.send(embed=w)
-            else:
-                e = discord.Embed(title="❌ Nope, the user (you or another) aren't listening to Spotify", description=f"User {user.name} isn't listening to Spotify")
-                return await ctx.send(embed=e)
-    """
-
     @commands.command()
     @commands.guild_only()
     async def avatar(self, ctx, *, user: discord.Member = None):
@@ -157,7 +140,7 @@ class Info(commands.Cog):
             embed = discord.Embed(
                 title=f"Server: __{ctx.guild.name}__ Info",
                 color=ctx.author.top_role.color,
-                description=f"🆔 Server ID: `{ctx.guild.id}`",
+                description=f":id: Server ID: `{ctx.guild.id}`",
             )
 
             if ctx.guild.icon:
@@ -174,20 +157,20 @@ class Info(commands.Cog):
                     content_filter = response
             embed.add_field(name="<:ServerOwner:864765886916067359> Owner",
                             value=ctx.guild.owner)
-            embed.add_field(name="🌍 Region",
+            embed.add_field(name=":earth_africa: Region",
                             value=str(ctx.guild.region).capitalize())
-            embed.add_field(name="✔️ Verification Level", value=verif_lvl)
-            embed.add_field(name="⚠️ Content Filter", value=content_filter)
-            embed.add_field(name="👥 Members", value=ctx.guild.member_count)
-            embed.add_field(name="🤖 Bots", value=find_bots)
-            embed.add_field(name="🎭 Roles", value=f"{len(ctx.guild.roles)}")
+            embed.add_field(name=":heavy_check_mark: Verification Level", value=verif_lvl)
+            embed.add_field(name=":warning: Content Filter", value=content_filter)
+            embed.add_field(name=":busts_in_silhouette: Members", value=ctx.guild.member_count)
+            embed.add_field(name=":robot: Bots", value=find_bots)
+            embed.add_field(name=":performing_arts: Roles", value=f"{len(ctx.guild.roles)}")
             embed.add_field(
-                name="⭐ Emotes",
+                name=":star: Emotes",
                 value=f"{len(ctx.guild.emojis)}/{ctx.guild.emoji_limit}",
             )
 
             date = ctx.guild.created_at.timestamp()
-            embed.add_field(name="📆 Created On", value=f"<t:{round(date)}:D>")
+            embed.add_field(name=":calendar: Created On", value=f"<t:{round(date)}:D>")
             await ctx.send(embed=embed)
 
     @server.command(name="server_icon", aliases=["icon"])
@@ -215,7 +198,6 @@ class Info(commands.Cog):
     async def user(self, ctx, *, user: discord.Member = None):
         """Get user information"""
         user = user or ctx.author
-        names, nicks = await self.get_names_and_nicks(user)
         """Timestamp stuff"""
         dt = user.joined_at
         dt1 = user.created_at
@@ -257,61 +239,37 @@ class Info(commands.Cog):
         embed = discord.Embed(
             title=f"{status} {user.display_name}'s Info.",
             colour=user.top_role.colour.value,
-            description=f"🆔 User ID: `{user.id}`",
+            description=f":id: User ID: `{user.id}`",
         )
         embed.set_thumbnail(url=user.avatar.url)
 
-        embed.add_field(name="🔹 User", value=user, inline=True)
-
-        if names:
-            name_name = ("**Previous Names:**"
-                         if len(names) > 1 else "**Previous Name:**")
-            name_val = filter_invites(", ".join(names))
-            prev_names_val = "{}\n{}".format(
-                name_name,
-                name_val,
+        embed.add_field(
+            name=":small_blue_diamond: User", 
+            value=user,
+            inline=True
             )
-
-        else:
-            prev_names_val = ""
-
-        if nicks:
-            nick_name = ("**Previous Nicknames:**"
-                         if len(nicks) > 1 else "**Previous Nickname:**")
-            nick_val = filter_invites(", ".join(nicks))
-            prev_nicks_val = "{}\n{}\n".format(
-                nick_name,
-                nick_val,
+        embed.add_field(
+            name=":small_blue_diamond: Nickname", 
+            value=user,
+            inline=True
             )
-
-        else:
-            prev_nicks_val = ""
-
         embed.add_field(
             name="**__User info__**",
-            value=("🔸 Roles: {}\n"
-                   "📅 Joined On {}"
-                   "{}").format(show_roles, joined_on, prev_nicks_val),
+            value=(
+                   ":date: Joined On {}"
+                ).format(joined_on),
+            inline=False
         )
         embed.add_field(
             name="**__Member Info__**",
-            value=("✏️ Name: {}\n"
-                   "{}: {}\n"
-                   "📅 Created On: {}").format(user.display_name,
-                                              user.display_name,
-                                              prev_names_val, created_on),
+            value=(":date: Created On: {}").format(created_on),
+            inline=True
         )
-
-        # embed.add_field(name="✏️ Name", value=user.display_name)
-
-        # embed.add_field(name=name_name, value=name_val)
-
-        # embed.add_field(name="🔸 Roles", value=show_roles, inline=False)
-
-        # embed.add_field(name="📅 Joined On", value=joined_on)
-
-        # embed.add_field(name=f"📅 Created On", value=created_on)
-
+        embed.add_field(
+            name=":small_orange_diamond: Roles",
+            value = show_roles,
+            inline=False
+        )
         if uuser.banner:
             embed.set_image(url=uuser.banner)
 

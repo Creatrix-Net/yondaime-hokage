@@ -14,7 +14,7 @@ except ImportError:
 import discord
 import dotenv
 import sentry_sdk
-from bot_files.lib import Embed, PaginatedHelpCommand, PostStats, Tokens, format_dt
+from bot_files.lib import Embed, PaginatedHelpCommand, PostStats, Tokens, format_dt, ChannelAndMessageId
 from discord.ext import commands
 from discord_together import DiscordTogether
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
@@ -161,24 +161,22 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         for filename in os.listdir(cog_dir):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
-                    if i.endswith(".py"):
+                    if i.endswith(".py") and i.lower() != '__init__.py':
                         self.load_extension(
                             f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
             else:
-                if filename.endswith(".py"):
+                if filename.endswith(".py")  and filename.lower() != '__init__.py':
                     self.load_extension(f"bot_files.cogs.{filename[:-3]}")
         self.togetherControl = await DiscordTogether(Tokens.token.value)
         difference = int(round(time.time() - self.start_time.timestamp()))
-        stats = (self.get_channel(819128718152695878)
-                 if not self.local else self.get_channel(869238107118112810))
+        stats = (self.get_channel(ChannelAndMessageId.restartlog_channel1.value) if not self.local else self.get_channel(ChannelAndMessageId.restartlog_channel2.value))
         e = Embed(
             title=f"Bot Loaded!",
             description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
         )
         e.set_thumbnail(url=self.user.avatar.url)
 
-        guild = (self.get_guild(747480356625711204)
-                 if not self.local else self.get_channel(869238107118112810))
+        guild = (self.get_guild(ChannelAndMessageId.server_id.value) if not self.local else self.get_channel(ChannelAndMessageId.restartlog_channel2.value))
         try:
             self._cache[guild.id] = {}
             for invite in await guild.invites():

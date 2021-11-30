@@ -17,7 +17,8 @@ from .time_class import *
 def chunks(data, SIZE: int = DEFAULT_COMMAND_SELECT_LENGTH):
     it = iter(data)
     for i in range(0, len(data), SIZE):
-        yield {k:data[k] for k in islice(it, SIZE)}
+        yield {k: data[k] for k in islice(it, SIZE)}
+
 
 class GroupHelpPageSource(menus.ListPageSource):
     def __init__(
@@ -123,6 +124,7 @@ class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
 class FrontPageSource(menus.PageSource):
     def __init__(self):
         super().__init__()
+
     def is_paginating(self) -> bool:
         # This forces the buttons to appear even in the front page
         return True
@@ -188,10 +190,11 @@ class FrontPageSource(menus.PageSource):
 
         return embed
 
+
 class HelpMenu(RoboPages):
     def __init__(self, source: menus.PageSource, ctx: commands.Context):
         super().__init__(source, ctx=ctx, compact=True)
-    
+
     def add_categories(
             self, commands: Dict[commands.Cog,
                                  List[commands.Command]]) -> None:
@@ -253,12 +256,18 @@ class PaginatedHelpCommand(commands.HelpCommand):
             all_commands[cog] = sorted(children,
                                        key=lambda c: c.qualified_name)
 
-        for i,command_sliced in enumerate(chunks(all_commands, DEFAULT_COMMAND_SELECT_LENGTH-1)):
-            if i<= 0:
+        for i, command_sliced in enumerate(
+                chunks(all_commands, DEFAULT_COMMAND_SELECT_LENGTH - 1)):
+            if i <= 0:
                 menu = HelpMenu(FrontPageSource(), ctx=self.context)
                 menu.add_categories(command_sliced)
             else:
-                menu = HelpMenu(TextPageSource('We have more that 25 commands category, Use the dropdown above and below to view it.'), ctx=self.context)
+                menu = HelpMenu(
+                    TextPageSource(
+                        "We have more that 25 commands category, Use the dropdown above and below to view it."
+                    ),
+                    ctx=self.context,
+                )
                 menu.add_categories(command_sliced)
             await menu.start()
 

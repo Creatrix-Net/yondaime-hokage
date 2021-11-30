@@ -22,7 +22,7 @@ class Tags:
         "tag_id",
         "ctx",
         "guild",
-        "channel"
+        "channel",
     ]
 
     def __init__(
@@ -41,8 +41,9 @@ class Tags:
         self.tag_id = tag_id
         self.ctx = ctx
         self.guild = ctx.get_guild(ChannelAndMessageId.server_id2.value)
-        self.channel = discord.utils.get(self.guild.channels,
-                                         id=ChannelAndMessageId.tags.value)
+        self.channel = discord.utils.get(
+            self.guild.channels, id=ChannelAndMessageId.tags.value
+        )
 
     async def edit(self, tag_content: str):
         msg = await self.channel.fetch_message(self.tag_id)
@@ -50,10 +51,9 @@ class Tags:
         await msg.edit(
             suppress=True,
             content="\n".join(message_cleanlist),
-            allowed_mentions=discord.AllowedMentions(everyone=False,
-                                                     users=False,
-                                                     roles=False,
-                                                     replied_user=False),
+            allowed_mentions=discord.AllowedMentions(
+                everyone=False, users=False, roles=False, replied_user=False
+            ),
         )
 
     async def search_tag(
@@ -67,10 +67,7 @@ class Tags:
         async for i in self.channel.history(limit=None):
             if tag_name and tag_name in i.content():
                 tags_found.append(i)
-            if (
-                creator_snowflake_id
-                and creator_snowflake_id in i.content()
-            ):
+            if creator_snowflake_id and creator_snowflake_id in i.content():
                 tags_found.append(i)
             if server_id and server_id in i.content():
                 tags_found.append(i)
@@ -87,8 +84,7 @@ class Tags:
         )
         await self.channel.send(
             content=local_format_tag,
-            allowed_mentions=discord.AllowedMentions(everyone=False,
-                                                     users=False,
-                                                     roles=False,
-                                                     replied_user=False),
+            allowed_mentions=discord.AllowedMentions(
+                everyone=False, users=False, roles=False, replied_user=False
+            ),
         )

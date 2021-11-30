@@ -34,7 +34,10 @@ class BadgesCog(commands.Cog, name="Badges"):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Create fun fake badges based on your discord profile"
-        return None
+    
+    @property
+    def display_emoji(self) -> discord.PartialEmoji:
+        return discord.PartialEmoji(name="\U0001f9a1")
 
     @staticmethod
     def remove_white_barcode(img: Image) -> Image:

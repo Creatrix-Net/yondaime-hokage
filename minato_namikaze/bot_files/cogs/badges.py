@@ -34,7 +34,7 @@ class BadgesCog(commands.Cog, name="Badges"):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Create fun fake badges based on your discord profile"
-    
+
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\U0001f9a1")
@@ -74,20 +74,17 @@ class BadgesCog(commands.Cog, name="Badges"):
     @staticmethod
     async def dl_image(url: str) -> BytesIO:
         """Download bytes like object of user avatar"""
-        async with aiohttp.ClientSession() as session, session.get(str(url)) as resp:
+        async with aiohttp.ClientSession() as session, session.get(
+                str(url)) as resp:
             test = await resp.read()
             return BytesIO(test)
 
-    def make_template(
-        self, user: Union[discord.User, discord.Member], badge: Badge, template: Image
-    ) -> Image:
+    def make_template(self, user: Union[discord.User, discord.Member],
+                      badge: Badge, template: Image) -> Image:
         """Build the base template before determining animated or not"""
         if hasattr(user, "roles"):
-            department = (
-                "GENERAL SUPPORT"
-                if user.top_role.name == "@everyone"
-                else user.top_role.name.upper()
-            )
+            department = ("GENERAL SUPPORT" if user.top_role.name
+                          == "@everyone" else user.top_role.name.upper())
             status = user.status
             level = str(len(user.roles))
         else:
@@ -103,8 +100,10 @@ class BadgesCog(commands.Cog, name="Badges"):
         if str(status) == "dnd":
             status = "MIA"
         barcode = BytesIO()
-        generate("code39", str(user.id),
-                 writer=ImageWriter(self), output=barcode)
+        generate("code39",
+                 str(user.id),
+                 writer=ImageWriter(self),
+                 output=barcode)
         barcode = Image.open(barcode)
         barcode = self.remove_white_barcode(barcode)
         fill = (0, 0, 0)  # text colour fill
@@ -203,9 +202,10 @@ class BadgesCog(commands.Cog, name="Badges"):
     async def create_badge(self, user, badge, is_gif: bool):
         """Async create badges handler"""
         template_img = await self.dl_image(badge.file_name)
-        task = functools.partial(
-            self.make_template, user=user, badge=badge, template=template_img
-        )
+        task = functools.partial(self.make_template,
+                                 user=user,
+                                 badge=badge,
+                                 template=template_img)
         task = self.bot.loop.run_in_executor(None, task)
         try:
             template = await asyncio.wait_for(task, timeout=60)
@@ -214,9 +214,9 @@ class BadgesCog(commands.Cog, name="Badges"):
         if user.display_avatar.is_animated() and is_gif:
             url = user.display_avatar.with_format("gif")
             avatar = Image.open(await self.dl_image(url))
-            task = functools.partial(
-                self.make_animated_gif, template=template, avatar=avatar
-            )
+            task = functools.partial(self.make_animated_gif,
+                                     template=template,
+                                     avatar=avatar)
             task = self.bot.loop.run_in_executor(None, task)
             try:
                 temp = await asyncio.wait_for(task, timeout=60)
@@ -226,8 +226,9 @@ class BadgesCog(commands.Cog, name="Badges"):
         else:
             url = user.display_avatar.with_format("png")
             avatar = Image.open(await self.dl_image(url))
-            task = functools.partial(
-                self.make_badge, template=template, avatar=avatar)
+            task = functools.partial(self.make_badge,
+                                     template=template,
+                                     avatar=avatar)
             task = self.bot.loop.run_in_executor(None, task)
             try:
                 temp = await asyncio.wait_for(task, timeout=60)
@@ -241,10 +242,8 @@ class BadgesCog(commands.Cog, name="Badges"):
         all_badges = await Badges(self.bot).get_all_badges()
         to_return = None
         for badge in all_badges:
-            if (
-                badge_name.lower() in badge["badge_name"].lower()
-                or badge_name.lower() in badge["code"].lower()
-            ):
+            if (badge_name.lower() in badge["badge_name"].lower()
+                    or badge_name.lower() in badge["code"].lower()):
                 to_return = await Badge.from_json(badge)
         return to_return
 
@@ -307,8 +306,8 @@ class BadgesCog(commands.Cog, name="Badges"):
         global_badges = await Badges(self.bot).get_all_badges()
         embed_paginator = BadgePages(ctx=ctx, entries=global_badges)
         embed_paginator.embed.set_author(
-            name=ctx.author.display_name, icon_url=ctx.author.display_avatar.url
-        )
+            name=ctx.author.display_name,
+            icon_url=ctx.author.display_avatar.url)
         await embed_paginator.start()
 
 

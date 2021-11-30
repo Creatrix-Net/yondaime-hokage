@@ -190,8 +190,8 @@ class BotEventsCommands(commands.Cog):
             e7.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e7,
                                    delete_after=self.delete_after_time)
-            
-            #send to developer
+
+            # send to developer
             c = self.bot.get_channel(830366314761420821)
 
             e = Embed(
@@ -221,8 +221,8 @@ class BotEventsCommands(commands.Cog):
         else:
             # if ctx.cog.qualified_name == "Music":
             #     return
-            
-            #send to developer
+
+            # send to developer
             c = self.bot.get_channel(830366314761420821)
 
             haaha = ctx.author.avatar.url
@@ -239,7 +239,7 @@ class BotEventsCommands(commands.Cog):
             await ctx.channel.send(embed=e9,
                                    delete_after=self.delete_after_time)
             await c.send(embed=e9)
-            
+
             e = Embed(
                 title=f"In **{ctx.guild.name}**",
                 description=f"User affected {ctx.message.author}",

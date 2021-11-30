@@ -13,10 +13,10 @@ chardet==4.0.0
 charset-normalizer==2.0.8
 click==8.0.3
 colorama==0.4.4
-discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@fbb8803779373357e274e1540b368365fd9d8074
+discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@master
 discord-ext-owoify==0.0.7.9a0
 discord-together==1.2.2
-discord.py @ git+https://github.com/StockerMC/discord.py.git@b33321f1aa87a1daf5f26d8ac352503f556a871c
+discord.py @ git+https://github.com/StockerMC/discord.py.git@master
 DiscordUtils==1.3.4
 eight-ball==3.0.3
 english-words==1.0.4
@@ -50,3 +50,4 @@ urllib3==1.26.7
 yarl==1.7.2
 youtube-dl==2021.6.6
 youtube-search==2.1.0
+uvloop==0.16.0; sys_platform != "win32"

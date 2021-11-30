@@ -190,11 +190,39 @@ class BotEventsCommands(commands.Cog):
             e7.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e7,
                                    delete_after=self.delete_after_time)
+            
+            #send to developer
+            c = self.bot.get_channel(830366314761420821)
+
+            e = Embed(
+                title=f"In **{ctx.guild.name}**",
+                description=f"User affected {ctx.message.author}",
+            )
+            if ctx.guild.icon:
+                e.set_thumbnail(url=ctx.guild.icon.url)
+            if ctx.guild.banner:
+                e.set_image(url=ctx.guild.banner.with_format("png").url)
+            e.add_field(name="**Total Members**", value=ctx.guild.member_count)
+            e.add_field(
+                name="**Bots**",
+                value=sum(1 for member in ctx.guild.members if member.bot),
+            )
+            e.add_field(name="**Region**",
+                        value=str(ctx.guild.region).capitalize(),
+                        inline=True)
+            e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
+            await ctx.send(
+                "**Error report was successfully sent**",
+                delete_after=self.delete_after_time,
+            )
+            await c.send(embed=e)
             raise error
 
         else:
-            if ctx.cog.qualified_name == "Music":
-                return
+            # if ctx.cog.qualified_name == "Music":
+            #     return
+            
+            #send to developer
             c = self.bot.get_channel(830366314761420821)
 
             haaha = ctx.author.avatar.url
@@ -211,11 +239,7 @@ class BotEventsCommands(commands.Cog):
             await ctx.channel.send(embed=e9,
                                    delete_after=self.delete_after_time)
             await c.send(embed=e9)
-
-            await ctx.send(
-                "**Sending the error report info to my developer**",
-                delete_after=self.delete_after_time,
-            )
+            
             e = Embed(
                 title=f"In **{ctx.guild.name}**",
                 description=f"User affected {ctx.message.author}",

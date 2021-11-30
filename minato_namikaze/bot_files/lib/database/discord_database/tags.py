@@ -3,7 +3,7 @@ from typing import Optional, Union
 import discord
 from discord.ext.commands import Context
 
-from ..util import ChannelAndMessageId
+from ...util import ChannelAndMessageId
 
 format_tag = """
 {tag_name}
@@ -40,8 +40,8 @@ class Tags:
         self.tag_content = tag_content
         self.tag_id = tag_id
         self.ctx = ctx
-        self.guild = ctx.bot.get_guild(ChannelAndMessageId.server_id2.value)
-        self.channel = discord.utils.get(guild.channels,
+        self.guild = ctx.get_guild(ChannelAndMessageId.server_id2.value)
+        self.channel = discord.utils.get(self.guild.channels,
                                          id=ChannelAndMessageId.tags.value)
 
     async def edit(self, tag_content: str):
@@ -56,7 +56,7 @@ class Tags:
                                                      replied_user=False),
         )
 
-    def search_tag(
+    async def search_tag(
         self,
         tag_name: Optional[str],
         creator_snowflake_id: Optional[int],

@@ -111,9 +111,8 @@ class MySupport(commands.Cog, name="My Support"):
         embed.timestamp = discord.utils.utcnow()
         await ctx.send(embed=embed)
 
-    @staticmethod
     @commands.command(description="Generates my invite link for your server")
-    async def inviteme(ctx):
+    async def inviteme(self, ctx):
         """Generates my invite link for your server"""
         embed = discord.Embed(
             title="**Invite Link**",
@@ -122,9 +121,8 @@ class MySupport(commands.Cog, name="My Support"):
         embed.set_thumbnail(url=ctx.bot.user.avatar.url)
         await ctx.send(embed=embed)
 
-    @staticmethod
     @commands.command(description="Generates my support server invite")
-    async def supportserver(ctx):
+    async def supportserver(self, ctx):
         """Generates my support server invite"""
         await ctx.send("**Here you go, my support server invite**")
         await ctx.send("https://discord.gg/S8kzbBVN8b")

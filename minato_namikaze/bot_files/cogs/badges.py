@@ -10,16 +10,32 @@ import discord
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
 
-from ...lib import BASE_DIR, Badge, Badges, ImageWriter, generate
+from ..lib import BASE_DIR, Badge, Badges, ImageWriter, generate, SimplePages
+import asyncio
 
-# from .templates import blank_template
+
+class BadgesPageEntry:
+    __slots__ = ("code", "name")
+
+    def __init__(self, entry):
+        self.code = entry["code"]
+        self.name = entry["badge_name"]
+
+    def __str__(self):
+        return f"{self.name} (CODE: {self.code})"
 
 
-class Badges(commands.Cog):
+class BadgePages(SimplePages):
+    def __init__(self, entries, *, ctx: commands.Context, per_page: int = 5):
+        converted = [BadgesPageEntry(entry) for entry in entries]
+        super().__init__(converted, per_page=per_page, ctx=ctx)
+
+
+class BadgesCog(commands.Cog, name="Badges"):
     def __init__(self, bot):
         self.bot = bot
-        default_global = {"badges": blank_template}
         self.description = "Create fun fake badges based on your discord profile"
+        return None
 
     @staticmethod
     def remove_white_barcode(img: Image) -> Image:
@@ -82,7 +98,6 @@ class Badges(commands.Cog):
         if str(status) == "dnd":
             status = "MIA"
         barcode = BytesIO()
-        log.debug(type(barcode))
         generate("code39",
                  str(user.id),
                  writer=ImageWriter(self),
@@ -99,7 +114,7 @@ class Badges(commands.Cog):
         barcode = barcode.resize((555, 125), Image.ANTIALIAS)
         template.paste(barcode, (400, 520), barcode)
         # font for user information
-        font_loc = BASE_DIR / os.path.join("lib", "data", "arial.ttf")
+        font_loc = str(BASE_DIR / os.path.join("lib", "data", "arial.ttf"))
         try:
             font1 = ImageFont.truetype(font_loc, 30)
             font2 = ImageFont.truetype(font_loc, 24)
@@ -194,8 +209,8 @@ class Badges(commands.Cog):
             template = await asyncio.wait_for(task, timeout=60)
         except asyncio.TimeoutError:
             return
-        if user.is_avatar_animated() and is_gif:
-            url = user.avatar_url_as(format="gif")
+        if user.display_avatar.is_animated() and is_gif:
+            url = user.display_avatar.with_format("gif")
             avatar = Image.open(await self.dl_image(url))
             task = functools.partial(self.make_animated_gif,
                                      template=template,
@@ -207,7 +222,7 @@ class Badges(commands.Cog):
                 return
 
         else:
-            url = user.avatar_url_as(format="png")
+            url = user.display_avatar.with_format("png")
             avatar = Image.open(await self.dl_image(url))
             task = functools.partial(self.make_badge,
                                      template=template,
@@ -222,10 +237,10 @@ class Badges(commands.Cog):
         return temp
 
     async def get_badge(self, badge_name: str) -> Badge:
-        all_badges = self.default_global
+        all_badges = await Badges(self.bot).get_all_badges()
         to_return = None
         for badge in all_badges:
-            if badge_name.lower() in badge["badge_name"].lower():
+            if badge_name.lower() in badge["badge_name"].lower() or badge_name.lower() in badge["code"].lower():
                 to_return = await Badge.from_json(badge)
         return to_return
 
@@ -236,12 +251,11 @@ class Badges(commands.Cog):
         `badge` is the name of the badges
         do `[p]listbadges` to see available badges
         """
-        guild = ctx.message.guild
         user = ctx.message.author
         if badge.lower() == "list":
             await ctx.invoke(self.listbadges)
             return
-        badge_obj = await self.get_badge(badge, guild)
+        badge_obj = await self.get_badge(badge)
         if not badge_obj:
             await ctx.send("`{}` is not an available badge.".format(badge))
             return
@@ -264,12 +278,11 @@ class Badges(commands.Cog):
         `badge` is the name of the badges
         do `[p]listbadges` to see available badges
         """
-        guild = ctx.message.guild
         user = ctx.message.author
         if badge.lower() == "list":
             await ctx.invoke(self.listbadges)
             return
-        badge_obj = await self.get_badge(badge, guild)
+        badge_obj = await self.get_badge(badge)
         if not badge_obj:
             await ctx.send("`{}` is not an available badge.".format(badge))
             return
@@ -287,7 +300,10 @@ class Badges(commands.Cog):
         """
         List the available badges that can be created
         """
-        global_badges = self.default_global
-        msg = "__Global Badges__\n"
-        msg += ", ".join(badge["badge_name"] for badge in global_badges)
-        await ctx.maybe_send_embed(msg)
+        global_badges = await Badges(self.bot).get_all_badges()
+        embed_paginator = BadgePages(ctx=ctx, entries=global_badges)
+        embed_paginator.embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.display_avatar.url)
+        await embed_paginator.start()
+
+def setup(bot):
+    bot.add_cog(BadgesCog(bot))

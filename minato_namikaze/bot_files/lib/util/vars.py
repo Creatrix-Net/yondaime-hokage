@@ -21,6 +21,8 @@ BASE_DIR = (
     Path(__file__).resolve().parent.parent.parent
 )  # In minato_namikaze/bot_files folder
 
+DEFAULT_COMMAND_SELECT_LENGTH = 25
+
 
 class BotList(enum.Enum):
     dblst = token_get("DISCORDBOTLIST")

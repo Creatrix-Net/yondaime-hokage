@@ -13,7 +13,6 @@ from ..util import LinksAndVars
 from .paginator import *
 from .time_class import *
 
-DEFAULT_COMMAND_SELECT_LENGTH=20
 
 def chunks(data, SIZE: int = DEFAULT_COMMAND_SELECT_LENGTH):
     it = iter(data)
@@ -66,7 +65,6 @@ class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
         self,
         commands: Dict[commands.Cog, List[commands.Command]],
         bot: commands.AutoShardedBot,
-        add_index: bool = True
     ):
         super().__init__(
             placeholder="Select a category...",
@@ -76,17 +74,15 @@ class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
         )
         self.commands = commands
         self.bot = bot
-        self.add_index = add_index
         self.__fill_options()
 
     def __fill_options(self) -> None:
-        if self.add_index:
-            self.add_option(
-                label="Index",
-                emoji="\N{WAVING HAND SIGN}",
-                value="__index",
-                description="The help page showing how to use the bot.",
-            )
+        self.add_option(
+            label="Index",
+            emoji="\N{WAVING HAND SIGN}",
+            value="__index",
+            description="The help page showing how to use the bot.",
+        )
         for cog, cog_commands in self.commands.items():
             if not cog_commands:
                 continue
@@ -125,6 +121,8 @@ class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
 
 
 class FrontPageSource(menus.PageSource):
+    def __init__(self):
+        super().__init__()
     def is_paginating(self) -> bool:
         # This forces the buttons to appear even in the front page
         return True
@@ -198,11 +196,7 @@ class HelpMenu(RoboPages):
             self, commands: Dict[commands.Cog,
                                  List[commands.Command]]) -> None:
         self.clear_items()
-        for i,command_sliced in enumerate(chunks(commands, DEFAULT_COMMAND_SELECT_LENGTH-1)):
-            if i>0:
-                self.add_item(HelpSelectMenu(command_sliced, self.ctx.bot, add_index=False))
-            else:
-                self.add_item(HelpSelectMenu(command_sliced, self.ctx.bot))
+        self.add_item(HelpSelectMenu(commands, self.ctx.bot))
         self.fill_items()
 
     async def rebind(self, source: menus.PageSource,
@@ -259,10 +253,14 @@ class PaginatedHelpCommand(commands.HelpCommand):
             all_commands[cog] = sorted(children,
                                        key=lambda c: c.qualified_name)
 
-        menu = HelpMenu(FrontPageSource(), ctx=self.context)
-        for command_sliced in chunks(all_commands, DEFAULT_COMMAND_SELECT_LENGTH):
-            menu.add_categories(command_sliced)
-        await menu.start()
+        for i,command_sliced in enumerate(chunks(all_commands, DEFAULT_COMMAND_SELECT_LENGTH-1)):
+            if i<= 0:
+                menu = HelpMenu(FrontPageSource(), ctx=self.context)
+                menu.add_categories(command_sliced)
+            else:
+                menu = HelpMenu(TextPageSource('We have more that 25 commands category, Use the dropdown above and below to view it.'), ctx=self.context)
+                menu.add_categories(command_sliced)
+            await menu.start()
 
     async def send_cog_help(self, cog):
         entries = await self.filter_commands(cog.get_commands(), sort=True)

@@ -241,6 +241,7 @@ class RoboPages(discord.ui.View):
         self, button: discord.ui.Button, interaction: discord.Interaction
     ):
         """stops the pagination session."""
+        button.disabled = True
         await interaction.response.defer()
         await interaction.delete_original_message()
         self.stop()
@@ -284,7 +285,10 @@ class TextPageSource(menus.ListPageSource):
         if maximum > 1:
             return f"{content}\nPage {menu.current_page + 1}/{maximum}"
         return content
-
+    
+    def is_paginating(self) -> bool:
+        # This forces the buttons to appear even in the front page
+        return True
 
 class SimplePageSource(menus.ListPageSource):
     async def format_page(self, menu, entries):

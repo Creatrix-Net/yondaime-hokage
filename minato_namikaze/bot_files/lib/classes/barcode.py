@@ -401,7 +401,8 @@ else:
             self.dpi = 300
             self._image = None
             self._draw = None
-            self.FONT = str(BASE_DIR / os.path.join("lib", "data","arial.ttf"))
+            self.FONT = str(
+                BASE_DIR / os.path.join("lib", "data", "arial.ttf"))
 
         def _init(self, code):
             size = self.calculate_size(len(code[0]), len(code), self.dpi)

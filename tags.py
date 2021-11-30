@@ -37,6 +37,7 @@ class UnableToUseBox(commands.CheckFailure):
 
 def suggest_box():
     """Custom commands.guild_only with different error checking."""
+
     def pred(ctx):
         if ctx.guild is None:
             raise UnavailableTagCommand()
@@ -151,8 +152,8 @@ class Tags(commands.Cog):
         if isinstance(error, (UnavailableTagCommand, UnableToUseBox)):
             await ctx.send(error)
         elif isinstance(
-            error,
-                (commands.BadArgument, commands.MissingRequiredArgument)):
+            error, (commands.BadArgument, commands.MissingRequiredArgument)
+        ):
             if ctx.command.qualified_name == "tag":
                 await ctx.send_help(ctx.command)
             else:
@@ -253,8 +254,7 @@ class Tags(commands.Cog):
             await tr.start()
 
             try:
-                await ctx.db.execute(query, name, content, ctx.author.id,
-                                     ctx.guild.id)
+                await ctx.db.execute(query, name, content, ctx.author.id, ctx.guild.id)
             except asyncpg.UniqueViolationError:
                 await tr.rollback()
                 await ctx.send("This tag already exists.")
@@ -308,8 +308,7 @@ class Tags(commands.Cog):
 
     @tag.command(aliases=["add"])
     @suggest_box()
-    async def create(self, ctx, name: TagName, *,
-                     content: commands.clean_content):
+    async def create(self, ctx, name: TagName, *, content: commands.clean_content):
         """Creates a new tag owned by you.
         This tag is server-specific and cannot be used in other servers.
         For global tags that others can use, consider using the tag box.
@@ -317,12 +316,10 @@ class Tags(commands.Cog):
         """
 
         if self.is_tag_being_made(ctx.guild.id, name):
-            return await ctx.send(
-                "This tag is currently being made by someone.")
+            return await ctx.send("This tag is currently being made by someone.")
 
         if len(content) > 2000:
-            return await ctx.send(
-                "Tag content is a maximum of 2000 characters.")
+            return await ctx.send("Tag content is a maximum of 2000 characters.")
 
         await self.create_tag(ctx, name, content)
 
@@ -345,15 +342,15 @@ class Tags(commands.Cog):
                 """
 
         try:
-            status = await ctx.db.execute(query, new_name, old_name.lower(),
-                                          ctx.guild.id, ctx.author.id)
+            status = await ctx.db.execute(
+                query, new_name, old_name.lower(), ctx.guild.id, ctx.author.id
+            )
         except asyncpg.UniqueViolationError:
             await ctx.send("A tag with this name already exists.")
         else:
             # The status returns INSERT N M, where M is the number of rows inserted.
             if status[-1] == "0":
-                await ctx.send(
-                    f'A tag with the name of "{old_name}" does not exist.')
+                await ctx.send(f'A tag with the name of "{old_name}" does not exist.')
             else:
                 await ctx.send(
                     f'Tag alias "{new_name}" that points to "{old_name}" successfully created.'
@@ -380,9 +377,7 @@ class Tags(commands.Cog):
         await ctx.release()
 
         try:
-            name = await self.bot.wait_for("message",
-                                           timeout=30.0,
-                                           check=check)
+            name = await self.bot.wait_for("message", timeout=30.0, check=check)
         except asyncio.TimeoutError:
             return await ctx.send("You took long. Goodbye.")
 
@@ -391,14 +386,16 @@ class Tags(commands.Cog):
             name = await converter.convert(ctx, name.content)
         except commands.BadArgument as e:
             return await ctx.send(
-                f'{e}. Redo the command "{ctx.prefix}tag make" to retry.')
+                f'{e}. Redo the command "{ctx.prefix}tag make" to retry.'
+            )
         finally:
             ctx.message = original
 
         if self.is_tag_being_made(ctx.guild.id, name):
             return await ctx.send(
                 "Sorry. This tag is currently being made by someone. "
-                f'Redo the command "{ctx.prefix}tag make" to retry.')
+                f'Redo the command "{ctx.prefix}tag make" to retry.'
+            )
 
         # reacquire our connection since we need the query
         await ctx.acquire()
@@ -413,7 +410,8 @@ class Tags(commands.Cog):
         if row is not None:
             return await ctx.send(
                 "Sorry. A tag with that name already exists. "
-                f'Redo the command "{ctx.prefix}tag make" to retry.')
+                f'Redo the command "{ctx.prefix}tag make" to retry.'
+            )
 
         self.add_in_progress_tag(ctx.guild.id, name)
         await ctx.send(
@@ -425,9 +423,7 @@ class Tags(commands.Cog):
         await ctx.release()
 
         try:
-            msg = await self.bot.wait_for("message",
-                                          check=check,
-                                          timeout=300.0)
+            msg = await self.bot.wait_for("message", check=check, timeout=300.0)
         except asyncio.TimeoutError:
             self.remove_in_progress_tag(ctx.guild.id, name)
             return await ctx.send("You took too long. Goodbye.")
@@ -436,8 +432,7 @@ class Tags(commands.Cog):
             self.remove_in_progress_tag(ctx.guild.id, name)
             return await ctx.send("Aborting.")
         if msg.content:
-            clean_content = await commands.clean_content().convert(
-                ctx, msg.content)
+            clean_content = await commands.clean_content().convert(ctx, msg.content)
         else:
             # fast path I guess?
             clean_content = msg.content
@@ -446,8 +441,7 @@ class Tags(commands.Cog):
             clean_content = f"{clean_content}\n{msg.attachments[0].url}"
 
         if len(clean_content) > 2000:
-            return await ctx.send(
-                "Tag content is a maximum of 2000 characters.")
+            return await ctx.send("Tag content is a maximum of 2000 characters.")
 
         try:
             await self.create_tag(ctx, name, clean_content)
@@ -489,8 +483,8 @@ class Tags(commands.Cog):
 
         if len(records) < 3:
             # fill with data to ensure that we have a minimum of 3
-            records.extend(
-                (None, None, None, None) for i in range(0, 3 - len(records)))
+            records.extend((None, None, None, None)
+                           for i in range(0, 3 - len(records)))
 
         def emojize(seq):
             emoji = 129351  # ord(':first_place:')
@@ -499,7 +493,8 @@ class Tags(commands.Cog):
 
         value = "\n".join(
             f"{emoji}: {name} ({uses} uses)" if name else f"{emoji}: Nothing!"
-            for (emoji, (name, uses, _, _)) in emojize(records))
+            for (emoji, (name, uses, _, _)) in emojize(records)
+        )
 
         e.add_field(name="Top Tags", value=value, inline=False)
 
@@ -520,9 +515,12 @@ class Tags(commands.Cog):
             # fill with data to ensure that we have a minimum of 3
             records.extend((None, None) for i in range(0, 3 - len(records)))
 
-        value = "\n".join(f"{emoji}: <@{author_id}> ({uses} times)"
-                          if author_id else f"{emoji}: No one!"
-                          for (emoji, (uses, author_id)) in emojize(records))
+        value = "\n".join(
+            f"{emoji}: <@{author_id}> ({uses} times)"
+            if author_id
+            else f"{emoji}: No one!"
+            for (emoji, (uses, author_id)) in emojize(records)
+        )
         e.add_field(name="Top Tag Users", value=value, inline=False)
 
         # tag creators
@@ -543,9 +541,12 @@ class Tags(commands.Cog):
             # fill with data to ensure that we have a minimum of 3
             records.extend((None, None) for i in range(0, 3 - len(records)))
 
-        value = "\n".join(f"{emoji}: <@{owner_id}> ({count} tags)"
-                          if owner_id else f"{emoji}: No one!"
-                          for (emoji, (count, owner_id)) in emojize(records))
+        value = "\n".join(
+            f"{emoji}: <@{owner_id}> ({count} tags)"
+            if owner_id
+            else f"{emoji}: No one!"
+            for (emoji, (count, owner_id)) in emojize(records)
+        )
         e.add_field(name="Top Tag Creators", value=value, inline=False)
 
         await ctx.send(embed=e)
@@ -590,8 +591,8 @@ class Tags(commands.Cog):
 
         if len(records) < 3:
             # fill with data to ensure that we have a minimum of 3
-            records.extend(
-                (None, None, None, None) for i in range(0, 3 - len(records)))
+            records.extend((None, None, None, None)
+                           for i in range(0, 3 - len(records)))
 
         emoji = 129351  # ord(':first_place:')
 
@@ -618,8 +619,7 @@ class Tags(commands.Cog):
     @staticmethod
     @tag.command()
     @suggest_box()
-    async def edit(ctx, name: TagName(lower=True), *,
-                   content: commands.clean_content):
+    async def edit(ctx, name: TagName(lower=True), *, content: commands.clean_content):
         """Modifies an existing tag that you own.
         This command completely replaces the original text. If
         you want to get the old text back, consider using the
@@ -627,8 +627,7 @@ class Tags(commands.Cog):
         """
 
         query = "UPDATE tags SET content=$1 WHERE LOWER(name)=$2 AND location_id=$3 AND owner_id=$4;"
-        status = await ctx.db.execute(query, content, name, ctx.guild.id,
-                                      ctx.author.id)
+        status = await ctx.db.execute(query, content, name, ctx.guild.id, ctx.author.id)
 
         # the status returns UPDATE <count>
         # if the <count> is 0, then nothing got updated
@@ -651,8 +650,10 @@ class Tags(commands.Cog):
         Deleting a tag will delete all of its aliases as well.
         """
 
-        bypass_owner_check = (ctx.author.id == self.bot.owner_id
-                              or ctx.author.guild_permissions.manage_messages)
+        bypass_owner_check = (
+            ctx.author.id == self.bot.owner_id
+            or ctx.author.guild_permissions.manage_messages
+        )
         clause = "LOWER(name)=$1 AND location_id=$2"
 
         if bypass_owner_check:
@@ -679,8 +680,7 @@ class Tags(commands.Cog):
             # this is based on the previous delete above
             await ctx.send("Tag alias successfully deleted.")
         else:
-            await ctx.send(
-                "Tag and corresponding aliases successfully deleted.")
+            await ctx.send("Tag and corresponding aliases successfully deleted.")
 
     @tag.command(aliases=["delete_id"])
     @suggest_box()
@@ -692,8 +692,10 @@ class Tags(commands.Cog):
         Deleting a tag will delete all of its aliases as well.
         """
 
-        bypass_owner_check = (ctx.author.id == self.bot.owner_id
-                              or ctx.author.guild_permissions.manage_messages)
+        bypass_owner_check = (
+            ctx.author.id == self.bot.owner_id
+            or ctx.author.guild_permissions.manage_messages
+        )
         clause = "id=$1 AND location_id=$2"
 
         if bypass_owner_check:
@@ -726,8 +728,7 @@ class Tags(commands.Cog):
             # this is based on the previous delete above
             await ctx.send("Tag alias successfully deleted.")
         else:
-            await ctx.send(
-                "Tag and corresponding aliases successfully deleted.")
+            await ctx.send("Tag and corresponding aliases successfully deleted.")
 
     async def _send_alias_info(self, ctx, record):
         embed = discord.Embed(colour=discord.Colour.blurple())
@@ -735,11 +736,11 @@ class Tags(commands.Cog):
         owner_id = record["lookup_owner_id"]
         embed.title = record["lookup_name"]
         embed.timestamp = record["lookup_created_at"].replace(
-            tzinfo=datetime.timezone.utc)
+            tzinfo=datetime.timezone.utc
+        )
         embed.set_footer(text="Alias created at")
 
-        user = self.bot.get_user(owner_id) or (await
-                                               self.bot.fetch_user(owner_id))
+        user = self.bot.get_user(owner_id) or (await self.bot.fetch_user(owner_id))
         embed.set_author(name=str(user), icon_url=user.display_avatar.url)
 
         embed.add_field(name="Owner", value=f"<@{owner_id}>")
@@ -755,8 +756,7 @@ class Tags(commands.Cog):
             tzinfo=datetime.timezone.utc)
         embed.set_footer(text="Tag created at")
 
-        user = self.bot.get_user(owner_id) or (await
-                                               self.bot.fetch_user(owner_id))
+        user = self.bot.get_user(owner_id) or (await self.bot.fetch_user(owner_id))
         embed.set_author(name=str(user), icon_url=user.display_avatar.url)
 
         embed.add_field(name="Owner", value=f"<@{owner_id}>")
@@ -819,8 +819,7 @@ class Tags(commands.Cog):
             return await ctx.send(e)
 
         first_step = discord.utils.escape_markdown(tag["content"])
-        await ctx.safe_send(first_step.replace("<", "\\<"),
-                            escape_mentions=False)
+        await ctx.safe_send(first_step.replace("<", "\\<"), escape_mentions=False)
 
     @staticmethod
     @tag.command(name="list")
@@ -841,8 +840,9 @@ class Tags(commands.Cog):
 
         if rows:
             p = TagPages(entries=rows, ctx=ctx)
-            p.embed.set_author(name=member.display_name,
-                               icon_url=member.display_avatar.url)
+            p.embed.set_author(
+                name=member.display_name, icon_url=member.display_avatar.url
+            )
             await p.start()
         else:
             await ctx.send(f"{member} has no tags.")
@@ -874,10 +874,13 @@ class Tags(commands.Cog):
                    ORDER BY tags.uses DESC;
                 """
 
-        bypass_owner_check = (ctx.author.id == self.bot.owner_id
-                              or ctx.author.guild_permissions.manage_messages)
-        rows = await ctx.db.fetch(query, ctx.guild.id, bypass_owner_check,
-                                  ctx.author.id)
+        bypass_owner_check = (
+            ctx.author.id == self.bot.owner_id
+            or ctx.author.guild_permissions.manage_messages
+        )
+        rows = await ctx.db.fetch(
+            query, ctx.guild.id, bypass_owner_check, ctx.author.id
+        )
         if not rows:
             return await ctx.send("This server has no server-specific tags.")
 
@@ -947,7 +950,8 @@ class Tags(commands.Cog):
         await ctx.db.execute(query, ctx.guild.id, member.id)
 
         await ctx.send(
-            f"Successfully removed all {count} tags that belong to {member}.")
+            f"Successfully removed all {count} tags that belong to {member}."
+        )
 
     @staticmethod
     @tag.command()
@@ -958,8 +962,7 @@ class Tags(commands.Cog):
         """
 
         if len(query) < 3:
-            return await ctx.send(
-                "The query length must be at least three characters.")
+            return await ctx.send("The query length must be at least three characters.")
 
         sql = """SELECT name, id
                  FROM tag_lookup
@@ -993,8 +996,7 @@ class Tags(commands.Cog):
             alias_query = "SELECT tag_id, owner_id FROM tag_lookup WHERE location_id = $1 and LOWER(name) = $2;"
             row = await ctx.db.fetchrow(alias_query, ctx.guild.id, tag.lower())
             if row is None:
-                return await ctx.send(
-                    f'A tag with the name of "{tag}" does not exist.')
+                return await ctx.send(f'A tag with the name of "{tag}" does not exist.')
             alias = True
 
         member = await self.bot.get_or_fetch_member(ctx.guild, row[1])
@@ -1022,8 +1024,7 @@ class Tags(commands.Cog):
         if member.bot:
             return await ctx.send("You cannot transfer a tag to a bot.")
         query = "SELECT id FROM tags WHERE location_id=$1 AND LOWER(name)=$2 AND owner_id=$3;"
-        row = await ctx.db.fetchrow(query, ctx.guild.id, tag.lower(),
-                                    ctx.author.id)
+        row = await ctx.db.fetchrow(query, ctx.guild.id, tag.lower(), ctx.author.id)
         if row is None:
             return await ctx.send(
                 f'A tag with the name of "{tag}" does not exist or is not owned by you.'
@@ -1086,8 +1087,7 @@ class Tags(commands.Cog):
         tag = await ctx.db.fetchrow(query, name)
 
         if tag is None:
-            return await ctx.send(
-                "A tag with this name cannot be found in the box.")
+            return await ctx.send("A tag with this name cannot be found in the box.")
 
         await ctx.invoke(self.create, name=tag["name"], content=tag["content"])
 
@@ -1101,8 +1101,7 @@ class Tags(commands.Cog):
         tag = await ctx.db.fetchrow(query, name)
 
         if tag is None:
-            return await ctx.send(
-                "A tag with this name cannot be found in the box.")
+            return await ctx.send("A tag with this name cannot be found in the box.")
 
         await ctx.send(tag["content"])
 
@@ -1111,8 +1110,9 @@ class Tags(commands.Cog):
 
     @staticmethod
     @box.command(name="edit", aliases=["change"])
-    async def box_edit(ctx, name: TagName(lower=True), *,
-                       content: commands.clean_content):
+    async def box_edit(
+        ctx, name: TagName(lower=True), *, content: commands.clean_content
+    ):
         """Edits tag from the tag box.
         You must own the tag to edit it.
         Editing the tag does not affect tags where people
@@ -1123,8 +1123,7 @@ class Tags(commands.Cog):
         status = await ctx.db.execute(query, name, content, ctx.author.id)
 
         if status[-1] == "0":
-            await ctx.send(
-                "This tag is either not in the box or you do not own it.")
+            await ctx.send("This tag is either not in the box or you do not own it.")
         else:
             await ctx.send("Successfully edited tag.")
 
@@ -1141,8 +1140,7 @@ class Tags(commands.Cog):
         status = await ctx.db.execute(query, name, ctx.author.id)
 
         if status[-1] == "0":
-            await ctx.send(
-                "This tag is either not in the box or you do not own it.")
+            await ctx.send("This tag is either not in the box or you do not own it.")
         else:
             await ctx.send("Successfully deleted tag.")
 
@@ -1173,8 +1171,7 @@ class Tags(commands.Cog):
             tzinfo=datetime.timezone.utc)
         embed.set_footer(text="Tag added to box")
 
-        user = self.bot.get_user(owner_id) or (await
-                                               self.bot.fetch_user(owner_id))
+        user = self.bot.get_user(owner_id) or (await self.bot.fetch_user(owner_id))
         embed.set_author(name=str(user), icon_url=user.display_avatar.url)
 
         embed.add_field(name="Owner", value=f"<@{owner_id}>")
@@ -1242,8 +1239,8 @@ class Tags(commands.Cog):
 
         top_tags = await ctx.db.fetch(query)
 
-        embed = discord.Embed(colour=discord.Colour.blurple(),
-                              title="Tag Box Stats")
+        embed = discord.Embed(
+            colour=discord.Colour.blurple(), title="Tag Box Stats")
 
         embed.add_field(name="Total Tags", value=top_tags[0]["Total Tags"])
         embed.add_field(name="Total Uses", value=top_tags[0]["Total Uses"])
@@ -1253,8 +1250,9 @@ class Tags(commands.Cog):
         emoji = 129351  # ord(':first_place:')
 
         for offset, (name, uses, _, _) in enumerate(top_tags):
-            embed.add_field(name=f"{chr(emoji + offset)} Tag",
-                            value=f"{name} ({uses} uses)")
+            embed.add_field(
+                name=f"{chr(emoji + offset)} Tag", value=f"{name} ({uses} uses)"
+            )
 
         values = []
         for offset, (total, uses, owner_id, _) in enumerate(top_creators):
@@ -1263,8 +1261,7 @@ class Tags(commands.Cog):
             )
 
         embed.add_field(name="Tag Creators",
-                        value="\n".join(values),
-                        inline=False)
+                        value="\n".join(values), inline=False)
         embed.set_footer(text="These statistics are for the tag box.")
         await ctx.send(embed=embed)
 

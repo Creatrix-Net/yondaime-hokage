@@ -18,8 +18,8 @@ def token_get(tokenname):
 
 
 BASE_DIR = (
-    Path(__file__).resolve().parent.parent.parent.parent
-)  # In minato_namikaze folder
+    Path(__file__).resolve().parent.parent.parent
+)  # In minato_namikaze/bot_files folder
 
 
 class BotList(enum.Enum):
@@ -72,6 +72,7 @@ class ChannelAndMessageId(enum.IntEnum):
     shinobi_character_channel = 869433768593719327
     welcome_channel = 747660913116577903  # This is only for the support server
     roles_channel = 777189846862266408
+    badges_channel = 880032497130405928
 
     error_logs_channel = 830366314761420821
 

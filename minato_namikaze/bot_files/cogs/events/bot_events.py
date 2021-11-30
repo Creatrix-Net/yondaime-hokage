@@ -16,6 +16,7 @@ from ...lib import (
     get_welcome_channel,
     return_ban_channel,
     return_unban_channel,
+    BASE_DIR
 )
 
 
@@ -56,27 +57,30 @@ class BotEvents(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        if member.guild.id == 747480356625711204:
-            inviter = await self.tracker.fetch_inviter_for_my_guild(member)
-            channel = discord.utils.get(self.bot.get_all_channels(),
-                                        id=747660913116577903)
-            if not member.bot:
-                embed = Embed(
-                    title=f"Welcome {member.name} !",
-                    description=f"Please {member.mention} goto <#777189846862266408> and get **supercool roles**",
-                    timestamp=datetime.utcnow(),
-                )
-                embed.set_image(url="https://i.imgur.com/mktY446.jpeg")
-                embed.set_thumbnail(url="https://i.imgur.com/SizgkEZ.png")
-                embed.set_author(name=self.bot.user.name,
-                                 icon_url=self.bot.user.avatar.url)
-                embed.set_footer(text=f"Welcome {member.name}")
+        try:
+            if member.guild.id == 747480356625711204:
+                inviter = await self.tracker.fetch_inviter_for_my_guild(member)
+                channel = discord.utils.get(self.bot.get_all_channels(),
+                                            id=747660913116577903)
+                if not member.bot:
+                    embed = Embed(
+                        title=f"Welcome {member.name} !",
+                        description=f"Please {member.mention} goto <#777189846862266408> and get **supercool roles**",
+                        timestamp=datetime.utcnow(),
+                    )
+                    embed.set_image(url="https://i.imgur.com/mktY446.jpeg")
+                    embed.set_thumbnail(url="https://i.imgur.com/SizgkEZ.png")
+                    embed.set_author(name=self.bot.user.name,
+                                    icon_url=self.bot.user.avatar.url)
+                    embed.set_footer(text=f"Welcome {member.name}")
 
-                e = Embed(
-                    description=f"**{member}** was invited by **{inviter.inviter}** \n- **INVITE CODE: {inviter.code}**,\n- USES **{inviter.uses} uses**."
-                )
-                await channel.send(member.mention, embed=embed)
-                await channel.send(embed=e)
+                    e = Embed(
+                        description=f"**{member}** was invited by **{inviter.inviter}** \n- **INVITE CODE: {inviter.code}**,\n- USES **{inviter.uses} uses**."
+                    )
+                    await channel.send(member.mention, embed=embed)
+                    await channel.send(embed=e)
+        except:
+            pass
 
     @commands.Cog.listener()
     async def on_invite_create(self, invite):
@@ -125,7 +129,7 @@ class BotEvents(commands.Cog):
                                 filename=img)
 
             f = open(
-                Path(__file__).resolve(strict=True).parent.parent.parent /
+                BASE_DIR /
                 join("lib", "text", "welcome_message.txt"),
                 "r",
             )
@@ -146,8 +150,7 @@ class BotEvents(commands.Cog):
             e.set_author(name=self.bot.user, icon_url=self.bot.user.avatar.url)
             e.set_thumbnail(url=self.bot.user.avatar.url)
             e.set_image(url=f"attachment://{img}")
-            await welcome_channel.send(
-                content="https://i.imgur.com/j6j7ob7.mp4", file=file, embed=e)
+            await welcome_channel.send(file=file, embed=e)
         except:
             pass
 

@@ -205,12 +205,12 @@ class PostStats:
             },
         )
         k = await self.post(
-            f"https://bladebotlist.xyz/api/bots/{self.bot.user.id}/stats",
+            f"https://api.bladelist.gg/bots/{self.bot.user.id}/",
             headers={
                 "Authorization": BotList.bladebot.name,
                 "Content-Type": "application/json",
             },
-            json={"servercount": guildsno, "shardcount": shards},
+            json={"server_count": guildsno, "shard_count": shards},
         )
         l = await self.post(
             f"https://bots.discordlabs.org/v2/bot/{self.bot.user.id}/stats",

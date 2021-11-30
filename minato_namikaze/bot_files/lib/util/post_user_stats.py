@@ -37,7 +37,6 @@ class PostStats:
                         await asyncio.sleep(5)
                 return True
             return False
-            return True
         except:
             return False
 

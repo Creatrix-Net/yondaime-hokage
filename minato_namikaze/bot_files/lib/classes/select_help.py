@@ -9,7 +9,7 @@ from itertools import islice
 import discord
 from discord.ext import commands, menus
 
-from ..util import LinksAndVars, DEFAULT_COMMAND_SELECT_LENGTH
+from ..util import DEFAULT_COMMAND_SELECT_LENGTH, LinksAndVars
 from .paginator import *
 from .time_class import *
 

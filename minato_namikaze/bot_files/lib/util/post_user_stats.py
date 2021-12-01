@@ -43,22 +43,22 @@ class PostStats:
     async def post_commands(self):
         commands_list = []
         for i in self.bot.commands:
-            tuple_notes = (str(i.description)
-                           if i.description != "" else str(i.short_doc))
+            tuple_notes = (
+                str(i.description) if i.description != "" else str(i.short_doc)
+            )
             parameters = list(f"<{j}>" for j in i.clean_params)
             dict_append = {
-                "cmd_name":
-                i.value,
-                "vote_locked":
-                True if "vote locked" in tuple_notes or "votes lock"
-                in tuple_notes or "vote lock" in tuple_notes else False,
-                "description":
-                str(i.description)
-                if i.description != "" else str(i.short_doc),
-                "cmd_groups":
-                i.parents + [i.cog_name] if i.cog_name else i.parents,
-                "cmd_type":
-                0,
+                "cmd_name": i.value,
+                "vote_locked": True
+                if "vote locked" in tuple_notes
+                or "votes lock" in tuple_notes
+                or "vote lock" in tuple_notes
+                else False,
+                "description": str(i.description)
+                if i.description != ""
+                else str(i.short_doc),
+                "cmd_groups": i.parents + [i.cog_name] if i.cog_name else i.parents,
+                "cmd_type": 0,
             }
             if i.usage:
                 dict_append.update({"examples": [f"){i.value} " + i.usage]})
@@ -120,17 +120,12 @@ class PostStats:
         except:
             pass
 
-    async def post(self,
-                   url,
-                   headers,
-                   data: dict = None,
-                   json: dict = None,
-                   getrequestobj=False):
+    async def post(
+        self, url, headers, data: dict = None, json: dict = None, getrequestobj=False
+    ):
         try:
             session = aiohttp.ClientSession()
-            request_made = await session.post(url,
-                                              headers=headers,
-                                              json=data or json)
+            request_made = await session.post(url, headers=headers, json=data or json)
             await session.close()
             if getrequestobj:
                 return request_made
@@ -142,8 +137,9 @@ class PostStats:
         guildsno = len(self.bot.guilds)
         members = len(set(self.bot.get_all_members()))
 
-        imageslistdir = Path(__file__).resolve(
-            strict=True).parent.parent / join("text", "images_list.txt")
+        imageslistdir = Path(__file__).resolve(strict=True).parent.parent / join(
+            "text", "images_list.txt"
+        )
         filepointer = open(imageslistdir)
         imageslist = filepointer.readlines()
         shards = 1
@@ -151,18 +147,12 @@ class PostStats:
         a = await self.post(
             f"https://top.gg/api/bots/{self.bot.user.id}/stats",
             headers={"Authorization": BotList.topken.value},
-            data={
-                "server_count": guildsno,
-                "shard_count": shards
-            },
+            data={"server_count": guildsno, "shard_count": shards},
         )
         b = await self.post(
             f"https://discordbotlist.com/api/v1/bots/{self.bot.user.id}/stats",
             headers={"Authorization": BotList.dblst.value},
-            data={
-                "guilds": guildsno,
-                "users": members
-            },
+            data={"guilds": guildsno, "users": members},
         )
         c = await self.post(
             f"https://discords.com/bots/api/bot/{self.bot.user.id}",
@@ -178,10 +168,7 @@ class PostStats:
                 "Authorization": f"Bot {BotList.botlist.value}",
                 "Content-Type": "application/json",
             },
-            json={
-                "serverCount": guildsno,
-                "active": True
-            },
+            json={"serverCount": guildsno, "active": True},
         )
         e = await self.post(
             f"https://discord.boats/api/bot/{self.bot.user.id}",
@@ -194,10 +181,7 @@ class PostStats:
                 "Authorization": BotList.discordbotsgg.value,
                 "Content-Type": "application/json",
             },
-            json={
-                "guildCount": guildsno,
-                "shardCount": shards
-            },
+            json={"guildCount": guildsno, "shardCount": shards},
         )
 
         i = await self.post(
@@ -206,10 +190,7 @@ class PostStats:
                 "Authorization": BotList.voidbot.value,
                 "Content-Type": "application/json",
             },
-            json={
-                "server_count": guildsno,
-                "shard_count": shards
-            },
+            json={"server_count": guildsno, "shard_count": shards},
         )
         j = await self.post(
             f"https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/stats",
@@ -229,10 +210,7 @@ class PostStats:
                 "Authorization": f"Token  {BotList.bladebot.value}",
                 "Content-Type": "application/json",
             },
-            json={
-                "server_count": guildsno,
-                "shard_count": shards
-            },
+            json={"server_count": guildsno, "shard_count": shards},
         )
         l = await self.post(
             f"https://bots.discordlabs.org/v2/bot/{self.bot.user.id}/stats",
@@ -240,23 +218,18 @@ class PostStats:
                 "Authorization": BotList.discordlabs.value,
                 "Content-Type": "application/json",
             },
-            json={
-                "server_count": guildsno,
-                "shard_count": shards
-            },
+            json={"server_count": guildsno, "shard_count": shards},
         )
         m = await self.post(
             f"https://api.infinitybotlist.com/bot/{self.bot.user.id}",
             headers={"Authorization": BotList.infinity.value},
-            json={
-                "servers": guildsno,
-                "botid": self.bot.user.id,
-                "shards": shards
-            },
+            json={"servers": guildsno,
+                  "botid": self.bot.user.id, "shards": shards},
         )
 
         r = self.bot.get_channel(
-            822472454030229545 if not self.bot.local else 870561578347540490)
+            822472454030229545 if not self.bot.local else 870561578347540490
+        )
         e1 = Embed(
             title="Status posted successfully",
             description=f"[Widgets Link](https://minato-namikaze.readthedocs.io/en/latest/#widgets) [Invite Stats](https://minatonamikaze-invites.herokuapp.com/)",
@@ -265,8 +238,8 @@ class PostStats:
         e1.set_thumbnail(url=self.bot.user.avatar.url)
 
         e1.add_field(
-            name="TopGG",
-            value=f"{a} : [TopGG](https://top.gg/bot/{self.bot.user.id})")
+            name="TopGG", value=f"{a} : [TopGG](https://top.gg/bot/{self.bot.user.id})"
+        )
         e1.add_field(
             name="DiscordBotList",
             value=f"{b} : [DiscordBotList](https://discord.ly/hatsune-miku)",

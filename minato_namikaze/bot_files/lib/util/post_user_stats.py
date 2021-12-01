@@ -226,7 +226,7 @@ class PostStats:
         k = await self.post(
             f"https://api.bladelist.gg/bots/{self.bot.user.id}",
             headers={
-                "Authorization": BotList.bladebot.value,
+                "Authorization": f'Token  {BotList.bladebot.value}',
                 "Content-Type": "application/json",
             },
             json={

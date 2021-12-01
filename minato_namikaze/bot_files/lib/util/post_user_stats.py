@@ -20,7 +20,7 @@ class PostStats:
             allcmd = requests.get(
                 f"https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands",
                 headers={
-                    "Authorization": BotList.fateslist.name,
+                    "Authorization": BotList.fateslist.value,
                     "Content-Type": "application/json",
                 },
             )
@@ -30,7 +30,7 @@ class PostStats:
                         requests.delete(
                             f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands/{j.get("id")}',
                             headers={
-                                "Authorization": BotList.fateslist.name,
+                                "Authorization": BotList.fateslist.value,
                                 "Content-Type": "application/json",
                             },
                         )
@@ -48,7 +48,7 @@ class PostStats:
             parameters = list(f"<{j}>" for j in i.clean_params)
             dict_append = {
                 "cmd_name":
-                i.name,
+                i.value,
                 "vote_locked":
                 True if "vote locked" in tuple_notes or "votes lock"
                 in tuple_notes or "vote lock" in tuple_notes else False,
@@ -61,7 +61,7 @@ class PostStats:
                 0,
             }
             if i.usage:
-                dict_append.update({"examples": [f"){i.name} " + i.usage]})
+                dict_append.update({"examples": [f"){i.value} " + i.usage]})
             if len(parameters) > 0:
                 dict_append.update({"args": parameters})
             commands_list.append(dict_append)
@@ -69,7 +69,7 @@ class PostStats:
             j = await self.post(
                 f"https://fateslist.xyz/api/v2/bots/779559821162315787/commands",
                 headers={
-                    "Authorization": BotList.fateslist.name,
+                    "Authorization": BotList.fateslist.value,
                     "Content-Type": "application/json",
                 },
                 json=i,
@@ -88,7 +88,7 @@ class PostStats:
                 k = await self.post(
                     f"https://fateslist.xyz/api/v2/bots/779559821162315787/commands",
                     headers={
-                        "Authorization": BotList.fateslist.name,
+                        "Authorization": BotList.fateslist.value,
                         "Content-Type": "application/json",
                     },
                     json=i,
@@ -99,7 +99,7 @@ class PostStats:
             allcmd = requests.get(
                 f"https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands",
                 headers={
-                    "Authorization": BotList.fateslist.name,
+                    "Authorization": BotList.fateslist.value,
                     "Content-Type": "application/json",
                 },
             )
@@ -112,7 +112,7 @@ class PostStats:
                             requests.delete(
                                 f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands/{j.get("id")}',
                                 headers={
-                                    "Authorization": BotList.fateslist.name,
+                                    "Authorization": BotList.fateslist.value,
                                     "Content-Type": "application/json",
                                 },
                             )
@@ -150,7 +150,7 @@ class PostStats:
 
         a = await self.post(
             f"https://top.gg/api/bots/{self.bot.user.id}/stats",
-            headers={"Authorization": BotList.topken.name},
+            headers={"Authorization": BotList.topken.value},
             data={
                 "server_count": guildsno,
                 "shard_count": shards
@@ -158,7 +158,7 @@ class PostStats:
         )
         b = await self.post(
             f"https://discordbotlist.com/api/v1/bots/{self.bot.user.id}/stats",
-            headers={"Authorization": BotList.dblst.name},
+            headers={"Authorization": BotList.dblst.value},
             data={
                 "guilds": guildsno,
                 "users": members
@@ -167,7 +167,7 @@ class PostStats:
         c = await self.post(
             f"https://discords.com/bots/api/bot/{self.bot.user.id}",
             headers={
-                "Authorization": BotList.bfd.name,
+                "Authorization": BotList.bfd.value,
                 "Content-Type": "application/json",
             },
             json={"server_count": guildsno},
@@ -175,7 +175,7 @@ class PostStats:
         d = await self.post(
             f"https://api.discordlist.space/v2/bots/{self.bot.user.id}",
             headers={
-                "Authorization": f"Bot {BotList.botlist.name}",
+                "Authorization": f"Bot {BotList.botlist.value}",
                 "Content-Type": "application/json",
             },
             json={
@@ -185,13 +185,13 @@ class PostStats:
         )
         e = await self.post(
             f"https://discord.boats/api/bot/{self.bot.user.id}",
-            headers={"Authorization": BotList.discordboats.name},
+            headers={"Authorization": BotList.discordboats.value},
             data={"server_count": guildsno},
         )
         f = await self.post(
             f"https://discord.bots.gg/api/v1/bots/{self.bot.user.id}/stats",
             headers={
-                "Authorization": BotList.discordbotsgg.name,
+                "Authorization": BotList.discordbotsgg.value,
                 "Content-Type": "application/json",
             },
             json={
@@ -203,7 +203,7 @@ class PostStats:
         i = await self.post(
             f"https://api.voidbots.net/bot/stats/{self.bot.user.id}",
             headers={
-                "Authorization": BotList.voidbot.name,
+                "Authorization": BotList.voidbot.value,
                 "Content-Type": "application/json",
             },
             json={
@@ -214,7 +214,7 @@ class PostStats:
         j = await self.post(
             f"https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/stats",
             headers={
-                "Authorization": BotList.fateslist.name,
+                "Authorization": BotList.fateslist.value,
                 "Content-Type": "application/json",
             },
             json={
@@ -224,9 +224,9 @@ class PostStats:
             },
         )
         k = await self.post(
-            f"https://api.bladelist.gg/bots/{self.bot.user.id}/",
+            f"https://api.bladelist.gg/bots/{self.bot.user.id}",
             headers={
-                "Authorization": BotList.bladebot.name,
+                "Authorization": BotList.bladebot.value,
                 "Content-Type": "application/json",
             },
             json={
@@ -237,7 +237,7 @@ class PostStats:
         l = await self.post(
             f"https://bots.discordlabs.org/v2/bot/{self.bot.user.id}/stats",
             headers={
-                "Authorization": BotList.discordlabs.name,
+                "Authorization": BotList.discordlabs.value,
                 "Content-Type": "application/json",
             },
             json={
@@ -247,7 +247,7 @@ class PostStats:
         )
         m = await self.post(
             f"https://api.infinitybotlist.com/bot/{self.bot.user.id}",
-            headers={"Authorization": BotList.infinity.name},
+            headers={"Authorization": BotList.infinity.value},
             json={
                 "servers": guildsno,
                 "botid": self.bot.user.id,
@@ -297,7 +297,7 @@ class PostStats:
         )
         e1.add_field(
             name="BladeBotList",
-            value=f"{k} : [BladeBotList](https://bladebotlist.xyz/bot/{self.bot.user.id}/)",
+            value=f"{k} : [BladeBotList](https://bladelist.gg/bots/{self.bot.user.id}/)",
         )
         e1.add_field(
             name="DiscordLabs",

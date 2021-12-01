@@ -106,18 +106,20 @@ class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
             cog = self.bot.get_cog(value)
             if cog is None:
                 await interaction.response.send_message(
-                    "Somehow this category does not exist?", ephemeral=True)
+                    "Somehow this category does not exist?", ephemeral=True
+                )
                 return
 
             commands = self.commands[cog]
             if not commands:
                 await interaction.response.send_message(
-                    "This category has no commands for you", ephemeral=True)
+                    "This category has no commands for you", ephemeral=True
+                )
                 return
 
-            source = GroupHelpPageSource(cog,
-                                         commands,
-                                         prefix=self.view.ctx.clean_prefix)
+            source = GroupHelpPageSource(
+                cog, commands, prefix=self.view.ctx.clean_prefix
+            )
             await self.view.rebind(source, interaction)
 
 
@@ -140,15 +142,17 @@ class FrontPageSource(menus.PageSource):
         return self
 
     def format_page(self, menu: HelpMenu, page):
-        embed = discord.Embed(title="Bot Help",
-                              colour=discord.Colour(0xA8B9CD))
-        embed.description = inspect.cleandoc(f"""
+        embed = discord.Embed(
+            title="Bot Help", colour=discord.Colour(0xA8B9CD))
+        embed.description = inspect.cleandoc(
+            f"""
             Hello! Welcome to the help page.
 
             Use "{menu.ctx.clean_prefix}help command" for more info on a command.
             Use "{menu.ctx.clean_prefix}help category" for more info on a category.
             Use the dropdown menu below to select a category.
-        """)
+        """
+        )
 
         embed.add_field(
             name="Support Server",
@@ -160,11 +164,12 @@ class FrontPageSource(menus.PageSource):
         if self.index == 0:
             embed.add_field(
                 name="Who are you?",
-                value=(":pray: Konichiwa :pray:, myself **Minato Namikaze**, **Konohagakure <:uzumaki_naruto:874930645405675521> Yondaime Hokage**"
-                       f"I joined discord on {created_at}. I try my best to do every work of a **hokage**. You can get more "
-                       "information on my commands by using the *dropdown* below.\n\n"
-                       f"I'm also open source. You can see my code on [GitHub]({LinksAndVars.github.value})!"
-                       ),
+                value=(
+                    ":pray: Konichiwa :pray:, myself **Minato Namikaze**, **Konohagakure <:uzumaki_naruto:874930645405675521> Yondaime Hokage**"
+                    f"I joined discord on {created_at}. I try my best to do every work of a **hokage**. You can get more "
+                    "information on my commands by using the *dropdown* below.\n\n"
+                    f"I'm also open source. You can see my code on [GitHub]({LinksAndVars.github.value})!"
+                ),
                 inline=False,
             )
         elif self.index == 1:
@@ -196,14 +201,15 @@ class HelpMenu(RoboPages):
         super().__init__(source, ctx=ctx, compact=True)
 
     def add_categories(
-            self, commands: Dict[commands.Cog,
-                                 List[commands.Command]]) -> None:
+        self, commands: Dict[commands.Cog, List[commands.Command]]
+    ) -> None:
         self.clear_items()
         self.add_item(HelpSelectMenu(commands, self.ctx.bot))
         self.fill_items()
 
-    async def rebind(self, source: menus.PageSource,
-                     interaction: discord.Interaction) -> None:
+    async def rebind(
+        self, source: menus.PageSource, interaction: discord.Interaction
+    ) -> None:
         self.source = source
         self.current_page = 0
 
@@ -218,12 +224,12 @@ class PaginatedHelpCommand(commands.HelpCommand):
     def __init__(self):
         super().__init__(
             command_attrs={
-                "cooldown":
-                commands.CooldownMapping.from_cooldown(
-                    1, 3.0, commands.BucketType.member),
-                "help":
-                "Shows help about the bot, a command, or a category",
-            })
+                "cooldown": commands.CooldownMapping.from_cooldown(
+                    1, 3.0, commands.BucketType.member
+                ),
+                "help": "Shows help about the bot, a command, or a category",
+            }
+        )
 
     def get_command_signature(self, command):
         parent = command.full_parent_name
@@ -245,7 +251,8 @@ class PaginatedHelpCommand(commands.HelpCommand):
             return cog.qualified_name if cog else "\U0010ffff"
 
         entries: List[commands.Command] = await self.filter_commands(
-            bot.commands, sort=True, key=key)
+            bot.commands, sort=True, key=key
+        )
 
         all_commands: Dict[commands.Cog, List[commands.Command]] = {}
         for name, children in itertools.groupby(entries, key=key):
@@ -253,11 +260,12 @@ class PaginatedHelpCommand(commands.HelpCommand):
                 continue
 
             cog = bot.get_cog(name)
-            all_commands[cog] = sorted(children,
-                                       key=lambda c: c.qualified_name)
+            all_commands[cog] = sorted(
+                children, key=lambda c: c.qualified_name)
 
         for i, command_sliced in enumerate(
-                chunks(all_commands, DEFAULT_COMMAND_SELECT_LENGTH - 1)):
+            chunks(all_commands, DEFAULT_COMMAND_SELECT_LENGTH - 1)
+        ):
             if i <= 0:
                 menu = HelpMenu(FrontPageSource(), ctx=self.context)
                 menu.add_categories(command_sliced)
@@ -274,8 +282,8 @@ class PaginatedHelpCommand(commands.HelpCommand):
     async def send_cog_help(self, cog):
         entries = await self.filter_commands(cog.get_commands(), sort=True)
         menu = HelpMenu(
-            GroupHelpPageSource(cog, entries,
-                                prefix=self.context.clean_prefix),
+            GroupHelpPageSource(
+                cog, entries, prefix=self.context.clean_prefix),
             ctx=self.context,
         )
         await menu.start()
@@ -302,9 +310,8 @@ class PaginatedHelpCommand(commands.HelpCommand):
         if len(entries) == 0:
             return await self.send_command_help(group)
 
-        source = GroupHelpPageSource(group,
-                                     entries,
-                                     prefix=self.context.clean_prefix)
+        source = GroupHelpPageSource(
+            group, entries, prefix=self.context.clean_prefix)
         self.common_command_formatting(source, group)
         menu = HelpMenu(source, ctx=self.context)
         await menu.start()

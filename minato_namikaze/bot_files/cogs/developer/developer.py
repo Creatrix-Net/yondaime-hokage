@@ -1,10 +1,10 @@
+import contextlib
 import inspect
 import io
 import os
 import subprocess as sp
 import sys
 import textwrap
-import contextlib
 import time
 import traceback
 from contextlib import redirect_stdout
@@ -52,7 +52,7 @@ class Developer(commands.Cog):
             embed.set_footer(text=discord.Embed.Empty)
             await ctx.send(embed=embed)
             return
-        
+
         paginator = EmbedPaginator(entries=all_pages, ctx=ctx)
         await paginator.start()
 
@@ -391,11 +391,12 @@ class Developer(commands.Cog):
             )
 
         await msg.edit(embed=embed)
-    
+
     @dev.group(name="pretend")
     @commands.check(owners)
-    async def pretend(self, ctx: commands.Context, target: discord.User, *,
-                    command_string: str):
+    async def pretend(
+        self, ctx: commands.Context, target: discord.User, *, command_string: str
+    ):
         """Execute my commands pretending as others | usage: <member.mention> <command.name> eg: )own as @Minato angel"""
         if ctx.guild:
             # Try to upgrade to a Member instance
@@ -405,23 +406,23 @@ class Developer(commands.Cog):
 
             with contextlib.suppress(discord.HTTPException):
                 target_member = ctx.guild.get_member(
-                    target.id) or await ctx.guild.fetch_member(target.id)
+                    target.id
+                ) or await ctx.guild.fetch_member(target.id)
 
             target = target_member or target
 
-        alt_ctx = await copy_context_with(ctx,
-                                          author=target,
-                                          content=ctx.prefix + command_string)
+        alt_ctx = await copy_context_with(
+            ctx, author=target, content=ctx.prefix + command_string
+        )
 
         if alt_ctx.command is None:
             if alt_ctx.invoked_with is None:
                 return await ctx.send(
-                    "This bot has been hard-configured to ignore this user.")
-            return await ctx.send(
-                f'Command "{alt_ctx.invoked_with}" is not found')
+                    "This bot has been hard-configured to ignore this user."
+                )
+            return await ctx.send(f'Command "{alt_ctx.invoked_with}" is not found')
 
         return await alt_ctx.command.invoke(alt_ctx)
-
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)

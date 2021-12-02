@@ -9,7 +9,6 @@ import discord
 from discord.ext import commands, menus
 from discord.ext.commands import Paginator as CommandPaginator
 
-
 class RoboPages(discord.ui.View):
     def __init__(
         self,
@@ -299,26 +298,17 @@ class SimplePages(RoboPages):
     """
 
     def __init__(self, entries, *, ctx: commands.Context, per_page: int = 12):
-        super().__init__(SimplePageSource(entries, per_page=per_page), ctx=ctx)
+        super().__init__(SimplePageSource(entries, per_page=per_page), ctx=ctx, check_embeds=True)
+
+class EmbedPageSource(menus.ListPageSource):
+    async def format_page(self, menu, entries):
+        return entries
+
+class EmbedPaginator(RoboPages):
+    def __init__(self, entries, *, ctx: commands.Context):
+        super().__init__(EmbedPageSource(entries, per_page=1), ctx=ctx)
         self.embed = discord.Embed(colour=discord.Colour.blurple())
 
-
-async def create_paginator(bot, ctx, pages):
-    msg = await ctx.send(embed=pages[0])
-
-    for reaction in ["⏮️", "◀️", "⏹️", "▶️", "⏭️"]:
-        await msg.add_reaction(reaction)
-
-    await bot.state.sadd(
-        "reaction_menus",
-        {
-            "kind": "paginator",
-            "channel": msg.channel.id,
-            "message": msg.id,
-            "end": int(time.time()) + 180,
-            "data": {
-                "page": 0,
-                "all_pages": [page.to_dict() for page in pages],
-            },
-        },
-    )
+    def is_paginating(self) -> bool:
+        # This forces the buttons to appear even in the front page
+        return True

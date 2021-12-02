@@ -78,7 +78,7 @@ class OwnerOnly(commands.Cog):
         await owner.send("Finally. You have escaped level one")
 
     @commands.check(owners)
-    @own.group(name="as", usage="")
+    @own.group(name="as")
     async def foddd(self, ctx: commands.Context, target: discord.User, *,
                     command_string: str):
         """Execute my commands pretending as others | usage: <member.mention> <command.name> eg: )own as @Minato angel"""

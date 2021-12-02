@@ -6,7 +6,6 @@ from os.path import join
 from typing import Optional, Union
 
 import discord
-import DiscordUtils
 from discord.ext import commands
 
 from ...lib import (
@@ -17,7 +16,6 @@ from ...lib import (
     MemberID,
     PostStats,
     check_if_warning_system_setup,
-    create_paginator,
     get_roles,
     get_user,
     has_permissions,
@@ -139,14 +137,8 @@ class Moderation(commands.Cog):
                                        description=description)
                     pages.append(embed)
 
-                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx)
-                paginator.add_reaction("⏮️", "first")
-                paginator.add_reaction("⏪", "back")
-                paginator.add_reaction("🔐", "lock")
-                paginator.add_reaction("⏩", "next")
-                paginator.add_reaction("⏭️", "last")
-
-                await paginator.run(pages)
+                paginator = EmbedPaginator(ctx=ctx, entries=pages)
+                await paginator.start()
             else:
                 description = ""
                 for k, i in enumerate(banned_users):

@@ -4,6 +4,7 @@ import os
 import subprocess as sp
 import sys
 import textwrap
+import contextlib
 import time
 import traceback
 from contextlib import redirect_stdout
@@ -43,7 +44,7 @@ class Developer(commands.Cog):
                 else:
                     page.description += f"\n{guild}"
 
-            page.set_footer(text="Use the reactions to flip pages.")
+            page.set_footer(text="Use the buttons to flip pages.")
             all_pages.append(page)
 
         if len(all_pages) == 1:
@@ -51,8 +52,9 @@ class Developer(commands.Cog):
             embed.set_footer(text=discord.Embed.Empty)
             await ctx.send(embed=embed)
             return
-
-        await create_paginator(self.bot, ctx, all_pages)
+        
+        paginator = EmbedPaginator(entries=all_pages, ctx=ctx)
+        await paginator.start()
 
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
@@ -294,7 +296,7 @@ class Developer(commands.Cog):
         """Reloads an extension."""
         try:
             self.bot.reload_extension(f"bot_files.cogs.{name}")
-            await ctx.message.add_reaction("🔄")
+            await ctx.message.add_reaction(discord.PartialEmoji(name="\U0001f504"))
 
         except Exception as e:
             return await ctx.send(f"```py\n{e}```")
@@ -389,6 +391,37 @@ class Developer(commands.Cog):
             )
 
         await msg.edit(embed=embed)
+    
+    @dev.group(name="pretend")
+    @commands.check(owners)
+    async def pretend(self, ctx: commands.Context, target: discord.User, *,
+                    command_string: str):
+        """Execute my commands pretending as others | usage: <member.mention> <command.name> eg: )own as @Minato angel"""
+        if ctx.guild:
+            # Try to upgrade to a Member instance
+            # This used to be done by a Union converter, but doing it like this makes
+            #  the command more compatible with chaining, e.g. `jsk in .. jsk su ..`
+            target_member = None
+
+            with contextlib.suppress(discord.HTTPException):
+                target_member = ctx.guild.get_member(
+                    target.id) or await ctx.guild.fetch_member(target.id)
+
+            target = target_member or target
+
+        alt_ctx = await copy_context_with(ctx,
+                                          author=target,
+                                          content=ctx.prefix + command_string)
+
+        if alt_ctx.command is None:
+            if alt_ctx.invoked_with is None:
+                return await ctx.send(
+                    "This bot has been hard-configured to ignore this user.")
+            return await ctx.send(
+                f'Command "{alt_ctx.invoked_with}" is not found')
+
+        return await alt_ctx.command.invoke(alt_ctx)
+
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)

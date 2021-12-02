@@ -49,15 +49,15 @@ class OwnerOnly(commands.Cog):
         embed = discord.Embed(title=f"Screenshot of {url}")
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{url}"
+                f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{url}"
             ) as r:
                 res = await r.read()
             embed.set_image(url="attachment://ss.png")
             embed.set_footer(
                 text=f"{ctx.author} | Minato Namikaze | {current_time} ")
-            await ctx.send(file=discord.File(io.BytesIO(res),
-                                             filename="ss.png"),
-                           embed=embed)
+            await ctx.send(
+                file=discord.File(io.BytesIO(res), filename="ss.png"), embed=embed
+            )
 
     @own.group()
     async def leaveguildbecauseimmad(self, ctx):
@@ -79,8 +79,9 @@ class OwnerOnly(commands.Cog):
 
     @commands.check(owners)
     @own.group(name="as")
-    async def foddd(self, ctx: commands.Context, target: discord.User, *,
-                    command_string: str):
+    async def foddd(
+        self, ctx: commands.Context, target: discord.User, *, command_string: str
+    ):
         """Execute my commands pretending as others | usage: <member.mention> <command.name> eg: )own as @Minato angel"""
         if ctx.guild:
             # Try to upgrade to a Member instance
@@ -90,20 +91,21 @@ class OwnerOnly(commands.Cog):
 
             with contextlib.suppress(discord.HTTPException):
                 target_member = ctx.guild.get_member(
-                    target.id) or await ctx.guild.fetch_member(target.id)
+                    target.id
+                ) or await ctx.guild.fetch_member(target.id)
 
             target = target_member or target
 
-        alt_ctx = await copy_context_with(ctx,
-                                          author=target,
-                                          content=ctx.prefix + command_string)
+        alt_ctx = await copy_context_with(
+            ctx, author=target, content=ctx.prefix + command_string
+        )
 
         if alt_ctx.command is None:
             if alt_ctx.invoked_with is None:
                 return await ctx.send(
-                    "This bot has been hard-configured to ignore this user.")
-            return await ctx.send(
-                f'Command "{alt_ctx.invoked_with}" is not found')
+                    "This bot has been hard-configured to ignore this user."
+                )
+            return await ctx.send(f'Command "{alt_ctx.invoked_with}" is not found')
 
         return await alt_ctx.command.invoke(alt_ctx)
 
@@ -117,7 +119,8 @@ class OwnerOnly(commands.Cog):
         await ctx.send(f"{word1} {name}")
 
     @commands.command(
-        usage="<channel id> or <channel.mention starting with #> <message to send>")
+        usage="<channel id> or <channel.mention starting with #> <message to send>"
+    )
     @commands.has_permissions(manage_guild=True)
     async def send(
         self,

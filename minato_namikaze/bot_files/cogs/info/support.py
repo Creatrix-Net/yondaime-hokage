@@ -5,11 +5,11 @@ from discord.ext import commands
 
 from ...lib import (
     Embed,
+    EmbedPaginator,
     ErrorEmbed,
     check_if_support_is_setup,
     get_user,
     return_support_channel,
-    EmbedPaginator
 )
 
 
@@ -37,8 +37,7 @@ class Support(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="support", id=884468194591518753)
 
-    @commands.command(
-        description="Open support ticket if enabled by the server admins")
+    @commands.command(description="Open support ticket if enabled by the server admins")
     @commands.cooldown(1, 120, commands.BucketType.user)
     @commands.check(check_if_support_is_setup)
     @commands.guild_only()
@@ -59,15 +58,20 @@ class Support(commands.Cog):
                 delete_after=4,
             )
             return
-        if (discord.utils.get(ctx.guild.roles, name="SupportRequired")
-                in ctx.message.author.roles):
-            await ctx.send(embed=ErrorEmbed(
-                description=f"{ctx.message.author.mention} you already applied for the support , please check the {chan.mention} channel."
-            ))
+        if (
+            discord.utils.get(ctx.guild.roles, name="SupportRequired")
+            in ctx.message.author.roles
+        ):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f"{ctx.message.author.mention} you already applied for the support , please check the {chan.mention} channel."
+                )
+            )
             return
         channel = ctx.channel
         await ctx.message.author.add_roles(
-            discord.utils.get(ctx.guild.roles, name="SupportRequired"))
+            discord.utils.get(ctx.guild.roles, name="SupportRequired")
+        )
         if channel.guild is ctx.guild:
             per = ctx.author.mention
             e = Embed(
@@ -85,13 +89,16 @@ class Support(commands.Cog):
 
     @support.error
     async def support_error_handler(self, ctx, error):
-        if (isinstance(error, commands.CheckFailure)
-                and not isinstance(error, commands.MissingPermissions)
-                and not isinstance(error, commands.BotMissingPermissions)):
+        if (
+            isinstance(error, commands.CheckFailure)
+            and not isinstance(error, commands.MissingPermissions)
+            and not isinstance(error, commands.BotMissingPermissions)
+        ):
             await ctx.send(embed=errorembed(ctx))
 
-    @commands.command(description="Resolves the existing ticket!",
-                      usage="<member.mention>")
+    @commands.command(
+        description="Resolves the existing ticket!", usage="<member.mention>"
+    )
     @commands.check(if_inside_support_channel)
     @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
@@ -99,11 +106,15 @@ class Support(commands.Cog):
         """Resolves the existing ticket!"""
         member = get_user(member, ctx)
         if member.bot:
-            await ctx.send(embed=ErrorEmbed(
-                description=f"{member.mention} is a bot! :robot:"))
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description=f"{member.mention} is a bot! :robot:")
+            )
             return
-        if (not discord.utils.get(ctx.guild.roles, name="SupportRequired")
-                in member.roles):
+        if (
+            not discord.utils.get(ctx.guild.roles, name="SupportRequired")
+            in member.roles
+        ):
             e = ErrorEmbed(
                 title="Sorry !",
                 description=f"{member.mention} has not requested any **support** !",
@@ -115,18 +126,24 @@ class Support(commands.Cog):
             f"Hope your issue has been resolved in {ctx.guild.name}, {member.mention}"
         )
         await ctx.send(
-            f"The issue/query for {member.mention} has been set to resolved!")
+            f"The issue/query for {member.mention} has been set to resolved!"
+        )
         await member.remove_roles(
-            discord.utils.get(ctx.guild.roles, name="SupportRequired"))
+            discord.utils.get(ctx.guild.roles, name="SupportRequired")
+        )
 
     @resolved.error
     async def resolved_error_handler(self, ctx, error):
-        if (isinstance(error, commands.CheckFailure)
-                and not isinstance(error, commands.MissingPermissions)
-                and not isinstance(error, commands.BotMissingPermissions)):
-            await ctx.send(embed=ErrorEmbed(
-                description="This command can be run **inside only servers's support channel**."
-            ))
+        if (
+            isinstance(error, commands.CheckFailure)
+            and not isinstance(error, commands.MissingPermissions)
+            and not isinstance(error, commands.BotMissingPermissions)
+        ):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description="This command can be run **inside only servers's support channel**."
+                )
+            )
 
     @commands.command(
         description="Checks who still requires the support.",
@@ -141,7 +158,8 @@ class Support(commands.Cog):
         l_no = 0
         if len(l) == 0:
             e = Embed(
-                description="Those who still **require support** are **None**! :tada:", )
+                description="Those who still **require support** are **None**! :tada:",
+            )
             await ctx.send(embed=e)
             return
         if len(l) > 10:
@@ -154,8 +172,9 @@ class Support(commands.Cog):
                     except:
                         pass
 
-                e = Embed(title="Those who still require support:",
-                          description=description)
+                e = Embed(
+                    title="Those who still require support:", description=description
+                )
                 embed.append(e)
 
             paginator = EmbedPaginator(ctx=ctx, entries=embed)
@@ -172,12 +191,16 @@ class Support(commands.Cog):
 
     @chksupreq.error
     async def chksupreq_error_handler(self, ctx, error):
-        if (isinstance(error, commands.CheckFailure)
-                and not isinstance(error, commands.MissingPermissions)
-                and not isinstance(error, commands.BotMissingPermissions)):
-            await ctx.send(embed=ErrorEmbed(
-                description="This command can be run **inside only servers's support channel**."
-            ))
+        if (
+            isinstance(error, commands.CheckFailure)
+            and not isinstance(error, commands.MissingPermissions)
+            and not isinstance(error, commands.BotMissingPermissions)
+        ):
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description="This command can be run **inside only servers's support channel**."
+                )
+            )
 
 
 def setup(bot):

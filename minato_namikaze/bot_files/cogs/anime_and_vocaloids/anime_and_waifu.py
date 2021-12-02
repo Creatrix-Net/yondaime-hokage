@@ -9,6 +9,7 @@ from mal import Anime, AnimeSearch, Manga, MangaSearch
 
 from ...lib import (
     Embed,
+    EmbedPaginator,
     ErrorEmbed,
     Tokens,
     generatevoteembed,
@@ -19,7 +20,6 @@ from ...lib import (
     votedfateslist,
     votedTopgg,
     votedVoidBots,
-    EmbedPaginator
 )
 
 
@@ -27,7 +27,8 @@ def format_related_anime_manga(dict_related_anime):
     formatted_string = "\n"
     for i in dict_related_anime:
         formatted_string += (
-            f'・**{i.capitalize()}**: {" ,".join(dict_related_anime[i])} ;\n')
+            f'・**{i.capitalize()}**: {" ,".join(dict_related_anime[i])} ;\n'
+        )
     return formatted_string
 
 
@@ -114,9 +115,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         )
         embeds = [e1]
         for i in search_results:
-            e = Embed(title=i.title,
-                      description=i.synopsis,
-                      timestamp=ctx.message.created_at)
+            e = Embed(
+                title=i.title, description=i.synopsis, timestamp=ctx.message.created_at
+            )
             if i.score:
                 e.add_field(name="**Score**", value=f"{i.score} :star:")
             if i.type:
@@ -127,8 +128,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 e.add_field(name="**MAL ID**", value=i.mal_id)
             if i.image_url:
                 e.set_image(url=i.image_url)
-            e.set_footer(text=f"{i.title} | {i.mal_id} | {i.score} stars",
-                         icon_url=i.image_url)
+            e.set_footer(
+                text=f"{i.title} | {i.mal_id} | {i.score} stars", icon_url=i.image_url
+            )
             embeds.append(e)
 
         paginator = EmbedPaginator(entries=embeds, ctx=ctx)
@@ -166,8 +168,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 value=f"{anime.title_japanese}",
             )
         if anime.title_synonyms:
-            e.add_field(name="**Title Synonyms**",
-                        value=" ,".join(anime.title_synonyms))
+            e.add_field(
+                name="**Title Synonyms**", value=" ,".join(anime.title_synonyms)
+            )
         if anime.score:
             e.add_field(name=":star: **Score**", value=f"{anime.score} :star:")
         if anime.type:
@@ -202,15 +205,20 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         if anime.licensors:
             e.add_field(name="**Licensors**", value=" ,".join(anime.licensors))
         if anime.studios:
-            e.add_field(name=":microphone2: **Studios**",
-                        value=" ,".join(anime.studios))
+            e.add_field(
+                name=":microphone2: **Studios**", value=" ,".join(anime.studios)
+            )
         if anime.source:
-            e.add_field(name=":information_source: **Source**", value=anime.source)
+            e.add_field(name=":information_source: **Source**",
+                        value=anime.source)
         if anime.duration:
             e.add_field(name=":stopwatch: **Duration**", value=anime.duration)
         if anime.rating:
             e.add_field(name="**Rating**", value=anime.rating)
-        if anime.related_anime and len(format_related_anime_manga(anime.related_anime)) < 1024:
+        if (
+            anime.related_anime
+            and len(format_related_anime_manga(anime.related_anime)) < 1024
+        ):
             e.add_field(
                 name="**Related Anime**",
                 value=format_related_anime_manga(anime.related_anime),
@@ -274,8 +282,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 )
                 embeds.append(e1)
         if anime.characters and len(format_characters(anime.characters)) <= 600:
-            e.add_field(name="**Characters**",
-                        value=format_characters(anime.characters))
+            e.add_field(
+                name="**Characters**", value=format_characters(anime.characters)
+            )
         else:
             if anime.characters:
                 e1 = Embed(
@@ -329,9 +338,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         )
         embeds = [e1]
         for i in search_results:
-            e = Embed(title=i.title,
-                      description=i.synopsis,
-                      timestamp=ctx.message.created_at)
+            e = Embed(
+                title=i.title, description=i.synopsis, timestamp=ctx.message.created_at
+            )
             if i.score:
                 e.add_field(name="**Score**", value=f"{i.score} :star:")
             if i.type:
@@ -342,10 +351,11 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 e.add_field(name="**MAL ID**", value=i.mal_id)
             if i.image_url:
                 e.set_image(url=i.image_url)
-            e.set_footer(text=f"{i.title} | {i.mal_id} | {i.score} stars",
-                         icon_url=i.image_url)
+            e.set_footer(
+                text=f"{i.title} | {i.mal_id} | {i.score} stars", icon_url=i.image_url
+            )
             embeds.append(e)
-        
+
         paginator = EmbedPaginator(entries=embeds, ctx=ctx)
         await paginator.start()
 
@@ -381,8 +391,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 value=f"{manga.title_japanese}",
             )
         if manga.title_synonyms:
-            e.add_field(name="**Title Synonyms**",
-                        value=" ,".join(manga.title_synonyms))
+            e.add_field(
+                name="**Title Synonyms**", value=" ,".join(manga.title_synonyms)
+            )
         if manga.score:
             e.add_field(name=":star: **Score**", value=f"{manga.score} :star:")
         if manga.type:
@@ -403,29 +414,36 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         if manga.popularity:
             e.add_field(name="**Popularity**", value=f"#{manga.popularity}")
         if manga.chapters:
-            e.add_field(name=":book: **No. of Chapters**", value=manga.chapters)
+            e.add_field(name=":book: **No. of Chapters**",
+                        value=manga.chapters)
         if manga.volumes:
             e.add_field(name=":books: **Volumes**", value=manga.volumes)
         if manga.authors:
-            e.add_field(name=":pen_fountain: **Author(s)**",
-                        value="\n・".join(manga.authors))
+            e.add_field(
+                name=":pen_fountain: **Author(s)**", value="\n・".join(manga.authors)
+            )
         if manga.published:
             e.add_field(name=":map: **Published**", value=manga.published)
         if manga.characters and len(format_manga_characters(manga.characters)) <= 600:
-            e.add_field(name="**Characters**",
-                        value=format_manga_characters(manga.characters))
+            e.add_field(
+                name="**Characters**", value=format_manga_characters(manga.characters)
+            )
         else:
             if manga.characters:
                 e1 = Embed(
                     title="Characters",
-                    description=format_manga_characters(manga.characters)[:4096],
+                    description=format_manga_characters(
+                        manga.characters)[:4096],
                 )
                 e1.set_footer(
                     text=f"{manga.title_japanese} | {manga.mal_id} | {manga.score} stars",
                     icon_url=manga.image_url,
                 )
                 embeds.append(e1)
-        if manga.related_manga and len(format_related_anime_manga(manga.related_manga)) < 1024:
+        if (
+            manga.related_manga
+            and len(format_related_anime_manga(manga.related_manga)) < 1024
+        ):
             e.add_field(
                 name="**Related Manga**",
                 value=format_related_anime_manga(manga.related_manga),
@@ -456,21 +474,24 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     async def waifu(self, ctx):
         """Get random waifu and marry them! UwU! (vote locked)"""
         async with ctx.typing():
-            if (not votedfateslist(ctx) and not votedbladebotlist(ctx)
-                    and not votedVoidBots(ctx)):
+            if (
+                not votedfateslist(ctx)
+                and not votedbladebotlist(ctx)
+                and not votedVoidBots(ctx)
+            ):
                 votes_list = [
                     votedfateslist(ctx),
                     votedbladebotlist(ctx),
                     votedVoidBots(ctx),
                 ]
                 votes_list_name = ["fateslist", "bladebotlist", "voidbots"]
-                await ctx.send(embed=generatevoteembed(
-                    ctx,
-                    [
-                        votes_list_name[i]
-                        for i, k in enumerate(votes_list) if not k
-                    ],
-                ))
+                await ctx.send(
+                    embed=generatevoteembed(
+                        ctx,
+                        [votes_list_name[i]
+                            for i, k in enumerate(votes_list) if not k],
+                    )
+                )
                 return
             waifu = await self.get_waifu()
             message = await ctx.send(embed=waifu[0])
@@ -480,9 +501,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             return user != self.bot.user and message.id == reaction.message.id
 
         try:
-            reaction, user = await self.bot.wait_for("reaction_add",
-                                                     timeout=30.0,
-                                                     check=check)
+            reaction, user = await self.bot.wait_for(
+                "reaction_add", timeout=30.0, check=check
+            )
             await ctx.send(
                 f":sparkling_heart: **{user.mention}** has *married* **{waifu[-1]}**! UwU :ring:"
             )
@@ -497,13 +518,13 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             if not voteddiscordlistspace(ctx) and not votedTopgg(ctx):
                 votes_list = [voteddiscordlistspace(ctx), votedTopgg(ctx)]
                 votes_list_name = ["discordlist.space", "top.gg"]
-                await ctx.send(embed=generatevoteembed(
-                    ctx,
-                    [
-                        votes_list_name[i]
-                        for i, k in enumerate(votes_list) if not k
-                    ],
-                ))
+                await ctx.send(
+                    embed=generatevoteembed(
+                        ctx,
+                        [votes_list_name[i]
+                            for i, k in enumerate(votes_list) if not k],
+                    )
+                )
                 return
         async with ctx.typing():
             wtp = await self.bot.dagpi.wtp()
@@ -519,7 +540,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             e.set_image(url=question)
 
             question_message = await ctx.send(
-                "You have 3 chances, **Chance: 1/3**", embed=e)
+                "You have 3 chances, **Chance: 1/3**", embed=e
+            )
 
         answerembed = discord.Embed(
             title=f"The Pokemon is: {wtp.name.capitalize()}",
@@ -527,21 +549,20 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             timestamp=ctx.message.created_at,
         )
         answerembed.add_field(name="**Height**", value=f"{round(wtp.height)}m")
-        answerembed.add_field(name="**Weight**",
-                              value=f"{round(wtp.weight)} kg")
+        answerembed.add_field(
+            name="**Weight**", value=f"{round(wtp.weight)} kg")
         answerembed.add_field(name=":id:", value=wtp.id)
         answerembed.set_image(url=wtp.answer)
         answerembed.set_footer(text=wtp.name.capitalize(), icon_url=wtp.answer)
-        answerembed.set_author(name=wtp.name.capitalize(),
-                               url=wtp.link,
-                               icon_url=wtp.answer)
+        answerembed.set_author(
+            name=wtp.name.capitalize(), url=wtp.link, icon_url=wtp.answer
+        )
         for i in range(3):
             try:
                 answer_content = await self.bot.wait_for(
                     "message",
                     timeout=30,
-                    check=lambda m: m.author == ctx.author and m.channel == ctx
-                    .channel,
+                    check=lambda m: m.author == ctx.author and m.channel == ctx.channel,
                 )
                 await asyncio.sleep(0.8)
                 if answer_content.content.lower() != answer:
@@ -586,9 +607,11 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                     await answer_content.delete()
                 except:
                     pass
-                await ctx.send(embed=ErrorEmbed(
-                    description="Well you didn't atleast once.\n Thus I won't be telling you the answer! :rofl:. **Baka**"
-                ))
+                await ctx.send(
+                    embed=ErrorEmbed(
+                        description="Well you didn't atleast once.\n Thus I won't be telling you the answer! :rofl:. **Baka**"
+                    )
+                )
                 return
         try:
             await answer_content.delete()

@@ -2,13 +2,13 @@ from typing import List, Tuple
 
 import aiohttp
 import discord
-import DiscordUtils
 from discord.ext import commands
 from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
 
 from ...lib.data import IMAGES, LATTICES, UNITS
 from ...lib.mendeleev import element as ELEMENTS
+from ...lib import EmbedPaginator
 
 
 class ElementConverter(Converter):
@@ -139,16 +139,16 @@ class Elements(commands.Cog):
         """
         if not elements:
             elements = [ELEMENTS(e) for e in range(1, 119)]
-        paginator = DiscordUtils.Pagination.AutoEmbedPaginator(ctx)
-        await paginator.run([await self.element_embed(e) for e in elements])
+        paginator = EmbedPaginator(ctx=ctx, entries=[await self.element_embed(e) for e in elements])
+        await paginator.start()
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
     async def ptable(self, ctx: commands.Context) -> None:
         """Display a menu of all elements"""
         embeds = [await self.element_embed(ELEMENTS(e)) for e in range(1, 119)]
-        paginator = DiscordUtils.Pagination.AutoEmbedPaginator(ctx)
-        await paginator.run(embeds)
+        paginator = EmbedPaginator(ctx=ctx, entries=embeds)
+        await paginator.start()
 
     async def element_embed(self, element: ELEMENTS) -> discord.Embed:
         embed = discord.Embed()

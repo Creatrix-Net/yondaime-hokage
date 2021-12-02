@@ -5,7 +5,6 @@ from os.path import join
 from pathlib import Path
 
 import discord
-import DiscordUtils
 from discord.ext import commands
 
 from ...lib import (

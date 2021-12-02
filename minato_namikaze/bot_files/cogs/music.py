@@ -2,7 +2,7 @@ import discord
 import DiscordUtils
 from discord.ext import commands
 
-from ..lib import Embed, ErrorEmbed
+from ..lib import Embed, ErrorEmbed, EmbedPaginator
 
 
 class NoChannelProvided(commands.CommandError):
@@ -175,16 +175,9 @@ class Music(commands.Cog):
     @commands.command()
     async def queue(self, ctx):
         """Displays the songs queue"""
-        paginator = DiscordUtils.Pagination.AutoEmbedPaginator(ctx)
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
-        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx)
-        paginator.add_reaction("⏮️", "first")
-        paginator.add_reaction("⏪", "back")
-        paginator.add_reaction("🔐", "lock")
-        paginator.add_reaction("⏩", "next")
-        paginator.add_reaction("⏭️", "last")
-        embeds = [self.songembed(song) for song in player.current_queue()]
-        await paginator.run(embeds)
+        paginator = EmbedPaginator(ctx=ctx, entries=[self.songembed(song) for song in player.current_queue()])
+        await paginator.start()
 
     @commands.command()
     async def np(self, ctx):

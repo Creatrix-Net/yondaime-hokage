@@ -1,7 +1,6 @@
 from typing import Optional, Union
 
 import discord
-import DiscordUtils
 from discord.ext import commands
 
 from ...lib import (
@@ -10,6 +9,7 @@ from ...lib import (
     check_if_support_is_setup,
     get_user,
     return_support_channel,
+    EmbedPaginator
 )
 
 
@@ -158,14 +158,8 @@ class Support(commands.Cog):
                           description=description)
                 embed.append(e)
 
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx)
-            paginator.add_reaction("⏮️", "first")
-            paginator.add_reaction("⏪", "back")
-            paginator.add_reaction("🔐", "lock")
-            paginator.add_reaction("⏩", "next")
-            paginator.add_reaction("⏭️", "last")
-
-            await paginator.run(embed)
+            paginator = EmbedPaginator(ctx=ctx, entries=embed)
+            await paginator.start()
         else:
             description = ""
             for k, i in enumerate(l):

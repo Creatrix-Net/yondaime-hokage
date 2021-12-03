@@ -190,6 +190,7 @@ class BotEventsCommands(commands.Cog):
             e7.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e7,
                                    delete_after=self.delete_after_time)
+            await c.send(embed=e7)
 
             # send to developer
             c = self.bot.get_channel(830366314761420821)

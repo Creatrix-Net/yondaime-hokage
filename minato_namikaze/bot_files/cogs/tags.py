@@ -1,3 +1,7 @@
+'''
+Originally The code was written by Danny, I had copied and modified to suit my needs
+'''
+
 import argparse
 import asyncio
 import datetime
@@ -7,12 +11,10 @@ import re
 import shlex
 import traceback
 
-import asyncpg
 import discord
 from discord.ext import commands, menus
 
-from .utils import cache, checks, db, formats
-from .utils.paginator import SimplePages
+from .utils import SimplePages, checks, TagsDatabase
 
 
 class Arguments(argparse.ArgumentParser):
@@ -140,9 +142,8 @@ class Tags(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-        # guild_id: set(name)
         self._reserved_tags_being_made = {}
+        self.tags_database = TagsDatabase(ctx=bot)
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
@@ -159,31 +160,14 @@ class Tags(commands.Cog):
             else:
                 await ctx.send(error)
 
-    # @cache.cache()
-    # async def get_tag_config(self, guild_id, *, connection=None):
-    #     # tag config is stored as a special server-wide tag, 'config'
-    #     # this 'config' value is serialised as JSON in the content
-
-    #     query = """SELECT content FROM tags WHERE name = 'config' AND location_id = $1;"""
-    #     con = connection if connection else self.bot.pool
-    #     record = await con.fetchrow(query, guild_id)
-    #     if record is None:
-    #         return TagConfig({})
-    #     return TagConfig(json.loads(record['content']))
-
     async def get_possible_tags(self, guild, *, connection=None):
         """Returns a list of Records of possible tags that the guild can execute.
         If this is a private message then only the generic tags are possible.
         Server specific tags will override the generic tags.
         """
-
-        con = connection or self.bot.pool
         if guild is None:
-            query = """SELECT name, content FROM tags WHERE location_id IS NULL;"""
-            return await con.fetch(query)
-
-        query = """SELECT name, content FROM tags WHERE location_id=$1;"""
-        return con.fetch(query, guild.id)
+            return await self.tags_database.search(search_all=True)
+        return await self.tags_database.search(server_id=guild.id)
 
     async def get_random_tag(self, guild, *, connection=None):
         """Returns a random tag."""

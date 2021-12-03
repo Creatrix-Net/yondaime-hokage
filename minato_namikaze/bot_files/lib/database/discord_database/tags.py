@@ -1,6 +1,7 @@
 from typing import Optional, Union
+from functools import cached_property, cache, wraps, lru_cache
 
-import discord
+import discord, random
 from discord.ext.commands import Context
 
 from ...util import ChannelAndMessageId
@@ -12,8 +13,14 @@ format_tag = """
 {tag_content}
 """
 
+def check_for_ctx(function):
+    @wraps(function)
+    def wrap(model, *args, **kwargs):
+        if not model.ctx:
+            raise NotImplementedError('context was not provided')
+    return wrap
 
-class Tags:
+class TagsDatabase:
     __slots__ = [
         "tag_name",
         "creator_snowflake_id",
@@ -55,26 +62,51 @@ class Tags:
                 everyone=False, users=False, roles=False, replied_user=False
             ),
         )
-
-    async def search_tag(
+    
+    @cache
+    @lru_cache
+    @check_for_ctx
+    async def search(
         self,
         tag_name: Optional[str],
         creator_snowflake_id: Optional[int],
         server_id: Optional[int],
         tag_content: Optional[str],
+        limit: Optional[int],
+        search_all: Optional[bool] = False,
+        oldest_first: Optional[bool] = False
     ):
         tags_found = []
-        async for i in self.channel.history(limit=None):
-            if tag_name and tag_name in i.content():
-                tags_found.append(i)
-            if creator_snowflake_id and creator_snowflake_id in i.content():
-                tags_found.append(i)
-            if server_id and server_id in i.content():
-                tags_found.append(i)
-            if tag_content and tag_content in i.content():
-                tags_found.append(i)
+        if search_all:
+            return await self.channel.history(limit=None, oldest_first=oldest_first).flatten()
+        if tag_name or self.tag_name:
+            def predicate(i):
+                return i.content() in (tag_name, self.tag_name)
+            tag_found = await self.channel.history(limit=None).get(predicate)
+            if tag_found:
+                tags_found.append(tag_found)
+        if creator_snowflake_id or self.creator_snowflake_id:
+            def predicate(i):
+                return i.content() in (creator_snowflake_id, self.creator_snowflake_id)
+            tag_found = await self.channel.history(limit=None).get(predicate)
+            if tag_found:
+                tags_found.append(tag_found)
+        if server_id or self.server_id:
+            def predicate(i):
+                return i.content() in (server_id, self.server_id)
+            tag_found = await self.channel.history(limit=None).get(predicate)
+            if tag_found:
+                tags_found.append(tag_found)
+        if tag_content or self.tag_content:
+            def predicate(i):
+                return i.content() in (tag_content, self.tag_content)
+            tag_found = await self.channel.history(limit=None).get(predicate)
+            if tag_found:
+                tags_found.append(tag_found)
         return tags_found
 
+    @classmethod
+    @check_for_ctx
     async def save(self):
         local_format_tag = str(format_tag).format(
             tag_name=self.tag_name,
@@ -88,3 +120,16 @@ class Tags:
                 everyone=False, users=False, roles=False, replied_user=False
             ),
         )
+    
+    @classmethod
+    @cache
+    @check_for_ctx
+    async def give_random_tag(self):
+        search = await search(oldest_first=random.choice([True, False], limit=random.randint(0,500)))
+        return random.choice(search)
+    
+    @staticmethod
+    def create_tag_from_string(string: str):
+        pass
+    
+    

@@ -1,9 +1,9 @@
 import random
+from datetime import datetime
 from functools import cache, cached_property, lru_cache, wraps
-from typing import Optional, Union, NamedTuple
+from typing import NamedTuple, Optional, Union
 
 import discord
-from datetime import datetime
 from discord.ext.commands import Context
 
 from ...util import ChannelAndMessageId
@@ -24,6 +24,7 @@ def check_for_ctx(function):
 
     return wrap
 
+
 class TagTemplate(NamedTuple):
     name: str
     content: str
@@ -31,7 +32,7 @@ class TagTemplate(NamedTuple):
     server_id: int
     created_at: datetime
     uses: int
-    
+
 
 class TagsDatabase:
     __slots__ = [

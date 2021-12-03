@@ -1,8 +1,9 @@
 import random
 from functools import cache, cached_property, lru_cache, wraps
-from typing import Optional, Union
+from typing import Optional, Union, NamedTuple
 
 import discord
+from datetime import datetime
 from discord.ext.commands import Context
 
 from ...util import ChannelAndMessageId
@@ -19,18 +20,27 @@ def check_for_ctx(function):
     @wraps(function)
     def wrap(model, *args, **kwargs):
         if not model.ctx:
-            raise NotImplementedError("context was not provided")
+            raise RuntimeError("context was not provided")
 
     return wrap
 
+class TagTemplate(NamedTuple):
+    name: str
+    content: str
+    owner_id: int
+    server_id: int
+    created_at: datetime
+    uses: int
+    
 
 class TagsDatabase:
     __slots__ = [
-        "tag_name",
-        "creator_snowflake_id",
+        "name",
+        "content",
+        "owner_id",
         "server_id",
-        "tag_content",
-        "tag_id",
+        "created_at",
+        "uses",
         "ctx",
         "guild",
         "channel",
@@ -41,14 +51,14 @@ class TagsDatabase:
         tag_name: Optional[str],
         creator_snowflake_id: Optional[int],
         server_id: Optional[int],
-        tag_content: Optional[str],
+        content: Optional[str],
         tag_id: Optional[int],
         ctx: Context,
     ):
         self.tag_name = tag_name
         self.creator_snowflake_id = creator_snowflake_id
         self.server_id = server_id
-        self.tag_content = tag_content
+        self.content = content
         self.tag_id = tag_id
         self.ctx = ctx
         self.guild = ctx.get_guild(ChannelAndMessageId.server_id2.value)

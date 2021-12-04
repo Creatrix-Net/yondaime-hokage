@@ -6,7 +6,6 @@ from ...lib import (
     Embed,
     ErrorEmbed,
     check_if_feedback_system_setup,
-    return_feedback_channel,
 )
 
 
@@ -26,7 +25,7 @@ class Feedback(commands.Cog):
     async def feedback(self, ctx, *, feed):
         """Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server owner)"""
         await ctx.message.delete()
-        channel = return_feedback_channel(ctx)
+        channel = self.bot.return_feedback_channel(ctx.guild)
 
         e = Embed(
             title="Feedback sent!",

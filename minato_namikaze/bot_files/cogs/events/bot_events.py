@@ -12,10 +12,6 @@ from ...lib import (
     Embed,
     ErrorEmbed,
     PostStats,
-    get_bot_inviter,
-    get_welcome_channel,
-    return_ban_channel,
-    return_unban_channel,
 )
 
 
@@ -129,10 +125,8 @@ class BotEvents(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        inviter_or_guild_owner = await get_bot_inviter(guild, self.bot)
-        welcome_channel = await get_welcome_channel(
-            guild, self.bot, inviter_or_guild_owner
-        )
+        inviter_or_guild_owner = await self.bot.get_bot_inviter(guild)
+        welcome_channel = await ctx.bot.get_welcome_channel(guild,inviter_or_guild_owner)
         try:
             img = random.choice(self.minato_gif)
             file = discord.File(
@@ -226,7 +220,7 @@ class BotEvents(commands.Cog):
     # ban
     @commands.Cog.listener()
     async def on_member_ban(self, guild, user):
-        ban = return_ban_channel(guild=guild)
+        ban = self.bot.return_ban_channel(guild=guild)
         event = False
         try:
             event = await guild.audit_logs().find(
@@ -257,7 +251,7 @@ class BotEvents(commands.Cog):
     # unban
     @commands.Cog.listener()
     async def on_member_unban(self, guild, user):
-        unban = return_unban_channel(guild=guild)
+        unban = self.bot.return_unban_channel(guild=guild)
         event = False
         try:
             event = await guild.audit_logs().find(

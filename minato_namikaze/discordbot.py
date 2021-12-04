@@ -1,5 +1,6 @@
 import ast
 import asyncio
+import aiohttp
 import logging
 import os
 import time
@@ -21,8 +22,11 @@ from bot_files.lib import (
     PostStats,
     Tokens,
     format_dt,
+    Context
 )
+from typing import Optional, Union
 from discord.ext import commands
+from collections import Counter, deque, defaultdict
 from discord_together import DiscordTogether
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -71,6 +75,17 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         self.start_time = discord.utils.utcnow()
         self.github = token_get("GITHUB")
+        
+        self._prev_events = deque(maxlen=10)
+
+        # shard_id: List[datetime.datetime]
+        # shows the last attempted IDENTIFYs and RESUMEs
+        self.resumes = defaultdict(list)
+        self.identifies = defaultdict(list)
+        
+        self.spam_control = commands.CooldownMapping.from_cooldown(10, 12.0, commands.BucketType.user)
+        self._auto_spam_count = Counter()
+
         self.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(
             strict=True).parent / join("botmain", "bot", "discord_bot_images")
 
@@ -105,45 +120,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 ],
             )
             log.info("Sentry Setup Done")
-
-            if self.local:
-                log.info("Attempting to start RICH PRESENCE")
-                from pypresence import Presence
-
-                try:
-                    client_id = "779559821162315787"
-                    RPC = Presence(client_id)
-                    RPC.connect()
-                    RPC.update(
-                        state="火 Minato Namikaze 火",
-                        large_image="fzglchm",
-                        small_image="m57xri9",
-                        details="Konichiwa, myself Minato Namikaze, \n Konohagakure Yondaime Hokage, \n\n I try my best to do every work as a Hokage",
-                        large_text="Minato Namikaze | 波風ミナト",
-                        small_text="Minato Namikaze",
-                        buttons=[
-                            {
-                                "label":
-                                "Invite",
-                                "url":
-                                "https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&scope=bot%20applications.commands",
-                            },
-                            {
-                                "label":
-                                "Website",
-                                "url":
-                                "https://minato-namikaze.readthedocs.io/en/latest/",
-                            },
-                        ],
-                    )
-                    log.info("RICH PRESENCE started")
-                except Exception as e:
-                    log.warning(
-                        "There was some error in attempt to start the rich presence for the bot. Read below"
-                    )
-                    log.warning(e)
-                    pass
-
             log.info("Bot will now start")
             super().run(Tokens.token.value, reconnect=True)
         except discord.PrivilegedIntentsRequired:
@@ -223,7 +199,150 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 activity=discord.Activity(type=discord.ActivityType.watching,
                                           name="over Naruto"),
             )
+    
+    async def query_member_named(self, guild, argument, *, cache=False):
+        """Queries a member by their name, name + discrim, or nickname.
+        Parameters
+        ------------
+        guild: Guild
+            The guild to query the member in.
+        argument: str
+            The name, nickname, or name + discrim combo to check.
+        cache: bool
+            Whether to cache the results of the query.
+        Returns
+        ---------
+        Optional[Member]
+            The member matching the query or None if not found.
+        """
+        if len(argument) > 5 and argument[-5] == '#':
+            username, _, discriminator = argument.rpartition('#')
+            members = await guild.query_members(username, limit=100, cache=cache)
+            return discord.utils.get(members, name=username, discriminator=discriminator)
+        else:
+            members = await guild.query_members(argument, limit=100, cache=cache)
+            return discord.utils.find(lambda m: m.name == argument or m.nick == argument, members)
 
+    async def get_or_fetch_member(self, guild, member_id):
+        """Looks up a member in cache or fetches if not found.
+        Parameters
+        -----------
+        guild: Guild
+            The guild to look in.
+        member_id: int
+            The member ID to search for.
+        Returns
+        ---------
+        Optional[Member]
+            The member or None if not found.
+        """
+
+        member = guild.get_member(member_id)
+        if member is not None:
+            return member
+
+        shard = self.get_shard(guild.shard_id)
+        if shard.is_ws_ratelimited():
+            try:
+                member = await guild.fetch_member(member_id)
+            except discord.HTTPException:
+                return None
+            else:
+                return member
+
+        members = await guild.query_members(limit=1, user_ids=[member_id], cache=True)
+        if not members:
+            return None
+        return members[0]
+
+    async def resolve_member_ids(self, guild, member_ids):
+        """Bulk resolves member IDs to member instances, if possible.
+        Members that can't be resolved are discarded from the list.
+        This is done lazily using an asynchronous iterator.
+        Note that the order of the resolved members is not the same as the input.
+        Parameters
+        -----------
+        guild: Guild
+            The guild to resolve from.
+        member_ids: Iterable[int]
+            An iterable of member IDs.
+        Yields
+        --------
+        Member
+            The resolved members.
+        """
+
+        needs_resolution = []
+        for member_id in member_ids:
+            member = guild.get_member(member_id)
+            if member is not None:
+                yield member
+            else:
+                needs_resolution.append(member_id)
+
+        total_need_resolution = len(needs_resolution)
+        if total_need_resolution == 1:
+            shard = self.get_shard(guild.shard_id)
+            if shard.is_ws_ratelimited():
+                try:
+                    member = await guild.fetch_member(needs_resolution[0])
+                except discord.HTTPException:
+                    pass
+                else:
+                    yield member
+            else:
+                members = await guild.query_members(limit=1, user_ids=needs_resolution, cache=True)
+                if members:
+                    yield members[0]
+        elif total_need_resolution <= 100:
+            # Only a single resolution call needed here
+            resolved = await guild.query_members(limit=100, user_ids=needs_resolution, cache=True)
+            for member in resolved:
+                yield member
+        else:
+            # We need to chunk these in bits of 100...
+            for index in range(0, total_need_resolution, 100):
+                to_resolve = needs_resolution[index : index + 100]
+                members = await guild.query_members(limit=100, user_ids=to_resolve, cache=True)
+                for member in members:
+                    yield member
+    
+    async def on_shard_resumed(self, shard_id):
+        log.info(f'Shard ID {shard_id} has resumed...')
+        self.resumes[shard_id].append(discord.utils.utcnow())
+    
+    async def close(self):
+        await super().close()
+    
+    async def process_commands(self, message):
+        ctx = await self.get_context(message, cls=Context)
+
+        if ctx.command is None:
+            return
+        
+        try:
+            await self.invoke(ctx)
+        except:
+            pass
+    
+    async def get_bot_inviter(self, guild: discord.Guild):
+        try:
+            async for i in guild.audit_logs(limit=1):
+                return i.user
+        except:
+            return guild.owner
+    
+    async def get_welcome_channel(self, guild: discord.Guild, inviter_or_guild_owner: Union[discord.User, discord.Member]):
+        try:
+            return guild.system_channel
+        except:
+            try:
+                text_channels_list = guild.text_channels
+                for i in text_channels_list:
+                    if i.permissions_for(self.user).send_messages:
+                        return i
+            except:
+                return inviter_or_guild_owner
 
 if __name__ == "__main__":
     try:

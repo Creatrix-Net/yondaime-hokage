@@ -8,14 +8,12 @@ from ...lib import (
     EmbedPaginator,
     ErrorEmbed,
     check_if_support_is_setup,
-    get_user,
-    return_support_channel,
 )
 
 
 def if_inside_support_channel(ctx):
     if check_if_support_is_setup(ctx):
-        if ctx.message.channel == return_support_channel(ctx):
+        if ctx.message.channel == ctx.return_support_channel():
             return True
         return False
     return False
@@ -43,7 +41,7 @@ class Support(commands.Cog):
     @commands.guild_only()
     async def support(self, ctx):
         """Open support ticket if enabled by the server admins"""
-        chan = return_support_channel(ctx)
+        chan = ctx.return_support_channel()
 
         if ctx.message.author == ctx.guild.owner:
             await ctx.send(
@@ -104,7 +102,7 @@ class Support(commands.Cog):
     @commands.guild_only()
     async def resolved(self, ctx, member: Union[int, discord.Member]):
         """Resolves the existing ticket!"""
-        member = get_user(member, ctx)
+        member = ctx.get_user(member)
         if member.bot:
             await ctx.send(
                 embed=ErrorEmbed(

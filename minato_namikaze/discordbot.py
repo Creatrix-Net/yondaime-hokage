@@ -1,32 +1,34 @@
 import ast
 import asyncio
-import aiohttp
 import logging
 import os
 import time
 from os.path import join
 from pathlib import Path
 
+import aiohttp
+
 try:
     import uvloop
 except ImportError:
     pass
+
+from collections import Counter, defaultdict, deque
+from typing import Optional, Union
 
 import discord
 import dotenv
 import sentry_sdk
 from bot_files.lib import (
     ChannelAndMessageId,
+    Context,
     Embed,
     PaginatedHelpCommand,
     PostStats,
     Tokens,
     format_dt,
-    Context
 )
-from typing import Optional, Union
 from discord.ext import commands
-from collections import Counter, deque, defaultdict
 from discord_together import DiscordTogether
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -75,15 +77,16 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         self.start_time = discord.utils.utcnow()
         self.github = token_get("GITHUB")
-        
+
         self._prev_events = deque(maxlen=10)
 
         # shard_id: List[datetime.datetime]
         # shows the last attempted IDENTIFYs and RESUMEs
         self.resumes = defaultdict(list)
         self.identifies = defaultdict(list)
-        
-        self.spam_control = commands.CooldownMapping.from_cooldown(10, 12.0, commands.BucketType.user)
+
+        self.spam_control = commands.CooldownMapping.from_cooldown(
+            10, 12.0, commands.BucketType.user)
         self._auto_spam_count = Counter()
 
         self.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(
@@ -199,7 +202,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 activity=discord.Activity(type=discord.ActivityType.watching,
                                           name="over Naruto"),
             )
-    
+
     async def query_member_named(self, guild, argument, *, cache=False):
         """Queries a member by their name, name + discrim, or nickname.
         Parameters
@@ -215,13 +218,20 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         Optional[Member]
             The member matching the query or None if not found.
         """
-        if len(argument) > 5 and argument[-5] == '#':
-            username, _, discriminator = argument.rpartition('#')
-            members = await guild.query_members(username, limit=100, cache=cache)
-            return discord.utils.get(members, name=username, discriminator=discriminator)
+        if len(argument) > 5 and argument[-5] == "#":
+            username, _, discriminator = argument.rpartition("#")
+            members = await guild.query_members(username,
+                                                limit=100,
+                                                cache=cache)
+            return discord.utils.get(members,
+                                     name=username,
+                                     discriminator=discriminator)
         else:
-            members = await guild.query_members(argument, limit=100, cache=cache)
-            return discord.utils.find(lambda m: m.name == argument or m.nick == argument, members)
+            members = await guild.query_members(argument,
+                                                limit=100,
+                                                cache=cache)
+            return discord.utils.find(
+                lambda m: m.name == argument or m.nick == argument, members)
 
     async def get_or_fetch_member(self, guild, member_id):
         """Looks up a member in cache or fetches if not found.
@@ -250,7 +260,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             else:
                 return member
 
-        members = await guild.query_members(limit=1, user_ids=[member_id], cache=True)
+        members = await guild.query_members(limit=1,
+                                            user_ids=[member_id],
+                                            cache=True)
         if not members:
             return None
         return members[0]
@@ -291,48 +303,58 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 else:
                     yield member
             else:
-                members = await guild.query_members(limit=1, user_ids=needs_resolution, cache=True)
+                members = await guild.query_members(limit=1,
+                                                    user_ids=needs_resolution,
+                                                    cache=True)
                 if members:
                     yield members[0]
         elif total_need_resolution <= 100:
             # Only a single resolution call needed here
-            resolved = await guild.query_members(limit=100, user_ids=needs_resolution, cache=True)
+            resolved = await guild.query_members(limit=100,
+                                                 user_ids=needs_resolution,
+                                                 cache=True)
             for member in resolved:
                 yield member
         else:
             # We need to chunk these in bits of 100...
             for index in range(0, total_need_resolution, 100):
-                to_resolve = needs_resolution[index : index + 100]
-                members = await guild.query_members(limit=100, user_ids=to_resolve, cache=True)
+                to_resolve = needs_resolution[index:index + 100]
+                members = await guild.query_members(limit=100,
+                                                    user_ids=to_resolve,
+                                                    cache=True)
                 for member in members:
                     yield member
-    
+
     async def on_shard_resumed(self, shard_id):
-        log.info(f'Shard ID {shard_id} has resumed...')
+        log.info(f"Shard ID {shard_id} has resumed...")
         self.resumes[shard_id].append(discord.utils.utcnow())
-    
+
     async def close(self):
         await super().close()
-    
+
     async def process_commands(self, message):
         ctx = await self.get_context(message, cls=Context)
 
         if ctx.command is None:
             return
-        
+
         try:
             await self.invoke(ctx)
         except:
             pass
-    
+
     async def get_bot_inviter(self, guild: discord.Guild):
         try:
             async for i in guild.audit_logs(limit=1):
                 return i.user
         except:
             return guild.owner
-    
-    async def get_welcome_channel(self, guild: discord.Guild, inviter_or_guild_owner: Union[discord.User, discord.Member]):
+
+    async def get_welcome_channel(
+        self,
+        guild: discord.Guild,
+        inviter_or_guild_owner: Union[discord.User, discord.Member],
+    ):
         try:
             return guild.system_channel
         except:
@@ -343,6 +365,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                         return i
             except:
                 return inviter_or_guild_owner
+
 
 if __name__ == "__main__":
     try:

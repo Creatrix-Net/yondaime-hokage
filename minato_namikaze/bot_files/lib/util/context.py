@@ -7,7 +7,7 @@ from typing import Optional, Union
 import discord
 from discord.ext import commands
 
-from . import SetupVars
+from . import SetupVars, ChannelAndMessageId
 
 
 class ConfirmationView(discord.ui.View):
@@ -175,31 +175,31 @@ class Context(commands.Context):
         else:
             return await self.send(content)
 
-    def return_ban_channel(self, guild: Optional[discord.Guild]):
+    def return_ban_channel(self, guild: discord.Guild):
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.ban.value,
         )
 
-    def return_unban_channel(self, guild: Optional[discord.Guild]):
+    def return_unban_channel(self, guild: discord.Guild):
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.unban.value,
         )
 
-    def return_feedback_channel(self, guild: Optional[discord.Guild]):
+    def return_feedback_channel(self, guild: discord.Guild):
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.feedback.value,
         )
 
-    def return_support_channel(self, guild: Optional[discord.Guild]):
+    def return_support_channel(self, guild: discord.Guild):
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.support.value,
         )
 
-    def return_warning_channel(self, guild: Optional[discord.Guild]):
+    def return_warning_channel(self, guild: discord.Guild):
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.warns.value,
@@ -210,7 +210,7 @@ class Context(commands.Context):
             user = self.bot.get_user(user)
         return user
 
-    async def get_dm(self, user: Optional[Union[int, discord.Member]]):
+    async def get_dm(self, user: Union[int, discord.Member]):
         try:
             if isinstance(user, int):
                 user = self.bot.get_or_fetch_member(user, ctx.guild)
@@ -225,3 +225,24 @@ class Context(commands.Context):
         if isinstance(role, int):
             role = discord.utils.get(self.guild.roles, id=role)
         return role
+    
+    def get_emoji(self, emoji: Union[int, discord.Emoji, discord.PartialEmoji]):
+        if isinstance(emoji, int):
+            emoji = discord.utils.get(self.guild.emojis, id=role)
+        return emoji
+    
+    def get_guild(self, guild: Union[int, discord.Guild, discord.PartialInviteGuild]):
+        if isinstance(guild, int):
+            guild = self.get_guild(guild)
+        return guild
+    
+    def get_config_emoji_by_name_or_id(self, emoji: Union[int, str]):
+        if isinstance(emoji, str):
+            guild1 = self.get_guild(ChannelAndMessageId.server_id.value)
+            emoji = discord.utils.get(guild1.emojis, name=emoji)
+            if not emoji:
+                guild2 = self.get_guild(ChannelAndMessageId.server_id2.value)
+                emoji = discord.utils.get(guild2.emojis, name=emoji)
+            return emoji
+        else:
+            return self.get_emoji(emoji)

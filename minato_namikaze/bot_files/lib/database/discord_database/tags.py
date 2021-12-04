@@ -25,16 +25,7 @@ def check_for_ctx(function):
     return wrap
 
 
-class TagTemplate(NamedTuple):
-    name: str
-    content: str
-    owner_id: int
-    server_id: int
-    created_at: datetime
-    uses: int
-
-
-class TagsDatabase:
+class TagsDatabase(NamedTuple):
     name: Optional[str]
     content: Optional[str]
     owner_id: Optional[int]
@@ -43,7 +34,7 @@ class TagsDatabase:
     uses: Optional[int]
     ctx: Context
 
-    def __init__(self, ):
+    def __init__(self):
         self.guild = ctx.get_guild(ChannelAndMessageId.server_id2.value)
         self.channel = discord.utils.get(self.guild.channels,
                                          id=ChannelAndMessageId.tags.value)

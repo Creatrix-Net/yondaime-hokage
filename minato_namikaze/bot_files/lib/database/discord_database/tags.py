@@ -33,6 +33,7 @@ class TagTemplate(NamedTuple):
     created_at: datetime
     uses: int
 
+
 class TagsDatabase:
     name: Optional[str]
     content: Optional[str]
@@ -41,10 +42,11 @@ class TagsDatabase:
     created_at: Optional[datetime]
     uses: Optional[int]
     ctx: Context
-    
-    def __init__(self,):
+
+    def __init__(self, ):
         self.guild = ctx.get_guild(ChannelAndMessageId.server_id2.value)
-        self.channel = discord.utils.get(self.guild.channels,id=ChannelAndMessageId.tags.value)
+        self.channel = discord.utils.get(self.guild.channels,
+                                         id=ChannelAndMessageId.tags.value)
 
     async def edit(self, tag_content: str):
         msg = await self.channel.fetch_message(self.tag_id)

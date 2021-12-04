@@ -18,8 +18,7 @@ def check_if_warning_system_setup(ctx):
 def check_if_support_is_setup(ctx):
     support_channel = bool(
         discord.utils.get(ctx.guild.text_channels,
-                          topic=SetupVars.support.value)
-    )
+                          topic=SetupVars.support.value))
     return support_channel
 
 
@@ -39,7 +38,8 @@ def check_if_unban_channel_setup(ctx):
 
 # check feedback
 def check_if_feedback_system_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.feedback.value):
+    if discord.utils.get(ctx.guild.text_channels,
+                         topic=SetupVars.feedback.value):
         return True
     return False
 
@@ -60,8 +60,8 @@ async def check_permissions(ctx, perms, *, check=all):
 
     resolved = ctx.channel.permissions_for(ctx.author)
     return check(
-        getattr(resolved, name, None) == value for name, value in perms.items()
-    )
+        getattr(resolved, name, None) == value
+        for name, value in perms.items())
 
 
 def has_permissions(*, check=all, **perms):
@@ -81,8 +81,8 @@ async def check_guild_permissions(ctx, perms, *, check=all):
 
     resolved = ctx.author.guild_permissions
     return check(
-        getattr(resolved, name, None) == value for name, value in perms.items()
-    )
+        getattr(resolved, name, None) == value
+        for name, value in perms.items())
 
 
 def has_guild_permissions(*, check=all, **perms):

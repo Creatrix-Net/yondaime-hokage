@@ -1,14 +1,25 @@
 from __future__ import annotations
 
-from typing import Optional, Union
-from discord.ext import commands
 import asyncio
-import discord
 import io
+from typing import Optional, Union
+
+import discord
+from discord.ext import commands
+
 from . import SetupVars
 
+
 class ConfirmationView(discord.ui.View):
-    def __init__(self, *, timeout: float, author_id: int, reacquire: bool, ctx: Context, delete_after: bool) -> None:
+    def __init__(
+        self,
+        *,
+        timeout: float,
+        author_id: int,
+        reacquire: bool,
+        ctx: Context,
+        delete_after: bool,
+    ) -> None:
         super().__init__(timeout=timeout)
         self.value: Optional[bool] = None
         self.delete_after: bool = delete_after
@@ -17,11 +28,13 @@ class ConfirmationView(discord.ui.View):
         self.reacquire: bool = reacquire
         self.message: Optional[discord.Message] = None
 
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+    async def interaction_check(self,
+                                interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.author_id:
             return True
         else:
-            await interaction.response.send_message('This confirmation dialog is not for you.', ephemeral=True)
+            await interaction.response.send_message(
+                "This confirmation dialog is not for you.", ephemeral=True)
             return False
 
     async def on_timeout(self) -> None:
@@ -30,16 +43,18 @@ class ConfirmationView(discord.ui.View):
         if self.delete_after and self.message:
             await self.message.delete()
 
-    @discord.ui.button(label='Confirm', style=discord.ButtonStyle.green)
-    async def confirm(self, button: discord.ui.Button, interaction: discord.Interaction):
+    @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green)
+    async def confirm(self, button: discord.ui.Button,
+                      interaction: discord.Interaction):
         self.value = True
         await interaction.response.defer()
         if self.delete_after:
             await interaction.delete_original_message()
         self.stop()
 
-    @discord.ui.button(label='Cancel', style=discord.ButtonStyle.red)
-    async def cancel(self, button: discord.ui.Button, interaction: discord.Interaction):
+    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red)
+    async def cancel(self, button: discord.ui.Button,
+                     interaction: discord.Interaction):
         self.value = False
         await interaction.response.defer()
         if self.delete_after:
@@ -50,23 +65,23 @@ class ConfirmationView(discord.ui.View):
 class Context(commands.Context):
     async def entry_to_code(self, entries):
         width = max(len(a) for a, b in entries)
-        output = ['```']
+        output = ["```"]
         for name, entry in entries:
-            output.append(f'{name:<{width}}: {entry}')
-        output.append('```')
-        await self.send('\n'.join(output))
+            output.append(f"{name:<{width}}: {entry}")
+        output.append("```")
+        await self.send("\n".join(output))
 
     async def indented_entry_to_code(self, entries):
         width = max(len(a) for a, b in entries)
-        output = ['```']
+        output = ["```"]
         for name, entry in entries:
-            output.append(f'\u200b{name:>{width}}: {entry}')
-        output.append('```')
-        await self.send('\n'.join(output))
+            output.append(f"\u200b{name:>{width}}: {entry}")
+        output.append("```")
+        await self.send("\n".join(output))
 
     def __repr__(self):
         # we need this for our cache key strategy
-        return '<Context>'
+        return "<Context>"
 
     @property
     def session(self):
@@ -125,13 +140,13 @@ class Context(commands.Context):
 
     def tick(self, opt, label=None):
         lookup = {
-            True: '<:greenTick:330090705336664065>',
-            False: '<:redTick:330090723011592193>',
-            None: '<:greyTick:563231201280917524>',
+            True: "<:greenTick:330090705336664065>",
+            False: "<:redTick:330090723011592193>",
+            None: "<:greyTick:563231201280917524>",
         }
-        emoji = lookup.get(opt, '<:redTick:330090723011592193>')
+        emoji = lookup.get(opt, "<:redTick:330090723011592193>")
         if label is not None:
-            return f'{emoji}: {label}'
+            return f"{emoji}: {label}"
         return emoji
 
     async def show_help(self, command=None):
@@ -139,7 +154,7 @@ class Context(commands.Context):
         If no command is given, then it'll show help for the current
         command.
         """
-        cmd = self.bot.get_command('help')
+        cmd = self.bot.get_command("help")
         command = command or self.command.qualified_name
         await self.invoke(cmd, command=command)
 
@@ -153,11 +168,13 @@ class Context(commands.Context):
 
         if len(content) > 2000:
             fp = io.BytesIO(content.encode())
-            kwargs.pop('file', None)
-            return await self.send(file=discord.File(fp, filename='message_too_long.txt'), **kwargs)
+            kwargs.pop("file", None)
+            return await self.send(file=discord.File(
+                fp, filename="message_too_long.txt"),
+                **kwargs)
         else:
             return await self.send(content)
-    
+
     def return_ban_channel(self, guild: Optional[discord.Guild]):
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
@@ -181,18 +198,18 @@ class Context(commands.Context):
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.support.value,
         )
-    
+
     def return_warning_channel(self, guild: Optional[discord.Guild]):
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.warns.value,
         )
-    
+
     def get_user(self, user: Union[int, discord.Member]):
         if isinstance(user, int):
             user = self.bot.get_user(user)
         return user
-    
+
     async def get_dm(self, user: Optional[Union[int, discord.Member]]):
         try:
             if isinstance(user, int):
@@ -203,9 +220,8 @@ class Context(commands.Context):
             if isinstance(user, int):
                 user = ctx.bot.get_user(user)
         return user.dm_channel if user.dm_channel else await user.create_dm()
-    
+
     def get_roles(self, role: Union[int, discord.Role]):
         if isinstance(role, int):
             role = discord.utils.get(self.guild.roles, id=role)
         return role
-    

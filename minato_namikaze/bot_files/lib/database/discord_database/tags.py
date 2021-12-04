@@ -32,38 +32,22 @@ class TagTemplate(NamedTuple):
     created_at: datetime
     uses: int
     
+    def give(self):
+        return self.name
+    
 
 class TagsDatabase:
-    __slots__ = [
-        "name",
-        "content",
-        "owner_id",
-        "server_id",
-        "created_at",
-        "uses",
-        "ctx",
-        "guild",
-        "channel",
-    ]
-
-    def __init__(
-        self,
-        tag_name: Optional[str],
-        creator_snowflake_id: Optional[int],
-        server_id: Optional[int],
-        content: Optional[str],
-        tag_id: Optional[int],
-        ctx: Context,
-    ):
-        self.tag_name = tag_name
-        self.creator_snowflake_id = creator_snowflake_id
-        self.server_id = server_id
-        self.content = content
-        self.tag_id = tag_id
-        self.ctx = ctx
+    name: Optional[str]
+    content: Optional[str]
+    owner_id: Optional[int]
+    server_id: Optional[int]
+    created_at: Optional[datetime]
+    uses: Optional[int]
+    ctx: Context
+    
+    def __init__(self,):
         self.guild = ctx.get_guild(ChannelAndMessageId.server_id2.value)
-        self.channel = discord.utils.get(self.guild.channels,
-                                         id=ChannelAndMessageId.tags.value)
+        self.channel = discord.utils.get(self.guild.channels,id=ChannelAndMessageId.tags.value)
 
     async def edit(self, tag_content: str):
         msg = await self.channel.fetch_message(self.tag_id)

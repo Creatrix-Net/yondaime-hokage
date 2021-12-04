@@ -12,7 +12,7 @@ from discord.ext import commands, owoify
 from gtts import gTTS
 from PIL import Image
 
-from ...lib import Embed, LinksAndVars, TimeConverter, get_user
+from ...lib import Embed, LinksAndVars, TimeConverter
 
 
 class Random(commands.Cog):
@@ -33,7 +33,7 @@ class Random(commands.Cog):
         `user` the user you would like to insult
         """
         if user:
-            user = get_user(user, ctx)
+            user = ctx.get_user(user)
             if user.id == self.bot.user.id:
                 user = ctx.message.author
                 bot_msg = [

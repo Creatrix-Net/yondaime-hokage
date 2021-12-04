@@ -44,42 +44,6 @@ def check_if_feedback_system_setup(ctx):
     return False
 
 
-# return warns
-def return_warning_channel(ctx=None, guild=None):
-    return discord.utils.get(
-        ctx.guild.text_channels if ctx else guild.text_channels,
-        topic=SetupVars.warns.value,
-    )
-
-
-def return_ban_channel(ctx=None, guild=None):
-    return discord.utils.get(
-        ctx.guild.text_channels if ctx else guild.text_channels,
-        topic=SetupVars.ban.value,
-    )
-
-
-def return_unban_channel(ctx=None, guild=None):
-    return discord.utils.get(
-        ctx.guild.text_channels if ctx else guild.text_channels,
-        topic=SetupVars.unban.value,
-    )
-
-
-def return_feedback_channel(ctx=None, guild=None):
-    return discord.utils.get(
-        ctx.guild.text_channels if ctx else guild.text_channels,
-        topic=SetupVars.feedback.value,
-    )
-
-
-def return_support_channel(ctx=None, guild=None):
-    return discord.utils.get(
-        ctx.guild.text_channels if ctx else guild.text_channels,
-        topic=SetupVars.support.value,
-    )
-
-
 # The permission system of the bot is based on a "just works" basis
 # You have permissions and the bot has permissions. If you meet the permissions
 # required to execute the command (and the bot does as well) then it goes through

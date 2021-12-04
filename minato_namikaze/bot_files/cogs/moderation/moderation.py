@@ -16,10 +16,7 @@ from ...lib import (
     MemberID,
     PostStats,
     check_if_warning_system_setup,
-    get_roles,
-    get_user,
     has_permissions,
-    return_warning_channel,
 )
 
 
@@ -291,8 +288,8 @@ class Moderation(commands.Cog):
         """Adds a role to a given user"""
         if member is None:
             member = ctx.message.author
-        member = get_user(member, ctx)
-        role = get_roles(role, ctx)
+        member = ctx.get_user(member)
+        role = ctx.get_roles(role)
         await member.add_roles(role)
         embed = discord.Embed(
             title="Added Roles",
@@ -309,7 +306,7 @@ class Moderation(commands.Cog):
         self, ctx, member: Union[int, discord.Member], *, reason: str = None
     ):
         """Warn a user"""
-        member = get_user(member, ctx)
+        member = ctx.get_user(member)
         e = ErrorEmbed(title="You have been warned!")
         e.add_field(
             name="**Responsible Moderator**:",
@@ -319,7 +316,7 @@ class Moderation(commands.Cog):
         if reason:
             e.add_field(name="**Reason**:", value=reason, inline=True)
 
-        warning_channel = return_warning_channel(ctx)
+        warning_channel = ctx.return_warning_channel(ctx.guild)
         await member.send(embed=e)
         await warning_channel.send(embed=e, content=member.mention)
         await ctx.send(
@@ -341,8 +338,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_warning_system_setup)
     async def warnlist(self, ctx, member: Optional[Union[int, discord.Member]] = None):
         """Get the no. of warns for a specified user"""
-        member = get_user(
-            member if member is not None else ctx.message.author, ctx)
+        member = ctx.get_user(member if member is not None else ctx.message.author)
         embed = discord.Embed(title="Type the below message in the search bar")
         search_image = discord.File(
             join(self.bot.minato_dir, "discord", "search.png"), filename="search.png"
@@ -350,7 +346,7 @@ class Moderation(commands.Cog):
         embed.set_image(url="attachment://search.png")
         await ctx.send(file=search_image, embed=embed)
 
-        warning_channel = return_warning_channel(ctx)
+        warning_channel = self.return_warning_channel(ctx.guild)
         message = f"mentions: {member}  in: {warning_channel}"
         await ctx.send(message)
 

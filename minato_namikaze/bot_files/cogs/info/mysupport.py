@@ -9,7 +9,7 @@ import psutil
 import pygit2
 from discord.ext import commands
 
-from ...lib import Embed, PrivacyPolicy, get_or_fetch_member, get_user
+from ...lib import Embed, PrivacyPolicy
 from ...lib import time_class as time
 
 
@@ -59,7 +59,7 @@ class MySupport(commands.Cog, name="My Support"):
 
         # To properly cache myself, I need to use the bot support server.
         support_guild = self.bot.get_guild(747480356625711204)
-        owner = await get_or_fetch_member(support_guild, self.bot.owner_id)
+        owner = await self.get_or_fetch_member(support_guild, self.bot.owner_id)
         embed.set_author(name=str(owner), icon_url=owner.display_avatar.url)
 
         # statistics
@@ -99,7 +99,7 @@ class MySupport(commands.Cog, name="My Support"):
         embed.add_field(name="Uptime", value=self.bot.uptime)
         embed.add_field(
             name="**Bot Developers:**",
-            value=f"[{get_user(self.bot.owner_id, ctx)}](https://discord.com/users/{self.bot.owner_id}/)",
+            value=f"[{ctx.get_user(self.bot.owner_id)}](https://discord.com/users/{self.bot.owner_id}/)",
         )
         embed.add_field(
             name="**More Info:**",

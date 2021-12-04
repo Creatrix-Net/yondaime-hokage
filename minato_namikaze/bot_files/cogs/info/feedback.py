@@ -2,11 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import command
 
-from ...lib import (
-    Embed,
-    ErrorEmbed,
-    check_if_feedback_system_setup,
-)
+from ...lib import Embed, ErrorEmbed, check_if_feedback_system_setup
 
 
 class Feedback(commands.Cog):
@@ -36,8 +32,7 @@ class Feedback(commands.Cog):
         e2 = discord.Embed(
             title=f"{ctx.author} has sent feedback",
             description=f"{feed}",
-            colour=ctx.author.color
-            or ctx.author.top_role.colour.value
+            colour=ctx.author.color or ctx.author.top_role.colour.value
             or discord.Color.random(),
         )
         await channel.send(embed=e2)

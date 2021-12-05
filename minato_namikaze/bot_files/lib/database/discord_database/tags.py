@@ -36,7 +36,8 @@ class TagsDatabase(NamedTuple):
 
     def __init__(self):
         self.channel = self.ctx.get_config_channel_by_name_or_id(
-            ChannelAndMessageId.tags.value)
+            ChannelAndMessageId.tags.value
+        )
 
     async def edit(self, tag_content: str):
         msg = await self.channel.fetch_message(self.tag_id)
@@ -44,10 +45,9 @@ class TagsDatabase(NamedTuple):
         await msg.edit(
             suppress=True,
             content="\n".join(message_cleanlist),
-            allowed_mentions=discord.AllowedMentions(everyone=False,
-                                                     users=False,
-                                                     roles=False,
-                                                     replied_user=False),
+            allowed_mentions=discord.AllowedMentions(
+                everyone=False, users=False, roles=False, replied_user=False
+            ),
         )
 
     @cache
@@ -66,7 +66,8 @@ class TagsDatabase(NamedTuple):
         tags_found = []
         if search_all:
             return await self.channel.history(
-                limit=None, oldest_first=oldest_first).flatten()
+                limit=None, oldest_first=oldest_first
+            ).flatten()
         if tag_name or self.tag_name:
 
             def predicate(i):
@@ -78,8 +79,7 @@ class TagsDatabase(NamedTuple):
         if creator_snowflake_id or self.creator_snowflake_id:
 
             def predicate(i):
-                return i.content() in (creator_snowflake_id,
-                                       self.creator_snowflake_id)
+                return i.content() in (creator_snowflake_id, self.creator_snowflake_id)
 
             tag_found = await self.channel.history(limit=None).get(predicate)
             if tag_found:
@@ -113,18 +113,19 @@ class TagsDatabase(NamedTuple):
         )
         await self.channel.send(
             content=local_format_tag,
-            allowed_mentions=discord.AllowedMentions(everyone=False,
-                                                     users=False,
-                                                     roles=False,
-                                                     replied_user=False),
+            allowed_mentions=discord.AllowedMentions(
+                everyone=False, users=False, roles=False, replied_user=False
+            ),
         )
 
     @classmethod
     @cache
     @check_for_ctx
     async def give_random_tag(self):
-        search = await search(oldest_first=random.choice(
-            [True, False], limit=random.randint(0, 500)))
+        search = await search(
+            oldest_first=random.choice(
+                [True, False], limit=random.randint(0, 500))
+        )
         return random.choice(search)
 
     @staticmethod

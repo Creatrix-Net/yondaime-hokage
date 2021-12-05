@@ -35,7 +35,8 @@ class TagsDatabase(NamedTuple):
     ctx: Context
 
     def __init__(self):
-        self.channel = self.ctx.get_config_channel_by_name_or_id(ChannelAndMessageId.tags.value)
+        self.channel = self.ctx.get_config_channel_by_name_or_id(
+            ChannelAndMessageId.tags.value)
 
     async def edit(self, tag_content: str):
         msg = await self.channel.fetch_message(self.tag_id)

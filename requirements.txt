@@ -15,7 +15,7 @@ ffmpeg==1.4
 gTTS==2.2.3
 mal-api==0.4.0
 mystbin.py==2.2.0
-orjson==3.6.3
+orjson==3.6.5
 parsedatetime==2.6
 Pillow==8.4.0
 psutil==5.8.0

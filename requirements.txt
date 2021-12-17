@@ -31,6 +31,6 @@ soupsieve==2.3.1
 spotify==0.10.2
 SQLAlchemy==1.4.27
 TenGiphPy==2.5.0
-youtube-dl==2021.6.6
+youtube-dl==2021.12.17
 youtube-search==2.1.0
 uvloop==0.16.0; sys_platform != "win32"

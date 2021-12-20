@@ -9,10 +9,7 @@ from ...util import ChannelAndMessageId
 class Badges:
     def __init__(self, ctx: Context):
         self.ctx = ctx
-        self.guild = ctx.get_guild(ChannelAndMessageId.server_id2.value)
-        self.channel = discord.utils.get(
-            self.guild.channels, id=ChannelAndMessageId.badges_channel.value
-        )
+        self.channel = ctx.get_config_channel_by_name_or_id(ChannelAndMessageId.badges_channel.value)
 
     async def get_all_badges(self) -> list:
         return [

@@ -71,22 +71,22 @@ class ShinobiMatch(list, enum.Enum):
 
 @enum.unique
 class ChannelAndMessageId(enum.IntEnum):
-    shinobi_character_channel = 869433768593719327
-    welcome_channel = 747660913116577903  # This is only for the support server
-    roles_channel = 777189846862266408
-    badges_channel = 880032497130405928
+    shinobi_character_channel = 922037658589466675
+    
+    welcome_channel = 920190310657699892  # This is only for the support server
+    roles_channel = 920190310657699893 # This is  for the private server
+    
+    badges_channel = 920536143458598930
+    backup_channel = 922544732918415390
+    error_logs_channel = 920190310942908513
 
-    error_logs_channel = 830366314761420821
+    server_id = 920190307595874304
+    server_id2 = 920536143244709889
 
-    server_id = 747480356625711204
-    server_id2 = 869085099470225508
+    tags = 920536143458598931
 
-    tags = 907215293896613928
-
-    help_smile_emoji = 848961696047300649
-
-    restartlog_channel1 = 819128718152695878
-    restartlog_channel2 = 869238107118112810
+    restartlog_channel1 = 920190310942908508
+    restartlog_channel2 = 920536143458598926
 
 
 class Tokens(enum.Enum):
@@ -125,3 +125,12 @@ class SetupVars(str, enum.Enum):
     ban = "This channel will be used to log the server bans."
     unban = "Unbans of the server will be logged here."
     feedback = "This channel will be used to log the feedbacks given by members."
+    
+
+class RaidMode(enum.Enum):
+    off = 0
+    on = 1
+    strict = 2
+
+    def __str__(self):
+        return self.name

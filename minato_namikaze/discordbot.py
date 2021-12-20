@@ -145,14 +145,26 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         for filename in os.listdir(cog_dir):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
-                    if i.endswith(".py") and i.lower() != "__init__.py":
+                    if i.endswith(".py") and i.lower() != "raid.py":
                         self.load_extension(
                             f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
             else:
-                if filename.endswith(
-                        ".py") and filename.lower() != "__init__.py":
+                if filename.endswith(".py") and filename.lower() != "raid.py":
                     self.load_extension(f"bot_files.cogs.{filename[:-3]}")
-        self.togetherControl = await DiscordTogether(Tokens.token.value)
+        
+        #slash command
+        slash_cog_dir = Path(__file__).resolve(strict=True).parent / join(
+            "bot_files", "slash_commands")
+        for filename in os.listdir(slash_cog_dir):
+            if os.path.isdir(cog_dir / filename):
+                for i in os.listdir(cog_dir / filename):
+                    if i.endswith(".py") and i.lower() != "__init__.py":
+                        self.load_extension(
+                            f'bot_files.slash_commands.{filename.strip(" ")}.{i[:-3]}')
+            else:
+                if filename.endswith(".py") and filename.lower() != "__init__.py":
+                    self.load_extension(f"bot_files.slash_commands.{filename[:-3]}")
+        
         difference = int(round(time.time() - self.start_time.timestamp()))
         stats = (self.get_channel(
             ChannelAndMessageId.restartlog_channel1.value)
@@ -202,6 +214,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 activity=discord.Activity(type=discord.ActivityType.watching,
                                           name="over Naruto"),
             )
+
 
     async def query_member_named(self, guild, argument, *, cache=False):
         """Queries a member by their name, name + discrim, or nickname.

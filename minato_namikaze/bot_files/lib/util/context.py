@@ -7,7 +7,7 @@ from typing import Optional, Union
 import discord
 from discord.ext import commands
 
-from . import ChannelAndMessageId, SetupVars
+from .vars import ChannelAndMessageId, SetupVars
 
 
 class ConfirmationView(discord.ui.View):

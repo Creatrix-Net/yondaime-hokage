@@ -1,12 +1,12 @@
 import datetime
 import re
 import shlex
-from collections import Counter
+from collections import Counter, defaultdict
 from os.path import join
 from typing import Optional, Union
 
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 from ...lib import (
     ActionReason,
@@ -27,8 +27,7 @@ class Moderation(commands.Cog):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",
-                                    id=876846223926128701)
+        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
 
     # set delay
     @commands.command()

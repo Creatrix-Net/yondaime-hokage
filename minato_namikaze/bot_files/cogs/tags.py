@@ -12,9 +12,9 @@ import shlex
 import traceback
 
 import discord
-from discord.ext import commands, menus
+from discord.ext import commands
 
-from ..lib import SimplePages, TagsDatabase, checks
+from ..lib import SimplePages, TagsDatabase, has_guild_permissions, UniqueViolationError, TagsDoesNotExistsError
 
 
 class Arguments(argparse.ArgumentParser):
@@ -168,86 +168,35 @@ class Tags(commands.Cog):
             return await self.tags_database.search(search_all=True)
         return await self.tags_database.search(server_id=guild.id)
 
-    async def get_random_tag(self, guild, *, connection=None):
+    async def get_random_tag(self, guild, *args):
         """Returns a random tag."""
-
-        con = connection or self.bot.pool
-        pred = "location_id IS NULL" if guild is None else "location_id=$1"
-        query = f"""SELECT name, content
-                    FROM tags
-                    WHERE {pred}
-                    OFFSET FLOOR(RANDOM() * (
-                        SELECT COUNT(*)
-                        FROM tags
-                        WHERE {pred}
-                    ))
-                    LIMIT 1;
-                 """
-
         if guild is None:
-            return await con.fetchrow(query)
-        return await con.fetchrow(query, guild.id)
+            return await self.tags_database.give_random_tag()
+        return await self.tags_database.give_random_tag(guild.id)
 
-    async def get_tag(self, guild_id, name, *, connection=None):
+    async def get_tag(self, guild_id, *,name):
         def disambiguate(rows, query):
             if rows is None or len(rows) == 0:
                 raise RuntimeError("Tag not found.")
 
             names = "\n".join(r["name"] for r in rows)
             raise RuntimeError(f"Tag not found. Did you mean...\n{names}")
-
-        con = connection or self.bot.pool
-
-        query = """SELECT tags.name, tags.content
-                   FROM tag_lookup
-                   INNER JOIN tags ON tags.id = tag_lookup.tag_id
-                   WHERE tag_lookup.location_id=$1 AND LOWER(tag_lookup.name)=$2;
-                """
-
-        row = await con.fetchrow(query, guild_id, name)
+        
+        row = await self.tags_database.do_exact_search(server_id=guild_id,tag_name=name)
         if row is None:
-            query = """SELECT     tag_lookup.name
-                               FROM       tag_lookup
-                               WHERE      tag_lookup.location_id=$1 AND tag_lookup.name % $2
-                               ORDER BY   similarity(tag_lookup.name, $2) DESC
-                               LIMIT 3;
-                            """
-
-            return disambiguate(await con.fetch(query, guild_id, name), name)
+            return disambiguate(self.tags_database.search(server_id=guild_id,tag_name=name, get_only_name=True), name)
         return row
 
-    @staticmethod
-    async def create_tag(ctx, name, content):
-        # due to our denormalized design, I need to insert the tag in two different
-        # tables, make sure it's in a transaction so if one of the inserts fail I
-        # can act upon it
-        query = """WITH tag_insert AS (
-                        INSERT INTO tags (name, content, owner_id, location_id)
-                        VALUES ($1, $2, $3, $4)
-                        RETURNING id
-                    )
-                    INSERT INTO tag_lookup (name, owner_id, location_id, tag_id)
-                    VALUES ($1, $3, $4, (SELECT id FROM tag_insert));
-                """
-
-        # since I'm checking for the exception type and acting on it, I need
-        # to use the manual transaction blocks
-        async with ctx.acquire():
-            tr = ctx.db.transaction()
-            await tr.start()
-
-            try:
-                await ctx.db.execute(query, name, content, ctx.author.id,
-                                     ctx.guild.id)
-            except asyncpg.UniqueViolationError:
-                await tr.rollback()
-                await ctx.send("This tag already exists.")
-            except:
-                await tr.rollback()
-                await ctx.send("Could not create tag.")
-            else:
-                await tr.commit()
-                await ctx.send(f"Tag {name} successfully created.")
+    async def create_tag(self, ctx, name, content):
+        tag_model = TagsDatabase(name=name,content=content, owner_id=ctx.author.id, server_id=ctx.guild.id,ctx=bot)
+        try:
+            await tag_model.save()
+        except UniqueViolationError:
+            await ctx.send("This tag already exists.")
+        except:
+            await ctx.send("Could not create tag.")
+        else:
+            await ctx.send(f"Tag {name} successfully created.")
 
     def is_tag_being_made(self, guild_id, name):
         try:
@@ -280,15 +229,15 @@ class Tags(commands.Cog):
         """
 
         try:
-            tag = await self.get_tag(ctx.guild.id, name, connection=ctx.db)
+            tag = await self.get_tag(ctx.guild.id, name)
         except RuntimeError as e:
             return await ctx.send(e)
 
         await ctx.send(tag["content"], reference=ctx.replied_reference)
 
         # update the usage
-        query = "UPDATE tags SET uses = uses + 1 WHERE name = $1 AND (location_id=$2 OR location_id IS NULL);"
-        await ctx.db.execute(query, tag["name"], ctx.guild.id)
+        tags_search_model = TagsDatabase(ctx=ctx).do_exact_search(name = tag["name"])
+        await TagsDatabase(ctx=ctx).increase_usage(name=tag["name"], server_id = ctx.guild.id)
 
     @tag.command(aliases=["add"])
     @suggest_box()
@@ -301,8 +250,7 @@ class Tags(commands.Cog):
         """
 
         if self.is_tag_being_made(ctx.guild.id, name):
-            return await ctx.send(
-                "This tag is currently being made by someone.")
+            return await ctx.send("This tag is currently being made by someone.")
 
         if len(content) > 2000:
             return await ctx.send(
@@ -310,43 +258,31 @@ class Tags(commands.Cog):
 
         await self.create_tag(ctx, name, content)
 
-    @staticmethod
     @tag.command()
     @suggest_box()
-    async def alias(ctx, new_name: TagName, *, old_name: TagName):
-        """Creates an alias for a pre-existing tag.
+    async def alias(self, ctx, new_name: TagName, *, old_name: TagName):
+        """
+        Creates an alias for a pre-existing tag.
         You own the tag alias. However, when the original
         tag is deleted the alias is deleted as well.
-        Tag aliases cannot be edited. You must delete
-        the alias and remake it to point it to another
-        location.
         """
-
-        query = """INSERT INTO tag_lookup (name, owner_id, location_id, tag_id)
-                   SELECT $1, $4, tag_lookup.location_id, tag_lookup.tag_id
-                   FROM tag_lookup
-                   WHERE tag_lookup.location_id=$3 AND LOWER(tag_lookup.name)=$2;
-                """
-
         try:
-            status = await ctx.db.execute(query, new_name, old_name.lower(),
-                                          ctx.guild.id, ctx.author.id)
-        except asyncpg.UniqueViolationError:
-            await ctx.send("A tag with this name already exists.")
+            await self.tags_database.add_aliases(tag_name=old_name, server_id=ctx.guild.id)
+        except UniqueViolationError:
+            await ctx.send('That aliases already exists')
+        except TagsDoesNotExistsError as e:
+            await ctx.send(e)
+        except:
+            await ctx.send('Unable to add the aliases')
         else:
-            # The status returns INSERT N M, where M is the number of rows inserted.
-            if status[-1] == "0":
-                await ctx.send(
-                    f'A tag with the name of "{old_name}" does not exist.')
-            else:
-                await ctx.send(
-                    f'Tag alias "{new_name}" that points to "{old_name}" successfully created.'
-                )
+            await ctx.send(f'{new_name} alias added to the {old_name}')
+        
 
     @tag.command(ignore_extra=False)
     @suggest_box()
     async def make(self, ctx):
-        """Interactive makes a tag for you.
+        """
+        Interactive makes a tag for you.
         This walks you through the process of creating a tag with
         its name and its content. This works similar to the tag
         create command.
@@ -359,9 +295,6 @@ class Tags(commands.Cog):
 
         def check(msg):
             return msg.author == ctx.author and ctx.channel == msg.channel
-
-        # release the connection back to the pool to wait for our user
-        await ctx.release()
 
         try:
             name = await self.bot.wait_for("message",
@@ -384,16 +317,7 @@ class Tags(commands.Cog):
                 "Sorry. This tag is currently being made by someone. "
                 f'Redo the command "{ctx.prefix}tag make" to retry.')
 
-        # reacquire our connection since we need the query
-        await ctx.acquire()
-
-        # it's technically kind of expensive to do two queries like this
-        # i.e. one to check if it exists and then another that does the insert
-        # while also checking if it exists due to the constraints,
-        # however for UX reasons I might as well do it.
-
-        query = """SELECT 1 FROM tags WHERE location_id=$1 AND LOWER(name)=$2;"""
-        row = await ctx.db.fetchrow(query, ctx.guild.id, name.lower())
+        row = await self.tags_database.do_exact_search(server_id=ctx.guild.id,tag_name=name.lower())
         if row is not None:
             return await ctx.send(
                 "Sorry. A tag with that name already exists. "
@@ -404,9 +328,6 @@ class Tags(commands.Cog):
             f"Neat. So the name is {name}. What about the tag's content? "
             f"**You can type {ctx.prefix}abort to abort the tag make process.**"
         )
-
-        # release while we wait for response
-        await ctx.release()
 
         try:
             msg = await self.bot.wait_for("message",
@@ -420,8 +341,7 @@ class Tags(commands.Cog):
             self.remove_in_progress_tag(ctx.guild.id, name)
             return await ctx.send("Aborting.")
         if msg.content:
-            clean_content = await commands.clean_content().convert(
-                ctx, msg.content)
+            clean_content = await commands.clean_content().convert(tx, msg.content)
         else:
             # fast path I guess?
             clean_content = msg.content
@@ -438,9 +358,8 @@ class Tags(commands.Cog):
         finally:
             self.remove_in_progress_tag(ctx.guild.id, name)
 
-    @staticmethod
     @make.error
-    async def tag_make_error(ctx, error):
+    async def tag_make_error(self, ctx, error):
         if isinstance(error, commands.TooManyArguments):
             await ctx.send(f"Please call just {ctx.prefix}tag make")
 
@@ -599,10 +518,9 @@ class Tags(commands.Cog):
         else:
             await self.member_tag_stats(ctx, member)
 
-    @staticmethod
     @tag.command()
     @suggest_box()
-    async def edit(ctx, name: TagName(lower=True), *,
+    async def edit(self, ctx, name: TagName(lower=True), *,
                    content: commands.clean_content):
         """Modifies an existing tag that you own.
         This command completely replaces the original text. If
@@ -798,7 +716,7 @@ class Tags(commands.Cog):
         """
 
         try:
-            tag = await self.get_tag(ctx.guild.id, name, connection=ctx.db)
+            tag = await self.get_tag(ctx.guild.id, name)
         except RuntimeError as e:
             return await ctx.send(e)
 
@@ -806,10 +724,9 @@ class Tags(commands.Cog):
         await ctx.safe_send(first_step.replace("<", "\\<"),
                             escape_mentions=False)
 
-    @staticmethod
     @tag.command(name="list")
     @suggest_box()
-    async def _list(ctx, *, member: TagMember = None):
+    async def _list(self, ctx, *, member: TagMember = None):
         """Lists all the tags that belong to you or someone else."""
 
         member = member or ctx.author
@@ -903,11 +820,10 @@ class Tags(commands.Cog):
         else:
             await ctx.send("This server has no server-specific tags.")
 
-    @staticmethod
     @tag.command()
     @suggest_box()
-    @checks.has_guild_permissions(manage_messages=True)
-    async def purge(ctx, member: TagMember):
+    @has_guild_permissions(manage_messages=True)
+    async def purge(self, ctx, member: TagMember):
         """Removes all server-specific tags by a user.
         You must have server-wide Manage Messages permissions to use this.
         """
@@ -933,10 +849,9 @@ class Tags(commands.Cog):
         await ctx.send(
             f"Successfully removed all {count} tags that belong to {member}.")
 
-    @staticmethod
     @tag.command()
     @suggest_box()
-    async def search(ctx, *, query: commands.clean_content):
+    async def search(self, ctx, *, query: commands.clean_content):
         """Searches for a tag.
         The query must be at least 3 characters.
         """
@@ -995,10 +910,9 @@ class Tags(commands.Cog):
 
             await ctx.send("Successfully transferred tag ownership to you.")
 
-    @staticmethod
     @tag.command()
     @suggest_box()
-    async def transfer(ctx, member: discord.Member, *, tag: TagName):
+    async def transfer(self, ctx, member: discord.Member, *, tag: TagName):
         """Transfers a tag to another member.
         You must own the tag before doing this.
         """
@@ -1021,10 +935,9 @@ class Tags(commands.Cog):
 
         await ctx.send(f"Successfully transferred tag ownership to {member}.")
 
-    @staticmethod
     @tag.group()
     @can_use_box()
-    async def box(ctx):
+    async def box(self, ctx):
         """The tag box is where global tags are stored.
         The tags in the box are not part of your server's tag list
         unless you explicitly enable them. As a result, only those
@@ -1037,9 +950,8 @@ class Tags(commands.Cog):
         if ctx.invoked_subcommand is None or ctx.subcommand_passed == "box":
             await ctx.send_help("tag box")
 
-    @staticmethod
     @box.command(name="put")
-    async def box_put(ctx, name: TagName, *, content: commands.clean_content):
+    async def box_put(self, ctx, name: TagName, *, content: commands.clean_content):
         """Puts a tag in the tag box.
         These are global tags that anyone can opt-in to receiving
         via the "tag box take" subcommand.
@@ -1075,9 +987,8 @@ class Tags(commands.Cog):
 
         await ctx.invoke(self.create, name=tag["name"], content=tag["content"])
 
-    @staticmethod
     @box.command(name="show", aliases=["get"])
-    async def box_show(ctx, *, name: TagName(lower=True)):
+    async def box_show(self, ctx, *, name: TagName(lower=True)):
         """Shows a tag from the tag box."""
 
         query = "SELECT name, content FROM tags WHERE LOWER(name)=$1 AND location_id IS NULL;"
@@ -1093,9 +1004,8 @@ class Tags(commands.Cog):
         query = "UPDATE tags SET uses = uses + 1 WHERE name=$1 AND location_id IS NULL;"
         await ctx.db.execute(query, tag["name"])
 
-    @staticmethod
     @box.command(name="edit", aliases=["change"])
-    async def box_edit(ctx, name: TagName(lower=True), *,
+    async def box_edit(self, ctx, name: TagName(lower=True), *,
                        content: commands.clean_content):
         """Edits tag from the tag box.
         You must own the tag to edit it.
@@ -1112,9 +1022,8 @@ class Tags(commands.Cog):
         else:
             await ctx.send("Successfully edited tag.")
 
-    @staticmethod
     @box.command(name="delete", aliases=["remove"])
-    async def box_delete(ctx, *, name: TagName(lower=True)):
+    async def box_delete(self, ctx, *, name: TagName(lower=True)):
         """Deletes a tag from the tag box.
         You must own the tag to delete it.
         Deleting the tag does not affect tags where people
@@ -1167,9 +1076,8 @@ class Tags(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @staticmethod
     @box.command(name="search")
-    async def box_search(ctx, *, query: commands.clean_content):
+    async def box_search(self, ctx, *, query: commands.clean_content):
         """Searches for a tag in the tag box.
         The query must be at least 3 characters long.
         """
@@ -1252,9 +1160,8 @@ class Tags(commands.Cog):
         embed.set_footer(text="These statistics are for the tag box.")
         await ctx.send(embed=embed)
 
-    @staticmethod
     @box.command(name="list")
-    async def box_list(ctx, *, user: discord.User = None):
+    async def box_list(self, ctx, *, user: discord.User = None):
         """Lists all the tags in the box that belong to you or someone else.
         Unlike the regular tag list command, this one is sorted by uses.
         """

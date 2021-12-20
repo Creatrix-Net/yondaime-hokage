@@ -14,7 +14,13 @@ import traceback
 import discord
 from discord.ext import commands
 
-from ..lib import SimplePages, TagsDatabase, has_guild_permissions, UniqueViolationError, TagsDoesNotExistsError
+from ..lib import (
+    SimplePages,
+    TagsDatabase,
+    TagsDoesNotExistsError,
+    UniqueViolationError,
+    has_guild_permissions,
+)
 
 
 class Arguments(argparse.ArgumentParser):
@@ -174,21 +180,33 @@ class Tags(commands.Cog):
             return await self.tags_database.give_random_tag()
         return await self.tags_database.give_random_tag(guild.id)
 
-    async def get_tag(self, guild_id, *,name):
+    async def get_tag(self, guild_id, *, name):
         def disambiguate(rows, query):
             if rows is None or len(rows) == 0:
                 raise RuntimeError("Tag not found.")
 
             names = "\n".join(r["name"] for r in rows)
             raise RuntimeError(f"Tag not found. Did you mean...\n{names}")
-        
-        row = await self.tags_database.do_exact_search(server_id=guild_id,tag_name=name)
+
+        row = await self.tags_database.do_exact_search(server_id=guild_id,
+                                                       tag_name=name)
         if row is None:
-            return disambiguate(self.tags_database.search(server_id=guild_id,tag_name=name, get_only_name=True), name)
+            return disambiguate(
+                self.tags_database.search(server_id=guild_id,
+                                          tag_name=name,
+                                          get_only_name=True),
+                name,
+            )
         return row
 
     async def create_tag(self, ctx, name, content):
-        tag_model = TagsDatabase(name=name,content=content, owner_id=ctx.author.id, server_id=ctx.guild.id,ctx=bot)
+        tag_model = TagsDatabase(
+            name=name,
+            content=content,
+            owner_id=ctx.author.id,
+            server_id=ctx.guild.id,
+            ctx=bot,
+        )
         try:
             await tag_model.save()
         except UniqueViolationError:
@@ -236,8 +254,10 @@ class Tags(commands.Cog):
         await ctx.send(tag["content"], reference=ctx.replied_reference)
 
         # update the usage
-        tags_search_model = TagsDatabase(ctx=ctx).do_exact_search(name = tag["name"])
-        await TagsDatabase(ctx=ctx).increase_usage(name=tag["name"], server_id = ctx.guild.id)
+        tags_search_model = TagsDatabase(ctx=ctx).do_exact_search(
+            name=tag["name"])
+        await TagsDatabase(ctx=ctx).increase_usage(name=tag["name"],
+                                                   server_id=ctx.guild.id)
 
     @tag.command(aliases=["add"])
     @suggest_box()
@@ -250,7 +270,8 @@ class Tags(commands.Cog):
         """
 
         if self.is_tag_being_made(ctx.guild.id, name):
-            return await ctx.send("This tag is currently being made by someone.")
+            return await ctx.send(
+                "This tag is currently being made by someone.")
 
         if len(content) > 2000:
             return await ctx.send(
@@ -267,16 +288,16 @@ class Tags(commands.Cog):
         tag is deleted the alias is deleted as well.
         """
         try:
-            await self.tags_database.add_aliases(tag_name=old_name, server_id=ctx.guild.id)
+            await self.tags_database.add_aliases(tag_name=old_name,
+                                                 server_id=ctx.guild.id)
         except UniqueViolationError:
-            await ctx.send('That aliases already exists')
+            await ctx.send("That aliases already exists")
         except TagsDoesNotExistsError as e:
             await ctx.send(e)
         except:
-            await ctx.send('Unable to add the aliases')
+            await ctx.send("Unable to add the aliases")
         else:
-            await ctx.send(f'{new_name} alias added to the {old_name}')
-        
+            await ctx.send(f"{new_name} alias added to the {old_name}")
 
     @tag.command(ignore_extra=False)
     @suggest_box()
@@ -317,7 +338,8 @@ class Tags(commands.Cog):
                 "Sorry. This tag is currently being made by someone. "
                 f'Redo the command "{ctx.prefix}tag make" to retry.')
 
-        row = await self.tags_database.do_exact_search(server_id=ctx.guild.id,tag_name=name.lower())
+        row = await self.tags_database.do_exact_search(server_id=ctx.guild.id,
+                                                       tag_name=name.lower())
         if row is not None:
             return await ctx.send(
                 "Sorry. A tag with that name already exists. "
@@ -341,7 +363,8 @@ class Tags(commands.Cog):
             self.remove_in_progress_tag(ctx.guild.id, name)
             return await ctx.send("Aborting.")
         if msg.content:
-            clean_content = await commands.clean_content().convert(tx, msg.content)
+            clean_content = await commands.clean_content().convert(
+                tx, msg.content)
         else:
             # fast path I guess?
             clean_content = msg.content
@@ -951,7 +974,8 @@ class Tags(commands.Cog):
             await ctx.send_help("tag box")
 
     @box.command(name="put")
-    async def box_put(self, ctx, name: TagName, *, content: commands.clean_content):
+    async def box_put(self, ctx, name: TagName, *,
+                      content: commands.clean_content):
         """Puts a tag in the tag box.
         These are global tags that anyone can opt-in to receiving
         via the "tag box take" subcommand.

@@ -72,10 +72,10 @@ class ShinobiMatch(list, enum.Enum):
 @enum.unique
 class ChannelAndMessageId(enum.IntEnum):
     shinobi_character_channel = 922037658589466675
-    
+
     welcome_channel = 920190310657699892  # This is only for the support server
-    roles_channel = 920190310657699893 # This is  for the private server
-    
+    roles_channel = 920190310657699893  # This is  for the private server
+
     badges_channel = 920536143458598930
     backup_channel = 922544732918415390
     error_logs_channel = 920190310942908513
@@ -125,7 +125,7 @@ class SetupVars(str, enum.Enum):
     ban = "This channel will be used to log the server bans."
     unban = "Unbans of the server will be logged here."
     feedback = "This channel will be used to log the feedbacks given by members."
-    
+
 
 class RaidMode(enum.Enum):
     off = 0

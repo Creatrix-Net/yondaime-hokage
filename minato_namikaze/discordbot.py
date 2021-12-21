@@ -27,12 +27,14 @@ from bot_files.lib import (
     PostStats,
     Tokens,
     format_dt,
+    format_relative
 )
 from discord.ext import commands
 from discord_together import DiscordTogether
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
+from datetime import datetime
 from sentry_sdk.integrations.threading import ThreadingIntegration
 
 log = logging.getLogger(__name__)
@@ -95,7 +97,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.minato_dir = Path(__file__).resolve(strict=True).parent / join(
             "bot_files", "discord_bot_images")
         self.minato_gif = list(os.listdir(join(self.minato_dir, "minato")))
-        self.uptime = format_dt(self.start_time, "R")
+        self.uptime = format_relative(self.start_time)
         super().__init__(
             command_prefix=get_prefix,
             description="Konichiwa, myself Minato Namikaze, Konohagakure Yondaime Hokage, I try my best to do every work as a Hokage!",
@@ -151,6 +153,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             else:
                 if filename.endswith(".py") and filename.lower() != "raid.py":
                     self.load_extension(f"bot_files.cogs.{filename[:-3]}")
+        self.load_extension('jishaku')
         
         #slash command
         slash_cog_dir = Path(__file__).resolve(strict=True).parent / join(
@@ -172,7 +175,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             ChannelAndMessageId.restartlog_channel2.value))
         e = Embed(
             title="Bot Loaded!",
-            description=f"Bot ready by **{time.ctime()}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
+            description=f"Bot ready by **{format_dt(datetime.now(), 'R',True)}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
         )
         e.set_thumbnail(url=self.user.avatar.url)
 

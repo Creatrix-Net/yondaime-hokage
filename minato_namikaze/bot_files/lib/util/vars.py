@@ -7,8 +7,8 @@ from typing import List, Union
 
 import dotenv
 
-dotenv_file = Path(
-    __file__).resolve().parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(__file__).resolve(
+).parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):
@@ -17,8 +17,9 @@ def token_get(tokenname):
     return os.environ.get(tokenname, "False").strip("\n")
 
 
-BASE_DIR = (Path(__file__).resolve().parent.parent.parent
-            )  # In minato_namikaze/bot_files folder
+BASE_DIR = (
+    Path(__file__).resolve().parent.parent.parent
+)  # In minato_namikaze/bot_files folder
 
 DEFAULT_COMMAND_SELECT_LENGTH = 25
 
@@ -51,8 +52,7 @@ class ShinobiMatch(list, enum.Enum):
 
     name_exclusion = character_side_exclude + [
         "naruto",
-        "sasuke"
-        "jiraya",
+        "sasuke" "jiraya",
         "namikaze",
         "sarutobi",
         "yamanaka",
@@ -72,10 +72,10 @@ class ShinobiMatch(list, enum.Enum):
 @enum.unique
 class ChannelAndMessageId(enum.IntEnum):
     shinobi_character_channel = 922037658589466675
-    
+
     welcome_channel = 920190310657699892  # This is only for the support server
-    roles_channel = 920190310657699893 # This is  for the private server
-    
+    roles_channel = 920190310657699893  # This is  for the private server
+
     badges_channel = 920536143458598930
     backup_channel = 922544732918415390
     error_logs_channel = 920190310942908513
@@ -108,15 +108,16 @@ class LinksAndVars(enum.Enum):
     timeout = 3.0
 
     with open(
-            os.path.join(
-                Path(__file__).resolve().parent.parent, "text",
-                "insult.txt")) as f:
+        os.path.join(Path(__file__).resolve().parent.parent,
+                     "text", "insult.txt")
+    ) as f:
         insults: List[str] = list(
             map(
-                lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip(
-                    "\\"),
+                lambda a: a.strip(" ").strip("\n").strip(
+                    "'").strip('"').strip("\\"),
                 f.read().split(","),
-            ))
+            )
+        )
 
 
 @enum.unique
@@ -126,7 +127,7 @@ class SetupVars(str, enum.Enum):
     ban = "This channel will be used to log the server bans."
     unban = "Unbans of the server will be logged here."
     feedback = "This channel will be used to log the feedbacks given by members."
-    
+
 
 class RaidMode(enum.Enum):
     off = 0

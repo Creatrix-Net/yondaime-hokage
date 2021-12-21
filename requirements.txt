@@ -13,7 +13,7 @@ eight-ball==3.0.3
 english-words==1.0.4
 ffmpeg==1.4
 gTTS==2.2.3
-mal-api==0.4.0
+mal-api==0.5.1
 mystbin.py==2.2.0
 orjson==3.6.5
 parsedatetime==2.6

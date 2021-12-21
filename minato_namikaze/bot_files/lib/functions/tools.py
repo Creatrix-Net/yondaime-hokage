@@ -1,9 +1,9 @@
 import datetime
 import time
-import pytz
-from typing import Optional, Union, Literal
+from typing import Literal, Optional, Union
 
 import discord
+import pytz
 
 
 def check_if_user_joined_a_channel(ctx):
@@ -60,12 +60,14 @@ def human_join(seq, delim=", ", final="or"):
 
 
 # R.Danny Code
-def format_dt(dt, style: Optional[str] = None, ist: Optional[Union[bool, Literal[False]]] = False):
+def format_dt(dt,
+              style: Optional[str] = None,
+              ist: Optional[Union[bool, Literal[False]]] = False):
     if dt.tzinfo is None and not ist:
         dt = dt.replace(tzinfo=datetime.timezone.utc)
     if ist:
-        timezone = datetime.timezone(datetime.timedelta(hours=5,minutes=30))  
-        dt = dt.replace(tzinfo=timezone)  
+        timezone = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
+        dt = dt.replace(tzinfo=timezone)
 
     if style is None:
         return f"<t:{int(dt.timestamp())}>"

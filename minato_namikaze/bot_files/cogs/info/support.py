@@ -8,7 +8,7 @@ from ...lib import Embed, EmbedPaginator, ErrorEmbed, check_if_support_is_setup
 
 def if_inside_support_channel(ctx):
     if check_if_support_is_setup(ctx):
-        if ctx.message.channel == ctx.return_support_channel():
+        if ctx.message.channel == ctx.return_support_channel(ctx.guild):
             return True
         return False
     return False
@@ -37,7 +37,7 @@ class Support(commands.Cog):
     @commands.guild_only()
     async def support(self, ctx):
         """Open support ticket if enabled by the server admins"""
-        chan = ctx.return_support_channel()
+        chan = ctx.return_support_channel(ctx.guild)
 
         if ctx.message.author == ctx.guild.owner:
             await ctx.send(

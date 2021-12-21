@@ -175,31 +175,36 @@ class Context(commands.Context):
         else:
             return await self.send(content)
 
-    def return_ban_channel(self, guild: discord.Guild):
+    def return_ban_channel(self, guild: Optional[discord.Guild]):
+        guild = guild or self.guild
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.ban.value,
         )
 
-    def return_unban_channel(self, guild: discord.Guild):
+    def return_unban_channel(self, guild: Optional[discord.Guild]):
+        guild = guild or self.guild
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.unban.value,
         )
 
-    def return_feedback_channel(self, guild: discord.Guild):
+    def return_feedback_channel(self, guild: Optional[discord.Guild]):
+        guild = guild or self.guild
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.feedback.value,
         )
 
-    def return_support_channel(self, guild: discord.Guild):
+    def return_support_channel(self, guild: Optional[discord.Guild]):
+        guild = guild or self.guild
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.support.value,
         )
 
-    def return_warning_channel(self, guild: discord.Guild):
+    def return_warning_channel(self, guild: Optional[discord.Guild]):
+        guild = guild or self.guild
         return discord.utils.get(
             self.guild.text_channels if self else guild.text_channels,
             topic=SetupVars.warns.value,
@@ -213,9 +218,9 @@ class Context(commands.Context):
     async def get_dm(self, user: Union[int, discord.Member]):
         try:
             if isinstance(user, int):
-                user = self.bot.get_or_fetch_member(user, ctx.guild)
+                user = self.bot.get_or_fetch_member(user, self.guild)
             else:
-                user = self.bot.get_or_fetch_member(user.id, ctx.guild)
+                user = self.bot.get_or_fetch_member(user.id, self.guild)
         except:
             if isinstance(user, int):
                 user = ctx.bot.get_user(user)

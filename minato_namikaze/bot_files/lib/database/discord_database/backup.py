@@ -126,8 +126,8 @@ class BackupDatabse:
                         for key, value in i.overwrites.items():
                             role_overwrites.append({
                                 j.name: {
-                                    "allow": value.pair()[0],
-                                    "deny": value.pair()[-1],
+                                    "allow": value.pair()[0].value,
+                                    "deny": value.pair()[-1].value,
                                 }
                             })
                     category_channel_update_dict.update(
@@ -142,8 +142,8 @@ class BackupDatabse:
                         for key, value in i.overwrites.items():
                             role_overwrites.append({
                                 key.name: {
-                                    "allow": value.pair()[0],
-                                    "deny": value.pair()[-1],
+                                    "allow": value.pair()[0].value,
+                                    "deny": value.pair()[-1].value,
                                 }
                             })
                     voice_channel_update_dict.update(
@@ -161,8 +161,8 @@ class BackupDatabse:
                         for key, value in i.overwrites.items():
                             role_overwrites.append({
                                 key.name: {
-                                    "allow": value.pair()[0],
-                                    "deny": value.pair()[-1],
+                                    "allow": value.pair()[0].value,
+                                    "deny": value.pair()[-1].value,
                                 }
                             })
                     text_channel_update_dict.update(
@@ -180,8 +180,8 @@ class BackupDatabse:
                         for key, value in i.overwrites.items():
                             role_overwrites.apppend({
                                 key.name: {
-                                    "allow": value.pair()[0],
-                                    "deny": value.pair()[-1],
+                                    "allow": value.pair()[0].value,
+                                    "deny": value.pair()[-1].value,
                                 }
                             })
                     stage_channel_update_dict.update(
@@ -189,10 +189,10 @@ class BackupDatabse:
                 stage_channel.append({i.name: stage_channel_update_dict})
         json_bytes = dumps({
             "roles": roles_dict,
-            # 'category_channel': category_channel,
-            # 'text_channels': text_channel,
-            # 'voice_channel': voice_channel,
-            # 'stage_channel': stage_channel
+            'category_channel': category_channel,
+            'text_channels': text_channel,
+            'voice_channel': voice_channel,
+            'stage_channel': stage_channel
         }).decode()
         await self.backup_channel.send(
             file=discord.File(io.BytesIO(json_bytes.encode()),

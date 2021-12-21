@@ -79,6 +79,7 @@ class ChannelAndMessageId(enum.IntEnum):
     badges_channel = 920536143458598930
     backup_channel = 922544732918415390
     error_logs_channel = 920190310942908513
+    traceback_channel = 922752004525260810
 
     server_id = 920190307595874304
     server_id2 = 920536143244709889

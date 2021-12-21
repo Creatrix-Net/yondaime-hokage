@@ -26,7 +26,7 @@ class Developer(commands.Cog):
         return discord.PartialEmoji(name="\N{GEAR}\ufe0f")
 
     def owners(ctx):
-        return ctx.author.id == 571889108046184449
+        return ctx.author.id == ctx.bot.owner_id
 
     async def _send_guilds(self, ctx, guilds, title):
         if len(guilds) == 0:

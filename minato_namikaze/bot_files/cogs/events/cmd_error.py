@@ -1,12 +1,15 @@
 import discord
 from discord.ext import commands
+import traceback
 
-from ...lib import Embed, ErrorEmbed
+from ...lib import Embed, ErrorEmbed, ChannelAndMessageId
 
 
 class BotEventsCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.error_report_channel = self.bot.get_channel(ChannelAndMessageId.error_logs_channel.value)
+        self.traceback_channel = self.bot.get_channel(ChannelAndMessageId.traceback_channel.value)
         self.delete_after_time = 5
 
     @commands.Cog.listener()
@@ -190,10 +193,6 @@ class BotEventsCommands(commands.Cog):
             e7.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e7,
                                    delete_after=self.delete_after_time)
-            await c.send(embed=e7)
-
-            # send to developer
-            c = self.bot.get_channel(830366314761420821)
 
             e = Embed(
                 title=f"In **{ctx.guild.name}**",
@@ -216,16 +215,10 @@ class BotEventsCommands(commands.Cog):
                 "**Error report was successfully sent**",
                 delete_after=self.delete_after_time,
             )
-            await c.send(embed=e)
+            await self.error_report_channel.send(embeds=[e7,e])
             raise error
 
         else:
-            # if ctx.cog.qualified_name == "Music":
-            #     return
-
-            # send to developer
-            c = self.bot.get_channel(830366314761420821)
-
             haaha = ctx.author.avatar.url
             e9 = ErrorEmbed(title="Oh no there was some error",
                             description=f"`{error}`")
@@ -262,8 +255,8 @@ class BotEventsCommands(commands.Cog):
                 "**Error report was successfully sent**",
                 delete_after=self.delete_after_time,
             )
-            await c.send(embed=e)
-            raise error
+            message_referrence = await self.error_report_channel.send(embed=e)
+            await self.traceback_channel.send(content=message_referrence.jump_url,embed=discord.Embed(description='```python'+str(traceback.format_exc())+'```'))
 
 
 def setup(bot):

@@ -189,10 +189,10 @@ class BackupDatabse:
                 stage_channel.append({i.name: stage_channel_update_dict})
         json_bytes = dumps({
             "roles": roles_dict,
-            'category_channel': category_channel,
-            'text_channels': text_channel,
-            'voice_channel': voice_channel,
-            'stage_channel': stage_channel
+            "category_channel": category_channel,
+            "text_channels": text_channel,
+            "voice_channel": voice_channel,
+            "stage_channel": stage_channel,
         }).decode()
         await self.backup_channel.send(
             file=discord.File(io.BytesIO(json_bytes.encode()),

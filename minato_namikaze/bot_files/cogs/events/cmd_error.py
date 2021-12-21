@@ -1,6 +1,7 @@
 import traceback
 
 import discord
+import io
 from discord.ext import commands
 
 from ...lib import ChannelAndMessageId, Embed, ErrorEmbed
@@ -197,7 +198,7 @@ class BotEventsCommands(commands.Cog):
         elif isinstance(error, commands.CommandInvokeError):
             e7 = ErrorEmbed(
                 title="Oh no, I guess I have not been given proper access! Or some internal error",
-                description=f"`{error}`",
+                description=f"`{error}`"[:2000],
             )
             e7.add_field(name="Command Error Caused By:",
                          value=f"{ctx.command}")
@@ -227,13 +228,18 @@ class BotEventsCommands(commands.Cog):
                 "**Error report was successfully sent**",
                 delete_after=self.delete_after_time,
             )
-            await self.error_report_channel.send(embeds=[e7, e])
-            raise error
+            message_referrence = await self.error_report_channel.send(embeds=[e7, e])
+            error_traceback="```python" +str(traceback.format_exc()) + "```"
+            fp = io.BytesIO(str(error_traceback).encode())
+            await self.traceback_channel.send(
+                content=message_referrence.jump_url,
+                file=discord.File(fp, filename="traceback.txt")
+            )
 
         else:
             haaha = ctx.author.avatar.url
             e9 = ErrorEmbed(
-                title="Oh no there was some error", description=f"`{error}`"
+                title="Oh no there was some error", description=f"`{error}`"[:2000]
             )
             e9.add_field(name="**Command Error Caused By**",
                          value=f"{ctx.command}")
@@ -268,12 +274,11 @@ class BotEventsCommands(commands.Cog):
                 delete_after=self.delete_after_time,
             )
             message_referrence = await self.error_report_channel.send(embed=e)
+            error_traceback="```python" +str(traceback.format_exc()) + "```"
+            fp = io.BytesIO(str(error_traceback).encode())
             await self.traceback_channel.send(
                 content=message_referrence.jump_url,
-                embed=discord.Embed(
-                    description="```python" +
-                    str(traceback.format_exc()) + "```"
-                ),
+                file=discord.File(fp, filename="traceback.txt")
             )
 
 

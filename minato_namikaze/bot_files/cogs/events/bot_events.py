@@ -44,6 +44,10 @@ class BotEvents(commands.Cog):
         self.minato_dir = bot.minato_dir
         self.posting = PostStats(self.bot)
         self.tracker = InviteTrackerForMyGuild(bot)
+    
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        raise error
 
     @commands.Cog.listener()
     async def on_member_join(self, member):

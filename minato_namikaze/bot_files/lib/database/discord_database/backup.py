@@ -26,7 +26,9 @@ class BackupDatabse:
     @staticmethod
     def get_unique_backup_code():
         return "".join(
-            secrets.choice(string.ascii_letters + string.digits + str(secrets.randbits(7)))for i in range(8)).upper()
+            secrets.choice(string.ascii_letters + string.digits +
+                           str(secrets.randbits(7)))
+            for i in range(8)).upper()
 
     async def create_backup(self):
         roles_dict = {}
@@ -44,27 +46,34 @@ class BackupDatabse:
                             "add_reactions": i.permissions.add_reactions,
                             "administrator": i.permissions.administrator,
                             "attach_files": i.permissions.attach_files,
-                            "read_message_history": i.permissions.read_message_history,
+                            "read_message_history":
+                            i.permissions.read_message_history,
                             "ban_members": i.permissions.ban_members,
                             "manage_channels": i.permissions.manage_channels,
                             "change_nickname": i.permissions.change_nickname,
                             "connect": i.permissions.connect,
-                            "create_instant_invite": i.permissions.create_instant_invite,
-                            "create_private_threads": i.permissions.create_private_threads,
-                            "create_public_threads": i.permissions.create_public_threads,
+                            "create_instant_invite":
+                            i.permissions.create_instant_invite,
+                            "create_private_threads":
+                            i.permissions.create_private_threads,
+                            "create_public_threads":
+                            i.permissions.create_public_threads,
                             "deafen_members": i.permissions.deafen_members,
                             "embed_links": i.permissions.embed_links,
                             "external_emojis": i.permissions.external_emojis,
-                            "external_stickers": i.permissions.external_stickers,
+                            "external_stickers":
+                            i.permissions.external_stickers,
                             "kick_members": i.permissions.kick_members,
                             "manage_channels": i.permissions.manage_channels,
                             "manage_emojis": i.permissions.manage_emojis,
-                            "manage_emojis_and_stickers": i.permissions.manage_emojis_and_stickers,
+                            "manage_emojis_and_stickers":
+                            i.permissions.manage_emojis_and_stickers,
                             "manage_events": i.permissions.manage_events,
                             "manage_guild": i.permissions.manage_guild,
                             "manage_messages": i.permissions.manage_messages,
                             "manage_nicknames": i.permissions.manage_nicknames,
-                            "manage_permissions": i.permissions.manage_permissions,
+                            "manage_permissions":
+                            i.permissions.manage_permissions,
                             "manage_roles": i.permissions.manage_roles,
                             "manage_threads": i.permissions.manage_threads,
                             "manage_webhooks": i.permissions.manage_webhooks,
@@ -72,19 +81,27 @@ class BackupDatabse:
                             "move_members": i.permissions.move_members,
                             "mute_members": i.permissions.mute_members,
                             "priority_speaker": i.permissions.priority_speaker,
-                            "read_message_history": i.permissions.read_message_history,
+                            "read_message_history":
+                            i.permissions.read_message_history,
                             "read_messages": i.permissions.read_messages,
                             "request_to_speak": i.permissions.request_to_speak,
                             "send_messages": i.permissions.send_messages,
-                            "send_messages_in_threads": i.permissions.send_messages_in_threads,
-                            "send_tts_messages": i.permissions.send_tts_messages,
+                            "send_messages_in_threads":
+                            i.permissions.send_messages_in_threads,
+                            "send_tts_messages":
+                            i.permissions.send_tts_messages,
                             "speak": i.permissions.speak,
                             "stream": i.permissions.stream,
-                            "use_external_emojis": i.permissions.use_external_emojis,
-                            "use_external_stickers": i.permissions.use_external_stickers,
-                            "use_slash_commands": i.permissions.use_slash_commands,
-                            "view_guild_insights": i.permissions.view_guild_insights,
-                            "use_voice_activation": i.permissions.use_voice_activation,
+                            "use_external_emojis":
+                            i.permissions.use_external_emojis,
+                            "use_external_stickers":
+                            i.permissions.use_external_stickers,
+                            "use_slash_commands":
+                            i.permissions.use_slash_commands,
+                            "view_guild_insights":
+                            i.permissions.view_guild_insights,
+                            "use_voice_activation":
+                            i.permissions.use_voice_activation,
                             "value": i.permissions.value,
                             "view_audit_log": i.permissions.view_audit_log,
                             "view_channel": i.permissions.view_channel,
@@ -172,15 +189,18 @@ class BackupDatabse:
                 stage_channel.append({i.name: stage_channel_update_dict})
         json_bytes = dumps({
             "roles": roles_dict,
-            'category_channel': category_channel,
-            'text_channels': text_channel,
-            'voice_channel': voice_channel,
-            'stage_channel': stage_channel
+            "category_channel": category_channel,
+            "text_channels": text_channel,
+            "voice_channel": voice_channel,
+            "stage_channel": stage_channel,
         })
         code = self.get_unique_backup_code()
-        await self.backup_channel.send(content=code, file=discord.File(io.BytesIO(json_bytes), filename=f'{code}.json'))
+        await self.backup_channel.send(
+            content=code,
+            file=discord.File(io.BytesIO(json_bytes), filename=f"{code}.json"),
+        )
         return code
-    
+
     async def get_backup_data(self, code: str):
         async for i in self.backup_channel.history():
             if i.content == code.upper():

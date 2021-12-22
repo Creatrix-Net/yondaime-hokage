@@ -19,10 +19,16 @@ class BackUp(commands.Cog):
     @commands.cooldown(2, 60, commands.BucketType.guild)
     async def backup(self, ctx):
         backup_code = await BackupDatabse(ctx).create_backup()
-        backup_code_reference = await ctx.author.send(F':arrow_right:  **BACKUP CODE** : ``{backup_code}``')
-        await ctx.send(content=f'{ctx.author.mention} check your dm(s) :white_check_mark:',embed=SuccessEmbed(title='The backup code was generated successfully', url=backup_code_reference.jump_url))
-    
-    
+        backup_code_reference = await ctx.author.send(
+            f":arrow_right:  **BACKUP CODE** : ``{backup_code}``")
+        await ctx.send(
+            content=f"{ctx.author.mention} check your dm(s) :white_check_mark:",
+            embed=SuccessEmbed(
+                title="The backup code was generated successfully",
+                url=backup_code_reference.jump_url,
+            ),
+        )
+
     @commands.command(description="Gets the json file which is stored")
     @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
@@ -30,9 +36,14 @@ class BackUp(commands.Cog):
     async def get_backup_data(self, ctx, code):
         backup_code_data_url = await BackupDatabse(ctx).get_backup_data(code)
         if backup_code_data_url is not None:
-            await ctx.send(content=f'The data for the :arrow_right: {code}\n{backup_code_data_url}')
+            await ctx.send(
+                content=f"The data for the :arrow_right: {code}\n{backup_code_data_url}"
+            )
         else:
-            await ctx.send(f'Hey {ctx.author.mention}, \n there is no data associated with **{code}** backup code!')
+            await ctx.send(
+                f"Hey {ctx.author.mention}, \n there is no data associated with **{code}** backup code!"
+            )
+
 
 def setup(bot):
     bot.add_cog(BackUp(bot))

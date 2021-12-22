@@ -7,7 +7,7 @@ asyncdagpi==3.3.4
 attrs==21.2.0
 backoff==1.11.1
 beautifulsoup4==4.10.0
-betterstatcord.py==3.3.0
+betterstatcord.py==3.4.0
 braceexpand==0.1.7
 cachetools==4.2.4
 certifi==2021.10.8

@@ -21,16 +21,16 @@ import discord
 import dotenv
 import sentry_sdk
 from bot_files.lib import (
+    BASE_DIR,
     ChannelAndMessageId,
     Context,
     Embed,
     PaginatedHelpCommand,
     PostStats,
     Tokens,
+    api_image_store_dir,
     format_dt,
     format_relative,
-    api_image_store_dir,
-    BASE_DIR
 )
 from discord.ext import commands
 from discord_together import DiscordTogether
@@ -94,8 +94,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self._auto_spam_count = Counter()
 
         self.DEFAULT_GIF_LIST_PATH = BASE_DIR / join("discord_bot_images")
-        self.minato_gif = list(os.listdir(join(self.DEFAULT_GIF_LIST_PATH, "minato")))
-        
+        self.minato_gif = list(
+            os.listdir(join(self.DEFAULT_GIF_LIST_PATH, "minato")))
+
         self.uptime = format_relative(self.start_time)
         super().__init__(
             command_prefix=get_prefix,
@@ -140,10 +141,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         except Exception as e:
             log.critical("An exception occured, %s", e)
 
-    async def on_ready(self):      
+    async def on_ready(self):
         if not os.path.isdir(api_image_store_dir):
             os.mkdir(api_image_store_dir)
-            
+
         cog_dir = BASE_DIR / "cogs"
         for filename in os.listdir(cog_dir):
             if os.path.isdir(cog_dir / filename):
@@ -205,7 +206,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 activity=discord.Activity(type=discord.ActivityType.watching,
                                           name="over Naruto"),
             )
-        
 
     async def query_member_named(self, guild, argument, *, cache=False):
         """Queries a member by their name, name + discrim, or nickname.

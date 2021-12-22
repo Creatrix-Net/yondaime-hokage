@@ -29,6 +29,8 @@ from bot_files.lib import (
     Tokens,
     format_dt,
     format_relative,
+    api_image_store_dir,
+    BASE_DIR
 )
 from discord.ext import commands
 from discord_together import DiscordTogether
@@ -91,12 +93,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             10, 12.0, commands.BucketType.user)
         self._auto_spam_count = Counter()
 
-        self.DEFAULT_GIF_LIST_PATH = Path(__file__).resolve(
-            strict=True).parent / join("botmain", "bot", "discord_bot_images")
-
-        self.minato_dir = Path(__file__).resolve(strict=True).parent / join(
-            "bot_files", "discord_bot_images")
-        self.minato_gif = list(os.listdir(join(self.minato_dir, "minato")))
+        self.DEFAULT_GIF_LIST_PATH = BASE_DIR / join("discord_bot_images")
+        self.minato_gif = list(os.listdir(join(self.DEFAULT_GIF_LIST_PATH, "minato")))
+        
         self.uptime = format_relative(self.start_time)
         super().__init__(
             command_prefix=get_prefix,
@@ -141,9 +140,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         except Exception as e:
             log.critical("An exception occured, %s", e)
 
-    async def on_ready(self):
-        cog_dir = Path(__file__).resolve(strict=True).parent / join(
-            "bot_files", "cogs")
+    async def on_ready(self):      
+        if not os.path.isdir(api_image_store_dir):
+            os.mkdir(api_image_store_dir)
+            
+        cog_dir = BASE_DIR / "cogs"
         for filename in os.listdir(cog_dir):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
@@ -154,22 +155,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 if filename.endswith(".py") and filename.lower() != "raid.py":
                     self.load_extension(f"bot_files.cogs.{filename[:-3]}")
         self.load_extension("jishaku")
-
-        # slash command
-        slash_cog_dir = Path(__file__).resolve(strict=True).parent / join(
-            "bot_files", "slash_commands")
-        for filename in os.listdir(slash_cog_dir):
-            if os.path.isdir(cog_dir / filename):
-                for i in os.listdir(cog_dir / filename):
-                    if i.endswith(".py") and i.lower() != "__init__.py":
-                        self.load_extension(
-                            f'bot_files.slash_commands.{filename.strip(" ")}.{i[:-3]}'
-                        )
-            else:
-                if filename.endswith(
-                        ".py") and filename.lower() != "__init__.py":
-                    self.load_extension(
-                        f"bot_files.slash_commands.{filename[:-3]}")
 
         difference = int(round(time.time() - self.start_time.timestamp()))
         stats = (self.get_channel(
@@ -220,6 +205,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 activity=discord.Activity(type=discord.ActivityType.watching,
                                           name="over Naruto"),
             )
+        
 
     async def query_member_named(self, guild, argument, *, cache=False):
         """Queries a member by their name, name + discrim, or nickname.

@@ -16,3 +16,12 @@ class ErrorEmbed(embeds.Embed):
             kwargs["colour"] = discord.Color.red()
 
         super().__init__(**kwargs)
+
+
+class SuccessEmbed(embeds.Embed):
+    def __init__(self, **kwargs):
+        if "colour" not in kwargs:
+            kwargs["colour"] = discord.Color.green()
+
+        super().__init__(**kwargs)
+

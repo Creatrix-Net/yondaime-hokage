@@ -20,6 +20,7 @@ def token_get(tokenname):
 BASE_DIR = (
     Path(__file__).resolve().parent.parent.parent
 )  # In minato_namikaze/bot_files folder
+api_image_store_dir = BASE_DIR / 'images_api_store'
 
 DEFAULT_COMMAND_SELECT_LENGTH = 25
 

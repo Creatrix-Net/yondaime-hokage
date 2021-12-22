@@ -1,15 +1,15 @@
+import io
 import random
+import traceback
 from asyncio import sleep
 from datetime import datetime
-import io
 from os.path import join
 from pathlib import Path
-import traceback
 
 import discord
 from discord.ext import commands
 
-from ...lib import BASE_DIR, Embed, ErrorEmbed, PostStats, ChannelAndMessageId
+from ...lib import BASE_DIR, ChannelAndMessageId, Embed, ErrorEmbed, PostStats
 
 
 class InviteTrackerForMyGuild:
@@ -45,7 +45,7 @@ class BotEvents(commands.Cog):
         self.minato_gif = bot.minato_gif
         self.posting = PostStats(self.bot)
         self.tracker = InviteTrackerForMyGuild(bot)
-        
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         try:
@@ -116,7 +116,7 @@ class BotEvents(commands.Cog):
             guild, inviter_or_guild_owner)
         try:
             img = random.choice(self.minato_gif)
-            file = discord.File(join(self.BOT.minato_gif,img),filename=img)
+            file = discord.File(join(self.BOT.minato_gif, img), filename=img)
 
             f = open(
                 BASE_DIR / join("lib", "text", "welcome_message.txt"),
@@ -272,8 +272,11 @@ class BotEvents(commands.Cog):
             await message.channel.send(
                 "The prefix is **)** ,A full list of all commands is available by typing ```)help```"
             )
-        
-        if message.channel.id in (ChannelAndMessageId.error_logs_channel.value, ChannelAndMessageId.traceback_channel.value):
+
+        if message.channel.id in (
+                ChannelAndMessageId.error_logs_channel.value,
+                ChannelAndMessageId.traceback_channel.value,
+        ):
             try:
                 await message.publish()
             except:

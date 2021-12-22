@@ -1,6 +1,8 @@
-import os, io
+import io
+import os
+import traceback
 
-import discord, traceback
+import discord
 from discord.ext import commands
 
 from ...lib import ChannelAndMessageId, Embed, ErrorEmbed
@@ -9,8 +11,10 @@ from ...lib import ChannelAndMessageId, Embed, ErrorEmbed
 class BotEventsCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.error_report_channel = self.bot.get_channel(ChannelAndMessageId.error_logs_channel.value) 
-        self.traceback_channel = self.bot.get_channel(ChannelAndMessageId.traceback_channel.value)
+        self.error_report_channel = self.bot.get_channel(
+            ChannelAndMessageId.error_logs_channel.value)
+        self.traceback_channel = self.bot.get_channel(
+            ChannelAndMessageId.traceback_channel.value)
         self.delete_after_time = 5
 
     @commands.Cog.listener()
@@ -221,7 +225,13 @@ class BotEventsCommands(commands.Cog):
             try:
                 raise error
             except Exception:
-                await self.traceback_channel.send(content=message_referrence.jump_url, file=discord.File(io.BytesIO(str(traceback.format_exc()).encode()), filename='traceback.txt'))
+                await self.traceback_channel.send(
+                    content=message_referrence.jump_url,
+                    file=discord.File(
+                        io.BytesIO(str(traceback.format_exc()).encode()),
+                        filename="traceback.txt",
+                    ),
+                )
 
         else:
             haaha = ctx.author.avatar.url
@@ -264,7 +274,14 @@ class BotEventsCommands(commands.Cog):
             try:
                 raise error
             except Exception:
-                await self.traceback_channel.send(content=message_referrence.jump_url, file=discord.File(io.BytesIO(str(traceback.format_exc()).encode(), filename='traceback.txt')))
+                await self.traceback_channel.send(
+                    content=message_referrence.jump_url,
+                    file=discord.File(
+                        io.BytesIO(
+                            str(traceback.format_exc()).encode(),
+                            filename="traceback.txt",
+                        )),
+                )
 
 
 def setup(bot):

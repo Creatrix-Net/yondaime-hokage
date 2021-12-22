@@ -238,8 +238,8 @@ class BadgesCog(commands.Cog, name="Badges"):
         temp.seek(0)
         return temp
 
-    async def get_badge(self, badge_name: str) -> Badge:
-        all_badges = await Badges(self.bot).get_all_badges()
+    async def get_badge(self, badge_name: str, ctx) -> Badge:
+        all_badges = await Badges(ctx).get_all_badges()
         to_return = None
         for badge in all_badges:
             if (badge_name.lower() in badge["badge_name"].lower()
@@ -258,7 +258,7 @@ class BadgesCog(commands.Cog, name="Badges"):
         if badge.lower() == "list":
             await ctx.invoke(self.listbadges)
             return
-        badge_obj = await self.get_badge(badge)
+        badge_obj = await self.get_badge(badge, ctx)
         if not badge_obj:
             await ctx.send("`{}` is not an available badge.".format(badge))
             return
@@ -285,7 +285,7 @@ class BadgesCog(commands.Cog, name="Badges"):
         if badge.lower() == "list":
             await ctx.invoke(self.listbadges)
             return
-        badge_obj = await self.get_badge(badge)
+        badge_obj = await self.get_badge(badge, ctx)
         if not badge_obj:
             await ctx.send("`{}` is not an available badge.".format(badge))
             return
@@ -303,11 +303,8 @@ class BadgesCog(commands.Cog, name="Badges"):
         """
         List the available badges that can be created
         """
-        global_badges = await Badges(self.bot).get_all_badges()
+        global_badges = await Badges(ctx).get_all_badges()
         embed_paginator = BadgePages(ctx=ctx, entries=global_badges)
-        embed_paginator.embed.set_author(
-            name=ctx.author.display_name,
-            icon_url=ctx.author.display_avatar.url)
         await embed_paginator.start()
 
 

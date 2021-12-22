@@ -1,7 +1,6 @@
-import io
-import traceback
+import os, io
 
-import discord
+import discord, traceback
 from discord.ext import commands
 
 from ...lib import ChannelAndMessageId, Embed, ErrorEmbed
@@ -10,10 +9,8 @@ from ...lib import ChannelAndMessageId, Embed, ErrorEmbed
 class BotEventsCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.error_report_channel = self.bot.get_channel(
-            ChannelAndMessageId.error_logs_channel.value)
-        self.traceback_channel = self.bot.get_channel(
-            ChannelAndMessageId.traceback_channel.value)
+        self.error_report_channel = self.bot.get_channel(ChannelAndMessageId.error_logs_channel.value) 
+        self.traceback_channel = self.bot.get_channel(ChannelAndMessageId.traceback_channel.value)
         self.delete_after_time = 5
 
     @commands.Cog.listener()
@@ -221,12 +218,10 @@ class BotEventsCommands(commands.Cog):
             )
             message_referrence = await self.error_report_channel.send(
                 embeds=[e7, e])
-            error_traceback = "```python" + str(traceback.format_exc()) + "```"
-            fp = io.BytesIO(str(error_traceback).encode())
-            await self.traceback_channel.send(
-                content=message_referrence.jump_url,
-                file=discord.File(fp, filename="traceback.txt"),
-            )
+            try:
+                raise error
+            except Exception:
+                await self.traceback_channel.send(content=message_referrence.jump_url, file=discord.File(io.BytesIO(str(traceback.format_exc()).encode()), filename='traceback.txt'))
 
         else:
             haaha = ctx.author.avatar.url
@@ -266,12 +261,10 @@ class BotEventsCommands(commands.Cog):
                 delete_after=self.delete_after_time,
             )
             message_referrence = await self.error_report_channel.send(embed=e)
-            error_traceback = "```python" + str(traceback.format_exc()) + "```"
-            fp = io.BytesIO(str(error_traceback).encode())
-            await self.traceback_channel.send(
-                content=message_referrence.jump_url,
-                file=discord.File(fp, filename="traceback.txt"),
-            )
+            try:
+                raise error
+            except Exception:
+                await self.traceback_channel.send(content=message_referrence.jump_url, file=discord.File(io.BytesIO(str(traceback.format_exc()).encode(), filename='traceback.txt')))
 
 
 def setup(bot):

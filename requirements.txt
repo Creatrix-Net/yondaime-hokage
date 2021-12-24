@@ -56,6 +56,6 @@ TenGiphPy==2.5.0
 typing-extensions==4.0.1
 urllib3==1.26.7
 yarl==1.7.2
-youtube-dl==2021.6.6
+youtube-dl==2021.12.17
 youtube-search==2.1.0
 zipp==3.6.0

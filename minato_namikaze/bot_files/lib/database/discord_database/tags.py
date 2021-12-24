@@ -141,4 +141,3 @@ class TagsDatabase:
     async def give_random_tag(self, guild: Optional[int]):
         search = await self.search(oldest_first=random.choice([True, False], limit=random.randint(0, 500)), server_id=guild)
         return random.choice(search)
-    

@@ -142,8 +142,10 @@ class Tags(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._reserved_tags_being_made = {}
-        self.tags_database = TagsDatabase(ctx=bot)
-
+    
+    async def cog_before_invoke(self, ctx, *args, **kwargs):
+        self.tags_database = TagsDatabase(ctx=ctx)
+        
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{LABEL}\ufe0f")
@@ -182,19 +184,19 @@ class Tags(commands.Cog):
             names = "\n".join(r["name"] for r in rows)
             raise RuntimeError(f"Tag not found. Did you mean...\n{names}")
         
-        row = await self.tags_database.do_exact_search(server_id=guild_id,tag_name=name)
+        row = await self.tags_database.search(server_id=guild_id,tag_name=name, exact=True)
         if row is None:
             return disambiguate(self.tags_database.search(server_id=guild_id,tag_name=name, get_only_name=True), name)
         return row
 
     async def create_tag(self, ctx, name, content):
-        tag_model = TagsDatabase(name=name,content=content, owner_id=ctx.author.id, server_id=ctx.guild.id,ctx=bot)
+        tag_model = TagsDatabase(name=name,content=content, owner_id=ctx.author.id, server_id=ctx.guild.id,ctx=ctx)
         try:
             await tag_model.save()
         except UniqueViolationError:
             await ctx.send("This tag already exists.")
-        except:
-            await ctx.send("Could not create tag.")
+        # except Exception as e:
+        #     await ctx.send(f"Could not create tag.{e}")
         else:
             await ctx.send(f"Tag {name} successfully created.")
 
@@ -234,10 +236,6 @@ class Tags(commands.Cog):
             return await ctx.send(e)
 
         await ctx.send(tag["content"], reference=ctx.replied_reference)
-
-        # update the usage
-        tags_search_model = TagsDatabase(ctx=ctx).do_exact_search(name = tag["name"])
-        await TagsDatabase(ctx=ctx).increase_usage(name=tag["name"], server_id = ctx.guild.id)
 
     @tag.command(aliases=["add"])
     @suggest_box()
@@ -317,7 +315,7 @@ class Tags(commands.Cog):
                 "Sorry. This tag is currently being made by someone. "
                 f'Redo the command "{ctx.prefix}tag make" to retry.')
 
-        row = await self.tags_database.do_exact_search(server_id=ctx.guild.id,tag_name=name.lower())
+        row = await self.tags_database.do_exactsearch_search(server_id=ctx.guild.id,tag_name=name.lower(), exact=True)
         if row is not None:
             return await ctx.send(
                 "Sorry. A tag with that name already exists. "
@@ -362,161 +360,6 @@ class Tags(commands.Cog):
     async def tag_make_error(self, ctx, error):
         if isinstance(error, commands.TooManyArguments):
             await ctx.send(f"Please call just {ctx.prefix}tag make")
-
-    @staticmethod
-    async def guild_tag_stats(ctx):
-        # I'm not sure on how to do this with a single query
-        # so I'm splitting it up into different queries
-
-        e = discord.Embed(colour=discord.Colour.blurple(), title="Tag Stats")
-        e.set_footer(text="These statistics are server-specific.")
-
-        # top 3 commands
-        query = """SELECT
-                       name,
-                       uses,
-                       COUNT(*) OVER () AS "Count",
-                       SUM(uses) OVER () AS "Total Uses"
-                   FROM tags
-                   WHERE location_id=$1
-                   ORDER BY uses DESC
-                   LIMIT 3;
-                """
-
-        records = await ctx.db.fetch(query, ctx.guild.id)
-        if not records:
-            e.description = "No tag statistics here."
-        else:
-            total = records[0]
-            e.description = f'{total["Count"]} tags, {total["Total Uses"]} tag uses'
-
-        if len(records) < 3:
-            # fill with data to ensure that we have a minimum of 3
-            records.extend(
-                (None, None, None, None) for i in range(0, 3 - len(records)))
-
-        def emojize(seq):
-            emoji = 129351  # ord(':first_place:')
-            for index, value in enumerate(seq):
-                yield chr(emoji + index), value
-
-        value = "\n".join(
-            f"{emoji}: {name} ({uses} uses)" if name else f"{emoji}: Nothing!"
-            for (emoji, (name, uses, _, _)) in emojize(records))
-
-        e.add_field(name="Top Tags", value=value, inline=False)
-
-        # tag users
-        query = """SELECT
-                       COUNT(*) AS tag_uses,
-                       author_id
-                   FROM commands
-                   WHERE guild_id=$1 AND command='tag'
-                   GROUP BY author_id
-                   ORDER BY COUNT(*) DESC
-                   LIMIT 3;
-                """
-
-        records = await ctx.db.fetch(query, ctx.guild.id)
-
-        if len(records) < 3:
-            # fill with data to ensure that we have a minimum of 3
-            records.extend((None, None) for i in range(0, 3 - len(records)))
-
-        value = "\n".join(f"{emoji}: <@{author_id}> ({uses} times)"
-                          if author_id else f"{emoji}: No one!"
-                          for (emoji, (uses, author_id)) in emojize(records))
-        e.add_field(name="Top Tag Users", value=value, inline=False)
-
-        # tag creators
-
-        query = """SELECT
-                       COUNT(*) AS "Tags",
-                       owner_id
-                   FROM tags
-                   WHERE location_id=$1
-                   GROUP BY owner_id
-                   ORDER BY COUNT(*) DESC
-                   LIMIT 3;
-                """
-
-        records = await ctx.db.fetch(query, ctx.guild.id)
-
-        if len(records) < 3:
-            # fill with data to ensure that we have a minimum of 3
-            records.extend((None, None) for i in range(0, 3 - len(records)))
-
-        value = "\n".join(f"{emoji}: <@{owner_id}> ({count} tags)"
-                          if owner_id else f"{emoji}: No one!"
-                          for (emoji, (count, owner_id)) in emojize(records))
-        e.add_field(name="Top Tag Creators", value=value, inline=False)
-
-        await ctx.send(embed=e)
-
-    @staticmethod
-    async def member_tag_stats(ctx, member):
-        e = discord.Embed(colour=discord.Colour.blurple())
-        e.set_author(name=str(member), icon_url=member.display_avatar.url)
-        e.set_footer(text="These statistics are server-specific.")
-
-        query = """SELECT COUNT(*)
-                   FROM commands
-                   WHERE guild_id=$1 AND command='tag' AND author_id=$2
-                """
-
-        count = await ctx.db.fetchrow(query, ctx.guild.id, member.id)
-
-        # top 3 commands and total tags/uses
-        query = """SELECT
-                       name,
-                       uses,
-                       COUNT(*) OVER() AS "Count",
-                       SUM(uses) OVER () AS "Uses"
-                   FROM tags
-                   WHERE location_id=$1 AND owner_id=$2
-                   ORDER BY uses DESC
-                   LIMIT 3;
-                """
-
-        records = await ctx.db.fetch(query, ctx.guild.id, member.id)
-
-        if len(records) > 1:
-            owned = records[0]["Count"]
-            uses = records[0]["Uses"]
-        else:
-            owned = "None"
-            uses = 0
-
-        e.add_field(name="Owned Tags", value=owned)
-        e.add_field(name="Owned Tag Uses", value=uses)
-        e.add_field(name="Tag Command Uses", value=count[0])
-
-        if len(records) < 3:
-            # fill with data to ensure that we have a minimum of 3
-            records.extend(
-                (None, None, None, None) for i in range(0, 3 - len(records)))
-
-        emoji = 129351  # ord(':first_place:')
-
-        for (offset, (name, uses, _, _)) in enumerate(records):
-            if name:
-                value = f"{name} ({uses} uses)"
-            else:
-                value = "Nothing!"
-
-            e.add_field(name=f"{chr(emoji + offset)} Owned Tag", value=value)
-
-        await ctx.send(embed=e)
-
-    @tag.command()
-    @suggest_box()
-    async def stats(self, ctx, *, member: TagMember = None):
-        """Gives tag statistics for a member or the server."""
-
-        if member is None:
-            await self.guild_tag_stats(ctx)
-        else:
-            await self.member_tag_stats(ctx, member)
 
     @tag.command()
     @suggest_box()

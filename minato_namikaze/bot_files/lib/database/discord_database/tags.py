@@ -38,9 +38,6 @@ class TagsDatabase:
         if ctx is not None:
             self.tags_channel = ctx.get_config_channel_by_name_or_id(ChannelAndMessageId.tags.value)
             self.tags_aliases_channel = ctx.get_config_channel_by_name_or_id(ChannelAndMessageId.tags_aliases.value)
-            super().__init__(name, content, owner_id, server_id, created_at, aliases, ctx, tags_channel, tags_aliases_channel)
-        else:
-            super().__init__(name, content, owner_id, server_id, created_at, aliases, ctx)
     
     @check_for_ctx
     def channel(self):

@@ -142,9 +142,6 @@ class Tags(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._reserved_tags_being_made = {}
-    
-    async def cog_before_invoke(self, ctx, *args, **kwargs):
-        self.tags_database = TagsDatabase(ctx=ctx)
         
     @property
     def display_emoji(self) -> discord.PartialEmoji:
@@ -167,14 +164,14 @@ class Tags(commands.Cog):
         Server specific tags will override the generic tags.
         """
         if guild is None:
-            return await self.tags_database.search(search_all=True)
-        return await self.tags_database.search(server_id=guild.id)
+            return await TagsDatabase(ctx=ctx).search(search_all=True)
+        return await TagsDatabase(ctx=ctx).search(server_id=guild.id)
 
     async def get_random_tag(self, guild, *args):
         """Returns a random tag."""
         if guild is None:
-            return await self.tags_database.give_random_tag()
-        return await self.tags_database.give_random_tag(guild.id)
+            return await TagsDatabase(ctx=ctx).give_random_tag()
+        return await TagsDatabase(ctx=ctx).give_random_tag(guild.id)
 
     async def get_tag(self, guild_id, *,name):
         def disambiguate(rows, query):
@@ -184,15 +181,14 @@ class Tags(commands.Cog):
             names = "\n".join(r["name"] for r in rows)
             raise RuntimeError(f"Tag not found. Did you mean...\n{names}")
         
-        row = await self.tags_database.search(server_id=guild_id,tag_name=name, exact=True)
+        row = await TagsDatabase(ctx=ctx).search(server_id=guild_id,tag_name=name, exact=True)
         if row is None:
-            return disambiguate(self.tags_database.search(server_id=guild_id,tag_name=name, get_only_name=True), name)
+            return disambiguate(TagsDatabase(ctx=ctx).search(server_id=guild_id,tag_name=name, get_only_name=True), name)
         return row
 
     async def create_tag(self, ctx, name, content):
-        tag_model = TagsDatabase(name=name,content=content, owner_id=ctx.author.id, server_id=ctx.guild.id,ctx=ctx)
         try:
-            await tag_model.save()
+            await TagsDatabase(name=name,content=content, owner_id=ctx.author.id, server_id=ctx.guild.id,ctx=ctx).save()
         except UniqueViolationError:
             await ctx.send("This tag already exists.")
         # except Exception as e:
@@ -265,7 +261,7 @@ class Tags(commands.Cog):
         tag is deleted the alias is deleted as well.
         """
         try:
-            await self.tags_database.add_aliases(tag_name=old_name, server_id=ctx.guild.id)
+            await TagsDatabase(ctx=ctx).add_aliases(tag_name=old_name, server_id=ctx.guild.id)
         except UniqueViolationError:
             await ctx.send('That aliases already exists')
         except TagsDoesNotExistsError as e:
@@ -315,7 +311,7 @@ class Tags(commands.Cog):
                 "Sorry. This tag is currently being made by someone. "
                 f'Redo the command "{ctx.prefix}tag make" to retry.')
 
-        row = await self.tags_database.do_exactsearch_search(server_id=ctx.guild.id,tag_name=name.lower(), exact=True)
+        row = await TagsDatabase(ctx=ctx).do_exactsearch_search(server_id=ctx.guild.id,tag_name=name.lower(), exact=True)
         if row is not None:
             return await ctx.send(
                 "Sorry. A tag with that name already exists. "

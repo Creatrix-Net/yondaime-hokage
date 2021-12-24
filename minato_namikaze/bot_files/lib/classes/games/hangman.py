@@ -142,19 +142,21 @@ class Hangman:
             matches = [a for a, b in enumerate(self.letters) if b == guess]
             for match in matches:
                 self.correct[match] = guess
-            self._embed.set_field_at(
-                0, name="Word", value=f"{' '.join(self.correct)}")
+            self._embed.set_field_at(0,
+                                     name="Word",
+                                     value=f"{' '.join(self.correct)}")
             await self._message.edit(embed=self._embed)
         else:
             self._alpha.remove(guess)
             self._counter -= 1
             self.wrong_letters.append(guess)
-            self._embed.set_field_at(
-                1, name="Wrong letters", value=f"{', '.join(self.wrong_letters)}"
-            )
-            self._embed.set_field_at(
-                2, name="Lives left", value=self.lives(), inline=False
-            )
+            self._embed.set_field_at(1,
+                                     name="Wrong letters",
+                                     value=f"{', '.join(self.wrong_letters)}")
+            self._embed.set_field_at(2,
+                                     name="Lives left",
+                                     value=self.lives(),
+                                     inline=False)
             self._embed.description = f"```\n{stages[self._counter]}\n```"
             await self._message.edit(embed=self._embed)
 
@@ -188,17 +190,17 @@ class Hangman:
         self._embed.add_field(name="Word", value=f"{' '.join(self.correct)}")
         wrong_letters = ", ".join(self.wrong_letters) or "  \u200b"
         self._embed.add_field(name="Wrong letters", value=wrong_letters)
-        self._embed.add_field(
-            name="Lives left", value=self.lives(), inline=False)
+        self._embed.add_field(name="Lives left",
+                              value=self.lives(),
+                              inline=False)
         self._message = await ctx.send(embed=self._embed, **kwargs)
 
         while True:
 
             def check(m):
                 if m.channel == ctx.channel and m.author == ctx.author:
-                    return (
-                        len(m.content) == 1 and m.content.lower() in self._alpha
-                    ) or (m.content.lower() == self.word)
+                    return (len(m.content) == 1 and m.content.lower()
+                            in self._alpha) or (m.content.lower() == self.word)
 
             message = await ctx.bot.wait_for("message", check=check)
 

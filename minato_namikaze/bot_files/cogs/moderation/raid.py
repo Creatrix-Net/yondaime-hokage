@@ -1,8 +1,8 @@
-import discord
+import asyncio
 from collections import Counter, defaultdict
 
+import discord
 from discord.ext import commands, tasks
-import asyncio
 
 
 class AntiRaid(commands.Cog):
@@ -14,18 +14,20 @@ class AntiRaid(commands.Cog):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
-    
+        return discord.PartialEmoji(name="discord_certified_moderator",
+                                    id=922030031146995733)
+
     @tasks.loop(seconds=10.0)
     async def bulk_send_messages(self):
         async with self._batch_message_lock:
-            for ((guild_id, channel_id), messages) in self.message_batches.items():
+            for ((guild_id, channel_id),
+                 messages) in self.message_batches.items():
                 guild = self.bot.get_guild(guild_id)
                 channel = guild and guild.get_channel(channel_id)
                 if channel is None:
                     continue
 
-                paginator = commands.Paginator(suffix='', prefix='')
+                paginator = commands.Paginator(suffix="", prefix="")
                 for message in messages:
                     paginator.add_line(message)
 
@@ -36,7 +38,7 @@ class AntiRaid(commands.Cog):
                         pass
 
             self.message_batches.clear()
-    
+
     @commands.Cog.listener()
     async def on_message(self, message):
         author = message.author
@@ -72,7 +74,8 @@ class AntiRaid(commands.Cog):
             return
 
         # check if it meets the thresholds required
-        mention_count = sum(not m.bot and m.id != author.id for m in message.mentions)
+        mention_count = sum(not m.bot and m.id != author.id
+                            for m in message.mentions)
         if mention_count < config.mention_count:
             return
 
@@ -80,15 +83,22 @@ class AntiRaid(commands.Cog):
             return
 
         try:
-            await author.ban(reason=f'Spamming mentions ({mention_count} mentions)')
+            await author.ban(
+                reason=f"Spamming mentions ({mention_count} mentions)")
         except Exception as e:
-            log.info(f'Failed to autoban member {author} (ID: {author.id}) in guild ID {guild_id}')
+            log.info(
+                f"Failed to autoban member {author} (ID: {author.id}) in guild ID {guild_id}"
+            )
         else:
-            to_send = f'Banned {author} (ID: {author.id}) for spamming {mention_count} mentions.'
+            to_send = f"Banned {author} (ID: {author.id}) for spamming {mention_count} mentions."
             async with self._batch_message_lock:
-                self.message_batches[(guild_id, message.channel.id)].append(to_send)
+                self.message_batches[(guild_id,
+                                      message.channel.id)].append(to_send)
 
-            log.info(f'Member {author} (ID: {author.id}) has been autobanned from guild ID {guild_id}')
+            log.info(
+                f"Member {author} (ID: {author.id}) has been autobanned from guild ID {guild_id}"
+            )
+
 
 def setup(bot):
     bot.add_cog(AntiRaid(bot))

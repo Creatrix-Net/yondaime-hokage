@@ -34,15 +34,15 @@ class FunGames(commands.Cog):
                 return
         lis = "cancel"
         transmit = True
-        await ctx.send(f"Chatbot Started!\nType the following items `{lis}` to end.")
+        await ctx.send(
+            f"Chatbot Started!\nType the following items `{lis}` to end.")
         while transmit is True:
             try:
                 m = await self.bot.wait_for(
                     "message",
                     timeout=30,
-                    check=lambda m: (
-                        ctx.author == m.author and ctx.channel == m.channel
-                    ),
+                    check=lambda m:
+                    (ctx.author == m.author and ctx.channel == m.channel),
                 )
             except asyncio.TimeoutError:
                 await ctx.send("I'm bored now, you should of been quicker...")
@@ -52,14 +52,12 @@ class FunGames(commands.Cog):
                     transmit = False
                     left = await self.bot.chatbot.ask("bye")
                     await ctx.send(
-                        f"{left.text}... Waiting... OH you said cancel, bye!"
-                    )
+                        f"{left.text}... Waiting... OH you said cancel, bye!")
                 else:
                     async with ctx.channel.typing():
                         response = await self.bot.chatbot.ask(
-                            m.content
-                            if len(m.content) >= 3
-                            else f"{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}"
+                            m.content if len(m.content) >= 3 else
+                            f"{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}"
                         )
                         await ctx.send(response.text)
 
@@ -81,30 +79,25 @@ class FunGames(commands.Cog):
             await message.edit(embed=discord.Embed(description=str(i)))
             await asyncio.sleep(1)
         await asyncio.sleep(random.randint(1, 3))
-        await message.edit(embed=discord.Embed(description=f"React to the {reaction}!"))
+        await message.edit(embed=discord.Embed(
+            description=f"React to the {reaction}!"))
         await message.add_reaction(reaction)
         start = time.perf_counter()
         try:
             _, user = await ctx.bot.wait_for(
                 "reaction_add",
-                check=lambda _reaction, user: _reaction.message.guild == ctx.guild
-                and _reaction.message.channel == ctx.message.channel
-                and _reaction.message == message
-                and str(_reaction.emoji) == reaction
-                and user != ctx.bot.user
-                and not user.bot,
+                check=lambda _reaction, user: _reaction.message.guild == ctx.
+                guild and _reaction.message.channel == ctx.message.channel and
+                _reaction.message == message and str(_reaction.emoji) ==
+                reaction and user != ctx.bot.user and not user.bot,
                 timeout=60,
             )
         except asyncio.TimeoutError:
-            return await message.edit(
-                embed=discord.Embed(description="No one ate the cookie...")
-            )
+            return await message.edit(embed=discord.Embed(
+                description="No one ate the cookie..."))
         end = time.perf_counter()
-        await message.edit(
-            embed=discord.Embed(
-                description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"
-            )
-        )
+        await message.edit(embed=discord.Embed(
+            description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"))
         lis3 = ["1", "2"]
         choice = random.choice(lis3)
         if choice == 2:

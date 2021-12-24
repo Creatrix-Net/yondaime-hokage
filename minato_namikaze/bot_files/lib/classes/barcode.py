@@ -52,9 +52,9 @@ def create_svg_object():
         "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd",
     )
     document = imp.createDocument(None, "svg", doctype)
-    _set_attributes(
-        document.documentElement, version="1.1", xmlns="http://www.w3.org/2000/svg"
-    )
+    _set_attributes(document.documentElement,
+                    version="1.1",
+                    xmlns="http://www.w3.org/2000/svg")
     return document
 
 
@@ -67,11 +67,8 @@ MIN_SIZE = 0.2
 MIN_QUIET_ZONE = 2.54
 
 # Charsets for code 39
-REF = (
-    tuple(string.digits)
-    + tuple(string.ascii_uppercase)
-    + ("-", ".", " ", "$", "/", "+", "%")
-)
+REF = (tuple(string.digits) + tuple(string.ascii_uppercase) +
+       ("-", ".", " ", "$", "/", "+", "%"))
 B = "1"
 E = "0"
 CODES = (
@@ -176,9 +173,11 @@ class BaseWriter:
             rendered output.
     """
 
-    def __init__(
-        self, initialize=None, paint_module=None, paint_text=None, finish=None
-    ):
+    def __init__(self,
+                 initialize=None,
+                 paint_module=None,
+                 paint_text=None,
+                 finish=None):
         self._callbacks = dict(
             initialize=initialize,
             paint_module=paint_module,
@@ -286,16 +285,15 @@ class BaseWriter:
                 else:
                     color = self.foreground
                 self._callbacks["paint_module"](
-                    xpos, ypos, self.module_width * abs(mod), color
-                )  # remove painting for background colored tiles?
+                    xpos, ypos, self.module_width * abs(mod),
+                    color)  # remove painting for background colored tiles?
                 xpos += self.module_width * abs(mod)
             bxe = xpos
             # Add right quiet zone to every line, except last line, quiet zone already
             # provided with background, should it be removed complety?
             if (cc + 1) != len(code):
-                self._callbacks["paint_module"](
-                    xpos, ypos, self.quiet_zone, self.background
-                )
+                self._callbacks["paint_module"](xpos, ypos, self.quiet_zone,
+                                                self.background)
             ypos += self.module_height
         if self.text and self._callbacks["paint_text"] is not None:
             ypos += self.text_distance
@@ -310,9 +308,8 @@ class BaseWriter:
 
 class SVGWriter(BaseWriter):
     def __init__(self):
-        BaseWriter.__init__(
-            self, self._init, self._create_module, self._create_text, self._finish
-        )
+        BaseWriter.__init__(self, self._init, self._create_module,
+                            self._create_text, self._finish)
         self.compress = False
         self.dpi = 25.4
         self._document = None
@@ -332,9 +329,9 @@ class SVGWriter(BaseWriter):
         _set_attributes(group, **attributes)
         self._group = self._root.appendChild(group)
         background = self._document.createElement("rect")
-        attributes = dict(
-            width="100%", height="100%", style="fill:{0}".format(self.background)
-        )
+        attributes = dict(width="100%",
+                          height="100%",
+                          style="fill:{0}".format(self.background))
         _set_attributes(background, **attributes)
         self._group.appendChild(background)
 
@@ -371,9 +368,9 @@ class SVGWriter(BaseWriter):
     def _finish(self):
         if self.compress:
             return self._document.toxml(encoding="UTF-8")
-        return self._document.toprettyxml(
-            indent=4 * " ", newl=os.linesep, encoding="UTF-8"
-        )
+        return self._document.toprettyxml(indent=4 * " ",
+                                          newl=os.linesep,
+                                          encoding="UTF-8")
 
     def save(self, filename, output):
         if self.compress:
@@ -394,15 +391,14 @@ else:
 
     class ImageWriter(BaseWriter):
         def __init__(self, COG):
-            BaseWriter.__init__(
-                self, self._init, self._paint_module, self._paint_text, self._finish
-            )
+            BaseWriter.__init__(self, self._init, self._paint_module,
+                                self._paint_text, self._finish)
             self.format = "PNG"
             self.dpi = 300
             self._image = None
             self._draw = None
-            self.FONT = str(
-                BASE_DIR / os.path.join("lib", "data", "arial.ttf"))
+            self.FONT = str(BASE_DIR /
+                            os.path.join("lib", "data", "arial.ttf"))
 
         def _init(self, code):
             size = self.calculate_size(len(code[0]), len(code), self.dpi)
@@ -466,7 +462,8 @@ class Barcode:
         return "\n".join(code)
 
     def __repr__(self):
-        return "<{0}({1!r})>".format(self.__class__.__name__, self.get_fullcode())
+        return "<{0}({1!r})>".format(self.__class__.__name__,
+                                     self.get_fullcode())
 
     def build(self):
         raise NotImplementedError
@@ -531,11 +528,9 @@ def check_code(code, name, allowed):
         if char not in allowed:
             wrong.append(char)
     if wrong:
-        raise IllegalCharacterError(
-            "The following characters are not "
-            "valid for {name}: {wrong}".format(
-                name=name, wrong=", ".join(wrong))
-        )
+        raise IllegalCharacterError("The following characters are not "
+                                    "valid for {name}: {wrong}".format(
+                                        name=name, wrong=", ".join(wrong)))
 
 
 class Code39(Barcode):
@@ -590,9 +585,8 @@ def get_barcode(name, code=None, writer=None):
     try:
         barcode = Code39
     except KeyError:
-        raise BarcodeNotFoundError(
-            "The barcode {0!r} you requested is not " "known.".format(name)
-        )
+        raise BarcodeNotFoundError("The barcode {0!r} you requested is not "
+                                   "known.".format(name))
     if code is not None:
         return barcode(code, writer)
     return barcode

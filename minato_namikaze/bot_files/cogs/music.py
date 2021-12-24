@@ -55,20 +55,15 @@ class Music(commands.Cog):
             return
 
         if isinstance(error, NoChannelProvided):
-            return await ctx.send(
-                embed=ErrorEmbed(
-                    description="You must be in a voice channel or provide one to connect to."
-                )
+            return await ctx.send(embed=ErrorEmbed(
+                description="You must be in a voice channel or provide one to connect to.")
             )
 
     async def cog_check(self, ctx: commands.Context):
         """Cog wide check, which disallows commands in DMs."""
         if not ctx.guild:
-            await ctx.send(
-                embed=ErrorEmbed(
-                    description="Music commands are not available in Private Messages."
-                )
-            )
+            await ctx.send(embed=ErrorEmbed(
+                description="Music commands are not available in Private Messages."))
             return False
 
         return True
@@ -79,9 +74,8 @@ class Music(commands.Cog):
         e.set_thumbnail(url=song.thumbnail)
         e.set_image(url=song.thumbnail)
         e.title = song.title
-        e.add_field(
-            name=f"**{song.channel}**", value=f"[Click Here]({song.channel_url})"
-        )
+        e.add_field(name=f"**{song.channel}**",
+                    value=f"[Click Here]({song.channel_url})")
         e.add_field(name=f"**{song.name}**", value=f"[Click Here]({song.url})")
         return e
 
@@ -91,17 +85,15 @@ class Music(commands.Cog):
         try:
             voice_state_author = ctx.author.voice
             voice_state_me = ctx.me.voice
-            if (
-                voice_state_author
-                and voice_state_me
-                and voice_state_author == voice_state_me
-            ):
+            if (voice_state_author and voice_state_me
+                    and voice_state_author == voice_state_me):
                 return
 
             if voice_state_author is None:
                 raise NoChannelProvided
 
-            await ctx.author.voice.channel.connect()  # Joins author's voice channel
+            await ctx.author.voice.channel.connect(
+            )  # Joins author's voice channel
             await ctx.send("```Joined```")
         except:
             pass
@@ -126,16 +118,15 @@ class Music(commands.Cog):
         e = Embed()
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         if not player:
-            player = self.bot.music.create_player(
-                ctx, ffmpeg_error_betterfix=True)
+            player = self.bot.music.create_player(ctx,
+                                                  ffmpeg_error_betterfix=True)
         if not ctx.voice_client.is_playing():
             await player.queue(url, search=True)
             song = await player.play()
             e.set_thumbnail(url=song.thumbnail)
             e.title = "Playing - " + song.title
-            e.add_field(
-                name=f"**{song.channel}**", value=f"[Click Here]({song.channel_url})"
-            )
+            e.add_field(name=f"**{song.channel}**",
+                        value=f"[Click Here]({song.channel_url})")
             e.add_field(name=f"**{song.name}**",
                         value=f"[Click Here]({song.url})")
             e.set_image(url=song.thumbnail)
@@ -143,9 +134,8 @@ class Music(commands.Cog):
             song = await player.queue(url, search=True)
             e.set_thumbnail(url=song.thumbnail)
             e.title = "Queued - " + song.title
-            e.add_field(
-                name=f"**{song.channel}**", value=f"[Click Here]({song.channel_url})"
-            )
+            e.add_field(name=f"**{song.channel}**",
+                        value=f"[Click Here]({song.channel_url})")
             e.add_field(name=f"**{song.name}**",
                         value=f"[Click Here]({song.url})")
             e.set_image(url=song.thumbnail)
@@ -187,9 +177,8 @@ class Music(commands.Cog):
         """Displays the songs queue"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         paginator = EmbedPaginator(
-            ctx=ctx, entries=[self.songembed(song)
-                              for song in player.current_queue()]
-        )
+            ctx=ctx,
+            entries=[self.songembed(song) for song in player.current_queue()])
         await paginator.start()
 
     @commands.command()
@@ -200,9 +189,8 @@ class Music(commands.Cog):
         song = player.now_playing()
         e.set_thumbnail(url=song.thumbnail)
         e.title = "Playing - " + song.title
-        e.add_field(
-            name=f"**{song.channel}**", value=f"[Click Here]({song.channel_url})"
-        )
+        e.add_field(name=f"**{song.channel}**",
+                    value=f"[Click Here]({song.channel_url})")
         e.add_field(name=f"**{song.name}**", value=f"[Click Here]({song.url})")
         e.set_image(url=song.thumbnail)
         await ctx.send(embed=e)
@@ -213,7 +201,8 @@ class Music(commands.Cog):
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         data = await player.skip(force=True)
         if len(data) == 2:
-            await ctx.send(f"```Skipped from {data[0].name} to {data[1].name}```")
+            await ctx.send(
+                f"```Skipped from {data[0].name} to {data[1].name}```")
         else:
             await ctx.send(f"```Skipped {data[0].name}```")
 

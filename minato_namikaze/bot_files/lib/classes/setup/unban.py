@@ -20,31 +20,30 @@ class Unban(menus.Menu):
 
     @menus.button("\N{WHITE HEAVY CHECK MARK}")
     async def on_add(self, payload):
-        bingo = (
-            discord.utils.get(self.ctx.guild.categories, name="Bingo Book")
-            if discord.utils.get(self.ctx.guild.categories, name="Bingo Book")
-            else False
-        )
+        bingo = (discord.utils.get(
+            self.ctx.guild.categories, name="Bingo Book") if discord.utils.get(
+                self.ctx.guild.categories, name="Bingo Book") else False)
         if not bingo:
             bingo = await self.ctx.guild.create_category(
-                "Bingo Book", reason="To log the the bans and unban events + warns"
-            )
+                "Bingo Book",
+                reason="To log the the bans and unban events + warns")
         unban = await self.ctx.guild.create_text_channel(
             "unban",
             overwrites={
-                self.ctx.guild.default_role: discord.PermissionOverwrite(
-                    read_messages=False, send_messages=False
-                )
+                self.ctx.guild.default_role:
+                discord.PermissionOverwrite(read_messages=False,
+                                            send_messages=False)
             },
             topic=SetupVars.unban.value,
-            category=discord.utils.get(
-                self.ctx.guild.categories, name="Bingo Book"),
+            category=discord.utils.get(self.ctx.guild.categories,
+                                       name="Bingo Book"),
         )
 
         await self.channel.send(
             f"{unban.mention} channel **created** for logging the **unbans** for the {self.ctx.guild.name}"
         )
-        e = Embed(description="This channel will be used to log the server unban.")
+        e = Embed(
+            description="This channel will be used to log the server unban.")
         a = await unban.send(embed=e)
         await a.pin()
         return

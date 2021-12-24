@@ -2,7 +2,7 @@
 akinator.py==5.0.0
 astunparse==1.6.3
 async-cleverbot==0.2.2
-async-timeout==3.0.1
+async-timeout==4.0.2
 asyncdagpi==3.3.4
 attrs==21.2.0
 backoff==1.11.1

@@ -34,7 +34,7 @@ jishaku @ git+https://github.com/Gorialis/jishaku.git@master
 mal-api==0.5.1
 multidict==5.2.0
 mystbin.py==2.2.0
-orjson==3.6.3
+orjson==3.6.5
 parsedatetime==2.6
 Pillow==8.4.0
 platformdirs==2.4.0

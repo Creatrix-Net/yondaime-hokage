@@ -86,6 +86,7 @@ class ChannelAndMessageId(enum.IntEnum):
     server_id2 = 920536143244709889
 
     tags = 920536143458598931
+    tags_aliases = 922539699409661972
 
     restartlog_channel1 = 920190310942908508
     restartlog_channel2 = 920536143458598926

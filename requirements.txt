@@ -1,4 +1,4 @@
-﻿aiohttp==3.7.4.post0
+﻿aiohttp==3.8.1
 akinator.py==5.0.0
 astunparse==1.6.3
 async-cleverbot==0.2.2

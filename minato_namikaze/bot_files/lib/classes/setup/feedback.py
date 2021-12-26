@@ -13,8 +13,7 @@ class Feedback(menus.Menu):
 
     async def send_initial_message(self, ctx, channel):
         embed = Embed(
-            title=f"Want to create a feedback system for the **{ctx.guild.name}** ?"
-        )
+            title=f"Want to create a feedback system for the **{ctx.guild.name}** ?")
         embed.add_field(name="Yes", value=":white_check_mark:")
         embed.add_field(name="No", value=":negative_squared_cross_mark:")
         return await channel.send(embed=embed)
@@ -25,20 +24,18 @@ class Feedback(menus.Menu):
             "Feedback",
             topic=SetupVars.feedback.value,
             overwrites={
-                self.ctx.guild.default_role: discord.PermissionOverwrite(
-                    read_messages=False, send_messages=False
-                )
+                self.ctx.guild.default_role:
+                discord.PermissionOverwrite(read_messages=False,
+                                            send_messages=False)
             },
-            category=discord.utils.get(
-                self.ctx.guild.categories, name="Admin / Feedback"
-            ),
+            category=discord.utils.get(self.ctx.guild.categories,
+                                       name="Admin / Feedback"),
         )
         await self.channel.send(
             f"{feed.mention} channel **created** for logging the **feedbacks** for the {self.ctx.guild.name} by members!"
         )
         e = Embed(
-            description="This channel will be used to log the feedbacks given by members."
-        )
+            description="This channel will be used to log the feedbacks given by members.")
         a = await feed.send(embed=e)
         await a.pin()
         return

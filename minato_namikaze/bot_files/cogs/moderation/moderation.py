@@ -27,7 +27,8 @@ class Moderation(commands.Cog):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
+        return discord.PartialEmoji(name="discord_certified_moderator",
+                                    id=922030031146995733)
 
     # set delay
     @commands.command()

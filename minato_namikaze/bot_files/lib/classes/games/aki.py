@@ -33,12 +33,10 @@ class Akinator:
 
         embed = discord.Embed(
             title="Guess your character!",
-            description=(
-                "```swift\n"
-                f"Question-Number  : {self.questions}\n"
-                f"Progression-Level: {self.aki.progression}\n```\n"
-                f"{self.build_bar()}"
-            ),
+            description=("```swift\n"
+                         f"Question-Number  : {self.questions}\n"
+                         f"Progression-Level: {self.aki.progression}\n```\n"
+                         f"{self.build_bar()}"),
             color=discord.Color.random(),
         )
         embed.add_field(name="- Question -", value=self.aki.question)
@@ -88,15 +86,13 @@ class Akinator:
 
             def check(reaction, user):
                 if reaction.message == self.message and user == ctx.author:
-                    return (
-                        str(reaction.emoji) in self.mapping
-                        or str(reaction.emoji) == STOP
-                    )
+                    return (str(reaction.emoji) in self.mapping
+                            or str(reaction.emoji) == STOP)
 
             try:
-                reaction, __ = await ctx.bot.wait_for(
-                    "reaction_add", timeout=timeout, check=check
-                )
+                reaction, __ = await ctx.bot.wait_for("reaction_add",
+                                                      timeout=timeout,
+                                                      check=check)
             except asyncio.TimeoutError:
                 return
 

@@ -24,7 +24,7 @@ DiscordUtils==1.3.4
 eight-ball==3.0.3
 english-words==1.0.4
 ffmpeg==1.4
-filelock==3.4.0
+filelock==3.4.2
 greenlet==1.1.2
 gTTS==2.2.3
 idna==3.3

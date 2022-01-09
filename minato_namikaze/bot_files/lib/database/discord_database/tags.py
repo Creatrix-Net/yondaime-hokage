@@ -32,6 +32,7 @@ class TagsDatabase:
         self.content=content
         self.owner_id=owner_id
         self.server_id=server_id
+        
         self.created_at=created_at
         self.aliases = aliases
         self.ctx: Context = ctx

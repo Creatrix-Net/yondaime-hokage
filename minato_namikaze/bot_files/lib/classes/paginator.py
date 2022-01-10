@@ -51,7 +51,8 @@ class RoboPages(discord.ui.View):
             self.add_item(self.stop_pages)  # type: ignore
 
     async def _get_kwargs_from_page(self, page: int) -> Dict[str, Any]:
-        value = await discord.utils.maybe_coroutine(self.source.format_page, self, page)
+        value = await discord.utils.maybe_coroutine(self.source.format_page,
+                                                    self, page)
         if isinstance(value, dict):
             return value
         if isinstance(value, str):
@@ -60,9 +61,8 @@ class RoboPages(discord.ui.View):
             return {"embed": value, "content": None}
         return {}
 
-    async def show_page(
-        self, interaction: discord.Interaction, page_number: int
-    ) -> None:
+    async def show_page(self, interaction: discord.Interaction,
+                        page_number: int) -> None:
         page = await self.source.get_page(page_number)
         self.current_page = page_number
         kwargs = await self._get_kwargs_from_page(page)
@@ -78,12 +78,10 @@ class RoboPages(discord.ui.View):
         self.go_to_first_page.disabled = page_number == 0
         if self.compact:
             max_pages = self.source.get_max_pages()
-            self.go_to_last_page.disabled = (
-                max_pages is None or (page_number + 1) >= max_pages
-            )
-            self.go_to_next_page.disabled = (
-                max_pages is not None and (page_number + 1) >= max_pages
-            )
+            self.go_to_last_page.disabled = (max_pages is None
+                                             or (page_number + 1) >= max_pages)
+            self.go_to_next_page.disabled = (max_pages is not None and
+                                             (page_number + 1) >= max_pages)
             self.go_to_previous_page.disabled = page_number == 0
             return
 
@@ -104,9 +102,8 @@ class RoboPages(discord.ui.View):
                 self.go_to_previous_page.disabled = True
                 self.go_to_previous_page.label = "…"
 
-    async def show_checked_page(
-        self, interaction: discord.Interaction, page_number: int
-    ) -> None:
+    async def show_checked_page(self, interaction: discord.Interaction,
+                                page_number: int) -> None:
         max_pages = self.source.get_max_pages()
         try:
             if max_pages is None:
@@ -118,41 +115,36 @@ class RoboPages(discord.ui.View):
             # An error happened that can be handled, so ignore it.
             pass
 
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+    async def interaction_check(self,
+                                interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id in (
-            self.ctx.bot.owner_id,
-            self.ctx.author.id,
+                self.ctx.bot.owner_id,
+                self.ctx.author.id,
         ):
             return True
         await interaction.response.send_message(
-            "This pagination menu cannot be controlled by you, sorry!", ephemeral=True
-        )
+            "This pagination menu cannot be controlled by you, sorry!",
+            ephemeral=True)
         return False
 
     async def on_timeout(self) -> None:
         if self.message:
             await self.message.edit(view=None)
 
-    async def on_error(
-        self, error: Exception, item: discord.ui.Item, interaction: discord.Interaction
-    ) -> None:
+    async def on_error(self, error: Exception, item: discord.ui.Item,
+                       interaction: discord.Interaction) -> None:
         if interaction.response.is_done():
-            await interaction.followup.send(
-                "An unknown error occurred, sorry", ephemeral=True
-            )
+            await interaction.followup.send("An unknown error occurred, sorry",
+                                            ephemeral=True)
         else:
             await interaction.response.send_message(
-                "An unknown error occurred, sorry", ephemeral=True
-            )
+                "An unknown error occurred, sorry", ephemeral=True)
 
     async def start(self) -> None:
-        if (
-            self.check_embeds
-            and not self.ctx.channel.permissions_for(self.ctx.me).embed_links
-        ):
+        if (self.check_embeds and
+                not self.ctx.channel.permissions_for(self.ctx.me).embed_links):
             await self.ctx.send(
-                "Bot does not have embed links permission in this channel."
-            )
+                "Bot does not have embed links permission in this channel.")
             return
 
         await self.source._prepare_once()
@@ -162,49 +154,44 @@ class RoboPages(discord.ui.View):
         self.message = await self.ctx.send(**kwargs, view=self)
 
     @discord.ui.button(label="≪", style=discord.ButtonStyle.grey)
-    async def go_to_first_page(
-        self, button: discord.ui.Button, interaction: discord.Interaction
-    ):
+    async def go_to_first_page(self, button: discord.ui.Button,
+                               interaction: discord.Interaction):
         """go to the first page"""
         await self.show_page(interaction, 0)
 
     @discord.ui.button(label="Back", style=discord.ButtonStyle.blurple)
-    async def go_to_previous_page(
-        self, button: discord.ui.Button, interaction: discord.Interaction
-    ):
+    async def go_to_previous_page(self, button: discord.ui.Button,
+                                  interaction: discord.Interaction):
         """go to the previous page"""
         await self.show_checked_page(interaction, self.current_page - 1)
 
-    @discord.ui.button(label="Current", style=discord.ButtonStyle.grey, disabled=True)
-    async def go_to_current_page(
-        self, button: discord.ui.Button, interaction: discord.Interaction
-    ):
+    @discord.ui.button(label="Current",
+                       style=discord.ButtonStyle.grey,
+                       disabled=True)
+    async def go_to_current_page(self, button: discord.ui.Button,
+                                 interaction: discord.Interaction):
         pass
 
     @discord.ui.button(label="Next", style=discord.ButtonStyle.blurple)
-    async def go_to_next_page(
-        self, button: discord.ui.Button, interaction: discord.Interaction
-    ):
+    async def go_to_next_page(self, button: discord.ui.Button,
+                              interaction: discord.Interaction):
         """go to the next page"""
         await self.show_checked_page(interaction, self.current_page + 1)
 
     @discord.ui.button(label="≫", style=discord.ButtonStyle.grey)
-    async def go_to_last_page(
-        self, button: discord.ui.Button, interaction: discord.Interaction
-    ):
+    async def go_to_last_page(self, button: discord.ui.Button,
+                              interaction: discord.Interaction):
         """go to the last page"""
         # The call here is safe because it's guarded by skip_if
         await self.show_page(interaction, self.source.get_max_pages() - 1)
 
     @discord.ui.button(label="Skip to page...", style=discord.ButtonStyle.grey)
-    async def numbered_page(
-        self, button: discord.ui.Button, interaction: discord.Interaction
-    ):
+    async def numbered_page(self, button: discord.ui.Button,
+                            interaction: discord.Interaction):
         """lets you type a page number to go to"""
         if self.input_lock.locked():
             await interaction.response.send_message(
-                "Already waiting for your response...", ephemeral=True
-            )
+                "Already waiting for your response...", ephemeral=True)
             return
 
         if self.message is None:
@@ -214,22 +201,19 @@ class RoboPages(discord.ui.View):
             channel = self.message.channel
             author_id = interaction.user and interaction.user.id
             await interaction.response.send_message(
-                "What page do you want to go to?", ephemeral=True
-            )
+                "What page do you want to go to?", ephemeral=True)
 
             def message_check(m):
-                return (
-                    m.author.id == author_id
-                    and channel == m.channel
-                    and m.content.isdigit()
-                )
+                return (m.author.id == author_id and channel == m.channel
+                        and m.content.isdigit())
 
             try:
-                msg = await self.ctx.bot.wait_for(
-                    "message", check=message_check, timeout=30.0
-                )
+                msg = await self.ctx.bot.wait_for("message",
+                                                  check=message_check,
+                                                  timeout=30.0)
             except asyncio.TimeoutError:
-                await interaction.followup.send("Took too long.", ephemeral=True)
+                await interaction.followup.send("Took too long.",
+                                                ephemeral=True)
                 await asyncio.sleep(5)
             else:
                 page = int(msg.content)
@@ -237,9 +221,8 @@ class RoboPages(discord.ui.View):
                 await self.show_checked_page(interaction, page - 1)
 
     @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
-    async def stop_pages(
-        self, button: discord.ui.Button, interaction: discord.Interaction
-    ):
+    async def stop_pages(self, button: discord.ui.Button,
+                         interaction: discord.Interaction):
         """stops the pagination session."""
         button.disabled = True
         await interaction.response.defer()
@@ -273,8 +256,9 @@ class FieldPageSource(menus.ListPageSource):
 
 class TextPageSource(menus.ListPageSource):
     def __init__(self, text, *, prefix="```", suffix="```", max_size=2000):
-        pages = CommandPaginator(
-            prefix=prefix, suffix=suffix, max_size=max_size - 200)
+        pages = CommandPaginator(prefix=prefix,
+                                 suffix=suffix,
+                                 max_size=max_size - 200)
         for line in text.split("\n"):
             pages.add_line(line)
 
@@ -294,7 +278,8 @@ class TextPageSource(menus.ListPageSource):
 class SimplePageSource(menus.ListPageSource):
     async def format_page(self, menu, entries):
         pages = []
-        for index, entry in enumerate(entries, start=menu.current_page * self.per_page):
+        for index, entry in enumerate(entries,
+                                      start=menu.current_page * self.per_page):
             pages.append(f"{index + 1}. {entry}")
 
         maximum = self.get_max_pages()
@@ -314,9 +299,9 @@ class SimplePages(RoboPages):
     """
 
     def __init__(self, entries, *, ctx: commands.Context, per_page: int = 12):
-        super().__init__(
-            SimplePageSource(entries, per_page=per_page), ctx=ctx, check_embeds=True
-        )
+        super().__init__(SimplePageSource(entries, per_page=per_page),
+                         ctx=ctx,
+                         check_embeds=True)
 
 
 class EmbedPageSource(menus.ListPageSource):

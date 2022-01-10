@@ -9,7 +9,8 @@ from ...util import ChannelAndMessageId
 class Badges:
     def __init__(self, ctx: Context):
         self.ctx = ctx
-        self.channel = ctx.get_config_channel_by_name_or_id(ChannelAndMessageId.badges_channel.value)
+        self.channel = ctx.get_config_channel_by_name_or_id(
+            ChannelAndMessageId.badges_channel.value)
 
     async def get_all_badges(self) -> list:
         return [
@@ -18,8 +19,7 @@ class Badges:
                 code=self.get_badge_code(i.content),
                 file_name=i.attachments[0],
                 is_inverted=False,
-            )
-            async for i in self.channel.history(limit=None)
+            ) async for i in self.channel.history(limit=None)
         ]
 
     @staticmethod

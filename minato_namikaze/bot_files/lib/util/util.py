@@ -6,8 +6,7 @@ import discord
 from .vars import ChannelAndMessageId
 
 INVITE_URL_RE = re.compile(
-    r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I
-)
+    r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I)
 
 
 def filter_invites(to_filter: str) -> str:
@@ -72,10 +71,8 @@ def return_random_5characters(characters: dict) -> dict:
 
 
 def format_character_name(character_name: str) -> str:
-    if (
-        character_name.split("(")[-1].strip(" ").strip(")").lower()
-        in ChannelAndMessageId.character_side_exclude.name
-    ):
+    if (character_name.split("(")[-1].strip(" ").strip(")").lower()
+            in ChannelAndMessageId.character_side_exclude.name):
         return character_name.split("(")[0].strip(" ").title()
     return character_name.strip(" ").title()
 
@@ -84,16 +81,16 @@ def return_matching_emoji(ctx, name):
     def emoji_predicate(emoji, name):
         return emoji.name.lower() in name
 
-    if (
-        name.split("(")[-1].strip(" ").strip(")").lower()
-        in ChannelAndMessageId.character_side_exclude.name
-    ):
+    if (name.split("(")[-1].strip(" ").strip(")").lower()
+            in ChannelAndMessageId.character_side_exclude.name):
         name = name.split("(")[-1].strip(" ").strip(")").lower()
-        for i in ctx.bot.get_guild(ChannelAndMessageId.testing_server_id.name).emojis:
+        for i in ctx.bot.get_guild(
+                ChannelAndMessageId.testing_server_id.name).emojis:
             if emoji_predicate(i, name):
                 return i
     else:
         name = name.lower().strip(" ").lower()
-        for i in ctx.bot.get_guild(ChannelAndMessageId.testing_server_id.name).emojis:
+        for i in ctx.bot.get_guild(
+                ChannelAndMessageId.testing_server_id.name).emojis:
             if emoji_predicate(i, name):
                 return i

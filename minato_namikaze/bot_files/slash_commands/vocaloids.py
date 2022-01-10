@@ -1,37 +1,22 @@
 import typing
+
 import discord
+
 from ..lib import meek_api
 
 
 class VocaloidSlash(discord.SlashCommand):
     """Get kawaii Vocaloids photo"""
-    
+
     def __init__(self, cog):
         self.cog = cog
 
-    vocaloid: typing.Literal[
-            'Aoki',
-            'Diva', 
-            'Fukase',
-            'Gumi',
-            'Ia',
-            'Kaito',
-            'Len',
-            'Lily',
-            'Luka',
-            'Mayu',
-            'Meiko',
-            'Miki',
-            'Miku',
-            'Rin',
-            'Teto',
-            'Una',
-            'Yukari',
-            'Zola'
-        ] = discord.application_command_option(
-        
-        description='Vocaloids Name',
-        default='Miku',
+    vocaloid: typing.Literal["Aoki", "Diva", "Fukase", "Gumi", "Ia", "Kaito",
+                             "Len", "Lily", "Luka", "Mayu", "Meiko", "Miki",
+                             "Miku", "Rin", "Teto", "Una", "Yukari",
+                             "Zola", ] = discord.application_command_option(
+                                 description="Vocaloids Name",
+                                 default="Miku",
     )
 
     async def callback(self, response: discord.SlashCommandResponse):

@@ -21,9 +21,11 @@ def insert_returns(body):
         insert_returns(body[-1].body)
 
 
-async def copy_context_with(
-    ctx: commands.Context, *, author=None, channel=None, **kwargs
-):
+async def copy_context_with(ctx: commands.Context,
+                            *,
+                            author=None,
+                            channel=None,
+                            **kwargs):
 
     alt_message: discord.Message = copy.copy(ctx.message)
     alt_message._update(kwargs)  # pylint: disable=protected-access

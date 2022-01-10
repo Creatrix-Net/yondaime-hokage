@@ -69,56 +69,48 @@ class ConnectFour:
 
         for x in range(6):
             for i in range(4):
-                if (
-                    self.board[x][i]
-                    == self.board[x][i + 1]
-                    == self.board[x][i + 2]
-                    == self.board[x][i + 3]
-                ) and self.board[x][i] != BLANK:
+                if (self.board[x][i] == self.board[x][i + 1] ==
+                        self.board[x][i + 2] ==
+                        self.board[x][i + 3]) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         for x in range(3):
             for i in range(7):
-                if (
-                    self.board[x][i]
-                    == self.board[x + 1][i]
-                    == self.board[x + 2][i]
-                    == self.board[x + 3][i]
-                ) and self.board[x][i] != BLANK:
+                if (self.board[x][i] == self.board[x + 1][i] ==
+                        self.board[x + 2][i] ==
+                        self.board[x + 3][i]) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         for x in range(3):
             for i in range(4):
-                if (
-                    self.board[x][i]
-                    == self.board[x + 1][i + 1]
-                    == self.board[x + 2][i + 2]
-                    == self.board[x + 3][i + 3]
-                ) and self.board[x][i] != BLANK:
+                if (self.board[x][i] == self.board[x + 1][i + 1] ==
+                        self.board[x + 2][i + 2] == self.board[x + 3][i + 3]
+                    ) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         for x in range(5, 2, -1):
             for i in range(4):
-                if (
-                    self.board[x][i]
-                    == self.board[x - 1][i + 1]
-                    == self.board[x - 2][i + 2]
-                    == self.board[x - 3][i + 3]
-                ) and self.board[x][i] != BLANK:
+                if (self.board[x][i] == self.board[x - 1][i + 1] ==
+                        self.board[x - 2][i + 2] == self.board[x - 3][i + 3]
+                    ) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         return False
 
-    async def start(
-        self, ctx: commands.Context, *, remove_reaction_after: bool = False, **kwargs
-    ):
+    async def start(self,
+                    ctx: commands.Context,
+                    *,
+                    remove_reaction_after: bool = False,
+                    **kwargs):
 
         embed = await self.make_embed()
-        self.message = await ctx.send(self.BoardString(), embed=embed, **kwargs)
+        self.message = await ctx.send(self.BoardString(),
+                                      embed=embed,
+                                      **kwargs)
 
         for button in self._controls:
             await self.message.add_reaction(button)
@@ -126,14 +118,14 @@ class ConnectFour:
         while True:
 
             def check(reaction, user):
-                return (
-                    str(reaction.emoji) in self._controls
-                    and user == self.turn
-                    and reaction.message == self.message
-                    and self.board[0][self._conversion[str(reaction.emoji)]] == BLANK
-                )
+                return (str(reaction.emoji) in self._controls
+                        and user == self.turn
+                        and reaction.message == self.message
+                        and self.board[0][self._conversion[str(
+                            reaction.emoji)]] == BLANK)
 
-            reaction, user = await ctx.bot.wait_for("reaction_add", check=check)
+            reaction, user = await ctx.bot.wait_for("reaction_add",
+                                                    check=check)
 
             if await self.GameOver():
                 break

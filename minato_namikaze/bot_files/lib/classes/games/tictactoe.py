@@ -81,26 +81,22 @@ class Tictactoe:
 
         for i in range(3):
 
-            if (
-                self.board[i][0] == self.board[i][1] == self.board[i][2]
-            ) and self.board[i][0] != BLANK:
+            if (self.board[i][0] == self.board[i][1] ==
+                    self.board[i][2]) and self.board[i][0] != BLANK:
                 self.winner = self._EmojiToPlayer[self.board[i][0]]
                 return True
-            if (
-                self.board[0][i] == self.board[1][i] == self.board[2][i]
-            ) and self.board[0][i] != BLANK:
+            if (self.board[0][i] == self.board[1][i] ==
+                    self.board[2][i]) and self.board[0][i] != BLANK:
                 self.winner = self._EmojiToPlayer[self.board[0][i]]
                 return True
 
-        if (self.board[0][0] == self.board[1][1] == self.board[2][2]) and self.board[0][
-            0
-        ] != BLANK:
+        if (self.board[0][0] == self.board[1][1] ==
+                self.board[2][2]) and self.board[0][0] != BLANK:
             self.winner = self._EmojiToPlayer[self.board[0][0]]
             return True
 
-        if (self.board[0][2] == self.board[1][1] == self.board[2][0]) and self.board[0][
-            2
-        ] != BLANK:
+        if (self.board[0][2] == self.board[1][1] ==
+                self.board[2][0]) and self.board[0][2] != BLANK:
             self.winner = self._EmojiToPlayer[self.board[0][2]]
             return True
 
@@ -115,7 +111,9 @@ class Tictactoe:
         **kwargs,
     ):
         embed = await self.make_embed()
-        self.message = await ctx.send(self.BoardString(), embed=embed, **kwargs)
+        self.message = await ctx.send(self.BoardString(),
+                                      embed=embed,
+                                      **kwargs)
 
         for button in self._controls:
             await self.message.add_reaction(button)
@@ -123,13 +121,12 @@ class Tictactoe:
         while True:
 
             def check(reaction, user):
-                return (
-                    str(reaction.emoji) in self._controls
-                    and user == self.turn
-                    and reaction.message == self.message
-                )
+                return (str(reaction.emoji) in self._controls
+                        and user == self.turn
+                        and reaction.message == self.message)
 
-            reaction, user = await ctx.bot.wait_for("reaction_add", check=check)
+            reaction, user = await ctx.bot.wait_for("reaction_add",
+                                                    check=check)
 
             if await self.GameOver():
                 break

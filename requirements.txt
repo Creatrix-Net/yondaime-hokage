@@ -13,7 +13,7 @@ cachetools==4.2.4
 certifi==2021.10.8
 cffi==1.15.0
 chardet==4.0.0
-charset-normalizer==2.0.7
+charset-normalizer==2.0.10
 click==8.0.3
 colorama==0.4.4
 discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@fbb8803779373357e274e1540b368365fd9d8074

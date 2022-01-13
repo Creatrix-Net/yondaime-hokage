@@ -9,7 +9,7 @@ import psutil
 import pygit2
 from discord.ext import commands
 
-from ...lib import Embed, PrivacyPolicy, ChannelAndMessageId, LinksAndVars
+from ...lib import ChannelAndMessageId, Embed, LinksAndVars, PrivacyPolicy
 from ...lib import time_class as time
 
 
@@ -55,8 +55,10 @@ class MySupport(commands.Cog, name="My Support"):
         embed.colour = discord.Colour.blurple()
 
         # To properly cache myself, I need to use the bot support server.
-        support_guild = self.bot.get_guild(ChannelAndMessageId.server_id2.value)
-        owner = await self.bot.get_or_fetch_member(support_guild,self.bot.application_id)
+        support_guild = self.bot.get_guild(
+            ChannelAndMessageId.server_id2.value)
+        owner = await self.bot.get_or_fetch_member(support_guild,
+                                                   self.bot.application_id)
         embed.set_author(name=str(owner), icon_url=owner.display_avatar.url)
 
         # statistics

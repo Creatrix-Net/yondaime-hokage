@@ -27,13 +27,13 @@ from bot_files.lib import (
     ChannelAndMessageId,
     Context,
     Embed,
+    LinksAndVars,
     PaginatedHelpCommand,
     PostStats,
     Tokens,
     api_image_store_dir,
     format_dt,
     format_relative,
-    LinksAndVars
 )
 from discord.ext import commands
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
@@ -79,7 +79,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self._cache = {}
 
         self.version = str(token_get("BOT_VER"))
-        self.local = ast.literal_eval(token_get('LOCAL'))
+        self.local = ast.literal_eval(token_get("LOCAL"))
 
         self.start_time = discord.utils.utcnow()
         self.github = token_get("GITHUB")
@@ -111,7 +111,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             intents=intents,
             enable_debug_events=True,
             help_command=PaginatedHelpCommand(),
-            owner_id = LinksAndVars.owner_ids.value[0],
+            owner_id=LinksAndVars.owner_ids.value[0],
         )
 
     def run(self):

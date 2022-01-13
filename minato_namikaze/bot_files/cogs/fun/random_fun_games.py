@@ -1,3 +1,6 @@
+# Future Imports
+from __future__ import annotations
+
 import asyncio
 import io
 import os
@@ -6,6 +9,8 @@ from random import choice
 from typing import Optional, Union
 
 import discord
+from pyppeteer import launch
+import pyppeteer
 import mystbin
 from asyncdagpi import ImageFeatures
 from discord.ext import commands, owoify
@@ -40,21 +45,21 @@ class Random(commands.Cog):
                     " How original. No one else had thought of trying to **get the bot to insult itself**. \nI applaud your creativity. \nYawn. **Perhaps this is why you don't have friends**. \n\nYou don't add anything new to any conversation. \n**You are more of a bot than me, predictable answers, and absolutely dull to have an actual conversation with.**",
                     "Just remember I am **Konohagakure Yellow Falsh** and **Konohagakure FOURTH HOKAGE**",
                 ]
-                e = Embed(title="⚠️", description=choice(bot_msg))
+                e = Embed(title=":warning:", description=choice(bot_msg))
                 e.set_image(url="https://i.imgur.com/45CUkfq.jpeg")
                 await ctx.send(ctx.author.mention, embed=e)
 
             else:
                 await ctx.send(
                     f"{user.mention} was **insulted** by {ctx.message.author.mention}",
-                    embed=Embed(title="⚠️",
+                    embed=Embed(title=":warning:",
                                 description=choice(
                                     LinksAndVars.insults.value)),
                 )
         else:
             await ctx.send(
                 ctx.message.author.mention,
-                embed=Embed(title="⚠️",
+                embed=Embed(title=":warning:",
                             description=choice(LinksAndVars.insults.value)),
             )
 
@@ -194,6 +199,39 @@ class Random(commands.Cog):
                 await ctx.send(embed=e2)
         except mystbin.BadPasteID:
             await ctx.send(f"Hmmm.. id : {id} isn't found, try again?")
+    
+    
+    @commands.bot_has_permissions(attach_files=True)
+    @commands.command(aliases=["ss"])
+    async def screenshot(self, ctx, link: str, wait: int = 3):
+        """
+        Screenshots a given link.
+        If no time is given, it will wait 3 seconds to screenshot
+        """
+
+        await ctx.trigger_typing()
+        browser = await launch()
+        page = await browser.newPage()
+        await page.setViewport({"width": 1280, "height": 720})
+        try:
+            await page.goto(link)
+        except pyppeteer.page.PageError:
+            await ctx.send("Sorry, I couldn't find anything at that link!")
+            await browser.close()
+            return
+        except Exception:
+            await ctx.send(
+                "Sorry, I ran into an issue! Make sure to include http:// or https:// at the beginning of the link."
+            )
+            await browser.close()
+            return
+
+        await asyncio.sleep(wait)
+        result = await page.screenshot()
+        await browser.close()
+        f = io.BytesIO(result)
+        file = discord.File(f, filename="screenshot.png")
+        await ctx.send(file=file)
 
 
 def setup(bot):

@@ -251,9 +251,10 @@ class Info(commands.Cog):
         embed.add_field(name=":small_blue_diamond: User",
                         value=user,
                         inline=True)
-        embed.add_field(name=":small_blue_diamond: Nickname",
-                        value=user,
-                        inline=True)
+        if user.nick:
+            embed.add_field(name=":small_blue_diamond: Nickname",
+                            value=user.nick,
+                            inline=True)
         embed.add_field(
             name="**__User info__**",
             value=(":date: Joined On {}").format(joined_on),

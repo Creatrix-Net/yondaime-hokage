@@ -9,13 +9,13 @@ from random import choice
 from typing import Optional, Union
 
 import discord
-from pyppeteer import launch
-import pyppeteer
 import mystbin
+import pyppeteer
 from asyncdagpi import ImageFeatures
 from discord.ext import commands, owoify
 from gtts import gTTS
 from PIL import Image
+from pyppeteer import launch
 
 from ...lib import Embed, LinksAndVars, TimeConverter
 
@@ -52,9 +52,10 @@ class Random(commands.Cog):
             else:
                 await ctx.send(
                     f"{user.mention} was **insulted** by {ctx.message.author.mention}",
-                    embed=Embed(title=":warning:",
-                                description=choice(
-                                    LinksAndVars.insults.value)),
+                    embed=Embed(
+                        title=":warning:",
+                        description=choice(LinksAndVars.insults.value),
+                    ),
                 )
         else:
             await ctx.send(
@@ -199,8 +200,7 @@ class Random(commands.Cog):
                 await ctx.send(embed=e2)
         except mystbin.BadPasteID:
             await ctx.send(f"Hmmm.. id : {id} isn't found, try again?")
-    
-    
+
     @commands.bot_has_permissions(attach_files=True)
     @commands.command(aliases=["ss"])
     async def screenshot(self, ctx, link: str, wait: int = 3):

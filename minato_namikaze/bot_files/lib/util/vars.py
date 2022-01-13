@@ -103,15 +103,16 @@ class Tokens(enum.Enum):
 class LinksAndVars(enum.Enum):
     website = token_get("WEBSITE")
 
-    github = 'https://github.com/Dhruvacube/yondaime-hokage'
+    github = "https://github.com/Dhruvacube/yondaime-hokage"
     github_branch = "master"
-    
-    statuspage_link = 'https://minatonamikaze.statuspage.io/'
+
+    statuspage_link = "https://minatonamikaze.statuspage.io/"
 
     version = token_get("VERSION")
-    invite_code = 'wXVQahNM5c'
+    invite_code = "wXVQahNM5c"
     timeout = 3.0
-    owner_ids = list({887549958931247137, 837223478934896670, 747729781369602049})
+    owner_ids = list(
+        {887549958931247137, 837223478934896670, 747729781369602049})
 
     with open(
             os.path.join(

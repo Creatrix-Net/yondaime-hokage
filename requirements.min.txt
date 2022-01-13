@@ -8,7 +8,7 @@ discord-ext-owoify
 discord.py @ git+https://github.com/StockerMC/discord.py.git@master
 eight-ball
 english-words
-DiscordUtils
+DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@master
 ffmpeg
 gTTS
 jishaku @ git+https://github.com/Gorialis/jishaku.git@master

@@ -113,7 +113,8 @@ class MySupport(commands.Cog, name="My Support"):
         embed.timestamp = discord.utils.utcnow()
         await ctx.send(embed=embed)
 
-    @commands.command(description="Generates my invite link for your server", aliases=["invite"])
+    @commands.command(description="Generates my invite link for your server",
+                      aliases=["invite"])
     async def inviteme(self, ctx):
         """Generates my invite link for your server"""
         embed = discord.Embed(

@@ -111,12 +111,12 @@ class MySupport(commands.Cog, name="My Support"):
         embed.timestamp = discord.utils.utcnow()
         await ctx.send(embed=embed)
 
-    @commands.command(description="Generates my invite link for your server")
+    @commands.command(description="Generates my invite link for your server", aliases=["invite"])
     async def inviteme(self, ctx):
         """Generates my invite link for your server"""
         embed = discord.Embed(
             title="**Invite Link**",
-            description="[My Invite Link!](https://discord.com/oauth2/authorize?client_id=779559821162315787&permissions=8&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot)",
+            description=f":point_right: [Required Perms Invite]({self.bot.get_required_perms_invite_link}) \n :point_right: [Admin Perms Invite]({self.bot.get_admin_invite_link})",
         )
         embed.set_thumbnail(url=ctx.bot.user.avatar.url)
         await ctx.send(embed=embed)

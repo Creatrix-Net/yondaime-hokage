@@ -5,6 +5,7 @@ import os
 import time
 from os.path import join
 from pathlib import Path
+import TenGiphPy
 
 import aiohttp
 
@@ -18,6 +19,7 @@ from datetime import datetime
 from typing import Optional, Union
 
 import discord
+import random
 import dotenv
 import sentry_sdk
 from bot_files.lib import (
@@ -147,12 +149,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             os.mkdir(api_image_store_dir)
 
         cog_dir = BASE_DIR / "cogs"
-        for filename in os.listdir(cog_dir):
+        for filename in list(set(os.listdir(cog_dir))):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
                     if i.endswith(".py") and i.lower() != "raid.py":
-                        self.load_extension(
-                            f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
+                        self.load_extension(f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
             else:
                 if filename.endswith(".py") and filename.lower() != "raid.py":
                     self.load_extension(f"bot_files.cogs.{filename[:-3]}")
@@ -370,6 +371,26 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                         return i
             except:
                 return inviter_or_guild_owner
+    
+    @property
+    def get_admin_invite_link(self):
+        return f'https://discord.com/oauth2/authorize?client_id={self.application_id}&permissions=8&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot'
+    
+    @property
+    def get_required_perms_invite_link(self):
+        return f'https://discord.com/oauth2/authorize?client_id={self.application_id}&permissions=1515049189367&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot'
+    
+    async def get_arandom_image_from_tag(self, tag_name:str) -> Optional[str]:
+        tenor_giphy = ['tenor', 'giphy']
+        if random.choice(tenor_giphy) == 'tenor':
+            return
+        return
+    
+    def get_arandom_image_from_tag(self, tag_name:str) -> Optional[str]:
+        tenor_giphy = ['tenor', 'giphy']
+        if random.choice(tenor_giphy) == 'tenor':
+            return
+        return
 
 
 if __name__ == "__main__":

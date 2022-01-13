@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 import asyncio
 
 import discord
@@ -100,9 +100,7 @@ class QuickPoll(commands.Cog):
                 return
             answers.append(message.content)
 
-        question, description, poll_channel = answers[0], answers[1], answers[
-            -1]
-
+        question, description, poll_channel = answers[0], answers[1], await commands.TextChannelConverter(answers[-1]).convert(ctx=ctx,argument=answers[-1])
         if not isinstance(poll_channel, discord.TextChannel):
             await ctx.send(embed=ErrorEmbed(
                 description="Wrong text channel provided! Try again and mention the channel next time! :wink:"

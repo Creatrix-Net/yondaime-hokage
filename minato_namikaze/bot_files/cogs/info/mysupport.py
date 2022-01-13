@@ -9,7 +9,7 @@ import psutil
 import pygit2
 from discord.ext import commands
 
-from ...lib import Embed, PrivacyPolicy
+from ...lib import Embed, PrivacyPolicy, ChannelAndMessageId, LinksAndVars
 from ...lib import time_class as time
 
 
@@ -35,7 +35,7 @@ class MySupport(commands.Cog, name="My Support"):
         # [`hash`](url) message (offset)
         offset = time.format_relative(
             commit_time.astimezone(datetime.timezone.utc))
-        return f"[`{short_sha2}`](https://github.com/The-4th-Hokage/yondaime-hokage/commit/{commit.hex}) {short} ({offset})"
+        return f"[`{short_sha2}`]({LinksAndVars.github.value}/commit/{commit.hex}) {short} ({offset})"
 
     def get_last_commits(self, count=3):
         repo = pygit2.Repository(".git")
@@ -51,13 +51,12 @@ class MySupport(commands.Cog, name="My Support"):
         revision = self.get_last_commits()
         embed = discord.Embed(description="Latest Changes:\n" + revision)
         embed.title = "Official Bot Server Invite"
-        embed.url = "https://discord.gg/S8kzbBVN8b"
+        embed.url = f"https://discord.gg/{LinksAndVars.invite_code.value}"
         embed.colour = discord.Colour.blurple()
 
         # To properly cache myself, I need to use the bot support server.
-        support_guild = self.bot.get_guild(747480356625711204)
-        owner = await self.get_or_fetch_member(support_guild,
-                                               self.bot.owner_id)
+        support_guild = self.bot.get_guild(ChannelAndMessageId.server_id2.value)
+        owner = await self.bot.get_or_fetch_member(support_guild,self.bot.application_id)
         embed.set_author(name=str(owner), icon_url=owner.display_avatar.url)
 
         # statistics
@@ -95,18 +94,18 @@ class MySupport(commands.Cog, name="My Support"):
         embed.add_field(name="Uptime", value=self.bot.uptime)
         embed.add_field(
             name="**Bot Developers:**",
-            value=f"[{ctx.get_user(self.bot.owner_id)}](https://discord.com/users/{self.bot.owner_id}/)",
+            value=f"[{ctx.get_user(self.bot.owner_id)}](https://discord.com/users/{self.bot.owner_id})",
         )
         embed.add_field(
             name="**More Info:**",
-            value="[Click Here](https://statcord.com/bot/779559821162315787)",
+            value=f"[Click Here](https://statcord.com/bot/{self.bot.owner_id})",
         )
         embed.add_field(
             name="**Incidents/Maintenance Reports:**",
-            value="[Click Here](https://minatonamikaze.statuspage.io/)",
+            value=f"[Click Here]({LinksAndVars.statuspage_link.value})",
         )
         embed.set_footer(
-            text=f"Made with discord.py v{version}",
+            text=f"Made with Stocker's discord.py v{version}",
             icon_url="http://i.imgur.com/5BFecvA.png",
         )
         embed.timestamp = discord.utils.utcnow()
@@ -126,7 +125,7 @@ class MySupport(commands.Cog, name="My Support"):
     async def supportserver(self, ctx):
         """Generates my support server invite"""
         await ctx.send("**Here you go, my support server invite**")
-        await ctx.send("https://discord.gg/S8kzbBVN8b")
+        await ctx.send(f"https://discord.gg/{LinksAndVars.invite_code.value}")
 
     @commands.command()
     async def privacy(self, ctx):
@@ -160,8 +159,8 @@ class MySupport(commands.Cog, name="My Support"):
         periods, e.g. tag.create for the create subcommand of the tag command
         or by spaces.
         """
-        source_url = "https://github.com/The-4th-Hokage/yondaime-hokage"
-        branch = "master"
+        source_url = LinksAndVars.github.value
+        branch = LinksAndVars.github_branch.value
         if command is None:
             return await ctx.send(source_url)
 

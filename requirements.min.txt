@@ -1,0 +1,33 @@
+﻿akinator.py
+async-cleverbot
+async-timeout
+asyncdagpi
+betterstatcord.py
+discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@master
+discord-ext-owoify
+discord.py @ git+https://github.com/StockerMC/discord.py.git@master
+eight-ball
+english-words
+DiscordUtils
+ffmpeg
+gTTS
+jishaku @ git+https://github.com/Gorialis/jishaku.git@master
+mal-api
+mystbin.py
+orjson
+parsedatetime
+Pillow
+platformdirs
+psutil
+pygit2
+PyNaCl
+python-dateutil
+python-dotenv
+pytz
+sentry-sdk
+spotify
+SQLAlchemy
+TenGiphPy
+youtube-dl
+youtube-search
+pyppeteer

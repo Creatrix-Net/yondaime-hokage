@@ -381,13 +381,13 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     def get_required_perms_invite_link(self):
         return f"https://discord.com/oauth2/authorize?client_id={self.application_id}&permissions=1515049189367&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot"
 
-    async def get_arandom_image_from_tag(self, tag_name: str) -> Optional[str]:
+    async def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
         tenor_giphy = ["tenor", "giphy"]
         if random.choice(tenor_giphy) == "tenor":
             return
         return
 
-    def get_arandom_image_from_tag(self, tag_name: str) -> Optional[str]:
+    def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
         tenor_giphy = ["tenor", "giphy"]
         if random.choice(tenor_giphy) == "tenor":
             return

@@ -381,17 +381,33 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     def get_required_perms_invite_link(self):
         return f"https://discord.com/oauth2/authorize?client_id={self.application_id}&permissions=1515049189367&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot"
 
-    async def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
-        tenor_giphy = ["tenor", "giphy"]
-        if random.choice(tenor_giphy) == "tenor":
-            return
-        return
-
     def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
         tenor_giphy = ["tenor", "giphy"]
         if random.choice(tenor_giphy) == "tenor":
+            api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
+            try:
+                return api_model.random(str(tag_name))
+            except:
+                return
+        api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
+        try:
+            return api_model.random(str(tag_name))['data']['images']['downsized_large']['url']
+        except:
             return
-        return
+
+    async def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
+        tenor_giphy = ["tenor", "giphy"]
+        if random.choice(tenor_giphy) == "tenor":
+            api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
+            try:
+                return await api_model.arandom(str(tag_name))
+            except:
+                return
+        api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
+        try:
+            return await api_model.arandom(tag=str(tag_name))['data']['images']['downsized_large']['url']
+        except:
+            return
 
 
 if __name__ == "__main__":

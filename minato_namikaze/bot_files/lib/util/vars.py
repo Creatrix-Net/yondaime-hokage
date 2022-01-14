@@ -97,6 +97,10 @@ class Tokens(enum.Enum):
     dagpi = token_get("DAGPI")
     chatbot = token_get("CHATBOTTOKEN")
     sentry_link = token_get("SENTRY")
+    
+    tenor = token_get("TENOR")
+    giphy = token_get("GIPHY")
+    
     token = token_get("TOKEN")
 
 

@@ -266,7 +266,7 @@ class Context(commands.Context):
             return channel_model
         else:
             return self.bot.get_channel(channel)
-    
+
     def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
         tenor_giphy = ["tenor", "giphy"]
         if random.choice(tenor_giphy) == "tenor":
@@ -277,7 +277,8 @@ class Context(commands.Context):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name))['data']['images']['downsized_large']['url']
+            return api_model.random(
+                str(tag_name))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -291,6 +292,7 @@ class Context(commands.Context):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return await api_model.arandom(tag=str(tag_name))['data']['images']['downsized_large']['url']
+            return await api_model.arandom(
+                tag=str(tag_name))["data"]["images"]["downsized_large"]["url"]
         except:
             return

@@ -104,6 +104,7 @@ class Tokens(enum.Enum):
     token = token_get("TOKEN")
     weather = token_get("WEATHER")
 
+
 class LinksAndVars(enum.Enum):
     website = token_get("WEBSITE")
 

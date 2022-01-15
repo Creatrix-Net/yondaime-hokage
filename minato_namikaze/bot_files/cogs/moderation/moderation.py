@@ -54,11 +54,16 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions(kick_members=True)
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
-    async def kick(self, ctx, member: Optional[Union[discord.Member, MemberID]], *, reason=None):
+    async def kick(self,
+                   ctx,
+                   member: Optional[Union[discord.Member, MemberID]],
+                   *,
+                   reason=None):
         """A command which kicks a given user"""
         await ctx.guild.kick(user=member, reason=reason)
 
-        embed = discord.Embed(title=f"{ctx.author.name} kicked: {member.name}", description=reason)
+        embed = discord.Embed(title=f"{ctx.author.name} kicked: {member.name}",
+                              description=reason)
         await ctx.send(embed=embed)
 
     # ban
@@ -83,7 +88,8 @@ class Moderation(commands.Cog):
                 description="You **can't ban yourself**!"))
             return
         try:
-            await ctx.guild.ban(user=member, reason=ActionReason().convert(ctx, reason))
+            await ctx.guild.ban(user=member,
+                                reason=ActionReason().convert(ctx, reason))
         except:
             await ctx.send(
                 embed=ErrorEmbed(
@@ -93,7 +99,8 @@ class Moderation(commands.Cog):
             )
             return
 
-        embed = ErrorEmbed(title=f"{ctx.author.name} banned: {member.name}",description=reason)
+        embed = ErrorEmbed(title=f"{ctx.author.name} banned: {member.name}",
+                           description=reason)
         await ctx.send(embed=embed)
 
     # banlist
@@ -238,8 +245,8 @@ class Moderation(commands.Cog):
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
-        await ctx.guild.ban(member, reason=ActionReason(ctx,reason))
-        await ctx.guild.unban(member, reason=ActionReason(ctx,reason))
+        await ctx.guild.ban(member, reason=ActionReason(ctx, reason))
+        await ctx.guild.unban(member, reason=ActionReason(ctx, reason))
         await ctx.send("\N{OK HAND SIGN}")
 
     # Unban

@@ -221,7 +221,7 @@ class Random(commands.Cog):
             return
         except Exception:
             await ctx.send(
-                "Sorry, I ran into an issue! Make sure to include http:// or https:// at the beginning of the link."
+                "Sorry, I ran into an issue! Make sure to include https:// or https:// at the beginning of the link."
             )
             await browser.close()
             return

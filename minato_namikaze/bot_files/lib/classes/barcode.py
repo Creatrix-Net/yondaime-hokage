@@ -49,12 +49,12 @@ def create_svg_object():
     doctype = imp.createDocumentType(
         "svg",
         "-//W3C//DTD SVG 1.1//EN",
-        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd",
+        "https://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd",
     )
     document = imp.createDocument(None, "svg", doctype)
     _set_attributes(document.documentElement,
                     version="1.1",
-                    xmlns="http://www.w3.org/2000/svg")
+                    xmlns="https://www.w3.org/2000/svg")
     return document
 
 

@@ -102,7 +102,7 @@ class Tokens(enum.Enum):
     giphy = token_get("GIPHY")
 
     token = token_get("TOKEN")
-
+    weather = token_get("WEATHER")
 
 class LinksAndVars(enum.Enum):
     website = token_get("WEBSITE")

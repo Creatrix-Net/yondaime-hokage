@@ -263,12 +263,14 @@ class BotEvents(commands.Cog):
     # on message event
     @commands.Cog.listener()
     async def on_message(self, message):
-        if (self.bot.user.mentioned_in(message) and
-                message.mention_everyone is False and message.content.lower()
-                in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
-                or message.content.lower() in
-            (f"<@!{self.bot.application_id}> prefix",
-             f"<@{self.bot.application_id}> prefix")) and not message.author.bot:
+        if (self.bot.user.mentioned_in(message)
+                and message.mention_everyone is False
+                and message.content.lower() in
+            (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
+                or message.content.lower() in (
+                    f"<@!{self.bot.application_id}> prefix",
+                    f"<@{self.bot.application_id}> prefix",
+        )) and not message.author.bot:
             await message.channel.send(
                 "The prefix is **)** ,A full list of all commands is available by typing ```)help```"
             )

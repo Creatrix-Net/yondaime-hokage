@@ -12,7 +12,7 @@ def votedVoidBots(ctx):
     ):
         return True
     e1 = requests.get(
-        f"http://api.voidbots.net/bot/voted/{ctx.bot.user.id}/{ctx.message.author.id}",
+        f"https://api.voidbots.net/bot/voted/{ctx.bot.user.id}/{ctx.message.author.id}",
         headers={"Authorization": voidbot},
     )
     try:

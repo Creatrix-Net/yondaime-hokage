@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import asyncio
-import random, TenGiphPy
 import io
+import random
 from typing import Optional, Union
 
 import discord
+import TenGiphPy
 from discord.ext import commands
 
 from .vars import ChannelAndMessageId, SetupVars

@@ -31,3 +31,4 @@ TenGiphPy
 youtube-dl
 youtube-search
 pyppeteer
+uvloop; sys_platform != "win32"

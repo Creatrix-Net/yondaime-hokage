@@ -391,7 +391,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name))['data']['images']['downsized_large']['url']
+            return api_model.random(
+                str(tag_name))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 

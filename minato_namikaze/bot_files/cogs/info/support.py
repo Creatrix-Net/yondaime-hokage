@@ -83,7 +83,8 @@ class Support(commands.Cog):
                 and not isinstance(error, commands.BotMissingPermissions)):
             await ctx.send(embed=errorembed(ctx))
 
-    @commands.command(description="Resolves the existing ticket!",usage="<member.mention>")
+    @commands.command(description="Resolves the existing ticket!",
+                      usage="<member.mention>")
     @commands.check(if_inside_support_channel)
     @commands.has_permissions(manage_guild=True)
     @commands.guild_only()

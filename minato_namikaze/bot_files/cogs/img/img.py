@@ -9,7 +9,7 @@ from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
 
-from ...lib import Tokens, MemberID
+from ...lib import MemberID, Tokens
 
 
 class ImageManipulation(commands.Cog, name="Image Manipulation"):
@@ -24,11 +24,13 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         return discord.PartialEmoji(name="\N{FRAME WITH PICTURE}")
 
     @commands.command(usage="[member.mention | member.id]")
-    async def wni(self, ctx, *, member: Optional[Union[discord.Member, MemberID]]):
+    async def wni(self, ctx, *, member: Optional[Union[discord.Member,
+                                                       MemberID]]):
         """Prove that you are not sus!"""
         if member == "@everyone":
             await ctx.send(
-                f"** {ctx.author.mention} yes yes bro!!! Everyone is not sus!**")
+                f"** {ctx.author.mention} yes yes bro!!! Everyone is not sus!**"
+            )
             return
         member = ctx.get_user(member)
         desc = f"** {member}  was not the imposter**"
@@ -42,7 +44,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(file=file, embed=embed)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def wi(self, ctx, *, member: Optional[Union[discord.Member, MemberID]]):
+    async def wi(self, ctx, *, member: Optional[Union[discord.Member,
+                                                      MemberID]]):
         """Prove anyone that they are sus!"""
         if member == "@everyone":
             desc = f"Hmmmmmmm ** {ctx.author.mention} , Hey guys {ctx.author.mention} is the sus !!!**"
@@ -74,7 +77,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         os.remove("wi.png")
 
     @commands.command(usage="[member.mention | member.id]")
-    async def triggered(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def triggered(self, ctx, member: Optional[Union[discord.Member,
+                                                          MemberID]]):
         """Make anyone triggered"""
         if member is None:
             member = ctx.author
@@ -87,8 +91,12 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://triggered.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.command(cooldown_after_parsing=True, usage="[discord.member.mention.to.send | member.id] <your.message>")
-    async def message(self, ctx, member: Optional[Union[discord.Member, MemberID]], *, text):
+    @commands.command(
+        cooldown_after_parsing=True,
+        usage="[discord.member.mention.to.send | member.id] <your.message>",
+    )
+    async def message(self, ctx, member: Optional[Union[discord.Member,
+                                                        MemberID]], *, text):
         """Send a fake Discord message"""
         if member is None:
             member = ctx.author
@@ -105,8 +113,15 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://message.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.command(cooldown_after_parsing=True,usage="<member.mention, captcha.text>")
-    async def captcha(self, ctx,member: Optional[Union[discord.Member, MemberID]],*, text="Detect Face"):
+    @commands.command(cooldown_after_parsing=True,
+                      usage="<member.mention, captcha.text>")
+    async def captcha(
+        self,
+        ctx,
+        member: Optional[Union[discord.Member, MemberID]],
+        *,
+        text="Detect Face",
+    ):
         """Captcha v3 Image mockup"""
         if member is None:
             member = ctx.author
@@ -127,7 +142,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             await ctx.send(file=e2file, embed=e)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def pixel(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def pixel(self, ctx, member: Optional[Union[discord.Member,
+                                                      MemberID]]):
         """Pixallate your pfp"""
         if member is None:
             member = ctx.author
@@ -140,7 +156,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(file=e2file, embed=e)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def jail(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def jail(self, ctx, member: Optional[Union[discord.Member,
+                                                     MemberID]]):
         """Jail yourself or someone"""
         if member is None:
             member = ctx.author
@@ -152,7 +169,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(file=e2file, embed=e)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def wanted(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def wanted(self, ctx, member: Optional[Union[discord.Member,
+                                                       MemberID]]):
         """Get yourself or someone listed in Bingo Book"""
         if member is None:
             member = ctx.author
@@ -165,7 +183,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(file=e2file, embed=e)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def rainbow(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def rainbow(self, ctx, member: Optional[Union[discord.Member,
+                                                        MemberID]]):
         """Rainbow light effect"""
         if member is None:
             member = ctx.author
@@ -178,7 +197,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=e, file=e2file)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def gay(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def gay(self, ctx, member: Optional[Union[discord.Member,
+                                                    MemberID]]):
         """Seperate yourself/others and mark them/yourself as gay!"""
         if member is None:
             member = ctx.author
@@ -191,7 +211,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=e, file=e2file)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def trash(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def trash(self, ctx, member: Optional[Union[discord.Member,
+                                                      MemberID]]):
         """Puts trash into trashbin"""
         if member is None:
             member = ctx.author
@@ -203,8 +224,10 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://trash.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.command(aliases=["delete_trash", "dt"], usage="[member.mention | member.id]")
-    async def delete(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    @commands.command(aliases=["delete_trash", "dt"],
+                      usage="[member.mention | member.id]")
+    async def delete(self, ctx, member: Optional[Union[discord.Member,
+                                                       MemberID]]):
         """Removes trash from bin"""
         if member is None:
             member = ctx.author
@@ -217,7 +240,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=e, file=e2file)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def angel(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def angel(self, ctx, member: Optional[Union[discord.Member,
+                                                      MemberID]]):
         """Be an Angel"""
         if member is None:
             member = ctx.author
@@ -230,7 +254,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=e, file=e2file)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def satan(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def satan(self, ctx, member: Optional[Union[discord.Member,
+                                                      MemberID]]):
         """Be the Devil"""
         if member is None:
             member = ctx.author
@@ -242,8 +267,12 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://satan.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.command(aliases=["chp", "chpaint", "charcoal_paint", "charcoalp"],usage="[member.mention | member.id]")
-    async def charcoal(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    @commands.command(
+        aliases=["chp", "chpaint", "charcoal_paint", "charcoalp"],
+        usage="[member.mention | member.id]",
+    )
+    async def charcoal(self, ctx, member: Optional[Union[discord.Member,
+                                                         MemberID]]):
         """Get your pfp beautiful charcoal paint"""
         if member is None:
             member = ctx.author
@@ -256,7 +285,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=e, file=e2file)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def hitler(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def hitler(self, ctx, member: Optional[Union[discord.Member,
+                                                       MemberID]]):
         """Hail Hitler"""
         if member is None:
             member = ctx.author
@@ -269,7 +299,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=e, file=e2file)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def wasted(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def wasted(self, ctx, member: Optional[Union[discord.Member,
+                                                       MemberID]]):
         """GTA V wasted screen"""
         if member is None:
             member = ctx.author
@@ -282,7 +313,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=e, file=e2file)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def bomb(self, ctx, member: Optional[Union[discord.Member, MemberID]]):
+    async def bomb(self, ctx, member: Optional[Union[discord.Member,
+                                                     MemberID]]):
         """Bomb someone"""
         e = discord.Embed(title="Boooom! :skull_crossbones:")
         if member is None:

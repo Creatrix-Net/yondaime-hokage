@@ -361,9 +361,9 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
                 allowed_mentions=discord.AllowedMentions(everyone=False)
             )
             return
-        
-        member = ctx.get_user(member)
-        desc = f"** {ctx.author.mention} spanks {member.mention} !!! Damm! **"
+        else:
+            member = ctx.get_user(member)
+            desc = f"** {ctx.author.mention} spanks {member.mention} !!! Damm! **"
         if member is ctx.author:
             desc = f"** {ctx.author.mention} spanks themselves !!! LOL! **"
 
@@ -383,9 +383,9 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
                 allowed_mentions=discord.AllowedMentions(everyone=False)
             )
             return
-        
-        member = ctx.get_user(member)
-        desc = f"** {ctx.author.mention} slaps {member.mention} !!! Damm! **"
+        else:
+            member = ctx.get_user(member)
+            desc = f"** {ctx.author.mention} slaps {member.mention} !!! Damm! **"
         if member is ctx.author:
             desc = f"** {ctx.author.mention} slaps themselves !!! LOL! **"
             
@@ -413,9 +413,9 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
                 allowed_mentions=discord.AllowedMentions(everyone=False)
             )
             return
-        
-        member = ctx.get_user(member)
-        desc = f"** {ctx.author.mention} hugs {member.mention} !!! :heart: :heart: :heart: **"
+        else:
+            member = ctx.get_user(member)
+            desc = f"** {ctx.author.mention} hugs {member.mention} !!! :heart: :heart: :heart: **"
         if member is ctx.author:
             desc = f"** {ctx.author.mention} hugs themselves !!! :heart: :heart: :heart: :heart: **"
             
@@ -435,9 +435,9 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
                 allowed_mentions=discord.AllowedMentions(everyone=False)
             )
             return
-        
-        member = ctx.get_user(member)
-        desc = f"** {ctx.author.mention} pokes {member} !!! **"
+        else:
+            member = ctx.get_user(member)
+            desc = f"** {ctx.author.mention} pokes {member} !!! **"
         if member is ctx.author:
             desc = f"** {ctx.author.id} pokes themselves !!! **"
 
@@ -453,9 +453,9 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             desc = f"**{ctx.author.mention} high-fives **"
         elif member in ["@everyone", "@here"]:
             desc = f"**@everyone , {ctx.author.mention} high-fives **"
-        
-        member = ctx.get_user(member)
-        desc = f"**{ctx.author.mention} high fives {member.mention} !!! **"
+        else:
+            member = ctx.get_user(member)
+            desc = f"**{ctx.author.mention} high fives {member.mention} !!! **"
         if member is ctx.author:
             desc = f"**{ctx.author.mention} high-fives **"
 
@@ -471,9 +471,9 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             desc = f"**{ctx.author.mention} is partying !!**"
         elif member in ["@everyone", "@here"]:
             desc = f"**@everyone {ctx.author.mention} is partying!! come join them !! **"
-        
-        member = ctx.get_user(member)
-        desc = f"**{ctx.author.mention} parties with {member.mention} !!! Yaay !!! **"
+        else:
+            member = ctx.get_user(member)
+            desc = f"**{ctx.author.mention} parties with {member.mention} !!! Yaay !!! **"
         if member is ctx.author:
             desc = f"**{ctx.author.mention} is partying !!!**"
 

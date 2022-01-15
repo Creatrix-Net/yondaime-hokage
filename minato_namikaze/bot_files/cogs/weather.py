@@ -8,7 +8,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
-
+from ..lib import Tokens
 
 class UnitConverter(Converter):
     async def convert(self, ctx: commands.Context,
@@ -119,7 +119,7 @@ class Weather(commands.Cog):
         guild = ctx.message.guild
         author = ctx.message.author
         units = choice(["kelvin", "imperial", "metric"])
-        params = {"appid": "88660f6af079866a3ef50f491082c386", "units": units}
+        params = {"appid": Tokens.weather.value, "units": units}
         if units == "kelvin":
             params["units"] = "metric"
         if zipcode:

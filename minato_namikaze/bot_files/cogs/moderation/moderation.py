@@ -27,8 +27,7 @@ class Moderation(commands.Cog):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",
-                                    id=922030031146995733)
+        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
 
     # set delay
     @commands.command()
@@ -109,8 +108,7 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def banlist(self, ctx, *, member: Optional[Union[str, int,
-                                                           discord.Member]]):
+    async def banlist(self, ctx, *, member: Optional[Union[str, MemberID, discord.Member]]):
         banned_users = list(await ctx.guild.bans())
         if not member:
             if len(banned_users) == 0:
@@ -177,7 +175,7 @@ class Moderation(commands.Cog):
                         n += 1
                         return
 
-                elif isinstance(member, int):
+                elif isinstance(member, MemberID):
                     if user.id == int(member):
                         if ban_entry.reason:
                             embed.add_field(name="**Reason**",
@@ -285,7 +283,7 @@ class Moderation(commands.Cog):
     async def ar(
         self,
         ctx,
-        member: Optional[Union[int, discord.Member]],
+        member: Optional[Union[MemberID, discord.Member]],
         role: Union[int, discord.Role],
     ):
         """Adds a role to a given user"""
@@ -308,7 +306,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_warning_system_setup)
     async def warn(self,
                    ctx,
-                   member: Union[int, discord.Member],
+                   member: Union[MemberID, discord.Member],
                    *,
                    reason: str = None):
         """Warn a user"""
@@ -344,7 +342,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_warning_system_setup)
     async def warnlist(self,
                        ctx,
-                       member: Optional[Union[int, discord.Member]] = None):
+                       member: Optional[Union[MemberID, discord.Member]] = None):
         """Get the no. of warns for a specified user"""
         member = ctx.get_user(
             member if member is not None else ctx.message.author)

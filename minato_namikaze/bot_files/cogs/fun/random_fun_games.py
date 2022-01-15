@@ -16,6 +16,7 @@ from discord.ext import commands, owoify
 from gtts import gTTS
 from PIL import Image
 from pyppeteer import launch
+import eight_ball
 
 from ...lib import Embed, LinksAndVars, TimeConverter
 
@@ -201,6 +202,13 @@ class Random(commands.Cog):
         except mystbin.BadPasteID:
             await ctx.send(f"Hmmm.. id : {id} isn't found, try again?")
 
+    @commands.command(name="8ball", usage="<question>")
+    async def _8ball(self, ctx, *, question):
+        """Ask questions about your future"""
+        ball = eight_ball.ball()
+        async with ctx.channel.typing():
+            await ctx.send(ball.response(question))
+    
     @commands.bot_has_permissions(attach_files=True)
     @commands.command(aliases=["ss"])
     async def screenshot(self, ctx, link: str, wait: int = 3):

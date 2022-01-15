@@ -274,13 +274,13 @@ class Context(commands.Context):
         if random.choice(tenor_giphy) == "tenor":
             api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
             try:
-                return api_model.random(str(tag_name))
+                return api_model.random(str(tag_name.lower()))
             except:
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
             return api_model.random(
-                str(tag_name))["data"]["images"]["downsized_large"]["url"]
+                str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -289,12 +289,42 @@ class Context(commands.Context):
         if random.choice(tenor_giphy) == "tenor":
             api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
             try:
-                return await api_model.arandom(str(tag_name))
+                return await api_model.arandom(str(tag_name.lower()))
             except:
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
             return (await api_model.arandom(
-                tag=str(tag_name)))["data"]["images"]["downsized_large"]["url"]
+                tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
+        except:
+            return
+    
+    def tenor(self, tag_name: str) -> Optional[str]:
+        api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
+        try:
+            return api_model.random(str(tag_name.lower()))
+        except:
+             return
+    
+    def giphy(self, tag_name: str) -> Optional[str]:
+        api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
+        try:
+            return api_model.random(
+                str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
+        except:
+            return
+    
+    async def tenor(self, tag_name: str) -> Optional[str]:
+        api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
+        try:
+            return await api_model.arandom(str(tag_name.lower()))
+        except:
+            return
+    
+    async def giphy(self, tag_name: str) -> Optional[str]:
+        api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
+        try:
+            return (await api_model.arandom(
+                tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
         except:
             return

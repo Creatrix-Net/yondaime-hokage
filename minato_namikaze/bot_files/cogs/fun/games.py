@@ -119,8 +119,7 @@ class Games(commands.Cog):
             description="You need to join the voice channel in order to use this command :)",
         )
         await ctx.send(embed=e)
-    
-    
+
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
     @commands.command(aliases=["cb"])
     async def chatbot(self, ctx):

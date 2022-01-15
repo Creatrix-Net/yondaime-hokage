@@ -292,6 +292,7 @@ class Context(commands.Context):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name)))['data']['images']['downsized_large']['url']
+            return (await api_model.arandom(
+                tag=str(tag_name)))["data"]["images"]["downsized_large"]["url"]
         except:
             return

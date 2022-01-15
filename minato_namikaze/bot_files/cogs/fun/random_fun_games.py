@@ -9,6 +9,7 @@ from random import choice
 from typing import Optional, Union
 
 import discord
+import eight_ball
 import mystbin
 import pyppeteer
 from asyncdagpi import ImageFeatures
@@ -16,7 +17,6 @@ from discord.ext import commands, owoify
 from gtts import gTTS
 from PIL import Image
 from pyppeteer import launch
-import eight_ball
 
 from ...lib import Embed, LinksAndVars, TimeConverter
 
@@ -208,7 +208,7 @@ class Random(commands.Cog):
         ball = eight_ball.ball()
         async with ctx.channel.typing():
             await ctx.send(ball.response(question))
-    
+
     @commands.bot_has_permissions(attach_files=True)
     @commands.command(aliases=["ss"])
     async def screenshot(self, ctx, link: str, wait: int = 3):

@@ -164,7 +164,7 @@ class Weather(commands.Cog):
             data["sys"]["sunset"] + data["timezone"]).strftime("%H:%M")
         embed = discord.Embed(colour=discord.Colour.blue())
         if city and country:
-            embed.add_field(name="🌍 **Location**",
+            embed.add_field(name=":earth_africa: **Location**",
                             value="{0}, {1}".format(city, country))
         else:
             embed.add_field(name="\N{EARTH GLOBE AMERICAS} **Location**",

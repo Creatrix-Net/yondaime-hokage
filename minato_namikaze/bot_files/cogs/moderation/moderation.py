@@ -1,7 +1,6 @@
-import datetime
 import re
 import shlex
-from collections import Counter, defaultdict
+from collections import Counter
 from os.path import join
 from typing import Optional, Union
 
@@ -14,7 +13,6 @@ from ...lib import (
     BannedMember,
     ErrorEmbed,
     MemberID,
-    PostStats,
     check_if_warning_system_setup,
     has_permissions,
 )
@@ -56,12 +54,11 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions(kick_members=True)
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
-    async def kick(self, ctx, member: discord.Member, *, reason=None):
+    async def kick(self, ctx, member: Optional[Union[discord.Member, MemberID]], *, reason=None):
         """A command which kicks a given user"""
         await ctx.guild.kick(user=member, reason=reason)
 
-        embed = discord.Embed(title=f"{ctx.author.name} kicked: {member.name}",
-                              description=reason)
+        embed = discord.Embed(title=f"{ctx.author.name} kicked: {member.name}", description=reason)
         await ctx.send(embed=embed)
 
     # ban
@@ -86,7 +83,7 @@ class Moderation(commands.Cog):
                 description="You **can't ban yourself**!"))
             return
         try:
-            await ctx.guild.ban(user=member, reason=reason)
+            await ctx.guild.ban(user=member, reason=ActionReason().convert(ctx, reason))
         except:
             await ctx.send(
                 embed=ErrorEmbed(
@@ -96,8 +93,7 @@ class Moderation(commands.Cog):
             )
             return
 
-        embed = ErrorEmbed(title=f"{ctx.author.name} banned: {member.name}",
-                           description=reason)
+        embed = ErrorEmbed(title=f"{ctx.author.name} banned: {member.name}",description=reason)
         await ctx.send(embed=embed)
 
     # banlist
@@ -242,8 +238,8 @@ class Moderation(commands.Cog):
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
-        await ctx.guild.ban(member, reason=reason)
-        await ctx.guild.unban(member, reason=reason)
+        await ctx.guild.ban(member, reason=ActionReason(ctx,reason))
+        await ctx.guild.unban(member, reason=ActionReason(ctx,reason))
         await ctx.send("\N{OK HAND SIGN}")
 
     # Unban
@@ -268,7 +264,7 @@ class Moderation(commands.Cog):
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
-        await ctx.guild.unban(member.user, reason=reason)
+        await ctx.guild.unban(member.user, reason=ActionReason(reason))
         if member.reason:
             await ctx.send(
                 f"Unbanned {member.user} (ID: {member.user.id}), previously banned for {member.reason}."

@@ -3,7 +3,7 @@ import functools
 import os
 import sys
 from io import BytesIO
-from typing import Optional, Union, cast
+from typing import Union
 
 import aiohttp
 import discord

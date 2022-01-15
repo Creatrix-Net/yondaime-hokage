@@ -78,8 +78,7 @@ class BannedMember(commands.Converter):
                     "This member has not been banned before.") from None
 
         ban_list = await ctx.guild.bans()
-        entity = discord.utils.find(lambda u: str(u.user) == argument,
-                                    ban_list)
+        entity = discord.utils.find(lambda u: str(u.user) == argument,ban_list)
 
         if entity is None:
             raise commands.BadArgument(

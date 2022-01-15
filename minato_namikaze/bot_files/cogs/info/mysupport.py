@@ -108,7 +108,7 @@ class MySupport(commands.Cog, name="My Support"):
         )
         embed.set_footer(
             text=f"Made with Stocker's discord.py v{version}",
-            icon_url="http://i.imgur.com/5BFecvA.png",
+            icon_url="https://i.imgur.com/5BFecvA.png",
         )
         embed.timestamp = discord.utils.utcnow()
         await ctx.send(embed=embed)

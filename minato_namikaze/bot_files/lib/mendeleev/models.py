@@ -62,7 +62,7 @@ class Element(Base):
             Hydrogen was taken from K. T. Tang, J. M. Norbeck and P. R. Certain,
             J. Chem. Phys. 64, 3063 (1976), doi:10.1063/1.432569
         c6_gb (float): C_6 dispersion coefficient in a.u. from Gould, T., & Bučko, T. (2016).
-            JCTC, 12(8), 3603–3613. http://doi.org/10.1021/acs.jctc.6b00361
+            JCTC, 12(8), 3603–3613. https://doi.org/10.1021/acs.jctc.6b00361
         cas (str): Chemical Abstracts Service identifier
         covalent_radius_bragg (float): Covalent radius in pm from
         covalent_radius_cordero (float): Covalent radius in pm from Cordero, B., Gómez, V., Platero-Prats, A.
@@ -75,7 +75,7 @@ class Element(Base):
             doi:10.1002/chem.200800987
         covalent_radius_pyykko_double (float): Double bond covalent radius in pm from P. Pyykkö et al.
         covalent_radius_pyykko_triple (float): Triple bond covalent radius in pm from P. Pyykkö et al.
-        cpk_color (str): CPK color of the atom in HEX, see http://jmol.sourceforge.net/jscolors/#color_U
+        cpk_color (str): CPK color of the atom in HEX, see https://jmol.sourceforge.net/jscolors/#color_U
         density (float): Density at 295K in g/cm3
         description (str): Short description of the element
         dipole_polarizability (float): Dipole polarizability in atomic units
@@ -96,7 +96,7 @@ class Element(Base):
         heat_of_formation (float): Heat of formation in kJ/mol
         is_monoisotopic (bool): A flag marking if the element is monoisotopic
         jmol_color (str): Color of the atom as used in Jmol, in HEX,
-            see http://jmol.sourceforge.net/jscolors/#color_U
+            see https://jmol.sourceforge.net/jscolors/#color_U
         lattice_constant (float): Lattice constant in ang
         lattice_structure (str): Lattice structure code
         mass (float): Relative atomic mass. Ratio of the average mass of atoms
@@ -108,7 +108,7 @@ class Element(Base):
             equation relating such distances with bond number
         metallic_radius_c12 (float): Metallic radius obtained by Pauling with an assumed number of
             nearest neighbors equal to 12
-        molcas_gv_color (str): Color of an atom in HEX from MOLCAS GV http://www.molcas.org/GV/
+        molcas_gv_color (str): Color of an atom in HEX from MOLCAS GV https://www.molcas.org/GV/
         name (str): Name in English
         name_origin (str): Origin of the name
         period (int): Period in periodic table
@@ -132,7 +132,7 @@ class Element(Base):
         vdw_radius_mm3 (float): Van der Waals radius from MM3 in pm
         oxistates (list): Oxidation states
         ionenergies (dict): Ionization energies in eV parsed from
-            http://physics.nist.gov/cgi-bin/ASD/ie.pl on April 13, 2015
+            https://physics.nist.gov/cgi-bin/ASD/ie.pl on April 13, 2015
     """
 
     __tablename__ = "elements"
@@ -369,15 +369,15 @@ class Element(Base):
             method: Method to calculate the screening constant, the choices are
                 - `slater`, for Slater's method as in Slater, J. C. (1930).
                     Atomic Shielding Constants. Physical Review, 36(1), 57–64.
-                    `doi:10.1103/PhysRev.36.57 <http://www.dx.doi.org/10.1103/PhysRev.36.57>`_
+                    `doi:10.1103/PhysRev.36.57 <https://www.dx.doi.org/10.1103/PhysRev.36.57>`_
                 - `clementi` for values of screening constants from Clementi, E.,
                     & Raimondi, D. L. (1963). Atomic Screening Constants from SCF
                     Functions. The Journal of Chemical Physics, 38(11), 2686.
-                    `doi:10.1063/1.1733573 <http://www.dx.doi.org/10.1063/1.1733573>`_
+                    `doi:10.1063/1.1733573 <https://www.dx.doi.org/10.1063/1.1733573>`_
                     and Clementi, E. (1967). Atomic Screening Constants from SCF
                     Functions. II. Atoms with 37 to 86 Electrons. The Journal of
                     Chemical Physics, 47(4), 1300.
-                    `doi:10.1063/1.1712084 <http://www.dx.doi.org/10.1063/1.1712084>`_
+                    `doi:10.1063/1.1712084 <https://www.dx.doi.org/10.1063/1.1712084>`_
             n: Principal quantum number
             o: Orbital label, (s, p, d, ...)
             alle: Use all the valence electrons, i.e. calculate screening for an
@@ -643,7 +643,7 @@ class IonicRadius(Base):
     .. [1] Shannon, R. D. (1976). Revised effective ionic radii and systematic
        studies of interatomic distances in halides and chalcogenides. Acta
        Crystallographica Section A.
-       `doi:10.1107/S0567739476001551 <http://www.dx.doi.org/10.1107/S0567739476001551>`_
+       `doi:10.1107/S0567739476001551 <https://www.dx.doi.org/10.1107/S0567739476001551>`_
     Args:
         atomic_number (int): Atomic number
         charge (int):  Charge of the ion
@@ -691,7 +691,7 @@ class IonizationEnergy(Base):
         atomic_number (int): Atomic number
         degree (int): Degree of ionization with respect to neutral atom
         energy (float): Ionization energy in eV parsed from
-            http://physics.nist.gov/cgi-bin/ASD/ie.pl on April 13, 2015
+            https://physics.nist.gov/cgi-bin/ASD/ie.pl on April 13, 2015
     """
 
     __tablename__ = "ionizationenergies"
@@ -758,7 +758,7 @@ class Series(Base):
     Args:
         name (str): Name of the series
         color (str): The HEX representation of a color of the series, the colors were
-            obtained from `ColorBrewer <http://colorbrewer2.org/?type=qualitative&scheme=Paired&n=10>`_
+            obtained from `ColorBrewer <https://colorbrewer2.org/?type=qualitative&scheme=Paired&n=10>`_
             the qualitative 10-class paired colormap
     """
 
@@ -834,10 +834,10 @@ class ScreeningConstant(Base):
     Nuclear screening constants from Clementi, E., & Raimondi, D. L. (1963).
     Atomic Screening Constants from SCF Functions. The Journal of Chemical
     Physics, 38(11), 2686.  `doi:10.1063/1.1733573
-    <http://www.dx.doi.org/10.1063/1.1733573>`_ and Clementi, E. (1967). Atomic
+    <https://www.dx.doi.org/10.1063/1.1733573>`_ and Clementi, E. (1967). Atomic
     Screening Constants from SCF Functions. II. Atoms with 37 to 86 Electrons.
     The Journal of Chemical Physics, 47(4), 1300.  `doi:10.1063/1.1712084
-    <http://www.dx.doi.org/10.1063/1.1712084>`_
+    <https://www.dx.doi.org/10.1063/1.1712084>`_
     Args::
         atomic_number (int): Atomic number
         n (int): Principal quantum number

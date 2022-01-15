@@ -66,7 +66,7 @@ class VoteInfo(commands.Cog):
                 params={"id": member.id},
             )
             e1 = requests.get(
-                f"http://api.voidbots.net/bot/voted/{self.bot.user.id}/{member.id}",
+                f"https://api.voidbots.net/bot/voted/{self.bot.user.id}/{member.id}",
                 headers={"Authorization": voidbot},
             )
             f = requests.get(

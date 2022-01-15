@@ -2,7 +2,7 @@ import datetime
 import random
 from os import listdir
 from os.path import join
-from typing import Optional
+from typing import Optional, Union
 
 import discord
 from asyncdagpi import ImageFeatures
@@ -31,13 +31,13 @@ class Fun(commands.Cog):
 
     # spank
     @commands.command(usage="[member.mention]")
-    async def spank(self, ctx, member: Optional[discord.Member]):
+    async def spank(self, ctx, member: Optional[Union[discord.Member, int]]):
         """Spank someone"""
         if member is None:
-            desc = f"** <@{ctx.author.id}> spanks themselves !!! LOL!**"
+            desc = f"** {ctx.author.mention} spanks themselves !!! LOL!**"
         elif member in ["@everyone", "@here"]:
             await ctx.send(
-                f"** <@{ctx.author.id}> why would you spank @everyone? **")
+                f"** {ctx.author.mention} why would you spank @everyone? **")
         elif type(member) is discord.Member:
             desc = f"** <@{ctx.author.id}> spanks {member.mention} !!! Damm! **"
         else:

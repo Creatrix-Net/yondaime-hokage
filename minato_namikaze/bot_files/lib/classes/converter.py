@@ -32,8 +32,11 @@ class Arguments(argparse.ArgumentParser):
 
 
 def can_execute_action(ctx, user, target):
-    return (user.id == ctx.bot.owner_id or user == ctx.guild.owner
-            or user.top_role > target.top_role)
+    return (
+        user.id == ctx.bot.owner_id
+        or user == ctx.guild.owner
+        or user.top_role > target.top_role
+    )
 
 
 class MemberID(commands.Converter):
@@ -54,10 +57,7 @@ class MemberID(commands.Converter):
                     return type(
                         "_Hackban",
                         (),
-                        {
-                            "id": argument,
-                            "__str__": lambda s: f"Member ID {s.id}"
-                        },
+                        {"id": argument, "__str__": lambda s: f"Member ID {s.id}"},
                     )()
 
         if not can_execute_action(ctx, ctx.author, member):
@@ -65,6 +65,7 @@ class MemberID(commands.Converter):
                 "You cannot do this action on this user due to role hierarchy."
             )
         return member
+
 
 class RoleID(commands.Converter):
     async def convert(self, ctx, argument):
@@ -84,10 +85,7 @@ class RoleID(commands.Converter):
                     return type(
                         "_Hackban",
                         (),
-                        {
-                            "id": argument,
-                            "__str__": lambda s: f"Member ID {s.id}"
-                        },
+                        {"id": argument, "__str__": lambda s: f"Member ID {s.id}"},
                     )()
 
         if not can_execute_action(ctx, ctx.author, member):
@@ -95,6 +93,7 @@ class RoleID(commands.Converter):
                 "You cannot do this action on this user due to role hierarchy."
             )
         return member
+
 
 class BannedMember(commands.Converter):
     async def convert(self, ctx, argument):
@@ -104,11 +103,12 @@ class BannedMember(commands.Converter):
                 return await ctx.guild.fetch_ban(discord.Object(id=member_id))
             except discord.NotFound:
                 raise commands.BadArgument(
-                    "This member has not been banned before.") from None
+                    "This member has not been banned before."
+                ) from None
 
         ban_list = await ctx.guild.bans()
-        entity = discord.utils.find(lambda u: str(u.user) == argument,
-                                    ban_list)
+        entity = discord.utils.find(
+            lambda u: str(u.user) == argument, ban_list)
 
         if entity is None:
             raise commands.BadArgument(
@@ -123,7 +123,8 @@ class ActionReason(commands.Converter):
         if len(ret) > 512:
             reason_max = 512 - len(ret) + len(argument)
             raise commands.BadArgument(
-                f"Reason is too long ({len(argument)}/{reason_max})")
+                f"Reason is too long ({len(argument)}/{reason_max})"
+            )
         return ret
 
 

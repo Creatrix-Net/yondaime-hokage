@@ -8,8 +8,8 @@ import discord
 import TenGiphPy
 from discord.ext import commands
 
-from .vars import ChannelAndMessageId, SetupVars, Tokens
 from ..classes.converter import MemberID
+from .vars import ChannelAndMessageId, SetupVars, Tokens
 
 
 class ConfirmationView(discord.ui.View):
@@ -30,13 +30,13 @@ class ConfirmationView(discord.ui.View):
         self.reacquire: bool = reacquire
         self.message: Optional[discord.Message] = None
 
-    async def interaction_check(self,
-                                interaction: discord.Interaction) -> bool:
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.author_id:
             return True
         else:
             await interaction.response.send_message(
-                "This confirmation dialog is not for you.", ephemeral=True)
+                "This confirmation dialog is not for you.", ephemeral=True
+            )
             return False
 
     async def on_timeout(self) -> None:
@@ -46,8 +46,9 @@ class ConfirmationView(discord.ui.View):
             await self.message.delete()
 
     @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green)
-    async def confirm(self, button: discord.ui.Button,
-                      interaction: discord.Interaction):
+    async def confirm(
+        self, button: discord.ui.Button, interaction: discord.Interaction
+    ):
         self.value = True
         await interaction.response.defer()
         if self.delete_after:
@@ -55,8 +56,7 @@ class ConfirmationView(discord.ui.View):
         self.stop()
 
     @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red)
-    async def cancel(self, button: discord.ui.Button,
-                     interaction: discord.Interaction):
+    async def cancel(self, button: discord.ui.Button, interaction: discord.Interaction):
         self.value = False
         await interaction.response.defer()
         if self.delete_after:
@@ -171,9 +171,9 @@ class Context(commands.Context):
         if len(content) > 2000:
             fp = io.BytesIO(content.encode())
             kwargs.pop("file", None)
-            return await self.send(file=discord.File(
-                fp, filename="message_too_long.txt"),
-                **kwargs)
+            return await self.send(
+                file=discord.File(fp, filename="message_too_long.txt"), **kwargs
+            )
         else:
             return await self.send(content)
 
@@ -257,12 +257,12 @@ class Context(commands.Context):
     def get_config_channel_by_name_or_id(self, channel: Union[int, str]):
         if isinstance(channel, str):
             guild1 = self.get_guild(ChannelAndMessageId.server_id.value)
-            channel_model = discord.utils.get(guild1.text_channels,
-                                              name=channel)
+            channel_model = discord.utils.get(
+                guild1.text_channels, name=channel)
             if not channel:
                 guild2 = self.get_guild(ChannelAndMessageId.server_id2.value)
-                channel_model = discord.utils.get(guild2.text_channels,
-                                                  name=channel)
+                channel_model = discord.utils.get(
+                    guild2.text_channels, name=channel)
             return channel_model
         else:
             return self.bot.get_channel(channel)
@@ -277,8 +277,9 @@ class Context(commands.Context):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(
-                tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"][
+                "downsized_large"
+            ]["url"]
         except:
             return
 
@@ -292,9 +293,9 @@ class Context(commands.Context):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(
-                tag=str(tag_name.lower())
-            ))["data"]["images"]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
+                "images"
+            ]["downsized_large"]["url"]
         except:
             return
 
@@ -308,8 +309,9 @@ class Context(commands.Context):
     def giphy(self, tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(
-                tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"][
+                "downsized_large"
+            ]["url"]
         except:
             return
 
@@ -323,8 +325,8 @@ class Context(commands.Context):
     async def giphy(self, tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(
-                tag=str(tag_name.lower())
-            ))["data"]["images"]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
+                "images"
+            ]["downsized_large"]["url"]
         except:
             return

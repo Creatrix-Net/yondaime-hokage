@@ -15,6 +15,7 @@ from ...lib import (
     MemberID,
     check_if_warning_system_setup,
     has_permissions,
+    EmbedPaginator
 )
 
 
@@ -25,15 +26,16 @@ class Moderation(commands.Cog):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",
-                                    id=922030031146995733)
+        return discord.PartialEmoji(name="discord_certified_moderator", id=922030031146995733)
 
     # set delay
-    @commands.command()
+    @commands.command(usage="<time in seconds>")
     @commands.has_permissions(manage_messages=True)
     @commands.guild_only()
     async def setdelay(self, ctx, seconds: int):
         """Sets Slowmode Of A Channel"""
+        if not await ctx.prompt(f'Are you sure that you want to **add delay** of {seconds} seconds to this channel?', author_id=ctx.author.id):
+            return
         current_slow = ctx.channel.slowmode_delay
         if current_slow == seconds:
             return await ctx.send(
@@ -41,7 +43,7 @@ class Moderation(commands.Cog):
             )
         message = f"Set the slowmode delay in this channel to {seconds} seconds!"
         if seconds == 0:
-            message = f"Reset Slowmode of channel {ctx.channel.name}"
+            message = f"Reset slowmode of channel {ctx.channel.name}"
         await ctx.channel.edit(slowmode_delay=seconds)
         await ctx.send(f"{message}")
 
@@ -60,10 +62,12 @@ class Moderation(commands.Cog):
                    *,
                    reason=None):
         """A command which kicks a given user"""
+        member = ctx.get_user(member)
+        if not await ctx.prompt(f'Are you sure that you want to **kick** {member} from the guild?', author_id=ctx.author.id):
+            return
         await ctx.guild.kick(user=member, reason=reason)
 
-        embed = discord.Embed(title=f"{ctx.author.name} kicked: {member.name}",
-                              description=reason)
+        embed = discord.Embed(title=f"{ctx.author.name} kicked: {member.name}", description=reason)
         await ctx.send(embed=embed)
 
     # ban
@@ -83,13 +87,15 @@ class Moderation(commands.Cog):
         reason: ActionReason = None,
     ):
         """A command which bans a given user"""
-        if member in (ctx.message.author, ctx.message.author.id):
+        member = ctx.get_user(member)
+        if not await ctx.prompt(f'Are you sure that you want to **ban** {member} from the guild?', author_id=ctx.author.id):
+            return
+        if member is ctx.message.author:
             await ctx.send(embed=ErrorEmbed(
                 description="You **can't ban yourself**!"))
             return
         try:
-            await ctx.guild.ban(user=member,
-                                reason=ActionReason().convert(ctx, reason))
+            await ctx.guild.ban(user=member, reason=reason)
         except:
             await ctx.send(
                 embed=ErrorEmbed(
@@ -98,6 +104,8 @@ class Moderation(commands.Cog):
                 delete_after=4,
             )
             return
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
         embed = ErrorEmbed(title=f"{ctx.author.name} banned: {member.name}",
                            description=reason)
@@ -107,7 +115,7 @@ class Moderation(commands.Cog):
     @commands.command(
         name="banlist",
         description="Shows list of users who have been banned! Or position of a specified user who was banned!",
-        usage="Optional[<member.id> or <member.mention> or <member.name.with.tag>]",
+        usage="[member.id ,member.mention or member.name.with.tag]",
     )
     @commands.bot_has_permissions()
     @commands.guild_only()
@@ -242,11 +250,15 @@ class Moderation(commands.Cog):
         To use this command you must have Kick Members permissions.
         """
 
+        member = ctx.get_user(member)
+        if not await ctx.prompt(f'Are you sure that you want to **softban** {member} from the guild?', author_id=ctx.author.id):
+            return
+
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
-        await ctx.guild.ban(member, reason=ActionReason(ctx, reason))
-        await ctx.guild.unban(member, reason=ActionReason(ctx, reason))
+        await ctx.guild.ban(member, reason=reason)
+        await ctx.guild.unban(member, reason=reason)
         await ctx.send("\N{OK HAND SIGN}")
 
     # Unban
@@ -268,10 +280,14 @@ class Moderation(commands.Cog):
         To use this command you must have Ban Members permissions.
         """
 
+        member = ctx.get_user(member)
+        if not await ctx.prompt(f'Are you sure that you want to **unban** {member} from the guild?', author_id=ctx.author.id):
+            return
+
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
-        await ctx.guild.unban(member.user, reason=ActionReason(reason))
+        await ctx.guild.unban(member.user, reason=reason)
         if member.reason:
             await ctx.send(
                 f"Unbanned {member.user} (ID: {member.user.id}), previously banned for {member.reason}."
@@ -290,13 +306,20 @@ class Moderation(commands.Cog):
         ctx,
         member: Optional[Union[MemberID, discord.Member]],
         role: Union[int, discord.Role],
+        *, reason: ActionReason = None
     ):
         """Adds a role to a given user"""
         if member is None:
             member = ctx.message.author
         member = ctx.get_user(member)
         role = ctx.get_roles(role)
-        await member.add_roles(role)
+
+        if not await ctx.prompt(f'Are you sure that you want to **add** {role} **role** to {member}?', author_id=ctx.author.id):
+            return
+        
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+        await member.add_roles(role, atomic=True, reason=reason)
         embed = discord.Embed(
             title="Added Roles",
             description=f"I have added the role '{role.mention}' to {member.mention}!",
@@ -316,6 +339,9 @@ class Moderation(commands.Cog):
                    reason: str = None):
         """Warn a user"""
         member = ctx.get_user(member)
+        if not await ctx.prompt(f'Are you sure that you want to **warn** {member}?', author_id=ctx.author.id):
+            return
+
         e = ErrorEmbed(title="You have been warned!")
         e.add_field(
             name="**Responsible Moderator**:",
@@ -406,7 +432,6 @@ class Moderation(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    # RDanny code from here
     async def _basic_cleanup_strategy(self, ctx, search):
         count = 0
         async for msg in ctx.history(limit=search, before=ctx.message):
@@ -455,6 +480,8 @@ class Moderation(commands.Cog):
         Members with Manage Messages can search up to 1000 messages.
         Members without can search up to 25 messages.
         """
+        if not await ctx.prompt(f'Are you sure that you want to **cleanup** the bot\'s messages from this channel?', author_id=ctx.author.id):
+            return
 
         strategy = self._basic_cleanup_strategy
         is_mod = ctx.channel.permissions_for(ctx.author).manage_messages
@@ -493,6 +520,9 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(manage_messages=True)
     async def purge(self, ctx, amount=5):
         """A command which purges the channel it is called in"""
+        if not await ctx.prompt(f'Are you sure that you want to **purge** {amount} **messages**?', author_id=ctx.author.id):
+            return
+
         await ctx.channel.purge(limit=amount)
         embed = discord.Embed(
             title=f"{ctx.author.name} purged: {ctx.channel.name}",
@@ -517,6 +547,10 @@ class Moderation(commands.Cog):
 
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
+            return
+        
+        if not await ctx.prompt(f'Are you sure that you want to **remove the messages**?', author_id=ctx.author.id):
+            return
 
     async def do_removal(self,
                          ctx,

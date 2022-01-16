@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import io
 import random
 from typing import Optional, Union
@@ -9,7 +8,8 @@ import discord
 import TenGiphPy
 from discord.ext import commands
 
-from .vars import ChannelAndMessageId, MemberID, SetupVars, Tokens
+from .vars import ChannelAndMessageId, SetupVars, Tokens
+from ..classes.converter import MemberID
 
 
 class ConfirmationView(discord.ui.View):
@@ -233,14 +233,12 @@ class Context(commands.Context):
             role = discord.utils.get(self.guild.roles, id=role)
         return role
 
-    def get_emoji(self, emoji: Union[int, discord.Emoji,
-                                     discord.PartialEmoji]):
+    def get_emoji(self, emoji: Union[int, discord.Emoji, discord.PartialEmoji]):
         if isinstance(emoji, int):
-            emoji = discord.utils.get(self.guild.emojis, id=role)
+            emoji = discord.utils.get(self.guild.emojis, id=emoji)
         return emoji
 
-    def get_guild(self, guild: Union[int, discord.Guild,
-                                     discord.PartialInviteGuild]):
+    def get_guild(self, guild: Union[int, discord.Guild, discord.PartialInviteGuild]):
         if isinstance(guild, int):
             guild = self.bot.get_guild(guild)
         return guild

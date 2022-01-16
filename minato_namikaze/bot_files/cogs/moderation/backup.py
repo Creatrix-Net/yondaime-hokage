@@ -25,7 +25,8 @@ class BackUp(commands.Cog):
             return
         backup_code = await BackupDatabse(ctx).create_backup()
         backup_code_reference = await ctx.author.send(
-            f":arrow_right:  **BACKUP CODE** : ``{backup_code}``")
+            f":arrow_right:  **BACKUP CODE** : ``{backup_code}``"
+        )
         await ctx.send(
             content=f"{ctx.author.mention} check your dm(s) :white_check_mark:",
             embed=SuccessEmbed(

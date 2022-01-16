@@ -18,6 +18,11 @@ class BackUp(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(2, 60, commands.BucketType.guild)
     async def backup(self, ctx):
+        if not await ctx.prompt(
+            f"Are you sure that you want to **create a backup** of this guild?",
+            author_id=ctx.author.id,
+        ):
+            return
         backup_code = await BackupDatabse(ctx).create_backup()
         backup_code_reference = await ctx.author.send(
             f":arrow_right:  **BACKUP CODE** : ``{backup_code}``")

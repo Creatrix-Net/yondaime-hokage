@@ -44,7 +44,7 @@ class PostStats:
         for i in self.bot.commands:
             tuple_notes = (str(i.description)
                            if i.description != "" else str(i.short_doc))
-            parameters = list(f"<{j}>" for j in i.clean_params)
+            parameters = [f"<{j}>" for j in i.clean_params]
             dict_append = {
                 "cmd_name":
                 i.value,

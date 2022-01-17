@@ -50,8 +50,9 @@ class PostStats:
                 "cmd_name":
                 i.value,
                 "vote_locked":
-                bool("vote locked" in tuple_notes or "votes lock"
-                in tuple_notes or "vote lock" in tuple_notes),
+                bool("vote locked" in tuple_notes
+                     or "votes lock" in tuple_notes
+                     or "vote lock" in tuple_notes),
                 "description":
                 str(i.description)
                 if i.description != "" else str(i.short_doc),

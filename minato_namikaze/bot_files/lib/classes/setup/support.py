@@ -1,9 +1,9 @@
 import discord
 from discord.ext import menus
+from discord.ext.menus.views import ViewMenu
 
 from ...util import SetupVars, perms_dict
 from ..embed import Embed
-from discord.ext.menus.views import ViewMenu
 
 
 class Support(ViewMenu):

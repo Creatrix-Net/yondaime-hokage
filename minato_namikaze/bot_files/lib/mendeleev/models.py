@@ -24,7 +24,6 @@ from .electronegativity import (
     martynov_batsanov,
     mulliken,
     nagle,
-    sanderson,
 )
 from .utils import coeffs
 

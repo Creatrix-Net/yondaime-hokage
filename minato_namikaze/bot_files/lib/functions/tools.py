@@ -1,7 +1,6 @@
 import datetime
 import os
 import pathlib
-import time
 from typing import AnyStr, Literal, Optional, Union
 
 import discord

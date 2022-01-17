@@ -1,6 +1,5 @@
 import asyncio
 import random
-import time
 from os.path import join
 from pathlib import Path
 

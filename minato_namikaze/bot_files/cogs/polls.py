@@ -169,9 +169,6 @@ class QuickPoll(commands.Cog):
         ]
         opt_dict = {}
         for x in unformatted_options:
-            # if x[0] != '🔟':
-            #     opt_dict.update({x[0]: x[4:]})
-            # else:
             opt_dict.update({x[0]: x[1:]})
 
         # add the bot's ID to the list of voters to exclude it's votes

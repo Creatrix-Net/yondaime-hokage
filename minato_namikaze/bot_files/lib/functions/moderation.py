@@ -1,9 +1,6 @@
-import asyncio
 
 import discord
 from discord.ext import commands
-
-from ..classes import ErrorEmbed
 from ..util import SetupVars
 
 

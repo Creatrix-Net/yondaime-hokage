@@ -3,7 +3,7 @@ import asyncio
 import discord
 from discord.ext import commands
 
-from ..lib import Embed, ErrorEmbed, convert
+from ..lib import Embed, ErrorEmbed
 
 
 class QuickPoll(commands.Cog):

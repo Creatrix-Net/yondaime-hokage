@@ -1,5 +1,4 @@
 import discord
-from discord.ext import menus
 
 from ..util import SetupVars
 from .embed import Embed

@@ -5,12 +5,10 @@ import string
 import discord
 from discord import (
     CategoryChannel,
-    Member,
     Role,
     StageChannel,
     TextChannel,
-    VoiceChannel,
-)
+    VoiceChannel)
 from discord.ext.commands import Context
 from orjson import dumps
 

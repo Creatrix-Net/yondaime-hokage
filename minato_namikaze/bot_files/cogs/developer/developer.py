@@ -3,7 +3,6 @@ import inspect
 import io
 import os
 import subprocess as sp
-import sys
 import textwrap
 import time
 import traceback

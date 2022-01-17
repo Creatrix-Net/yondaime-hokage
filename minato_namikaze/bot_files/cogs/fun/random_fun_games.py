@@ -4,7 +4,6 @@ from __future__ import annotations
 import asyncio
 import io
 import os
-import platform
 from random import choice
 from typing import Optional, Union
 

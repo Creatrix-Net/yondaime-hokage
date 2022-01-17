@@ -1,8 +1,6 @@
 import random
 import re
 
-import discord
-
 from .vars import ChannelAndMessageId
 
 INVITE_URL_RE = re.compile(

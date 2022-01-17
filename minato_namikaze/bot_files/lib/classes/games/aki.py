@@ -1,6 +1,5 @@
 import asyncio
 
-import akinator
 import discord
 from akinator.async_aki import Akinator as _Akinator_
 from discord.ext import commands

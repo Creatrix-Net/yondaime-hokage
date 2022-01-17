@@ -1,11 +1,7 @@
 # Discord Imports
-import datetime
-import re
-import time
 from datetime import timezone
 
 import discord
-from discord import Spotify
 from discord.ext import commands
 
 from ...lib import Embed

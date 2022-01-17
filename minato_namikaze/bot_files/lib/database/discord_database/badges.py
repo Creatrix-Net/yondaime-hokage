@@ -1,6 +1,5 @@
 from typing import AsyncIterator
 
-import discord
 from discord.ext.commands import Context
 
 from ...util import ChannelAndMessageId

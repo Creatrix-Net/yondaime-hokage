@@ -1,10 +1,7 @@
-import io
 import random
-import traceback
 from asyncio import sleep
 from datetime import datetime
 from os.path import join
-from pathlib import Path
 
 import discord
 from discord.ext import commands

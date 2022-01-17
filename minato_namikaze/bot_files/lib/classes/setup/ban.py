@@ -1,5 +1,7 @@
 import discord
 from discord.ext import menus
+from discord.ext.menus.views import ViewMenu
+
 
 from ...util import SetupVars
 from ..embed import Embed
@@ -7,7 +9,7 @@ from ..embed import Embed
 ban = SetupVars.ban.value
 
 
-class Ban(menus.Menu):
+class Ban(ViewMenu):
     def __init__(self, bot, timeout, channel):
         super().__init__(timeout=timeout)
         self.bot = bot

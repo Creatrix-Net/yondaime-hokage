@@ -3,9 +3,10 @@ from discord.ext import menus
 
 from ...util import SetupVars
 from ..embed import Embed
+from discord.ext.menus.views import ViewMenu
 
 
-class Feedback(menus.Menu):
+class Feedback(ViewMenu):
     def __init__(self, bot, timeout, channel):
         super().__init__(timeout=timeout)
         self.bot = bot

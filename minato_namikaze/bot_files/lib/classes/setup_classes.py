@@ -11,20 +11,23 @@ unban_topic = SetupVars.unban.value
 warns_topic = SetupVars.warns.value
 
 
-async def check():pass
+async def check():
+    pass
+
 
 class Ban:
     def __init__(self, ctx, timeout: int, channel: discord.TextChannel):
         self.ctx = ctx
         self.channel = channel
         self.timeout = timeout
-    
+
     async def start(self):
         if not await self.ctx.prompt(
                 f"Want to **log bans** for the *{self.ctx.guild.name}* ?",
                 timeout=self.timeout,
                 author_id=ctx.author.id,
-                channel=self.channel):
+                channel=self.channel,
+        ):
             return
         bingo = (discord.utils.get(
             self.ctx.guild.categories, name="Bingo Book") if discord.utils.get(

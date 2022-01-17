@@ -5,7 +5,7 @@ from os.path import join
 from typing import Optional, Union
 
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 from ...lib import (
     ActionReason,
@@ -805,6 +805,12 @@ class Moderation(commands.Cog):
         await self.do_removal(
             ctx, args.search, predicate, before=args.before, after=args.after
         )
+    
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_guild_permissions(timeout_members=True)
+    async def timeout(self, ctx):
+        pass
 
 
 def setup(bot):

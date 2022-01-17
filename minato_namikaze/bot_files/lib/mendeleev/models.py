@@ -23,7 +23,8 @@ from .electronegativity import (
     li_xue,
     martynov_batsanov,
     mulliken,
-    nagle)
+    nagle,
+)
 from .utils import coeffs
 
 __all__ = [

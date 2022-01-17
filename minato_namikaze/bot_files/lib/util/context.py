@@ -104,6 +104,7 @@ class Context(commands.Context):
         delete_after: bool = True,
         reacquire: bool = True,
         author_id: Optional[int] = None,
+        channel: Optional[discord.TextChannel] = None
     ) -> Optional[bool]:
         """An interactive reaction confirmation dialog.
         Parameters
@@ -136,7 +137,10 @@ class Context(commands.Context):
             ctx=self,
             author_id=author_id,
         )
-        view.message = await self.send(message, view=view)
+        if channel is not None:
+            view.message = await channel.send(message, view=view)
+        else:
+            view.message = await self.send(message, view=view)
         await view.wait()
         return view.value
 

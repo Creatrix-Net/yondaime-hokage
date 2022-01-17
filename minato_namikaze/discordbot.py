@@ -237,8 +237,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             members = await guild.query_members(argument,
                                                 limit=100,
                                                 cache=cache)
-            return discord.utils.find(
-                lambda m: argument in (m.name, m.nick), members)
+            return discord.utils.find(lambda m: argument in (m.name, m.nick),
+                                      members)
 
     async def get_or_fetch_member(self, guild, member_id):
         """Looks up a member in cache or fetches if not found.

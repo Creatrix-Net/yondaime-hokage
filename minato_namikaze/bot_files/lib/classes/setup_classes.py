@@ -1,27 +1,31 @@
 import discord
 from discord.ext import menus
-from discord.ext.menus.views import ViewMenu
 
-from ...util import SetupVars
-from ..embed import Embed
+from ..util import SetupVars
+from .embed import Embed
 
-ban = SetupVars.ban.value
+ban_topic = SetupVars.ban.value
+feedback_topic = SetupVars.feedback.value
+support_topic = SetupVars.support.value
+unban_topic = SetupVars.unban.value
+warns_topic = SetupVars.warns.value
 
 
-class Ban(ViewMenu):
-    def __init__(self, bot, timeout, channel):
-        super().__init__(timeout=timeout)
-        self.bot = bot
+async def check():pass
+
+class Ban:
+    def __init__(self, ctx, timeout: int, channel: discord.TextChannel):
+        self.ctx = ctx
         self.channel = channel
-
-    async def send_initial_message(self, ctx, channel):
-        embed = Embed(title=f"Want to log bans for the **{ctx.guild.name}** ?")
-        embed.add_field(name="Yes", value=":white_check_mark:")
-        embed.add_field(name="No", value=":negative_squared_cross_mark:")
-        return await channel.send(embed=embed)
-
-    @menus.button("\N{WHITE HEAVY CHECK MARK}")
-    async def on_add(self, payload):
+        self.timeout = timeout
+    
+    async def start(self):
+        if not await self.ctx.prompt(
+                f"Want to **log bans** for the *{self.ctx.guild.name}* ?",
+                timeout=self.timeout,
+                author_id=ctx.author.id,
+                channel=self.channel):
+            return
         bingo = (discord.utils.get(
             self.ctx.guild.categories, name="Bingo Book") if discord.utils.get(
                 self.ctx.guild.categories, name="Bingo Book") else False)
@@ -31,7 +35,7 @@ class Ban(ViewMenu):
                 reason="To log the the bans and unban events + warns")
         ban_channel = await self.ctx.guild.create_text_channel(
             "ban",
-            topic=ban,
+            topic=ban_topic,
             overwrites={
                 self.ctx.guild.default_role:
                 discord.PermissionOverwrite(read_messages=False,
@@ -48,11 +52,4 @@ class Ban(ViewMenu):
             description="This channel will be used to log the server bans.")
         a = await ban_channel.send(embed=e)
         await a.pin()
-        return
-
-    @menus.button("\N{NEGATIVE SQUARED CROSS MARK}")
-    async def on_stop(self, payload):
-        await self.channel.send(
-            f"**Okay** no logging system for the **{self.ctx.guild.name}** bans will be there"
-        )
         return

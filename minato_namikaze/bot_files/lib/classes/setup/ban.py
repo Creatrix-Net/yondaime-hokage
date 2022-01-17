@@ -2,7 +2,6 @@ import discord
 from discord.ext import menus
 from discord.ext.menus.views import ViewMenu
 
-
 from ...util import SetupVars
 from ..embed import Embed
 

@@ -17,7 +17,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
 
     def pin_img(self):
-        file_pin = discord.File(join(self.bot.minato_dir, "discord","pin.png"), filename="pin.png")
+        file_pin = discord.File(join(self.bot.minato_dir, "discord",
+                                     "pin.png"),
+                                filename="pin.png")
         return file_pin
 
     @commands.command(name="setup", description="Easy setup for the server")
@@ -87,7 +89,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Feedback
             if not feed_channel:
-                await Feedback(ctx=ctx,timeout=commonwaitingtime,channel=botask).start()
+                await Feedback(ctx=ctx,
+                               timeout=commonwaitingtime,
+                               channel=botask).start()
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
                 await ctx.send(
@@ -98,7 +102,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Support
             if not support_channel:
-                await Support(ctx=ctx,timeout=commonwaitingtime,channel=botask).start()
+                await Support(ctx=ctx,
+                              timeout=commonwaitingtime,
+                              channel=botask).start()
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
                 await ctx.send(
@@ -109,7 +115,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Ban
             if not ban_channel:
-                await Ban(ctx=ctx,timeout=commonwaitingtime,channel=botask).start()
+                await Ban(ctx=ctx, timeout=commonwaitingtime,
+                          channel=botask).start()
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
                 await ban_channel.send(file=self.pin_img(), embed=embed)
@@ -120,7 +127,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # UnBan
             if not unban_channel:
-                await Unban(ctx=ctx,timeout=commonwaitingtime,channel=botask).start()
+                await Unban(ctx=ctx, timeout=commonwaitingtime,
+                            channel=botask).start()
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
                 file = discord.File(join(self.bot.minato_dir, "discord",
@@ -134,7 +142,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
             # Warns
             if not warns_channel:
-                await Warns(ctx=ctx,timeout=commonwaitingtime,channel=botask).start()
+                await Warns(ctx=ctx, timeout=commonwaitingtime,
+                            channel=botask).start()
                 await asyncio.sleep(waitingtime_bet_mesg)
             else:
                 await warns_channel.send(file=self.pin_img(), embed=embed)

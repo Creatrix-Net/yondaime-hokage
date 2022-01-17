@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import itertools
-import time
 from typing import Any, Dict, Optional
 
 import discord

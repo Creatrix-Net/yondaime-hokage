@@ -1,7 +1,6 @@
 import asyncio
 import random
 import time
-from asyncio import TimeoutError, sleep
 from random import choice
 from string import ascii_letters
 from typing import Union

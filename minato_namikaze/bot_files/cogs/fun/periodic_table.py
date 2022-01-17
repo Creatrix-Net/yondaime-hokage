@@ -1,6 +1,4 @@
 from typing import List, Tuple
-
-import aiohttp
 import discord
 from discord.ext import commands
 from discord.ext.commands.converter import Converter

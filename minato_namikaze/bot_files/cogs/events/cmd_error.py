@@ -1,5 +1,4 @@
 import io
-import os
 import traceback
 
 import discord

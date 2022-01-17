@@ -5,7 +5,6 @@ Which is itself a port of python-barcode which is no longer available
 """
 
 import gzip
-import logging
 import os
 import string
 import xml.dom

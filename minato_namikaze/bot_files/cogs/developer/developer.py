@@ -177,7 +177,6 @@ class Developer(commands.Cog):
             "guild": ctx.guild,
             "message": ctx.message,
             "source": inspect.getsource,
-            # ctx.guild.owner_id
             "owner": self.bot.get_user(ctx.guild.owner_id),
         }
 

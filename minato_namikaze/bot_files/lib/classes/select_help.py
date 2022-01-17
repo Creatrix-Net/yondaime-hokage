@@ -122,7 +122,6 @@ class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
 
 
 class FrontPageSource(menus.PageSource):
-
     def is_paginating(self) -> bool:
         # This forces the buttons to appear even in the front page
         return True

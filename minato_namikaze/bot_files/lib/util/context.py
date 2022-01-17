@@ -217,18 +217,18 @@ class Context(commands.Context):
         )
 
     def get_user(self, user: Union[int, discord.Member, MemberID]):
-        if isinstance(user, int) or isinstance(user, MemberID):
+        if isinstance(user, (int, MemberID)):
             user = self.bot.get_user(user)
         return user
 
     async def get_dm(self, user: Union[int, discord.Member, MemberID]):
         try:
-            if isinstance(user, int) or isinstance(user, MemberID):
+            if isinstance(user, (int, MemberID)):
                 user = self.bot.get_or_fetch_member(user, self.guild)
             else:
                 user = self.bot.get_or_fetch_member(user.id, self.guild)
         except:
-            if isinstance(user, int) or isinstance(user, MemberID):
+            if isinstance(user, (int, MemberID)):
                 user = self.bot.get_user(user)
         return user.dm_channel if user.dm_channel else await user.create_dm()
 

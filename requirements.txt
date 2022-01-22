@@ -52,7 +52,7 @@ sentry-sdk==1.5.2
 six==1.16.0
 soupsieve==2.3.1
 spotify==0.10.2
-SQLAlchemy==1.4.29
+SQLAlchemy==1.4.31
 TenGiphPy==2.5.0
 tqdm==4.62.3
 urllib3==1.26.8

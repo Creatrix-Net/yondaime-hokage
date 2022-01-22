@@ -24,7 +24,7 @@ DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@2bfe916459
 eight-ball==3.0.3
 english-words==1.0.4
 ffmpeg==1.4
-frozenlist==1.2.0
+frozenlist==1.3.0
 greenlet==1.1.2
 gTTS==2.2.3
 idna==3.3

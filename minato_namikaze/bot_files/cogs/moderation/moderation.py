@@ -1,4 +1,4 @@
-import re
+import re, io
 import shlex
 from collections import Counter
 from os.path import join
@@ -6,6 +6,7 @@ from typing import Optional, Union
 
 import discord
 from discord.ext import commands
+import datetime
 
 from ...lib import (
     ActionReason,
@@ -14,10 +15,12 @@ from ...lib import (
     EmbedPaginator,
     ErrorEmbed,
     FutureTime,
-    MemberID,
     check_if_warning_system_setup,
     format_relative,
     has_permissions,
+    plural,
+    can_execute_action,
+    MemberID
 )
 
 
@@ -64,7 +67,7 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(kick_members=True)
     async def kick(self,
                    ctx,
-                   member: Optional[Union[discord.Member, MemberID]],
+                   member: Optional[Union[commands.MemberConverter, MemberID]],
                    *,
                    reason=None):
         """A command which kicks a given user"""
@@ -92,7 +95,7 @@ class Moderation(commands.Cog):
     async def ban(
         self,
         ctx,
-        member: Union[MemberID, discord.Member],
+        member: Union[commands.MemberConverter, MemberID],
         *,
         reason: ActionReason = None,
     ):
@@ -133,10 +136,9 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def banlist(self, ctx, *, member: Optional[Union[str, MemberID,
-                                                           discord.Member]]):
+    async def banlist(self, ctx, *, member: Optional[Union[commands.MemberConverter, MemberID]]):
         banned_users = list(await ctx.guild.bans())
-        if not member:
+        if member is not None:
             if len(banned_users) == 0:
                 await ctx.send(embed=discord.Embed(
                     description="There is **no-one banned**! :zero: people are **banned**")
@@ -170,78 +172,27 @@ class Moderation(commands.Cog):
                 await ctx.send(embed=embed)
                 return
         else:
-            if member.isdigit():
-                member = int(member)
-            if isinstance(member, str):
-                member_name, member_discriminator = member.split("#")
-
-            n = 0
             for i, ban_entry in enumerate(banned_users):
                 user = ban_entry.user
                 embed = ErrorEmbed(topic=f"About the ban {member}")
-                if isinstance(member, str):
-                    if (user.name, user.discriminator) == (
-                            member_name,
-                            member_discriminator,
-                    ):
-                        if ban_entry.reason:
-                            embed.add_field(name="**Reason**",
-                                            value=ban_entry.reason,
-                                            inline=True)
-                        embed.add_field(name="**Position**",
-                                        value=i + 1,
+                if user is member:
+                    if ban_entry.reason:
+                        embed.add_field(name="**Reason**",
+                                        value=ban_entry.reason,
                                         inline=True)
-                        embed.add_field(
-                            name="**Banned User Name**",
-                            value=ban_entry.user,
-                            inline=True,
-                        )
-                        embed.set_thumbnail(url=ban_entry.user.avatar.url)
-                        await ctx.channel.send(embed=embed)
-                        n += 1
-                        return
-
-                elif isinstance(member, MemberID):
-                    if user.id == int(member):
-                        if ban_entry.reason:
-                            embed.add_field(name="**Reason**",
-                                            value=ban_entry.reason,
-                                            inline=True)
-                        embed.add_field(name="**Position**",
-                                        value=i + 1,
-                                        inline=True)
-                        embed.add_field(
-                            name="**Banned User Name**",
-                            value=ban_entry.user,
-                            inline=True,
-                        )
-                        embed.set_thumbnail(url=ban_entry.user.avatar.url)
-                        await ctx.channel.send(embed=embed)
-                        n += 1
-                        return
-
-                else:
-                    if user == member:
-                        if ban_entry.reason:
-                            embed.add_field(name="**Reason**",
-                                            value=ban_entry.reason,
-                                            inline=True)
-                        embed.add_field(name="**Position**",
-                                        value=i + 1,
-                                        inline=True)
-                        embed.add_field(
-                            name="**Banned User Name**",
-                            value=ban_entry.user,
-                            inline=True,
-                        )
-                        embed.set_thumbnail(url=ban_entry.user.avatar.url)
-                        await ctx.channel.send(embed=embed)
-                        n += 1
-                        return
-            if n == 0:
-                await ctx.send(embed=ErrorEmbed(
-                    description=f"The **{member}** isn't there in the **ban list**"))
-                return
+                    embed.add_field(name="**Position**",
+                                    value=i + 1,
+                                    inline=True)
+                    embed.add_field(
+                        name="**Banned User Name**",
+                        value=ban_entry.user,
+                        inline=True,
+                    )
+                    embed.set_thumbnail(url=ban_entry.user.avatar.url)
+                    await ctx.channel.send(embed=embed)
+                    return
+            await ctx.send(embed=ErrorEmbed(
+                description=f"The **{member}** isn't there in the **ban list**"))
 
     # Soft Ban
     @commands.command()
@@ -250,7 +201,7 @@ class Moderation(commands.Cog):
     async def softban(
         self,
         ctx,
-        member: Union[MemberID, discord.Member],
+        member: Union[commands.MemberConverter, MemberID],
         *,
         reason: ActionReason = None,
     ):
@@ -322,8 +273,8 @@ class Moderation(commands.Cog):
     async def ar(
         self,
         ctx,
-        member: Union[MemberID, discord.Member],
-        role: Union[int, discord.Role],
+        member: Union[commands.MemberConverter, MemberID],
+        role: commands.RoleConverter,
         *,
         reason: ActionReason = None,
     ):
@@ -353,7 +304,7 @@ class Moderation(commands.Cog):
     @has_permissions(ban_members=True)
     async def multiban(self,
                        ctx,
-                       members: commands.Greedy[MemberID],
+                       members: Union[commands.MemberConverter, MemberID],
                        *,
                        reason: ActionReason = None):
         """Bans multiple members from the server.
@@ -617,7 +568,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_warning_system_setup)
     async def warn(self,
                    ctx,
-                   member: Union[MemberID, discord.Member],
+                   member: Union[commands.MemberConverter, MemberID],
                    *,
                    reason: str = None):
         """Warn a user"""
@@ -658,8 +609,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_warning_system_setup)
     async def warnlist(self,
                        ctx,
-                       member: Optional[Union[MemberID,
-                                              discord.Member]] = None):
+                       member: Optional[Union[commands.MemberConverter, MemberID]] = None):
         """Get the no. of warns for a specified user"""
         member = ctx.get_user(
             member if member is not None else ctx.message.author)
@@ -1103,7 +1053,7 @@ class Moderation(commands.Cog):
         self,
         ctx,
         duration: FutureTime,
-        member: Union[MemberID, discord.Member],
+        member: Union[commands.MemberConverter, MemberID],
         *,
         reason: ActionReason = None,
     ):
@@ -1112,9 +1062,12 @@ class Moderation(commands.Cog):
                 author_id=ctx.author.id,
         ):
             return
-        await member.edit(timed_out_until=duration.dt)
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+        await member.edit(timed_out_until=duration.dt,reason=reason)
         await ctx.send(embed=discord.Embed(
-            description=f"**Timed out** {member} until {format_relative(duration.dt)}"))
+            description=f"**Timed out** {member} until {format_relative(duration.dt)}")
+        )
 
 
 def setup(bot):

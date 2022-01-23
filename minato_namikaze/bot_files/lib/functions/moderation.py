@@ -1,44 +1,4 @@
-import discord
 from discord.ext import commands
-
-from ..util import SetupVars
-
-
-# checks warns
-def check_if_warning_system_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.warns.value):
-        return True
-    return False
-
-
-# checks support
-def check_if_support_is_setup(ctx):
-    support_channel = bool(
-        discord.utils.get(ctx.guild.text_channels,
-                          topic=SetupVars.support.value))
-    return support_channel
-
-
-# checks ban
-def check_if_ban_channel_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.ban.value):
-        return True
-    return False
-
-
-# checks unban
-def check_if_unban_channel_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels, topic=SetupVars.unban.value):
-        return True
-    return False
-
-
-# check feedback
-def check_if_feedback_system_setup(ctx):
-    if discord.utils.get(ctx.guild.text_channels,
-                         topic=SetupVars.feedback.value):
-        return True
-    return False
 
 
 # The permission system of the bot is based on a "just works" basis

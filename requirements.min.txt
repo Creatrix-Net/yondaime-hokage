@@ -6,7 +6,7 @@ betterstatcord.py
 discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@master
 discord-ext-owoify
 discord.py @ git+https://github.com/StockerMC/discord.py.git@master
-discord-ext-menus-views @ git+https://github.com/oliver-ni/discord-ext-menus-views@master
+DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@master
 eight-ball
 english-words
 DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@master

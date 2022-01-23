@@ -7,6 +7,7 @@ from os.path import join
 from pathlib import Path
 
 import TenGiphPy
+from DiscordDatabase import DiscordDatabase
 
 try:
     import uvloop
@@ -99,6 +100,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             os.listdir(join(self.DEFAULT_GIF_LIST_PATH, "minato")))
 
         self.uptime = format_relative(self.start_time)
+        self.db = DiscordDatabase(self, 920536143244709889)
+
         super().__init__(
             command_prefix=get_prefix,
             description="Konichiwa, myself Minato Namikaze, Konohagakure Yondaime Hokage, I try my best to do every work as a Hokage!",

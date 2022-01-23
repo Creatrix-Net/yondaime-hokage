@@ -123,7 +123,7 @@ class Support(commands.Cog):
 
     @commands.command(
         description="Checks who still requires the support.",
-        aliases=["check_who_require_support", "cksupreq"],
+        aliases=["check_who_require_support", "cksupreq", "supreq", "sup_req"],
     )
     @commands.check(if_inside_support_channel)
     async def chksupreq(self, ctx):
@@ -171,6 +171,45 @@ class Support(commands.Cog):
             await ctx.send(embed=ErrorEmbed(
                 description="This command can be run **inside only servers's support channel**."
             ))
+    
+
+    @commands.command()
+    @commands.cooldown(1, 60, commands.BucketType.user)
+    @commands.guild_only()
+    async def feedback(self, ctx, *, feed):
+        """Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server admin)"""
+        data = await ctx.database.get(ctx.guild.id)
+        if data is None:
+            e = ErrorEmbed(
+                title="No Feedback system setup for this server!",
+                description="An admin can always setup the **feedback system** using `{}setup add feedback #channelname` command".format(ctx.prefix),
+            )
+            await ctx.send(embed=e, delete_after=10)
+            return
+        if data.get('feedback') is None:
+            e = ErrorEmbed(
+                title="No Feedback system setup for this server!",
+                description="An admin can always setup the **feedback system** using `{}setup add feedback #channelname` command".format(ctx.prefix),
+            )
+            await ctx.send(embed=e, delete_after=10)
+            return
+        
+        channel = self.bot.get_channel(data.get('feedback'))
+
+        e = Embed(
+            title="Feedback sent!",
+            description=f"Your feedback '{feed}' has been sent!",
+        )
+        await ctx.send(embed=e, delete_after=10)
+
+        e2 = discord.Embed(
+            title="New Feedback!",
+            description=feed,
+            colour=ctx.author.color or ctx.author.top_role.colour.value
+            or discord.Color.random(),
+        )
+        e.set_author(name=ctx.author.display_name, icon_url=ctx.author.display_avatar.url)
+        await channel.send(embed=e2)
 
 
 def setup(bot):

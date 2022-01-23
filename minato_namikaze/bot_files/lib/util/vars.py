@@ -1,7 +1,7 @@
 import enum
 import os
 from pathlib import Path
-from typing import List, Union
+from typing import List
 
 import dotenv
 
@@ -129,19 +129,17 @@ class LinksAndVars(enum.Enum):
             ))
 
 
-@enum.unique
-class SetupVars(str, enum.Enum):
-    warns = "Warning of the server members will be logged here."
-    support = "This channel will be used as a support channel for this server."
-    ban = "This channel will be used to log the server bans."
-    unban = "Unbans of the server will be logged here."
-    feedback = "This channel will be used to log the feedbacks given by members."
-
-
 class RaidMode(enum.Enum):
     off = 0
     on = 1
     strict = 2
 
-    def __str__(self):
-        return self.name
+database_category_name = 'DATABASE'
+database_channel_name = 'setup vars'
+setupvars = (
+    'ban',
+    'unban',
+    'feedback',
+    'warns',
+    'support',
+)

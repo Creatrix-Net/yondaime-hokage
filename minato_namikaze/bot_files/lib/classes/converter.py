@@ -67,34 +67,6 @@ class MemberID(commands.Converter):
         return member
 
 
-class RoleID(commands.Converter):
-    async def convert(self, ctx, argument):
-        try:
-            member = await commands.MemberConverter().convert(ctx, argument)
-        except commands.BadArgument:
-            try:
-                argument = int(argument, base=10)
-            except ValueError:
-                raise commands.BadArgument(
-                    f"{argument} is not a valid member or member ID."
-                ) from None
-            else:
-                member = await ctx.bot.get_or_fetch_member(ctx.guild, argument)
-                if member is None:
-                    # hackban case
-                    return type(
-                        "_Hackban",
-                        (),
-                        {"id": argument, "__str__": lambda s: f"Member ID {s.id}"},
-                    )()
-
-        if not can_execute_action(ctx, ctx.author, member):
-            raise commands.BadArgument(
-                "You cannot do this action on this user due to role hierarchy."
-            )
-        return member
-
-
 class BannedMember(commands.Converter):
     async def convert(self, ctx, argument):
         if argument.isdigit():
@@ -133,3 +105,8 @@ def safe_reason_append(base, to_append):
     if len(appended) > 512:
         return base
     return appended
+
+def can_execute_action(ctx, user, target):
+    return user.id == ctx.bot.owner_id or \
+           user == ctx.guild.owner or \
+           user.top_role > target.top_role

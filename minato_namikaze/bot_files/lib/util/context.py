@@ -9,7 +9,7 @@ import TenGiphPy
 from discord.ext import commands
 
 from ..classes.converter import MemberID
-from .vars import ChannelAndMessageId, SetupVars, Tokens
+from .vars import ChannelAndMessageId, Tokens, database_category_name, database_channel_name
 
 
 class ConfirmationView(discord.ui.View):
@@ -88,6 +88,10 @@ class Context(commands.Context):
     @property
     def session(self):
         return self.bot.session
+    
+    @discord.utils.cached_property
+    async def database(self):
+        return await self.db.new(database_category_name, database_channel_name)
 
     @discord.utils.cached_property
     def replied_reference(self):
@@ -144,17 +148,6 @@ class Context(commands.Context):
         await view.wait()
         return view.value
 
-    def tick(self, opt, label=None):
-        lookup = {
-            True: "<:greenTick:330090705336664065>",
-            False: "<:redTick:330090723011592193>",
-            None: "<:greyTick:563231201280917524>",
-        }
-        emoji = lookup.get(opt, "<:redTick:330090723011592193>")
-        if label is not None:
-            return f"{emoji}: {label}"
-        return emoji
-
     async def show_help(self, command=None):
         """Shows the help command for the specified command if given.
         If no command is given, then it'll show help for the current
@@ -180,41 +173,6 @@ class Context(commands.Context):
                 **kwargs)
         else:
             return await self.send(content)
-
-    def return_ban_channel(self, guild: Optional[discord.Guild]):
-        guild = guild or self.guild
-        return discord.utils.get(
-            self.guild.text_channels if self else guild.text_channels,
-            topic=SetupVars.ban.value,
-        )
-
-    def return_unban_channel(self, guild: Optional[discord.Guild]):
-        guild = guild or self.guild
-        return discord.utils.get(
-            self.guild.text_channels if self else guild.text_channels,
-            topic=SetupVars.unban.value,
-        )
-
-    def return_feedback_channel(self, guild: Optional[discord.Guild]):
-        guild = guild or self.guild
-        return discord.utils.get(
-            self.guild.text_channels if self else guild.text_channels,
-            topic=SetupVars.feedback.value,
-        )
-
-    def return_support_channel(self, guild: Optional[discord.Guild]):
-        guild = guild or self.guild
-        return discord.utils.get(
-            self.guild.text_channels if self else guild.text_channels,
-            topic=SetupVars.support.value,
-        )
-
-    def return_warning_channel(self, guild: Optional[discord.Guild]):
-        guild = guild or self.guild
-        return discord.utils.get(
-            self.guild.text_channels if self else guild.text_channels,
-            topic=SetupVars.warns.value,
-        )
 
     def get_user(self, user: Union[int, discord.Member, MemberID]):
         if isinstance(user, (int, MemberID)):

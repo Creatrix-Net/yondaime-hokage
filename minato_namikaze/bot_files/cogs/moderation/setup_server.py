@@ -34,12 +34,13 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         if not await ctx.prompt(f'Do you really want to **log {add_type}** for **{ctx.guild.name}** in {channel.mention}?'):
             return
         dict_to_add = {str(add_type): channel.id}
-        guild_dict = await(await ctx.database).get(ctx.guild.id)
+        guild_dict = await (await ctx.database).get(ctx.guild.id)
         if guild_dict is None:
-            (await ctx.database).set(ctx.guild.id,dict_to_add)
+            await (await ctx.database).set(ctx.guild.id,dict_to_add)
             return
         guild_dict.update(dict_to_add)
-        await ctx.database.set(ctx.guild.id,guild_dict)
+        await (await ctx.database).set(ctx.guild.id,guild_dict)
+        print('hi')
         await ctx.send(':ok_hand:')
     
     @commands.command()

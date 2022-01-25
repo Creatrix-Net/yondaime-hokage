@@ -91,7 +91,7 @@ class Context(commands.Context):
     
     @discord.utils.cached_property
     async def database(self):
-        return await self.db.new(database_category_name, database_channel_name)
+        return await self.bot.db.new(database_category_name, database_channel_name)
 
     @discord.utils.cached_property
     def replied_reference(self):

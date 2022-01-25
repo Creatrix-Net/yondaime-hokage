@@ -15,7 +15,6 @@ from ...lib import (
     EmbedPaginator,
     ErrorEmbed,
     FutureTime,
-    check_if_warning_system_setup,
     format_relative,
     has_permissions,
     plural,
@@ -565,13 +564,27 @@ class Moderation(commands.Cog):
                       usage="<member.mention> <optional: reason>")
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
-    @commands.check(check_if_warning_system_setup)
     async def warn(self,
                    ctx,
                    member: Union[commands.MemberConverter, MemberID],
                    *,
                    reason: str = None):
         """Warn a user"""
+        data = await(await ctx.database).get(ctx.guild.id)
+        if data is None:
+            e = ErrorEmbed(
+                title=f"No warning system setup for the {ctx.guild.name}",
+                description="You can always setup the **warning system** using `{}setup` command".format(ctx.prefix),
+            )
+            await ctx.send(embed=e, delete_after=10)
+            return
+        if data.get('warns') is None:
+            e = ErrorEmbed(
+                title=f"No warning system setup for the {ctx.guild.name}",
+                description="You can always setup the **warning system** using `{}setup` command".format(ctx.prefix),
+            )
+            await ctx.send(embed=e, delete_after=10)
+            return
 
         if not await ctx.prompt(
                 f"Are you sure that you want to **warn** {member}?",
@@ -587,7 +600,7 @@ class Moderation(commands.Cog):
         if reason:
             e.add_field(name="**Reason**:", value=reason, inline=True)
 
-        warning_channel = ctx.return_warning_channel(ctx.guild)
+        warning_channel = self.bot.get_channel(data.get('warns'))
         await member.send(embed=e)
         await warning_channel.send(embed=e, content=member.mention)
         await ctx.send(
@@ -595,22 +608,28 @@ class Moderation(commands.Cog):
             delete_after=10,
         )
 
-    @warn.error
-    async def warn_handler(self, ctx, error):
-        if isinstance(error, commands.CheckFailure):
-            e = ErrorEmbed(
-                title=f"No warning system setup for the {ctx.guild.name}",
-                description="You can always setup the **warning system** using `)setup` command",
-            )
-            await ctx.send(embed=e)
 
     @commands.command(pass_context=True, usage="<member.mention>")
     @commands.guild_only()
-    @commands.check(check_if_warning_system_setup)
     async def warnlist(self,
                        ctx,
                        member: Optional[Union[commands.MemberConverter, MemberID]] = None):
         """Get the no. of warns for a specified user"""
+        data = await(await ctx.database).get(ctx.guild.id)
+        if data is None:
+            e = ErrorEmbed(
+                title=f"No warning system setup for the {ctx.guild.name}",
+                description="You can always setup the **warning system** using `{}setup` command".format(ctx.prefix),
+            )
+            await ctx.send(embed=e, delete_after=10)
+            return
+        if data.get('warns') is None:
+            e = ErrorEmbed(
+                title=f"No warning system setup for the {ctx.guild.name}",
+                description="You can always setup the **warning system** using `{}setup` command".format(ctx.prefix),
+            )
+            await ctx.send(embed=e, delete_after=10)
+            return
         member = ctx.get_user(
             member if member is not None else ctx.message.author)
         embed = discord.Embed(title="Type the below message in the search bar")
@@ -620,18 +639,10 @@ class Moderation(commands.Cog):
         embed.set_image(url="attachment://search.png")
         await ctx.send(file=search_image, embed=embed)
 
-        warning_channel = self.return_warning_channel(ctx.guild)
+        warning_channel = self.bot.get_channel(data.get('warns'))
         message = f"mentions: {member}  in: {warning_channel}"
         await ctx.send(message)
 
-    @warnlist.error
-    async def warnlist_handler(self, ctx, error):
-        if isinstance(error, commands.CheckFailure):
-            e = ErrorEmbed(
-                title=f"No warning system setup for the {ctx.guild.name}",
-                description="You/Admin can always setup the **warning system** using `)setup` command",
-            )
-            await ctx.send(embed=e)
 
     @commands.command(aliases=["newmembers"])
     @commands.guild_only()

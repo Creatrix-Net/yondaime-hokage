@@ -1,17 +1,9 @@
-from typing import Optional, Union
+from typing import Union
 
 import discord
 from discord.ext import commands
 
-from ...lib import Embed, EmbedPaginator, ErrorEmbed, check_if_support_is_setup
-
-
-def if_inside_support_channel(ctx):
-    if check_if_support_is_setup(ctx):
-        if ctx.message.channel == ctx.return_support_channel(ctx.guild):
-            return True
-        return False
-    return False
+from ...lib import Embed, EmbedPaginator, ErrorEmbed
 
 
 def errorembed(ctx):
@@ -33,7 +25,6 @@ class Support(commands.Cog):
     @commands.command(
         description="Open support ticket if enabled by the server admins")
     @commands.cooldown(1, 120, commands.BucketType.user)
-    @commands.check(check_if_support_is_setup)
     @commands.guild_only()
     async def support(self, ctx):
         """Open support ticket if enabled by the server admins"""
@@ -85,7 +76,6 @@ class Support(commands.Cog):
 
     @commands.command(description="Resolves the existing ticket!",
                       usage="<member.mention>")
-    @commands.check(if_inside_support_channel)
     @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
     async def resolved(self, ctx, member: Union[int, discord.Member]):
@@ -125,7 +115,6 @@ class Support(commands.Cog):
         description="Checks who still requires the support.",
         aliases=["check_who_require_support", "cksupreq", "supreq", "sup_req"],
     )
-    @commands.check(if_inside_support_channel)
     async def chksupreq(self, ctx):
         """Checks who still requires the support."""
         role_sup = discord.utils.get(ctx.guild.roles, name="SupportRequired")
@@ -178,18 +167,18 @@ class Support(commands.Cog):
     @commands.guild_only()
     async def feedback(self, ctx, *, feed):
         """Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server admin)"""
-        data = await ctx.database.get(ctx.guild.id)
+        data = await(await ctx.database).get(ctx.guild.id)
         if data is None:
             e = ErrorEmbed(
                 title="No Feedback system setup for this server!",
-                description="An admin can always setup the **feedback system** using `{}setup add feedback #channelname` command".format(ctx.prefix),
+                description="An admin can always setup the **feedback system** using `{}add feedback #channelname` command".format(ctx.prefix),
             )
             await ctx.send(embed=e, delete_after=10)
             return
         if data.get('feedback') is None:
             e = ErrorEmbed(
                 title="No Feedback system setup for this server!",
-                description="An admin can always setup the **feedback system** using `{}setup add feedback #channelname` command".format(ctx.prefix),
+                description="An admin can always setup the **feedback system** using `{}add feedback #channelname` command".format(ctx.prefix),
             )
             await ctx.send(embed=e, delete_after=10)
             return

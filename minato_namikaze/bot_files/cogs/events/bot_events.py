@@ -49,11 +49,11 @@ class BotEvents(commands.Cog):
             if member.guild.id == 747480356625711204:
                 inviter = await self.tracker.fetch_inviter_for_my_guild(member)
                 channel = discord.utils.get(self.bot.get_all_channels(),
-                                            id=747660913116577903)
+                                            id=922006581334405180)
                 if not member.bot:
                     embed = Embed(
                         title=f"Welcome {member.name} !",
-                        description=f"Please {member.mention} goto <#777189846862266408> and get **supercool roles**",
+                        description=f"Please {member.mention} goto <#922006581372157958> and get **supercool roles**",
                         timestamp=datetime.utcnow(),
                     )
                     embed.set_image(url="https://i.imgur.com/mktY446.jpeg")
@@ -74,7 +74,7 @@ class BotEvents(commands.Cog):
     async def on_invite_create(self, invite):
         try:
             if (invite.guild.id not in self._cache.keys()
-                    and invite.guild.id == 747480356625711204):
+                    and invite.guild.id == 922006581334405180):
                 self._cache[invite.guild.id] = {}
             self._cache[invite.guild.id][invite.code] = invite
         except:
@@ -109,7 +109,7 @@ class BotEvents(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         inviter_or_guild_owner = await self.bot.get_bot_inviter(guild)
-        welcome_channel = await ctx.bot.get_welcome_channel(
+        welcome_channel = await self.bot.get_welcome_channel(
             guild, inviter_or_guild_owner)
         try:
             img = random.choice(self.minato_gif)
@@ -129,7 +129,7 @@ class BotEvents(commands.Cog):
                 inviter_or_guild_owner.mention,
             )
             e = Embed(
-                title="Thanks for Inviting me <:smilenaruto:848961696047300649>",
+                title="Thanks for Inviting me !",
                 description=description,
                 timestamp=datetime.utcnow(),
             )
@@ -149,8 +149,7 @@ class BotEvents(commands.Cog):
                 e34.set_thumbnail(url=guild.icon.url)
             if guild.banner:
                 e34.set_image(url=guild.banner.with_format("png").url)
-            c = (self.bot.get_channel(813954921782706227) if not self.bot.local
-                 else self.bot.get_channel(869238107524968479))
+            c = (self.bot.get_channel(ChannelAndMessageId.serverlog_channel2.value) if not self.bot.local else self.bot.get_channel(ChannelAndMessageId.serverlog_channel1.value))
             e34.add_field(name="**Total Members**", value=guild.member_count)
             e34.add_field(name="**Bots**",
                           value=sum(1 for member in guild.members
@@ -176,8 +175,7 @@ class BotEvents(commands.Cog):
                 e34.set_thumbnail(url=guild.icon.url)
             if guild.banner:
                 e34.set_image(url=guild.banner.with_format("png").url)
-            c = (self.bot.get_channel(813954921782706227) if not self.bot.local
-                 else self.bot.get_channel(869238107524968479))
+            c = (self.bot.get_channel(ChannelAndMessageId.serverlog_channel2.value) if not self.bot.local else self.bot.get_channel(ChannelAndMessageId.serverlog_channel1.value))
             e34.add_field(name="**Total Members**", value=guild.member_count)
             e34.add_field(name="**Bots**",
                           value=sum(1 for member in guild.members

@@ -89,6 +89,9 @@ class ChannelAndMessageId(enum.IntEnum):
     restartlog_channel1 = 920190310942908508
     restartlog_channel2 = 920536143458598926
 
+    serverlog_channel1 = 920190310942908509
+    serverlog_channel2 = 920536143458598927
+
 
 class Tokens(enum.Enum):
     statcord = token_get("STATCORD")

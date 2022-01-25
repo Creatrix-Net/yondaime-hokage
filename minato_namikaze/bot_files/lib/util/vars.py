@@ -136,10 +136,4 @@ class RaidMode(enum.Enum):
 
 database_category_name = 'DATABASE'
 database_channel_name = 'setup vars'
-setupvars = (
-    'ban',
-    'unban',
-    'feedback',
-    'warns',
-    'support',
-)
+

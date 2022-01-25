@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import inspect
 from itertools import islice
+import itertools
+from typing import Union, List
 
 import discord
 from discord.ext import commands, menus

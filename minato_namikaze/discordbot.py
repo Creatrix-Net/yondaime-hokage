@@ -42,6 +42,13 @@ from sentry_sdk.integrations.modules import ModulesIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
 
 log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(message)s')
+ch.setFormatter(formatter)
+log.addHandler(ch)
 
 dotenv_file = os.path.join(Path(__file__).resolve().parent.parent / ".env")
 
@@ -100,7 +107,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             os.listdir(join(self.DEFAULT_GIF_LIST_PATH, "minato")))
 
         self.uptime = format_relative(self.start_time)
-        self.db = DiscordDatabase(self, 920536143244709889)
+        self.db = DiscordDatabase(self, ChannelAndMessageId.server_id2.value)
 
         super().__init__(
             command_prefix=get_prefix,

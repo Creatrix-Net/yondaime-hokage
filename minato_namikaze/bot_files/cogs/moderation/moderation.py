@@ -1,4 +1,6 @@
-import re, io
+import datetime
+import io
+import re
 import shlex
 from collections import Counter
 from os.path import join
@@ -6,7 +8,6 @@ from typing import Optional, Union
 
 import discord
 from discord.ext import commands
-import datetime
 
 from ...lib import (
     ActionReason,
@@ -15,11 +16,11 @@ from ...lib import (
     EmbedPaginator,
     ErrorEmbed,
     FutureTime,
+    MemberID,
+    can_execute_action,
     format_relative,
     has_permissions,
     plural,
-    can_execute_action,
-    MemberID
 )
 
 
@@ -64,11 +65,13 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions(kick_members=True)
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
-    async def kick(self,
-                   ctx,
-                   member: Optional[Union[commands.MemberConverter, MemberID]],
-                   *,
-                   reason=None):
+    async def kick(
+        self,
+        ctx,
+        member: Optional[Union[commands.MemberConverter, MemberID]],
+        *,
+        reason=None,
+    ):
         """A command which kicks a given user"""
 
         if not await ctx.prompt(
@@ -135,7 +138,9 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def banlist(self, ctx, *, member: Optional[Union[commands.MemberConverter, MemberID]]):
+    async def banlist(self, ctx, *,
+                      member: Optional[Union[commands.MemberConverter,
+                                             MemberID]]):
         banned_users = list(await ctx.guild.bans())
         if member is not None:
             if len(banned_users) == 0:
@@ -191,7 +196,8 @@ class Moderation(commands.Cog):
                     await ctx.channel.send(embed=embed)
                     return
             await ctx.send(embed=ErrorEmbed(
-                description=f"The **{member}** isn't there in the **ban list**"))
+                description=f"The **{member}** isn't there in the **ban list**"
+            ))
 
     # Soft Ban
     @commands.command()
@@ -301,11 +307,13 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @has_permissions(ban_members=True)
-    async def multiban(self,
-                       ctx,
-                       members: Union[commands.MemberConverter, MemberID],
-                       *,
-                       reason: ActionReason = None):
+    async def multiban(
+        self,
+        ctx,
+        members: Union[commands.MemberConverter, MemberID],
+        *,
+        reason: ActionReason = None,
+    ):
         """Bans multiple members from the server.
         This only works through banning via ID.
         In order for this to work, the bot must have Ban Member permissions.
@@ -564,24 +572,28 @@ class Moderation(commands.Cog):
                       usage="<member.mention> <optional: reason>")
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
-    async def warn(self,
-                   ctx,
-                   member: Union[commands.MemberConverter, MemberID],
-                   *,
-                   reason: str = None):
+    async def warn(
+        self,
+        ctx,
+        member: Union[commands.MemberConverter, MemberID],
+        *,
+        reason: str = None,
+    ):
         """Warn a user"""
-        data = await(await ctx.database).get(ctx.guild.id)
+        data = await (await ctx.database).get(ctx.guild.id)
         if data is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
-                description="You can always setup the **warning system** using `{}setup` command".format(ctx.prefix),
+                description="You can always setup the **warning system** using `{}setup` command"
+                .format(ctx.prefix),
             )
             await ctx.send(embed=e, delete_after=10)
             return
-        if data.get('warns') is None:
+        if data.get("warns") is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
-                description="You can always setup the **warning system** using `{}setup` command".format(ctx.prefix),
+                description="You can always setup the **warning system** using `{}setup` command"
+                .format(ctx.prefix),
             )
             await ctx.send(embed=e, delete_after=10)
             return
@@ -600,7 +612,7 @@ class Moderation(commands.Cog):
         if reason:
             e.add_field(name="**Reason**:", value=reason, inline=True)
 
-        warning_channel = self.bot.get_channel(data.get('warns'))
+        warning_channel = self.bot.get_channel(data.get("warns"))
         await member.send(embed=e)
         await warning_channel.send(embed=e, content=member.mention)
         await ctx.send(
@@ -608,25 +620,27 @@ class Moderation(commands.Cog):
             delete_after=10,
         )
 
-
     @commands.command(pass_context=True, usage="<member.mention>")
     @commands.guild_only()
     async def warnlist(self,
                        ctx,
-                       member: Optional[Union[commands.MemberConverter, MemberID]] = None):
+                       member: Optional[Union[commands.MemberConverter,
+                                              MemberID]] = None):
         """Get the no. of warns for a specified user"""
-        data = await(await ctx.database).get(ctx.guild.id)
+        data = await (await ctx.database).get(ctx.guild.id)
         if data is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
-                description="You can always setup the **warning system** using `{}setup` command".format(ctx.prefix),
+                description="You can always setup the **warning system** using `{}setup` command"
+                .format(ctx.prefix),
             )
             await ctx.send(embed=e, delete_after=10)
             return
-        if data.get('warns') is None:
+        if data.get("warns") is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
-                description="You can always setup the **warning system** using `{}setup` command".format(ctx.prefix),
+                description="You can always setup the **warning system** using `{}setup` command"
+                .format(ctx.prefix),
             )
             await ctx.send(embed=e, delete_after=10)
             return
@@ -639,10 +653,9 @@ class Moderation(commands.Cog):
         embed.set_image(url="attachment://search.png")
         await ctx.send(file=search_image, embed=embed)
 
-        warning_channel = self.bot.get_channel(data.get('warns'))
+        warning_channel = self.bot.get_channel(data.get("warns"))
         message = f"mentions: {member}  in: {warning_channel}"
         await ctx.send(message)
-
 
     @commands.command(aliases=["newmembers"])
     @commands.guild_only()
@@ -1075,10 +1088,9 @@ class Moderation(commands.Cog):
             return
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
-        await member.edit(timed_out_until=duration.dt,reason=reason)
+        await member.edit(timed_out_until=duration.dt, reason=reason)
         await ctx.send(embed=discord.Embed(
-            description=f"**Timed out** {member} until {format_relative(duration.dt)}")
-        )
+            description=f"**Timed out** {member} until {format_relative(duration.dt)}"))
 
 
 def setup(bot):

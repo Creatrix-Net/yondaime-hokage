@@ -109,7 +109,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
         `Note: If 'log' action is selected then, I will only delete the message and log it the current channel where the link was sent and will do nothing`
         """
-        await self.add_and_check_data(dict_to_add={"badlinks": str(option)},ctx=ctx)
+        await self.add_and_check_data(dict_to_add={"badlinks": str(option)},
+                                      ctx=ctx)
 
     @commands.command()
     @commands.guild_only()

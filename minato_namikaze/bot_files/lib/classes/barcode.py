@@ -9,8 +9,9 @@ import os
 import string
 import xml.dom
 
-from ..util import BASE_DIR
 from PIL import Image, ImageDraw, ImageFont  # lint:ok
+
+from ..util import BASE_DIR
 
 _strbase = str
 

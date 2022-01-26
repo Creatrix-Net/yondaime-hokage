@@ -159,8 +159,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         for filename in list(set(os.listdir(cog_dir))):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
-                    if i.endswith(".py") :
-                        self.load_extension(f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
+                    if i.endswith(".py"):
+                        self.load_extension(
+                            f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
             else:
                 if filename.endswith(".py"):
                     self.load_extension(f"bot_files.cogs.{filename[:-3]}")

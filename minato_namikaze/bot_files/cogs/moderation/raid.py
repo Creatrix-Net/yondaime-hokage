@@ -1,17 +1,27 @@
 import asyncio
+import datetime
+import logging
 from collections import defaultdict
 
 import discord
 from discord.ext import commands, tasks
-import logging
-import datetime
-from ...lib import RaidMode, is_mod, cache, format_dt, format_relative
+
+from ...lib import RaidMode, cache, format_dt, format_relative, is_mod
 
 log = logging.getLogger(__name__)
 
+
 class ModConfig:
-    __slots__ = ('raid_mode', 'id', 'bot', 'broadcast_channel_id', 'mention_count',
-                 'safe_mention_channel_ids', 'mute_role_id', 'muted_members')
+    __slots__ = (
+        "raid_mode",
+        "id",
+        "bot",
+        "broadcast_channel_id",
+        "mention_count",
+        "safe_mention_channel_ids",
+        "mute_role_id",
+        "muted_members",
+    )
 
     @classmethod
     async def from_record(cls, record, bot):
@@ -19,9 +29,9 @@ class ModConfig:
 
         # the basic configuration
         self.bot = bot
-        self.raid_mode = record['raid_mode']
-        self.id = record['id']
-        self.broadcast_channel_id = record['broadcast_channel']
+        self.raid_mode = record["raid_mode"]
+        self.id = record["id"]
+        self.broadcast_channel_id = record["broadcast_channel"]
         return self
 
     @property
@@ -29,9 +39,11 @@ class ModConfig:
         guild = self.bot.get_guild(self.id)
         return guild and guild.get_channel(self.broadcast_channel_id)
 
+
 class CooldownByContent(commands.CooldownMapping):
     def _bucket_key(self, message):
         return (message.channel.id, message.content)
+
 
 class SpamChecker:
     """This spam checker does a few things.
@@ -43,15 +55,20 @@ class SpamChecker:
     just catches regular singular spam bots.
     From experience these values aren't reached unless someone is actively spamming.
     """
+
     def __init__(self):
-        self.by_content = CooldownByContent.from_cooldown(15, 17.0, commands.BucketType.member)
-        self.by_user = commands.CooldownMapping.from_cooldown(10, 12.0, commands.BucketType.user)
+        self.by_content = CooldownByContent.from_cooldown(
+            15, 17.0, commands.BucketType.member)
+        self.by_user = commands.CooldownMapping.from_cooldown(
+            10, 12.0, commands.BucketType.user)
         self.last_join = None
-        self.new_user = commands.CooldownMapping.from_cooldown(30, 35.0, commands.BucketType.channel)
+        self.new_user = commands.CooldownMapping.from_cooldown(
+            30, 35.0, commands.BucketType.channel)
 
         # user_id flag mapping (for about 30 minutes)
         self.fast_joiners = cache.ExpiringCache(seconds=1800.0)
-        self.hit_and_run = commands.CooldownMapping.from_cooldown(10, 12, commands.BucketType.channel)
+        self.hit_and_run = commands.CooldownMapping.from_cooldown(
+            10, 12, commands.BucketType.channel)
 
     def is_new(self, member):
         now = discord.utils.utcnow()
@@ -101,25 +118,28 @@ class AntiRaid(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Some simple moderation commands"
-        self._batch_message_lock = self._disable_lock = asyncio.Lock(loop=bot.loop)
+        self._batch_message_lock = self._disable_lock = asyncio.Lock(
+            loop=bot.loop)
         self._spam_check = defaultdict(SpamChecker)
         self.message_batches = defaultdict(list)
         self.bulk_send_messages.start()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
-    
+        return discord.PartialEmoji(name="discord_certified_moderator",
+                                    id=922030031146995733)
+
     @tasks.loop(seconds=10.0)
     async def bulk_send_messages(self):
         async with self._batch_message_lock:
-            for ((guild_id, channel_id), messages) in self.message_batches.items():
+            for ((guild_id, channel_id),
+                 messages) in self.message_batches.items():
                 guild = self.bot.get_guild(guild_id)
                 channel = guild and guild.get_channel(channel_id)
                 if channel is None:
                     continue
 
-                paginator = commands.Paginator(suffix='', prefix='')
+                paginator = commands.Paginator(suffix="", prefix="")
                 for message in messages:
                     paginator.add_line(message)
 
@@ -130,7 +150,7 @@ class AntiRaid(commands.Cog):
                         pass
 
             self.message_batches.clear()
-    
+
     @cache()
     async def get_guild_config(self, guild_id):
         query = """SELECT * FROM guild_mod_config WHERE id=$1;"""
@@ -139,7 +159,7 @@ class AntiRaid(commands.Cog):
             if record is not None:
                 return await ModConfig.from_record(record, self.bot)
             return None
-    
+
     async def check_raid(self, config, guild_id, member, message):
         if config.raid_mode != RaidMode.strict.value:
             return
@@ -149,11 +169,16 @@ class AntiRaid(commands.Cog):
             return
 
         try:
-            await member.ban(reason='Auto-ban from spam (strict raid mode ban)')
+            await member.ban(reason="Auto-ban from spam (strict raid mode ban)"
+                             )
         except discord.HTTPException:
-            log.info(f'[Raid Mode] Failed to ban {member} (ID: {member.id}) from server {member.guild} via strict mode.')
+            log.info(
+                f"[Raid Mode] Failed to ban {member} (ID: {member.id}) from server {member.guild} via strict mode."
+            )
         else:
-            log.info(f'[Raid Mode] Banned {member} (ID: {member.id}) from server {member.guild} via strict mode.')
+            log.info(
+                f"[Raid Mode] Banned {member} (ID: {member.id}) from server {member.guild} via strict mode."
+            )
 
     @tasks.loop(seconds=10.0)
     async def bulk_send_messages(self):
@@ -253,24 +278,26 @@ class AntiRaid(commands.Cog):
         checker = self._spam_check[guild_id]
 
         # Do the broadcasted message to the channel
-        title = 'Member Joined'
+        title = "Member Joined"
         if checker.is_fast_join(member):
-            colour = 0xdd5f53 # red
+            colour = 0xDD5F53  # red
             if is_new:
-                title = 'Member Joined (Very New Member)'
+                title = "Member Joined (Very New Member)"
         else:
-            colour = 0x53dda4 # green
+            colour = 0x53DDA4  # green
 
             if is_new:
-                colour = 0xdda453 # yellow
-                title = 'Member Joined (Very New Member)'
+                colour = 0xDDA453  # yellow
+                title = "Member Joined (Very New Member)"
 
         e = discord.Embed(title=title, colour=colour)
         e.timestamp = now
         e.set_author(name=str(member), icon_url=member.display_avatar.url)
-        e.add_field(name='ID', value=member.id)
-        e.add_field(name='Joined', value=format_dt(member.joined_at, "F"))
-        e.add_field(name='Created', value=format_relative(member.created_at), inline=False)
+        e.add_field(name="ID", value=member.id)
+        e.add_field(name="Joined", value=format_dt(member.joined_at, "F"))
+        e.add_field(name="Created",
+                    value=format_relative(member.created_at),
+                    inline=False)
 
         if config.broadcast_channel:
             try:
@@ -279,7 +306,7 @@ class AntiRaid(commands.Cog):
                 async with self._disable_lock:
                     await self.disable_raid_mode(guild_id)
 
-    @commands.group(aliases=['raids'], invoke_without_command=True)
+    @commands.group(aliases=["raids"], invoke_without_command=True)
     @is_mod()
     async def raid(self, ctx):
         """Controls raid mode on the server.
@@ -293,15 +320,15 @@ class AntiRaid(commands.Cog):
 
         row = await ctx.db.fetchrow(query, ctx.guild.id)
         if row is None:
-            fmt = 'Raid Mode: off\nBroadcast Channel: None'
+            fmt = "Raid Mode: off\nBroadcast Channel: None"
         else:
-            ch = f'<#{row[1]}>' if row[1] else None
+            ch = f"<#{row[1]}>" if row[1] else None
             mode = RaidMode(row[0]) if row[0] is not None else RaidMode.off
-            fmt = f'Raid Mode: {mode}\nBroadcast Channel: {ch}'
+            fmt = f"Raid Mode: {mode}\nBroadcast Channel: {ch}"
 
         await ctx.send(fmt)
 
-    @raid.command(name='on', aliases=['enable', 'enabled'])
+    @raid.command(name="on", aliases=["enable", "enabled"])
     @is_mod()
     async def raid_on(self, ctx, *, channel: discord.TextChannel = None):
         """
@@ -316,9 +343,11 @@ class AntiRaid(commands.Cog):
         channel = channel or ctx.channel
 
         try:
-            await ctx.guild.edit(verification_level=discord.VerificationLevel.high)
+            await ctx.guild.edit(
+                verification_level=discord.VerificationLevel.high)
         except discord.HTTPException:
-            await ctx.send('\N{WARNING SIGN} Could not set verification level.')
+            await ctx.send("\N{WARNING SIGN} Could not set verification level."
+                           )
 
         query = """INSERT INTO guild_mod_config (id, raid_mode, broadcast_channel)
                    VALUES ($1, $2, $3) ON CONFLICT (id)
@@ -327,9 +356,12 @@ class AntiRaid(commands.Cog):
                         broadcast_channel = EXCLUDED.broadcast_channel;
                 """
 
-        await ctx.db.execute(query, ctx.guild.id, RaidMode.on.value, channel.id)
+        await ctx.db.execute(query, ctx.guild.id, RaidMode.on.value,
+                             channel.id)
         self.get_guild_config.invalidate(self, ctx.guild.id)
-        await ctx.send(f'Raid mode enabled. Broadcasting join messages to {channel.mention}.')
+        await ctx.send(
+            f"Raid mode enabled. Broadcasting join messages to {channel.mention}."
+        )
 
     async def disable_raid_mode(self, guild_id):
         query = """INSERT INTO guild_mod_config (id, raid_mode, broadcast_channel)
@@ -343,7 +375,7 @@ class AntiRaid(commands.Cog):
         self._spam_check.pop(guild_id, None)
         self.get_guild_config.invalidate(self, guild_id)
 
-    @raid.command(name='off', aliases=['disable', 'disabled'])
+    @raid.command(name="off", aliases=["disable", "disabled"])
     @is_mod()
     async def raid_off(self, ctx):
         """Disables raid mode on the server.
@@ -353,14 +385,17 @@ class AntiRaid(commands.Cog):
         """
 
         try:
-            await ctx.guild.edit(verification_level=discord.VerificationLevel.low)
+            await ctx.guild.edit(
+                verification_level=discord.VerificationLevel.low)
         except discord.HTTPException:
-            await ctx.send('\N{WARNING SIGN} Could not set verification level.')
+            await ctx.send("\N{WARNING SIGN} Could not set verification level."
+                           )
 
         await self.disable_raid_mode(ctx.guild.id)
-        await ctx.send('Raid mode disabled. No longer broadcasting join messages.')
+        await ctx.send(
+            "Raid mode disabled. No longer broadcasting join messages.")
 
-    @raid.command(name='strict')
+    @raid.command(name="strict")
     @is_mod()
     async def raid_strict(self, ctx, *, channel: discord.TextChannel = None):
         """
@@ -376,12 +411,16 @@ class AntiRaid(commands.Cog):
 
         perms = ctx.me.guild_permissions
         if not (perms.kick_members and perms.ban_members):
-            return await ctx.send('\N{NO ENTRY SIGN} I do not have permissions to kick and ban members.')
+            return await ctx.send(
+                "\N{NO ENTRY SIGN} I do not have permissions to kick and ban members."
+            )
 
         try:
-            await ctx.guild.edit(verification_level=discord.VerificationLevel.high)
+            await ctx.guild.edit(
+                verification_level=discord.VerificationLevel.high)
         except discord.HTTPException:
-            await ctx.send('\N{WARNING SIGN} Could not set verification level.')
+            await ctx.send("\N{WARNING SIGN} Could not set verification level."
+                           )
 
         query = """INSERT INTO guild_mod_config (id, raid_mode, broadcast_channel)
                    VALUES ($1, $2, $3) ON CONFLICT (id)
@@ -390,9 +429,12 @@ class AntiRaid(commands.Cog):
                         broadcast_channel = EXCLUDED.broadcast_channel;
                 """
 
-        await ctx.db.execute(query, ctx.guild.id, RaidMode.strict.value, channel.id)
+        await ctx.db.execute(query, ctx.guild.id, RaidMode.strict.value,
+                             channel.id)
         self.get_guild_config.invalidate(self, ctx.guild.id)
-        await ctx.send(f'Raid mode enabled strictly. Broadcasting join messages to {channel.mention}.')
+        await ctx.send(
+            f"Raid mode enabled strictly. Broadcasting join messages to {channel.mention}."
+        )
 
 
 def setup(bot):

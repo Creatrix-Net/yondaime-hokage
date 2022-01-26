@@ -4,9 +4,9 @@ This code has been fully copied from here https://github.com/Rapptz/RoboDanny/bl
 from __future__ import annotations
 
 import inspect
-from itertools import islice
 import itertools
-from typing import Union, List
+from itertools import islice
+from typing import List, Union
 
 import discord
 from discord.ext import commands, menus

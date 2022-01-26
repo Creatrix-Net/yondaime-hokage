@@ -137,6 +137,6 @@ class RaidMode(enum.Enum):
     on = 1
     strict = 2
 
-database_category_name = 'DATABASE'
-database_channel_name = 'setup vars'
 
+database_category_name = "DATABASE"
+database_channel_name = "setup vars"

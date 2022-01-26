@@ -149,7 +149,10 @@ class BotEvents(commands.Cog):
                 e34.set_thumbnail(url=guild.icon.url)
             if guild.banner:
                 e34.set_image(url=guild.banner.with_format("png").url)
-            c = (self.bot.get_channel(ChannelAndMessageId.serverlog_channel2.value) if not self.bot.local else self.bot.get_channel(ChannelAndMessageId.serverlog_channel1.value))
+            c = (self.bot.get_channel(
+                ChannelAndMessageId.serverlog_channel2.value)
+                if not self.bot.local else self.bot.get_channel(
+                ChannelAndMessageId.serverlog_channel1.value))
             e34.add_field(name="**Total Members**", value=guild.member_count)
             e34.add_field(name="**Bots**",
                           value=sum(1 for member in guild.members
@@ -175,7 +178,10 @@ class BotEvents(commands.Cog):
                 e34.set_thumbnail(url=guild.icon.url)
             if guild.banner:
                 e34.set_image(url=guild.banner.with_format("png").url)
-            c = (self.bot.get_channel(ChannelAndMessageId.serverlog_channel2.value) if not self.bot.local else self.bot.get_channel(ChannelAndMessageId.serverlog_channel1.value))
+            c = (self.bot.get_channel(
+                ChannelAndMessageId.serverlog_channel2.value)
+                if not self.bot.local else self.bot.get_channel(
+                ChannelAndMessageId.serverlog_channel1.value))
             e34.add_field(name="**Total Members**", value=guild.member_count)
             e34.add_field(name="**Bots**",
                           value=sum(1 for member in guild.members

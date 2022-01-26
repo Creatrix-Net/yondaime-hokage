@@ -3,24 +3,25 @@ import discord
 from ..util import SetupVars
 from .embed import Embed
 
-bingo = 'Bingo Book'
-admin = 'Admin / Feedback'
+bingo = "Bingo Book"
+admin = "Admin / Feedback"
 categories_dict = {
-    'ban': bingo,
-    'unban': bingo,
-    'warns': bingo,
-    'support': admin,
-    'feedback': admin,
+    "ban": bingo,
+    "unban": bingo,
+    "warns": bingo,
+    "support": admin,
+    "feedback": admin,
 }
 
 categories_dict_reason = {
     bingo: "To log the the bans and unban events + warns",
-    admin: "Admin Only Category"
+    admin: "Admin Only Category",
 }
 
 
 class SetupChannels:
-    def __init__(self, ctx, timeout: int, channel: discord.TextChannel, channel_type: SetupVars):
+    def __init__(self, ctx, timeout: int, channel: discord.TextChannel,
+                 channel_type: SetupVars):
         self.ctx = ctx
         self.channel = channel
         self.timeout = timeout
@@ -34,8 +35,11 @@ class SetupChannels:
                 channel=self.channel,
         ):
             return
-        
-        category_exists = (True if discord.utils.get(self.ctx.guild.categories, name=categories_dict.get(self.channel_type.name)) else False)
+
+        category_exists = (True if discord.utils.get(
+            self.ctx.guild.categories,
+            name=categories_dict.get(self.channel_type.name),
+        ) else False)
         if not category_exists:
             category = await self.ctx.guild.create_category(
                 "Bingo Book",
@@ -45,7 +49,8 @@ class SetupChannels:
             topic=self.channel_type.value,
             overwrites={
                 self.ctx.guild.default_role:
-                discord.PermissionOverwrite(read_messages=False,send_messages=False)
+                discord.PermissionOverwrite(read_messages=False,
+                                            send_messages=False)
             },
             category=category,
         )

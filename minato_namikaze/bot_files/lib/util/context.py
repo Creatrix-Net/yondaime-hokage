@@ -9,7 +9,12 @@ import TenGiphPy
 from discord.ext import commands
 
 from ..classes.converter import MemberID
-from .vars import ChannelAndMessageId, Tokens, database_category_name, database_channel_name
+from .vars import (
+    ChannelAndMessageId,
+    Tokens,
+    database_category_name,
+    database_channel_name,
+)
 
 
 class ConfirmationView(discord.ui.View):
@@ -88,10 +93,11 @@ class Context(commands.Context):
     @property
     def session(self):
         return self.bot.session
-    
+
     @discord.utils.cached_property
     async def database(self):
-        return await self.bot.db.new(database_category_name, database_channel_name)
+        return await self.bot.db.new(database_category_name,
+                                     database_channel_name)
 
     @discord.utils.cached_property
     def replied_reference(self):

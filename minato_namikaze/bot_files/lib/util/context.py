@@ -11,10 +11,7 @@ from discord.ext import commands
 from ..classes.converter import MemberID
 from .vars import (
     ChannelAndMessageId,
-    Tokens,
-    database_category_name,
-    database_channel_name,
-)
+    Tokens)
 
 
 class ConfirmationView(discord.ui.View):

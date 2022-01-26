@@ -9,7 +9,12 @@ import TenGiphPy
 from discord.ext import commands
 
 from ..classes.converter import MemberID
-from .vars import ChannelAndMessageId, Tokens, database_category_name, database_channel_name
+from .vars import (
+    ChannelAndMessageId,
+    Tokens,
+    database_category_name,
+    database_channel_name,
+)
 
 
 class ConfirmationView(discord.ui.View):

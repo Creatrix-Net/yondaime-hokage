@@ -11,6 +11,7 @@ eight-ball
 english-words
 DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@master
 ffmpeg
+cachetools
 gTTS
 jishaku @ git+https://github.com/Gorialis/jishaku.git@master
 mal-api

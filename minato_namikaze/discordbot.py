@@ -7,7 +7,6 @@ from os.path import join
 from pathlib import Path
 
 import TenGiphPy
-from DiscordDatabase import DiscordDatabase
 
 try:
     import uvloop
@@ -107,7 +106,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             os.listdir(join(self.DEFAULT_GIF_LIST_PATH, "minato")))
 
         self.uptime = format_relative(self.start_time)
-        self.db = DiscordDatabase(self, ChannelAndMessageId.server_id2.value)
 
         super().__init__(
             command_prefix=get_prefix,
@@ -161,11 +159,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         for filename in list(set(os.listdir(cog_dir))):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
-                    if i.endswith(".py") and i.lower() != "raid.py":
-                        self.load_extension(
-                            f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
+                    if i.endswith(".py") :
+                        self.load_extension(f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
             else:
-                if filename.endswith(".py") and filename.lower() != "raid.py":
+                if filename.endswith(".py"):
                     self.load_extension(f"bot_files.cogs.{filename[:-3]}")
         self.load_extension("jishaku")
 

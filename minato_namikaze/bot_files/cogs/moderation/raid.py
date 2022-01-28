@@ -2,138 +2,54 @@ import asyncio
 import datetime
 import logging
 from collections import defaultdict
+from typing import Optional, Literal
 
 import discord
 from discord.ext import commands, tasks
 
-from ...lib import RaidMode, cache, format_dt, format_relative, is_mod
+from ...lib import (RaidMode, SpamChecker, antiraid_channel_name, cache,
+                    database_category_name, format_dt, format_relative,
+                    has_permissions, is_mod, AntiRaidConfig, mentionspam_channel_name, MentionSpamConfig)
 
 log = logging.getLogger(__name__)
-
-
-class ModConfig:
-    __slots__ = (
-        "raid_mode",
-        "id",
-        "bot",
-        "broadcast_channel_id",
-        "mention_count",
-        "safe_mention_channel_ids",
-        "mute_role_id",
-        "muted_members",
-    )
-
-    @classmethod
-    async def from_record(cls, record, bot):
-        self = cls()
-
-        # the basic configuration
-        self.bot = bot
-        self.raid_mode = record["raid_mode"]
-        self.id = record["id"]
-        self.broadcast_channel_id = record["broadcast_channel"]
-        return self
-
-    @property
-    def broadcast_channel(self):
-        guild = self.bot.get_guild(self.id)
-        return guild and guild.get_channel(self.broadcast_channel_id)
-
-
-class CooldownByContent(commands.CooldownMapping):
-    def _bucket_key(self, message):
-        return (message.channel.id, message.content)
-
-
-class SpamChecker:
-    """This spam checker does a few things.
-    1) It checks if a user has spammed more than 10 times in 12 seconds
-    2) It checks if the content has been spammed 15 times in 17 seconds.
-    3) It checks if new users have spammed 30 times in 35 seconds.
-    4) It checks if "fast joiners" have spammed 10 times in 12 seconds.
-    The second case is meant to catch alternating spam bots while the first one
-    just catches regular singular spam bots.
-    From experience these values aren't reached unless someone is actively spamming.
-    """
-
-    def __init__(self):
-        self.by_content = CooldownByContent.from_cooldown(
-            15, 17.0, commands.BucketType.member)
-        self.by_user = commands.CooldownMapping.from_cooldown(
-            10, 12.0, commands.BucketType.user)
-        self.last_join = None
-        self.new_user = commands.CooldownMapping.from_cooldown(
-            30, 35.0, commands.BucketType.channel)
-
-        # user_id flag mapping (for about 30 minutes)
-        self.fast_joiners = cache.ExpiringCache(seconds=1800.0)
-        self.hit_and_run = commands.CooldownMapping.from_cooldown(
-            10, 12, commands.BucketType.channel)
-
-    def is_new(self, member):
-        now = discord.utils.utcnow()
-        seven_days_ago = now - datetime.timedelta(days=7)
-        ninety_days_ago = now - datetime.timedelta(days=90)
-        return member.created_at > ninety_days_ago and member.joined_at > seven_days_ago
-
-    def is_spamming(self, message):
-        if message.guild is None:
-            return False
-
-        current = message.created_at.timestamp()
-
-        if message.author.id in self.fast_joiners:
-            bucket = self.hit_and_run.get_bucket(message)
-            if bucket.update_rate_limit(current):
-                return True
-
-        if self.is_new(message.author):
-            new_bucket = self.new_user.get_bucket(message)
-            if new_bucket.update_rate_limit(current):
-                return True
-
-        user_bucket = self.by_user.get_bucket(message)
-        if user_bucket.update_rate_limit(current):
-            return True
-
-        content_bucket = self.by_content.get_bucket(message)
-        if content_bucket.update_rate_limit(current):
-            return True
-
-        return False
-
-    def is_fast_join(self, member):
-        joined = member.joined_at or discord.utils.utcnow()
-        if self.last_join is None:
-            self.last_join = joined
-            return False
-        is_fast = (joined - self.last_join).total_seconds() <= 2.0
-        self.last_join = joined
-        if is_fast:
-            self.fast_joiners[member.id] = True
-        return is_fast
 
 
 class AntiRaid(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.description = "Some simple moderation commands"
-        self._batch_message_lock = self._disable_lock = asyncio.Lock(
-            loop=bot.loop)
+        self.description = "Antiraid system commands to use"
+        self._batch_message_lock = self._disable_lock = asyncio.Lock(loop=bot.loop)
         self._spam_check = defaultdict(SpamChecker)
         self.message_batches = defaultdict(list)
         self.bulk_send_messages.start()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",
-                                    id=922030031146995733)
+        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
+
+    async def database_class_antiraid(self):
+        return await self.bot.db.new(database_category_name,antiraid_channel_name)
+    
+    async def database_class_mentionspam(self):
+        return await self.bot.db.new(database_category_name,mentionspam_channel_name)
+    
+    async def add_and_check_data(self, dict_to_add: dict,ctx: commands.Context, type_database : Optional[Literal['antiraid', 'mentionspam']] = 'antiraid') -> None:
+        if type_database.lower() == 'antiraid':
+            database = await self.database_class_antiraid()
+        else:
+            database = await self.database_class_mentionspam()
+        guild_dict = await database.get(ctx.guild.id)
+        if guild_dict is None:
+            await database.set(ctx.guild.id, dict_to_add)
+            return
+        guild_dict.update(dict_to_add)
+        await database.set(ctx.guild.id, guild_dict)
+        return
 
     @tasks.loop(seconds=10.0)
     async def bulk_send_messages(self):
         async with self._batch_message_lock:
-            for ((guild_id, channel_id),
-                 messages) in self.message_batches.items():
+            for ((guild_id, channel_id),messages) in self.message_batches.items():
                 guild = self.bot.get_guild(guild_id)
                 channel = guild and guild.get_channel(channel_id)
                 if channel is None:
@@ -152,13 +68,19 @@ class AntiRaid(commands.Cog):
             self.message_batches.clear()
 
     @cache()
-    async def get_guild_config(self, guild_id):
-        query = """SELECT * FROM guild_mod_config WHERE id=$1;"""
-        async with self.bot.pool.acquire(timeout=300.0) as con:
-            record = await con.fetchrow(query, guild_id)
-            if record is not None:
-                return await ModConfig.from_record(record, self.bot)
-            return None
+    async def get_guild_config(self, guild_id, type_database : Optional[Literal['antiraid', 'mentionspam']] = 'antiraid'):
+        if type_database.lower() == 'antiraid':
+            database = await self.database_class_antiraid()
+        else:
+            database = await self.database_class_mentionspam()
+        record = await database.get(guild_id)
+        record.update({'id': guild_id})
+        if record is not None:
+            if type_database.lower() == 'antiraid':
+                return await AntiRaidConfig.from_record(record, self.bot)
+            else:
+                return await MentionSpamConfig.from_record(record, self.bot)
+        return None
 
     async def check_raid(self, config, guild_id, member, message):
         if config.raid_mode != RaidMode.strict.value:
@@ -169,8 +91,7 @@ class AntiRaid(commands.Cog):
             return
 
         try:
-            await member.ban(reason="Auto-ban from spam (strict raid mode ban)"
-                             )
+            await member.ban(reason="Auto-ban from spam (strict raid mode ban)")
         except discord.HTTPException:
             log.info(
                 f"[Raid Mode] Failed to ban {member} (ID: {member.id}) from server {member.guild} via strict mode."
@@ -222,27 +143,31 @@ class AntiRaid(commands.Cog):
             return
 
         guild_id = message.guild.id
-        config = await self.get_guild_config(guild_id)
-        if config is None:
+        config_antiraid = await self.get_guild_config(guild_id)
+        config_mentionspam = await self.get_guild_config(guild_id, 'mentionspam')
+        if config_antiraid is None:
             return
 
         # check for raid mode stuff
-        await self.check_raid(config, guild_id, author, message)
+        await self.check_raid(config_antiraid, guild_id, author, message)
 
         # auto-ban tracking for mention spams begin here
         if len(message.mentions) <= 3:
             return
 
-        if not config.mention_count:
+        if config_mentionspam is None:
+            return
+
+        if not config_mentionspam.mention_count:
             return
 
         # check if it meets the thresholds required
         mention_count = sum(not m.bot and m.id != author.id
                             for m in message.mentions)
-        if mention_count < config.mention_count:
+        if mention_count < config_mentionspam.mention_count:
             return
 
-        if message.channel.id in config.safe_mention_channel_ids:
+        if message.channel.id in config_mentionspam.safe_mention_channel_ids:
             return
 
         try:
@@ -255,8 +180,7 @@ class AntiRaid(commands.Cog):
         else:
             to_send = f"Banned {author} (ID: {author.id}) for spamming {mention_count} mentions."
             async with self._batch_message_lock:
-                self.message_batches[(guild_id,
-                                      message.channel.id)].append(to_send)
+                self.message_batches[(guild_id, message.channel.id)].append(to_send)
 
             log.info(
                 f"Member {author} (ID: {author.id}) has been autobanned from guild ID {guild_id}"
@@ -284,10 +208,10 @@ class AntiRaid(commands.Cog):
             if is_new:
                 title = "Member Joined (Very New Member)"
         else:
-            colour = 0x53DDA4  # green
+            colour = discord.Color.green()  # green
 
             if is_new:
-                colour = 0xDDA453  # yellow
+                colour = discord.Color.yellow()  # yellow
                 title = "Member Joined (Very New Member)"
 
         e = discord.Embed(title=title, colour=colour)
@@ -316,14 +240,14 @@ class AntiRaid(commands.Cog):
         its subcommands.
         """
 
-        query = "SELECT raid_mode, broadcast_channel FROM guild_mod_config WHERE id=$1;"
+        database = await self.database_class_antiraid()
+        guild_dict = await database.get(ctx.guild.id)
 
-        row = await ctx.db.fetchrow(query, ctx.guild.id)
-        if row is None:
+        if guild_dict is None:
             fmt = "Raid Mode: off\nBroadcast Channel: None"
         else:
-            ch = f"<#{row[1]}>" if row[1] else None
-            mode = RaidMode(row[0]) if row[0] is not None else RaidMode.off
+            ch = f"<#{guild_dict['broadcast_channel_id']}>" if guild_dict['broadcast_channel_id'] else None
+            mode = RaidMode(guild_dict['raid_mode']) if guild_dict['raid_mode'] is not None else RaidMode.off
             fmt = f"Raid Mode: {mode}\nBroadcast Channel: {ch}"
 
         await ctx.send(fmt)
@@ -349,29 +273,17 @@ class AntiRaid(commands.Cog):
             await ctx.send("\N{WARNING SIGN} Could not set verification level."
                            )
 
-        query = """INSERT INTO guild_mod_config (id, raid_mode, broadcast_channel)
-                   VALUES ($1, $2, $3) ON CONFLICT (id)
-                   DO UPDATE SET
-                        raid_mode = EXCLUDED.raid_mode,
-                        broadcast_channel = EXCLUDED.broadcast_channel;
-                """
-
-        await ctx.db.execute(query, ctx.guild.id, RaidMode.on.value,
-                             channel.id)
+        update_dict = {ctx.guild.id: {'raid_mode': RaidMode.on.value, 'broadcast_channel': channel.id}}
+        await self.add_and_check_data(dict_to_add=update_dict, ctx=ctx)
+        
         self.get_guild_config.invalidate(self, ctx.guild.id)
         await ctx.send(
             f"Raid mode enabled. Broadcasting join messages to {channel.mention}."
         )
 
     async def disable_raid_mode(self, guild_id):
-        query = """INSERT INTO guild_mod_config (id, raid_mode, broadcast_channel)
-                   VALUES ($1, $2, NULL) ON CONFLICT (id)
-                   DO UPDATE SET
-                        raid_mode = EXCLUDED.raid_mode,
-                        broadcast_channel = NULL;
-                """
-
-        await self.bot.pool.execute(query, guild_id, RaidMode.off.value)
+        database = await self.database_class_antiraid()
+        await database.delete(guild_id)
         self._spam_check.pop(guild_id, None)
         self.get_guild_config.invalidate(self, guild_id)
 
@@ -422,19 +334,102 @@ class AntiRaid(commands.Cog):
             await ctx.send("\N{WARNING SIGN} Could not set verification level."
                            )
 
-        query = """INSERT INTO guild_mod_config (id, raid_mode, broadcast_channel)
-                   VALUES ($1, $2, $3) ON CONFLICT (id)
-                   DO UPDATE SET
-                        raid_mode = EXCLUDED.raid_mode,
-                        broadcast_channel = EXCLUDED.broadcast_channel;
-                """
-
-        await ctx.db.execute(query, ctx.guild.id, RaidMode.strict.value,
-                             channel.id)
+        update_dict = {ctx.guild.id: {'raid_mode': RaidMode.strict.value, 'broadcast_channel': channel.id}}
+        await self.add_and_check_data(dict_to_add=update_dict, ctx=ctx)
         self.get_guild_config.invalidate(self, ctx.guild.id)
         await ctx.send(
             f"Raid mode enabled strictly. Broadcasting join messages to {channel.mention}."
         )
+
+    
+    @commands.group(invoke_without_command=True)
+    @commands.guild_only()
+    @has_permissions(ban_members=True)
+    async def mentionspam(self, ctx, count: Optional[int]=None):
+        """Enables auto-banning accounts that spam mentions.
+        If a message contains `count` or more mentions then the
+        bot will automatically attempt to auto-ban the member.
+        The `count` must be greater than 3. 
+        If the `count` is 0 then this is disabled (also deletes the data from database).
+        This only applies for user mentions. Everyone or Role
+        mentions are not included.
+        To use this command you must have the Ban Members permission.
+        """
+
+        database = await self.database_class_mentionspam()
+        if count is None:
+            guild_dict = await database.get(ctx.guild.id)
+            if guild_dict is None:
+                return await ctx.send('This server has not set up mention spam banning.')
+
+            ignores = ', '.join(f'<#{e}>' for e in guild_dict.get('safe_mention_channel_ids',[])) or 'None'
+            return await ctx.send(f'- Threshold: {guild_dict["mention_count"]} mentions\n- Ignored Channels: {ignores}')
+
+        if count == 0:
+            await database.delete(ctx.guild.id)
+            self.get_guild_config.invalidate(self, ctx.guild.id)
+            return await ctx.send('Auto-banning members has been disabled.')
+
+        if count <= 3:
+            await ctx.send('\N{NO ENTRY SIGN} Auto-ban threshold must be greater than three.')
+            return
+
+        await self.add_and_check_data(dict_to_add = {'mention_count': count} ,ctx = ctx,type_database = 'mentionspam')
+        self.get_guild_config.invalidate(self, ctx.guild.id)
+        await ctx.send(f'Now auto-banning members that mention more than {count} users.')
+
+    @mentionspam.command(name='ignore', aliases=['bypass'])
+    @commands.guild_only()
+    @has_permissions(ban_members=True)
+    async def mentionspam_ignore(self, ctx, *channels: discord.TextChannel):
+        """Specifies what channels ignore mentionspam auto-bans.
+        If a channel is given then that channel will no longer be protected
+        by auto-banning from mention spammers.
+        To use this command you must have the Ban Members permission.
+        """
+
+        if len(channels) == 0:
+            return await ctx.send('Missing channels to ignore.')
+        
+        if len(channels) > 50:
+            return await ctx.send('Sorry you cannot add more than 50 channels to the ignore list')
+
+        channel_ids = [c.id for c in channels]
+        dict_update = {'safe_mention_channel_ids': channel_ids}
+        await self.add_and_check_data(dict_to_add = dict_update ,ctx = ctx,type_database = 'mentionspam')
+        self.get_guild_config.invalidate(self, ctx.guild.id)
+        await ctx.send(f'Mentions are now ignored on {", ".join(c.mention for c in channels)}.')
+
+    @mentionspam.command(name='unignore', aliases=['protect'])
+    @commands.guild_only()
+    @has_permissions(ban_members=True)
+    async def mentionspam_unignore(self, ctx, *channels: discord.TextChannel):
+        """Specifies what channels to take off the ignore list.
+        To use this command you must have the Ban Members permission.
+        """
+
+        if len(channels) == 0:
+            return await ctx.send('Missing channels to protect.')
+
+        database = await self.database_class_mentionspam()
+        guild_dict = await database.get(ctx.guild.id)
+        if guild_dict is None:
+            return
+
+        ignore_list = guild_dict.get('safe_mention_channel_ids')
+        if ignore_list is None:
+            return
+        
+        for i in channels:
+            try:
+                ignore_list.remove(i.id)
+            except:
+                pass
+        
+        guild_dict.update({'safe_mention_channel_ids': ignore_list})
+        await database.set(ctx.guild.id, guild_dict)
+        self.get_guild_config.invalidate(self, ctx.guild.id)
+        await ctx.send('Updated mentionspam ignore list.')
 
 
 def setup(bot):

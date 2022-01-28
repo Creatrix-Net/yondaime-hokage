@@ -1,8 +1,10 @@
 import argparse
-import re, datetime
+import datetime
+import re
 
 import discord
 from discord.ext import commands
+
 from ..functions import ExpiringCache
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
@@ -112,12 +114,7 @@ def can_execute_action(ctx, user, target):
 
 
 class AntiRaidConfig:
-    __slots__ = (
-        "raid_mode",
-        "id",
-        "bot",
-        "broadcast_channel_id"
-    )
+    __slots__ = ("raid_mode", "id", "bot", "broadcast_channel_id")
 
     @classmethod
     async def from_record(cls, record, bot):
@@ -137,7 +134,7 @@ class AntiRaidConfig:
 
 
 class MentionSpamConfig:
-    __slots__ = ('id','bot','mention_count','safe_mention_channel_ids')
+    __slots__ = ("id", "bot", "mention_count", "safe_mention_channel_ids")
 
     @classmethod
     async def from_record(cls, record, bot):
@@ -145,9 +142,10 @@ class MentionSpamConfig:
 
         # the basic configuration
         self.bot = bot
-        self.id = record['id']
-        self.mention_count = record['mention_count']
-        self.safe_mention_channel_ids = set(record['safe_mention_channel_ids'] or [])
+        self.id = record["id"]
+        self.mention_count = record["mention_count"]
+        self.safe_mention_channel_ids = set(record["safe_mention_channel_ids"]
+                                            or [])
         return self
 
 

@@ -188,9 +188,9 @@ class BackupDatabse:
             "voice_channel": voice_channel,
             "stage_channel": stage_channel,
         })
-        message_reference = await self.backup_channel.send(
-            file=discord.File(io.BytesIO(json_bytes), filename=f"{self.get_unique_backup_code()}.json"),
-        )
+        message_reference = await self.backup_channel.send(file=discord.File(
+            io.BytesIO(json_bytes),
+            filename=f"{self.get_unique_backup_code()}.json"), )
         return message_reference.id
 
     async def get_backup_data(self, code: Optional[discord.Message]):

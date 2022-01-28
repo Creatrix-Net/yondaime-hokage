@@ -18,10 +18,10 @@ class BackUp(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(2, 60, commands.BucketType.guild)
     async def backup(self, ctx):
-        '''
+        """
         Create a backup of this guild, (it backups only those channels which is visible to the bot)
         And then dm you the backup code, (Phew keep it safe)
-        '''
+        """
         if not await ctx.prompt(
                 f"Are you sure that you want to **create a backup** of this guild?",
                 author_id=ctx.author.id,

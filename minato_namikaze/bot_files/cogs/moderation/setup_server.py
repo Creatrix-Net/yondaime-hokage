@@ -1,17 +1,17 @@
+import json
 import typing
 
 import discord
 from discord.ext import commands
-import json
 
 from ...lib import (
     Embed,
+    EmbedPaginator,
+    antiraid_channel_name,
     database_category_name,
     database_channel_name,
     is_mod,
-    antiraid_channel_name,
     mentionspam_channel_name,
-    EmbedPaginator
 )
 
 
@@ -23,17 +23,21 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
-    
-    async def database_class(self):
-        return await self.bot.db.new(database_category_name,database_channel_name)
-    
-    async def database_class_antiraid(self):
-        return await self.bot.db.new(database_category_name,antiraid_channel_name)
-    
-    async def database_class_mentionspam(self):
-        return await self.bot.db.new(database_category_name,mentionspam_channel_name)
 
-    async def add_and_check_data(self, dict_to_add: dict,ctx: commands.Context) -> None:
+    async def database_class(self):
+        return await self.bot.db.new(database_category_name,
+                                     database_channel_name)
+
+    async def database_class_antiraid(self):
+        return await self.bot.db.new(database_category_name,
+                                     antiraid_channel_name)
+
+    async def database_class_mentionspam(self):
+        return await self.bot.db.new(database_category_name,
+                                     mentionspam_channel_name)
+
+    async def add_and_check_data(self, dict_to_add: dict,
+                                 ctx: commands.Context) -> None:
         database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:
@@ -94,7 +98,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         ):
             return
         dict_to_add = {"support": [textchannel.id, support_required_role.id]}
-        await self.add_and_check_data(dict_to_add=dict_to_add,search_query="support",ctx=ctx)
+        await self.add_and_check_data(dict_to_add=dict_to_add,
+                                      search_query="support",
+                                      ctx=ctx)
 
     @add.command(usage="<option> [action] [logging_channel]")
     async def badlinks(
@@ -115,7 +121,16 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
         `Note: If 'log' action is selected then, I will only delete the message and log it the current channel where the link was sent and will do nothing`
         """
-        await self.add_and_check_data(dict_to_add={"badlinks": { 'option':option,'action':action,'logging_channel':logging_channel }},ctx=ctx)
+        await self.add_and_check_data(
+            dict_to_add={
+                "badlinks": {
+                    "option": option,
+                    "action": action,
+                    "logging_channel": logging_channel,
+                }
+            },
+            ctx=ctx,
+        )
 
     @commands.command()
     @commands.guild_only()
@@ -128,11 +143,11 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         database = await self.database_class()
         database_antiraid = await self.database_class_antiraid()
         database_mentionspam = await self.database_class_mentionspam()
-        
+
         data = await database.get(ctx.guild.id)
         data_antiraid = await database_antiraid.get(ctx.guild.id)
         data_mentionspam = await database_mentionspam.get(ctx.guild.id)
-        
+
         if data is None and data_antiraid is None and data_mentionspam is None:
             embed.description = "```\nNo data associated with this guild\n```"
             await ctx.send(embed=embed)
@@ -141,44 +156,44 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         embeds_list = []
         if data is not None:
             embed = Embed()
-            embed.title='Setup Vars'
-            embed.description="```json\n{}\n```".format(
+            embed.title = "Setup Vars"
+            embed.description = "```json\n{}\n```".format(
                 json.dumps(
-                    {'setupvars': data},
+                    {"setupvars": data},
                     sort_keys=True,
                     indent=4,
-                    separators=(',', ': '),
+                    separators=(",", ": "),
                     ensure_ascii=False,
-                    null = None
+                    null=None,
                 ))
             embeds_list.append(embed)
         if data_antiraid is not None:
             embed = Embed()
-            embed.title='AntiRaid'
-            embed.description="```json\n{}\n```".format(
+            embed.title = "AntiRaid"
+            embed.description = "```json\n{}\n```".format(
                 json.dumps(
-                    {'antiraid': data_antiraid},
+                    {"antiraid": data_antiraid},
                     sort_keys=True,
                     indent=4,
-                    separators=(',', ': '),
+                    separators=(",", ": "),
                     ensure_ascii=False,
-                    null = None
+                    null=None,
                 ))
             embeds_list.append(embed)
         if data_mentionspam is not None:
             embed = Embed()
-            embed.title='Mention Spam'
-            embed.description="```json\n{}\n```".format(
+            embed.title = "Mention Spam"
+            embed.description = "```json\n{}\n```".format(
                 json.dumps(
-                    {'mentionspam': data_mentionspam},
+                    {"mentionspam": data_mentionspam},
                     sort_keys=True,
                     indent=4,
-                    separators=(',', ': '),
+                    separators=(",", ": "),
                     ensure_ascii=False,
-                    null = None
+                    null=None,
                 ))
             embeds_list.append(embed)
-        
+
         paginator = EmbedPaginator(entries=embeds_list, ctx=ctx)
         await paginator.start()
 

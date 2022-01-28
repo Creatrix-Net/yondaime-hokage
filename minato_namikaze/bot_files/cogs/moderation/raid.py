@@ -2,14 +2,25 @@ import asyncio
 import datetime
 import logging
 from collections import defaultdict
-from typing import Optional, Literal
+from typing import Literal, Optional
 
 import discord
 from discord.ext import commands, tasks
 
-from ...lib import (RaidMode, SpamChecker, antiraid_channel_name, cache,
-                    database_category_name, format_dt, format_relative,
-                    has_permissions, is_mod, AntiRaidConfig, mentionspam_channel_name, MentionSpamConfig)
+from ...lib import (
+    AntiRaidConfig,
+    MentionSpamConfig,
+    RaidMode,
+    SpamChecker,
+    antiraid_channel_name,
+    cache,
+    database_category_name,
+    format_dt,
+    format_relative,
+    has_permissions,
+    is_mod,
+    mentionspam_channel_name,
+)
 
 log = logging.getLogger(__name__)
 
@@ -18,23 +29,33 @@ class AntiRaid(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Antiraid system commands to use"
-        self._batch_message_lock = self._disable_lock = asyncio.Lock(loop=bot.loop)
+        self._batch_message_lock = self._disable_lock = asyncio.Lock(
+            loop=bot.loop)
         self._spam_check = defaultdict(SpamChecker)
         self.message_batches = defaultdict(list)
         self.bulk_send_messages.start()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
+        return discord.PartialEmoji(name="discord_certified_moderator",
+                                    id=922030031146995733)
 
     async def database_class_antiraid(self):
-        return await self.bot.db.new(database_category_name,antiraid_channel_name)
-    
+        return await self.bot.db.new(database_category_name,
+                                     antiraid_channel_name)
+
     async def database_class_mentionspam(self):
-        return await self.bot.db.new(database_category_name,mentionspam_channel_name)
-    
-    async def add_and_check_data(self, dict_to_add: dict,ctx: commands.Context, type_database : Optional[Literal['antiraid', 'mentionspam']] = 'antiraid') -> None:
-        if type_database.lower() == 'antiraid':
+        return await self.bot.db.new(database_category_name,
+                                     mentionspam_channel_name)
+
+    async def add_and_check_data(
+        self,
+        dict_to_add: dict,
+        ctx: commands.Context,
+        type_database: Optional[Literal["antiraid",
+                                        "mentionspam"]] = "antiraid",
+    ) -> None:
+        if type_database.lower() == "antiraid":
             database = await self.database_class_antiraid()
         else:
             database = await self.database_class_mentionspam()
@@ -49,7 +70,8 @@ class AntiRaid(commands.Cog):
     @tasks.loop(seconds=10.0)
     async def bulk_send_messages(self):
         async with self._batch_message_lock:
-            for ((guild_id, channel_id),messages) in self.message_batches.items():
+            for ((guild_id, channel_id),
+                 messages) in self.message_batches.items():
                 guild = self.bot.get_guild(guild_id)
                 channel = guild and guild.get_channel(channel_id)
                 if channel is None:
@@ -68,15 +90,20 @@ class AntiRaid(commands.Cog):
             self.message_batches.clear()
 
     @cache()
-    async def get_guild_config(self, guild_id, type_database : Optional[Literal['antiraid', 'mentionspam']] = 'antiraid'):
-        if type_database.lower() == 'antiraid':
+    async def get_guild_config(
+        self,
+        guild_id,
+        type_database: Optional[Literal["antiraid",
+                                        "mentionspam"]] = "antiraid",
+    ):
+        if type_database.lower() == "antiraid":
             database = await self.database_class_antiraid()
         else:
             database = await self.database_class_mentionspam()
         record = await database.get(guild_id)
-        record.update({'id': guild_id})
+        record.update({"id": guild_id})
         if record is not None:
-            if type_database.lower() == 'antiraid':
+            if type_database.lower() == "antiraid":
                 return await AntiRaidConfig.from_record(record, self.bot)
             else:
                 return await MentionSpamConfig.from_record(record, self.bot)
@@ -91,7 +118,8 @@ class AntiRaid(commands.Cog):
             return
 
         try:
-            await member.ban(reason="Auto-ban from spam (strict raid mode ban)")
+            await member.ban(reason="Auto-ban from spam (strict raid mode ban)"
+                             )
         except discord.HTTPException:
             log.info(
                 f"[Raid Mode] Failed to ban {member} (ID: {member.id}) from server {member.guild} via strict mode."
@@ -144,7 +172,8 @@ class AntiRaid(commands.Cog):
 
         guild_id = message.guild.id
         config_antiraid = await self.get_guild_config(guild_id)
-        config_mentionspam = await self.get_guild_config(guild_id, 'mentionspam')
+        config_mentionspam = await self.get_guild_config(
+            guild_id, "mentionspam")
         if config_antiraid is None:
             return
 
@@ -180,7 +209,8 @@ class AntiRaid(commands.Cog):
         else:
             to_send = f"Banned {author} (ID: {author.id}) for spamming {mention_count} mentions."
             async with self._batch_message_lock:
-                self.message_batches[(guild_id, message.channel.id)].append(to_send)
+                self.message_batches[(guild_id,
+                                      message.channel.id)].append(to_send)
 
             log.info(
                 f"Member {author} (ID: {author.id}) has been autobanned from guild ID {guild_id}"
@@ -246,8 +276,10 @@ class AntiRaid(commands.Cog):
         if guild_dict is None:
             fmt = "Raid Mode: off\nBroadcast Channel: None"
         else:
-            ch = f"<#{guild_dict['broadcast_channel_id']}>" if guild_dict['broadcast_channel_id'] else None
-            mode = RaidMode(guild_dict['raid_mode']) if guild_dict['raid_mode'] is not None else RaidMode.off
+            ch = (f"<#{guild_dict['broadcast_channel_id']}>"
+                  if guild_dict["broadcast_channel_id"] else None)
+            mode = (RaidMode(guild_dict["raid_mode"])
+                    if guild_dict["raid_mode"] is not None else RaidMode.off)
             fmt = f"Raid Mode: {mode}\nBroadcast Channel: {ch}"
 
         await ctx.send(fmt)
@@ -273,9 +305,12 @@ class AntiRaid(commands.Cog):
             await ctx.send("\N{WARNING SIGN} Could not set verification level."
                            )
 
-        update_dict = {'raid_mode': RaidMode.on.value, 'broadcast_channel': channel.id}
+        update_dict = {
+            "raid_mode": RaidMode.on.value,
+            "broadcast_channel": channel.id
+        }
         await self.add_and_check_data(dict_to_add=update_dict, ctx=ctx)
-        
+
         self.get_guild_config.invalidate(self, ctx.guild.id)
         await ctx.send(
             f"Raid mode enabled. Broadcasting join messages to {channel.mention}."
@@ -334,22 +369,24 @@ class AntiRaid(commands.Cog):
             await ctx.send("\N{WARNING SIGN} Could not set verification level."
                            )
 
-        update_dict = {'raid_mode': RaidMode.strict.value, 'broadcast_channel': channel.id}
+        update_dict = {
+            "raid_mode": RaidMode.strict.value,
+            "broadcast_channel": channel.id,
+        }
         await self.add_and_check_data(dict_to_add=update_dict, ctx=ctx)
         self.get_guild_config.invalidate(self, ctx.guild.id)
         await ctx.send(
             f"Raid mode enabled strictly. Broadcasting join messages to {channel.mention}."
         )
 
-    
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
     @has_permissions(ban_members=True)
-    async def mentionspam(self, ctx, count: Optional[int]=None):
+    async def mentionspam(self, ctx, count: Optional[int] = None):
         """Enables auto-banning accounts that spam mentions.
         If a message contains `count` or more mentions then the
         bot will automatically attempt to auto-ban the member.
-        The `count` must be greater than 3. 
+        The `count` must be greater than 3.
         If the `count` is 0 then this is disabled (also deletes the data from database).
         This only applies for user mentions. Everyone or Role
         mentions are not included.
@@ -360,25 +397,36 @@ class AntiRaid(commands.Cog):
         if count is None:
             guild_dict = await database.get(ctx.guild.id)
             if guild_dict is None:
-                return await ctx.send('This server has not set up mention spam banning.')
+                return await ctx.send(
+                    "This server has not set up mention spam banning.")
 
-            ignores = ', '.join(f'<#{e}>' for e in guild_dict.get('safe_mention_channel_ids',[])) or 'None'
-            return await ctx.send(f'- Threshold: {guild_dict["mention_count"]} mentions\n- Ignored Channels: {ignores}')
+            ignores = (", ".join(
+                f"<#{e}>"
+                for e in guild_dict.get("safe_mention_channel_ids", []))
+                or "None")
+            return await ctx.send(
+                f'- Threshold: {guild_dict["mention_count"]} mentions\n- Ignored Channels: {ignores}'
+            )
 
         if count == 0:
             await database.delete(ctx.guild.id)
             self.get_guild_config.invalidate(self, ctx.guild.id)
-            return await ctx.send('Auto-banning members has been disabled.')
+            return await ctx.send("Auto-banning members has been disabled.")
 
         if count <= 3:
-            await ctx.send('\N{NO ENTRY SIGN} Auto-ban threshold must be greater than three.')
+            await ctx.send(
+                "\N{NO ENTRY SIGN} Auto-ban threshold must be greater than three."
+            )
             return
 
-        await self.add_and_check_data(dict_to_add = {'mention_count': count} ,ctx = ctx,type_database = 'mentionspam')
+        await self.add_and_check_data(dict_to_add={"mention_count": count},
+                                      ctx=ctx,
+                                      type_database="mentionspam")
         self.get_guild_config.invalidate(self, ctx.guild.id)
-        await ctx.send(f'Now auto-banning members that mention more than {count} users.')
+        await ctx.send(
+            f"Now auto-banning members that mention more than {count} users.")
 
-    @mentionspam.command(name='ignore', aliases=['bypass'])
+    @mentionspam.command(name="ignore", aliases=["bypass"])
     @commands.guild_only()
     @has_permissions(ban_members=True)
     async def mentionspam_ignore(self, ctx, *channels: discord.TextChannel):
@@ -389,18 +437,24 @@ class AntiRaid(commands.Cog):
         """
 
         if len(channels) == 0:
-            return await ctx.send('Missing channels to ignore.')
-        
+            return await ctx.send("Missing channels to ignore.")
+
         if len(channels) > 50:
-            return await ctx.send('Sorry you cannot add more than 50 channels to the ignore list')
+            return await ctx.send(
+                "Sorry you cannot add more than 50 channels to the ignore list"
+            )
 
         channel_ids = [c.id for c in channels]
-        dict_update = {'safe_mention_channel_ids': channel_ids}
-        await self.add_and_check_data(dict_to_add = dict_update ,ctx = ctx,type_database = 'mentionspam')
+        dict_update = {"safe_mention_channel_ids": channel_ids}
+        await self.add_and_check_data(dict_to_add=dict_update,
+                                      ctx=ctx,
+                                      type_database="mentionspam")
         self.get_guild_config.invalidate(self, ctx.guild.id)
-        await ctx.send(f'Mentions are now ignored on {", ".join(c.mention for c in channels)}.')
+        await ctx.send(
+            f'Mentions are now ignored on {", ".join(c.mention for c in channels)}.'
+        )
 
-    @mentionspam.command(name='unignore', aliases=['protect'])
+    @mentionspam.command(name="unignore", aliases=["protect"])
     @commands.guild_only()
     @has_permissions(ban_members=True)
     async def mentionspam_unignore(self, ctx, *channels: discord.TextChannel):
@@ -409,27 +463,27 @@ class AntiRaid(commands.Cog):
         """
 
         if len(channels) == 0:
-            return await ctx.send('Missing channels to protect.')
+            return await ctx.send("Missing channels to protect.")
 
         database = await self.database_class_mentionspam()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:
             return
 
-        ignore_list = guild_dict.get('safe_mention_channel_ids')
+        ignore_list = guild_dict.get("safe_mention_channel_ids")
         if ignore_list is None:
             return
-        
+
         for i in channels:
             try:
                 ignore_list.remove(i.id)
             except:
                 pass
-        
-        guild_dict.update({'safe_mention_channel_ids': ignore_list})
+
+        guild_dict.update({"safe_mention_channel_ids": ignore_list})
         await database.set(ctx.guild.id, guild_dict)
         self.get_guild_config.invalidate(self, ctx.guild.id)
-        await ctx.send('Updated mentionspam ignore list.')
+        await ctx.send("Updated mentionspam ignore list.")
 
 
 def setup(bot):

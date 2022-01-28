@@ -3,7 +3,7 @@ import re, datetime
 
 import discord
 from discord.ext import commands
-from ..functions import cache
+from ..functions import ExpiringCache
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 
@@ -177,7 +177,7 @@ class SpamChecker:
             30, 35.0, commands.BucketType.channel)
 
         # user_id flag mapping (for about 30 minutes)
-        self.fast_joiners = cache.ExpiringCache(seconds=1800.0)
+        self.fast_joiners = ExpiringCache(seconds=1800.0)
         self.hit_and_run = commands.CooldownMapping.from_cooldown(
             10, 12, commands.BucketType.channel)
 

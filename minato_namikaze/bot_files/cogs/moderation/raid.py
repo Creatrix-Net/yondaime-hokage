@@ -246,9 +246,9 @@ class AntiRaid(commands.Cog):
         if guild_dict is None:
             fmt = "Raid Mode: off\nBroadcast Channel: None"
         else:
-            ch = f"<#{guild_dict['broadcast_channel_id']}>" if guild_dict['broadcast_channel_id'] else None
+            ch = f"<#{guild_dict['broadcast_channel']}>" if guild_dict['broadcast_channel'] else None
             mode = RaidMode(guild_dict['raid_mode']) if guild_dict['raid_mode'] is not None else RaidMode.off
-            fmt = f"Raid Mode: {mode}\nBroadcast Channel: {ch}"
+            fmt = f"Raid Mode: {mode.name.capitalize()}\nBroadcast Channel: {ch}"
 
         await ctx.send(fmt)
 
@@ -263,6 +263,12 @@ class AntiRaid(commands.Cog):
         If no channel is given, then the bot will broadcast join
         messages on the channel this command was used in.
         """
+
+        if not await ctx.prompt(
+                "Are you sure that you want to **turn on the raid mode** for the guild?",
+                author_id=ctx.author.id,
+        ):
+            return
 
         channel = channel or ctx.channel
 
@@ -296,6 +302,12 @@ class AntiRaid(commands.Cog):
         join messages.
         """
 
+        if not await ctx.prompt(
+                "Are you sure that you want to **turn off the raid mode** for the guild?",
+                author_id=ctx.author.id,
+        ):
+            return
+
         try:
             await ctx.guild.edit(
                 verification_level=discord.VerificationLevel.low)
@@ -319,6 +331,12 @@ class AntiRaid(commands.Cog):
         If this is considered too strict, it is recommended to fall back to regular
         raid mode.
         """
+        if not await ctx.prompt(
+                "Are you sure that you want to set **raid mode to strict** for the guild?",
+                author_id=ctx.author.id,
+        ):
+            return
+
         channel = channel or ctx.channel
 
         perms = ctx.me.guild_permissions
@@ -366,6 +384,11 @@ class AntiRaid(commands.Cog):
             return await ctx.send(f'- Threshold: {guild_dict["mention_count"]} mentions\n- Ignored Channels: {ignores}')
 
         if count == 0:
+            if not await ctx.prompt(
+                "Are you sure that you want to **disable autoban for the spam mention** for the guild?",
+                author_id=ctx.author.id,
+            ):
+                return
             await database.delete(ctx.guild.id)
             self.get_guild_config.invalidate(self, ctx.guild.id)
             return await ctx.send('Auto-banning members has been disabled.')
@@ -373,6 +396,12 @@ class AntiRaid(commands.Cog):
         if count <= 3:
             await ctx.send('\N{NO ENTRY SIGN} Auto-ban threshold must be greater than three.')
             return
+        
+        if not await ctx.prompt(
+                f"Are you sure that you want to **autoban for the spam mention of more than {count}** for the guild?",
+                author_id=ctx.author.id,
+            ):
+                return
 
         await self.add_and_check_data(dict_to_add = {'mention_count': count} ,ctx = ctx,type_database = 'mentionspam')
         self.get_guild_config.invalidate(self, ctx.guild.id)
@@ -387,6 +416,12 @@ class AntiRaid(commands.Cog):
         by auto-banning from mention spammers.
         To use this command you must have the Ban Members permission.
         """
+
+        if not await ctx.prompt(
+                f"Are you sure that you want to **ignore {len(channels)} channel(s) for the spam mention**, for the guild?",
+                author_id=ctx.author.id,
+            ):
+                return
 
         if len(channels) == 0:
             return await ctx.send('Missing channels to ignore.')
@@ -407,6 +442,12 @@ class AntiRaid(commands.Cog):
         """Specifies what channels to take off the ignore list.
         To use this command you must have the Ban Members permission.
         """
+
+        if not await ctx.prompt(
+                f"Are you sure that you want to **remove {len(channels)} channel(s) from the ignore list**, for the guild?",
+                author_id=ctx.author.id,
+            ):
+                return
 
         if len(channels) == 0:
             return await ctx.send('Missing channels to protect.')

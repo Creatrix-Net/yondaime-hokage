@@ -1,5 +1,4 @@
 import random
-from asyncio import sleep
 from datetime import datetime
 from os.path import join
 
@@ -9,102 +8,12 @@ from discord.ext import commands
 from ...lib import BASE_DIR, ChannelAndMessageId, Embed, ErrorEmbed, PostStats
 
 
-class InviteTrackerForMyGuild:
-    def __init__(self, bot):
-        self._cache = bot._cache
-        self.bot = bot
-
-    async def fetch_inviter_for_my_guild(self, member):
-        await sleep(self.bot.latency)
-        for new_invite in await member.guild.invites():
-            try:
-                for cached_invite in self._cache[member.guild.id].values():
-                    if (new_invite.code == cached_invite.code
-                            and new_invite.uses - cached_invite.uses == 1
-                            or cached_invite.revoked):
-                        if cached_invite.revoked:
-                            self._cache[member.guild.id].pop(
-                                cached_invite.code)
-                        elif new_invite.inviter == cached_invite.inviter:
-                            self._cache[member.guild.id][
-                                cached_invite.code] = new_invite
-                        else:
-                            self._cache[member.guild.id][
-                                cached_invite.code].uses += 1
-                        return cached_invite
-            except KeyError:
-                pass
-
-
 class BotEvents(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.minato_gif = bot.minato_gif
+        self._cache = bot._cache
         self.posting = PostStats(self.bot)
-        self.tracker = InviteTrackerForMyGuild(bot)
-
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-        try:
-            if member.guild.id == 747480356625711204:
-                inviter = await self.tracker.fetch_inviter_for_my_guild(member)
-                channel = discord.utils.get(self.bot.get_all_channels(),
-                                            id=922006581334405180)
-                if not member.bot:
-                    embed = Embed(
-                        title=f"Welcome {member.name} !",
-                        description=f"Please {member.mention} goto <#922006581372157958> and get **supercool roles**",
-                        timestamp=datetime.utcnow(),
-                    )
-                    embed.set_image(url="https://i.imgur.com/mktY446.jpeg")
-                    embed.set_thumbnail(url="https://i.imgur.com/SizgkEZ.png")
-                    embed.set_author(name=self.bot.user.name,
-                                     icon_url=self.bot.user.avatar.url)
-                    embed.set_footer(text=f"Welcome {member.name}")
-
-                    e = Embed(
-                        description=f"**{member}** was invited by **{inviter.inviter}** \n- **INVITE CODE: {inviter.code}**,\n- USES **{inviter.uses} uses**."
-                    )
-                    await channel.send(member.mention, embed=embed)
-                    await channel.send(embed=e)
-        except:
-            pass
-
-    @commands.Cog.listener()
-    async def on_invite_create(self, invite):
-        try:
-            if (invite.guild.id not in self._cache.keys()
-                    and invite.guild.id == 922006581334405180):
-                self._cache[invite.guild.id] = {}
-            self._cache[invite.guild.id][invite.code] = invite
-        except:
-            pass
-
-    @commands.Cog.listener()
-    async def on_invite_delete(self, invite):
-        if invite.guild.id not in self._cache.keys():
-            return
-        ref_invite = self._cache[invite.guild.id][invite.code]
-        if ((ref_invite.created_at.timestamp() + ref_invite.max_age >
-             datetime.utcnow().timestamp() or ref_invite.max_age == 0)
-                and ref_invite.max_uses > 0
-                and ref_invite.uses == ref_invite.max_uses - 1):
-            try:
-                async for entry in invite.guild.audit_logs(
-                        limit=1, action=discord.AuditLogAction.invite_delete):
-                    if entry.target.code != invite.code:
-                        self._cache[invite.guild.id][
-                            ref_invite.code].revoked = True
-                        return
-                else:
-                    self._cache[invite.guild.id][
-                        ref_invite.code].revoked = True
-                    return
-            except discord.Forbidden:
-                self._cache[invite.guild.id][ref_invite.code].revoked = True
-                return
-        else:
-            self._cache[invite.guild.id].pop(invite.code)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):

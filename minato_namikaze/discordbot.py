@@ -17,7 +17,6 @@ import random
 from collections import Counter, defaultdict, deque
 from datetime import datetime
 from typing import Optional, Union
-from DiscordDatabase import DiscordDatabase
 
 import discord
 import dotenv
@@ -36,6 +35,7 @@ from bot_files.lib import (
     format_relative,
 )
 from discord.ext import commands
+from DiscordDatabase import DiscordDatabase
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
@@ -103,7 +103,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self._auto_spam_count = Counter()
 
         self.DEFAULT_GIF_LIST_PATH = BASE_DIR / join("discord_bot_images")
-        self.minato_gif = list(os.listdir(join(self.DEFAULT_GIF_LIST_PATH, "minato")))
+        self.minato_gif = list(
+            os.listdir(join(self.DEFAULT_GIF_LIST_PATH, "minato")))
         self.db = DiscordDatabase(self, ChannelAndMessageId.server_id2.value)
 
         self.uptime = format_relative(self.start_time)

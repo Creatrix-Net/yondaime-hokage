@@ -5,7 +5,8 @@ from typing import List
 
 import dotenv
 
-dotenv_file = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(
+    __file__).resolve().parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):

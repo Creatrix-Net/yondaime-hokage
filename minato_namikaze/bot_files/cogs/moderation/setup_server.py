@@ -7,10 +7,10 @@ from DiscordDatabase import DiscordDatabase
 from ...lib import (
     ChannelAndMessageId,
     Embed,
+    cache,
     database_category_name,
     database_channel_name,
     is_mod,
-    cache
 )
 
 
@@ -22,12 +22,14 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
-    
+
     @cache()
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,database_channel_name)
+        return await self.bot.db.new(database_category_name,
+                                     database_channel_name)
 
-    async def add_and_check_data(self, dict_to_add: dict,ctx: commands.Context) -> None:
+    async def add_and_check_data(self, dict_to_add: dict,
+                                 ctx: commands.Context) -> None:
         database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:
@@ -111,7 +113,16 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
         `Note: If 'log' action is selected then, I will only delete the message and log it the current channel where the link was sent and will do nothing`
         """
-        await self.add_and_check_data(dict_to_add={"badlinks": {'option':option,'action':action,'logging_channel':logging_channel}},ctx=ctx)
+        await self.add_and_check_data(
+            dict_to_add={
+                "badlinks": {
+                    "option": option,
+                    "action": action,
+                    "logging_channel": logging_channel,
+                }
+            },
+            ctx=ctx,
+        )
 
     @commands.command()
     @commands.guild_only()

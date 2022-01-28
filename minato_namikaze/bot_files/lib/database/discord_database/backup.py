@@ -1,6 +1,7 @@
 import io
 import secrets
 import string
+from typing import Optional
 
 import discord
 from discord import CategoryChannel, Role, StageChannel, TextChannel, VoiceChannel
@@ -187,15 +188,10 @@ class BackupDatabse:
             "voice_channel": voice_channel,
             "stage_channel": stage_channel,
         })
-        code = self.get_unique_backup_code()
-        await self.backup_channel.send(
-            content=code,
-            file=discord.File(io.BytesIO(json_bytes), filename=f"{code}.json"),
+        message_reference = await self.backup_channel.send(
+            file=discord.File(io.BytesIO(json_bytes), filename=f"{self.get_unique_backup_code()}.json"),
         )
-        return code
+        return message_reference.id
 
-    async def get_backup_data(self, code: str):
-        async for i in self.backup_channel.history():
-            if i.content == code.upper():
-                return i.attachments[0]
-        return None
+    async def get_backup_data(self, code: Optional[discord.Message]):
+        return code.attachments[0] if code else None

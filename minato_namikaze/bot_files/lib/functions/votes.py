@@ -1,6 +1,6 @@
 import requests
 
-from ..classes import ErrorEmbed
+from ..classes.embed import ErrorEmbed
 from ..util.vars import *
 
 

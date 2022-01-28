@@ -10,23 +10,25 @@ from ...lib import (
     database_category_name,
     database_channel_name,
     is_mod,
+    cache
 )
 
 
 class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot):
         self.bot = bot
-        self.db = DiscordDatabase(bot, ChannelAndMessageId.server_id2.value)
         self.description = "Do some necessary setup through an interactive mode."
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
+    
+    @cache()
+    async def database_class(self):
+        return await self.bot.db.new(database_category_name,database_channel_name)
 
-    async def add_and_check_data(self, dict_to_add: dict,
-                                 ctx: commands.Context) -> None:
-        database = await self.db.new(database_category_name,
-                                     database_channel_name)
+    async def add_and_check_data(self, dict_to_add: dict,ctx: commands.Context) -> None:
+        database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:
             await database.set(ctx.guild.id, dict_to_add)
@@ -79,7 +81,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
         Args:
             - textchannel : A text channel where the support request will be logged.
-            - support_required_role : A A role which will be provided to the users, when a support request lodged
+            - support_required_role : A role which will be provided to the users, when a support request lodged
         """
         if not await ctx.prompt(
                 f"Do you really want to **create a suppoprt system** for **{ctx.guild.name}** in {textchannel.mention}?"
@@ -109,7 +111,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
         `Note: If 'log' action is selected then, I will only delete the message and log it the current channel where the link was sent and will do nothing`
         """
-        await self.add_and_check_data(dict_to_add={"badlinks": str(option)},ctx=ctx)
+        await self.add_and_check_data(dict_to_add={"badlinks": {'option':option,'action':action,'logging_channel':logging_channel}},ctx=ctx)
 
     @commands.command()
     @commands.guild_only()
@@ -119,8 +121,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         It returns the raw data which is stored in the database in the form of json
         """
         embed = Embed(title=f"Data associated with {ctx.guild.name}")
-        database = await self.db.new(database_category_name,
-                                     database_channel_name)
+        database = await self.database_class()
         data = await database.get(ctx.guild.id)
         if data is None:
             embed.description = "```\nNo data associated with this guild\n```"

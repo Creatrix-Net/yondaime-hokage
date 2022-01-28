@@ -5,8 +5,7 @@ from typing import List
 
 import dotenv
 
-dotenv_file = Path(
-    __file__).resolve().parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):
@@ -140,3 +139,5 @@ class RaidMode(enum.Enum):
 
 database_category_name = "DATABASE"
 database_channel_name = "setup vars"
+antiraid_channel_name = "antiraid"
+mentionspam_channel_name = "mentionspam"

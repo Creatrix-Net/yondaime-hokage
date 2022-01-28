@@ -24,3 +24,4 @@ class SuccessEmbed(embeds.Embed):
             kwargs["colour"] = discord.Color.green()
 
         super().__init__(**kwargs)
+

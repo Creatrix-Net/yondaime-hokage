@@ -230,7 +230,7 @@ class AntiRaid(commands.Cog):
                 async with self._disable_lock:
                     await self.disable_raid_mode(guild_id)
 
-    @commands.group(aliases=["raids"], invoke_without_command=True)
+    @commands.group(aliases=["raids", "antiraid"], invoke_without_command=True)
     @is_mod()
     async def raid(self, ctx):
         """Controls raid mode on the server.
@@ -273,7 +273,7 @@ class AntiRaid(commands.Cog):
             await ctx.send("\N{WARNING SIGN} Could not set verification level."
                            )
 
-        update_dict = {ctx.guild.id: {'raid_mode': RaidMode.on.value, 'broadcast_channel': channel.id}}
+        update_dict = {'raid_mode': RaidMode.on.value, 'broadcast_channel': channel.id}
         await self.add_and_check_data(dict_to_add=update_dict, ctx=ctx)
         
         self.get_guild_config.invalidate(self, ctx.guild.id)
@@ -334,7 +334,7 @@ class AntiRaid(commands.Cog):
             await ctx.send("\N{WARNING SIGN} Could not set verification level."
                            )
 
-        update_dict = {ctx.guild.id: {'raid_mode': RaidMode.strict.value, 'broadcast_channel': channel.id}}
+        update_dict = {'raid_mode': RaidMode.strict.value, 'broadcast_channel': channel.id}
         await self.add_and_check_data(dict_to_add=update_dict, ctx=ctx)
         self.get_guild_config.invalidate(self, ctx.guild.id)
         await ctx.send(

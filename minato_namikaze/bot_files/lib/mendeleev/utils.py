@@ -50,7 +50,7 @@ def n_effective(n: int, source: str = "slater") -> Union[float, None]:
         },
     }
 
-    if source not in numbers.keys():
+    if source not in numbers:
         raise ValueError(
             f"source '{source}' not found, available sources are: {', '.join(numbers.keys())}"
         )

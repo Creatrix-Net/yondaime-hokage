@@ -1,8 +1,10 @@
 import argparse
-import re, datetime
+import datetime
+import re
 
 import discord
 from discord.ext import commands
+
 from ..functions import ExpiringCache
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
@@ -33,8 +35,11 @@ class Arguments(argparse.ArgumentParser):
 
 
 def can_execute_action(ctx, user, target):
-    return (user.id == ctx.bot.owner_id or user == ctx.guild.owner
-            or user.top_role > target.top_role)
+    return (
+        user.id == ctx.bot.owner_id
+        or user == ctx.guild.owner
+        or user.top_role > target.top_role
+    )
 
 
 class MemberID(commands.Converter):
@@ -55,10 +60,7 @@ class MemberID(commands.Converter):
                     return type(
                         "_Hackban",
                         (),
-                        {
-                            "id": argument,
-                            "__str__": lambda s: f"Member ID {s.id}"
-                        },
+                        {"id": argument, "__str__": lambda s: f"Member ID {s.id}"},
                     )()
 
         if not can_execute_action(ctx, ctx.author, member):
@@ -76,11 +78,12 @@ class BannedMember(commands.Converter):
                 return await ctx.guild.fetch_ban(discord.Object(id=member_id))
             except discord.NotFound:
                 raise commands.BadArgument(
-                    "This member has not been banned before.") from None
+                    "This member has not been banned before."
+                ) from None
 
         ban_list = await ctx.guild.bans()
-        entity = discord.utils.find(lambda u: str(u.user) == argument,
-                                    ban_list)
+        entity = discord.utils.find(
+            lambda u: str(u.user) == argument, ban_list)
 
         if entity is None:
             raise commands.BadArgument(
@@ -95,7 +98,8 @@ class ActionReason(commands.Converter):
         if len(ret) > 512:
             reason_max = 512 - len(ret) + len(argument)
             raise commands.BadArgument(
-                f"Reason is too long ({len(argument)}/{reason_max})")
+                f"Reason is too long ({len(argument)}/{reason_max})"
+            )
         return ret
 
 
@@ -107,17 +111,15 @@ def safe_reason_append(base, to_append):
 
 
 def can_execute_action(ctx, user, target):
-    return (user.id == ctx.bot.owner_id or user == ctx.guild.owner
-            or user.top_role > target.top_role)
+    return (
+        user.id == ctx.bot.owner_id
+        or user == ctx.guild.owner
+        or user.top_role > target.top_role
+    )
 
 
 class AntiRaidConfig:
-    __slots__ = (
-        "raid_mode",
-        "id",
-        "bot",
-        "broadcast_channel_id"
-    )
+    __slots__ = ("raid_mode", "id", "bot", "broadcast_channel_id")
 
     @classmethod
     async def from_record(cls, record, bot):
@@ -137,17 +139,19 @@ class AntiRaidConfig:
 
 
 class MentionSpamConfig:
-    __slots__ = ('id','bot','mention_count','safe_mention_channel_ids')
+    __slots__ = ("id", "bot", "mention_count", "safe_mention_channel_ids")
 
     @classmethod
     async def from_record(cls, record, bot):
-        self = cls() 
+        self = cls()
 
         # the basic configuration
         self.bot = bot
-        self.id = record['id']
-        self.mention_count = record.get('mention_count')
-        self.safe_mention_channel_ids = set(record.get('safe_mention_channel_ids') or [])
+        self.id = record["id"]
+        self.mention_count = record.get("mention_count")
+        self.safe_mention_channel_ids = set(
+            record.get("safe_mention_channel_ids") or []
+        )
         return self
 
 
@@ -169,17 +173,21 @@ class SpamChecker:
 
     def __init__(self):
         self.by_content = CooldownByContent.from_cooldown(
-            15, 17.0, commands.BucketType.member)
+            15, 17.0, commands.BucketType.member
+        )
         self.by_user = commands.CooldownMapping.from_cooldown(
-            10, 12.0, commands.BucketType.user)
+            10, 12.0, commands.BucketType.user
+        )
         self.last_join = None
         self.new_user = commands.CooldownMapping.from_cooldown(
-            30, 35.0, commands.BucketType.channel)
+            30, 35.0, commands.BucketType.channel
+        )
 
         # user_id flag mapping (for about 30 minutes)
         self.fast_joiners = ExpiringCache(seconds=1800.0)
         self.hit_and_run = commands.CooldownMapping.from_cooldown(
-            10, 12, commands.BucketType.channel)
+            10, 12, commands.BucketType.channel
+        )
 
     def is_new(self, member):
         now = discord.utils.utcnow()

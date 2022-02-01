@@ -10,7 +10,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 
-from ...lib import Embed, ErrorEmbed, Tokens, generatevoteembed, votedTopgg
+from ...lib import Embed, ErrorEmbed, Tokens, check_if_user_joined_a_channel, MemberID
 from ...lib.classes.games import *
 
 
@@ -26,9 +26,8 @@ class Games(commands.Cog):
 
     @commands.command(aliases=["tc"], usage="<other player.mention>")
     @commands.guild_only()
-    async def tictactoe(self, ctx, member: Union[int, discord.Member]):
+    async def tictactoe(self, ctx, member: Union[MemberID, discord.Member]):
         """Play Amazing Tictactoe Game"""
-        member = get_user(member, ctx)
         if member == ctx.author or member.bot:
             await ctx.send(embed=ErrorEmbed(
                 description="*You cannot play this game yourself or with a bot*"
@@ -46,9 +45,8 @@ class Games(commands.Cog):
     @commands.command(aliases=["connect_four", "c4", "cf"],
                       usage="<other player.mention>")
     @commands.guild_only()
-    async def connectfour(self, ctx, member: Union[int, discord.Member]):
+    async def connectfour(self, ctx, member: Union[MemberID, discord.Member]):
         """Play Amazing Connect Four Game"""
-        member = get_user(member, ctx)
         if member == ctx.author or member.bot:
             await ctx.send(embed=ErrorEmbed(
                 description="*You cannot play this game yourself or with a bot*"
@@ -123,10 +121,6 @@ class Games(commands.Cog):
     @commands.command(aliases=["cb"])
     async def chatbot(self, ctx):
         """Talk with me! (Vote Locked)"""
-        async with ctx.typing():
-            if not votedTopgg(ctx):
-                await ctx.send(embed=generatevoteembed(ctx, "top.gg"))
-                return
         lis = "cancel"
         transmit = True
         await ctx.send(

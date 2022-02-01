@@ -11,14 +11,6 @@ from ...lib import (
     EmbedPaginator,
     ErrorEmbed,
     Tokens,
-    generatevoteembed,
-    votedbladebotlist,
-    votedbotsfordiscord,
-    voteddiscordboats,
-    voteddiscordlistspace,
-    votedfateslist,
-    votedTopgg,
-    votedVoidBots,
 )
 
 
@@ -93,10 +85,6 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     )
     async def animesearch(self, ctx, *, anime_name: str):
         """Searches Anime from MAL and displays the first 10 search result. (vote locked)"""
-        if not votedVoidBots(ctx):
-            await ctx.send(embed=generatevoteembed(ctx, "voidbots"))
-            return
-
         search = AnimeSearch(str(anime_name).strip(" ").lower())
         search_results = search.results[:10]
         description = ""
@@ -148,10 +136,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     )
     async def aboutanime(self, ctx, mal_id: int):
         """Displays about the anime using the MAL ANIME ID. get it by using animesearch command. (vote locked)"""
-        if not votedTopgg(ctx):
-            await ctx.send(embed=generatevoteembed(ctx, "top.gg"))
-            return
-        message = await ctx.send(":mag: Searching...", delete_after=5)
+        await ctx.send(":mag: Searching...", delete_after=5)
         anime = Anime(int(mal_id))
         embeds = []
         e = Embed(
@@ -313,9 +298,6 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     )
     async def mangasearch(self, ctx, *, manga_name: str):
         """Searches Manga from MAL and displays the first 10 search result. (vote locked)"""
-        if not votedbotsfordiscord(ctx):
-            await ctx.send(embed=generatevoteembed(ctx, "botsfordiscord"))
-            return
         search = MangaSearch(str(manga_name).strip(" ").lower())
         search_results = search.results[:10]
         description = ""
@@ -367,9 +349,6 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     )
     async def aboutmanga(self, ctx, mal_id: int):
         """Displays about the manga using the MAL MANGA ID. get it by using mangasearch command. (vote locked)"""
-        if not voteddiscordboats(ctx):
-            await ctx.send(embed=generatevoteembed(ctx, "discord.boats"))
-            return
         message = await ctx.send(":mag: Searching...", delete_after=5)
         manga = Manga(int(mal_id))
         embeds = []
@@ -463,25 +442,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     async def waifu(self, ctx):
         """Get random waifu and marry them! UwU! (vote locked)"""
         async with ctx.typing():
-            if (not votedfateslist(ctx) and not votedbladebotlist(ctx)
-                    and not votedVoidBots(ctx)):
-                votes_list = [
-                    votedfateslist(ctx),
-                    votedbladebotlist(ctx),
-                    votedVoidBots(ctx),
-                ]
-                votes_list_name = ["fateslist", "bladebotlist", "voidbots"]
-                await ctx.send(embed=generatevoteembed(
-                    ctx,
-                    [
-                        votes_list_name[i]
-                        for i, k in enumerate(votes_list) if not k
-                    ],
-                ))
-                return
             waifu = await self.get_waifu()
             message = await ctx.send(embed=waifu[0])
-            await message.add_reaction("💓")
+            await message.add_reaction(discord.PartialEmoji(name="\U0001f493"))
 
         def check(reaction, user):
             return user != self.bot.user and message.id == reaction.message.id
@@ -500,18 +463,6 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     @commands.cooldown(1, 2, commands.BucketType.guild)
     async def whosthatpokemon(self, ctx):
         """Play Who\'s That Pokemon? (vote locked)"""
-        async with ctx.typing():
-            if not voteddiscordlistspace(ctx) and not votedTopgg(ctx):
-                votes_list = [voteddiscordlistspace(ctx), votedTopgg(ctx)]
-                votes_list_name = ["discordlist.space", "top.gg"]
-                await ctx.send(embed=generatevoteembed(
-                    ctx,
-                    [
-                        votes_list_name[i]
-                        for i, k in enumerate(votes_list) if not k
-                    ],
-                ))
-                return
         async with ctx.typing():
             wtp = await self.bot.dagpi.wtp()
             question = wtp.question

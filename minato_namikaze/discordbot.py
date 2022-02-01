@@ -200,15 +200,14 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                                       name="over Naruto"),
         )
 
-        await PostStats(self).post_guild_stats_all()
-        log.info("Status Posted")
-
         if ast.literal_eval(token_get('POST_STATS')):
             await self.change_presence(
                 status=discord.Status.dnd,
                 activity=discord.Activity(type=discord.ActivityType.watching,
                                           name="over Naruto"),
             )
+            await PostStats(self).post_guild_stats_all()
+            log.info("Status Posted")
             await PostStats(self).post_commands()
             log.info("Commands Status Posted")
 

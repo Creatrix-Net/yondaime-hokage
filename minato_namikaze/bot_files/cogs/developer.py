@@ -63,17 +63,11 @@ class Developer(commands.Cog):
     @commands.check(owners)
     async def dev(self, ctx, command=None):
         """These set of commands are only locked to the developer"""
-        command2 = self.bot.get_command(f"{command}")
-        if command2 is None:
+        if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
-        else:
-            if command is None:
-                await ctx.send_help(ctx.command)
-            else:
-                pass
+            return
 
-    @dev.group(name="postcommand",
-               alisases=["postfates", "post_commands_to_fates_list"])
+    @dev.group(name="postcommand", alisases=["postfates", "post_commands_to_fates_list"])
     async def post_commands_to_fates_list(self, ctx):
         """Post all the commands to FATES LIST"""
         start_time = time.time()
@@ -294,48 +288,6 @@ class Developer(commands.Cog):
 
         except Exception as e:
             return await ctx.send(f"```py\n{e}```")
-
-    @dev.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def unload(self, ctx, name: str):
-        """Unloads an extension."""
-        try:
-            self.bot.unload_extension(f"bot_files.cogs.{name}")
-        except Exception as e:
-            return await ctx.send(f"```py\n{e}```")
-        await ctx.send(f"📤 Unloaded extension **`{name}.py`**")
-
-    @dev.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def reloadall(self, ctx):
-        """Reloads all extensions."""
-        cog_dir = Path(__file__).resolve(strict=True).parent.parent
-        error_collection = []
-        for file in os.listdir(cog_dir):
-            if os.path.isdir(cog_dir / file):
-                for i in os.listdir(cog_dir / file):
-                    if i.endswith(".py"):
-                        try:
-                            self.bot.reload_extension(
-                                f"bot_files.cogs.{file.strip(' ')}.{i[:-3]}")
-                        except Exception as e:
-                            return await ctx.send(f"```py\n{e}```")
-            else:
-                if file.endswith(".py"):
-                    try:
-                        self.bot.reload_extension(
-                            f"bot_files.cogs.{file[:-3]}")
-                    except Exception as e:
-                        return await ctx.send(f"```py\n{e}```")
-
-        if error_collection:
-            output = "\n".join(
-                [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection])
-            return await ctx.send(
-                f"Attempted to reload all extensions, was able to reload, "
-                f"however the following failed...\n\n{output}")
-
-        await ctx.send("**`Reloaded All Extentions`**")
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)

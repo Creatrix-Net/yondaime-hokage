@@ -141,13 +141,13 @@ class MentionSpamConfig:
 
     @classmethod
     async def from_record(cls, record, bot):
-        self = cls()
+        self = cls() 
 
         # the basic configuration
         self.bot = bot
         self.id = record['id']
-        self.mention_count = record['mention_count']
-        self.safe_mention_channel_ids = set(record['safe_mention_channel_ids'] or [])
+        self.mention_count = record.get('mention_count')
+        self.safe_mention_channel_ids = set(record.get('safe_mention_channel_ids') or [])
         return self
 
 

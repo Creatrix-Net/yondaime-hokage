@@ -244,9 +244,7 @@ class BotEventsCommands(commands.Cog):
             )
             e9.set_thumbnail(url=f"{haaha}")
             e9.set_footer(text=f"{ctx.author.name}")
-            await ctx.channel.send(embed=e9,
-                                   delete_after=self.delete_after_time)
-            await c.send(embed=e9)
+            await ctx.channel.send(embed=e9,delete_after=self.delete_after_time)
 
             e = Embed(
                 title=f"In **{ctx.guild.name}**",

@@ -21,6 +21,7 @@ from ...lib import (
     format_relative,
     has_permissions,
     plural,
+    database_category_name, database_channel_name, Embed
 )
 
 
@@ -32,6 +33,9 @@ class Moderation(commands.Cog):
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
+    
+    async def database_class(self):
+        return await self.bot.db.new(database_category_name,database_channel_name)
 
     # set delay
     @commands.command(usage="<time in seconds>")
@@ -252,7 +256,7 @@ class Moderation(commands.Cog):
         To use this command you must have Ban Members permissions.
         """
         if not await ctx.prompt(
-                f"Are you sure that you want to **unban** {member} from the guild?",
+                f"Are you sure that you want to **unban** {member.user} from the guild?",
                 author_id=ctx.author.id,
         ):
             return
@@ -268,10 +272,69 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(f"Unbanned {member.user} (ID: {member.user.id}).")
 
+    # ban
+    @commands.Cog.listener()
+    async def on_member_ban(self, guild, user):
+        database = await self.database_class()
+        if await database.get(guild.id) is None or (await database.get(guild.id)).get('ban') is None:
+            return
+
+        ban = self.bot.get_channel((await database.get(guild.id)).get('ban'))
+        ban_entry = await guild.fetch_ban(discord.Object(id=user.id))
+
+        e = ErrorEmbed(
+            title=f"{user} was banned!",
+            description=f"ID: {user.id}",
+        )
+        e.set_author(name=user.display_name, icon_url=user.display_avatar.url)
+        if ban_entry.reason:
+            e.add_field(name="**Reason** :", value=ban_entry.reason)
+        try:
+            await user.send(f"You were **banned** from **{guild.name}**",embed=e)
+            dmed = True
+        except:
+            dmed = False
+        if dmed:
+            e.add_field(name="DM-Members:", value='\U00002611')
+        else:
+            e.add_field(name="DM-Members:", value='\U0000274c')
+        await ban.send(embed=e)
+
+    # unban
+    @commands.Cog.listener()
+    async def on_member_unban(self, guild, user):
+        database = await self.database_class()
+        if await database.get(guild.id) is None or (await database.get(guild.id)).get('unban') is None:
+            return
+
+        unban = self.bot.get_channel((await database.get(guild.id)).get('unban'))
+        try:
+            event = await guild.audit_logs().find(lambda x: x.action is discord.AuditLogAction.unban)
+        except:
+            event = False
+
+        e = Embed(
+            title="Unban :tada:",
+            description=f"**{user}** was unbanned! :tada:",
+        )
+        if user.avatar.url:
+            e.set_thumbnail(url=user.avatar.url)
+        if event:
+            if event.reason:
+                e.add_field(name="**Reason** :", value=event.reason)
+        await unban.send(embed=e)
+        try:
+            await user.send(f"You were **unbanned** from **{guild.name}** ! :tada:",embed=e)
+            dmed = True
+        except:
+            dmed = False
+        if dmed:
+            e.add_field(name="DM-Members:", value='\U00002611')
+        else:
+            e.add_field(name="DM-Members:", value='\U0000274c')
+
     # Add Roles
-    @commands.command(pass_context=True,
-                      usage="<member.mention> <role>",
-                      alias=["add_roles"])
+    @commands.command(pass_context=True,usage="<member.mention> <role>",alias=["add_roles"])
     @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
     async def ar(
@@ -579,19 +642,11 @@ class Moderation(commands.Cog):
         reason: str = None,
     ):
         """Warn a user"""
-        data = await (await ctx.database).get(ctx.guild.id)
-        if data is None:
+        data = await (await self.database_class()).get(ctx.guild.id)
+        if data is None or data.get("warns") is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
-                description="You can always setup the **warning system** using `{}setup` command"
-                .format(ctx.prefix),
-            )
-            await ctx.send(embed=e, delete_after=10)
-            return
-        if data.get("warns") is None:
-            e = ErrorEmbed(
-                title=f"No warning system setup for the {ctx.guild.name}",
-                description="You can always setup the **warning system** using `{}setup` command"
+                description="You can always setup the **warning system** by running `{}setup add warns #warns`"
                 .format(ctx.prefix),
             )
             await ctx.send(embed=e, delete_after=10)
@@ -626,29 +681,19 @@ class Moderation(commands.Cog):
                        member: Optional[Union[commands.MemberConverter,
                                               MemberID]] = None):
         """Get the no. of warns for a specified user"""
-        data = await (await ctx.database).get(ctx.guild.id)
-        if data is None:
+        data = await (await self.database_class()).get(ctx.guild.id)
+        if data is None or data.get("warns") is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
-                description="You can always setup the **warning system** using `{}setup` command"
-                .format(ctx.prefix),
+                description="You can always setup the **warning system** by running `{}setup add warns #warns` command".format(ctx.prefix),
             )
             await ctx.send(embed=e, delete_after=10)
             return
-        if data.get("warns") is None:
-            e = ErrorEmbed(
-                title=f"No warning system setup for the {ctx.guild.name}",
-                description="You can always setup the **warning system** using `{}setup` command"
-                .format(ctx.prefix),
-            )
-            await ctx.send(embed=e, delete_after=10)
-            return
+
         member = ctx.get_user(
             member if member is not None else ctx.message.author)
         embed = discord.Embed(title="Type the below message in the search bar")
-        search_image = discord.File(join(self.bot.minato_dir, "discord",
-                                         "search.png"),
-                                    filename="search.png")
+        search_image = discord.File(join(self.bot.minato_dir, "discord","search.png"),filename="search.png")
         embed.set_image(url="attachment://search.png")
         await ctx.send(file=search_image, embed=embed)
 

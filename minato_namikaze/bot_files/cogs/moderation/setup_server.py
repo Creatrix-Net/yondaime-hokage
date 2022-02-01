@@ -43,15 +43,25 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database.set(ctx.guild.id, guild_dict)
         await ctx.send(":ok_hand:")
         return
-
-    @commands.group(usage="<add_type> <textchannel>")
+    
+    @commands.group()
     @commands.guild_only()
     @is_mod()
+    async def setup(self, ctx):
+        '''
+        This commands setups some logging system for system for server with some nice features
+        '''
+        if ctx.invoked_subcommand is None:
+            await ctx.send_help(ctx.command)
+            return
+
+
+    @setup.command(usage="<add_type> <textchannel>")
     async def add(
         self,
         ctx,
         add_type: typing.Literal["ban", "feedback", "warns", "unban"],
-        channel: commands.TextChannelConverter,
+        channel: commands.TextChannelConverter
     ):
         """
         This command adds logging of the following things in the specified text channel
@@ -59,8 +69,6 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         >   - warns
         >   - unban
         >   - feedback
-        >   - support
-        >   - badlinks
 
         `If the data for the any of the above is already available in database then it rewrite the data.`
 
@@ -75,7 +83,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         dict_to_add = {str(add_type): channel.id}
         await self.add_and_check_data(dict_to_add=dict_to_add, ctx=ctx)
 
-    @add.command(usage="<textchannel.mention> <support_required_role>")
+    @setup.command(usage="<textchannel.mention> <support_required_role>")
     async def support(
         self,
         ctx,
@@ -94,9 +102,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         ):
             return
         dict_to_add = {"support": [textchannel.id, support_required_role.id]}
-        await self.add_and_check_data(dict_to_add=dict_to_add,search_query="support",ctx=ctx)
+        await self.add_and_check_data(dict_to_add=dict_to_add,ctx=ctx)
 
-    @add.command(usage="<option> [action] [logging_channel]")
+    @setup.command(usage="<option> [action] [logging_channel]")
     async def badlinks(
         self,
         ctx,

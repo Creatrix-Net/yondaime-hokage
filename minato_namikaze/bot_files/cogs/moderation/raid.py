@@ -4,7 +4,7 @@ import logging
 from collections import defaultdict
 from typing import Optional, Literal
 
-import discord
+import discord, num2words
 from discord.ext import commands, tasks
 
 from ...lib import (RaidMode, SpamChecker, antiraid_channel_name, cache,
@@ -19,6 +19,7 @@ class AntiRaid(commands.Cog):
         self.bot = bot
         self.description = "Antiraid system commands to use"
         self._batch_message_lock = self._disable_lock = asyncio.Lock(loop=bot.loop)
+        self.autoban_threshold = 3
         self._spam_check = defaultdict(SpamChecker)
         self.message_batches = defaultdict(list)
         self.bulk_send_messages.start()
@@ -74,8 +75,8 @@ class AntiRaid(commands.Cog):
         else:
             database = await self.database_class_mentionspam()
         record = await database.get(guild_id)
-        record.update({'id': guild_id})
         if record is not None:
+            record.update({'id': guild_id})
             if type_database.lower() == 'antiraid':
                 return await AntiRaidConfig.from_record(record, self.bot)
             else:
@@ -122,6 +123,21 @@ class AntiRaid(commands.Cog):
                         pass
 
             self.message_batches.clear()
+    
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        author = message.author
+        if author.id in (self.bot.user.id, self.bot.owner_id):
+            return
+
+        if message.guild is None:
+            return
+
+        if not isinstance(author, discord.Member):
+            return
+
+        if author.bot:
+            return
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -145,14 +161,14 @@ class AntiRaid(commands.Cog):
         guild_id = message.guild.id
         config_antiraid = await self.get_guild_config(guild_id)
         config_mentionspam = await self.get_guild_config(guild_id, 'mentionspam')
-        if config_antiraid is None:
+        if config_antiraid is None and config_mentionspam is None:
             return
 
         # check for raid mode stuff
         await self.check_raid(config_antiraid, guild_id, author, message)
-
+        
         # auto-ban tracking for mention spams begin here
-        if len(message.mentions) <= 3:
+        if len(message.mentions) <= self.autoban_threshold:
             return
 
         if config_mentionspam is None:
@@ -185,6 +201,7 @@ class AntiRaid(commands.Cog):
             log.info(
                 f"Member {author} (ID: {author.id}) has been autobanned from guild ID {guild_id}"
             )
+
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -393,8 +410,8 @@ class AntiRaid(commands.Cog):
             self.get_guild_config.invalidate(self, ctx.guild.id)
             return await ctx.send('Auto-banning members has been disabled.')
 
-        if count <= 3:
-            await ctx.send('\N{NO ENTRY SIGN} Auto-ban threshold must be greater than three.')
+        if count <= self.autoban_threshold:
+            await ctx.send(f'\N{NO ENTRY SIGN} Auto-ban threshold must be greater than {num2words(self.autoban_threshold)}.')
             return
         
         if not await ctx.prompt(

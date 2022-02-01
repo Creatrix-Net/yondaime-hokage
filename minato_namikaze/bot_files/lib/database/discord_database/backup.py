@@ -1,6 +1,4 @@
 import io
-import secrets
-import string
 from typing import Optional
 
 import discord
@@ -16,13 +14,6 @@ class BackupDatabse:
         self.ctx = ctx
         self.backup_channel = ctx.get_config_channel_by_name_or_id(
             ChannelAndMessageId.backup_channel.value)
-
-    @staticmethod
-    def get_unique_backup_code():
-        return "".join(
-            secrets.choice(string.ascii_letters + string.digits +
-                           str(secrets.randbits(7)))
-            for i in range(8)).upper()
 
     async def create_backup(self):
         roles_dict = {}
@@ -189,9 +180,15 @@ class BackupDatabse:
             "stage_channel": stage_channel,
         })
         message_reference = await self.backup_channel.send(
-            file=discord.File(io.BytesIO(json_bytes), filename=f"{self.get_unique_backup_code()}.json"),
+            content=self.ctx.guild.id,
+            file=discord.File(io.BytesIO(json_bytes), filename=f"{self.ctx.guild.id}.json"),
         )
         return message_reference.id
 
     async def get_backup_data(self, code: Optional[discord.Message]):
         return code.attachments[0] if code else None
+    
+    async def delete_backup_data(self, code: Optional[discord.Message] = None, guild: Optional[discord.Guild] = None):
+        if code is not None:
+            await code.delete()
+            return

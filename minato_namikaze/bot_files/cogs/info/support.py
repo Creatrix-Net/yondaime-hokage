@@ -3,13 +3,13 @@ from typing import Union
 import discord
 from discord.ext import commands
 
-from ...lib import Embed, EmbedPaginator, ErrorEmbed
+from ...lib import Embed, EmbedPaginator, ErrorEmbed, database_category_name, database_channel_name, MemberID, is_mod
 
 
 def errorembed(ctx):
     return ErrorEmbed(
         title=f"No support system setup for the {ctx.guild.name}",
-        description="An admin can always setup the **support system** using `)setup` command",
+        description="An admin can always setup the **support system** using `{}setup support #support @support_required` command".format(ctx.prefix),
     )
 
 
@@ -21,44 +21,59 @@ class Support(commands.Cog):
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="support", id=922030091800829954)
+    
+    async def database_class(self):
+        return await self.bot.db.new(database_category_name,database_channel_name)
 
-    @commands.command(
-        description="Open support ticket if enabled by the server admins")
+    @commands.command()
     @commands.cooldown(1, 120, commands.BucketType.user)
     @commands.guild_only()
     async def support(self, ctx):
         """Open support ticket if enabled by the server admins"""
-        chan = ctx.return_support_channel(ctx.guild)
+        if not await ctx.prompt(
+                f"Are you sure that you want to **raise a support query** ?",
+                author_id=ctx.author.id,
+        ):
+            return
+
+        data = await (await self.database_class()).get(ctx.guild.id)
+        if data is None or data.get("support") is None:
+            await ctx.send(embed=errorembed(ctx))
+            return
+        channel = self.bot.get_channel(data.get("support")[0])
 
         if ctx.message.author == ctx.guild.owner:
             await ctx.send(
                 f"{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:"
             )
             return
-        if chan == ctx.message.channel:
+        
+        if channel == ctx.message.channel:
             await ctx.send(
                 embed=ErrorEmbed(
-                    description=f"{ctx.message.author.mention} This command can't be run inside the {chan.mention}"
+                    description=f"{ctx.message.author.mention} This command can't be run inside the {ctx.message.channel.mention}"
                 ),
                 delete_after=4,
             )
             return
-        if (discord.utils.get(ctx.guild.roles, name="SupportRequired")
-                in ctx.message.author.roles):
+        if (discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]) in ctx.message.author.roles):
             await ctx.send(embed=ErrorEmbed(
-                description=f"{ctx.message.author.mention} you already applied for the support , please check the {chan.mention} channel."
+                description=f"{ctx.message.author.mention} you already applied for the support , please check the {channel.mention} channel."
             ))
             return
-        channel = ctx.channel
-        await ctx.message.author.add_roles(
-            discord.utils.get(ctx.guild.roles, name="SupportRequired"))
-        if channel.guild is ctx.guild:
+        try:
+            await ctx.message.author.add_roles(discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]))
+        except Exception as error:
+            await ctx.send(embed=ErrorEmbed(description=error))
+            return
+
+        if ctx.channel.guild is ctx.guild:
             per = ctx.author.mention
             e = Embed(
                 title="Help Required",
-                description=f"{per} in {channel.mention} needs support!",
+                description=f"{per} in {ctx.channel.mention} needs support!",
             )
-            await chan.send("@here", embed=e)
+            await channel.send("@here", embed=e, allowed_mentions=discord.AllowedMentions(everyone=True,users=True,roles=True))
             await ctx.send("**Help Desk** has been has been notifed!")
             e = Embed(
                 title="Support Requirement Registered",
@@ -67,25 +82,29 @@ class Support(commands.Cog):
             await ctx.message.author.send("Hello", embed=e)
             return
 
-    @support.error
-    async def support_error_handler(self, ctx, error):
-        if (isinstance(error, commands.CheckFailure)
-                and not isinstance(error, commands.MissingPermissions)
-                and not isinstance(error, commands.BotMissingPermissions)):
-            await ctx.send(embed=errorembed(ctx))
-
-    @commands.command(description="Resolves the existing ticket!",
-                      usage="<member.mention>")
-    @commands.has_permissions(manage_guild=True)
+    @commands.command(usage="<member.mention>", aliases=['resolve', 'resolves'])
     @commands.guild_only()
-    async def resolved(self, ctx, member: Union[int, discord.Member]):
-        """Resolves the existing ticket!"""
-        member = ctx.get_user(member)
+    @is_mod()
+    async def resolved(self, ctx, member: Union[MemberID, discord.Member]):
+        """
+        Resolves the existing ticket!
+        One needs to have manage server permission in order to run this command
+        """
+        if not await ctx.prompt(
+                f"Are you sure that you want to **set {member} issue to resolved** ?",
+                author_id=ctx.author.id,
+        ):
+            return
+
+        data = await (await self.database_class()).get(ctx.guild.id)
+        if data is None or data.get("support") is None:
+            await ctx.send(embed=errorembed(ctx))
+            return
         if member.bot:
             await ctx.send(embed=ErrorEmbed(
                 description=f"{member.mention} is a bot! :robot:"))
             return
-        if (not discord.utils.get(ctx.guild.roles, name="SupportRequired")
+        if (not discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
                 in member.roles):
             e = ErrorEmbed(
                 title="Sorry !",
@@ -99,25 +118,21 @@ class Support(commands.Cog):
         )
         await ctx.send(
             f"The issue/query for {member.mention} has been set to resolved!")
-        await member.remove_roles(
-            discord.utils.get(ctx.guild.roles, name="SupportRequired"))
-
-    @resolved.error
-    async def resolved_error_handler(self, ctx, error):
-        if (isinstance(error, commands.CheckFailure)
-                and not isinstance(error, commands.MissingPermissions)
-                and not isinstance(error, commands.BotMissingPermissions)):
-            await ctx.send(embed=ErrorEmbed(
-                description="This command can be run **inside only servers's support channel**."
-            ))
+        await member.remove_roles(discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]))
 
     @commands.command(
         description="Checks who still requires the support.",
-        aliases=["check_who_require_support", "cksupreq", "supreq", "sup_req"],
+        aliases=["check_who_require_support", "cksupreq", "supreq", "sup_req", "checksupport", "check_support"],
     )
+    @commands.guild_only()
+    @is_mod()
     async def chksupreq(self, ctx):
         """Checks who still requires the support."""
-        role_sup = discord.utils.get(ctx.guild.roles, name="SupportRequired")
+        data = await (await self.database_class()).get(ctx.guild.id)
+        if data is None or data.get("support") is None:
+            await ctx.send(embed=errorembed(ctx))
+            return
+        role_sup = discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
         l = [m for m in ctx.guild.members if role_sup in m.roles]
         embed = []
         l_no = 0
@@ -131,7 +146,7 @@ class Support(commands.Cog):
                 description = ""
                 for l in range(10):
                     try:
-                        description += f"\n**({l_no+1}.)** - {l[l_no].mention}"
+                        description += f"\n**{l_no+1}.** - {l[l_no].mention}"
                         l_no += 1
                     except:
                         pass
@@ -145,40 +160,35 @@ class Support(commands.Cog):
         else:
             description = ""
             for k, i in enumerate(l):
-                description += f"\n**({k+1}.)** -  {l[k].mention}"
+                description += f"\n**{k+1}.** -  {l[k].mention}"
             e = Embed(title="Those who still require support:",
                       description=description)
             embed.append(e)
             await ctx.send(embed=e)
             return
 
-    @chksupreq.error
-    async def chksupreq_error_handler(self, ctx, error):
-        if (isinstance(error, commands.CheckFailure)
-                and not isinstance(error, commands.MissingPermissions)
-                and not isinstance(error, commands.BotMissingPermissions)):
-            await ctx.send(embed=ErrorEmbed(
-                description="This command can be run **inside only servers's support channel**."
-            ))
-
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.user)
     @commands.guild_only()
     async def feedback(self, ctx, *, feed):
-        """Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server admin)"""
-        data = await (await ctx.database).get(ctx.guild.id)
-        if data is None:
-            e = ErrorEmbed(
-                title="No Feedback system setup for this server!",
-                description="An admin can always setup the **feedback system** using `{}add feedback #channelname` command"
-                .format(ctx.prefix),
-            )
-            await ctx.send(embed=e, delete_after=10)
+        """
+        Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server admin)
+        ``The feedback should be less than 2000 characters``
+        """
+        if not await ctx.prompt(
+                "Are you sure that you want to **send the feedback** ?",
+                author_id=ctx.author.id,
+        ):
             return
-        if data.get("feedback") is None:
+        
+        if len(feed) > 2000:
+            await ctx.send('\N{WARNING SIGN} The feedback should be less than 2000 characters')
+            return
+        data = await (await self.database_class()).get(ctx.guild.id)
+        if data is None or data.get("feedback") is None:
             e = ErrorEmbed(
                 title="No Feedback system setup for this server!",
-                description="An admin can always setup the **feedback system** using `{}add feedback #channelname` command"
+                description="An admin can always setup the **feedback system** using `{}setup add feedback #channelname` command"
                 .format(ctx.prefix),
             )
             await ctx.send(embed=e, delete_after=10)
@@ -198,8 +208,8 @@ class Support(commands.Cog):
             colour=ctx.author.color or ctx.author.top_role.colour.value
             or discord.Color.random(),
         )
-        e.set_author(name=ctx.author.display_name,
-                     icon_url=ctx.author.display_avatar.url)
+        e2.set_author(name=ctx.author.display_name,icon_url=ctx.author.display_avatar.url)
+        e.set_author(name=ctx.author.display_name,icon_url=ctx.author.display_avatar.url)
         await channel.send(embed=e2)
 
 

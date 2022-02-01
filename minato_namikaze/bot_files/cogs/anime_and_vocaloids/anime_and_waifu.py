@@ -6,12 +6,7 @@ from asyncdagpi import Client
 from discord.ext import commands
 from mal import Anime, AnimeSearch, Manga, MangaSearch
 
-from ...lib import (
-    Embed,
-    EmbedPaginator,
-    ErrorEmbed,
-    Tokens,
-)
+from ...lib import Embed, EmbedPaginator, ErrorEmbed, Tokens
 
 
 def format_related_anime_manga(dict_related_anime):

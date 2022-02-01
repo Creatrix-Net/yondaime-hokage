@@ -25,17 +25,19 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name, database_channel_name)
+        return await self.bot.db.new(database_category_name,
+                                     database_channel_name)
 
     async def database_class_antiraid(self):
-        return await self.bot.db.new(database_category_name, antiraid_channel_name)
+        return await self.bot.db.new(database_category_name,
+                                     antiraid_channel_name)
 
     async def database_class_mentionspam(self):
-        return await self.bot.db.new(database_category_name, mentionspam_channel_name)
+        return await self.bot.db.new(database_category_name,
+                                     mentionspam_channel_name)
 
-    async def add_and_check_data(
-        self, dict_to_add: dict, ctx: commands.Context
-    ) -> None:
+    async def add_and_check_data(self, dict_to_add: dict,
+                                 ctx: commands.Context) -> None:
         database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:
@@ -78,7 +80,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         """
 
         if not await ctx.prompt(
-            f"Do you really want to **log {add_type}** for **{ctx.guild.name}** in {channel.mention}?"
+                f"Do you really want to **log {add_type}** for **{ctx.guild.name}** in {channel.mention}?"
         ):
             return
         dict_to_add = {str(add_type): channel.id}
@@ -99,7 +101,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             - support_required_role : A role which will be provided to the users, when a support request lodged
         """
         if not await ctx.prompt(
-            f"Do you really want to **create a suppoprt system** for **{ctx.guild.name}** in {textchannel.mention}?"
+                f"Do you really want to **create a suppoprt system** for **{ctx.guild.name}** in {textchannel.mention}?"
         ):
             return
         dict_to_add = {"support": [textchannel.id, support_required_role.id]}
@@ -110,9 +112,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         self,
         ctx,
         option: typing.Literal[True, False, "yes", "no", "on", "off"],
-        action: typing.Optional[
-            typing.Literal["ban", "mute", "timeout", "kick", "log"]
-        ] = "log",
+        action: typing.Optional[typing.Literal["ban", "mute", "timeout",
+                                               "kick", "log"]] = "log",
         logging_channel: typing.Optional[commands.TextChannelConverter] = None,
     ):
         """
@@ -169,8 +170,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     separators=(",", ": "),
                     ensure_ascii=False,
                     null=None,
-                )
-            )
+                ))
             embeds_list.append(embed)
         if data_antiraid is not None:
             embed = Embed()
@@ -183,8 +183,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     separators=(",", ": "),
                     ensure_ascii=False,
                     null=None,
-                )
-            )
+                ))
             embeds_list.append(embed)
         if data_mentionspam is not None:
             embed = Embed()
@@ -197,8 +196,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     separators=(",", ": "),
                     ensure_ascii=False,
                     null=None,
-                )
-            )
+                ))
             embeds_list.append(embed)
 
         paginator = EmbedPaginator(entries=embeds_list, ctx=ctx)

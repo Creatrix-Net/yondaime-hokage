@@ -3,6 +3,7 @@ from asyncio import sleep as sl
 
 import discord
 from discord.ext import menus
+
 from .vars import listing
 
 
@@ -20,7 +21,9 @@ class VotingMenu(menus.Menu):
 
     @menus.button("\N{WHITE HEAVY CHECK MARK}")
     async def on_check_mark(self, payload):
-        listing_formatted_string = '\n'.join(f'- **[{i}](https://{listing[i]}/{self.bot.application_id})**' for i in listing)
+        listing_formatted_string = "\n".join(
+            f"- **[{i}](https://{listing[i]}/{self.bot.application_id})**"
+            for i in listing)
         e1 = discord.Embed(
             title="Thanks!",
             description=f"Thanks {self.ctx.author.mention}! Here's the links:{listing_formatted_string}",

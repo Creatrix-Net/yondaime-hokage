@@ -10,7 +10,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 
-from ...lib import Embed, ErrorEmbed, Tokens, check_if_user_joined_a_channel, MemberID
+from ...lib import Embed, ErrorEmbed, MemberID, Tokens, check_if_user_joined_a_channel
 from ...lib.classes.games import *
 
 

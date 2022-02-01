@@ -1,12 +1,13 @@
 import enum
+import json
 import os
 from pathlib import Path
 from typing import List
-import json
 
 import dotenv
 
-dotenv_file = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(
+    __file__).resolve().parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):
@@ -15,7 +16,8 @@ def token_get(tokenname):
     return os.environ.get(tokenname, "False").strip("\n")
 
 
-BASE_DIR = (Path(__file__).resolve().parent.parent.parent)  # In minato_namikaze/bot_files folder
+BASE_DIR = (Path(__file__).resolve().parent.parent.parent
+            )  # In minato_namikaze/bot_files folder
 api_image_store_dir = BASE_DIR / "images_api_store"
 
 DEFAULT_COMMAND_SELECT_LENGTH = 25
@@ -116,7 +118,8 @@ class LinksAndVars(enum.Enum):
     version = token_get("VERSION")
     invite_code = "wXVQahNM5c"
     timeout = 3.0
-    owner_ids = list({887549958931247137, 837223478934896670, 747729781369602049})
+    owner_ids = list(
+        {887549958931247137, 837223478934896670, 747729781369602049})
 
     with open(
             os.path.join(
@@ -135,7 +138,11 @@ class RaidMode(enum.Enum):
     on = 1
     strict = 2
 
-with open(os.path.join(Path(__file__).resolve().parent.parent, "database","listing.json")) as f:
+
+with open(
+        os.path.join(
+            Path(__file__).resolve().parent.parent, "database",
+            "listing.json")) as f:
     listing: dict = json.load(f)
 
 database_category_name = "DATABASE"

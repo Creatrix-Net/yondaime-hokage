@@ -1,13 +1,14 @@
 import enum
+import gzip
+import json
 import os
 from pathlib import Path
 from typing import List
-import json
-import gzip
 
 import dotenv
 
-dotenv_file = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
+dotenv_file = Path(
+    __file__).resolve().parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):
@@ -16,7 +17,8 @@ def token_get(tokenname):
     return os.environ.get(tokenname, "False").strip("\n")
 
 
-BASE_DIR = (Path(__file__).resolve().parent.parent.parent)  # In minato_namikaze/bot_files folder
+BASE_DIR = (Path(__file__).resolve().parent.parent.parent
+            )  # In minato_namikaze/bot_files folder
 api_image_store_dir = BASE_DIR / "images_api_store"
 
 DEFAULT_COMMAND_SELECT_LENGTH = 25
@@ -117,12 +119,20 @@ class LinksAndVars(enum.Enum):
     version = token_get("VERSION")
     invite_code = "wXVQahNM5c"
     timeout = 3.0
-    owner_ids = list({887549958931247137, 837223478934896670, 747729781369602049})
+    owner_ids = list(
+        {887549958931247137, 837223478934896670, 747729781369602049})
 
-    with gzip.open(os.path.join(Path(__file__).resolve().parent.parent, "data","insult.txt.gz"),'rt', encoding='utf-8') as f:
+    with gzip.open(
+            os.path.join(
+                Path(__file__).resolve().parent.parent, "data",
+                "insult.txt.gz"),
+            "rt",
+            encoding="utf-8",
+    ) as f:
         insults: List[str] = list(
             map(
-                lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip("\\"),
+                lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip(
+                    "\\"),
                 f.read().split(","),
             ))
 
@@ -132,16 +142,38 @@ class RaidMode(enum.Enum):
     on = 1
     strict = 2
 
-with open(os.path.join(Path(__file__).resolve().parent.parent, "data","listing.json")) as f:
+
+with open(
+        os.path.join(
+            Path(__file__).resolve().parent.parent, "data",
+            "listing.json")) as f:
     listing: dict = json.load(f)
 
-with open(os.path.join(Path(__file__).resolve().parent.parent, "data", "periodic_table_data","LATTICES.json.gz")) as f:
+with open(
+        os.path.join(
+            Path(__file__).resolve().parent.parent,
+            "data",
+            "periodic_table_data",
+            "LATTICES.json.gz",
+        )) as f:
     LATTICES: dict = json.load(f)
 
-with open(os.path.join(Path(__file__).resolve().parent.parent, "data", "periodic_table_data","IMAGES.json.gz")) as f:
+with open(
+        os.path.join(
+            Path(__file__).resolve().parent.parent,
+            "data",
+            "periodic_table_data",
+            "IMAGES.json.gz",
+        )) as f:
     IMAGES: dict = json.load(f)
 
-with open(os.path.join(Path(__file__).resolve().parent.parent, "data", "periodic_table_data","UNITS.json.gz")) as f:
+with open(
+        os.path.join(
+            Path(__file__).resolve().parent.parent,
+            "data",
+            "periodic_table_data",
+            "UNITS.json.gz",
+        )) as f:
     UNITS: dict = json.load(f)
 
 database_category_name = "DATABASE"

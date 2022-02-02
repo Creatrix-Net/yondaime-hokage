@@ -11,7 +11,6 @@ from pathlib import Path
 
 import discord
 from discord.ext import commands
-
 from lib import *
 
 
@@ -280,8 +279,7 @@ class Developer(commands.Cog):
             else:
                 if file.endswith(".py"):
                     try:
-                        self.bot.reload_extension(
-                            f"cogs.{file[:-3]}")
+                        self.bot.reload_extension(f"cogs.{file[:-3]}")
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 

@@ -274,14 +274,14 @@ class Developer(commands.Cog):
                     if i.endswith(".py"):
                         try:
                             self.bot.reload_extension(
-                                f"bot_files.cogs.{file.strip(' ')}.{i[:-3]}")
+                                f"cogs.{file.strip(' ')}.{i[:-3]}")
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
                 if file.endswith(".py"):
                     try:
                         self.bot.reload_extension(
-                            f"bot_files.cogs.{file[:-3]}")
+                            f"cogs.{file[:-3]}")
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 
@@ -470,8 +470,8 @@ class Developer(commands.Cog):
             e.set_thumbnail(url=self.bot.user.avatar.url)
             e.set_image(url=f"attachment://{img[0]}")
             await welcome_channel.send(file=file, embed=e)
-        except Exception as e:
-            print(e)
+        except:
+            pass
 
         # Send it to server count channel the support server
         try:

@@ -11,7 +11,15 @@ class ConnectFour:
         self.red_player = red
         self.blue_player = blue
         self.board = [[BLANK for __ in range(7)] for __ in range(6)]
-        self._controls = ("\N{DIGIT ONE}\U000020e3", "\N{DIGIT TWO}\U000020e3", "\N{DIGIT THREE}\U000020e3", "\N{DIGIT FOUR}\U000020e3", "\N{DIGIT FIVE}\U000020e3", "\N{DIGIT SIX}\U000020e3", "\N{DIGIT SEVEN}\U000020e3")
+        self._controls = (
+            "\N{DIGIT ONE}\U000020e3",
+            "\N{DIGIT TWO}\U000020e3",
+            "\N{DIGIT THREE}\U000020e3",
+            "\N{DIGIT FOUR}\U000020e3",
+            "\N{DIGIT FIVE}\U000020e3",
+            "\N{DIGIT SIX}\U000020e3",
+            "\N{DIGIT SEVEN}\U000020e3",
+        )
         self.turn = self.red_player
         self.message = None
         self.winner = None

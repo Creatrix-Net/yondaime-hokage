@@ -1,15 +1,17 @@
 import enum
 import gzip
-import json
 import io
+import json
 import os
+import zipfile
 from pathlib import Path
 from typing import List
-import zipfile
+
 import dotenv
 
-BASE_DIR = (Path(__file__).resolve().parent.parent.parent)  # In minato_namikaze/ folder
-dotenv_file = (Path(__file__).resolve().parent.parent.parent.parent / ".env")
+BASE_DIR = Path(
+    __file__).resolve().parent.parent.parent  # In minato_namikaze/ folder
+dotenv_file = Path(__file__).resolve().parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):
@@ -17,9 +19,11 @@ def token_get(tokenname):
         dotenv.load_dotenv(dotenv_file)
     return os.environ.get(tokenname, "False").strip("\n")
 
+
 api_image_store_dir = BASE_DIR / "images_api_store"
 
 DEFAULT_COMMAND_SELECT_LENGTH = 25
+
 
 class BotList(enum.Enum):
     dblst = token_get("DISCORDBOTLIST")
@@ -152,8 +156,10 @@ with gzip.open(
             "data",
             "periodic_table_data",
             "LATTICES.json.gz",
-        ), "rt",
-            encoding="utf-8") as f:
+        ),
+        "rt",
+        encoding="utf-8",
+) as f:
     LATTICES: dict = json.load(f)
 
 with gzip.open(
@@ -162,8 +168,10 @@ with gzip.open(
             "data",
             "periodic_table_data",
             "IMAGES.json.gz",
-        ), "rt",
-            encoding="utf-8") as f:
+        ),
+        "rt",
+        encoding="utf-8",
+) as f:
     IMAGES: dict = json.load(f)
 
 with gzip.open(
@@ -172,8 +180,10 @@ with gzip.open(
             "data",
             "periodic_table_data",
             "UNITS.json.gz",
-        ), "rt",
-            encoding="utf-8") as f:
+        ),
+        "rt",
+        encoding="utf-8",
+) as f:
     UNITS: dict = json.load(f)
 
 database_category_name = "DATABASE"
@@ -182,13 +192,15 @@ antiraid_channel_name = "antiraid"
 mentionspam_channel_name = "mentionspam"
 
 minato_gif = []
-with zipfile.ZipFile(BASE_DIR/os.path.join('lib','data', 'minato.zip')) as myzip:
+with zipfile.ZipFile(BASE_DIR /
+                     os.path.join("lib", "data", "minato.zip")) as myzip:
     for i in myzip.namelist():
         with myzip.open(i) as f:
             minato_gif.append((i, io.BytesIO(f.read())))
 
-with zipfile.ZipFile(BASE_DIR/os.path.join('lib','data', 'among_us.zip')) as myzip:
-    with myzip.open('amoungus.png') as f:
+with zipfile.ZipFile(BASE_DIR /
+                     os.path.join("lib", "data", "among_us.zip")) as myzip:
+    with myzip.open("amoungus.png") as f:
         among_us = io.BytesIO(f.read())
-    with myzip.open('amoungus_friends.png') as f:
+    with myzip.open("amoungus_friends.png") as f:
         among_us_friends = (i, io.BytesIO(f.read()))

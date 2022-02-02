@@ -17,7 +17,7 @@ from gtts import gTTS
 from PIL import Image
 from pyppeteer import launch
 
-from ...lib import Embed, LinksAndVars, TimeConverter
+from lib import Embed, LinksAndVars, TimeConverter
 
 
 class Random(commands.Cog):

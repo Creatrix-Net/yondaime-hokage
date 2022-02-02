@@ -7,7 +7,7 @@ from typing import List
 
 import dotenv
 
-BASE_DIR = (Path(__file__).resolve().parent.parent)  # In minato_namikaze/ folder
+BASE_DIR = (Path(__file__).resolve().parent.parent.parent)  # In minato_namikaze/ folder
 dotenv_file = (Path(__file__).resolve().parent.parent.parent.parent / ".env")
 
 
@@ -179,3 +179,9 @@ database_category_name = "DATABASE"
 database_channel_name = "setup vars"
 antiraid_channel_name = "antiraid"
 mentionspam_channel_name = "mentionspam"
+
+
+import zipfile
+[]
+with zipfile.ZipFile(BASE_DIR/os.path.join('lib','data', 'minato.zip')) as myzip:
+    print(myzip.namelist())

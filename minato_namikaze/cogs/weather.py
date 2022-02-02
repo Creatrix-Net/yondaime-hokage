@@ -9,7 +9,7 @@ from discord.ext import commands
 from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
 
-from ..lib import Tokens
+from lib import Tokens
 
 
 class UnitConverter(Converter):

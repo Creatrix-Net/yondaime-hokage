@@ -9,8 +9,8 @@ import psutil
 import pygit2
 from discord.ext import commands
 
-from ...lib import ChannelAndMessageId, Embed, LinksAndVars, PrivacyPolicy
-from ...lib import time_class as time
+from lib import ChannelAndMessageId, Embed, LinksAndVars, PrivacyPolicy, VotingMenu
+from lib import time_class as time
 
 
 class MySupport(commands.Cog, name="My Support"):
@@ -22,6 +22,12 @@ class MySupport(commands.Cog, name="My Support"):
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{SQUARED SOS}")
+    
+    @commands.command()
+    async def vote(self, ctx):
+        """Get all the voting links"""
+        m = VotingMenu(bot=self.bot)
+        await m.start(ctx)
 
     @staticmethod
     def format_commit(commit):

@@ -1,7 +1,7 @@
 import statcord
 from discord.ext import commands
 
-from ..lib import Tokens
+from lib import Tokens
 
 
 class StatcordPost(commands.Cog):

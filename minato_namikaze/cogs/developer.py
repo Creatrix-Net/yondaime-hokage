@@ -12,14 +12,14 @@ from pathlib import Path
 import discord
 from discord.ext import commands
 
-from ..lib import *
+from lib import *
 
 
 class Developer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.posting = PostStats(self.bot)
-        self.minato_gif = bot.minato_gif
+        self.minato_gif = []
         self.description = "These set of commands are only locked to the developer"
 
     @property

@@ -6,7 +6,7 @@ from asyncdagpi import Client
 from discord.ext import commands
 from mal import Anime, AnimeSearch, Manga, MangaSearch
 
-from ...lib import (
+from lib import (
     Embed,
     EmbedPaginator,
     ErrorEmbed,

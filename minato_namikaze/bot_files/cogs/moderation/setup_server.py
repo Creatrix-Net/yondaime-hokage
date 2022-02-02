@@ -204,6 +204,67 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         paginator = EmbedPaginator(entries=embeds_list, ctx=ctx)
         await paginator.start()
 
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        database = await self.database_class()
+        database_antiraid = await self.database_class_antiraid()
+        database_mentionspam = await self.database_class_mentionspam()
+
+        await database.delete(guild.id)
+        await database_antiraid.delete(guild.id)
+        await database_mentionspam.delete(guild.id)
+    
+    @commands.command(alisases=['datadelete','delete_data', 'data_delete'], usage="[type_data]")
+    @commands.guild_only()
+    @is_mod()
+    async def deletedata(self, ctx, type_data: typing.Literal['ban', 'unban', 'support', 'warns', 'feedback', 'mentionspam', 'antiraid', 'all'] = 'all'):
+        '''
+        This command deletes the available data:
+        It accepts an optional parameter `type_data`, You can pass the following things through `type_data` parameter:
+        
+            - `ban` : Deletes the `ban data` from database
+            - `unban` : Deletes the `unban data` from database
+            - `support` : Deletes the `support data` from database
+            - `warns` : Deletes the `warns data` from database
+            - `feedback`: Deletes the `feedback data` from database
+            - `mentionspam`: Deletes the `mentionspam data` from database
+            - `antiraid`: Deletes the `antiraid data` from database
+
+        By default the `type_data` is set to `all`, which will delete all the data present in the database.
+        '''
+        if not await ctx.prompt(
+            f"Do you really want to **delete {type_data}** data?"
+        ):
+            return
+        if type_data in ['ban', 'unban', 'support', 'warns', 'feedback']:
+            database = await self.database_class()
+            data = await database.get(ctx.guild.id)
+            data.pop(type_data)
+            await database.set(ctx.guild.id, data)
+            await ctx.send(":ok_hand:")
+            return
+        
+        if type_data == 'mentionspam':
+            database = await self.database_class_mentionspam()
+            await database.delete(ctx.guild.id)
+            await ctx.send(":ok_hand:")
+            return
+        
+        if type_data == 'antiraid':
+            database = await self.database_class_antiraid()
+            await database.delete(ctx.guild.id)
+            await ctx.send(":ok_hand:")
+            return
+        
+        database = await self.database_class()
+        database_antiraid = await self.database_class_antiraid()
+        database_mentionspam = await self.database_class_mentionspam()
+
+        await database.delete(ctx.guild.id)
+        await database_antiraid.delete(ctx.guild.id)
+        await database_mentionspam.delete(ctx.guild.id)
+        await ctx.send(":ok_hand:")
+
 
 def setup(bot):
     bot.add_cog(ServerSetup(bot))

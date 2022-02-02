@@ -17,11 +17,11 @@ cffi==1.15.0
 charset-normalizer==2.0.11
 click==8.0.3
 colorama==0.4.4
-discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@fbb8803779373357e274e1540b368365fd9d8074
+discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@master
 discord-ext-owoify==0.0.7.9a0
-discord.py @ git+https://github.com/StockerMC/discord.py.git@5b864f6c6709b20e04b519568dd4fb8107dc8658
-DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@737a4ee74667e10a920cc6bdb9eec496a1c86bad
-DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@795b3af875e178f1c8c9f8394391c41db3b00406
+discord.py @ git+https://github.com/StockerMC/discord.py.git@master
+DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@master
+DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@master
 docopt==0.6.2
 eight-ball==3.0.3
 english-words==1.1.0
@@ -32,7 +32,7 @@ gTTS==2.2.3
 idna==3.3
 import-expression==1.1.4
 importlib-metadata==4.10.1
-jishaku @ git+https://github.com/Gorialis/jishaku.git@d8e676f55a48e1ffad14e13e733debd4ab93eccb
+jishaku @ git+https://github.com/Gorialis/jishaku.git@master
 mal-api==0.5.2
 multidict==6.0.2
 mystbin.py==2.2.0

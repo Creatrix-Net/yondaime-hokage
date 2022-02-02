@@ -112,7 +112,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         self,
         ctx,
         option: typing.Literal[True, False, "yes", "no", "on", "off"] = True,
-        action: typing.Optional[typing.Literal["ban", "mute", "timeout","kick", "log"]] = "log",
+        action: typing.Optional[typing.Literal["ban", "mute", "timeout",
+                                               "kick", "log"]] = "log",
         logging_channel: typing.Optional[commands.TextChannelConverter] = None,
     ):
         """
@@ -219,8 +220,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         self,
         ctx,
         type_data: typing.Literal["ban", "unban", "support", "warns",
-                                  "feedback", "mentionspam", "antiraid", "badlinks",
-                                  "all" ] = "all",
+                                  "feedback", "mentionspam", "antiraid",
+                                  "badlinks", "all", ] = "all",
     ):
         """
         This command deletes the available data:
@@ -240,7 +241,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         if not await ctx.prompt(
                 f"Do you really want to **delete {type_data}** data?"):
             return
-        if type_data in ["ban", "unban", "support", "warns", "feedback", "badlinks"]:
+        if type_data in [
+                "ban", "unban", "support", "warns", "feedback", "badlinks"
+        ]:
             database = await self.database_class()
             data = await database.get(ctx.guild.id)
             data.pop(type_data)

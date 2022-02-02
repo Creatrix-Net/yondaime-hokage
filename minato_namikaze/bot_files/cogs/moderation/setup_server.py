@@ -111,16 +111,15 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     async def badlinks(
         self,
         ctx,
-        option: typing.Literal[True, False, "yes", "no", "on", "off"],
-        action: typing.Optional[typing.Literal["ban", "mute", "timeout",
-                                               "kick", "log"]] = "log",
+        option: typing.Literal[True, False, "yes", "no", "on", "off"] = True,
+        action: typing.Optional[typing.Literal["ban", "mute", "timeout","kick", "log"]] = "log",
         logging_channel: typing.Optional[commands.TextChannelConverter] = None,
     ):
         """
         If enabled then it checks against any scam, phishing or adult links which is posted by members and take actions accordingly
 
         Args:
-            - option : It accepts the following options ; True, False, yes, no, on, off
+            - option [Optional] (default: True) : It accepts the following options ; True, False, yes, no, on, off
             - action [Optional] (default: log) : What kind of action to take, It accepts the following options ; 'ban', 'mute', 'timeout', 'kick', 'log'
             - logging_channel [Optional] : It will log in a specific channel if specified, otherwise it will log the message where the link was sent. Default
 
@@ -220,8 +219,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         self,
         ctx,
         type_data: typing.Literal["ban", "unban", "support", "warns",
-                                  "feedback", "mentionspam", "antiraid",
-                                  "all", ] = "all",
+                                  "feedback", "mentionspam", "antiraid", "badlinks",
+                                  "all" ] = "all",
     ):
         """
         This command deletes the available data:
@@ -234,13 +233,14 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             - `feedback`: Deletes the `feedback data` from database
             - `mentionspam`: Deletes the `mentionspam data` from database
             - `antiraid`: Deletes the `antiraid data` from database
+            - `badlinks`: Delets the `badlinks data` from database
 
         By default the `type_data` is set to `all`, which will delete all the data present in the database.
         """
         if not await ctx.prompt(
                 f"Do you really want to **delete {type_data}** data?"):
             return
-        if type_data in ["ban", "unban", "support", "warns", "feedback"]:
+        if type_data in ["ban", "unban", "support", "warns", "feedback", "badlinks"]:
             database = await self.database_class()
             data = await database.get(ctx.guild.id)
             data.pop(type_data)

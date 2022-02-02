@@ -1,0 +1,1 @@
+from .periodic_table_data import *

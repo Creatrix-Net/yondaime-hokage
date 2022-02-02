@@ -135,6 +135,15 @@ class RaidMode(enum.Enum):
 with open(os.path.join(Path(__file__).resolve().parent.parent, "data","listing.json")) as f:
     listing: dict = json.load(f)
 
+with open(os.path.join(Path(__file__).resolve().parent.parent, "data", "periodic_table_data","LATTICES.json.gz")) as f:
+    LATTICES: dict = json.load(f)
+
+with open(os.path.join(Path(__file__).resolve().parent.parent, "data", "periodic_table_data","IMAGES.json.gz")) as f:
+    IMAGES: dict = json.load(f)
+
+with open(os.path.join(Path(__file__).resolve().parent.parent, "data", "periodic_table_data","UNITS.json.gz")) as f:
+    UNITS: dict = json.load(f)
+
 database_category_name = "DATABASE"
 database_channel_name = "setup vars"
 antiraid_channel_name = "antiraid"

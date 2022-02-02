@@ -5,8 +5,7 @@ from discord.ext import commands
 from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
 
-from ...lib import EmbedPaginator
-from ...lib.data import IMAGES, LATTICES, UNITS
+from ...lib import EmbedPaginator, IMAGES, LATTICES, UNITS
 from ...lib.mendeleev import element as ELEMENTS
 
 

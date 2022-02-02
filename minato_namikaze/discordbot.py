@@ -17,11 +17,12 @@ import random
 from collections import Counter, defaultdict, deque
 from datetime import datetime
 from typing import Optional, Union
-from DiscordDatabase import DiscordDatabase
 
 import discord
 import dotenv
 import sentry_sdk
+from discord.ext import commands
+from DiscordDatabase import DiscordDatabase
 from lib import (
     BASE_DIR,
     ChannelAndMessageId,
@@ -35,7 +36,6 @@ from lib import (
     format_dt,
     format_relative,
 )
-from discord.ext import commands
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
@@ -159,7 +159,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
                     if i.endswith(".py"):
-                        self.load_extension(f'cogs.{filename.strip(" ")}.{i[:-3]}')
+                        self.load_extension(
+                            f'cogs.{filename.strip(" ")}.{i[:-3]}')
             else:
                 if filename.endswith(".py"):
                     self.load_extension(f"cogs.{filename[:-3]}")
@@ -197,7 +198,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                                       name="over Naruto"),
         )
 
-        if ast.literal_eval(token_get('POST_STATS')):
+        if ast.literal_eval(token_get("POST_STATS")):
             await self.change_presence(
                 status=discord.Status.dnd,
                 activity=discord.Activity(type=discord.ActivityType.watching,
@@ -210,7 +211,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
             await self.change_presence(
                 status=discord.Status.idle,
-                activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
+                activity=discord.Activity(type=discord.ActivityType.watching,
+                                          name="over Naruto"),
             )
 
     async def query_member_named(self, guild, argument, *, cache=False):
@@ -341,6 +343,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     async def close(self):
         import shutil
+
         if not os.path.isdir(api_image_store_dir):
             shutil.rmtree(api_image_store_dir)
         await super().close()

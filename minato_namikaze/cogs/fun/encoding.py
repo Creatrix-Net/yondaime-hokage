@@ -1,14 +1,13 @@
 import base64
 import hashlib
-import unicodedata
 import re
+import unicodedata
 from string import ascii_lowercase as lc
 from string import ascii_uppercase as uc
 from typing import Iterator, Optional, Sequence
 
 import discord
 from discord.ext import commands
-
 from lib.data.braille import (
     contractions,
     dna,
@@ -104,21 +103,20 @@ class Encoding(commands.Cog):
         except ZeroDivisionError:
             return False
         return False
-    
+
     @commands.command()
     async def charinfo(self, ctx, *, characters: str):
         """Shows you information about a number of characters.
         Only up to 25 characters at a time.
         """
-
         def to_string(c):
-            digit = f'{ord(c):x}'
-            name = unicodedata.name(c, 'Name not found.')
-            return f'`\\U{digit:>08}`: {name} - {c} \N{EM DASH} <http://www.fileformat.info/info/unicode/char/{digit}>'
+            digit = f"{ord(c):x}"
+            name = unicodedata.name(c, "Name not found.")
+            return f"`\\U{digit:>08}`: {name} - {c} \N{EM DASH} <http://www.fileformat.info/info/unicode/char/{digit}>"
 
-        msg = '\n'.join(map(to_string, characters))
+        msg = "\n".join(map(to_string, characters))
         if len(msg) > 2000:
-            return await ctx.send('Output too long to display.')
+            return await ctx.send("Output too long to display.")
         await ctx.send(msg)
 
     @commands.group(name="hash")

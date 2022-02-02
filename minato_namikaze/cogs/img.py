@@ -6,9 +6,9 @@ from typing import Optional, Union
 import discord
 from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
+from lib import Embed, ErrorEmbed, MemberID, Tokens, among_us, among_us_friends
 from PIL import Image, ImageDraw, ImageFont
 
-from lib import Embed, ErrorEmbed, MemberID, Tokens, among_us, among_us_friends
 from minato_namikaze.lib.util.vars import BASE_DIR
 
 
@@ -40,7 +40,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(file=file, embed=embed)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def wi(self, ctx, *, member: Optional[Union[discord.Member,MemberID]]):
+    async def wi(self, ctx, *, member: Optional[Union[discord.Member,
+                                                      MemberID]]):
         """Prove anyone that they are sus!"""
         if member == "@everyone":
             desc = f"Hmmmmmmm ** {ctx.author.mention} , Hey guys {ctx.author.mention} is the sus !!!**"
@@ -54,7 +55,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
 
         img = Image.open(among_us_friends)
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(FileIO(BASE_DIR / os.path.join("lib","data","arial.ttf")), 60)
+        font = ImageFont.truetype(
+            FileIO(BASE_DIR / os.path.join("lib", "data", "arial.ttf")), 60)
         draw.text((250, 300), text, font=font, fill="red", align="right")
         img.save("wi.png")
         embed.set_image(url="attachment://wi.png")
@@ -63,7 +65,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         os.remove("wi.png")
 
     @commands.command(usage="[member.mention | member.id]")
-    async def triggered(self, ctx, member: Optional[Union[discord.Member,MemberID]]):
+    async def triggered(self, ctx, member: Optional[Union[discord.Member,
+                                                          MemberID]]):
         """Make anyone triggered"""
         if member is None:
             member = ctx.author

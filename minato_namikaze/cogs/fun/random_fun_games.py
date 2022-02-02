@@ -14,10 +14,9 @@ import pyppeteer
 from asyncdagpi import ImageFeatures
 from discord.ext import commands, owoify
 from gtts import gTTS
+from lib import Embed, LinksAndVars, MemberID, TimeConverter
 from PIL import Image
 from pyppeteer import launch
-
-from lib import Embed, LinksAndVars, TimeConverter, MemberID
 
 
 class Random(commands.Cog):

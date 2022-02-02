@@ -6,7 +6,7 @@ from discord import CategoryChannel, Role, StageChannel, TextChannel, VoiceChann
 from discord.ext.commands import Context
 from orjson import dumps
 
-from ...util.vars import ChannelAndMessageId
+from ..util.vars import ChannelAndMessageId
 
 
 class BackupDatabse:

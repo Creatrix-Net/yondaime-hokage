@@ -118,14 +118,10 @@ class LinksAndVars(enum.Enum):
     timeout = 3.0
     owner_ids = list({887549958931247137, 837223478934896670, 747729781369602049})
 
-    with open(
-            os.path.join(
-                Path(__file__).resolve().parent.parent, "text",
-                "insult.txt")) as f:
+    with open(os.path.join(Path(__file__).resolve().parent.parent, "text","insult.txt")) as f:
         insults: List[str] = list(
             map(
-                lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip(
-                    "\\"),
+                lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip("\\"),
                 f.read().split(","),
             ))
 

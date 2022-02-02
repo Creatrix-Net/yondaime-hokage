@@ -8,9 +8,8 @@ from typing import Union
 import aiohttp
 import discord
 from discord.ext import commands
-from PIL import Image, ImageDraw, ImageFont, ImageSequence
-
 from lib import BASE_DIR, Badge, Badges, ImageWriter, SimplePages, generate
+from PIL import Image, ImageDraw, ImageFont, ImageSequence
 
 
 class BadgesPageEntry:

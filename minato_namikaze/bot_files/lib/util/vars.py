@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from typing import List
 import json
+import gzip
 
 import dotenv
 
@@ -118,7 +119,7 @@ class LinksAndVars(enum.Enum):
     timeout = 3.0
     owner_ids = list({887549958931247137, 837223478934896670, 747729781369602049})
 
-    with open(os.path.join(Path(__file__).resolve().parent.parent, "text","insult.txt")) as f:
+    with gzip.open(os.path.join(Path(__file__).resolve().parent.parent, "data","insult.txt.gz"),'rt', encoding='utf-8') as f:
         insults: List[str] = list(
             map(
                 lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip("\\"),
@@ -131,7 +132,7 @@ class RaidMode(enum.Enum):
     on = 1
     strict = 2
 
-with open(os.path.join(Path(__file__).resolve().parent.parent, "database","listing.json")) as f:
+with open(os.path.join(Path(__file__).resolve().parent.parent, "data","listing.json")) as f:
     listing: dict = json.load(f)
 
 database_category_name = "DATABASE"

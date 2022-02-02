@@ -1,22 +1,31 @@
 import asyncio
+import gzip
 import random
 from os.path import join
 from pathlib import Path
 
 import aiohttp
 import requests
-import gzip
 
 from ..classes.embed import Embed
 from .vars import *
 
+
 class PostStats:
     def __init__(self, bot):
         self.bot = bot
-    
+
     @staticmethod
     def imagelist(self):
-        with gzip.open(join(Path(__file__).resolve().parent.parent,"data","vocaloid_images.txt.gz",), "rt",encoding="utf-8") as f:
+        with gzip.open(
+                join(
+                    Path(__file__).resolve().parent.parent,
+                    "data",
+                    "vocaloid_images.txt.gz",
+                ),
+                "rt",
+                encoding="utf-8",
+        ) as f:
             images_list: list = f.readlines()
         return images_list
 

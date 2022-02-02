@@ -4,7 +4,7 @@ from datetime import timezone
 import discord
 from discord.ext import commands
 
-from ...lib import Embed
+from lib import Embed
 
 
 class Info(commands.Cog):

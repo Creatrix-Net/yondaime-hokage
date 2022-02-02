@@ -8,7 +8,7 @@ from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
 
-from ..lib import Embed, ErrorEmbed, MemberID, Tokens
+from lib import Embed, ErrorEmbed, MemberID, Tokens
 
 
 class ImageManipulation(commands.Cog, name="Image Manipulation"):

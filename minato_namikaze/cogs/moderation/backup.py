@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from ...lib import BackupDatabse, SuccessEmbed
+from lib import BackupDatabse, SuccessEmbed
 
 
 class BackUp(commands.Cog):

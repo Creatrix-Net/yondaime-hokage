@@ -9,7 +9,7 @@ from typing import Iterator, Optional, Sequence
 import discord
 from discord.ext import commands
 
-from ...lib.data.braille import (
+from lib.data.braille import (
     contractions,
     dna,
     letters,

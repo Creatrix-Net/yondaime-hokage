@@ -10,7 +10,7 @@ import discord
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
 
-from ..lib import BASE_DIR, Badge, Badges, ImageWriter, SimplePages, generate
+from lib import BASE_DIR, Badge, Badges, ImageWriter, SimplePages, generate
 
 
 class BadgesPageEntry:

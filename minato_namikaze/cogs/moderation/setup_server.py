@@ -4,7 +4,7 @@ import typing
 import discord
 from discord.ext import commands
 
-from ...lib import (
+from lib import (
     Embed,
     EmbedPaginator,
     antiraid_channel_name,

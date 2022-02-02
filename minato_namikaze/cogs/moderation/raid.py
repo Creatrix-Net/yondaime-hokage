@@ -8,7 +8,7 @@ import discord
 import num2words
 from discord.ext import commands, tasks
 
-from ...lib import (
+from lib import (
     AntiRaidConfig,
     MentionSpamConfig,
     RaidMode,

@@ -9,7 +9,7 @@ from typing import Optional, Union
 import discord
 from discord.ext import commands
 
-from ...lib import (
+from lib import (
     ActionReason,
     Arguments,
     BannedMember,

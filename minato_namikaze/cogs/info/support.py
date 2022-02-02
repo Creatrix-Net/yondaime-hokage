@@ -3,7 +3,7 @@ from typing import Union
 import discord
 from discord.ext import commands
 
-from ...lib import (
+from lib import (
     Embed,
     EmbedPaginator,
     ErrorEmbed,

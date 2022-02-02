@@ -63,7 +63,7 @@ class Akinator:
     async def start(
         self,
         ctx: commands.Context,
-        remove_reaction_after: bool = False,
+        remove_reaction_after: bool = True,
         win_at_: int = 80,
         timeout: int = None,
         delete_button: bool = False,

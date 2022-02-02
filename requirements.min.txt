@@ -9,7 +9,7 @@ discord.py @ git+https://github.com/StockerMC/discord.py.git@master
 DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@master
 eight-ball
 num2words
-english-words
+english-words @ git+https://github.com/The-4th-Hokage/english-words-py.git@master
 DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@master
 ffmpeg
 cachetools

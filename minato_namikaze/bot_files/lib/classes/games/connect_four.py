@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
 
-RED = "🔴"
-BLUE = "🔵"
-BLANK = "⬛"
+RED = "\U0001f534"
+BLUE = "\U0001f535"
+BLANK = "\U00002b1b"
 
 
 class ConnectFour:
@@ -11,18 +11,18 @@ class ConnectFour:
         self.red_player = red
         self.blue_player = blue
         self.board = [[BLANK for __ in range(7)] for __ in range(6)]
-        self._controls = ("1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣")
+        self._controls = ("\N{DIGIT ONE}\U000020e3", "\N{DIGIT TWO}\U000020e3", "\N{DIGIT THREE}\U000020e3", "\N{DIGIT FOUR}\U000020e3", "\N{DIGIT FIVE}\U000020e3", "\N{DIGIT SIX}\U000020e3", "\N{DIGIT SEVEN}\U000020e3")
         self.turn = self.red_player
         self.message = None
         self.winner = None
         self._conversion = {
-            "1️⃣": 0,
-            "2️⃣": 1,
-            "3️⃣": 2,
-            "4️⃣": 3,
-            "5️⃣": 4,
-            "6️⃣": 5,
-            "7️⃣": 6,
+            "\N{DIGIT ONE}\U000020e3": 0,
+            "\N{DIGIT TWO}\U000020e3": 1,
+            "\N{DIGIT THREE}\U000020e3": 2,
+            "\N{DIGIT FOUR}\U000020e3": 3,
+            "\N{DIGIT FIVE}\U000020e3": 4,
+            "\N{DIGIT SIX}\U000020e3": 5,
+            "\N{DIGIT SEVEN}\U000020e3": 6,
         }
         self._PlayerToEmoji = {
             self.red_player: RED,
@@ -34,7 +34,7 @@ class ConnectFour:
         }
 
     def BoardString(self) -> str:
-        board = "1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣\n"
+        board = "\N{DIGIT ONE}\U000020e3\N{DIGIT TWO}\U000020e3\N{DIGIT THREE}\U000020e3\N{DIGIT FOUR}\U000020e3\N{DIGIT FIVE}\U000020e3\N{DIGIT SIX}\U000020e3\N{DIGIT SEVEN}\U000020e3\n"
         for row in self.board:
             board += "".join(row) + "\n"
         return board

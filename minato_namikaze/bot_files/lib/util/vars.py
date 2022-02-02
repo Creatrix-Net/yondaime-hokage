@@ -7,8 +7,8 @@ from typing import List
 
 import dotenv
 
-dotenv_file = Path(
-    __file__).resolve().parent.parent.parent.parent.parent / ".env"
+BASE_DIR = (Path(__file__).resolve().parent.parent.parent)  # In minato_namikaze/bot_files folder
+dotenv_file = (Path(__file__).resolve().parent.parent.parent.parent.parent / ".env")
 
 
 def token_get(tokenname):
@@ -16,13 +16,9 @@ def token_get(tokenname):
         dotenv.load_dotenv(dotenv_file)
     return os.environ.get(tokenname, "False").strip("\n")
 
-
-BASE_DIR = (Path(__file__).resolve().parent.parent.parent
-            )  # In minato_namikaze/bot_files folder
 api_image_store_dir = BASE_DIR / "images_api_store"
 
 DEFAULT_COMMAND_SELECT_LENGTH = 25
-
 
 class BotList(enum.Enum):
     dblst = token_get("DISCORDBOTLIST")

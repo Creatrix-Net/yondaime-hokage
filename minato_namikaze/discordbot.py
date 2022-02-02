@@ -22,7 +22,7 @@ from DiscordDatabase import DiscordDatabase
 import discord
 import dotenv
 import sentry_sdk
-from bot_files.lib import (
+from lib import (
     BASE_DIR,
     ChannelAndMessageId,
     Context,
@@ -161,11 +161,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
                     if i.endswith(".py"):
-                        self.load_extension(
-                            f'bot_files.cogs.{filename.strip(" ")}.{i[:-3]}')
+                        self.load_extension(f'cogs.{filename.strip(" ")}.{i[:-3]}')
             else:
                 if filename.endswith(".py"):
-                    self.load_extension(f"bot_files.cogs.{filename[:-3]}")
+                    self.load_extension(f"cogs.{filename[:-3]}")
         self.load_extension("jishaku")
 
         difference = int(round(time.time() - self.start_time.timestamp()))

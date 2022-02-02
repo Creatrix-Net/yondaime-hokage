@@ -7,8 +7,8 @@ from typing import List
 
 import dotenv
 
-BASE_DIR = (Path(__file__).resolve().parent.parent.parent)  # In minato_namikaze/bot_files folder
-dotenv_file = (Path(__file__).resolve().parent.parent.parent.parent.parent / ".env")
+BASE_DIR = (Path(__file__).resolve().parent.parent)  # In minato_namikaze/ folder
+dotenv_file = (Path(__file__).resolve().parent.parent.parent.parent / ".env")
 
 
 def token_get(tokenname):

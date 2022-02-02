@@ -121,7 +121,6 @@ class BadgesCog(commands.Cog, name="Badges"):
             font1 = ImageFont.truetype(font_loc, 30)
             font2 = ImageFont.truetype(font_loc, 24)
         except Exception as e:
-            print(e)
             font1 = None
             font2 = None
         # font for extra information

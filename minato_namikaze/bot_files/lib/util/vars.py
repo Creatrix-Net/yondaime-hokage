@@ -149,31 +149,34 @@ with open(
             "listing.json")) as f:
     listing: dict = json.load(f)
 
-with open(
+with gzip.open(
         os.path.join(
             Path(__file__).resolve().parent.parent,
             "data",
             "periodic_table_data",
             "LATTICES.json.gz",
-        )) as f:
+        ), "rt",
+            encoding="utf-8") as f:
     LATTICES: dict = json.load(f)
 
-with open(
+with gzip.open(
         os.path.join(
             Path(__file__).resolve().parent.parent,
             "data",
             "periodic_table_data",
             "IMAGES.json.gz",
-        )) as f:
+        ), "rt",
+            encoding="utf-8") as f:
     IMAGES: dict = json.load(f)
 
-with open(
+with gzip.open(
         os.path.join(
             Path(__file__).resolve().parent.parent,
             "data",
             "periodic_table_data",
             "UNITS.json.gz",
-        )) as f:
+        ), "rt",
+            encoding="utf-8") as f:
     UNITS: dict = json.load(f)
 
 database_category_name = "DATABASE"

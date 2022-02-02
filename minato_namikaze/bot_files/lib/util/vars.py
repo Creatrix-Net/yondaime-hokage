@@ -7,8 +7,10 @@ from typing import List
 
 import dotenv
 
-BASE_DIR = (Path(__file__).resolve().parent.parent.parent)  # In minato_namikaze/bot_files folder
-dotenv_file = (Path(__file__).resolve().parent.parent.parent.parent.parent / ".env")
+BASE_DIR = (Path(__file__).resolve().parent.parent.parent
+            )  # In minato_namikaze/bot_files folder
+dotenv_file = Path(
+    __file__).resolve().parent.parent.parent.parent.parent / ".env"
 
 
 def token_get(tokenname):
@@ -16,9 +18,11 @@ def token_get(tokenname):
         dotenv.load_dotenv(dotenv_file)
     return os.environ.get(tokenname, "False").strip("\n")
 
+
 api_image_store_dir = BASE_DIR / "images_api_store"
 
 DEFAULT_COMMAND_SELECT_LENGTH = 25
+
 
 class BotList(enum.Enum):
     dblst = token_get("DISCORDBOTLIST")
@@ -151,8 +155,10 @@ with gzip.open(
             "data",
             "periodic_table_data",
             "LATTICES.json.gz",
-        ), "rt",
-            encoding="utf-8") as f:
+        ),
+        "rt",
+        encoding="utf-8",
+) as f:
     LATTICES: dict = json.load(f)
 
 with gzip.open(
@@ -161,8 +167,10 @@ with gzip.open(
             "data",
             "periodic_table_data",
             "IMAGES.json.gz",
-        ), "rt",
-            encoding="utf-8") as f:
+        ),
+        "rt",
+        encoding="utf-8",
+) as f:
     IMAGES: dict = json.load(f)
 
 with gzip.open(
@@ -171,8 +179,10 @@ with gzip.open(
             "data",
             "periodic_table_data",
             "UNITS.json.gz",
-        ), "rt",
-            encoding="utf-8") as f:
+        ),
+        "rt",
+        encoding="utf-8",
+) as f:
     UNITS: dict = json.load(f)
 
 database_category_name = "DATABASE"

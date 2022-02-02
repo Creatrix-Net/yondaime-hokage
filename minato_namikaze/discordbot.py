@@ -343,6 +343,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     async def close(self):
         import shutil
+
         if not os.path.isdir(api_image_store_dir):
             shutil.rmtree(api_image_store_dir)
         await super().close()

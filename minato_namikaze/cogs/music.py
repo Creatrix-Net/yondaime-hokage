@@ -1,7 +1,6 @@
 import discord
 import DiscordUtils
 from discord.ext import commands
-
 from lib import Embed, EmbedPaginator, ErrorEmbed
 
 

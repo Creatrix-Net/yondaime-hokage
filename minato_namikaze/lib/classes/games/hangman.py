@@ -1,6 +1,6 @@
 import random
-from typing import Union
 import string
+from typing import Union
 
 import discord
 from discord.ext import commands
@@ -102,7 +102,8 @@ class Hangman:
         self._message = None
         self._counter = 8
         self.GameOver = False
-        self.lives = lambda: "`{}`".format(('\U00002764' * self._counter) or '-')
+        self.lives = lambda: "`{}`".format(
+            ("\U00002764" * self._counter) or "-")
 
     async def MakeGuess(self, guess: str) -> None:
 

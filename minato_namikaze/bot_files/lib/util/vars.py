@@ -155,8 +155,10 @@ with gzip.open(
             "data",
             "periodic_table_data",
             "LATTICES.json.gz",
-        ), "rt",
-            encoding="utf-8") as f:
+        ),
+        "rt",
+        encoding="utf-8",
+) as f:
     LATTICES: dict = json.load(f)
 
 with gzip.open(
@@ -165,8 +167,10 @@ with gzip.open(
             "data",
             "periodic_table_data",
             "IMAGES.json.gz",
-        ), "rt",
-            encoding="utf-8") as f:
+        ),
+        "rt",
+        encoding="utf-8",
+) as f:
     IMAGES: dict = json.load(f)
 
 with gzip.open(
@@ -175,8 +179,10 @@ with gzip.open(
             "data",
             "periodic_table_data",
             "UNITS.json.gz",
-        ), "rt",
-            encoding="utf-8") as f:
+        ),
+        "rt",
+        encoding="utf-8",
+) as f:
     UNITS: dict = json.load(f)
 
 database_category_name = "DATABASE"

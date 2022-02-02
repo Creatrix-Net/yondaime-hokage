@@ -257,42 +257,6 @@ class Developer(commands.Cog):
         else:
             await ctx.message.add_reaction("\u2705")
 
-    @dev.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def get_all_cogs(self, ctx):
-        """Get all the cogs list"""
-        cog_dir = Path(__file__).resolve(strict=True).parent.parent
-        cogs_list = []
-        for file in os.listdir(cog_dir):
-            if os.path.isdir(cog_dir / file):
-                for i in os.listdir(cog_dir / file):
-                    if i.endswith(".py"):
-                        cogs_list.append(f"```{file.strip(' ')}.{i[:-3]}```")
-            else:
-                if file.endswith(".py"):
-                    cogs_list.append(f"```{file[:-3]}```")
-        await ctx.send("\n".join(cogs_list))
-
-    @dev.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def load(self, ctx, name: str):
-        """Loads an extension."""
-        try:
-            self.bot.load_extension(f"bot_files.cogs.{name}")
-        except Exception as e:
-            return await ctx.send(f"```py\n{e}```")
-        await ctx.send(f"Loaded extension **`cogs/{name}.py`**")
-
-    @dev.group(invoke_without_command=True)
-    @commands.check(owners)
-    async def reload(self, ctx, name: str):
-        """Reloads an extension."""
-        try:
-            self.bot.reload_extension(f"bot_files.cogs.{name}")
-            await ctx.message.add_reaction(discord.PartialEmoji(name="\U0001f504"))
-
-        except Exception as e:
-            return await ctx.send(f"```py\n{e}```")
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
@@ -376,7 +340,9 @@ class Developer(commands.Cog):
     @commands.check(owners)
     async def changestat(self, ctx):
         """Change the bot status"""
-        await ctx.send("Hi yeah")
+        if ctx.invoked_subcommand is None:
+            await ctx.send_help(ctx.command)
+            return
 
     @changestat.group(invoke_without_command=True)
     @commands.check(owners)
@@ -537,7 +503,7 @@ class Developer(commands.Cog):
             c = (
                 self.bot.get_channel(
                     ChannelAndMessageId.serverlog_channel2.value)
-                if not self.bot.local
+                if self.bot.local
                 else self.bot.get_channel(ChannelAndMessageId.serverlog_channel1.value)
             )
             e34.add_field(name="**Total Members**", value=guild.member_count)

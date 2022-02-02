@@ -8,14 +8,14 @@ from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
 
-from lib import Embed, ErrorEmbed, MemberID, Tokens
+from lib import Embed, ErrorEmbed, MemberID, Tokens, among_us, among_us_friends
+from minato_namikaze.lib.util.vars import BASE_DIR
 
 
 class ImageManipulation(commands.Cog, name="Image Manipulation"):
     def __init__(self, bot):
         self.bot = bot
         self.bot.dagpi = Client(Tokens.dagpi.value)
-        self.DEFAULT_GIF_LIST_PATH = bot.DEFAULT_GIF_LIST_PATH
         self.description = "Some fun Image Manipulation Commands"
 
     @property
@@ -31,36 +31,30 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
                 f"** {ctx.author.mention} yes yes bro!!! Everyone is not sus!**"
             )
             return
-        member = ctx.get_user(member)
         desc = f"** {member}  was not the imposter**"
 
-        file_path = self.DEFAULT_GIF_LIST_PATH / "amoungus_friends.png"
-        file = discord.File(file_path)
+        file = discord.File(among_us)
 
         embed = Embed(description=desc, timestamp=discord.utils.utcnow())
-        embed.set_image(url=f"attachment://{file_path}")
+        embed.set_image(url="attachment://amongus.png")
         await ctx.send(file=file, embed=embed)
 
     @commands.command(usage="[member.mention | member.id]")
-    async def wi(self, ctx, *, member: Optional[Union[discord.Member,
-                                                      MemberID]]):
+    async def wi(self, ctx, *, member: Optional[Union[discord.Member,MemberID]]):
         """Prove anyone that they are sus!"""
         if member == "@everyone":
             desc = f"Hmmmmmmm ** {ctx.author.mention} , Hey guys {ctx.author.mention} is the sus !!!**"
             await ctx.send(ErrorEmbed(description=desc))
             return
 
-        member = ctx.get_user(member)
         desc = f"** {member.mention}  is the imposter**"
         text = f"{member.display_name}  is the imposter"
 
         embed = ErrorEmbed(description=desc, timestamp=discord.utils.utcnow())
 
-        img = Image.open(
-            FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("amongus.png")))
+        img = Image.open(among_us_friends)
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(
-            FileIO(self.DEFAULT_GIF_LIST_PATH / os.path.join("Arial.ttf")), 60)
+        font = ImageFont.truetype(FileIO(BASE_DIR / os.path.join("lib","data","arial.ttf")), 60)
         draw.text((250, 300), text, font=font, fill="red", align="right")
         img.save("wi.png")
         embed.set_image(url="attachment://wi.png")
@@ -69,13 +63,10 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         os.remove("wi.png")
 
     @commands.command(usage="[member.mention | member.id]")
-    async def triggered(self, ctx, member: Optional[Union[discord.Member,
-                                                          MemberID]]):
+    async def triggered(self, ctx, member: Optional[Union[discord.Member,MemberID]]):
         """Make anyone triggered"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.triggered(),
@@ -94,8 +85,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Send a fake Discord message"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         uname = member.display_name
         text = str(text)
@@ -121,8 +110,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Captcha v3 Image mockup"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         text = str(text)
         textaslen = len(text)
@@ -145,8 +132,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Pixallate your pfp"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.pixel(), url)
@@ -161,8 +146,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Jail yourself or someone"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
+
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.jail(), url=url)
         e2file = discord.File(fp=img.image, filename=f"jail.{img.format}")
@@ -176,8 +160,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Get yourself or someone listed in Bingo Book"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.wanted(), url)
@@ -192,8 +174,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Rainbow light effect"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.gay(), url)
@@ -208,8 +188,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Seperate yourself/others and mark them/yourself as gay!"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.gay(), url)
@@ -224,8 +202,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Puts trash into trashbin"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(512).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.trash(), url)
@@ -241,8 +217,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Removes trash from bin"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.delete(), url)
@@ -257,8 +231,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Be an Angel"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(512).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.angel(), url)
@@ -273,8 +245,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Be the Devil"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(64).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.satan(), url)
@@ -292,8 +262,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Get your pfp beautiful charcoal paint"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.charcoal(), url)
@@ -308,8 +276,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Hail Hitler"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(64).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.hitler(), url)
@@ -324,8 +290,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """GTA V wasted screen"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.wasted(), url)
@@ -341,8 +305,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e = Embed(title="Boooom! :skull_crossbones:")
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.bomb(), url)
@@ -356,8 +318,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Pat someone, UwU!"""
         if member is None:
             member = ctx.author
-        else:
-            member = ctx.get_user(member)
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.petpet(), url)
@@ -380,7 +340,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             )
             return
         else:
-            member = ctx.get_user(member)
             desc = f"** {ctx.author.mention} spanks {member.mention} !!! Damm! **"
         if member is ctx.author:
             desc = f"** {ctx.author.mention} spanks themselves !!! LOL! **"
@@ -403,7 +362,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             )
             return
         else:
-            member = ctx.get_user(member)
             desc = f"** {ctx.author.mention} slaps {member.mention} !!! Damm! **"
         if member is ctx.author:
             desc = f"** {ctx.author.mention} slaps themselves !!! LOL! **"
@@ -433,7 +391,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             )
             return
         else:
-            member = ctx.get_user(member)
             desc = f"** {ctx.author.mention} hugs {member.mention} !!! :heart: :heart: :heart: **"
         if member is ctx.author:
             desc = f"** {ctx.author.mention} hugs themselves !!! :heart: :heart: :heart: :heart: **"
@@ -456,7 +413,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             )
             return
         else:
-            member = ctx.get_user(member)
             desc = f"** {ctx.author.mention} pokes {member} !!! **"
         if member is ctx.author:
             desc = f"** {ctx.author.id} pokes themselves !!! **"
@@ -475,7 +431,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         elif member in ["@everyone", "@here"]:
             desc = f"**@everyone , {ctx.author.mention} high-fives **"
         else:
-            member = ctx.get_user(member)
             desc = f"**{ctx.author.mention} high fives {member.mention} !!! **"
         if member is ctx.author:
             desc = f"**{ctx.author.mention} high-fives **"
@@ -496,7 +451,6 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
                 f"**@everyone {ctx.author.mention} is partying!! come join them !! **"
             )
         else:
-            member = ctx.get_user(member)
             desc = (
                 f"**{ctx.author.mention} parties with {member.mention} !!! Yaay !!! **"
             )

@@ -102,7 +102,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             10, 12.0, commands.BucketType.user)
         self._auto_spam_count = Counter()
 
-        self.DEFAULT_GIF_LIST_PATH = BASE_DIR / join("discord_bot_images")
         self.db = DiscordDatabase(self, ChannelAndMessageId.server_id2.value)
 
         self.uptime = format_relative(self.start_time)

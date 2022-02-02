@@ -712,8 +712,7 @@ class Moderation(commands.Cog):
             await ctx.send(embed=e, delete_after=10)
             return
 
-        member = ctx.get_user(
-            member if member is not None else ctx.message.author)
+        member = member or ctx.message.author
         embed = discord.Embed(title="Type the below message in the search bar")
         search_image = discord.File(
             join(self.bot.minato_dir, "discord", "search.png"), filename="search.png"

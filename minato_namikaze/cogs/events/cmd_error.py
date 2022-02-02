@@ -3,7 +3,6 @@ import traceback
 
 import discord
 from discord.ext import commands
-
 from lib import ChannelAndMessageId, Embed, ErrorEmbed
 
 
@@ -11,11 +10,9 @@ class BotEventsCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.error_report_channel = self.bot.get_channel(
-            ChannelAndMessageId.error_logs_channel.value
-        )
+            ChannelAndMessageId.error_logs_channel.value)
         self.traceback_channel = self.bot.get_channel(
-            ChannelAndMessageId.traceback_channel.value
-        )
+            ChannelAndMessageId.traceback_channel.value)
         self.delete_after_time = 5
 
     @commands.Cog.listener()
@@ -23,17 +20,20 @@ class BotEventsCommands(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             e1 = ErrorEmbed(title="Command Error!", description=f"`{error}`")
             e1.set_footer(text=f"{ctx.author.name}")
-            await ctx.channel.send(embed=e1, delete_after=self.delete_after_time)
+            await ctx.channel.send(embed=e1,
+                                   delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.MissingRequiredArgument):
             e4 = ErrorEmbed(title="Command Error!", description=f"`{error}`")
             e4.set_footer(text=f"{ctx.author.name}")
-            await ctx.channel.send(embed=e4, delete_after=self.delete_after_time)
+            await ctx.channel.send(embed=e4,
+                                   delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.CommandNotFound):
             e2 = ErrorEmbed(title="Command Error!", description=f"`{error}`")
             e2.set_footer(text=f"{ctx.author.name}")
-            await ctx.channel.send(embed=e2, delete_after=self.delete_after_time)
+            await ctx.channel.send(embed=e2,
+                                   delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.BotMissingPermissions):
             e = ErrorEmbed(description=error)
@@ -63,8 +63,7 @@ class BotEventsCommands(commands.Cog):
         elif isinstance(error, commands.EmojiNotFound):
             await ctx.send(
                 embed=ErrorEmbed(
-                    description=f"The emoji provided {error.argument} was **not found!**"
-                ),
+                    description=f"The emoji provided {error.argument} was **not found!**"),
                 delete_after=self.delete_after_time,
             )
 
@@ -78,9 +77,8 @@ class BotEventsCommands(commands.Cog):
             return
 
         elif isinstance(error, commands.RoleNotFound):
-            await ctx.send(
-                embed=ErrorEmbed(description=error), delete_after=self.delete_after_time
-            )
+            await ctx.send(embed=ErrorEmbed(description=error),
+                           delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.NSFWChannelRequired):
             await ctx.send(
@@ -123,39 +121,32 @@ class BotEventsCommands(commands.Cog):
             )
 
         elif isinstance(error, commands.BadBoolArgument):
-            await ctx.send(
-                embed=ErrorEmbed(description=error), delete_after=self.delete_after_time
-            )
+            await ctx.send(embed=ErrorEmbed(description=error),
+                           delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.BadColourArgument):
-            await ctx.send(
-                embed=ErrorEmbed(description=error), delete_after=self.delete_after_time
-            )
+            await ctx.send(embed=ErrorEmbed(description=error),
+                           delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.ChannelNotFound):
-            await ctx.send(
-                embed=ErrorEmbed(description=error), delete_after=self.delete_after_time
-            )
+            await ctx.send(embed=ErrorEmbed(description=error),
+                           delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.MessageNotFound):
-            await ctx.send(
-                embed=ErrorEmbed(description=error), delete_after=self.delete_after_time
-            )
+            await ctx.send(embed=ErrorEmbed(description=error),
+                           delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.MemberNotFound):
-            await ctx.send(
-                embed=ErrorEmbed(description=error), delete_after=self.delete_after_time
-            )
+            await ctx.send(embed=ErrorEmbed(description=error),
+                           delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.GuildNotFound):
-            await ctx.send(
-                embed=ErrorEmbed(description=error), delete_after=self.delete_after_time
-            )
+            await ctx.send(embed=ErrorEmbed(description=error),
+                           delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.UserNotFound):
-            await ctx.send(
-                embed=ErrorEmbed(description=error), delete_after=self.delete_after_time
-            )
+            await ctx.send(embed=ErrorEmbed(description=error),
+                           delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.ChannelNotReadable):
             await ctx.send(
@@ -169,9 +160,8 @@ class BotEventsCommands(commands.Cog):
             return
 
         elif isinstance(error, commands.MaxConcurrencyReached):
-            await ctx.send(
-                embed=ErrorEmbed(description=error), delete_after=self.delete_after_time
-            )
+            await ctx.send(embed=ErrorEmbed(description=error),
+                           delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.PrivateMessageOnly):
             await ctx.send(
@@ -184,8 +174,7 @@ class BotEventsCommands(commands.Cog):
         elif isinstance(error, commands.NoPrivateMessage):
             await ctx.send(
                 embed=ErrorEmbed(
-                    description=f"**{ctx.command.name}** doesn't work in **DM's**"
-                ),
+                    description=f"**{ctx.command.name}** doesn't work in **DM's**"),
                 delete_after=self.delete_after_time,
             )
 
@@ -205,7 +194,8 @@ class BotEventsCommands(commands.Cog):
             e7.add_field(name="By", value=f"{ctx.author.name}")
             e7.set_thumbnail(url="https://i.imgur.com/1zey3je.jpg")
             e7.set_footer(text=f"{ctx.author.name}")
-            await ctx.channel.send(embed=e7, delete_after=self.delete_after_time)
+            await ctx.channel.send(embed=e7,
+                                   delete_after=self.delete_after_time)
 
             e = Embed(
                 title=f"In **{ctx.guild.name}**",
@@ -220,15 +210,16 @@ class BotEventsCommands(commands.Cog):
                 name="**Bots**",
                 value=sum(1 for member in ctx.guild.members if member.bot),
             )
-            e.add_field(
-                name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True
-            )
+            e.add_field(name="**Region**",
+                        value=str(ctx.guild.region).capitalize(),
+                        inline=True)
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await ctx.send(
                 "**Error report was successfully sent**",
                 delete_after=self.delete_after_time,
             )
-            message_referrence = await self.error_report_channel.send(embeds=[e7, e])
+            message_referrence = await self.error_report_channel.send(
+                embeds=[e7, e])
             try:
                 raise error
             except Exception:
@@ -242,9 +233,8 @@ class BotEventsCommands(commands.Cog):
 
         else:
             haaha = ctx.author.avatar.url
-            e9 = ErrorEmbed(
-                title="Oh no there was some error", description=f"`{error}`"[:2000]
-            )
+            e9 = ErrorEmbed(title="Oh no there was some error",
+                            description=f"`{error}`"[:2000])
             e9.add_field(name="**Command Error Caused By**",
                          value=f"{ctx.command}")
             e9.add_field(
@@ -253,7 +243,8 @@ class BotEventsCommands(commands.Cog):
             )
             e9.set_thumbnail(url=f"{haaha}")
             e9.set_footer(text=f"{ctx.author.name}")
-            await ctx.channel.send(embed=e9, delete_after=self.delete_after_time)
+            await ctx.channel.send(embed=e9,
+                                   delete_after=self.delete_after_time)
 
             e = Embed(
                 title=f"In **{ctx.guild.name}**",
@@ -268,9 +259,9 @@ class BotEventsCommands(commands.Cog):
                 name="**Bots**",
                 value=sum(1 for member in ctx.guild.members if member.bot),
             )
-            e.add_field(
-                name="**Region**", value=str(ctx.guild.region).capitalize(), inline=True
-            )
+            e.add_field(name="**Region**",
+                        value=str(ctx.guild.region).capitalize(),
+                        inline=True)
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await ctx.send(
                 "**Error report was successfully sent**",
@@ -286,8 +277,7 @@ class BotEventsCommands(commands.Cog):
                         io.BytesIO(
                             str(traceback.format_exc()).encode(),
                             filename="traceback.txt",
-                        )
-                    ),
+                        )),
                 )
 
 

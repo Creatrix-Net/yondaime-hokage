@@ -1,5 +1,6 @@
 import random
 from typing import Union
+import string
 
 import discord
 from discord.ext import commands
@@ -9,7 +10,7 @@ stages = [
     """
             _________\t
             |/      |\t
-            |      😵\t
+            |      \U0001f635\t
             |      \\|/\t
             |       |\t
             |      / \\\t
@@ -18,7 +19,7 @@ stages = [
     """
             _________\t
             |/      |\t
-            |      😦\t
+            |      \U0001f626\t
             |      \\|/\t
             |       |\t
             |      /\t
@@ -27,7 +28,7 @@ stages = [
     """
             _________\t
             |/      |\t
-            |      😦\t
+            |      \U0001f626\t
             |      \\|/\t
             |       |\t
             |
@@ -36,7 +37,7 @@ stages = [
     """
             --------\t
             |/     |\t
-            |     😦\t
+            |     \U0001f626\t
             |     \\|\t
             |      |\t
             |
@@ -45,7 +46,7 @@ stages = [
     """
             _________\t
             |/      |\t
-            |      😦\t
+            |      \U0001f626\t
             |       |\t
             |       |\t
             |
@@ -54,7 +55,7 @@ stages = [
     """
             _________\t
             |/      |\t
-            |      😦\t
+            |      \U0001f626\t
             |        
             |
             |
@@ -92,34 +93,7 @@ stages = [
 
 class Hangman:
     def __init__(self):
-        self._alpha = [
-            "a",
-            "b",
-            "c",
-            "d",
-            "e",
-            "f",
-            "g",
-            "h",
-            "i",
-            "j",
-            "k",
-            "l",
-            "m",
-            "n",
-            "o",
-            "p",
-            "q",
-            "r",
-            "s",
-            "t",
-            "u",
-            "v",
-            "w",
-            "x",
-            "y",
-            "z",
-        ]
+        self._alpha = list(string.ascii_lowercase)
         self.word = random.choice(list(english_words_set)).lower()
         self.letters = list(self.word)
         self.correct = [r"\_" for __ in self.word]
@@ -128,7 +102,7 @@ class Hangman:
         self._message = None
         self._counter = 8
         self.GameOver = False
-        self.lives = lambda: f"`{('❤️' * self._counter) or '-'}`"
+        self.lives = lambda: "`{}`".format(('\U00002764' * self._counter) or '-')
 
     async def MakeGuess(self, guess: str) -> None:
 

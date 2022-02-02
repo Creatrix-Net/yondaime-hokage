@@ -17,7 +17,7 @@ from gtts import gTTS
 from PIL import Image
 from pyppeteer import launch
 
-from lib import Embed, LinksAndVars, TimeConverter
+from lib import Embed, LinksAndVars, TimeConverter, MemberID
 
 
 class Random(commands.Cog):
@@ -32,13 +32,12 @@ class Random(commands.Cog):
     @commands.command(aliases=["takeitback"], usage="<member.mention>")
     async def insult(self,
                      ctx,
-                     user: Optional[Union[int, discord.Member]] = None):
+                     user: Optional[Union[MemberID, discord.Member]] = None):
         """
         Insult a user
         `user` the user you would like to insult
         """
         if user:
-            user = ctx.get_user(user)
             if user.id == self.bot.user.id:
                 user = ctx.message.author
                 bot_msg = [

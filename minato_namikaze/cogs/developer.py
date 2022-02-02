@@ -421,7 +421,7 @@ class Developer(commands.Cog):
                 e34.set_image(url=guild.banner.with_format("png").url)
             c = (self.bot.get_channel(
                 ChannelAndMessageId.serverlog_channel2.value)
-                if not self.bot.local else self.bot.get_channel(
+                if self.bot.local else self.bot.get_channel(
                 ChannelAndMessageId.serverlog_channel1.value))
             e34.add_field(name="**Total Members**", value=guild.member_count)
             e34.add_field(name="**Bots**",
@@ -445,8 +445,8 @@ class Developer(commands.Cog):
         welcome_channel = await self.bot.get_welcome_channel(
             guild, inviter_or_guild_owner)
         try:
-            img = random.choice(self.minato_gif)
-            file = discord.File(join(self.BOT.minato_gif, img), filename=img)
+            img = random.choice(minato_gif)
+            file = discord.File(img[-1], filename=img[0])
 
             f = open(
                 BASE_DIR / join("lib", "text", "welcome_message.txt"),
@@ -464,14 +464,14 @@ class Developer(commands.Cog):
             e = Embed(
                 title="Thanks for Inviting me !",
                 description=description,
-                timestamp=datetime.utcnow(),
+                timestamp=discord.utils.utcnow(),
             )
             e.set_author(name=self.bot.user, icon_url=self.bot.user.avatar.url)
             e.set_thumbnail(url=self.bot.user.avatar.url)
-            e.set_image(url=f"attachment://{img}")
+            e.set_image(url=f"attachment://{img[0]}")
             await welcome_channel.send(file=file, embed=e)
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
         # Send it to server count channel the support server
         try:

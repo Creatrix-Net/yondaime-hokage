@@ -1,10 +1,11 @@
 import enum
 import gzip
 import json
+import io
 import os
 from pathlib import Path
 from typing import List
-
+import zipfile
 import dotenv
 
 BASE_DIR = (Path(__file__).resolve().parent.parent.parent)  # In minato_namikaze/ folder
@@ -180,8 +181,14 @@ database_channel_name = "setup vars"
 antiraid_channel_name = "antiraid"
 mentionspam_channel_name = "mentionspam"
 
-
-import zipfile
-[]
+minato_gif = []
 with zipfile.ZipFile(BASE_DIR/os.path.join('lib','data', 'minato.zip')) as myzip:
-    print(myzip.namelist())
+    for i in myzip.namelist():
+        with myzip.open(i) as f:
+            minato_gif.append((i, io.BytesIO(f.read())))
+
+with zipfile.ZipFile(BASE_DIR/os.path.join('lib','data', 'among_us.zip')) as myzip:
+    with myzip.open('amoungus.png') as f:
+        among_us = io.BytesIO(f.read())
+    with myzip.open('amoungus_friends.png') as f:
+        among_us_friends = (i, io.BytesIO(f.read()))

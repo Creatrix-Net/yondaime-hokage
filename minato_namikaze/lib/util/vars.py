@@ -200,7 +200,7 @@ with zipfile.ZipFile(BASE_DIR /
 
 with zipfile.ZipFile(BASE_DIR /
                      os.path.join("lib", "data", "among_us.zip")) as myzip:
-    with myzip.open("amoungus.png") as f:
+    with myzip.open("amongus.png") as f:
         among_us = io.BytesIO(f.read())
     with myzip.open("amoungus_friends.png") as f:
         among_us_friends = (i, io.BytesIO(f.read()))

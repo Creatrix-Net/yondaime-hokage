@@ -5,14 +5,20 @@ from pathlib import Path
 
 import aiohttp
 import requests
+import gzip
 
 from ..classes.embed import Embed
 from .vars import *
 
-
 class PostStats:
     def __init__(self, bot):
         self.bot = bot
+    
+    @staticmethod
+    def imagelist(self):
+        with gzip.open(join(Path(__file__).resolve().parent.parent,"data","vocaloid_images.txt.gz",), "rt",encoding="utf-8") as f:
+            images_list: list = f.readlines()
+        return images_list
 
     async def delete_commands(self):
         try:
@@ -24,8 +30,8 @@ class PostStats:
                 },
             )
             if allcmd.status_code != 404:
-                for i in allcmd1:
-                    for j in allcmd1.get(i):
+                for i in allcmd:
+                    for j in allcmd.get(i):
                         requests.delete(
                             f'https://fateslist.xyz/api/v2/bots/{self.bot.user.id}/commands/{j.get("id")}',
                             headers={
@@ -142,10 +148,7 @@ class PostStats:
         guildsno = len(self.bot.guilds)
         members = len(set(self.bot.get_all_members()))
 
-        imageslistdir = Path(__file__).resolve(
-            strict=True).parent.parent / join("text", "images_list.txt")
-        filepointer = open(imageslistdir)
-        imageslist = filepointer.readlines()
+        imageslist = self.imagelist
         shards = 1
 
         a = await self.post(

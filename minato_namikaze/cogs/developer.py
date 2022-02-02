@@ -449,7 +449,7 @@ class Developer(commands.Cog):
             file = discord.File(img[-1], filename=img[0])
 
             f = open(
-                BASE_DIR / join("lib", "text", "welcome_message.txt"),
+                BASE_DIR / join("lib", "data", "welcome_message.txt"),
                 "r",
             )
 

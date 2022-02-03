@@ -190,6 +190,7 @@ database_category_name = "DATABASE"
 database_channel_name = "setup vars"
 antiraid_channel_name = "antiraid"
 mentionspam_channel_name = "mentionspam"
+reaction_roles_channel_name = "reaction roles"
 
 minato_gif = []
 with zipfile.ZipFile(BASE_DIR /

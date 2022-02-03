@@ -37,8 +37,7 @@ class Moderation(commands.Cog):
                                     id=922030031146995733)
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,
-                                     database_channel_name)
+        return await self.bot.db.new(database_category_name,database_channel_name)
 
     # set delay
     @commands.command(usage="<time in seconds>")

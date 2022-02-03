@@ -34,7 +34,7 @@ import-expression==1.1.4
 importlib-metadata==4.10.1
 jishaku @ git+https://github.com/Gorialis/jishaku.git@d8e676f55a48e1ffad14e13e733debd4ab93eccb
 mal-api==0.5.2
-multidict==6.0.0
+multidict==6.0.2
 mystbin.py==2.2.0
 num2words==0.5.10
 orjson==3.6.6

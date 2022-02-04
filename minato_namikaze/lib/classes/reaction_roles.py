@@ -19,13 +19,12 @@ class ReactionRolesButton(discord.ui.Button['ReactionPersistentView']):
                 return
         
         for i in data.get('reactions'):
-            digit = f"{ord(i):x}"
-            if self.emoji == discord.PartialEmoji(name=f"\\U{digit:>08}"):
+            if self.emoji == discord.PartialEmoji(name=i):
                 role_id = data.get('reactions')[i]
                 role_model = discord.utils.get(interaction.guild.roles, id=role_id)
-                await interaction.user.add_roles(role_model, reason="Reaction Roles", atomic=True)
                 try:
-                    await interaction.response.send_message('You cannot have more than 1 role from this message', ephemeral=True)
+                    await interaction.user.add_roles(role_model, reason="Reaction Roles", atomic=True)
+                    await interaction.response.send_message(f'Added {role_model.mention} role', ephemeral=True)
                 except discord.Forbidden:
                     await interaction.response.send_message('I don\'t have the `Manage Roles` permissions', ephemeral=True)
                 except discord.HTTPException:

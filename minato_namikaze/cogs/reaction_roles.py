@@ -1,44 +1,54 @@
-import discord
-from discord.ext import commands
 import asyncio
 import uuid
-from lib import reaction_roles_channel_name, database_category_name, Embed, ReactionPersistentView
+
+import discord
+from discord.ext import commands
+from lib import (
+    Embed,
+    ReactionPersistentView,
+    database_category_name,
+    reaction_roles_channel_name,
+)
 
 
-class ReactionRoles(commands.Cog, name='Reaction Roles'):
+class ReactionRoles(commands.Cog, name="Reaction Roles"):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Setup some reaction roles"
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
+        return discord.PartialEmoji(
+            name="discord_certified_moderator", id=922030031146995733
+        )
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,reaction_roles_channel_name)
-    
+        return await self.bot.db.new(
+            database_category_name, reaction_roles_channel_name
+        )
+
     @commands.command(name="new", aliases=["create"])
     async def new(self, ctx):
         """Create a new reaction"""
         if not await ctx.prompt(
-                "Welcome to the Reaction Light creation program. Please provide the required information once requested. If you would like to abort the creation then click cancel",
-                author_id=ctx.author.id,
+            "Welcome to the Reaction Light creation program. Please provide the required information once requested. If you would like to abort the creation then click cancel",
+            author_id=ctx.author.id,
         ):
             return
-        
+
         error_messages = []
         user_messages = []
-        rl_object={}
+        rl_object = {}
         sent_reactions_message = await ctx.send(
-        "Attach roles and emojis separated by one space (one combination"
-        " per message). When you are done type `done`. Example:\n:smile:"
-        " `@Role`"
+            "Attach roles and emojis separated by one space (one combination"
+            " per message). When you are done type `done`. Example:\n:smile:"
+            " `@Role`"
         )
         rl_object["reactions"] = {}
+
         def check(message):
-            return (
-                message.author.id == ctx.message.author.id and message.content != ""
-            )
+            return message.author.id == ctx.message.author.id and message.content != ""
+
         try:
             while True:
                 reactions_message = await self.bot.wait_for(
@@ -94,7 +104,7 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
             await sent_reactions_message.delete()
             for message in error_messages + user_messages:
                 await message.delete()
-        
+
         sent_limited_message = await ctx.send(
             "Would you like to limit users to select only have one of the roles at a given time? Please react with a \U0001f512 to limit users or with a \U0000267e to allow users to select multiple roles."
         )
@@ -124,7 +134,7 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
             return
         finally:
             await sent_limited_message.delete()
-        
+
         sent_channel_message = await ctx.send(
             "Mention the #channel where to send the auto-role message."
         )
@@ -134,16 +144,14 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
                     "message", timeout=120, check=check
                 )
                 if channel_message.channel_mentions:
-                        rl_object[
-                            "target_channel"
-                        ] = channel_message.channel_mentions[0].id
-                        break
+                    rl_object["target_channel"] = channel_message.channel_mentions[0].id
+                    break
                 else:
                     error_messages.append(
                         (
                             await message.channel.send(
-                                    "The channel you mentioned is invalid."
-                                )
+                                "The channel you mentioned is invalid."
+                            )
                         )
                     )
         except asyncio.TimeoutError:
@@ -155,7 +163,6 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
             await sent_channel_message.delete()
             for message in error_messages:
                 await message.delete()
-        
 
         error_messages = []
         selector_embed = Embed(
@@ -186,8 +193,7 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
                 # But it would be a breaking change that would be annoying for thoose who have saved their message commands
                 # for editing.
                 selector_msg_body = (
-                    msg_values[0] if msg_values[0].lower(
-                    ) != "none" else None
+                    msg_values[0] if msg_values[0].lower() != "none" else None
                 )
                 selector_embed = Embed()
                 selector_embed.set_footer(
@@ -209,11 +215,18 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
                 )
                 database = await self.database_class()
                 if selector_msg_body or selector_embed:
-                    target_channel = ctx.bot.get_channel(rl_object["target_channel"])
+                    target_channel = ctx.bot.get_channel(
+                        rl_object["target_channel"])
                     sent_final_message = None
                     try:
                         sent_final_message = await target_channel.send(
-                            content=selector_msg_body, embed=selector_embed,view=ReactionPersistentView(reactions_dict=rl_object['reactions'],message_id=str(uuid.uuid4()),database=database)
+                            content=selector_msg_body,
+                            embed=selector_embed,
+                            view=ReactionPersistentView(
+                                reactions_dict=rl_object["reactions"],
+                                message_id=str(uuid.uuid4()),
+                                database=database,
+                            ),
                         )
                         rl_object["message"] = dict(
                             message_id=sent_final_message.id,
@@ -240,7 +253,14 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
             for message in error_messages:
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
-        await sent_final_message.edit(view=ReactionPersistentView(reactions_dict=rl_object['reactions'],message_id=sent_final_message.id,database=database))
+        await sent_final_message.edit(
+            view=ReactionPersistentView(
+                reactions_dict=rl_object["reactions"],
+                message_id=sent_final_message.id,
+                database=database,
+            )
+        )
+
 
 def setup(bot):
     bot.add_cog(ReactionRoles(bot))

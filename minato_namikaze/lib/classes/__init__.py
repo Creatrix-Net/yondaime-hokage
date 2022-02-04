@@ -4,6 +4,6 @@ from .converter import *
 from .embed import *
 from .games import *
 from .paginator import *
+from .reaction_roles import *
 from .select_help import *
 from .time_class import *
-from .reaction_roles import *

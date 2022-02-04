@@ -1,9 +1,9 @@
 import ast
 import asyncio
+import json
 import logging
 import os
 import time
-import json
 from pathlib import Path
 
 import TenGiphPy
@@ -31,13 +31,13 @@ from lib import (
     LinksAndVars,
     PaginatedHelpCommand,
     PostStats,
+    ReactionPersistentView,
     Tokens,
-    reaction_roles_channel_name,
     api_image_store_dir,
+    database_category_name,
     format_dt,
     format_relative,
-    database_category_name,
-    ReactionPersistentView
+    reaction_roles_channel_name,
 )
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -74,9 +74,9 @@ def get_prefix(bot, message):
 
 class MinatoNamikazeBot(commands.AutoShardedBot):
     def __init__(self):
-        allowed_mentions = discord.AllowedMentions(roles=True,
-                                                   everyone=True,
-                                                   users=True)
+        allowed_mentions = discord.AllowedMentions(
+            roles=True, everyone=True, users=True
+        )
         intents = discord.Intents(
             guilds=True,
             members=True,
@@ -102,7 +102,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.identifies = defaultdict(list)
 
         self.spam_control = commands.CooldownMapping.from_cooldown(
-            10, 12.0, commands.BucketType.user)
+            10, 12.0, commands.BucketType.user
+        )
         self._auto_spam_count = Counter()
 
         self.db = DiscordDatabase(self, ChannelAndMessageId.server_id2.value)
@@ -171,19 +172,22 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.load_extension("jishaku")
 
         difference = int(round(time.time() - self.start_time.timestamp()))
-        stats = (self.get_channel(
-            ChannelAndMessageId.restartlog_channel1.value)
-            if not self.local else self.get_channel(
-            ChannelAndMessageId.restartlog_channel2.value))
+        stats = (
+            self.get_channel(ChannelAndMessageId.restartlog_channel1.value)
+            if not self.local
+            else self.get_channel(ChannelAndMessageId.restartlog_channel2.value)
+        )
         e = Embed(
             title="Bot Loaded!",
             description=f"Bot ready by **{format_dt(datetime.now(), 'R',True)}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
         )
         e.set_thumbnail(url=self.user.avatar.url)
 
-        guild = (self.get_guild(ChannelAndMessageId.server_id.value)
-                 if not self.local else self.get_channel(
-                     ChannelAndMessageId.restartlog_channel2.value))
+        guild = (
+            self.get_guild(ChannelAndMessageId.server_id.value)
+            if not self.local
+            else self.get_channel(ChannelAndMessageId.restartlog_channel2.value)
+        )
         try:
             self._cache[guild.id] = {}
             for invite in await guild.invites():
@@ -198,15 +202,17 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             pass
         await self.change_presence(
             status=discord.Status.idle,
-            activity=discord.Activity(type=discord.ActivityType.watching,
-                                      name="over Naruto"),
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name="over Naruto"
+            ),
         )
 
         if ast.literal_eval(token_get("POST_STATS")):
             await self.change_presence(
                 status=discord.Status.dnd,
-                activity=discord.Activity(type=discord.ActivityType.watching,
-                                          name="over Naruto"),
+                activity=discord.Activity(
+                    type=discord.ActivityType.watching, name="over Naruto"
+                ),
             )
             await PostStats(self).post_guild_stats_all()
             log.info("Status Posted")
@@ -215,24 +221,33 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
             await self.change_presence(
                 status=discord.Status.idle,
-                activity=discord.Activity(type=discord.ActivityType.watching,
-                                          name="over Naruto"),
+                activity=discord.Activity(
+                    type=discord.ActivityType.watching, name="over Naruto"
+                ),
             )
         if not self.persistent_views_added:
-            database = await self.db.new(database_category_name,reaction_roles_channel_name)
+            database = await self.db.new(
+                database_category_name, reaction_roles_channel_name
+            )
             async for message in database._Database__channel.history(limit=None):
                 cnt = message.content
                 try:
                     data = json.loads(str(cnt))
-                    data.pop('type')
-                    data_keys = list(map(lambda a: str(a),list(data.keys())))
+                    data.pop("type")
+                    data_keys = list(map(lambda a: str(a), list(data.keys())))
                     data = data[data_keys[0]]
-                    self.add_view(ReactionPersistentView(reactions_dict=data['reactions'], custom_id=str(data['custom_id']),database=database))
+                    self.add_view(
+                        ReactionPersistentView(
+                            reactions_dict=data["reactions"],
+                            custom_id=str(data["custom_id"]),
+                            database=database,
+                        )
+                    )
                     self.persistent_views_added = True
                 except Exception as e:
                     log.error(e)
                     continue
-            log.info('Persistent views added')
+            log.info("Persistent views added")
 
     async def query_member_named(self, guild, argument, *, cache=False):
         """Queries a member by their name, name + discrim, or nickname.
@@ -251,18 +266,13 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         """
         if len(argument) > 5 and argument[-5] == "#":
             username, _, discriminator = argument.rpartition("#")
-            members = await guild.query_members(username,
-                                                limit=100,
-                                                cache=cache)
-            return discord.utils.get(members,
-                                     name=username,
-                                     discriminator=discriminator)
+            members = await guild.query_members(username, limit=100, cache=cache)
+            return discord.utils.get(
+                members, name=username, discriminator=discriminator
+            )
         else:
-            members = await guild.query_members(argument,
-                                                limit=100,
-                                                cache=cache)
-            return discord.utils.find(lambda m: argument in (m.name, m.nick),
-                                      members)
+            members = await guild.query_members(argument, limit=100, cache=cache)
+            return discord.utils.find(lambda m: argument in (m.name, m.nick), members)
 
     async def get_or_fetch_member(self, guild, member_id):
         """Looks up a member in cache or fetches if not found.
@@ -291,7 +301,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             else:
                 return member
 
-        members = await guild.query_members(limit=1,user_ids=[member_id],cache=True)
+        members = await guild.query_members(limit=1, user_ids=[member_id], cache=True)
         if not members:
             return None
         return members[0]
@@ -332,25 +342,25 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 else:
                     yield member
             else:
-                members = await guild.query_members(limit=1,
-                                                    user_ids=needs_resolution,
-                                                    cache=True)
+                members = await guild.query_members(
+                    limit=1, user_ids=needs_resolution, cache=True
+                )
                 if members:
                     yield members[0]
         elif total_need_resolution <= 100:
             # Only a single resolution call needed here
-            resolved = await guild.query_members(limit=100,
-                                                 user_ids=needs_resolution,
-                                                 cache=True)
+            resolved = await guild.query_members(
+                limit=100, user_ids=needs_resolution, cache=True
+            )
             for member in resolved:
                 yield member
         else:
             # We need to chunk these in bits of 100...
             for index in range(0, total_need_resolution, 100):
-                to_resolve = needs_resolution[index:index + 100]
-                members = await guild.query_members(limit=100,
-                                                    user_ids=to_resolve,
-                                                    cache=True)
+                to_resolve = needs_resolution[index: index + 100]
+                members = await guild.query_members(
+                    limit=100, user_ids=to_resolve, cache=True
+                )
                 for member in members:
                     yield member
 
@@ -360,7 +370,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     async def close(self):
         import shutil
-
 
         if not os.path.isdir(api_image_store_dir):
             shutil.rmtree(api_image_store_dir)
@@ -418,8 +427,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(
-                tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"][
+                "downsized_large"
+            ]["url"]
         except:
             return
 
@@ -433,9 +443,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(
-                tag=str(tag_name.lower())
-            ))["data"]["images"]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
+                "images"
+            ]["downsized_large"]["url"]
         except:
             return
 
@@ -449,8 +459,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     def giphy(self, tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(
-                tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"][
+                "downsized_large"
+            ]["url"]
         except:
             return
 
@@ -464,9 +475,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def giphy(self, tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(
-                tag=str(tag_name.lower())
-            ))["data"]["images"]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
+                "images"
+            ]["downsized_large"]["url"]
         except:
             return
 

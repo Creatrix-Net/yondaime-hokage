@@ -213,7 +213,7 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
                     sent_final_message = None
                     try:
                         sent_final_message = await target_channel.send(
-                            content=selector_msg_body, embed=selector_embed,view=ReactionPersistentView(reactions_dict=rl_object['reactions'],message_id=str(uuid.uuid4()),database=database)
+                            content=selector_msg_body, embed=selector_embed,view=ReactionPersistentView(reactions_dict=rl_object['reactions'],custom_id=str(uuid.uuid4()),database=database)
                         )
                         rl_object["message"] = dict(
                             message_id=sent_final_message.id,
@@ -240,7 +240,7 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
             for message in error_messages:
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
-        await sent_final_message.edit(view=ReactionPersistentView(reactions_dict=rl_object['reactions'],message_id=sent_final_message.id,database=database))
+        await sent_final_message.edit(view=ReactionPersistentView(reactions_dict=rl_object['reactions'],custom_id=sent_final_message.id,database=database))
 
 def setup(bot):
     bot.add_cog(ReactionRoles(bot))

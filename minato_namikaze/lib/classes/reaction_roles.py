@@ -1,8 +1,8 @@
 import discord
 
 class ReactionRolesButton(discord.ui.Button['ReactionPersistentView']):
-    def __init__(self,database, message_id: int, emoji):
-        super().__init__(style=discord.ButtonStyle.secondary , emoji=emoji,custom_id=message_id)
+    def __init__(self,database, custom_id: int, emoji):
+        super().__init__(style=discord.ButtonStyle.secondary , emoji=emoji,custom_id=custom_id)
         self.database = database
 
     # This function is called whenever this particular button is pressed
@@ -33,7 +33,7 @@ class ReactionRolesButton(discord.ui.Button['ReactionPersistentView']):
 
 
 class ReactionPersistentView(discord.ui.View):
-    def __init__(self, reactions_dict: dict, database, message_id: int):
+    def __init__(self, reactions_dict: dict, database, custom_id: int):
         super().__init__(timeout=None)
         for i in reactions_dict:
-            self.add_item(ReactionRolesButton(database=database, custom_id=message_id, emoji=i))
+            self.add_item(ReactionRolesButton(database=database, custom_id=custom_id, emoji=i))

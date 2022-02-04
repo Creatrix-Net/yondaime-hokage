@@ -212,6 +212,7 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
                     target_channel = ctx.bot.get_channel(rl_object["target_channel"])
                     sent_final_message = None
                     try:
+                        custom_id = str(uuid.uuid4())
                         sent_final_message = await target_channel.send(
                             content=selector_msg_body, embed=selector_embed,view=ReactionPersistentView(reactions_dict=rl_object['reactions'],custom_id=str(uuid.uuid4()),database=database)
                         )
@@ -220,6 +221,7 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
                             channel_id=sent_final_message.channel.id,
                             guild_id=sent_final_message.guild.id,
                         )
+                        rl_object['custom_id'] = custom_id
                         break
                     except discord.Forbidden:
                         error_messages.append(
@@ -240,7 +242,6 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
             for message in error_messages:
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
-        await sent_final_message.edit(view=ReactionPersistentView(reactions_dict=rl_object['reactions'],custom_id=sent_final_message.id,database=database))
 
 def setup(bot):
     bot.add_cog(ReactionRoles(bot))

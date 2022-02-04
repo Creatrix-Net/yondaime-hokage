@@ -224,15 +224,15 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 cnt = message.content
                 try:
                     data = json.loads(str(cnt))
-                    data_keys = list(map(lambda a: str(a),list(data.keys())))
-                    data_keys.remove('type')
                     data.pop('type')
-                    self.add_view(ReactionPersistentView(reactions_dict=data, message_id=int(data_keys[0]),database=database))
+                    data_keys = list(map(lambda a: str(a),list(data.keys())))
+                    data = data[data_keys[0]]
+                    self.add_view(ReactionPersistentView(reactions_dict=data['reactions'], custom_id=str(data['custom_id']),database=database))
                     self.persistent_views_added = True
                 except Exception as e:
                     log.error(e)
                     continue
-        log.info('Persistent views added')
+            log.info('Persistent views added')
 
     async def query_member_named(self, guild, argument, *, cache=False):
         """Queries a member by their name, name + discrim, or nickname.

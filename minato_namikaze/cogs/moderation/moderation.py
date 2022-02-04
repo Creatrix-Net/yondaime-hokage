@@ -871,12 +871,6 @@ class Moderation(commands.Cog):
             await ctx.send_help(ctx.command)
             return
 
-        if not await ctx.prompt(
-                f"Are you sure that you want to **remove the messages**?",
-                author_id=ctx.author.id,
-        ):
-            return
-
     async def do_removal(self,
                          ctx,
                          limit,
@@ -884,6 +878,11 @@ class Moderation(commands.Cog):
                          *,
                          before=None,
                          after=None):
+        if not await ctx.prompt(
+                f"Are you sure that you want to **remove the messages**?",
+                author_id=ctx.author.id,
+        ):
+            return
         if limit > 2000:
             return await ctx.send(
                 f"Too many messages to search given ({limit}/2000)")
@@ -988,6 +987,11 @@ class Moderation(commands.Cog):
     @remove.command(name="reactions")
     async def _reactions(self, ctx, search=100):
         """Removes all reactions from messages that have them."""
+        if not await ctx.prompt(
+                f"Are you sure that you want to **remove the reactions**?",
+                author_id=ctx.author.id,
+        ):
+            return
 
         if search > 2000:
             return await ctx.send(
@@ -1033,6 +1037,12 @@ class Moderation(commands.Cog):
         `--or`: Use logical OR for all options.
         `--not`: Use logical NOT for all options.
         """
+        if not await ctx.prompt(
+                f"Are you sure that you want to **remove the messages**?",
+                author_id=ctx.author.id,
+        ):
+            return
+            
         parser = Arguments(add_help=False, allow_abbrev=False)
         parser.add_argument("--user", nargs="+")
         parser.add_argument("--contains", nargs="+")

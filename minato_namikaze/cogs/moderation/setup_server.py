@@ -35,8 +35,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         return await self.bot.db.new(database_category_name,
                                      mentionspam_channel_name)
 
-    async def add_and_check_data(self, dict_to_add: dict,
-                                 ctx: commands.Context) -> None:
+    async def add_and_check_data(self, dict_to_add: dict, ctx: commands.Context) -> None:
         database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:

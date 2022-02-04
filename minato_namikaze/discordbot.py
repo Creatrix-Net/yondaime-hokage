@@ -3,7 +3,7 @@ import asyncio
 import logging
 import os
 import time
-from os.path import join
+import json
 from pathlib import Path
 
 import TenGiphPy
@@ -32,9 +32,12 @@ from lib import (
     PaginatedHelpCommand,
     PostStats,
     Tokens,
+    reaction_roles_channel_name,
     api_image_store_dir,
     format_dt,
     format_relative,
+    database_category_name,
+    ReactionPersistentView
 )
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -105,6 +108,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.db = DiscordDatabase(self, ChannelAndMessageId.server_id2.value)
 
         self.uptime = format_relative(self.start_time)
+        self.persistent_views_added = False
 
         super().__init__(
             command_prefix=get_prefix,
@@ -214,6 +218,21 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 activity=discord.Activity(type=discord.ActivityType.watching,
                                           name="over Naruto"),
             )
+        if not self.persistent_views_added:
+            database = await self.db.new(database_category_name,reaction_roles_channel_name)
+            async for message in database._Database__channel.history(limit=None):
+                cnt = message.content
+                try:
+                    data = json.loads(str(cnt))
+                    data_keys = list(map(lambda a: str(a),list(data.keys())))
+                    data_keys.remove('type')
+                    data.pop('type')
+                    self.add_view(ReactionPersistentView(reactions_dict=data, message_id=int(data_keys[0]),database=database))
+                    self.persistent_views_added = True
+                except Exception as e:
+                    log.error(e)
+                    continue
+        log.info('Persistent views added')
 
     async def query_member_named(self, guild, argument, *, cache=False):
         """Queries a member by their name, name + discrim, or nickname.
@@ -272,9 +291,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             else:
                 return member
 
-        members = await guild.query_members(limit=1,
-                                            user_ids=[member_id],
-                                            cache=True)
+        members = await guild.query_members(limit=1,user_ids=[member_id],cache=True)
         if not members:
             return None
         return members[0]

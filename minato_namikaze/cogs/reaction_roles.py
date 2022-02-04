@@ -1,50 +1,11 @@
 import discord
 from discord.ext import commands
 import asyncio
-from lib import reaction_roles_channel_name, database_category_name, Embed
-
-class ReactionRolesButton(discord.ui.Button['ReactionPersistentView']):
-    def __init__(self,database, message_id: int, emoji: discord.PartialEmoji):
-        super().__init__(style=discord.ButtonStyle.secondary, emoji = emoji , custom_id=message_id)
-        self.database = database
-
-    # This function is called whenever this particular button is pressed
-    async def callback(self, interaction: discord.Interaction):
-        assert self.view is not None
-        data = await self.database.get(interaction.message.id)
-        if data is None:
-            return
-        unique = bool(data.get('limit_to_one'))
-        if unique:
-            roles_id_list = [data.get('reactions')[i] for i in data.get('reactions')]
-            if list(map(lambda i: i.id, interaction.user.roles)) in roles_id_list:
-                await interaction.response.send_message('You cannot have more than 1 role from this message', ephemeral=True)
-                return
-        
-        for i in data.get('reactions'):
-            digit = f"{ord(i):x}"
-            if self.emoji is discord.PartialEmoji(name=f"\\U{digit:>08}"):
-                role_id = data.get('reactions')[i]
-                role_model = discord.utils.get(interaction.guild.roles, id=role_id)
-                await interaction.user.add_roles(role_model, reason="Reaction Roles", atomic=True)
-                try:
-                    await interaction.response.send_message('You cannot have more than 1 role from this message', ephemeral=True)
-                except discord.Forbidden:
-                    await interaction.response.send_message('I don\'t have the `Manage Roles` permissions', ephemeral=True)
-                except discord.HTTPException:
-                    await interaction.response.send_message('Adding roles failed', ephemeral=True)
-                return
+import uuid
+from lib import reaction_roles_channel_name, database_category_name, Embed, ReactionPersistentView
 
 
-class ReactionPersistentView(discord.ui.View):
-    def __init__(self, reactions_dict: dict, database, message_id: int):
-        super().__init__(timeout=None)
-        for i in reactions_dict:
-            digit = f"{ord(i):x}"
-            self.add_item(ReactionRolesButton(database=database, message_id=message_id, emoji=discord.PartialEmoji(name=f"\\U{digit:>08}")))
-
-
-class ReactionRoles(commands.Cog):
+class ReactionRoles(commands.Cog, name='Reaction Roles'):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Setup some reaction roles"
@@ -56,7 +17,6 @@ class ReactionRoles(commands.Cog):
     async def database_class(self):
         return await self.bot.db.new(database_category_name,reaction_roles_channel_name)
     
-    # set delay
     @commands.command(name="new", aliases=["create"])
     async def new(self, ctx):
         """Create a new reaction"""
@@ -247,13 +207,13 @@ class ReactionRoles(commands.Cog):
                     if selector_embed.title or selector_embed.description
                     else None
                 )
-
+                database = await self.database_class()
                 if selector_msg_body or selector_embed:
                     target_channel = ctx.bot.get_channel(rl_object["target_channel"])
                     sent_final_message = None
                     try:
                         sent_final_message = await target_channel.send(
-                            content=selector_msg_body, embed=selector_embed
+                            content=selector_msg_body, embed=selector_embed,view=ReactionPersistentView(reactions_dict=rl_object['reactions'],message_id=str(uuid.uuid4()),database=database)
                         )
                         rl_object["message"] = dict(
                             message_id=sent_final_message.id,
@@ -279,10 +239,8 @@ class ReactionRoles(commands.Cog):
             await sent_message_message.delete()
             for message in error_messages:
                 await message.delete()
-        database = await self.database_class()
         await database.set(sent_final_message.id, rl_object)
         await sent_final_message.edit(view=ReactionPersistentView(reactions_dict=rl_object['reactions'],message_id=sent_final_message.id,database=database))
-        await ctx.send('```json\n{}\n```'.format(rl_object))
 
 def setup(bot):
     bot.add_cog(ReactionRoles(bot))

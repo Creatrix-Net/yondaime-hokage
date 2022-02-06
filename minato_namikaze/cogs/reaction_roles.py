@@ -17,6 +17,111 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
     async def database_class(self):
         return await self.bot.db.new(database_category_name,reaction_roles_channel_name)
     
+    async def system_notification(self, guild_id, text, embed=None):
+        # Send a message to the system channel (if set)
+        system_channel1 = await self.getguild(guild_id)
+        system_channel = system_channel1.system_channel
+        if guild_id:
+            server_channel = self.db.fetch_systemchannel(guild_id)
+
+            if isinstance(server_channel, Exception):
+                await self.system_notification(
+                    None,
+                    "Database error when fetching guild system"
+                    f" channels:\n```\n{server_channel}\n```\n\n{text}",
+                )
+                return
+
+            if server_channel:
+                server_channel = server_channel[0][0]
+
+            if server_channel:
+                try:
+                    target_channel = await self.getchannel(server_channel)
+                    if embed:
+                        await target_channel.send(text, embed=embed)
+                    else:
+                        await target_channel.send(text)
+
+                except discord.Forbidden:
+                    await self.system_notification(None, text)
+
+            else:
+                if embed:
+                    await self.system_notification(None, text, embed=embed)
+                else:
+                    await self.system_notification(None, text)
+
+        elif system_channel:
+            try:
+                target_channel = await self.getchannel(system_channel)
+                if embed:
+                    await target_channel.send(text, embed=embed)
+                else:
+                    await target_channel.send(text)
+
+            except discord.NotFound:
+                print("I cannot find the system channel.")
+
+            except discord.Forbidden:
+                print("I cannot send messages to the system channel.")
+
+        else:
+            print(text)
+
+    async def formatted_channel_list(self, channel):
+        all_messages = self.db.fetch_messages(channel.id)
+        if isinstance(all_messages, Exception):
+            await self.system_notification(
+                channel.guild.id,
+                f"Database error when fetching messages:\n```\n{all_messages}\n```",
+            )
+            return
+
+        formatted_list = []
+        counter = 1
+        for msg_id in all_messages:
+            try:
+                old_msg = await channel.fetch_message(int(msg_id))
+
+            except discord.NotFound:
+                # Skipping reaction-role messages that might have been deleted without updating CSVs
+                continue
+
+            except discord.Forbidden:
+                await self.system_notification(
+                    channel.guild.id,
+                    "I do not have permissions to edit a reaction-role message"
+                    f" that I previously created.\n\nID: {msg_id} in"
+                    f" {channel.mention}",
+                )
+                continue
+
+            entry = (
+                f"`{counter}`"
+                f" {old_msg.embeds[0].title if old_msg.embeds else old_msg.content}"
+            )
+            formatted_list.append(entry)
+            counter += 1
+
+        return formatted_list
+    
+    @commands.command(name="notify")
+    async def toggle_notify(self, ctx):
+        """Toggles sending messages to users when they get/lose a role (default off) for the current server (the command affects only the server it was used in)."""
+        if self.isadmin(ctx.message.author, ctx.guild.id):
+            notify = self.db.toggle_notify(ctx.guild.id)
+            if notify:
+                await ctx.send(
+                    "Notifications have been set to **ON** for this server.\n"
+                    "Use this command again to turn them off."
+                )
+            else:
+                await ctx.send(
+                    "Notifications have been set to **OFF** for this server.\n"
+                    "Use this command again to turn them on."
+                )
+    
     @commands.command(name="new", aliases=["create"])
     async def new(self, ctx):
         """

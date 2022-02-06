@@ -22,6 +22,14 @@ class ReactionRolesButton(discord.ui.Button['ReactionPersistentView']):
             if self.emoji == discord.PartialEmoji(name=i):
                 role_id = data.get('reactions')[i]
                 role_model = discord.utils.get(interaction.guild.roles, id=role_id)
+                if role_model in interaction.user.roles:
+                    try:
+                        await interaction.user.remove_roles(role_model, reason="Reaction Roles", atomic=True)
+                        return
+                    except discord.Forbidden:
+                        await interaction.response.send_message('I don\'t have the `Manage Roles` permissions', ephemeral=True)
+                    except discord.HTTPException:
+                        await interaction.response.send_message('Removing roles failed', ephemeral=True)
                 try:
                     await interaction.user.add_roles(role_model, reason="Reaction Roles", atomic=True)
                     await interaction.response.send_message(f'Added {role_model.mention} role', ephemeral=True)

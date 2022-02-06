@@ -155,6 +155,22 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             log.critical("An exception occured, %s", e)
 
     async def on_ready(self):
+        if not self.persistent_views_added:
+            database = await self.db.new(database_category_name,reaction_roles_channel_name)
+            async for message in database._Database__channel.history(limit=None):
+                cnt = message.content
+                try:
+                    data = json.loads(str(cnt))
+                    data.pop('type')
+                    data_keys = list(map(lambda a: str(a),list(data.keys())))
+                    data = data[data_keys[0]]
+                    self.add_view(ReactionPersistentView(reactions_dict=data['reactions'], custom_id=data['custom_id'],database=database),message_id=int(data_keys[0]))
+                    self.persistent_views_added = True
+                except Exception as e:
+                    log.error(e)
+                    continue
+            log.info('Persistent views added')
+            
         if not os.path.isdir(api_image_store_dir):
             os.mkdir(api_image_store_dir)
 
@@ -218,21 +234,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 activity=discord.Activity(type=discord.ActivityType.watching,
                                           name="over Naruto"),
             )
-        if not self.persistent_views_added:
-            database = await self.db.new(database_category_name,reaction_roles_channel_name)
-            async for message in database._Database__channel.history(limit=None):
-                cnt = message.content
-                try:
-                    data = json.loads(str(cnt))
-                    data.pop('type')
-                    data_keys = list(map(lambda a: str(a),list(data.keys())))
-                    data = data[data_keys[0]]
-                    self.add_view(ReactionPersistentView(reactions_dict=data['reactions'], custom_id=str(data['custom_id']),database=database))
-                    self.persistent_views_added = True
-                except Exception as e:
-                    log.error(e)
-                    continue
-            log.info('Persistent views added')
 
     async def query_member_named(self, guild, argument, *, cache=False):
         """Queries a member by their name, name + discrim, or nickname.
@@ -477,4 +478,5 @@ if __name__ == "__main__":
         uvloop.install()
     except:
         pass
-    MinatoNamikazeBot().run()
+    bot = MinatoNamikazeBot()
+    bot.run()

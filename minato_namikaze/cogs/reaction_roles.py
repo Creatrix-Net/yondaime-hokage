@@ -19,7 +19,11 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
     
     @commands.command(name="new", aliases=["create"])
     async def new(self, ctx):
-        """Create a new reaction"""
+        """
+        Create a new reaction role using some interactive setup.
+
+        ``Note: You can have upto 15 reaction buttons in a message, if it exceeds that it will automatically proceed to next step``
+        """
         if not await ctx.prompt(
                 "Welcome to the Reaction Light creation program. Please provide the required information once requested. If you would like to abort the creation then click cancel",
                 author_id=ctx.author.id,
@@ -40,12 +44,17 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
                 message.author.id == ctx.message.author.id and message.content != ""
             )
         try:
+            n=0
             while True:
                 reactions_message = await self.bot.wait_for(
                     "message", timeout=120, check=check
                 )
+                if n>15:
+                    break
                 user_messages.append(reactions_message)
-                if reactions_message.content.lower() != "done":
+                if n==15:
+                    break
+                if reactions_message.content.lower() != 'done':
                     reaction = (reactions_message.content.split())[0]
                     try:
                         role = reactions_message.role_mentions[0].id
@@ -73,6 +82,7 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
                         try:
                             await reactions_message.add_reaction(reaction)
                             rl_object["reactions"][reaction] = role
+                            n+=1
                         except discord.HTTPException:
                             error_messages.append(
                                 (
@@ -212,14 +222,9 @@ class ReactionRoles(commands.Cog, name='Reaction Roles'):
                     target_channel = ctx.bot.get_channel(rl_object["target_channel"])
                     sent_final_message = None
                     try:
-                        custom_id = str(uuid.uuid4())
+                        custom_id = [str(uuid.uuid4()) for i in rl_object["reactions"]]
                         sent_final_message = await target_channel.send(
-                            content=selector_msg_body, embed=selector_embed,view=ReactionPersistentView(reactions_dict=rl_object['reactions'],custom_id=str(uuid.uuid4()),database=database)
-                        )
-                        rl_object["message"] = dict(
-                            message_id=sent_final_message.id,
-                            channel_id=sent_final_message.channel.id,
-                            guild_id=sent_final_message.guild.id,
+                            content=selector_msg_body, embed=selector_embed,view=ReactionPersistentView(reactions_dict=rl_object['reactions'],custom_id=custom_id,database=database)
                         )
                         rl_object['custom_id'] = custom_id
                         break

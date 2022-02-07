@@ -215,7 +215,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                     log.error(e)
                     continue
             log.info("Persistent views added")
-        
+
         log.info("Started The Bot")
 
         try:

@@ -3,7 +3,7 @@ import random
 import time
 from random import choice
 from string import ascii_letters
-from typing import Union
+from typing import Union, Optional
 
 import async_cleverbot as ac
 import discord
@@ -23,37 +23,27 @@ class Games(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{FLYING DISC}")
 
-    @commands.command(aliases=["tc"], usage="<other player.mention>")
+    @commands.command(aliases=["tc"], usage="[other player.mention]")
     @commands.guild_only()
-    async def tictactoe(self, ctx, member: Union[MemberID, discord.Member]):
-        """Play Amazing Tictactoe Game"""
-        if member == ctx.author or member.bot:
-            await ctx.send(embed=ErrorEmbed(
-                description="*You cannot play this game yourself or with a bot*"
-            ))
-            return
-        await ctx.send(embed=Embed(
-            description=f"*Positions are marked with 1,2,3.. just like 3x3 cube*\n{ctx.author.mention} you are taking *cross*\n{member.mention} you are taking *circle*"
-        ))
-        game = tictactoe.Tictactoe(
-            cross=ctx.author,
-            circle=member,
-        )
-        await game.start(ctx, remove_reaction_after=True)
+    async def tictactoe(self, ctx, member: Optional[Union[MemberID, discord.Member]]):
+        """
+        Play Tictactoe with yourself or your friend!
+        """
+        await ctx.send('Tic Tac Toe: X goes first', view=TicTacToe())
 
     @commands.command(aliases=["connect_four", "c4", "cf"],
                       usage="<other player.mention>")
     @commands.guild_only()
     async def connectfour(self, ctx, member: Union[MemberID, discord.Member]):
-        """Play Amazing Connect Four Game"""
-        if member == ctx.author or member.bot:
+        """
+        Play Amazing Connect Four Game
+        https://en.wikipedia.org/wiki/Connect_Four#firstHeading
+        """
+        if member is ctx.author or member.bot:
             await ctx.send(embed=ErrorEmbed(
                 description="*You cannot play this game yourself or with a bot*"
             ))
             return
-        await ctx.send(embed=Embed(
-            description="**Here is the link to know about** *Connect Four*: [Click Here](<https://en.wikipedia.org/wiki/Connect_Four#firstHeading>)"
-        ))
         await ctx.send(f"{ctx.author.mention} you are taking *red*")
         await ctx.send(f"{member.mention} you are taking *blue*")
         game = connect_four.ConnectFour(
@@ -64,11 +54,10 @@ class Games(commands.Cog):
 
     @commands.command(aliases=["hg"])
     async def hangman(self, ctx):
-        """Play Hangman!"""
-        await ctx.send(embed=Embed(
-            description="**Here is the link to know about** *Hangman*: [Click Here](<https://en.wikipedia.org/wiki/Hangman_(game)#Example_game>)"
-        ))
-
+        """
+        Play Hangman!
+        https://en.wikipedia.org/wiki/Hangman_(game)#Example_game
+        """
         await ctx.send(
             "__After execution__ of **hangman** command *reply* to the embed *to guess the word/movie.*"
         )
@@ -77,17 +66,10 @@ class Games(commands.Cog):
 
     @commands.command(aliases=["aki"])
     async def akinator(self, ctx):
-        """Play Akinator"""
-        await ctx.send(embed=Embed(
-            description="**Here is the link to know about** *Akinator*: [Click Here](<https://en.wikipedia.org/wiki/Akinator#Gameplay>)"
-        ))
-        a = await ctx.send("**Now get ready for the game**")
-        await asyncio.sleep(1)
-        await a.edit(content="Starting in 5 seconds")
-        for i in range(4):
-            await a.edit(content=4 - i)
-            await asyncio.sleep(1)
-        await a.delete()
+        """
+        Play Akinator
+        https://en.wikipedia.org/wiki/Akinator#Gameplay
+        """
         game = aki.Akinator()
         await game.start(ctx)
 
@@ -119,7 +101,7 @@ class Games(commands.Cog):
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
     @commands.command(aliases=["cb"])
     async def chatbot(self, ctx):
-        """Talk with me! (Vote Locked)"""
+        """Talk with me!"""
         lis = "cancel"
         transmit = True
         await ctx.send(

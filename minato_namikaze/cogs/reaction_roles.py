@@ -241,7 +241,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
 
-    @commands.command(name="new", aliases=["create"])
+    @commands.command(aliases=["del_rr"])
     @has_permissions(manage_roles=True)
     async def delete_reaction_roles(
             self, ctx, reaction_roles_id: commands.MessageConverter):

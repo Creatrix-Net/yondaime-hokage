@@ -1,144 +1,117 @@
-from typing import Optional, Union
-
+from typing import List
 import discord
-from discord.ext import commands
 
-BLANK = "\U0001f533"
-CIRCLE = "\U0000274c"
-CROSS = "\U0000274c"
+# Defines a custom button that contains the logic of the game.
+# The ['TicTacToe'] bit is for type hinting purposes to tell your IDE or linter
+# what the type of `self.view` is. It is not required.
+class TicTacToeButton(discord.ui.Button['TicTacToe']):
+    def __init__(self, x: int, y: int):
+        # A label is required, but we don't need one so a zero-width space is used
+        # The row parameter tells the View which row to place the button under.
+        # A View can only contain up to 5 rows -- each row can only have 5 buttons.
+        # Since a Tic Tac Toe grid is 3x3 that means we have 3 rows and 3 columns.
+        super().__init__(style=discord.ButtonStyle.secondary, label='\u200b', row=y)
+        self.x = x
+        self.y = y
 
+    # This function is called whenever this particular button is pressed
+    # This is part of the "meat" of the game logic
+    async def callback(self, interaction: discord.Interaction):
+        assert self.view is not None
+        view: TicTacToe = self.view
+        state = view.board[self.y][self.x]
+        if state in (view.X, view.O):
+            return
 
-class Tictactoe:
-    def __init__(self, cross: discord.Member, circle: discord.Member) -> None:
-        self.cross = cross
-        self.circle = circle
-        self.board = [[BLANK for __ in range(3)] for __ in range(3)]
-        self.turn = self.cross
-        self.winner = None
-        self.message = None
-        self._controls = [
-            "\N{DIGIT ONE}\U000020e3",
-            "\N{DIGIT TWO}\U000020e3",
-            "\N{DIGIT THREE}\U000020e3",
-            "\N{DIGIT FOUR}\U000020e3",
-            "\N{DIGIT FIVE}\U000020e3",
-            "\N{DIGIT SIX}\U000020e3",
-            "\N{DIGIT SEVEN}\U000020e3",
-            "\N{DIGIT EIGHT}\U000020e3",
-            "\N{DIGIT NINE}\U000020e3",
-        ]
-        self._conversion = {
-            "\N{DIGIT ONE}\U000020e3": (0, 0),
-            "\N{DIGIT TWO}\U000020e3": (0, 1),
-            "\N{DIGIT THREE}\U000020e3": (0, 2),
-            "\N{DIGIT FOUR}\U000020e3": (1, 0),
-            "\N{DIGIT FIVE}\U000020e3": (1, 1),
-            "\N{DIGIT SIX}\U000020e3": (1, 2),
-            "\N{DIGIT SEVEN}\U000020e3": (2, 0),
-            "\N{DIGIT EIGHT}\U000020e3": (2, 1),
-            "\N{DIGIT NINE}\U000020e3": (2, 2),
-        }
-        self._EmojiToPlayer = {
-            CIRCLE: self.circle,
-            CROSS: self.cross,
-        }
-        self._PlayerToEmoji = {
-            self.cross: CROSS,
-            self.circle: CIRCLE,
-        }
-
-    def BoardString(self) -> str:
-        board = ""
-        for row in self.board:
-            board += "".join(row) + "\n"
-        return board
-
-    async def make_embed(self) -> discord.Embed:
-        embed = discord.Embed()
-        if not await self.GameOver():
-            embed.description = f"**Turn:** {self.turn.name}\n**Piece:** `{self._PlayerToEmoji[self.turn]}`"
+        if view.current_player == view.X:
+            self.style = discord.ButtonStyle.danger
+            self.label = 'X'
+            self.disabled = True
+            view.board[self.y][self.x] = view.X
+            view.current_player = view.O
+            content = "It is now O's turn"
         else:
-            status = f"{self.winner} won!" if self.winner else "Tie"
-            embed.description = f"**Game over**\n{status}"
-        return embed
+            self.style = discord.ButtonStyle.success
+            self.label = 'O'
+            self.disabled = True
+            view.board[self.y][self.x] = view.O
+            view.current_player = view.X
+            content = "It is now X's turn"
 
-    async def MakeMove(self, emoji: str, user: discord.Member) -> list:
+        winner = view.check_board_winner()
+        if winner is not None:
+            if winner == view.X:
+                content = 'X won!'
+            elif winner == view.O:
+                content = 'O won!'
+            else:
+                content = "It's a tie!"
 
-        if emoji not in self._controls:
-            raise KeyError("Provided emoji is not one of the valid controls")
-        x, y = self._conversion[emoji]
-        piece = self._PlayerToEmoji[user]
-        self.board[x][y] = piece
-        self.turn = self.circle if user == self.cross else self.cross
-        self._conversion.pop(emoji)
-        self._controls.remove(emoji)
-        return self.board
+            for child in view.children:
+                child.disabled = True
 
-    async def GameOver(self) -> bool:
+            view.stop()
 
-        if not self._controls:
-            return True
+        await interaction.response.edit_message(content=content, view=view)
 
-        for i in range(3):
 
-            if (self.board[i][0] == self.board[i][1] ==
-                    self.board[i][2]) and self.board[i][0] != BLANK:
-                self.winner = self._EmojiToPlayer[self.board[i][0]]
-                return True
-            if (self.board[0][i] == self.board[1][i] ==
-                    self.board[2][i]) and self.board[0][i] != BLANK:
-                self.winner = self._EmojiToPlayer[self.board[0][i]]
-                return True
+# This is our actual board View
+class TicTacToe(discord.ui.View):
+    # This tells the IDE or linter that all our children will be TicTacToeButtons
+    # This is not required
+    children: List[TicTacToeButton]
+    X = -1
+    O = 1
+    Tie = 2
 
-        if (self.board[0][0] == self.board[1][1] ==
-                self.board[2][2]) and self.board[0][0] != BLANK:
-            self.winner = self._EmojiToPlayer[self.board[0][0]]
-            return True
+    def __init__(self):
+        super().__init__()
+        self.current_player = self.X
+        self.board = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
 
-        if (self.board[0][2] == self.board[1][1] ==
-                self.board[2][0]) and self.board[0][2] != BLANK:
-            self.winner = self._EmojiToPlayer[self.board[0][2]]
-            return True
+        # Our board is made up of 3 by 3 TicTacToeButtons
+        # The TicTacToeButton maintains the callbacks and helps steer
+        # the actual game.
+        for x in range(3):
+            for y in range(3):
+                self.add_item(TicTacToeButton(x, y))
 
-        return False
+    # This method checks for the board winner -- it is used by the TicTacToeButton
+    def check_board_winner(self):
+        for across in self.board:
+            value = sum(across)
+            if value == 3:
+                return self.O
+            elif value == -3:
+                return self.X
 
-    async def start(
-        self,
-        ctx: commands.Context,
-        *,
-        remove_reaction_after: bool = False,
-        return_after_block: int = None,
-        **kwargs,
-    ):
-        embed = await self.make_embed()
-        self.message = await ctx.send(self.BoardString(),
-                                      embed=embed,
-                                      **kwargs)
+        # Check vertical
+        for line in range(3):
+            value = self.board[0][line] + self.board[1][line] + self.board[2][line]
+            if value == 3:
+                return self.O
+            elif value == -3:
+                return self.X
 
-        for button in self._controls:
-            await self.message.add_reaction(button)
+        # Check diagonals
+        diag = self.board[0][2] + self.board[1][1] + self.board[2][0]
+        if diag == 3:
+            return self.O
+        elif diag == -3:
+            return self.X
 
-        while True:
+        diag = self.board[0][0] + self.board[1][1] + self.board[2][2]
+        if diag == 3:
+            return self.O
+        elif diag == -3:
+            return self.X
 
-            def check(reaction, user):
-                return (str(reaction.emoji) in self._controls
-                        and user == self.turn
-                        and reaction.message == self.message)
+        # If we're here, we need to check if a tie was made
+        if all(i != 0 for row in self.board for i in row):
+            return self.Tie
 
-            reaction, user = await ctx.bot.wait_for("reaction_add",
-                                                    check=check)
-
-            if await self.GameOver():
-                break
-
-            emoji = str(reaction.emoji)
-            await self.MakeMove(emoji, user)
-            embed = await self.make_embed()
-
-            if remove_reaction_after:
-                await self.message.remove_reaction(emoji, user)
-
-            await self.message.edit(content=self.BoardString(), embed=embed)
-
-        embed = await self.make_embed()
-        return await self.message.edit(content=self.BoardString(), embed=embed)
+        return None

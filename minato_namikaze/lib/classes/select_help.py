@@ -151,7 +151,7 @@ class FrontPageSource(menus.PageSource):
 
         embed.add_field(
             name="Support Server",
-            value="For more help, consider joining the official server over at https://discord.gg/S8kzbBVN8b",
+            value=f"For more help, consider joining the official server over at https://discord.gg/{LinksAndVars.invite_code.value}",
             inline=False,
         )
 

@@ -43,7 +43,7 @@ Pillow==9.0.1
 platformdirs==2.4.1
 psutil==5.9.0
 pycparser==2.21
-pyee==9.0.3
+pyee==9.0.4
 pygit2==1.8.0
 PyNaCl==1.5.0
 pyppeteer==1.0.2

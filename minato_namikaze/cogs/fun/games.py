@@ -3,7 +3,7 @@ import random
 import time
 from random import choice
 from string import ascii_letters
-from typing import Union, Optional
+from typing import Optional, Union
 
 import async_cleverbot as ac
 import discord
@@ -25,11 +25,12 @@ class Games(commands.Cog):
 
     @commands.command(aliases=["tc"], usage="[other player.mention]")
     @commands.guild_only()
-    async def tictactoe(self, ctx, member: Optional[Union[MemberID, discord.Member]]):
+    async def tictactoe(self, ctx, member: Optional[Union[MemberID,
+                                                          discord.Member]]):
         """
         Play Tictactoe with yourself or your friend!
         """
-        await ctx.send('Tic Tac Toe: X goes first', view=TicTacToe())
+        await ctx.send("Tic Tac Toe: X goes first", view=TicTacToe())
 
     @commands.command(aliases=["connect_four", "c4", "cf"],
                       usage="<other player.mention>")

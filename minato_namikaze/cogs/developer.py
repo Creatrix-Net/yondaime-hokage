@@ -1,15 +1,16 @@
 import contextlib
 import inspect
 import io
+import json
 import os
 import subprocess as sp
 import textwrap
 import traceback
-import orjson, json
 from contextlib import redirect_stdout
 from pathlib import Path
 
 import discord
+import orjson
 from discord.ext import commands
 from lib import *
 
@@ -235,7 +236,8 @@ class Developer(commands.Cog):
         await msg.edit(embed=embed)
 
     @dev.command(name="pretend")
-    async def pretend(self, ctx: commands.Context, target: discord.User, *, command_string: str):
+    async def pretend(self, ctx: commands.Context, target: discord.User, *,
+                      command_string: str):
         """Execute my commands pretending as others | usage: <member.mention> <command.name> eg: )own as @Minato angel"""
         if ctx.guild:
             # Try to upgrade to a Member instance
@@ -261,39 +263,41 @@ class Developer(commands.Cog):
                 f'Command "{alt_ctx.invoked_with}" is not found')
 
         return await alt_ctx.command.invoke(alt_ctx)
-    
+
     @dev.command()
     async def get_commands_in_json(self, ctx):
-        '''
+        """
         Give you all commands details in a json format
-        '''
+        """
         json_to_be_given = {}
         for name in self.bot.cogs:
             cog_commands_list = []
             for command in self.bot.cogs[name].get_commands():
                 if not command.hidden:
                     command_dict = {
-                        'name':command.name,
-                        'short_doc': command.short_doc,
+                        "name": command.name,
+                        "short_doc": command.short_doc,
                     }
                     if command.usage:
-                        command_dict.update({'usage': command.usage})
+                        command_dict.update({"usage": command.usage})
                     if command.aliases:
-                        command_dict.update({'aliases': command.aliases})
+                        command_dict.update({"aliases": command.aliases})
                     if command.description:
-                        command_dict.update({'description': command.description})
+                        command_dict.update(
+                            {"description": command.description})
                     if command.clean_params or len(command.params) != 0:
-                        command_dict.update({'params': [i for i in command.clean_params]})
+                        command_dict.update(
+                            {"params": [i for i in command.clean_params]})
                     cog_commands_list.append(command_dict)
             json_to_be_given.update({name: cog_commands_list})
-        with open(BASE_DIR / os.path.join('lib','data','commands.json'),'w') as f:
-            json.dump(json_to_be_given,f)
+        with open(BASE_DIR / os.path.join("lib", "data", "commands.json"),
+                  "w") as f:
+            json.dump(json_to_be_given, f)
         try:
             await ctx.message.delete()
         except discord.Forbidden or discord.HTTPException:
             pass
-        await ctx.send(':ok_hand:')
-
+        await ctx.send(":ok_hand:")
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)

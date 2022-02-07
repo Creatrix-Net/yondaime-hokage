@@ -221,7 +221,8 @@ class Context(commands.Context):
             emoji = discord.utils.get(self.guild.emojis, id=emoji)
         return emoji
 
-    def get_guild(self, guild: Union[int, discord.Guild, discord.PartialInviteGuild]):
+    def get_guild(self, guild: Union[int, discord.Guild,
+                                     discord.PartialInviteGuild]):
         if isinstance(guild, int):
             guild = self.bot.get_guild(guild)
         return guild
@@ -244,7 +245,8 @@ class Context(commands.Context):
                                               name=channel)
             if not channel:
                 guild2 = self.get_guild(ChannelAndMessageId.server_id2.value)
-                channel_model = discord.utils.get(guild2.text_channels,name=channel)
+                channel_model = discord.utils.get(guild2.text_channels,
+                                                  name=channel)
             return channel_model
         else:
             return self.bot.get_channel(channel)

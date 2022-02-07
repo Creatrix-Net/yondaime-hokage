@@ -165,7 +165,7 @@ class Random(commands.Cog):
         em.set_image(url="attachment://color.png")
         await ctx.send(file=discord.File(file, "color.png"), embed=em)
 
-    @commands.command(aliases=["myst"], usage="<code>/<text>")
+    @commands.command(aliases=["myst"], usage="<code | text>")
     async def mystbin(self, ctx, *, text):
         """Generate an Mystbin for yourself"""
         paste = await self.bot.mystbin_client.post(f"{text}", syntax="python")

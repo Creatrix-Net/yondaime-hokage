@@ -25,6 +25,7 @@ class ReactionRolesButton(discord.ui.Button['ReactionPersistentView']):
                 if role_model in interaction.user.roles:
                     try:
                         await interaction.user.remove_roles(role_model, reason="Reaction Roles", atomic=True)
+                        await interaction.response.send_message(f'Removed {role_model.mention} role', ephemeral=True)
                         return
                     except discord.Forbidden:
                         await interaction.response.send_message('I don\'t have the `Manage Roles` permissions', ephemeral=True)

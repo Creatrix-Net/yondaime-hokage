@@ -289,10 +289,11 @@ class Developer(commands.Cog):
                         command_dict.update(
                             {"params": [i for i in command.clean_params]})
                     cog_commands_list.append(command_dict)
-            if len(cog_commands_list) != 0 :
+            if len(cog_commands_list) != 0:
                 json_to_be_given.update({name: cog_commands_list})
-        with open(BASE_DIR / os.path.join('lib','data','commands.json'),'w') as f:
-            json.dump(json_to_be_given,f)
+        with open(BASE_DIR / os.path.join("lib", "data", "commands.json"),
+                  "w") as f:
+            json.dump(json_to_be_given, f)
         try:
             await ctx.message.delete()
         except discord.Forbidden or discord.HTTPException:

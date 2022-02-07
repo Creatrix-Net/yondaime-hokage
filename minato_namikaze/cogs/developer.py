@@ -4,8 +4,8 @@ import io
 import os
 import subprocess as sp
 import textwrap
-import time
 import traceback
+import orjson, json
 from contextlib import redirect_stdout
 from pathlib import Path
 
@@ -66,63 +66,7 @@ class Developer(commands.Cog):
             await ctx.send_help(ctx.command)
             return
 
-    @dev.group(name="postcommand",
-               alisases=["postfates", "post_commands_to_fates_list"])
-    async def post_commands_to_fates_list(self, ctx):
-        """Post all the commands to FATES LIST"""
-        start_time = time.time()
-        await self.bot.change_presence(
-            status=discord.Status.dnd,
-            activity=discord.Activity(type=discord.ActivityType.watching,
-                                      name="over Naruto"),
-        )
-        post_start = await ctx.send("Posting :outbox_tray:")
-        await PostStats(self.bot).post_commands()
-        await post_start.edit(
-            content=f"Posted! :inbox_tray: {ctx.message.author.mention}",
-            embed=discord.Embed(
-                title="Commands Posted!",
-                description=f"**Time taken**: {round(time.time()-start_time)} sec",
-                timestamp=ctx.message.created_at,
-                color=discord.Color.random(),
-            ),
-        )
-        await self.bot.change_presence(
-            status=discord.Status.idle,
-            activity=discord.Activity(type=discord.ActivityType.watching,
-                                      name="over Naruto"),
-        )
-
-    @dev.group(name="deletecommand",
-               alisases=["postfates", "deletefateslistcommand"])
-    async def deletefateslistcommand(self, ctx):
-        """Deletes all the commands from FATES LIST"""
-        start_time = time.time()
-        await self.bot.change_presence(
-            status=discord.Status.dnd,
-            activity=discord.CustomActivity(
-                name="Internal Cleanup!",
-                emoji=":broom:",
-                type=discord.ActivityType.playing,
-            ),
-        )
-        post_start = await ctx.send("Deleting :broom:")
-        await PostStats(self.bot).delete_commands()
-        await post_start.edit(
-            content=f"Deleted! :wastebasket: {ctx.message.author.mention}",
-            embed=Embed(
-                title="Commands Deleted!",
-                description=f"**Time taken**: {start_time-time.time()} sec",
-                timestamp=ctx.message.created_at,
-            ),
-        )
-        await self.bot.change_presence(
-            status=discord.Status.idle,
-            activity=discord.Activity(type=discord.ActivityType.watching,
-                                      name="over Naruto"),
-        )
-
-    @dev.group(name="sharedservers", usage="<user>")
+    @dev.command(name="sharedservers", usage="<user>")
     async def sharedservers(self, ctx, *, user: discord.Member):
         """Get a list of servers the bot shares with the user."""
         guilds = [
@@ -132,7 +76,7 @@ class Developer(commands.Cog):
 
         await self._send_guilds(ctx, guilds, "Shared Servers")
 
-    @dev.group(usage="<server ID>")
+    @dev.command(usage="<server ID>")
     async def createinvite(self, ctx, *, argument: int):
         """Create an invite to the specified server"""
         try:
@@ -159,8 +103,7 @@ class Developer(commands.Cog):
             await ctx.send(embed=ErrorEmbed(
                 description="Sorry! This is not possible for this server!"))
 
-    @dev.group(invoke_without_command=True, name="eval")
-    @commands.check(owners)
+    @dev.command(invoke_without_command=True, name="eval")
     async def _eval(self, ctx, *, body):
         """Evaluates python code"""
         env = {
@@ -251,8 +194,7 @@ class Developer(commands.Cog):
         else:
             await ctx.message.add_reaction("\u2705")
 
-    @dev.group(invoke_without_command=True)
-    @commands.check(owners)
+    @dev.command(invoke_without_command=True)
     async def sync(self, ctx):
         """Sync with GitHub and reload all the cogs"""
         embed = Embed(title="Syncing...",
@@ -292,10 +234,8 @@ class Developer(commands.Cog):
 
         await msg.edit(embed=embed)
 
-    @dev.group(name="pretend")
-    @commands.check(owners)
-    async def pretend(self, ctx: commands.Context, target: discord.User, *,
-                      command_string: str):
+    @dev.command(name="pretend")
+    async def pretend(self, ctx: commands.Context, target: discord.User, *, command_string: str):
         """Execute my commands pretending as others | usage: <member.mention> <command.name> eg: )own as @Minato angel"""
         if ctx.guild:
             # Try to upgrade to a Member instance
@@ -321,6 +261,39 @@ class Developer(commands.Cog):
                 f'Command "{alt_ctx.invoked_with}" is not found')
 
         return await alt_ctx.command.invoke(alt_ctx)
+    
+    @dev.command()
+    async def get_commands_in_json(self, ctx):
+        '''
+        Give you all commands details in a json format
+        '''
+        json_to_be_given = {}
+        for name in self.bot.cogs:
+            cog_commands_list = []
+            for command in self.bot.cogs[name].get_commands():
+                if not command.hidden:
+                    command_dict = {
+                        'name':command.name,
+                        'short_doc': command.short_doc,
+                    }
+                    if command.usage:
+                        command_dict.update({'usage': command.usage})
+                    if command.aliases:
+                        command_dict.update({'aliases': command.aliases})
+                    if command.description:
+                        command_dict.update({'description': command.description})
+                    if command.clean_params or len(command.params) != 0:
+                        command_dict.update({'params': [i for i in command.clean_params]})
+                    cog_commands_list.append(command_dict)
+            json_to_be_given.update({name: cog_commands_list})
+        with open(BASE_DIR / os.path.join('lib','data','commands.json'),'w') as f:
+            json.dump(json_to_be_given,f)
+        try:
+            await ctx.message.delete()
+        except discord.Forbidden or discord.HTTPException:
+            pass
+        await ctx.send(':ok_hand:')
+
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
@@ -330,8 +303,7 @@ class Developer(commands.Cog):
             await ctx.send_help(ctx.command)
             return
 
-    @changestat.group(invoke_without_command=True)
-    @commands.check(owners)
+    @changestat.command(invoke_without_command=True)
     async def stream(self, ctx, *, activity="placeholder (owner to lazy lol)"):
         """Streaming Activity"""
         await self.bot.change_presence(activity=discord.Streaming(
@@ -343,8 +315,7 @@ class Developer(commands.Cog):
             f"```diff\n- Changed activity to {activity} using Stream status.```"
         )
 
-    @changestat.group(invoke_without_command=True)
-    @commands.check(owners)
+    @changestat.command(invoke_without_command=True)
     async def game(self, ctx, *, activity="placeholder (owner to lazy lol)"):
         """Game Activity"""
         await self.bot.change_presence(status=discord.Status.idle,
@@ -352,8 +323,7 @@ class Developer(commands.Cog):
         await ctx.send(
             f"```md\n# Changed activity to {activity} using Game status.```")
 
-    @changestat.group(invoke_without_command=True)
-    @commands.check(owners)
+    @changestat.command(invoke_without_command=True)
     async def watching(self,
                        ctx,
                        *,
@@ -368,8 +338,7 @@ class Developer(commands.Cog):
             f"```arm\nChanged activity to {activity} using Watching status.```"
         )
 
-    @changestat.group(invoke_without_command=True)
-    @commands.check(owners)
+    @changestat.command(invoke_without_command=True)
     async def listening(self,
                         ctx,
                         *,

@@ -1,9 +1,9 @@
 import ast
 import asyncio
+import json
 import logging
 import os
 import time
-import json
 from pathlib import Path
 
 import TenGiphPy
@@ -31,13 +31,13 @@ from lib import (
     LinksAndVars,
     PaginatedHelpCommand,
     PostStats,
+    ReactionPersistentView,
     Tokens,
-    reaction_roles_channel_name,
     api_image_store_dir,
+    database_category_name,
     format_dt,
     format_relative,
-    database_category_name,
-    ReactionPersistentView
+    reaction_roles_channel_name,
 )
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -156,21 +156,30 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     async def on_ready(self):
         if not self.persistent_views_added:
-            database = await self.db.new(database_category_name,reaction_roles_channel_name)
-            async for message in database._Database__channel.history(limit=None):
+            database = await self.db.new(database_category_name,
+                                         reaction_roles_channel_name)
+            async for message in database._Database__channel.history(
+                    limit=None):
                 cnt = message.content
                 try:
                     data = json.loads(str(cnt))
-                    data.pop('type')
-                    data_keys = list(map(lambda a: str(a),list(data.keys())))
+                    data.pop("type")
+                    data_keys = list(map(lambda a: str(a), list(data.keys())))
                     data = data[data_keys[0]]
-                    self.add_view(ReactionPersistentView(reactions_dict=data['reactions'], custom_id=data['custom_id'],database=database),message_id=int(data_keys[0]))
+                    self.add_view(
+                        ReactionPersistentView(
+                            reactions_dict=data["reactions"],
+                            custom_id=data["custom_id"],
+                            database=database,
+                        ),
+                        message_id=int(data_keys[0]),
+                    )
                     self.persistent_views_added = True
                 except Exception as e:
                     log.error(e)
                     continue
-            log.info('Persistent views added')
-            
+            log.info("Persistent views added")
+
         if not os.path.isdir(api_image_store_dir):
             os.mkdir(api_image_store_dir)
 
@@ -292,7 +301,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             else:
                 return member
 
-        members = await guild.query_members(limit=1,user_ids=[member_id],cache=True)
+        members = await guild.query_members(limit=1,
+                                            user_ids=[member_id],
+                                            cache=True)
         if not members:
             return None
         return members[0]
@@ -361,7 +372,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     async def close(self):
         import shutil
-
 
         if not os.path.isdir(api_image_store_dir):
             shutil.rmtree(api_image_store_dir)

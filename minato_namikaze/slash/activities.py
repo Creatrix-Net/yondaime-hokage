@@ -15,7 +15,7 @@ activities = [
     'checkers'
 ]
 
-class Activities(discord.SlashCommand):
+class Activities(discord.SlashCommand, guild_ids=[920536143244709889, 922006581334405180, 920190307595874304]):
     """Get access to discord beta activities feature"""
 
     activities: typing.Optional[typing.Literal['youtube', 'poker', 'chess', 'betrayal', 'fishing', 'letter-league', 'word-snack', 'sketch-heads', 'spellcast','awkword', 'checkers']] = discord.application_command_option(
@@ -45,10 +45,9 @@ class Activities(discord.SlashCommand):
         await response.send_message('Hello', ephemeral=True)
 
 class ActivitiesCog(discord.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self):
         self.add_application_command(Activities(self))
 
 
 def setup(bot):
-    bot.add_cog(ActivitiesCog(bot))
+    bot.add_cog(ActivitiesCog())

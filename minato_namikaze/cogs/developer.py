@@ -4,15 +4,18 @@ import io
 import json
 import os
 import subprocess as sp
+import logging
 import textwrap
 import traceback
 from contextlib import redirect_stdout
 from pathlib import Path
 
 import discord
-import orjson
 from discord.ext import commands
+from json.decoder import JSONDecodeError
 from lib import *
+
+log = logging.getLogger(__name__)
 
 
 class Developer(commands.Cog):
@@ -66,9 +69,91 @@ class Developer(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
             return
+    
+    @dev.command()
+    async def cleanup_data(self, ctx):
+        '''Cleans the uncessary data from the database'''
+        #Reaction Roles
+        database = await self.bot.db.new(database_category_name,reaction_roles_channel_name)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(lambda a: str(a), list(data.keys())))
+                try:
+                    await commands.MessageConverter().convert(ctx,int(data_keys[0]))
+                except commands.CommandError:
+                    await database.delete(data_keys[0])
+            except JSONDecodeError:
+                await message.delete()
+                continue
+        await ctx.send('Reaction Roles :ok_hand:', delete_after=4)
+        
+        #Setup Vars
+        database = await self.bot.db.new(database_category_name,database_channel_name)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(lambda a: str(a), list(data.keys())))
+                try:
+                    await commands.GuildConverter().convert(ctx,int(data_keys[0]))
+                except commands.CommandError:
+                    await database.delete(data_keys[0])
+            except JSONDecodeError:
+                await message.delete()
+                continue
+        await ctx.send('Setup Vars :ok_hand:', delete_after=4)
+
+        #Antiraid
+        database = await self.bot.db.new(database_category_name,antiraid_channel_name)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(lambda a: str(a), list(data.keys())))
+                try:
+                    await commands.GuildConverter().convert(ctx,int(data_keys[0]))
+                except commands.CommandError:
+                    await database.delete(data_keys[0])
+            except JSONDecodeError:
+                await message.delete()
+                continue
+        await ctx.send('AntiRaid :ok_hand:', delete_after=4)
+
+        #Mention Spam
+        database = await self.bot.db.new(database_category_name,mentionspam_channel_name)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(lambda a: str(a), list(data.keys())))
+                try:
+                    await commands.GuildConverter().convert(ctx,int(data_keys[0]))
+                except commands.CommandError:
+                    await database.delete(data_keys[0])
+            except JSONDecodeError:
+                await message.delete()
+                continue
+        await ctx.send('MentionSpam :ok_hand:', delete_after=4)
+
+        #Backup
+        async for message in self.bot.get_channel(ChannelAndMessageId.backup_channel.value).history(limit=None):
+            cnt = message.content
+            try:
+                if int(cnt) not in list(map(lambda a: a.id, self.bot.guilds)):
+                    await message.delete()
+            except JSONDecodeError:
+                await message.delete()
+        await ctx.send('Backups :ok_hand:', delete_after=4)
+        await ctx.message.delete()
 
     @dev.command(name="sharedservers", usage="<user>")
-    async def sharedservers(self, ctx, *, user: discord.Member):
+    async def sharedservers(self, ctx, *, user: Union[discord.Member, MemberID]):
         """Get a list of servers the bot shares with the user."""
         guilds = [
             f"{guild.name} `{guild.id}` ({guild.member_count} members)"
@@ -78,14 +163,9 @@ class Developer(commands.Cog):
         await self._send_guilds(ctx, guilds, "Shared Servers")
 
     @dev.command(usage="<server ID>")
-    async def createinvite(self, ctx, *, argument: int):
+    async def createinvite(self, ctx, *, guild: commands.GuildConverter):
         """Create an invite to the specified server"""
         try:
-            try:
-                guild = self.bot.get_guild(int(argument))
-            except:
-                await ctx.send(embed=ErrorEmbed(description="Guild not found"))
-                return
             try:
                 invite = (await guild.invites())[0]
             except:
@@ -100,9 +180,9 @@ class Developer(commands.Cog):
 
             await ctx.send(embed=Embed(
                 description=f"Here is the invite link: {invite.url}"))
-        except:
-            await ctx.send(embed=ErrorEmbed(
-                description="Sorry! This is not possible for this server!"))
+        except Exception as e:
+            log.error(e)
+            await ctx.send(embed=ErrorEmbed(description="Sorry! This is not possible for this server!"))
 
     @dev.command(invoke_without_command=True, name="eval")
     async def _eval(self, ctx, *, body):
@@ -236,8 +316,7 @@ class Developer(commands.Cog):
         await msg.edit(embed=embed)
 
     @dev.command(name="pretend")
-    async def pretend(self, ctx: commands.Context, target: discord.User, *,
-                      command_string: str):
+    async def pretend(self, ctx: commands.Context, target: Union[discord.User, MemberID], *, command_string: str):
         """Execute my commands pretending as others | usage: <member.mention> <command.name> eg: )own as @Minato angel"""
         if ctx.guild:
             # Try to upgrade to a Member instance

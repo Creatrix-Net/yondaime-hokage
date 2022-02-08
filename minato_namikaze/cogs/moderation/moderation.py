@@ -137,15 +137,13 @@ class Moderation(commands.Cog):
     # banlist
     @commands.command(
         name="banlist",
-        description="Shows list of users who have been banned! Or position of a specified user who was banned!",
         usage="[member.id ,member.mention or member.name.with.tag]",
     )
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def banlist(self, ctx, *,
-                      member: Optional[Union[commands.MemberConverter,
-                                             MemberID]]):
+    async def banlist(self, ctx, *,member: Optional[Union[commands.MemberConverter,MemberID]]):
+        '''Shows list of users who have been banned! Or position of a specified user who was banned!'''
         banned_users = list(await ctx.guild.bans())
         if member is not None:
             if len(banned_users) == 0:

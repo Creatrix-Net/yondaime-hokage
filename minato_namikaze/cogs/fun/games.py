@@ -9,7 +9,7 @@ import async_cleverbot as ac
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
-from lib import Embed, ErrorEmbed, MemberID, Tokens, check_if_user_joined_a_channel
+from lib import ErrorEmbed, MemberID, Tokens
 from lib.classes.games import *
 
 
@@ -74,33 +74,6 @@ class Games(commands.Cog):
         game = aki.Akinator()
         await game.start(ctx)
 
-    @commands.command()
-    async def youtube(self, ctx):
-        '''
-        Starts `Watch Together` activity
-        '''
-        if not check_if_user_joined_a_channel:
-            e = ErrorEmbed(
-            title="No voice channel joined!",
-            description="You need to join the voice channel in order to use this command :)",
-        )
-            await ctx.send(embed=e)
-            return
-        link = await self.bot.togetherControl.create_link(ctx.author.voice.channel.id, "youtube")
-        await ctx.send(f"Click the blue link!\n{link}")
-
-    @commands.command()
-    async def poker(self, ctx):
-        if check_if_user_joined_a_channel:
-            link = await self.togetherControl.create_link(
-                ctx.author.voice.channel.id, "poker")
-            await ctx.send(f"Click the blue link!\n{link}")
-        e = ErrorEmbed(
-            title="No voice channel joined!",
-            description="You need to join the voice channel in order to use this command :)",
-        )
-        await ctx.send(embed=e)
-
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
     @commands.command(aliases=["cb"])
     async def chatbot(self, ctx):
@@ -140,7 +113,7 @@ class Games(commands.Cog):
         """
         Yum Yum or Yuck Yuck?
         """
-        cookies = ["🍪", "❤"]
+        cookies = ["\U0001f36a", "\U00002764"]
         lis = ["this mighty", "this weak", "this amazing"]
         reaction = random.choices(cookies, weights=[0.9, 0.1], k=1)[0]
         embed = discord.Embed(
@@ -154,7 +127,7 @@ class Games(commands.Cog):
         await asyncio.sleep(random.randint(1, 3))
         await message.edit(embed=discord.Embed(
             description=f"React to the {reaction}!"))
-        await message.add_reaction(reaction)
+        await message.add_reaction(discord.PartialEmoji(name=reaction))
         start = time.perf_counter()
         try:
             _, user = await ctx.bot.wait_for(

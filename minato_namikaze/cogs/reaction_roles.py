@@ -1,5 +1,4 @@
 import asyncio
-import logging
 import uuid
 
 import discord
@@ -8,20 +7,9 @@ from lib import (
     Embed,
     ReactionPersistentView,
     database_category_name,
-    database_channel_name,
     has_permissions,
     reaction_roles_channel_name,
 )
-
-log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(message)s")
-ch.setFormatter(formatter)
-log.addHandler(ch)
-
 
 class ReactionRoles(commands.Cog, name="Reaction Roles"):
     def __init__(self, bot):
@@ -30,12 +18,13 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",
-                                    id=922030031146995733)
+        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
+    
+    def owners(ctx):
+        return ctx.author.id == ctx.bot.owner_id
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,
-                                     reaction_roles_channel_name)
+        return await self.bot.db.new(database_category_name,reaction_roles_channel_name)
 
     @commands.command(name="new", aliases=["create"])
     @has_permissions(manage_roles=True)

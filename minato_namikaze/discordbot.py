@@ -206,8 +206,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             pass
 
         if not self.persistent_views_added:
-            database = await self.db.new(database_category_name,
-                                         reaction_roles_channel_name)
+            database = await self.db.new(database_category_name, reaction_roles_channel_name)
             async for message in database._Database__channel.history(
                     limit=None):
                 cnt = message.content

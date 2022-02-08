@@ -37,7 +37,8 @@ class Moderation(commands.Cog):
                                     id=922030031146995733)
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,database_channel_name)
+        return await self.bot.db.new(database_category_name,
+                                     database_channel_name)
 
     # set delay
     @commands.command(usage="<time in seconds>")
@@ -142,8 +143,10 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def banlist(self, ctx, *,member: Optional[Union[commands.MemberConverter,MemberID]]):
-        '''Shows list of users who have been banned! Or position of a specified user who was banned!'''
+    async def banlist(self, ctx, *,
+                      member: Optional[Union[commands.MemberConverter,
+                                             MemberID]]):
+        """Shows list of users who have been banned! Or position of a specified user who was banned!"""
         banned_users = list(await ctx.guild.bans())
         if member is not None:
             if len(banned_users) == 0:
@@ -1040,7 +1043,7 @@ class Moderation(commands.Cog):
                 author_id=ctx.author.id,
         ):
             return
-            
+
         parser = Arguments(add_help=False, allow_abbrev=False)
         parser.add_argument("--user", nargs="+")
         parser.add_argument("--contains", nargs="+")

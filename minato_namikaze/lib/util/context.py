@@ -14,6 +14,7 @@ from .vars import ChannelAndMessageId, Tokens
 
 
 class ConfirmationView(discord.ui.View):
+
     def __init__(self, *, timeout: float, author_id: int, ctx: Context,
                  delete_after: bool) -> None:
         super().__init__(timeout=timeout)
@@ -56,6 +57,7 @@ class ConfirmationView(discord.ui.View):
 
 
 class Context(commands.Context):
+
     async def entry_to_code(self, entries):
         width = max(len(a) for a, b in entries)
         output = ["```"]

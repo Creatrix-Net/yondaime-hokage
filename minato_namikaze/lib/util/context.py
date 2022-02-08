@@ -14,7 +14,8 @@ from .vars import ChannelAndMessageId, Tokens
 
 
 class ConfirmationView(discord.ui.View):
-    def __init__(self, *, timeout: float, author_id: int, ctx: Context, delete_after: bool) -> None:
+    def __init__(self, *, timeout: float, author_id: int, ctx: Context,
+                 delete_after: bool) -> None:
         super().__init__(timeout=timeout)
         self.value: Optional[bool] = None
         self.delete_after: bool = delete_after
@@ -22,32 +23,37 @@ class ConfirmationView(discord.ui.View):
         self.ctx: Context = ctx
         self.message: Optional[discord.Message] = None
 
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+    async def interaction_check(self,
+                                interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.author_id:
             return True
         else:
-            await interaction.response.send_message('This confirmation dialog is not for you.', ephemeral=True)
+            await interaction.response.send_message(
+                "This confirmation dialog is not for you.", ephemeral=True)
             return False
 
     async def on_timeout(self) -> None:
         if self.delete_after and self.message:
             await self.message.delete()
 
-    @discord.ui.button(label='Confirm', style=discord.ButtonStyle.green)
-    async def confirm(self, button: discord.ui.Button, interaction: discord.Interaction):
+    @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green)
+    async def confirm(self, button: discord.ui.Button,
+                      interaction: discord.Interaction):
         self.value = True
         await interaction.response.defer()
         if self.delete_after:
             await interaction.delete_original_message()
         self.stop()
 
-    @discord.ui.button(label='Cancel', style=discord.ButtonStyle.red)
-    async def cancel(self, button: discord.ui.Button, interaction: discord.Interaction):
+    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red)
+    async def cancel(self, button: discord.ui.Button,
+                     interaction: discord.Interaction):
         self.value = False
         await interaction.response.defer()
         if self.delete_after:
             await interaction.delete_original_message()
         self.stop()
+
 
 class Context(commands.Context):
     async def entry_to_code(self, entries):

@@ -18,8 +18,7 @@ activities = [
 
 
 class Activities(
-        discord.SlashCommand,
-):
+        discord.SlashCommand, ):
     """Get access to discord beta activities feature"""
 
     activities: typing.Optional[typing.Literal[

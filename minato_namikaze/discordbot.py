@@ -5,6 +5,7 @@ import logging
 import os
 import time
 from pathlib import Path
+from discord_together import DiscordTogether
 
 import TenGiphPy
 
@@ -157,6 +158,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def on_ready(self):
         if not os.path.isdir(api_image_store_dir):
             os.mkdir(api_image_store_dir)
+        
+        self.togetherControl = await DiscordTogether(Tokens.token.value)
 
         cog_dir = BASE_DIR / "cogs"
         for filename in list(set(os.listdir(cog_dir))):
@@ -169,6 +172,17 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 if filename.endswith(".py"):
                     self.load_extension(f"cogs.{filename[:-3]}")
         self.load_extension("jishaku")
+
+        slash_dir = BASE_DIR / "slash"
+        for filename in list(set(os.listdir(slash_dir))):
+            if os.path.isdir(slash_dir / filename):
+                for i in os.listdir(slash_dir / filename):
+                    if i.endswith(".py"):
+                        self.load_extension(f'slash.{filename.strip(" ")}.{i[:-3]}')
+            else:
+                if filename.endswith(".py"):
+                    self.load_extension(f"slash.{filename[:-3]}")
+        log.info('Loaded slash commands')
 
         difference = int(round(time.time() - self.start_time.timestamp()))
         stats = (self.get_channel(

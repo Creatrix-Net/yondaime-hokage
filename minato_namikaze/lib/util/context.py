@@ -126,7 +126,6 @@ class Context(commands.Context):
         *,
         timeout: float = 60.0,
         delete_after: bool = True,
-        reacquire: bool = True,
         author_id: Optional[int] = None,
     ) -> Optional[bool]:
         """An interactive reaction confirmation dialog.
@@ -153,7 +152,6 @@ class Context(commands.Context):
         view = ConfirmationView(
             timeout=timeout,
             delete_after=delete_after,
-            reacquire=reacquire,
             ctx=self,
             author_id=author_id,
         )

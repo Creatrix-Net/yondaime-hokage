@@ -5,9 +5,9 @@ import logging
 import os
 import time
 from pathlib import Path
-from discord_together import DiscordTogether
 
 import TenGiphPy
+from discord_together import DiscordTogether
 
 try:
     import uvloop
@@ -158,7 +158,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def on_ready(self):
         if not os.path.isdir(api_image_store_dir):
             os.mkdir(api_image_store_dir)
-        
+
         self.togetherControl = await DiscordTogether(Tokens.token.value)
 
         cog_dir = BASE_DIR / "cogs"
@@ -178,11 +178,12 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             if os.path.isdir(slash_dir / filename):
                 for i in os.listdir(slash_dir / filename):
                     if i.endswith(".py"):
-                        self.load_extension(f'slash.{filename.strip(" ")}.{i[:-3]}')
+                        self.load_extension(
+                            f'slash.{filename.strip(" ")}.{i[:-3]}')
             else:
                 if filename.endswith(".py"):
                     self.load_extension(f"slash.{filename[:-3]}")
-        log.info('Loaded slash commands')
+        log.info("Loaded slash commands")
 
         difference = int(round(time.time() - self.start_time.timestamp()))
         stats = (self.get_channel(
@@ -206,7 +207,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             pass
 
         if not self.persistent_views_added:
-            database = await self.db.new(database_category_name, reaction_roles_channel_name)
+            database = await self.db.new(database_category_name,
+                                         reaction_roles_channel_name)
             async for message in database._Database__channel.history(
                     limit=None):
                 cnt = message.content

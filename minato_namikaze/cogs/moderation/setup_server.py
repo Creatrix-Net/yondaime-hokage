@@ -24,8 +24,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,
-                                     database_channel_name)
+        return await self.bot.db.new(database_category_name, database_channel_name)
 
     async def database_class_antiraid(self):
         return await self.bot.db.new(database_category_name,

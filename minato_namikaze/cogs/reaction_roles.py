@@ -241,10 +241,15 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
 
-    @commands.command(aliases=["del_rr"])
+    @commands.command(aliases=["del_rr"], usage="<reaction_roles_id aka message.id")
     @has_permissions(manage_roles=True)
-    async def delete_reaction_roles(
-            self, ctx, reaction_roles_id: commands.MessageConverter):
+    async def delete_reaction_roles(self, ctx, reaction_roles_id: commands.MessageConverter):
+        '''
+        It deletes the reaction roles
+        args:
+            reaction_roles_id : It is the message id of the reaction roles messages
+        https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
+        '''
         database = await self.database_class()
         reaction_roles = await database.get(reaction_roles_id.id)
         if reaction_roles is None:

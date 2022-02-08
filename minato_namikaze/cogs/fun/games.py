@@ -76,16 +76,18 @@ class Games(commands.Cog):
 
     @commands.command()
     async def youtube(self, ctx):
-        if check_if_user_joined_a_channel:
-            link = await self.togetherControl.create_link(
-                ctx.author.voice.channel.id, "youtube")
-            await ctx.send(f"Click the blue link!\n{link}")
-            return
-        e = ErrorEmbed(
+        '''
+        Starts `Watch Together` activity
+        '''
+        if not check_if_user_joined_a_channel:
+            e = ErrorEmbed(
             title="No voice channel joined!",
             description="You need to join the voice channel in order to use this command :)",
         )
-        await ctx.send(embed=e)
+            await ctx.send(embed=e)
+            return
+        link = await self.bot.togetherControl.create_link(ctx.author.voice.channel.id, "youtube")
+        await ctx.send(f"Click the blue link!\n{link}")
 
     @commands.command()
     async def poker(self, ctx):

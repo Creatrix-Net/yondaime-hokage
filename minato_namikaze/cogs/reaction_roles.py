@@ -11,6 +11,7 @@ from lib import (
     reaction_roles_channel_name,
 )
 
+
 class ReactionRoles(commands.Cog, name="Reaction Roles"):
     def __init__(self, bot):
         self.bot = bot
@@ -18,13 +19,15 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
-    
+        return discord.PartialEmoji(name="discord_certified_moderator",
+                                    id=922030031146995733)
+
     def owners(ctx):
         return ctx.author.id == ctx.bot.owner_id
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,reaction_roles_channel_name)
+        return await self.bot.db.new(database_category_name,
+                                     reaction_roles_channel_name)
 
     @commands.command(name="new", aliases=["create"])
     @has_permissions(manage_roles=True)
@@ -230,15 +233,17 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
 
-    @commands.command(aliases=["del_rr"], usage="<reaction_roles_id aka message.id")
+    @commands.command(aliases=["del_rr"],
+                      usage="<reaction_roles_id aka message.id")
     @has_permissions(manage_roles=True)
-    async def delete_reaction_roles(self, ctx, reaction_roles_id: commands.MessageConverter):
-        '''
+    async def delete_reaction_roles(
+            self, ctx, reaction_roles_id: commands.MessageConverter):
+        """
         It deletes the reaction roles
         args:
             reaction_roles_id : It is the message id of the reaction roles messages
         https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
-        '''
+        """
         database = await self.database_class()
         reaction_roles = await database.get(reaction_roles_id.id)
         if reaction_roles is None:

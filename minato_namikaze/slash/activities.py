@@ -19,7 +19,6 @@ activities = [
 
 class Activities(
         discord.SlashCommand,
-        guild_ids=[920536143244709889, 922006581334405180, 920190307595874304],
 ):
     """Get access to discord beta activities feature"""
 

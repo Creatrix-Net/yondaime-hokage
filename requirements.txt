@@ -5,7 +5,7 @@ appdirs==1.4.4
 astunparse==1.6.3
 async-cleverbot==0.2.2
 async-timeout==4.0.2
-asyncdagpi==4.0.0
+asyncdagpi==4.1.2
 attrs==21.4.0
 backoff==1.11.1
 beautifulsoup4==4.10.0

@@ -1,20 +1,19 @@
 import asyncio
 import random
 import time
+import typing
 from random import choice
 from string import ascii_letters
 from typing import Optional, Union
 
 import async_cleverbot as ac
 import discord
+from discord import VoiceChannel, application_command_option
+from discord.abc import GuildChannel
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 from lib import ErrorEmbed, MemberID, Tokens
 from lib.classes.games import *
-import discord
-from discord.abc import GuildChannel
-from discord import application_command_option, VoiceChannel
-import typing
 
 activities = [
     "youtube",
@@ -34,22 +33,39 @@ activities = [
 class Activities(discord.SlashCommand):
     """Get access to discord beta activities feature"""
 
-    activities: typing.Optional[typing.Literal[
-        "youtube", "poker", "chess", "betrayal", "fishing", "letter-league",
-        "word-snack", "sketch-heads", "spellcast", "awkword",
-        "checkers", ]] = discord.application_command_option(
-            description="The type of activity",
-            default="youtube",
+    activities: typing.Optional[
+        typing.Literal[
+            "youtube",
+            "poker",
+            "chess",
+            "betrayal",
+            "fishing",
+            "letter-league",
+            "word-snack",
+            "sketch-heads",
+            "spellcast",
+            "awkword",
+            "checkers",
+        ]
+    ] = discord.application_command_option(
+        description="The type of activity",
+        default="youtube",
     )
 
-    voice_channel: GuildChannel = application_command_option(channel_types=[VoiceChannel],description="A voice channel in the selected activity will start")
+    voice_channel: GuildChannel = application_command_option(
+        channel_types=[VoiceChannel],
+        description="A voice channel in the selected activity will start",
+    )
 
     def __init__(self, cog):
         self.cog = cog
 
     async def callback(self, response: discord.SlashCommandResponse):
-        link = await self.cog.bot.togetherControl.create_link(response.options.voice_channel.id, str(response.options.activities))
+        link = await self.cog.bot.togetherControl.create_link(
+            response.options.voice_channel.id, str(response.options.activities)
+        )
         await response.send_message(f"Click the blue link!\n{link}")
+
 
 class Games(discord.Cog):
     def __init__(self, bot):
@@ -64,15 +80,15 @@ class Games(discord.Cog):
 
     @commands.command(aliases=["tc"], usage="[other player.mention]")
     @commands.guild_only()
-    async def tictactoe(self, ctx, member: Optional[Union[MemberID,
-                                                          discord.Member]]):
+    async def tictactoe(self, ctx, member: Optional[Union[MemberID, discord.Member]]):
         """
         Play Tictactoe with yourself or your friend!
         """
         await ctx.send("Tic Tac Toe: X goes first", view=TicTacToe())
 
-    @commands.command(aliases=["connect_four", "c4", "cf"],
-                      usage="<other player.mention>")
+    @commands.command(
+        aliases=["connect_four", "c4", "cf"], usage="<other player.mention>"
+    )
     @commands.guild_only()
     async def connectfour(self, ctx, member: Union[MemberID, discord.Member]):
         """
@@ -80,9 +96,11 @@ class Games(discord.Cog):
         https://en.wikipedia.org/wiki/Connect_Four#firstHeading
         """
         if member is ctx.author or member.bot:
-            await ctx.send(embed=ErrorEmbed(
-                description="*You cannot play this game yourself or with a bot*"
-            ))
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description="*You cannot play this game yourself or with a bot*"
+                )
+            )
             return
         await ctx.send(f"{ctx.author.mention} you are taking *red*")
         await ctx.send(f"{member.mention} you are taking *blue*")
@@ -119,15 +137,15 @@ class Games(discord.Cog):
         """Talk with me!"""
         lis = "cancel"
         transmit = True
-        await ctx.send(
-            f"Chatbot Started!\nType the following items `{lis}` to end.")
+        await ctx.send(f"Chatbot Started!\nType the following items `{lis}` to end.")
         while transmit is True:
             try:
                 m = await self.bot.wait_for(
                     "message",
                     timeout=30,
-                    check=lambda m:
-                    (ctx.author == m.author and ctx.channel == m.channel),
+                    check=lambda m: (
+                        ctx.author == m.author and ctx.channel == m.channel
+                    ),
                 )
             except asyncio.TimeoutError:
                 await ctx.send("I'm bored now, you should of been quicker...")
@@ -137,12 +155,14 @@ class Games(discord.Cog):
                     transmit = False
                     left = await self.bot.chatbot.ask("bye")
                     await ctx.send(
-                        f"{left.text}... Waiting... OH you said cancel, bye!")
+                        f"{left.text}... Waiting... OH you said cancel, bye!"
+                    )
                 else:
                     async with ctx.channel.typing():
                         response = await self.bot.chatbot.ask(
-                            m.content if len(m.content) >= 3 else
-                            f"{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}"
+                            m.content
+                            if len(m.content) >= 3
+                            else f"{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}"
                         )
                         await ctx.send(response.text)
 
@@ -164,25 +184,30 @@ class Games(discord.Cog):
             await message.edit(embed=discord.Embed(description=str(i)))
             await asyncio.sleep(1)
         await asyncio.sleep(random.randint(1, 3))
-        await message.edit(embed=discord.Embed(
-            description=f"React to the {reaction}!"))
+        await message.edit(embed=discord.Embed(description=f"React to the {reaction}!"))
         await message.add_reaction(discord.PartialEmoji(name=reaction))
         start = time.perf_counter()
         try:
             _, user = await ctx.bot.wait_for(
                 "reaction_add",
-                check=lambda _reaction, user: _reaction.message.guild == ctx.
-                guild and _reaction.message.channel == ctx.message.channel and
-                _reaction.message == message and str(_reaction.emoji) ==
-                reaction and user != ctx.bot.user and not user.bot,
+                check=lambda _reaction, user: _reaction.message.guild == ctx.guild
+                and _reaction.message.channel == ctx.message.channel
+                and _reaction.message == message
+                and str(_reaction.emoji) == reaction
+                and user != ctx.bot.user
+                and not user.bot,
                 timeout=60,
             )
         except asyncio.TimeoutError:
-            return await message.edit(embed=discord.Embed(
-                description="No one ate the cookie..."))
+            return await message.edit(
+                embed=discord.Embed(description="No one ate the cookie...")
+            )
         end = time.perf_counter()
-        await message.edit(embed=discord.Embed(
-            description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"))
+        await message.edit(
+            embed=discord.Embed(
+                description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"
+            )
+        )
         lis3 = ["1", "2"]
         choice = random.choice(lis3)
         if choice == 2:

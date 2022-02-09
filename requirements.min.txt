@@ -1,6 +1,7 @@
 ﻿akinator.py
 async-cleverbot
 async-timeout
+discord-together
 asyncdagpi
 betterstatcord.py
 discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@master

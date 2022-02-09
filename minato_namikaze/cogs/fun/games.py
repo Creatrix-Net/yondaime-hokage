@@ -11,13 +11,52 @@ from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 from lib import ErrorEmbed, MemberID, Tokens
 from lib.classes.games import *
+import discord
+from discord.abc import GuildChannel
+from discord import application_command_option, VoiceChannel
+import typing
+
+activities = [
+    "youtube",
+    "poker",
+    "chess",
+    "betrayal",
+    "fishing",
+    "letter-league",
+    "word-snack",
+    "sketch-heads",
+    "spellcast",
+    "awkword",
+    "checkers",
+]
 
 
-class Games(commands.Cog):
+class Activities(discord.SlashCommand):
+    """Get access to discord beta activities feature"""
+
+    activities: typing.Optional[typing.Literal[
+        "youtube", "poker", "chess", "betrayal", "fishing", "letter-league",
+        "word-snack", "sketch-heads", "spellcast", "awkword",
+        "checkers", ]] = discord.application_command_option(
+            description="The type of activity",
+            default="youtube",
+    )
+
+    voice_channel: GuildChannel = application_command_option(channel_types=[VoiceChannel],description="A voice channel in the selected activity will start")
+
+    def __init__(self, cog):
+        self.cog = cog
+
+    async def callback(self, response: discord.SlashCommandResponse):
+        link = await self.cog.bot.togetherControl.create_link(response.options.voice_channel.id, str(response.options.activities))
+        await response.send_message(f"Click the blue link!\n{link}")
+
+class Games(discord.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.chatbot = ac.Cleverbot(Tokens.chatbot.value)
         self.description = "Play some amazing games"
+        self.add_application_command(Activities(self))
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:

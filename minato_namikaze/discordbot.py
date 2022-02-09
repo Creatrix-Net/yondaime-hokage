@@ -70,14 +70,15 @@ def get_prefix(bot, message):
     if not message.guild:
         return "m!"
 
+    if bot.local:
+        return "!"
+
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 
 class MinatoNamikazeBot(commands.AutoShardedBot):
     def __init__(self):
-        allowed_mentions = discord.AllowedMentions(roles=True,
-                                                   everyone=True,
-                                                   users=True)
+        allowed_mentions = discord.AllowedMentions(roles=False,everyone=False,users=True)
         intents = discord.Intents(
             guilds=True,
             members=True,

@@ -3,7 +3,7 @@
 ### Konichiwa 👋, myself Minato Namikaze, Konohagakure Yondaime Hokage. I do every work of a Hokage in a swift and clean way ⚡
 
 
-![Owner](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=owner&style=for-the-badge&color=orange) ![Status](https://top.gg/api/widget/status/935242576343224352.svg)  ![Servers](https://top.gg/api/widget/servers/935242576343224352.svg) ![Support](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=support&style=flat-square&color=orange) 
+![Owner](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=owner&style=for-the-badge&color=orange) ![Status](https://top.gg/api/widget/status/935242576343224352.svg)  ![Servers](https://top.gg/api/widget/servers/935242576343224352.svg) ![Support](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=support&style=flat-square&color=orange) |[Support](https://discord.com/api/guilds/920536143244709889/embed.png) 
 
 ![image](https://i.imgur.com/FzgLCHM.jpeg)
 

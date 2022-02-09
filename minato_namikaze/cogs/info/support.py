@@ -22,6 +22,7 @@ def errorembed(ctx):
 
 
 class Support(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Displays the support command for the server, this can only be used if the owner has enabled it"

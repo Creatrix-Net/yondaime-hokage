@@ -26,6 +26,7 @@ log = logging.getLogger(__name__)
 
 
 class AntiRaid(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Antiraid system commands to use"

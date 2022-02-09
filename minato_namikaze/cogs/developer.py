@@ -19,6 +19,7 @@ log = logging.getLogger(__name__)
 
 
 class Developer(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.posting = PostStats(self.bot)

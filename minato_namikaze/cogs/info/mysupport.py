@@ -13,6 +13,7 @@ from lib import time_class as time
 
 
 class MySupport(commands.Cog, name="My Support"):
+
     def __init__(self, bot):
         self.bot = bot
         self.process = psutil.Process()

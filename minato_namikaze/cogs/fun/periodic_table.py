@@ -10,6 +10,7 @@ from lib.mendeleev import element as ELEMENTS
 
 class ElementConverter(Converter):
     """Converts a given argument to an element object"""
+
     async def convert(self, ctx: commands.Context, argument: str) -> ELEMENTS:
         result = None
         if argument.isdigit():
@@ -30,6 +31,7 @@ class ElementConverter(Converter):
 
 class MeasurementConverter(Converter):
     """Converts a given measurement type into usable strings"""
+
     async def convert(self, ctx: commands.Context,
                       argument: str) -> List[Tuple[str, str, str]]:
         result = []
@@ -52,6 +54,7 @@ class MeasurementConverter(Converter):
 
 
 class Elements(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Display information from the periodic table of elements"

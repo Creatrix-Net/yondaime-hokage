@@ -4,7 +4,9 @@ RED = "\U0001f534"
 BLUE = "\U0001f535"
 BLANK = "\U00002b1b"
 
+
 class ConnectFour(discord.ui.View):
+
     def __init__(self, *, red: discord.Member, blue: discord.Member):
         super().__init__()
         self.red_player = red
@@ -35,10 +37,7 @@ class ConnectFour(discord.ui.View):
             self.red_player: RED,
             self.blue_player: BLUE,
         }
-        self._EmojiToPlayer = {
-            RED: self.red_player,
-            BLUE: self.blue_player
-        }
+        self._EmojiToPlayer = {RED: self.red_player, BLUE: self.blue_player}
         self.embed = self.make_embed()
 
     def BoardString(self) -> str:
@@ -108,124 +107,174 @@ class ConnectFour(discord.ui.View):
 
         return False
 
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+    async def interaction_check(self,
+                                interaction: discord.Interaction) -> bool:
         if interaction.user == self.turn:
             return True
         else:
-            await interaction.response.send_message("This Connect Four match is not for you or wait for your turn", ephemeral=True)
+            await interaction.response.send_message(
+                "This Connect Four match is not for you or wait for your turn",
+                ephemeral=True,
+            )
             return False
-    
-    @discord.ui.button(style=discord.ButtonStyle.primary, emoji=discord.PartialEmoji(name="\N{DIGIT ONE}\U000020e3"))
-    async def one(self, button: discord.ui.Button,interaction: discord.Interaction):
+
+    @discord.ui.button(
+        style=discord.ButtonStyle.primary,
+        emoji=discord.PartialEmoji(name="\N{DIGIT ONE}\U000020e3"),
+    )
+    async def one(self, button: discord.ui.Button,
+                  interaction: discord.Interaction):
         if self.GameOver():
             embed = self.make_embed()
             for child in self.children:
                 child.disabled = True
-            await interaction.message.edit(embeds=[embed,self.BoardString()], view=self)
+            await interaction.message.edit(embeds=[embed,
+                                                   self.BoardString()],
+                                           view=self)
             self.stop()
             return
-        
+
         self.PlacePiece(button.emoji, interaction.user)
-        
+
         embed = self.make_embed()
-        await interaction.message.edit(embeds=[embed,self.BoardString()])
-    
-    @discord.ui.button(style=discord.ButtonStyle.primary, emoji=discord.PartialEmoji(name="\N{DIGIT TWO}\U000020e3"))
-    async def two(self, button: discord.ui.Button,interaction: discord.Interaction):
+        await interaction.message.edit(embeds=[embed, self.BoardString()])
+
+    @discord.ui.button(
+        style=discord.ButtonStyle.primary,
+        emoji=discord.PartialEmoji(name="\N{DIGIT TWO}\U000020e3"),
+    )
+    async def two(self, button: discord.ui.Button,
+                  interaction: discord.Interaction):
         if self.GameOver():
             embed = self.make_embed()
             for child in self.children:
                 child.disabled = True
-            await interaction.message.edit(embeds=[embed,self.BoardString()], view=self)
+            await interaction.message.edit(embeds=[embed,
+                                                   self.BoardString()],
+                                           view=self)
             self.stop()
             return
-        
+
         self.PlacePiece(button.emoji, interaction.user)
-        
+
         embed = self.make_embed()
-        await interaction.message.edit(embeds=[embed,self.BoardString()])
-    
-    @discord.ui.button(style=discord.ButtonStyle.primary, emoji=discord.PartialEmoji(name="\N{DIGIT THREE}\U000020e3"))
-    async def three(self, button: discord.ui.Button,interaction: discord.Interaction):
+        await interaction.message.edit(embeds=[embed, self.BoardString()])
+
+    @discord.ui.button(
+        style=discord.ButtonStyle.primary,
+        emoji=discord.PartialEmoji(name="\N{DIGIT THREE}\U000020e3"),
+    )
+    async def three(self, button: discord.ui.Button,
+                    interaction: discord.Interaction):
         if self.GameOver():
             embed = self.make_embed()
             for child in self.children:
                 child.disabled = True
-            await interaction.message.edit(embeds=[embed,self.BoardString()], view=self)
+            await interaction.message.edit(embeds=[embed,
+                                                   self.BoardString()],
+                                           view=self)
             self.stop()
             return
-        
+
         self.PlacePiece(button.emoji, interaction.user)
-        
+
         embed = self.make_embed()
-        await interaction.message.edit(embeds=[embed,self.BoardString()])
-    
-    @discord.ui.button(style=discord.ButtonStyle.primary, emoji=discord.PartialEmoji(name="\N{DIGIT FOUR}\U000020e3"))
-    async def four(self, button: discord.ui.Button,interaction: discord.Interaction):
+        await interaction.message.edit(embeds=[embed, self.BoardString()])
+
+    @discord.ui.button(
+        style=discord.ButtonStyle.primary,
+        emoji=discord.PartialEmoji(name="\N{DIGIT FOUR}\U000020e3"),
+    )
+    async def four(self, button: discord.ui.Button,
+                   interaction: discord.Interaction):
         if self.GameOver():
             embed = self.make_embed()
             for child in self.children:
                 child.disabled = True
-            await interaction.message.edit(embeds=[embed,self.BoardString()], view=self)
+            await interaction.message.edit(embeds=[embed,
+                                                   self.BoardString()],
+                                           view=self)
             self.stop()
             return
-        
+
         self.PlacePiece(button.emoji, interaction.user)
-        
+
         embed = self.make_embed()
-        await interaction.message.edit(embeds=[embed,self.BoardString()])
-    
-    @discord.ui.button(style=discord.ButtonStyle.primary, emoji=discord.PartialEmoji(name="\N{DIGIT FIVE}\U000020e3"),row=2)
-    async def five(self, button: discord.ui.Button,interaction: discord.Interaction):
+        await interaction.message.edit(embeds=[embed, self.BoardString()])
+
+    @discord.ui.button(
+        style=discord.ButtonStyle.primary,
+        emoji=discord.PartialEmoji(name="\N{DIGIT FIVE}\U000020e3"),
+        row=2,
+    )
+    async def five(self, button: discord.ui.Button,
+                   interaction: discord.Interaction):
         if self.GameOver():
             embed = self.make_embed()
             for child in self.children:
                 child.disabled = True
-            await interaction.message.edit(embeds=[embed,self.BoardString()], view=self)
+            await interaction.message.edit(embeds=[embed,
+                                                   self.BoardString()],
+                                           view=self)
             self.stop()
             return
-        
+
         self.PlacePiece(button.emoji, interaction.user)
-        
+
         embed = self.make_embed()
-        await interaction.message.edit(embeds=[embed,self.BoardString()])
-    
-    @discord.ui.button(style=discord.ButtonStyle.primary, emoji=discord.PartialEmoji(name="\N{DIGIT SIX}\U000020e3"),row=2)
-    async def six(self, button: discord.ui.Button,interaction: discord.Interaction):
+        await interaction.message.edit(embeds=[embed, self.BoardString()])
+
+    @discord.ui.button(
+        style=discord.ButtonStyle.primary,
+        emoji=discord.PartialEmoji(name="\N{DIGIT SIX}\U000020e3"),
+        row=2,
+    )
+    async def six(self, button: discord.ui.Button,
+                  interaction: discord.Interaction):
         if self.GameOver():
             embed = self.make_embed()
             for child in self.children:
                 child.disabled = True
-            await interaction.message.edit(embeds=[embed,self.BoardString()], view=self)
+            await interaction.message.edit(embeds=[embed,
+                                                   self.BoardString()],
+                                           view=self)
             self.stop()
             return
-        
+
         self.PlacePiece(button.emoji, interaction.user)
-        
+
         embed = self.make_embed()
-        await interaction.message.edit(embeds=[embed,self.BoardString()])
-    
-    @discord.ui.button(style=discord.ButtonStyle.primary, emoji=discord.PartialEmoji(name="\N{DIGIT SEVEN}\U000020e3"),row=2)
-    async def seven(self, button: discord.ui.Button,interaction: discord.Interaction):
+        await interaction.message.edit(embeds=[embed, self.BoardString()])
+
+    @discord.ui.button(
+        style=discord.ButtonStyle.primary,
+        emoji=discord.PartialEmoji(name="\N{DIGIT SEVEN}\U000020e3"),
+        row=2,
+    )
+    async def seven(self, button: discord.ui.Button,
+                    interaction: discord.Interaction):
         if self.GameOver():
             embed = self.make_embed()
             for child in self.children:
                 child.disabled = True
-            await interaction.message.edit(embeds=[embed,self.BoardString()], view=self)
+            await interaction.message.edit(embeds=[embed,
+                                                   self.BoardString()],
+                                           view=self)
             self.stop()
             return
-        
+
         self.PlacePiece(button.emoji, interaction.user)
-        
+
         embed = self.make_embed()
-        await interaction.message.edit(embeds=[embed,self.BoardString()])
-    
-    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red,row=2)
-    async def quit(self, button: discord.ui.Button,interaction: discord.Interaction):
+        await interaction.message.edit(embeds=[embed, self.BoardString()])
+
+    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red, row=2)
+    async def quit(self, button: discord.ui.Button,
+                   interaction: discord.Interaction):
         await interaction.response.defer()
         await interaction.delete_original_message()
         self.stop()
-    
+
     async def on_timeout(self) -> None:
         for child in self.children:
             child.disabled = True

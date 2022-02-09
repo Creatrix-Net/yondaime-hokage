@@ -9,6 +9,7 @@ from lib import Embed, convert
 
 
 class Giveaway(Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.cancelled = False

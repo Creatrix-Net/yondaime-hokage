@@ -76,6 +76,7 @@ def format_character_name(character_name: str) -> str:
 
 
 def return_matching_emoji(ctx, name):
+
     def emoji_predicate(emoji, name):
         return emoji.name.lower() in name
 

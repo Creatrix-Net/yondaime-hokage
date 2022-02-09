@@ -4,6 +4,7 @@ from lib.functions import meek_api
 
 
 class Vocaloid(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Get some kawai pictures of the vocaloids."

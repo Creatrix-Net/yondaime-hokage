@@ -3,6 +3,7 @@ from discord import embeds
 
 
 class Embed(embeds.Embed):
+
     def __init__(self, **kwargs):
         if "colour" not in kwargs:
             kwargs["colour"] = discord.Color.random()
@@ -11,6 +12,7 @@ class Embed(embeds.Embed):
 
 
 class ErrorEmbed(embeds.Embed):
+
     def __init__(self, **kwargs):
         if "colour" not in kwargs:
             kwargs["colour"] = discord.Color.red()
@@ -19,6 +21,7 @@ class ErrorEmbed(embeds.Embed):
 
 
 class SuccessEmbed(embeds.Embed):
+
     def __init__(self, **kwargs):
         if "colour" not in kwargs:
             kwargs["colour"] = discord.Color.green()

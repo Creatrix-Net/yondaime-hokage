@@ -38,6 +38,7 @@ def format_manga_characters(character):
 
 
 class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
+
     def __init__(self, bot):
         self.bot = bot
         self.bot.dagpi = Client(Tokens.dagpi.value)

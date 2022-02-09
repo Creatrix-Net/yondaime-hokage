@@ -1,7 +1,10 @@
-import discord
 from typing import List
 
+import discord
+
+
 class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
+
     def __init__(self, database, custom_id: int, emoji, y: int):
         super().__init__(style=discord.ButtonStyle.primary,
                          emoji=emoji,
@@ -65,7 +68,7 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
 
 class ReactionPersistentView(discord.ui.View):
     children: List[ReactionRolesButton]
-    
+
     def __init__(self, reactions_dict: dict, database, custom_id: list):
         super().__init__(timeout=None)
         for count, i in enumerate(reactions_dict):

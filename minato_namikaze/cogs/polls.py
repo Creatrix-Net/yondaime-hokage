@@ -6,6 +6,7 @@ from lib import Embed, ErrorEmbed
 
 
 class QuickPoll(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.reactions = [
@@ -44,6 +45,7 @@ class QuickPoll(commands.Cog):
     @commands.command(pass_context=True, aliases=["poll", "polls"])
     async def polltime(self, ctx):
         """Create polls easily"""
+
         def check(m):
             return m.author == ctx.author and m.channel == ctx.channel
 

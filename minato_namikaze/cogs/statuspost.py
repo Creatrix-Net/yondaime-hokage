@@ -2,7 +2,9 @@ import statcord
 from discord.ext import commands
 from lib import Tokens
 
+
 class StatcordPost(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.key = Tokens.statcord.value

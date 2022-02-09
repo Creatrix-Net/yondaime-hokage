@@ -71,6 +71,7 @@ class HumanTime:
 
 
 class Time(HumanTime):
+
     def __init__(self, argument, *, now=None):
         try:
             o = ShortTime(argument, now=now)
@@ -82,6 +83,7 @@ class Time(HumanTime):
 
 
 class FutureTime(Time):
+
     def __init__(self, argument, *, now=None):
         super().__init__(argument, now=now)
 

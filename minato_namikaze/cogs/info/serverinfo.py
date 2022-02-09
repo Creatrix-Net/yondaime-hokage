@@ -7,6 +7,7 @@ from lib import Embed
 
 
 class Info(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.bot.start_time = bot.start_time

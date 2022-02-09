@@ -15,6 +15,7 @@ from lib import (
 
 
 class ServerSetup(commands.Cog, name="Server Setup"):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Do some necessary setup through an interactive mode."

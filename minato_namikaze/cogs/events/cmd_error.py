@@ -7,6 +7,7 @@ from lib import ChannelAndMessageId, Embed, ErrorEmbed
 
 
 class BotEventsCommands(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.error_report_channel = self.bot.get_channel(

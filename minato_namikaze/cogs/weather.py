@@ -12,6 +12,7 @@ from lib import Tokens
 
 
 class UnitConverter(Converter):
+
     async def convert(self, ctx: commands.Context,
                       argument: str) -> Optional[str]:
         new_units = None
@@ -30,6 +31,7 @@ class UnitConverter(Converter):
 
 
 class Weather(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         default = {"units": None}

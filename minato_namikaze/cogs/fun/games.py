@@ -1,20 +1,19 @@
 import asyncio
 import random
 import time
+import typing
 from random import choice
 from string import ascii_letters
 from typing import Union
 
 import async_cleverbot as ac
 import discord
+from discord import VoiceChannel, application_command_option
+from discord.abc import GuildChannel
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 from lib import ErrorEmbed, MemberID, Tokens
 from lib.classes.games import *
-import discord
-from discord.abc import GuildChannel
-from discord import application_command_option, VoiceChannel
-import typing
 
 activities = [
     "youtube",
@@ -42,16 +41,23 @@ class Activities(discord.SlashCommand):
             default="youtube",
     )
 
-    voice_channel: GuildChannel = application_command_option(channel_types=[VoiceChannel],description="A voice channel in the selected activity will start")
+    voice_channel: GuildChannel = application_command_option(
+        channel_types=[VoiceChannel],
+        description="A voice channel in the selected activity will start",
+    )
 
     def __init__(self, cog):
         self.cog = cog
 
     async def callback(self, response: discord.SlashCommandResponse):
-        link = await self.cog.bot.togetherControl.create_link(response.options.voice_channel.id, str(response.options.activities))
+        link = await self.cog.bot.togetherControl.create_link(
+            response.options.voice_channel.id,
+            str(response.options.activities))
         await response.send_message(f"Click the blue link!\n{link}")
 
+
 class Games(discord.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.bot.chatbot = ac.Cleverbot(Tokens.chatbot.value)
@@ -64,7 +70,7 @@ class Games(discord.Cog):
 
     @commands.command(aliases=["tc"], usage="<other player.mention>")
     @commands.guild_only()
-    async def tictactoe(self, ctx, member: Union[MemberID,discord.Member]):
+    async def tictactoe(self, ctx, member: Union[MemberID, discord.Member]):
         """
         Play Tictactoe with yourself or your friend!
         """
@@ -73,9 +79,13 @@ class Games(discord.Cog):
                 description="*You cannot play this game yourself or with a bot*"
             ))
             return
-        await ctx.send("Tic Tac Toe: X goes first", view=TicTacToe(player2=member, player1=ctx.author))
+        await ctx.send(
+            "Tic Tac Toe: X goes first",
+            view=TicTacToe(player2=member, player1=ctx.author),
+        )
 
-    @commands.command(aliases=["connect_four", "c4", "cf"],usage="<other player.mention>")
+    @commands.command(aliases=["connect_four", "c4", "cf"],
+                      usage="<other player.mention>")
     @commands.guild_only()
     async def connectfour(self, ctx, member: Union[MemberID, discord.Member]):
         """
@@ -87,10 +97,8 @@ class Games(discord.Cog):
                 description="*You cannot play this game yourself or with a bot*"
             ))
             return
-        view = ConnectFour(red = ctx.author, blue=member)
-        await ctx.send(
-            embeds=[view.embed, view.BoardString()],
-            view=view)
+        view = ConnectFour(red=ctx.author, blue=member)
+        await ctx.send(embeds=[view.embed, view.BoardString()], view=view)
 
     @commands.command(aliases=["hg"])
     async def hangman(self, ctx):

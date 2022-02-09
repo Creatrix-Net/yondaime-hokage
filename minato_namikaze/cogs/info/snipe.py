@@ -8,6 +8,7 @@ invitere2 = r"(http[s]?:\/\/)*discord((app\.com\/invite)|(\.gg))\/(invite\/)?(#\
 
 
 class Snipe(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.snipes = {}

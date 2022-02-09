@@ -4,6 +4,7 @@ from ..util import ChannelAndMessageId
 
 
 class Badges:
+
     def __init__(self, ctx: Context):
         self.ctx = ctx
         self.channel = ctx.get_config_channel_by_name_or_id(

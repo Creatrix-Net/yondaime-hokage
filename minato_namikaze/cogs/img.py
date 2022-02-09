@@ -12,6 +12,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 class ImageManipulation(commands.Cog, name="Image Manipulation"):
+
     def __init__(self, bot):
         self.bot = bot
         self.bot.dagpi = Client(Tokens.dagpi.value)

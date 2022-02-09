@@ -8,6 +8,7 @@ from cachetools import LRUCache
 
 
 def _wrap_and_store_coroutine(cache, key, coro):
+
     async def func():
         value = await coro
         cache[key] = value
@@ -17,6 +18,7 @@ def _wrap_and_store_coroutine(cache, key, coro):
 
 
 def _wrap_new_coroutine(value):
+
     async def new_coroutine():
         return value
 
@@ -24,6 +26,7 @@ def _wrap_new_coroutine(value):
 
 
 class ExpiringCache(dict):
+
     def __init__(self, seconds):
         self.__ttl = seconds
         super().__init__()
@@ -57,6 +60,7 @@ class Strategy(enum.Enum):
 
 
 def cache(maxsize=128, strategy=Strategy.lru, ignore_kwargs=False):
+
     def decorator(func):
         if strategy is Strategy.lru:
             _internal_cache = LRUCache(maxsize)

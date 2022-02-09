@@ -23,6 +23,7 @@ def chunks(data, SIZE: int = DEFAULT_COMMAND_SELECT_LENGTH):
 
 
 class GroupHelpPageSource(menus.ListPageSource):
+
     def __init__(
         self,
         group: Union[commands.Group, commands.Cog],
@@ -64,6 +65,7 @@ class GroupHelpPageSource(menus.ListPageSource):
 
 
 class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
+
     def __init__(
         self,
         commands: Dict[commands.Cog, List[commands.Command]],
@@ -124,6 +126,7 @@ class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
 
 
 class FrontPageSource(menus.PageSource):
+
     def is_paginating(self) -> bool:
         # This forces the buttons to appear even in the front page
         return True
@@ -191,6 +194,7 @@ class FrontPageSource(menus.PageSource):
 
 
 class HelpMenu(RoboPages):
+
     def __init__(self, source: menus.PageSource, ctx: commands.Context):
         super().__init__(source, ctx=ctx, compact=True)
 
@@ -214,6 +218,7 @@ class HelpMenu(RoboPages):
 
 
 class PaginatedHelpCommand(commands.HelpCommand):
+
     def __init__(self):
         super().__init__(
             command_attrs={

@@ -58,6 +58,7 @@ async def check_permissions(ctx, perms, *, check=all):
 
 
 def has_permissions(*, check=all, **perms):
+
     async def pred(ctx):
         return await check_permissions(ctx, perms, check=check)
 
@@ -79,6 +80,7 @@ async def check_guild_permissions(ctx, perms, *, check=all):
 
 
 def has_guild_permissions(*, check=all, **perms):
+
     async def pred(ctx):
         return await check_guild_permissions(ctx, perms, check=check)
 
@@ -89,6 +91,7 @@ def has_guild_permissions(*, check=all, **perms):
 
 
 def is_mod():
+
     async def pred(ctx):
         return await check_guild_permissions(ctx, {"manage_guild": True})
 
@@ -96,6 +99,7 @@ def is_mod():
 
 
 def is_admin():
+
     async def pred(ctx):
         return await check_guild_permissions(ctx, {"administrator": True})
 
@@ -121,6 +125,7 @@ def admin_or_permissions(**perms):
 
 
 def is_in_guilds(*guild_ids):
+
     def predicate(ctx):
         guild = ctx.guild
         if guild is None:

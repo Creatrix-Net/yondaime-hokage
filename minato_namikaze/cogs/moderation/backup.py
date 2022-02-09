@@ -4,6 +4,7 @@ from lib import BackupDatabse, SuccessEmbed
 
 
 class BackUp(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Create a backup for your server"

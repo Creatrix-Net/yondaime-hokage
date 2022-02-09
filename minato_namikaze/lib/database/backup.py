@@ -10,6 +10,7 @@ from ..util.vars import ChannelAndMessageId
 
 
 class BackupDatabse:
+
     def __init__(self, ctx: Context):
         self.ctx = ctx
         self.backup_channel = ctx.get_config_channel_by_name_or_id(

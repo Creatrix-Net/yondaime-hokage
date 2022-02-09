@@ -7,12 +7,15 @@ import discord
 # The ['TicTacToe'] bit is for type hinting purposes to tell your IDE or linter
 # what the type of `self.view` is. It is not required.
 class TicTacToeButton(discord.ui.Button["TicTacToe"]):
+
     def __init__(self, x: int, y: int):
         # A label is required, but we don't need one so a zero-width space is used
         # The row parameter tells the View which row to place the button under.
         # A View can only contain up to 5 rows -- each row can only have 5 buttons.
         # Since a Tic Tac Toe grid is 3x3 that means we have 3 rows and 3 columns.
-        super().__init__(style=discord.ButtonStyle.secondary,label="\u200b",row=y)
+        super().__init__(style=discord.ButtonStyle.secondary,
+                         label="\u200b",
+                         row=y)
         self.x = x
         self.y = y
 
@@ -85,13 +88,18 @@ class TicTacToe(discord.ui.View):
         for x in range(3):
             for y in range(3):
                 self.add_item(TicTacToeButton(x, y))
-    
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        user_to_equate = self.player1 if self.last_used_by == self.player2 else self.player2
+
+    async def interaction_check(self,
+                                interaction: discord.Interaction) -> bool:
+        user_to_equate = (self.player1 if self.last_used_by == self.player2
+                          else self.player2)
         if interaction.user and interaction.user.id == user_to_equate.id:
             return True
         else:
-            await interaction.response.send_message("This TicTacToe match is not for you or wait for your turn", ephemeral=True)
+            await interaction.response.send_message(
+                "This TicTacToe match is not for you or wait for your turn",
+                ephemeral=True,
+            )
             return False
 
     # This method checks for the board winner -- it is used by the TicTacToeButton

@@ -110,6 +110,7 @@ MAP = dict(zip(REF, enumerate(CODES)))
 
 
 class BarcodeError(Exception):
+
     def __init__(self, msg):
         self.msg = msg
 
@@ -292,6 +293,7 @@ class BaseWriter:
 
 
 class SVGWriter(BaseWriter):
+
     def __init__(self):
         BaseWriter.__init__(self, self._init, self._create_module,
                             self._create_text, self._finish)
@@ -375,6 +377,7 @@ if Image is None:
 else:
 
     class ImageWriter(BaseWriter):
+
         def __init__(self, COG):
             BaseWriter.__init__(self, self._init, self._paint_module,
                                 self._paint_text, self._finish)

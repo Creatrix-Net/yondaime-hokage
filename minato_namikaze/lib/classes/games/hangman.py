@@ -92,6 +92,7 @@ stages = [
 
 
 class Hangman:
+
     def __init__(self):
         self._alpha = list(string.ascii_lowercase)
         self.word = random.choice(list(english_words_set)).lower()

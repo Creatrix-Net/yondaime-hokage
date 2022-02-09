@@ -12,6 +12,7 @@ from .vars import *
 
 
 class PostStats:
+
     def __init__(self, bot):
         self.bot = bot
 

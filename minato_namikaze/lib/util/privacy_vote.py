@@ -8,6 +8,7 @@ from .vars import listing
 
 
 class VotingMenu(menus.Menu):
+
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
@@ -44,6 +45,7 @@ class VotingMenu(menus.Menu):
 
 
 class PrivacyPolicy(menus.Menu):
+
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
@@ -76,6 +78,7 @@ class PrivacyPolicy(menus.Menu):
 
 
 class MenuSource(menus.ListPageSource):
+
     def __init__(self, data):
         super().__init__(data, per_page=1)
 

@@ -24,12 +24,14 @@ class BadgesPageEntry:
 
 
 class BadgePages(SimplePages):
+
     def __init__(self, entries, *, ctx: commands.Context, per_page: int = 5):
         converted = [BadgesPageEntry(entry) for entry in entries]
         super().__init__(converted, per_page=per_page, ctx=ctx)
 
 
 class BadgesCog(commands.Cog, name="Badges"):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Create fun fake badges based on your discord profile"

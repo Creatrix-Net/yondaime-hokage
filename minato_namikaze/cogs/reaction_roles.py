@@ -13,6 +13,7 @@ from lib import (
 
 
 class ReactionRoles(commands.Cog, name="Reaction Roles"):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Setup some reaction roles"

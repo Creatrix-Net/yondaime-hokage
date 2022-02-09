@@ -74,6 +74,7 @@ def pagify(
 
 
 class Encoding(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Convert messages into fun encodings"
@@ -109,6 +110,7 @@ class Encoding(commands.Cog):
         """Shows you information about a number of characters.
         Only up to 25 characters at a time.
         """
+
         def to_string(c):
             digit = f"{ord(c):x}"
             name = unicodedata.name(c, "Name not found.")

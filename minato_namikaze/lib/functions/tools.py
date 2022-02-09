@@ -69,6 +69,7 @@ async def get_welcome_channel(guild: discord.Guild, bot: discord.Client,
 
 # R.Danny Code
 class plural:
+
     def __init__(self, value):
         self.value = value
 

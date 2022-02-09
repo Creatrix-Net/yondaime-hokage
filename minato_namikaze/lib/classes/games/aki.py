@@ -13,6 +13,7 @@ STOP = "\U000023f9"
 
 
 class Akinator:
+
     def __init__(self):
         self.aki = _Akinator_()
         self.bar_emojis = ("  ", "\U00002588")

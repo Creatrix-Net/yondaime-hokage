@@ -17,6 +17,7 @@ class IncorrectChannelError(commands.CommandError):
 
 
 class Music(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.bot.music = DiscordUtils.Music()

@@ -20,6 +20,7 @@ from pyppeteer import launch
 
 
 class Random(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Some random fun and usefull commands."

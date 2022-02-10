@@ -478,7 +478,6 @@ class Developer(commands.Cog):
 
         if message.channel.id in (
                 ChannelAndMessageId.error_logs_channel.value,
-                ChannelAndMessageId.traceback_channel.value,
         ):
             try:
                 await message.publish()

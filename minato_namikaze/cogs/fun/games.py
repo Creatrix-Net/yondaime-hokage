@@ -88,7 +88,7 @@ class Games(discord.Cog):
                     description="*You cannot play this game yourself or with a bot*"
                 ))
                 return
-        view = ConnectFour(red = ctx.author, blue=member, auto = True if member is ctx.me else False)
+        view = ConnectFour(red = ctx.author, blue=member, auto = member is ctx.me)
         view.message = await ctx.send(embeds=[view.embed, view.BoardString()],view=view)
 
     @commands.command(aliases=["hg"])

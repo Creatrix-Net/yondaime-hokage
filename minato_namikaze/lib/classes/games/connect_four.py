@@ -14,7 +14,7 @@ class ConnectFourButton(discord.ui.Button["ConnectFour"]):
     async def callback(self,interaction: discord.Interaction):
         if self.view is None:
             raise AssertionError
-
+        
         self.view.PlacePiece(self.emoji, interaction.user)
         embed = self.view.make_embed()
         await interaction.message.edit(embeds=[embed,self.view.BoardString()], view=self.view)
@@ -25,18 +25,21 @@ class ConnectFourButton(discord.ui.Button["ConnectFour"]):
             await interaction.message.edit(embeds=[embed,self.view.BoardString()], view=self.view)
             self.view.stop()
             return
-        
-        await interaction.response.send_message('Now let me think! ......',ephemeral=True)
-        await asyncio.sleep(2)
-        
+                
         #if bot
         if not self.view.auto:
             return
+        
+        await interaction.response.defer()
+        await interaction.message.edit('Now let me think! ......', embeds=[embed,self.view.BoardString()], view=self.view)
+
+        await asyncio.sleep(2)
+
         if self.view.turn is not self.view.blue_player:
             return
         self.view.PlacePiece(random.choice(self.view._controls), self.view.turn)
         embed = self.view.make_embed()
-        await interaction.message.edit(embeds=[embed,self.view.BoardString()], view=self.view)
+        await interaction.message.edit(content=None,embeds=[embed,self.view.BoardString()], view=self.view)
         if self.view.GameOver():
             embed = self.view.make_embed()
             for child in self.view.children:

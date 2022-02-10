@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 import discord
 
@@ -23,30 +23,30 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
             raise AssertionError
         view: TicTacToe = self.view
         state = view.board[self.y][self.x]
-        if state in (view.X, view.O):
+        if state in (view.player1, view.player2):
             return
 
-        if view.current_player == view.X:
+        if view.current_player == view.player1:
             self.style = discord.ButtonStyle.danger
             self.label = "X"
             self.disabled = True
-            view.board[self.y][self.x] = view.X
-            view.current_player = view.O
-            content = "It is now O's turn"
+            view.board[self.y][self.x] = view.player1
+            view.current_player = view.player2
+            content = f"It is now O's ({view.player2.mention}) turn"
         else:
             self.style = discord.ButtonStyle.success
             self.label = "O"
             self.disabled = True
-            view.board[self.y][self.x] = view.O
-            view.current_player = view.X
-            content = "It is now X's turn"
+            view.board[self.y][self.x] = view.player2
+            view.current_player = view.player1
+            content = f"It is now X's {view.player1.mentiona} turn"
 
         winner = view.check_board_winner()
         if winner is not None:
-            if winner == view.X:
-                content = "X won!"
-            elif winner == view.O:
-                content = "O won!"
+            if winner == view.player1:
+                content = f"{view.player1.mention} won!"
+            elif winner == view.player2:
+                content = f"{view.player2.mention} won!"
             else:
                 content = "It's a tie!"
 
@@ -60,8 +60,6 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
 
 # This is our actual board View
 class TicTacToe(discord.ui.View):
-    # This tells the IDE or linter that all our children will be TicTacToeButtons
-    # This is not required
     children: List[TicTacToeButton]
     X = -1
     O = 1
@@ -69,7 +67,8 @@ class TicTacToe(discord.ui.View):
 
     def __init__(self, player1, player2):
         super().__init__()
-        self.current_player = self.X
+        # X is player 1 and O is player2
+        self.current_player: Optional[discord.Member] = player1
         self.board = [
             [0, 0, 0],
             [0, 0, 0],
@@ -77,8 +76,6 @@ class TicTacToe(discord.ui.View):
         ]
         self.player1 = player1
         self.player2 = player2
-
-        self.last_used_by = player2
 
         # Our board is made up of 3 by 3 TicTacToeButtons
         # The TicTacToeButton maintains the callbacks and helps steer
@@ -100,31 +97,31 @@ class TicTacToe(discord.ui.View):
         for across in self.board:
             value = sum(across)
             if value == 3:
-                return self.O
+                return self.player2
             elif value == -3:
-                return self.X
+                return self.player1
 
         # Check vertical
         for line in range(3):
             value = self.board[0][line] + self.board[1][line] + self.board[2][
                 line]
             if value == 3:
-                return self.O
+                return self.player2
             elif value == -3:
-                return self.X
+                return self.player1
 
         # Check diagonals
         diag = self.board[0][2] + self.board[1][1] + self.board[2][0]
         if diag == 3:
-            return self.O
+            return self.player2
         elif diag == -3:
-            return self.X
+            return self.player1
 
         diag = self.board[0][0] + self.board[1][1] + self.board[2][2]
         if diag == 3:
-            return self.O
+            return self.player2
         elif diag == -3:
-            return self.X
+            return self.player1
 
         # If we're here, we need to check if a tie was made
         if all(i != 0 for row in self.board for i in row):

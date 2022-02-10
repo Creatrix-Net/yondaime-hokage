@@ -399,7 +399,7 @@ class Developer(commands.Cog):
             json.dump(json_to_be_given, f)
         try:
             await ctx.message.delete()
-        except discord.Forbidden or discord.HTTPException:
+        except (discord.Forbidden, discord.HTTPException):
             pass
         await ctx.send(":ok_hand:")
 

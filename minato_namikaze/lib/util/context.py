@@ -14,6 +14,7 @@ from .vars import ChannelAndMessageId, Tokens
 
 
 class ConfirmationView(discord.ui.View):
+
     def __init__(self, *, timeout: float, author_id: int, ctx: Context,
                  delete_after: bool) -> None:
         super().__init__(timeout=timeout)
@@ -23,7 +24,8 @@ class ConfirmationView(discord.ui.View):
         self.ctx: Context = ctx
         self.message: Optional[discord.Message] = None
 
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+    async def interaction_check(self,
+                                interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.author_id:
             return True
         else:
@@ -55,6 +57,7 @@ class ConfirmationView(discord.ui.View):
 
 
 class Context(commands.Context):
+
     async def entry_to_code(self, entries):
         width = max(len(a) for a, b in entries)
         output = ["```"]

@@ -12,6 +12,7 @@ from .vars import *
 
 
 class PostStats:
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -82,7 +83,7 @@ class PostStats:
             commands_list.append(dict_append)
         for i in commands_list:
             j = await self.post(
-                f"https://fateslist.xyz/api/v2/bots/779559821162315787/commands",
+                "https://fateslist.xyz/api/v2/bots/779559821162315787/commands",
                 headers={
                     "Authorization": BotList.fateslist.value,
                     "Content-Type": "application/json",
@@ -101,7 +102,7 @@ class PostStats:
                 res = list(map(int, temp))
                 await asyncio.sleep(res[0])
                 k = await self.post(
-                    f"https://fateslist.xyz/api/v2/bots/779559821162315787/commands",
+                    "https://fateslist.xyz/api/v2/bots/779559821162315787/commands",
                     headers={
                         "Authorization": BotList.fateslist.value,
                         "Content-Type": "application/json",
@@ -135,8 +136,8 @@ class PostStats:
         except:
             pass
 
-    async def post(self,
-                   url,
+    @staticmethod
+    async def post(url,
                    headers,
                    data: dict = None,
                    json: dict = None,
@@ -271,7 +272,7 @@ class PostStats:
             822472454030229545 if not self.bot.local else 870561578347540490)
         e1 = Embed(
             title="Status posted successfully",
-            description=f"[Widgets Link](https://minato-namikaze.readthedocs.io/en/latest/#widgets) [Invite Stats](https://minatonamikaze-invites.herokuapp.com/)",
+            description="[Widgets Link](https://minato-namikaze.readthedocs.io/en/latest/#widgets) [Invite Stats](https://minatonamikaze-invites.herokuapp.com/)",
         )
         e1.set_image(url=random.choice(imageslist).strip("\n"))
         e1.set_thumbnail(url=self.bot.user.avatar.url)

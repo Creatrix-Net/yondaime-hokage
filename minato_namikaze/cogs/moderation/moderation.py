@@ -27,6 +27,7 @@ from lib import (
 
 
 class Moderation(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Some simple moderation commands"
@@ -327,9 +328,8 @@ class Moderation(commands.Cog):
         )
         if user.avatar.url:
             e.set_thumbnail(url=user.avatar.url)
-        if event:
-            if event.reason:
-                e.add_field(name="**Reason** :", value=event.reason)
+        if event and event.reason:
+            e.add_field(name="**Reason** :", value=event.reason)
         await unban.send(embed=e)
         try:
             await user.send(
@@ -454,7 +454,7 @@ class Moderation(commands.Cog):
         `--embeds`: Checks if the message has embeds (no arguments).
         """
 
-        if not await ctx.prompt(f"Are you sure that you want to **massban**?",
+        if not await ctx.prompt("Are you sure that you want to **massban**?",
                                 author_id=ctx.author.id):
             return
 
@@ -749,7 +749,8 @@ class Moderation(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    async def _basic_cleanup_strategy(self, ctx, search):
+    @staticmethod
+    async def _basic_cleanup_strategy(ctx, search):
         count = 0
         async for msg in ctx.history(limit=search, before=ctx.message):
             if msg.author == ctx.me and not (msg.mentions
@@ -798,7 +799,7 @@ class Moderation(commands.Cog):
         Members without can search up to 25 messages.
         """
         if not await ctx.prompt(
-                f"Are you sure that you want to **cleanup** the bot's messages from this channel?",
+                "Are you sure that you want to **cleanup** the bot's messages from this channel?",
                 author_id=ctx.author.id,
         ):
             return
@@ -872,15 +873,10 @@ class Moderation(commands.Cog):
             await ctx.send_help(ctx.command)
             return
 
-    async def do_removal(self,
-                         ctx,
-                         limit,
-                         predicate,
-                         *,
-                         before=None,
-                         after=None):
+    @staticmethod
+    async def do_removal(ctx, limit, predicate, *, before=None, after=None):
         if not await ctx.prompt(
-                f"Are you sure that you want to **remove the messages**?",
+                "Are you sure that you want to **remove the messages**?",
                 author_id=ctx.author.id,
         ):
             return
@@ -968,6 +964,7 @@ class Moderation(commands.Cog):
     @remove.command(name="bot", aliases=["bots"])
     async def _bot(self, ctx, prefix=None, search=100):
         """Removes a bot user's messages and messages with their optional prefix."""
+
         def predicate(m):
             return (m.webhook_id is None
                     and m.author.bot) or (prefix
@@ -989,7 +986,7 @@ class Moderation(commands.Cog):
     async def _reactions(self, ctx, search=100):
         """Removes all reactions from messages that have them."""
         if not await ctx.prompt(
-                f"Are you sure that you want to **remove the reactions**?",
+                "Are you sure that you want to **remove the reactions**?",
                 author_id=ctx.author.id,
         ):
             return
@@ -1039,7 +1036,7 @@ class Moderation(commands.Cog):
         `--not`: Use logical NOT for all options.
         """
         if not await ctx.prompt(
-                f"Are you sure that you want to **remove the messages**?",
+                "Are you sure that you want to **remove the messages**?",
                 author_id=ctx.author.id,
         ):
             return

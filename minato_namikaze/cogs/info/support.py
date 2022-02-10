@@ -40,7 +40,7 @@ class Support(commands.Cog):
     async def support(self, ctx):
         """Open support ticket if enabled by the server admins"""
         if not await ctx.prompt(
-                f"Are you sure that you want to **raise a support query** ?",
+                "Are you sure that you want to **raise a support query** ?",
                 author_id=ctx.author.id,
         ):
             return

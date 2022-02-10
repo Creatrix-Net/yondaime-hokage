@@ -749,7 +749,8 @@ class Moderation(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    async def _basic_cleanup_strategy(self, ctx, search):
+    @staticmethod
+    async def _basic_cleanup_strategy(ctx, search):
         count = 0
         async for msg in ctx.history(limit=search, before=ctx.message):
             if msg.author == ctx.me and not (msg.mentions
@@ -872,8 +873,8 @@ class Moderation(commands.Cog):
             await ctx.send_help(ctx.command)
             return
 
-    async def do_removal(self,
-                         ctx,
+    @staticmethod
+    async def do_removal(ctx,
                          limit,
                          predicate,
                          *,

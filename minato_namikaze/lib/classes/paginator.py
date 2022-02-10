@@ -129,7 +129,8 @@ class RoboPages(discord.ui.View):
         if self.message:
             await self.message.edit(view=None)
 
-    async def on_error(self, error: Exception, item: discord.ui.Item,
+    @staticmethod
+    async def on_error(error: Exception, item: discord.ui.Item,
                        interaction: discord.Interaction) -> None:
         if interaction.response.is_done():
             await interaction.followup.send("An unknown error occurred, sorry",
@@ -312,6 +313,7 @@ class EmbedPaginator(RoboPages):
         super().__init__(EmbedPageSource(entries, per_page=1), ctx=ctx)
         self.embed = discord.Embed(colour=discord.Colour.blurple())
 
-    def is_paginating(self) -> bool:
+    @staticmethod
+    def is_paginating() -> bool:
         # This forces the buttons to appear even in the front page
         return True

@@ -22,7 +22,7 @@ class BackUp(commands.Cog):
         And then dm you the backup code, (Phew keep it safe)
         """
         if not await ctx.prompt(
-                f"Are you sure that you want to **create a backup** of this guild?",
+                "Are you sure that you want to **create a backup** of this guild?",
                 author_id=ctx.author.id,
         ):
             return

@@ -10,6 +10,7 @@ from ..util.vars import ChannelAndMessageId
 
 
 class BackupDatabse:
+
     def __init__(self, ctx: Context):
         self.ctx = ctx
         self.backup_channel = ctx.get_config_channel_by_name_or_id(
@@ -186,11 +187,12 @@ class BackupDatabse:
         )
         return message_reference.id
 
-    async def get_backup_data(self, code: Optional[discord.Message]):
+    @staticmethod
+    async def get_backup_data(code: Optional[discord.Message]):
         return code.attachments[0] if code else None
 
+    @staticmethod
     async def delete_backup_data(
-        self,
         code: Optional[discord.Message] = None,
         guild: Optional[discord.Guild] = None,
     ):

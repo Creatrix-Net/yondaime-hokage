@@ -286,7 +286,8 @@ class TypeRacer:
         buffer.seek(0)
         return buffer
 
-    async def wait_for_tr_response(self, ctx: commands.Context, text: str, *,
+    @staticmethod
+    async def wait_for_tr_response(ctx: commands.Context, text: str, *,
                                    timeout: int, start):
 
         text = text.lower().replace("\n", " ").strip(".")

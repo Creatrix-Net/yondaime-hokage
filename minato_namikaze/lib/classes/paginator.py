@@ -9,6 +9,7 @@ from discord.ext.commands import Paginator as CommandPaginator
 
 
 class RoboPages(discord.ui.View):
+
     def __init__(
         self,
         source: menus.PageSource,
@@ -254,6 +255,7 @@ class FieldPageSource(menus.ListPageSource):
 
 
 class TextPageSource(menus.ListPageSource):
+
     def __init__(self, text, *, prefix="```", suffix="```", max_size=2000):
         pages = CommandPaginator(prefix=prefix,
                                  suffix=suffix,
@@ -275,6 +277,7 @@ class TextPageSource(menus.ListPageSource):
 
 
 class SimplePageSource(menus.ListPageSource):
+
     async def format_page(self, menu, entries):
         pages = []
         for index, entry in enumerate(entries,
@@ -304,11 +307,13 @@ class SimplePages(RoboPages):
 
 
 class EmbedPageSource(menus.ListPageSource):
+
     async def format_page(self, menu, entries):
         return entries
 
 
 class EmbedPaginator(RoboPages):
+
     def __init__(self, entries, *, ctx: commands.Context):
         super().__init__(EmbedPageSource(entries, per_page=1), ctx=ctx)
         self.embed = discord.Embed(colour=discord.Colour.blurple())

@@ -143,8 +143,9 @@ class Invites(commands.Cog):
         if not self._invites_ready.is_set():
             await self._invites_ready.wait()
 
+    @staticmethod
     async def fetch_invites(
-            self, guild: discord.Guild) -> Optional[Dict[str, discord.Invite]]:
+            guild: discord.Guild) -> Optional[Dict[str, discord.Invite]]:
         try:
             invites = await guild.invites()
         except discord.HTTPException:

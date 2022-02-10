@@ -260,7 +260,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                                           name="over Naruto"),
             )
 
-    async def query_member_named(self, guild, argument, *, cache=False):
+    @staticmethod
+    async def query_member_named(guild, argument, *, cache=False):
         """Queries a member by their name, name + discrim, or nickname.
         Parameters
         ------------
@@ -404,7 +405,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         except:
             pass
 
-    async def get_bot_inviter(self, guild: discord.Guild):
+    @staticmethod
+    async def get_bot_inviter(guild: discord.Guild):
         try:
             async for i in guild.audit_logs(limit=1):
                 return i.user
@@ -435,7 +437,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     def get_required_perms_invite_link(self):
         return f"https://discord.com/oauth2/authorize?client_id={self.application_id}&permissions=1515049189367&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot"
 
-    def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    def get_random_image_from_tag(tag_name: str) -> Optional[str]:
         tenor_giphy = ["tenor", "giphy"]
         if random.choice(tenor_giphy) == "tenor":
             api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
@@ -450,7 +453,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         except:
             return
 
-    async def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    async def get_random_image_from_tag(tag_name: str) -> Optional[str]:
         tenor_giphy = ["tenor", "giphy"]
         if random.choice(tenor_giphy) == "tenor":
             api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
@@ -466,14 +470,16 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         except:
             return
 
-    def tenor(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    def tenor(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
         try:
             return api_model.random(str(tag_name.lower()))
         except:
             return
 
-    def giphy(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    def giphy(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
             return api_model.random(str(
@@ -481,14 +487,16 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         except:
             return
 
-    async def tenor(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    async def tenor(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
         try:
             return await api_model.arandom(str(tag_name.lower()))
         except:
             return
 
-    async def giphy(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    async def giphy(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
             return (await api_model.arandom(

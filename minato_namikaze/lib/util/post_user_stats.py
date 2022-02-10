@@ -135,8 +135,8 @@ class PostStats:
         except:
             pass
 
-    async def post(self,
-                   url,
+    @staticmethod
+    async def post(url,
                    headers,
                    data: dict = None,
                    json: dict = None,

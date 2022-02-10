@@ -236,7 +236,8 @@ class BadgesCog(commands.Cog, name="Badges"):
         temp.seek(0)
         return temp
 
-    async def get_badge(self, badge_name: str, ctx) -> Badge:
+    @staticmethod
+    async def get_badge(badge_name: str, ctx) -> Badge:
         all_badges = await Badges(ctx).get_all_badges()
         to_return = None
         for badge in all_badges:

@@ -179,7 +179,8 @@ class SpamChecker:
         self.hit_and_run = commands.CooldownMapping.from_cooldown(
             10, 12, commands.BucketType.channel)
 
-    def is_new(self, member):
+    @staticmethod
+    def is_new(member):
         now = discord.utils.utcnow()
         seven_days_ago = now - datetime.timedelta(days=7)
         ninety_days_ago = now - datetime.timedelta(days=90)

@@ -3,7 +3,7 @@ import random
 import time
 from random import choice
 from string import ascii_letters
-from typing import Union
+from typing import Union, Optional
 
 import async_cleverbot as ac
 import discord
@@ -74,19 +74,21 @@ class Games(discord.Cog):
             return
         await ctx.send("Tic Tac Toe: X goes first", view=TicTacToe(player2=member, player1=ctx.author))
 
-    @commands.command(aliases=["connect_four", "c4", "cf"],usage="<other player.mention>")
+    @commands.command(aliases=["connect_four", "c4", "cf"],usage="[other player.mention]")
     @commands.guild_only()
-    async def connectfour(self, ctx, member: Union[MemberID, discord.Member]):
+    async def connectfour(self, ctx, member: Optional[Union[MemberID, discord.Member]] = None):
         """
         Play Amazing Connect Four Game
         https://en.wikipedia.org/wiki/Connect_Four#firstHeading
         """
+        member = member or ctx.me
         if member is ctx.author or member.bot:
-            await ctx.send(embed=ErrorEmbed(
-                description="*You cannot play this game yourself or with a bot*"
-            ))
-            return
-        view = ConnectFour(red = ctx.author, blue=member)
+            if member is not ctx.me:
+                await ctx.send(embed=ErrorEmbed(
+                    description="*You cannot play this game yourself or with a bot*"
+                ))
+                return
+        view = ConnectFour(red = ctx.author, blue=member, auto = True if member is ctx.me else False)
         view.message = await ctx.send(embeds=[view.embed, view.BoardString()],view=view)
 
     @commands.command(aliases=["hg"])

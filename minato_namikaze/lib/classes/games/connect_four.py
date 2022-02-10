@@ -1,5 +1,8 @@
 import discord
+import asyncio
+
 from typing import List
+import random
 RED = "\U0001f534"
 BLUE = "\U0001f535"
 BLANK = "\U00002b1b"
@@ -22,6 +25,24 @@ class ConnectFourButton(discord.ui.Button["ConnectFour"]):
             await interaction.message.edit(embeds=[embed,self.view.BoardString()], view=self.view)
             self.view.stop()
             return
+        
+        await interaction.response.send_message('Now let me think! ......',ephemeral=True)
+        await asyncio.sleep(2)
+        
+        #if bot
+        if not self.view.auto:
+            return
+        if self.view.turn is not self.view.blue_player:
+            return
+        self.view.PlacePiece(random.choice(self.view._controls), self.view.turn)
+        embed = self.view.make_embed()
+        await interaction.message.edit(embeds=[embed,self.view.BoardString()], view=self.view)
+        if self.view.GameOver():
+            embed = self.view.make_embed()
+            for child in self.view.children:
+                child.disabled = True
+            await interaction.message.edit(embeds=[embed,self.view.BoardString()], view=self)
+            self.view.stop()
 
 
 class Quit(discord.ui.Button["ConnectFour"]):
@@ -39,10 +60,11 @@ class Quit(discord.ui.Button["ConnectFour"]):
 class ConnectFour(discord.ui.View):
     children: List[ConnectFourButton]
 
-    def __init__(self, *, red: discord.Member, blue: discord.Member):
+    def __init__(self, *, red: discord.Member, blue: discord.Member, auto: bool = False):
         super().__init__()
         self.red_player = red
         self.blue_player = blue
+        self.auto = auto
         self.message : discord.Message = None
         self.board = [[BLANK for __ in range(7)] for __ in range(6)]
         self._controls = (
@@ -91,7 +113,7 @@ class ConnectFour(discord.ui.View):
         if not self.GameOver():
             embed.description = f"**Turn:** {self.turn.mention}\n**Piece:** `{self._PlayerToEmoji[self.turn]}`"
         else:
-            status = f"{self.winner} won!" if self.winner else "Tie"
+            status = f"{self.winner.mention} won!" if self.winner else "Tie"
             embed.description = f"**Game over**\n{status}"
             embed.color = discord.Color.green()
         return embed

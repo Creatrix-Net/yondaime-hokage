@@ -11,8 +11,6 @@ class BotEventsCommands(commands.Cog):
         self.bot = bot
         self.error_report_channel = self.bot.get_channel(
             ChannelAndMessageId.error_logs_channel.value)
-        self.traceback_channel = self.bot.get_channel(
-            ChannelAndMessageId.traceback_channel.value)
         self.delete_after_time = 5
 
     @commands.Cog.listener()
@@ -218,13 +216,11 @@ class BotEventsCommands(commands.Cog):
                 "**Error report was successfully sent**",
                 delete_after=self.delete_after_time,
             )
-            message_referrence = await self.error_report_channel.send(
-                embeds=[e7, e])
             try:
                 raise error
             except Exception:
-                await self.traceback_channel.send(
-                    content=message_referrence.jump_url,
+                await self.error_report_channel.send(
+                    embeds=[e7, e],
                     file=discord.File(
                         io.BytesIO(str(traceback.format_exc()).encode()),
                         filename="traceback.txt",
@@ -267,17 +263,16 @@ class BotEventsCommands(commands.Cog):
                 "**Error report was successfully sent**",
                 delete_after=self.delete_after_time,
             )
-            message_referrence = await self.error_report_channel.send(embed=e)
             try:
                 raise error
             except Exception:
-                await self.traceback_channel.send(
-                    content=message_referrence.jump_url,
+                await self.error_report_channel.send(
+                    embed=e,
                     file=discord.File(
                         io.BytesIO(
                             str(traceback.format_exc()).encode(),
                             filename="traceback.txt",
-                        )),
+                    ))
                 )
 
 

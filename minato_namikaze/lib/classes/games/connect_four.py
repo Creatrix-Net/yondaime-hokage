@@ -7,6 +7,34 @@ BLANK = "\U00002b1b"
 class ConnectFourButton(discord.ui.Button["ConnectFour"]):
     def __init__(self, y: int, emoji):
         super().__init__(style=discord.ButtonStyle.primary,emoji=emoji,row=y)
+    
+    async def callback(self,interaction: discord.Interaction):
+        if self.view is None:
+            raise AssertionError
+
+        self.view.PlacePiece(self.emoji, interaction.user)
+        embed = self.view.make_embed()
+        await interaction.message.edit(embeds=[embed,self.view.BoardString()], view=self.view)
+        if self.view.GameOver():
+            embed = self.view.make_embed()
+            for child in self.view.children:
+                child.disabled = True
+            await interaction.message.edit(embeds=[embed,self.view.BoardString()], view=self.view)
+            self.view.stop()
+            return
+
+
+class Quit(discord.ui.Button["ConnectFour"]):
+    def __init__(self):
+        super().__init__(style=discord.ButtonStyle.red,label='Quit',row=2)
+    
+    async def callback(self,interaction: discord.Interaction):
+        if self.view is None:
+            raise AssertionError
+
+        await interaction.response.defer()
+        await interaction.delete_original_message()
+        self.view.stop()
 
 class ConnectFour(discord.ui.View):
     children: List[ConnectFourButton]
@@ -15,6 +43,7 @@ class ConnectFour(discord.ui.View):
         super().__init__()
         self.red_player = red
         self.blue_player = blue
+        self.message : discord.Message = None
         self.board = [[BLANK for __ in range(7)] for __ in range(6)]
         self._controls = (
             discord.PartialEmoji(name="\N{DIGIT ONE}\U000020e3"),
@@ -47,7 +76,9 @@ class ConnectFour(discord.ui.View):
         }
         self.embed = self.make_embed()
         for i in range(7):
-            self.add_item(ConnectFourButton(y=i//2 if i > 1 else 1,emoji=self._controls[i]))
+            row = i//2 if i > 1 else 1
+            self.add_item(ConnectFourButton(y=row if row <=2 else 2,emoji=self._controls[i]))
+        self.add_item(Quit())
 
     def BoardString(self) -> str:
         board = "\N{DIGIT ONE}\U000020e3\N{DIGIT TWO}\U000020e3\N{DIGIT THREE}\U000020e3\N{DIGIT FOUR}\U000020e3\N{DIGIT FIVE}\U000020e3\N{DIGIT SIX}\U000020e3\N{DIGIT SEVEN}\U000020e3\n"
@@ -123,27 +154,7 @@ class ConnectFour(discord.ui.View):
             await interaction.response.send_message("This Connect Four match is not for you or wait for your turn", ephemeral=True)
             return False
     
-    @discord.ui.button(style=discord.ButtonStyle.primary, emoji=discord.PartialEmoji(name="\N{DIGIT ONE}\U000020e3"))
-    async def one(self, button: discord.ui.Button,interaction: discord.Interaction):
-        if self.GameOver():
-            embed = self.make_embed()
-            for child in self.children:
-                child.disabled = True
-            await interaction.message.edit(embeds=[embed,self.BoardString()], view=self)
-            self.stop()
-            return
-        
-        self.PlacePiece(button.emoji, interaction.user)
-        
-        embed = self.make_embed()
-        await interaction.message.edit(embeds=[embed,self.BoardString()])
-    
-    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red,row=2)
-    async def quit(self, button: discord.ui.Button,interaction: discord.Interaction):
-        await interaction.response.defer()
-        await interaction.delete_original_message()
-        self.stop()
-    
     async def on_timeout(self) -> None:
         for child in self.children:
             child.disabled = True
+        await self.message.edit(embeds=[self.embed, self.BoardString()],view=self)

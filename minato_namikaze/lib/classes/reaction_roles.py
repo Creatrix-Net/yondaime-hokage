@@ -7,13 +7,12 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
                          emoji=emoji,
                          custom_id=custom_id,
                          row=y)
-        self.database = database
 
     # This function is called whenever this particular button is pressed
     async def callback(self, interaction: discord.Interaction):
         if self.view is None:
             raise AssertionError
-        data = await self.database.get(interaction.message.id)
+        data = await self.view.database.get(interaction.message.id)
         if data is None:
             return
         unique = bool(data.get("limit_to_one"))
@@ -69,6 +68,7 @@ class ReactionPersistentView(discord.ui.View):
     
     def __init__(self, reactions_dict: dict, database, custom_id: list):
         super().__init__(timeout=None)
+        self.database = database
         for count, i in enumerate(reactions_dict):
             self.add_item(
                 ReactionRolesButton(

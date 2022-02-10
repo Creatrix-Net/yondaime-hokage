@@ -87,9 +87,7 @@ class Games(discord.Cog):
             ))
             return
         view = ConnectFour(red = ctx.author, blue=member)
-        await ctx.send(
-            embeds=[view.embed, view.BoardString()],
-            view=view)
+        view.message = await ctx.send(embeds=[view.embed, view.BoardString()],view=view)
 
     @commands.command(aliases=["hg"])
     async def hangman(self, ctx):

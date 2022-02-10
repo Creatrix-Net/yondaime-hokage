@@ -14,6 +14,7 @@ from .vars import ChannelAndMessageId, Tokens
 
 
 class ConfirmationView(discord.ui.View):
+
     def __init__(self, *, timeout: float, author_id: int, ctx: Context,
                  delete_after: bool) -> None:
         super().__init__(timeout=timeout)
@@ -23,7 +24,8 @@ class ConfirmationView(discord.ui.View):
         self.ctx: Context = ctx
         self.message: Optional[discord.Message] = None
 
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+    async def interaction_check(self,
+                                interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.author_id:
             return True
         else:
@@ -55,6 +57,7 @@ class ConfirmationView(discord.ui.View):
 
 
 class Context(commands.Context):
+
     async def entry_to_code(self, entries):
         width = max(len(a) for a, b in entries)
         output = ["```"]
@@ -247,7 +250,8 @@ class Context(commands.Context):
         else:
             return self.bot.get_channel(channel)
 
-    def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    def get_random_image_from_tag(tag_name: str) -> Optional[str]:
         tenor_giphy = ["tenor", "giphy"]
         if random.choice(tenor_giphy) == "tenor":
             api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
@@ -262,7 +266,8 @@ class Context(commands.Context):
         except:
             return
 
-    async def get_random_image_from_tag(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    async def get_random_image_from_tag(tag_name: str) -> Optional[str]:
         tenor_giphy = ["tenor", "giphy"]
         if random.choice(tenor_giphy) == "tenor":
             api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
@@ -278,14 +283,16 @@ class Context(commands.Context):
         except:
             return
 
-    def tenor(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    def tenor(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
         try:
             return api_model.random(str(tag_name.lower()))
         except:
             return
 
-    def giphy(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    def giphy(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
             return api_model.random(str(
@@ -293,14 +300,16 @@ class Context(commands.Context):
         except:
             return
 
-    async def tenor(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    async def tenor(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
         try:
             return await api_model.arandom(str(tag_name.lower()))
         except:
             return
 
-    async def giphy(self, tag_name: str) -> Optional[str]:
+    @staticmethod
+    async def giphy(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
             return (await api_model.arandom(

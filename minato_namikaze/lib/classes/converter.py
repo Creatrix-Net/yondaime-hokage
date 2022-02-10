@@ -13,6 +13,7 @@ time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
 
 
 class TimeConverter(commands.Converter):
+
     async def convert(self, ctx, argument):
         args = argument.lower()
         matches = re.findall(time_regex, args)
@@ -30,6 +31,7 @@ class TimeConverter(commands.Converter):
 
 
 class Arguments(argparse.ArgumentParser):
+
     def error(self, message):
         raise RuntimeError(message)
 
@@ -40,6 +42,7 @@ def can_execute_action(ctx, user, target):
 
 
 class MemberID(commands.Converter):
+
     async def convert(self, ctx, argument):
         try:
             member = await commands.MemberConverter().convert(ctx, argument)
@@ -71,6 +74,7 @@ class MemberID(commands.Converter):
 
 
 class BannedMember(commands.Converter):
+
     async def convert(self, ctx, argument):
         if argument.isdigit():
             member_id = int(argument, base=10)
@@ -91,6 +95,7 @@ class BannedMember(commands.Converter):
 
 
 class ActionReason(commands.Converter):
+
     async def convert(self, ctx, argument):
         ret = f"{ctx.author} (ID: {ctx.author.id}): {argument}"
 
@@ -150,6 +155,7 @@ class MentionSpamConfig:
 
 
 class CooldownByContent(commands.CooldownMapping):
+
     def _bucket_key(self, message):
         return (message.channel.id, message.content)
 
@@ -179,7 +185,8 @@ class SpamChecker:
         self.hit_and_run = commands.CooldownMapping.from_cooldown(
             10, 12, commands.BucketType.channel)
 
-    def is_new(self, member):
+    @staticmethod
+    def is_new(member):
         now = discord.utils.utcnow()
         seven_days_ago = now - datetime.timedelta(days=7)
         ninety_days_ago = now - datetime.timedelta(days=90)

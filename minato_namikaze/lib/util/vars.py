@@ -120,8 +120,7 @@ class LinksAndVars(enum.Enum):
     version = token_get("VERSION")
     invite_code = "wXVQahNM5c"
     timeout = 3.0
-    owner_ids = list(
-        {887549958931247137, 837223478934896670, 747729781369602049})
+    owner_ids = [887549958931247137, 837223478934896670, 747729781369602049]
 
     with gzip.open(
             os.path.join(

@@ -19,6 +19,7 @@ log = logging.getLogger(__name__)
 
 
 class Developer(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.posting = PostStats(self.bot)
@@ -32,7 +33,8 @@ class Developer(commands.Cog):
     def owners(ctx):
         return ctx.author.id == ctx.bot.owner_id
 
-    async def _send_guilds(self, ctx, guilds, title):
+    @staticmethod
+    async def _send_guilds(ctx, guilds, title):
         if len(guilds) == 0:
             await ctx.send(embed=ErrorEmbed(
                 description="No such guild was found."))

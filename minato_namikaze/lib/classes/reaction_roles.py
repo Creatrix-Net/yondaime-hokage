@@ -11,7 +11,8 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
 
     # This function is called whenever this particular button is pressed
     async def callback(self, interaction: discord.Interaction):
-        assert self.view is not None
+        if self.view is None:
+            raise AssertionError
         data = await self.database.get(interaction.message.id)
         if data is None:
             return

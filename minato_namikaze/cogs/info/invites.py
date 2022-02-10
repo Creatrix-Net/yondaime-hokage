@@ -16,6 +16,7 @@ POLL_PERIOD = 25
 
 
 class Invites(commands.Cog):
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self._invites_ready = asyncio.Event()
@@ -143,8 +144,9 @@ class Invites(commands.Cog):
         if not self._invites_ready.is_set():
             await self._invites_ready.wait()
 
+    @staticmethod
     async def fetch_invites(
-            self, guild: discord.Guild) -> Optional[Dict[str, discord.Invite]]:
+            guild: discord.Guild, ) -> Optional[Dict[str, discord.Invite]]:
         try:
             invites = await guild.invites()
         except discord.HTTPException:

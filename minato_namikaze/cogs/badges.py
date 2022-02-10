@@ -24,12 +24,14 @@ class BadgesPageEntry:
 
 
 class BadgePages(SimplePages):
+
     def __init__(self, entries, *, ctx: commands.Context, per_page: int = 5):
         converted = [BadgesPageEntry(entry) for entry in entries]
         super().__init__(converted, per_page=per_page, ctx=ctx)
 
 
 class BadgesCog(commands.Cog, name="Badges"):
+
     def __init__(self, bot):
         self.bot = bot
         self.description = "Create fun fake badges based on your discord profile"
@@ -236,7 +238,8 @@ class BadgesCog(commands.Cog, name="Badges"):
         temp.seek(0)
         return temp
 
-    async def get_badge(self, badge_name: str, ctx) -> Badge:
+    @staticmethod
+    async def get_badge(badge_name: str, ctx) -> Badge:
         all_badges = await Badges(ctx).get_all_badges()
         to_return = None
         for badge in all_badges:

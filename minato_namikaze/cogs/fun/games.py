@@ -11,7 +11,6 @@ from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 from lib import ErrorEmbed, MemberID, Tokens
 from lib.classes.games import *
-import discord
 from discord.abc import GuildChannel
 from discord import application_command_option, VoiceChannel
 import typing

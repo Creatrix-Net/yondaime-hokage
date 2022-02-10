@@ -83,7 +83,7 @@ class Developer(commands.Cog):
             try:
                 data = json.loads(str(cnt))
                 data.pop("type")
-                data_keys = list(map(lambda a: str(a), list(data.keys())))
+                data_keys = list(map(str, list(data.keys())))
                 try:
                     await commands.MessageConverter().convert(
                         ctx, int(data_keys[0]))
@@ -102,7 +102,7 @@ class Developer(commands.Cog):
             try:
                 data = json.loads(str(cnt))
                 data.pop("type")
-                data_keys = list(map(lambda a: str(a), list(data.keys())))
+                data_keys = list(map(str, list(data.keys())))
                 try:
                     await commands.GuildConverter().convert(
                         ctx, int(data_keys[0]))
@@ -121,7 +121,7 @@ class Developer(commands.Cog):
             try:
                 data = json.loads(str(cnt))
                 data.pop("type")
-                data_keys = list(map(lambda a: str(a), list(data.keys())))
+                data_keys = list(map(str, list(data.keys())))
                 try:
                     await commands.GuildConverter().convert(
                         ctx, int(data_keys[0]))
@@ -140,7 +140,7 @@ class Developer(commands.Cog):
             try:
                 data = json.loads(str(cnt))
                 data.pop("type")
-                data_keys = list(map(lambda a: str(a), list(data.keys())))
+                data_keys = list(map(str, list(data.keys())))
                 try:
                     await commands.GuildConverter().convert(
                         ctx, int(data_keys[0]))

@@ -328,9 +328,8 @@ class Moderation(commands.Cog):
         )
         if user.avatar.url:
             e.set_thumbnail(url=user.avatar.url)
-        if event:
-            if event.reason:
-                e.add_field(name="**Reason** :", value=event.reason)
+        if event and event.reason:
+            e.add_field(name="**Reason** :", value=event.reason)
         await unban.send(embed=e)
         try:
             await user.send(

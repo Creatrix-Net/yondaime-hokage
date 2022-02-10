@@ -385,7 +385,7 @@ class Developer(commands.Cog):
                             {"description": command.description})
                     if command.clean_params or len(command.params) != 0:
                         command_dict.update(
-                            {"params": [i for i in command.clean_params]})
+                            {"params": list(command.clean_params)})
                     cog_commands_list.append(command_dict)
             if len(cog_commands_list) != 0:
                 json_to_be_given.update({

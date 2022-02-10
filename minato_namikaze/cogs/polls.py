@@ -102,9 +102,7 @@ class QuickPoll(commands.Cog):
             answers[0],
             answers[1],
             await
-            commands.TextChannelConverter(answers[-1]
-                                          ).convert(ctx=ctx,
-                                                    argument=answers[-1]),
+            commands.TextChannelConverter(answers[-1]).convert(ctx=ctx, argument=answers[-1]),
         )
         if not isinstance(poll_channel, discord.TextChannel):
             await ctx.send(embed=ErrorEmbed(

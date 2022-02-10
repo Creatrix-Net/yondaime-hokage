@@ -455,7 +455,7 @@ class Moderation(commands.Cog):
         `--embeds`: Checks if the message has embeds (no arguments).
         """
 
-        if not await ctx.prompt(f"Are you sure that you want to **massban**?",
+        if not await ctx.prompt("Are you sure that you want to **massban**?",
                                 author_id=ctx.author.id):
             return
 
@@ -800,7 +800,7 @@ class Moderation(commands.Cog):
         Members without can search up to 25 messages.
         """
         if not await ctx.prompt(
-                f"Are you sure that you want to **cleanup** the bot's messages from this channel?",
+                "Are you sure that you want to **cleanup** the bot's messages from this channel?",
                 author_id=ctx.author.id,
         ):
             return
@@ -877,7 +877,7 @@ class Moderation(commands.Cog):
     @staticmethod
     async def do_removal(ctx, limit, predicate, *, before=None, after=None):
         if not await ctx.prompt(
-                f"Are you sure that you want to **remove the messages**?",
+                "Are you sure that you want to **remove the messages**?",
                 author_id=ctx.author.id,
         ):
             return
@@ -987,7 +987,7 @@ class Moderation(commands.Cog):
     async def _reactions(self, ctx, search=100):
         """Removes all reactions from messages that have them."""
         if not await ctx.prompt(
-                f"Are you sure that you want to **remove the reactions**?",
+                "Are you sure that you want to **remove the reactions**?",
                 author_id=ctx.author.id,
         ):
             return
@@ -1037,7 +1037,7 @@ class Moderation(commands.Cog):
         `--not`: Use logical NOT for all options.
         """
         if not await ctx.prompt(
-                f"Are you sure that you want to **remove the messages**?",
+                "Are you sure that you want to **remove the messages**?",
                 author_id=ctx.author.id,
         ):
             return

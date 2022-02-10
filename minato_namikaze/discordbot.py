@@ -208,7 +208,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 try:
                     data = json.loads(str(cnt))
                     data.pop("type")
-                    data_keys = list(map(lambda a: str(a), list(data.keys())))
+                    data_keys = list(map(str, list(data.keys())))
                     data = data[data_keys[0]]
                     self.add_view(
                         ReactionPersistentView(

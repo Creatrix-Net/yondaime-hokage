@@ -63,16 +63,18 @@ class Games(discord.Cog):
 
     @commands.command(aliases=["tc"], usage="<other player.mention>")
     @commands.guild_only()
-    async def tictactoe(self, ctx, member: Union[MemberID,discord.Member]):
+    async def tictactoe(self, ctx, member: Optional[Union[MemberID, discord.Member]] = None):
         """
         Play Tictactoe with yourself or your friend!
         """
+        member = member or ctx.me
         if member is ctx.author or member.bot:
-            await ctx.send(embed=ErrorEmbed(
-                description="*You cannot play this game yourself or with a bot*"
-            ))
-            return
-        await ctx.send("Tic Tac Toe: X goes first", view=TicTacToe(player2=member, player1=ctx.author))
+            if member is not ctx.me:
+                await ctx.send(embed=ErrorEmbed(
+                    description="*You cannot play this game yourself or with a bot*"
+                ))
+                return
+        await ctx.send(f"Tic Tac Toe: X goes first aka {ctx.author.mention}", view=TicTacToe(player2=member, player1=ctx.author, auto = member is ctx.me))
 
     @commands.command(aliases=["connect_four", "c4", "cf"],usage="[other player.mention]")
     @commands.guild_only()

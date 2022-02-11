@@ -1,7 +1,7 @@
-from typing import List, Optional
-
+from typing import List, Optional, Tuple
+import asyncio
 import discord
-
+import random
 
 # Defines a custom button that contains the logic of the game.
 # The ['TicTacToe'] bit is for type hinting purposes to tell your IDE or linter
@@ -15,6 +15,7 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
         super().__init__(style=discord.ButtonStyle.secondary,label="\u200b",row=y)
         self.x = x
         self.y = y
+        self.button_id = x
 
     # This function is called whenever this particular button is pressed
     # This is part of the "meat" of the game logic
@@ -23,25 +24,54 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
             raise AssertionError
         view: TicTacToe = self.view
         state = view.board[self.y][self.x]
-        if state in (view.player1, view.player2):
+        if state in (view.X, view.O):
             return
 
         if view.current_player == view.player1:
             self.style = discord.ButtonStyle.danger
             self.label = "X"
             self.disabled = True
-            view.board[self.y][self.x] = view.player1
+            view.board[self.y][self.x] = view.X
             view.current_player = view.player2
+            view.member_board[self.y][self.x] = view.player1
             content = f"It is now O's ({view.player2.mention}) turn"
+
+            await interaction.message.edit(content=content, view=view)
+            if view.auto:
+                await interaction.response.defer()
         else:
             self.style = discord.ButtonStyle.success
             self.label = "O"
             self.disabled = True
-            view.board[self.y][self.x] = view.player2
+            view.board[self.y][self.x] = view.O
+            view.member_board[self.y][self.x] = view.player2
             view.current_player = view.player1
-            content = f"It is now X's {view.player1.mentiona} turn"
+            content = f"It is now X's {view.player1.mention} turn"
 
         winner = view.check_board_winner()
+        if view.auto and winner is None or winner == view.Tie:
+            await interaction.message.edit(content='Now let me think! ......', view=view)
+            await asyncio.sleep(2)
+
+            left_board_space: List[Tuple] = [] #[(x,y)]
+            for count, i in enumerate(view.member_board):
+                for count_1, j in enumerate(i):
+                    if isinstance(j,int):
+                        left_board_space.append((count_1, count))
+            select_space = random.choice(left_board_space)
+            x = select_space[0]
+            y = select_space[-1]
+            
+            child = discord.utils.get(view.children, button_id=x, row=y)
+            child.style = discord.ButtonStyle.success
+            child.label = "O"
+            child.disabled = True
+            view.board[y][x] = view.O
+            view.member_board[y][x] = view.player2
+            view.current_player = view.player1
+            content = f"It is now X's {view.player1.mention} turn"
+            await interaction.message.edit(content=content, view=view)
+
         if winner is not None:
             if winner == view.player1:
                 content = f"{view.player1.mention} won!"
@@ -54,18 +84,18 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
                 child.disabled = True
 
             view.stop()
-
-        await interaction.response.edit_message(content=content, view=view)
+            await interaction.message.edit(content=content, view=view)
+            
 
 
 # This is our actual board View
 class TicTacToe(discord.ui.View):
     children: List[TicTacToeButton]
+    Tie = 2
     X = -1
     O = 1
-    Tie = 2
 
-    def __init__(self, player1, player2):
+    def __init__(self, player1, player2, auto: bool = False):
         super().__init__()
         # X is player 1 and O is player2
         self.current_player: Optional[discord.Member] = player1
@@ -74,8 +104,14 @@ class TicTacToe(discord.ui.View):
             [0, 0, 0],
             [0, 0, 0],
         ]
-        self.player1 = player1
-        self.player2 = player2
+        self.member_board = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+        self.player1: discord.Member = player1
+        self.player2: discord.Member = player2
+        self.auto = auto
 
         # Our board is made up of 3 by 3 TicTacToeButtons
         # The TicTacToeButton maintains the callbacks and helps steer
@@ -85,8 +121,7 @@ class TicTacToe(discord.ui.View):
                 self.add_item(TicTacToeButton(x, y))
     
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        user_to_equate = self.player1 if self.last_used_by == self.player2 else self.player2
-        if interaction.user and interaction.user.id == user_to_equate.id:
+        if interaction.user and interaction.user.id == self.current_player.id:
             return True
         else:
             await interaction.response.send_message("This TicTacToe match is not for you or wait for your turn", ephemeral=True)

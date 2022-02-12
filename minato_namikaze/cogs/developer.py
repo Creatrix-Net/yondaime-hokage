@@ -76,8 +76,7 @@ class Developer(commands.Cog):
     async def cleanup_data(self, ctx):
         """Cleans the uncessary data from the database"""
         # Reaction Roles
-        database = await self.bot.db.new(database_category_name,
-                                         reaction_roles_channel_name)
+        database = await self.bot.db.new(database_category_name,reaction_roles_channel_name)
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
@@ -85,8 +84,7 @@ class Developer(commands.Cog):
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
-                    await commands.MessageConverter().convert(
-                        ctx, int(data_keys[0]))
+                    await commands.MessageConverter().convert(ctx, int(data_keys[0]))
                 except commands.CommandError:
                     await database.delete(data_keys[0])
             except JSONDecodeError:

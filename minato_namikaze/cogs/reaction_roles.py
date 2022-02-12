@@ -1,5 +1,7 @@
 import asyncio
-import uuid
+import uuid, json
+from json.decoder import JSONDecodeError
+from discord.ext import tasks
 
 import discord
 from discord.ext import commands
@@ -9,6 +11,7 @@ from lib import (
     database_category_name,
     has_permissions,
     reaction_roles_channel_name,
+    ChannelAndMessageId
 )
 
 
@@ -16,18 +19,36 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Setup some reaction roles"
+        self.cleanup.start()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",
-                                    id=922030031146995733)
+        return discord.PartialEmoji(name="discord_certified_moderator", id=922030031146995733)
 
     def owners(ctx):
         return ctx.author.id == ctx.bot.owner_id
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,
-                                     reaction_roles_channel_name)
+        return await self.bot.db.new(database_category_name,reaction_roles_channel_name)
+    
+    @tasks.loop(hours=1)
+    async def cleanup(self):
+        database = await self.database_class()
+        server2 = await self.bot.fetch_guild(ChannelAndMessageId.server_id2.value)
+        bot_member_class = await self.bot.get_or_fetch_member(server2, self.bot.application_id)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(str, list(data.keys())))
+                try:
+                    await bot_member_class.fetch_message(int(data_keys[0]))
+                except discord.NotFound or discord.Forbidden or discord.HTTPException:
+                    await database.delete(data_keys[0])
+            except JSONDecodeError:
+                await message.delete()
+                continue
 
     @commands.command(name="new", aliases=["create"])
     @has_permissions(manage_roles=True)
@@ -233,8 +254,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
 
-    @commands.command(aliases=["del_rr"],
-                      usage="<reaction_roles_id aka message.id")
+    @commands.command(aliases=["del_rr"],usage="<reaction_roles_id aka message.id")
     @has_permissions(manage_roles=True)
     async def delete_reaction_roles(
             self, ctx, reaction_roles_id: commands.MessageConverter):

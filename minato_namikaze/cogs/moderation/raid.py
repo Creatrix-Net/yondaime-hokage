@@ -3,6 +3,8 @@ import datetime
 import logging
 from collections import defaultdict
 from typing import Literal, Optional
+import json
+from json.decoder import JSONDecodeError
 
 import discord
 import num2words
@@ -35,19 +37,49 @@ class AntiRaid(commands.Cog):
         self._spam_check = defaultdict(SpamChecker)
         self.message_batches = defaultdict(list)
         self.bulk_send_messages.start()
+        self.cleanup.start()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator",
-                                    id=922030031146995733)
+        return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
 
     async def database_class_antiraid(self):
-        return await self.bot.db.new(database_category_name,
-                                     antiraid_channel_name)
+        return await self.bot.db.new(database_category_name,antiraid_channel_name)
 
     async def database_class_mentionspam(self):
-        return await self.bot.db.new(database_category_name,
-                                     mentionspam_channel_name)
+        return await self.bot.db.new(database_category_name,mentionspam_channel_name)
+    
+    @tasks.loop(hours=1)
+    async def cleanup(self):
+        database = await self.database_class_antiraid()
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(str, list(data.keys())))
+                try:
+                    await self.bot.fetch_guild(int(data_keys[0]))
+                except discord.Forbidden or discord.HTTPException:
+                    await database.delete(data_keys[0])
+            except JSONDecodeError:
+                await message.delete()
+                continue
+        
+        database = await self.database_class_mentionspam()
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(str, list(data.keys())))
+                try:
+                    await self.bot.fetch_guild(int(data_keys[0]))
+                except discord.Forbidden or discord.HTTPException:
+                    await database.delete(data_keys[0])
+            except JSONDecodeError:
+                await message.delete()
+                continue
 
     async def add_and_check_data(
         self,
@@ -129,28 +161,6 @@ class AntiRaid(commands.Cog):
             log.info(
                 f"[Raid Mode] Banned {member} (ID: {member.id}) from server {member.guild} via strict mode."
             )
-
-    @tasks.loop(seconds=10.0)
-    async def bulk_send_messages(self):
-        async with self._batch_message_lock:
-            for ((guild_id, channel_id),
-                 messages) in self.message_batches.items():
-                guild = self.bot.get_guild(guild_id)
-                channel = guild and guild.get_channel(channel_id)
-                if channel is None:
-                    continue
-
-                paginator = commands.Paginator(suffix="", prefix="")
-                for message in messages:
-                    paginator.add_line(message)
-
-                for page in paginator.pages:
-                    try:
-                        await channel.send(page)
-                    except discord.HTTPException:
-                        pass
-
-            self.message_batches.clear()
 
     @commands.Cog.listener()
     async def on_message(self, message):

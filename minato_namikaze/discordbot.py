@@ -165,16 +165,16 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         self.togetherControl = await DiscordTogether(Tokens.token.value)
 
-        cog_dir = BASE_DIR / "cogs"
-        for filename in list(set(os.listdir(cog_dir))):
-            if os.path.isdir(cog_dir / filename):
-                for i in os.listdir(cog_dir / filename):
-                    if i.endswith(".py"):
-                        self.load_extension(
-                            f'cogs.{filename.strip(" ")}.{i[:-3]}')
-            else:
-                if filename.endswith(".py"):
-                    self.load_extension(f"cogs.{filename[:-3]}")
+        # cog_dir = BASE_DIR / "cogs"
+        # for filename in list(set(os.listdir(cog_dir))):
+        #     if os.path.isdir(cog_dir / filename):
+        #         for i in os.listdir(cog_dir / filename):
+        #             if i.endswith(".py"):
+        #                 self.load_extension(
+        #                     f'cogs.{filename.strip(" ")}.{i[:-3]}')
+        #     else:
+        #         if filename.endswith(".py"):
+        #             self.load_extension(f"cogs.{filename[:-3]}")
         self.load_extension("jishaku")
 
 
@@ -506,4 +506,13 @@ if __name__ == "__main__":
     except:
         pass
     bot = MinatoNamikazeBot()
+    cog_dir = BASE_DIR / "cogs"
+    for filename in list(set(os.listdir(cog_dir))):
+        if os.path.isdir(cog_dir / filename):
+            for i in os.listdir(cog_dir / filename):
+                if i.endswith(".py"):
+                    bot.load_extension(f'cogs.{filename.strip(" ")}.{i[:-3]}')
+        else:
+            if filename.endswith(".py"):
+                bot.load_extension(f"cogs.{filename[:-3]}")
     bot.run()

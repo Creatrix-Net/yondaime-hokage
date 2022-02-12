@@ -9,12 +9,12 @@ from lib import ChannelAndMessageId, Embed, ErrorEmbed
 class BotEventsCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.error_report_channel = self.bot.get_channel(
-            ChannelAndMessageId.error_logs_channel.value)
         self.delete_after_time = 5
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
+        print(error)
+        error_channel = await self.bot.fetch_channel(ChannelAndMessageId.error_logs_channel.value)
         if isinstance(error, commands.CommandOnCooldown):
             e1 = ErrorEmbed(title="Command Error!", description=f"`{error}`")
             e1.set_footer(text=f"{ctx.author.name}")
@@ -219,7 +219,8 @@ class BotEventsCommands(commands.Cog):
             try:
                 raise error
             except Exception:
-                await self.error_report_channel.send(
+                
+                await error_channel.send(
                     embeds=[e7, e],
                     file=discord.File(
                         io.BytesIO(str(traceback.format_exc()).encode()),
@@ -266,7 +267,7 @@ class BotEventsCommands(commands.Cog):
             try:
                 raise error
             except Exception:
-                await self.error_report_channel.send(
+                await error_channel.send(
                     embed=e,
                     file=discord.File(
                         io.BytesIO(

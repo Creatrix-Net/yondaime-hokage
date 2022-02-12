@@ -74,7 +74,8 @@ class Games(discord.Cog):
                     description="*You cannot play this game yourself or with a bot*"
                 ))
                 return
-        await ctx.send(f"Tic Tac Toe: X goes first aka {ctx.author.mention}", view=TicTacToe(player2=member, player1=ctx.author, auto = member is ctx.me))
+        view = TicTacToe(player2=member, player1=ctx.author, auto = member is ctx.me)
+        view.message = await ctx.send(f"Tic Tac Toe: X goes first aka {ctx.author.mention}", view=view)
 
     @commands.command(aliases=["connect_four", "c4", "cf"],usage="[other player.mention]")
     @commands.guild_only()
@@ -109,8 +110,9 @@ class Games(discord.Cog):
         Play Akinator
         https://en.wikipedia.org/wiki/Akinator#Gameplay
         """
-        game = aki.Akinator()
-        await game.start(ctx)
+        view = Akinator()
+        await view.start()
+        view.message = await ctx.send(embed=await view.build_embed(), view=view)
 
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
     @commands.command(aliases=["cb"])

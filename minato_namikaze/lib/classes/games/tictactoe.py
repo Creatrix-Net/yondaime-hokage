@@ -112,6 +112,7 @@ class TicTacToe(discord.ui.View):
         self.player1: discord.Member = player1
         self.player2: discord.Member = player2
         self.auto = auto
+        self.message: Optional[discord.Message] = None
 
         # Our board is made up of 3 by 3 TicTacToeButtons
         # The TicTacToeButton maintains the callbacks and helps steer
@@ -163,3 +164,8 @@ class TicTacToe(discord.ui.View):
             return self.Tie
 
         return None
+    
+    async def on_timeout(self) -> None:
+        for child in self.children:
+            child.disabled = True
+        await self.message.edit(view=self)

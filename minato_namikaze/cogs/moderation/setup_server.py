@@ -3,6 +3,8 @@ import typing,random, string
 from discord.ext import tasks
 from json.decoder import JSONDecodeError
 
+from datetime import timedelta
+
 import aiohttp
 import discord
 from discord.ext import commands
@@ -154,30 +156,91 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     async def badlinks(
         self,
         ctx,
-        option: typing.Literal[True, False, "yes", "no", "on", "off"] = True,
-        action: typing.Optional[typing.Literal["ban", "mute", "timeout", "kick", "log"]] = "log",
+        action: typing.Optional[typing.Literal["ban", "mute", "timeout", "kick", "log"]] = None,
         logging_channel: typing.Optional[commands.TextChannelConverter] = None,
+        option: typing.Literal["yes", "no", "on", "off", True, False] = True,
     ):
         """
         If enabled then it checks against any scam, phishing or adult links which is posted by members and take actions accordingly
 
         Args:
-            - option [Optional] (default: True) : It accepts the following options ; True, False, yes, no, on, off
             - action [Optional] (default: log) : What kind of action to take, It accepts the following options ; 'ban', 'mute', 'timeout', 'kick', 'log'
             - logging_channel [Optional] : It will log in a specific channel if specified, otherwise it will log the message where the link was sent. Default
+            - option [Optional] (default: True) : It accepts the following options ; True, False, yes, no, on, off
 
         `Note: If 'log' action is selected then, I will only delete the message and log it the current channel where the link was sent and will do nothing`
         """
+        if option is not None and option in ['no','off', False]:
+            database = await self.database_class()
+            guild_dict = await database.get(ctx.guild.id)
+            if guild_dict is None:
+                return
+            guild_dict.pop('badlinks')
+            await database.set(ctx.guild.id, guild_dict)
+            await ctx.send(':ok_hand:')
+        
         await self.add_and_check_data(
-            dict_to_add={
+            {
                 "badlinks": {
                     "option": option,
                     "action": action,
-                    "logging_channel": logging_channel,
-                }
-            },
+                    "logging_channel": logging_channel.id
+            }
+        },
             ctx=ctx,
         )
+    
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message is None or message.content == string.whitespace or message.content is None:
+            return
+        ctx = await self.bot.get_context(message)
+        detected_urls = await detect_bad_domains(message.content)
+        if len(detected_urls) != 0:   
+            embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')
+            detected_string = '\n'.join([f'- ||{i}||' for i in set(detected_urls)])
+            embed.description = f'The following scam url(s) were detected:\n{detected_string}'
+            embed.set_author(name=message.author,icon_url=message.author.display_avatar.url)
+            message_sent = await ctx.send(embed=embed)
+            try:
+                await message.delete()
+            except discord.Forbidden or discord.NotFound or discord.HTTPException:
+                pass
+        
+        if message.guild is None:
+            return
+
+        database = await self.database_class()
+        guild_dict = await database.get(message.guild.id)
+        if guild_dict is None:
+            return
+        
+        bad_link_config: dict = guild_dict.get('badlinks')
+        if bad_link_config is None:
+            return
+        
+        action_config = bad_link_config.get('action')
+        action_reason_string = '[Auto Mod] Scam/Phishing/Adult Link posted'
+        if action_config is None:
+            return
+        
+        if action_config.lower() == 'ban':
+            await message.author.ban(reason=action_reason_string)
+            await ctx.send(reference=message_sent,embed=SuccessEmbed(title="Action Taken",description="Ban :hammer:"))
+        if action_config.lower() in ['mute', 'timeout']:
+            await message.author.edit(timed_out_until=discord.utils.utcnow()+timedelta(days=2),reason=action_reason_string)
+            await ctx.send(reference=message_sent,embed=SuccessEmbed(title="Action Taken",description="Time Out :x: "))
+        if action_config.lower() == "kick":
+            await message.author.kick(reason=action_reason_string)
+            await ctx.send(reference=message_sent,embed=SuccessEmbed(title="Action Taken",description="Kick :foot: "))
+        
+        log_config = bad_link_config.get('logging_channel')
+        if log_config is None:
+            return
+        
+        log_channel = await self.bot.fetch_channel(log_config)
+        await log_channel.send(embed=embed)
+
 
     @commands.command()
     @commands.guild_only()
@@ -313,24 +376,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database_antiraid.delete(ctx.guild.id)
         await database_mentionspam.delete(ctx.guild.id)
         await ctx.send(":ok_hand:")
-    
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if message is None or message.content == string.whitespace or message.content is None:
-            return
-        ctx = await self.bot.get_context(message)
-        detected_urls = await detect_bad_domains(message.content)
-        if len(detected_urls) != 0:   
-            embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')
-            detected_string = '\n'.join([f'- ||{i}||' for i in set(detected_urls)])
-            embed.description = f'The following scam url(s) were detected:\n{detected_string}'
-            embed.set_author(name=message.author.display_name,icon_url=message.author.display_avatar.url)
-            await ctx.send(embed=embed)
-        
-        if message.guild is None:
-            return
-        database = await self.database_class()
-        guild_dict = await database.get(message.guild.id)
+
 
 
 def setup(bot):

@@ -1154,8 +1154,7 @@ class Moderation(commands.Cog):
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
         await member.edit(timed_out_until=duration.dt, reason=reason)
-        await ctx.send(embed=discord.Embed(
-            description=f"**Timed out** {member} until {format_relative(duration.dt)}"))
+        await ctx.send(embed=discord.Embed(description=f"**Timed out** {member} until {format_relative(duration.dt)}"))
 
 
 def setup(bot):

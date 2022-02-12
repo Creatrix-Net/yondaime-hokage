@@ -109,6 +109,8 @@ class LinksAndVars(enum.Enum):
     github = "https://github.com/The-4th-Hokage/yondaime-hokage"
     github_branch = "master"
 
+    bad_links = 'https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/main/bad-domains.txt'
+
     statuspage_link = "https://minatonamikaze.statuspage.io/"
 
     version = token_get("VERSION")

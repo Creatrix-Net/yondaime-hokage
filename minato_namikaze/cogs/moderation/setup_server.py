@@ -1,42 +1,69 @@
 import json
-import typing
+import typing,random, string
+from discord.ext import tasks
+from json.decoder import JSONDecodeError
 
+import aiohttp
 import discord
 from discord.ext import commands
-from lib import (
-    Embed,
-    EmbedPaginator,
-    antiraid_channel_name,
-    database_category_name,
-    database_channel_name,
-    is_mod,
-    mentionspam_channel_name,
-)
+from lib import (Embed, EmbedPaginator, ErrorEmbed, LinksAndVars,
+                 antiraid_channel_name, database_category_name,
+                 database_channel_name, detect_bad_domains, is_mod,
+                 mentionspam_channel_name, SuccessEmbed)
+
+
+class Badurls(discord.SlashCommand):
+    """Check if a text has a malicious url or not from a extensive list 60k+ flagged domains"""
+
+    content = discord.application_command_option(description='The text, url or a list of urls to check', type=str)
+   
+    @content.autocomplete
+    async def content_autocomplete(self, response: discord.AutocompleteResponse) -> typing.AsyncIterator[str]:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(LinksAndVars.bad_links.value) as resp:
+                list_of_bad_domains = (await resp.text()).split('\n')
+        
+        end = random.randint(25, len(list_of_bad_domains))
+        for domain in list_of_bad_domains[end-25:end]:
+            if response.value.lower() in domain.lower():
+                yield domain
+    
+    def __init__(self, cog):
+        self.cog = cog
+
+    async def callback(self, response: discord.SlashCommandResponse):
+        detected_urls = await detect_bad_domains(response.options.content)
+        if len(detected_urls) != 0:   
+            embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')
+            detected_string = '\n'.join([f'- ||{i}||' for i in set(detected_urls)])
+            embed.description = f'The following scam url(s) were detected:\n{detected_string}'
+            embed.set_author(name=response.interaction.user.display_name,icon_url=response.interaction.user.display_avatar.url)
+            await response.send_message(embed=embed,ephemeral=True)
+            return
+        await response.send_message(embed=SuccessEmbed(title="The url or the text message is safe!"),ephemeral=True)
 
 
 class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Do some necessary setup through an interactive mode."
+        self.add_application_command(Badurls(self))
+        self.cleanup.start()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,
-                                     database_channel_name)
+        return await self.bot.db.new(database_category_name,database_channel_name)
 
     async def database_class_antiraid(self):
-        return await self.bot.db.new(database_category_name,
-                                     antiraid_channel_name)
+        return await self.bot.db.new(database_category_name,antiraid_channel_name)
 
     async def database_class_mentionspam(self):
-        return await self.bot.db.new(database_category_name,
-                                     mentionspam_channel_name)
+        return await self.bot.db.new(database_category_name,mentionspam_channel_name)
 
-    async def add_and_check_data(self, dict_to_add: dict,
-                                 ctx: commands.Context) -> None:
+    async def add_and_check_data(self, dict_to_add: dict,ctx: commands.Context) -> None:
         database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:
@@ -46,6 +73,23 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database.set(ctx.guild.id, guild_dict)
         await ctx.send(":ok_hand:")
         return
+    
+    @tasks.loop(hours=1)
+    async def cleanup(self):
+        database = await self.database_class()
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(str, list(data.keys())))
+                try:
+                    await self.bot.fetch_guild(int(data_keys[0]))
+                except discord.Forbidden or discord.HTTPException:
+                    await database.delete(data_keys[0])
+            except JSONDecodeError:
+                await message.delete()
+                continue
 
     @commands.group()
     @commands.guild_only()
@@ -111,8 +155,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         self,
         ctx,
         option: typing.Literal[True, False, "yes", "no", "on", "off"] = True,
-        action: typing.Optional[typing.Literal["ban", "mute", "timeout",
-                                               "kick", "log"]] = "log",
+        action: typing.Optional[typing.Literal["ban", "mute", "timeout", "kick", "log"]] = "log",
         logging_channel: typing.Optional[commands.TextChannelConverter] = None,
     ):
         """
@@ -270,6 +313,24 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database_antiraid.delete(ctx.guild.id)
         await database_mentionspam.delete(ctx.guild.id)
         await ctx.send(":ok_hand:")
+    
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message is None or message.content == string.whitespace or message.content is None:
+            return
+        ctx = await self.bot.get_context(message)
+        detected_urls = await detect_bad_domains(message.content)
+        if len(detected_urls) != 0:   
+            embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')
+            detected_string = '\n'.join([f'- ||{i}||' for i in set(detected_urls)])
+            embed.description = f'The following scam url(s) were detected:\n{detected_string}'
+            embed.set_author(name=message.author.display_name,icon_url=message.author.display_avatar.url)
+            await ctx.send(embed=embed)
+        
+        if message.guild is None:
+            return
+        database = await self.database_class()
+        guild_dict = await database.get(message.guild.id)
 
 
 def setup(bot):

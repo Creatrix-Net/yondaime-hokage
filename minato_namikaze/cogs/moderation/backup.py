@@ -1,16 +1,26 @@
 import discord
-from discord.ext import commands
-from lib import BackupDatabse, SuccessEmbed
+from discord.ext import commands, tasks
+from lib import BackupDatabse, SuccessEmbed,ChannelAndMessageId
 
 
 class BackUp(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Create a backup for your server"
+        self.cleanup.start()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\U0001f4be")
+    
+    @tasks.loop(hours=1)
+    async def cleanup(self):
+        async for message in (await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)).history(limit=None):
+            try:
+                await self.bot.fetch_guild(int(message.content.strip()))
+            except discord.Forbidden or discord.HTTPException:
+                await message.delete()
+                continue
 
     @commands.command(description="Create backup of the server")
     @commands.has_permissions(manage_guild=True)

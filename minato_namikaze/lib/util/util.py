@@ -1,10 +1,9 @@
 import aiohttp
 import re
-import string
+import discord
 from .vars import ChannelAndMessageId, BASE_DIR, LinksAndVars
 import os
 import gzip
-import string
 import re
 import aiohttp
 from urllib.parse import urlparse,uses_netloc
@@ -65,27 +64,11 @@ def format_character_name(character_name: str) -> str:
     return character_name.strip(" ").title()
 
 
-def return_matching_emoji(ctx, name):
-    def emoji_predicate(emoji, name):
-        return emoji.name.lower() in name
-
-    if (name.split("(")[-1].strip(" ").strip(")").lower()
-            in ChannelAndMessageId.character_side_exclude.name):
-        name = name.split("(")[-1].strip(" ").strip(")").lower()
-        for i in ctx.bot.get_guild(
-                ChannelAndMessageId.testing_server_id.name).emojis:
-            if emoji_predicate(i, name):
-                return i
-    else:
-        name = name.lower().strip(" ").lower()
-        for i in ctx.bot.get_guild(
-                ChannelAndMessageId.testing_server_id.name).emojis:
-            if emoji_predicate(i, name):
-                return i
+async def return_matching_emoji(bot, name) -> discord.Emoji:
+    return discord.utils.get((await bot.fetch_guild(ChannelAndMessageId.server_id.value)).emojis, name=name.lower()) or discord.utils.get((await bot.fetch_guild(ChannelAndMessageId.server_id2.value)).emojis, name=name.lower())
 
 
-
-async def detect_bad_domains(message_content: str):
+async def detect_bad_domains(message_content: str) -> list:
     with gzip.open(BASE_DIR / os.path.join("lib","data","url_regex.txt.gz",),"rt",encoding="utf-8",) as f:
         url_regex = f.read()
     url = [x[0] for x in re.findall(url_regex,message_content)]

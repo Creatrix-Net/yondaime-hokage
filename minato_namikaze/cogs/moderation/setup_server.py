@@ -1,55 +1,23 @@
 import json
-import typing,random, string
+import typing, string
 from discord.ext import tasks
 from json.decoder import JSONDecodeError
 
 from datetime import timedelta
 
-import aiohttp
 import discord
 from discord.ext import commands
-from lib import (Embed, EmbedPaginator, ErrorEmbed, LinksAndVars,
+from lib import (Embed, EmbedPaginator, ErrorEmbed,
                  antiraid_channel_name, database_category_name,
                  database_channel_name, detect_bad_domains, is_mod,
-                 mentionspam_channel_name, SuccessEmbed)
+                 mentionspam_channel_name)
 
-
-class Badurls(discord.SlashCommand):
-    """Check if a text has a malicious url or not from a extensive list 60k+ flagged domains"""
-
-    content = discord.application_command_option(description='The text, url or a list of urls to check', type=str)
-   
-    @content.autocomplete
-    async def content_autocomplete(self, response: discord.AutocompleteResponse) -> typing.AsyncIterator[str]:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(LinksAndVars.bad_links.value) as resp:
-                list_of_bad_domains = (await resp.text()).split('\n')
-        
-        end = random.randint(25, len(list_of_bad_domains))
-        for domain in list_of_bad_domains[end-25:end]:
-            if response.value.lower() in domain.lower():
-                yield domain
-    
-    def __init__(self, cog):
-        self.cog = cog
-
-    async def callback(self, response: discord.SlashCommandResponse):
-        detected_urls = await detect_bad_domains(response.options.content)
-        if len(detected_urls) != 0:   
-            embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')
-            detected_string = '\n'.join([f'- ||{i}||' for i in set(detected_urls)])
-            embed.description = f'The following scam url(s) were detected:\n{detected_string}'
-            embed.set_author(name=response.interaction.user.display_name,icon_url=response.interaction.user.display_avatar.url)
-            await response.send_message(embed=embed,ephemeral=True)
-            return
-        await response.send_message(embed=SuccessEmbed(title="The url or the text message is safe!"),ephemeral=True)
 
 
 class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Do some necessary setup through an interactive mode."
-        self.add_application_command(Badurls(self))
         self.cleanup.start()
 
     @property
@@ -196,16 +164,17 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             return
         ctx = await self.bot.get_context(message)
         detected_urls = await detect_bad_domains(message.content)
-        if len(detected_urls) != 0:   
-            embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')
-            detected_string = '\n'.join([f'- ||{i}||' for i in set(detected_urls)])
-            embed.description = f'The following scam url(s) were detected:\n{detected_string}'
-            embed.set_author(name=message.author,icon_url=message.author.display_avatar.url)
-            message_sent = await ctx.send(embed=embed)
-            try:
-                await message.delete()
-            except discord.Forbidden or discord.NotFound or discord.HTTPException:
-                pass
+        if len(detected_urls) <= 0:  
+            return 
+        embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')
+        detected_string = '\n'.join([f'- ||{i}||' for i in set(detected_urls)])
+        embed.description = f'The following scam url(s) were detected:\n{detected_string}'
+        embed.set_author(name=message.author,icon_url=message.author.display_avatar.url)
+        message_sent = await ctx.send(embed=embed)
+        try:
+            await message.delete()
+        except discord.Forbidden or discord.NotFound or discord.HTTPException:
+            pass
         
         if message.guild is None:
             return
@@ -225,14 +194,26 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             return
         
         if action_config.lower() == 'ban':
-            await message.author.ban(reason=action_reason_string)
-            await ctx.send(reference=message_sent,embed=SuccessEmbed(title="Action Taken",description="Ban :hammer:"))
+            try:
+                await message.author.ban(reason=action_reason_string)
+                embed.add_field(name="Action Taken", value="Ban :hammer:")
+                await message_sent.edit(embed=embed)
+            except discord.Forbidden or discord.HTTPException:
+                pass
         if action_config.lower() in ['mute', 'timeout']:
-            await message.author.edit(timed_out_until=discord.utils.utcnow()+timedelta(days=2),reason=action_reason_string)
-            await ctx.send(reference=message_sent,embed=SuccessEmbed(title="Action Taken",description="Time Out :x: "))
+            try:
+                await message.author.edit(timed_out_until=discord.utils.utcnow()+timedelta(days=2),reason=action_reason_string)
+                embed.add_field(name="Action Taken", value="Time Out :x:")
+                await message_sent.send(embed=embed)
+            except discord.Forbidden or discord.HTTPException:
+                pass
         if action_config.lower() == "kick":
-            await message.author.kick(reason=action_reason_string)
-            await ctx.send(reference=message_sent,embed=SuccessEmbed(title="Action Taken",description="Kick :foot: "))
+            try:
+                await message.author.kick(reason=action_reason_string)
+                embed.add_field(name="Action Taken", value="Kick :foot:")
+                await message_sent.send(embed=embed)
+            except discord.Forbidden or discord.HTTPException:
+                pass
         
         log_config = bad_link_config.get('logging_channel')
         if log_config is None:

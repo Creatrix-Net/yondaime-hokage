@@ -85,8 +85,7 @@ class AntiRaid(commands.Cog):
         self,
         dict_to_add: dict,
         ctx: commands.Context,
-        type_database: Optional[Literal["antiraid",
-                                        "mentionspam"]] = "antiraid",
+        type_database: Optional[Literal["antiraid","mentionspam"]] = "antiraid",
     ) -> None:
         if type_database.lower() == "antiraid":
             database = await self.database_class_antiraid()
@@ -331,11 +330,9 @@ class AntiRaid(commands.Cog):
         channel = channel or ctx.channel
 
         try:
-            await ctx.guild.edit(
-                verification_level=discord.VerificationLevel.high)
+            await ctx.guild.edit(verification_level=discord.VerificationLevel.medium)
         except discord.HTTPException:
-            await ctx.send("\N{WARNING SIGN} Could not set verification level."
-                           )
+            await ctx.send("\N{WARNING SIGN} Could not set verification level.")
 
         update_dict = {
             "raid_mode": RaidMode.on.value,
@@ -370,15 +367,12 @@ class AntiRaid(commands.Cog):
             return
 
         try:
-            await ctx.guild.edit(
-                verification_level=discord.VerificationLevel.low)
+            await ctx.guild.edit(verification_level=discord.VerificationLevel.low)
         except discord.HTTPException:
-            await ctx.send("\N{WARNING SIGN} Could not set verification level."
-                           )
+            await ctx.send("\N{WARNING SIGN} Could not set verification level.")
 
         await self.disable_raid_mode(ctx.guild.id)
-        await ctx.send(
-            "Raid mode disabled. No longer broadcasting join messages.")
+        await ctx.send("Raid mode disabled. No longer broadcasting join messages.")
 
     @raid.command(name="strict")
     @is_mod()
@@ -407,11 +401,9 @@ class AntiRaid(commands.Cog):
             )
 
         try:
-            await ctx.guild.edit(
-                verification_level=discord.VerificationLevel.high)
+            await ctx.guild.edit(verification_level=discord.VerificationLevel.high)
         except discord.HTTPException:
-            await ctx.send("\N{WARNING SIGN} Could not set verification level."
-                           )
+            await ctx.send("\N{WARNING SIGN} Could not set verification level.")
 
         update_dict = {
             "raid_mode": RaidMode.strict.value,

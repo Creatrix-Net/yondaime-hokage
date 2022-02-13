@@ -3,6 +3,11 @@ import copy
 
 import discord
 from discord.ext import commands
+from datetime import timezone
+
+from ..util.util import return_matching_emoji
+from psutil._common import bytes2human
+
 
 
 def insert_returns(body):
@@ -85,9 +90,6 @@ def has_guild_permissions(*, check=all, **perms):
     return commands.check(pred)
 
 
-# These do not take channel overrides into account
-
-
 def is_mod():
     async def pred(ctx):
         return await check_guild_permissions(ctx, {"manage_guild": True})
@@ -128,3 +130,149 @@ def is_in_guilds(*guild_ids):
         return guild.id in guild_ids
 
     return commands.check(predicate)
+
+
+async def serverinfo(guild: discord.Guild, author: discord.Member, bot) -> discord.Embed:
+    levels = {
+        "None - No criteria set.": 
+        discord.VerificationLevel.none,
+        "Low - Member must have a verified email on their Discord account.":
+        discord.VerificationLevel.low,
+        "Medium - Member must have a verified email and be registered on Discord for more than five minutes.":
+        discord.VerificationLevel.medium,
+        "High - Member must have a verified email, be registered on Discord for more than five minutes, and be a member of the guild itself for more than ten minutes.":
+        discord.VerificationLevel.high,
+        "Extreme - Member must have a verified phone on their Discord account.":
+        discord.VerificationLevel.highest,
+        }
+    filters = {
+        "Disabled - The guild does not have the content filter enabled.":
+        discord.ContentFilter.disabled,
+        "No Role - The guild has the content filter enabled for members without a role.":
+        discord.ContentFilter.no_role,
+        "All Members - The guild has the content filter enabled for every member.":
+        discord.ContentFilter.all_members,
+    }
+    nsfw_level = {
+        discord.NSFWLevel.default : "The guild has not been categorised yet.",
+        discord.NSFWLevel.explicit : "The guild contains NSFW content.",
+        discord.NSFWLevel.safe : "The guild does not contain any NSFW content.",
+        discord.NSFWLevel.age_restricted : "The guild may contain NSFW content."
+    }
+    find_bots = sum(1 for member in guild.members if member.bot)
+
+    embed = discord.Embed(
+        title=f"Server: __{guild.name}__ Info",
+        color=author.top_role.color,
+        description=f":id: Server ID: `{guild.id}`",
+    )
+
+    if guild.icon:
+        embed.set_thumbnail(url=guild.icon.url)
+    if guild.banner:
+        embed.set_image(url=guild.banner.with_format("png").url)
+
+    verif_lvl = "None"
+    for text, dvl in levels.items():
+        if dvl is guild.verification_level:
+            verif_lvl = text
+    for response, filt in filters.items():
+        if filt is guild.explicit_content_filter:
+            content_filter = response
+    embed.add_field(name=":crown: Owner", value=guild.owner)
+    embed.add_field(name='Max Bitrate', value=str(guild.bitrate_limit / 1000)+"kbps")
+    embed.add_field(name='File Size',value=bytes2human(guild.filesize_limit))
+    embed.add_field(name=":heavy_check_mark: Verification Level", value=verif_lvl)
+    embed.add_field(name=":warning: Content Filter", value=content_filter)
+    embed.add_field(name=":busts_in_silhouette: Members",value=guild.member_count)
+    embed.add_field(name=":robot: Bots", value=find_bots)
+    embed.add_field(name=":performing_arts: Roles", value=f"{len(guild.roles)}")
+    embed.add_field(
+        name=":star: Emotes",
+        value=f"{len(guild.emojis)}/{guild.emoji_limit}",
+    )
+    embed.add_field(name=":calendar: Created On",value=f"<t:{round(guild.created_at.timestamp())}:D>")
+    embed.add_field(name=":level_slider: NSFW Level",value=nsfw_level[guild.nsfw_level])
+    embed.add_field(name=":key: 2FA", value="Enabled" if bool(guild.mfa_level) else "Disabled")
+    embed.add_field(name=":bell: Notifications", value="All Messages " if guild.default_notifications == discord.NotificationLevel.all_messages else "Disabled")
+    embed.add_field(name="Categories", value=len(guild.categories))
+    embed.add_field(name=f"{str(await return_matching_emoji(bot, 'text_channel'))} Text Channels", value=len(guild.text_channels))
+    embed.add_field(name=f"{str(await return_matching_emoji(bot, 'voice_channel'))} Voice Channels", value=len(guild.voice_channels))
+    embed.add_field(name=f"{str(await return_matching_emoji(bot, 'stage_channel'))} Stage Channels", value=len(guild.stage_channels))
+    if len(guild.features) != 0:
+        embed.add_field(name="Features", value = ''.join(f'- {i}\n' for i in guild.features),inline=False)
+    return embed
+
+
+async def userinfo(user: discord.Member, guild: discord.Guild, bot) -> discord.Embed:
+    dt = user.joined_at
+    dt1 = user.created_at
+    unix_ts_utc = dt.replace(tzinfo=timezone.utc).timestamp()
+    unix_ts_utc1 = dt1.replace(tzinfo=timezone.utc).timestamp()
+    user_c_converter = int(unix_ts_utc1)
+    user_j_converter = int(unix_ts_utc)
+
+    since_created = "<t:{}:R>".format(user_c_converter)
+    if user.joined_at is not None:
+        since_joined = "<t:{}:R>".format(user_j_converter)
+        user_joined = "<t:{}:D>".format(user_j_converter)
+    else:
+        since_joined = "?"
+        user_joined = "Unknown"
+    user_created = "<t:{}:D>".format(user_c_converter)
+    created_on = ("{} - ({})").format(since_created, user_created)
+    joined_on = ("{} - ({})\n").format(since_joined, user_joined)
+
+    # to get status of user with emoji
+    status = ""
+    s = user.status
+    if s == discord.Status.online:
+        status += str(await return_matching_emoji(name="online", bot=bot))
+    if s == discord.Status.offline:
+        status += str(await return_matching_emoji(name="offline", bot=bot))
+    if s == discord.Status.idle:
+        status += str(await return_matching_emoji(name="idle", bot=bot))
+    if s == discord.Status.dnd:
+        status += str(await return_matching_emoji(name="dnd", bot=bot))
+
+    show_roles = (", ".join([
+        f"<@&{x.id}>"
+        for x in sorted(user.roles, key=lambda x: x.position, reverse=True)
+        if x.id != guild.default_role.id
+    ]) if len(user.roles) > 1 else "None")
+
+    embed = discord.Embed(
+        title=f"{status} {user.display_name}'s Info.",
+        colour=user.top_role.colour.value,
+        description=f":id: User ID: `{user.id}`",
+    )
+    embed.set_thumbnail(url=user.avatar.url)
+
+    embed.add_field(name=":small_blue_diamond: User",
+        value=user,
+        inline=True
+    )
+    if user.nick:
+        embed.add_field(
+            name=":small_blue_diamond: Nickname",
+            value=user.nick,
+            inline=True
+        )
+    embed.add_field(
+        name="**__User info__**",
+        value=(":date: Joined On {}").format(joined_on),
+        inline=False,
+    )
+    embed.add_field(
+        name="**__Member Info__**",
+        value=(":date: Created On: {}").format(created_on),
+        inline=True,
+    )
+    embed.add_field(
+        name=":small_orange_diamond: Roles",
+        value=show_roles,
+        inline=False
+    )
+    if user.banner:
+        embed.set_image(url=user.banner)
+    return embed

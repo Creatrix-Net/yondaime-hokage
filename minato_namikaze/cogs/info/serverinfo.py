@@ -1,9 +1,6 @@
-# Discord Imports
-from datetime import timezone
-
 import discord
 from discord.ext import commands
-from lib import Embed
+from lib import Embed, serverinfo, userinfo
 
 
 class Info(commands.Cog):
@@ -108,70 +105,8 @@ class Info(commands.Cog):
     @commands.guild_only()
     async def server(self, ctx):
         """Check info about current server"""
-        guild = ctx.guild
-        levels = {
-            "None - No criteria set.":
-            discord.VerificationLevel.none,
-            "Low - Member must have a verified email on their Discord account.":
-            discord.VerificationLevel.low,
-            "Medium - Member must have a verified email and be registered on Discord for more than five minutes.":
-            discord.VerificationLevel.medium,
-            "High - Member must have a verified email, be registered on Discord for more than five minutes, and be a member of the guild itself for more than ten minutes.":
-            discord.VerificationLevel.high,
-            "Extreme - Member must have a verified phone on their Discord account.":
-            discord.VerificationLevel.highest,
-        }
-        filters = {
-            "Disabled - The guild does not have the content filter enabled.":
-            discord.ContentFilter.disabled,
-            "No Role - The guild has the content filter enabled for members without a role.":
-            discord.ContentFilter.no_role,
-            "All Members - The guild has the content filter enabled for every member.":
-            discord.ContentFilter.all_members,
-        }
         if ctx.invoked_subcommand is None:
-            find_bots = sum(1 for member in ctx.guild.members if member.bot)
-
-            embed = discord.Embed(
-                title=f"Server: __{ctx.guild.name}__ Info",
-                color=ctx.author.top_role.color,
-                description=f":id: Server ID: `{ctx.guild.id}`",
-            )
-
-            if ctx.guild.icon:
-                embed.set_thumbnail(url=ctx.guild.icon.url)
-            if ctx.guild.banner:
-                embed.set_image(url=ctx.guild.banner.with_format("png").url)
-
-            verif_lvl = "None"
-            for text, dvl in levels.items():
-                if dvl is guild.verification_level:
-                    verif_lvl = text
-            for response, filt in filters.items():
-                if filt is guild.explicit_content_filter:
-                    content_filter = response
-            embed.add_field(name="<:ServerOwner:864765886916067359> Owner",
-                            value=ctx.guild.owner)
-            embed.add_field(name=":earth_africa: Region",
-                            value=str(ctx.guild.region).capitalize())
-            embed.add_field(name=":heavy_check_mark: Verification Level",
-                            value=verif_lvl)
-            embed.add_field(name=":warning: Content Filter",
-                            value=content_filter)
-            embed.add_field(name=":busts_in_silhouette: Members",
-                            value=ctx.guild.member_count)
-            embed.add_field(name=":robot: Bots", value=find_bots)
-            embed.add_field(name=":performing_arts: Roles",
-                            value=f"{len(ctx.guild.roles)}")
-            embed.add_field(
-                name=":star: Emotes",
-                value=f"{len(ctx.guild.emojis)}/{ctx.guild.emoji_limit}",
-            )
-
-            date = ctx.guild.created_at.timestamp()
-            embed.add_field(name=":calendar: Created On",
-                            value=f"<t:{round(date)}:D>")
-            await ctx.send(embed=embed)
+            await ctx.send(embed=await serverinfo(ctx.guild, ctx.author, self.bot))
 
     @server.command(name="server_icon", aliases=["icon"])
     @commands.guild_only()
@@ -189,7 +124,7 @@ class Info(commands.Cog):
         """Get the current banner image"""
         if not ctx.guild.banner:
             return await ctx.send("This server does not have a banner...")
-        e = Embed(title=f"ℹ Banner for {ctx.guild}")
+        e = Embed(title=f":information_source: Banner for {ctx.guild}")
         e.set_image(url=ctx.guild.banner.with_format("png").url)
         await ctx.send(embed=e)
 
@@ -197,76 +132,8 @@ class Info(commands.Cog):
     @commands.guild_only()
     async def user(self, ctx, *, user: discord.Member = None):
         """Get user information"""
-        user = user or ctx.author
-        """Timestamp stuff"""
-        dt = user.joined_at
-        dt1 = user.created_at
-        unix_ts_utc = dt.replace(tzinfo=timezone.utc).timestamp()
-        unix_ts_utc1 = dt1.replace(tzinfo=timezone.utc).timestamp()
-        user_c_converter = int(unix_ts_utc1)
-        user_j_converter = int(unix_ts_utc)
-
-        since_created = "<t:{}:R>".format(user_c_converter)
-        if user.joined_at is not None:
-            since_joined = "<t:{}:R>".format(user_j_converter)
-            user_joined = "<t:{}:D>".format(user_j_converter)
-        else:
-            since_joined = "?"
-            user_joined = "Unknown"
-        user_created = "<t:{}:D>".format(user_c_converter)
-        created_on = ("{} - ({})").format(since_created, user_created)
-        joined_on = ("{} - ({})\n").format(since_joined, user_joined)
-        """ to fetch user (for banner)"""
-        uuser = await self.bot.fetch_user(user.id)
-        """ to get status of user with emoji """
-        status = ""
-        s = user.status
-        if s == discord.Status.online:
-            status += "<:online:885521973965357066>"
-        if s == discord.Status.offline:
-            status += "<:offline:885522151866777641>"
-        if s == discord.Status.idle:
-            status += "<:idle:885522083545772032>"
-        if s == discord.Status.dnd:
-            status += "<:dnd:885522031536394320>"
-
-        show_roles = (", ".join([
-            f"<@&{x.id}>"
-            for x in sorted(user.roles, key=lambda x: x.position, reverse=True)
-            if x.id != ctx.guild.default_role.id
-        ]) if len(user.roles) > 1 else "None")
-
-        embed = discord.Embed(
-            title=f"{status} {user.display_name}'s Info.",
-            colour=user.top_role.colour.value,
-            description=f":id: User ID: `{user.id}`",
-        )
-        embed.set_thumbnail(url=user.avatar.url)
-
-        embed.add_field(name=":small_blue_diamond: User",
-                        value=user,
-                        inline=True)
-        if user.nick:
-            embed.add_field(name=":small_blue_diamond: Nickname",
-                            value=user.nick,
-                            inline=True)
-        embed.add_field(
-            name="**__User info__**",
-            value=(":date: Joined On {}").format(joined_on),
-            inline=False,
-        )
-        embed.add_field(
-            name="**__Member Info__**",
-            value=(":date: Created On: {}").format(created_on),
-            inline=True,
-        )
-        embed.add_field(name=":small_orange_diamond: Roles",
-                        value=show_roles,
-                        inline=False)
-        if uuser.banner:
-            embed.set_image(url=uuser.banner)
-
-        await ctx.send(embed=embed)
+        user = user or ctx.author        
+        await ctx.send(embed=await userinfo(user, ctx.guild, self.bot))
 
 
 def setup(bot):

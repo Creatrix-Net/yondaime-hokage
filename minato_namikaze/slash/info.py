@@ -1,7 +1,7 @@
 import discord
 from lib import serverinfo, Embed
 
-class Server(discord.SlashCommand, guild_ids=[920536143244709889]):
+class Server(discord.SlashCommand):
     '''Some server releated commands'''
     def __init__(self, cog):
         self.cog = cog

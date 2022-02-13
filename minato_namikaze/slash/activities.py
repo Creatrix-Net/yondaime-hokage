@@ -37,10 +37,7 @@ activities = [
 class Activities(discord.SlashCommand):
     """Get access to discord beta activities feature"""
 
-    activities: typing.Optional[typing.Literal[
-        "youtube", "poker", "chess", "betrayal", "fishing", "letter-league",
-        "word-snack", "sketch-heads", "spellcast", "awkword",
-        "checkers", ]] = discord.application_command_option(
+    activities: typing.Literal["youtube", "poker", "chess", "betrayal", "fishing", "letter-league","word-snack", "sketch-heads", "spellcast", "awkword","checkers", ] = discord.application_command_option(
             description="The type of activity",
             default="youtube",
     )

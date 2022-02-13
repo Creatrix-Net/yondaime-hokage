@@ -1,7 +1,13 @@
-import discord, typing
-import aiohttp
 import random
-from lib import LinksAndVars, ErrorEmbed, SuccessEmbed, detect_bad_domains
+import typing
+
+import aiohttp
+import discord
+from discord.abc import GuildChannel
+from lib import (ErrorEmbed, LinksAndVars, RaidMode, SuccessEmbed,
+                 antiraid_channel_name, database_category_name,
+                 detect_bad_domains)
+
 
 class Badurls(discord.SlashCommand, name="badurls"):
     """Check if a text has a malicious url or not from a extensive list 60k+ flagged domains"""
@@ -35,7 +41,7 @@ class Badurls(discord.SlashCommand, name="badurls"):
         await response.send_message(embed=SuccessEmbed(title="The url or the text message is safe!"),ephemeral=True)
 
 
-class BadurlsMessageCommand(discord.MessageCommand, guild_ids=[920536143244709889], name="flagged urls"):
+class BadurlsMessageCommand(discord.MessageCommand, name="flagged urls"):
     """Check if a text has a malicious url or not from a extensive list 60k+ flagged domains"""
     def __init__(self, cog):
         self.cog = cog
@@ -54,11 +60,69 @@ class BadurlsMessageCommand(discord.MessageCommand, guild_ids=[92053614324470988
         await response.send_message(embed=SuccessEmbed(title="The url or the text message is safe!"),ephemeral=True)
 
 
+class AntiRaid(discord.SlashCommand):
+    """Enable or disable Antiraid system for the server"""
+    switch: typing.Literal["on", "strict", "off"] = discord.application_command_option(description="Antiraid different modes",default="on")
+    channel: typing.Optional[GuildChannel] = discord.application_command_option(channel_types=[discord.TextChannel],description="Channel to broadcast join messages", default=None)
+    
+    def __init__(self, cog):
+        self.cog = cog
+    
+    async def add_and_check_data(
+        self,
+        dict_to_add: dict,
+        guild: discord.Guild
+    ) -> None:
+        database = await self.cog.bot.db.new(database_category_name,antiraid_channel_name)
+        guild_dict = await database.get(guild.id)
+        if guild_dict is None:
+            await database.set(guild.id, dict_to_add)
+            return
+        guild_dict.update(dict_to_add)
+        await database.set(guild.id, guild_dict)
+        return
+    
+    async def callback(self, response: discord.SlashCommandResponse):
+        database = await self.cog.bot.db.new(database_category_name,antiraid_channel_name)
+        switch = response.options.switch
+        if switch.lower() == "off":
+            await database.delete(response.interaction.guild_id)
+            try:
+                await response.interaction.guild.edit(verification_level=discord.VerificationLevel.low)
+                await response.send_message("Raid mode disabled. No longer broadcasting join messages.",ephemeral=True)
+            except discord.HTTPException:
+                await response.send_message("\N{WARNING SIGN} Could not set verification level.",ephemeral=True)
+            return
+        if switch.lower() == "strict":
+            try:
+                await response.interaction.guild.edit(verification_level=discord.VerificationLevel.high)
+                update_dict = {
+                    "raid_mode": RaidMode.strict.value,
+                    "broadcast_channel": response.options.channel.id
+                }
+                await self.add_and_check_data(update_dict,response.interaction.guild)
+                await response.send_message(f"Raid mode enabled. Broadcasting join messages to {response.options.channel.mention}.",ephemeral=True)
+            except discord.HTTPException:
+                await response.send_message("\N{WARNING SIGN} Could not set verification level.",ephemeral=True)
+            return
+        try:
+            await response.interaction.guild.edit(verification_level=discord.VerificationLevel.medium)
+            update_dict = {
+                "raid_mode": RaidMode.on.value,
+                "broadcast_channel": response.options.channel.id
+            }
+            await self.add_and_check_data(update_dict,response.interaction.guild)
+            await response.send_message(f"Raid mode enabled. Broadcasting join messages to {response.options.channel.mention}.",ephemeral=True)
+        except discord.HTTPException:
+            await response.send_message("\N{WARNING SIGN} Could not set verification level.",ephemeral=True)
+
+
 class ModerationCog(discord.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.add_application_command(Badurls(self))
         self.add_application_command(BadurlsMessageCommand(self))
+        self.add_application_command(AntiRaid(self))
 
 def setup(bot):
     bot.add_cog(ModerationCog(bot))

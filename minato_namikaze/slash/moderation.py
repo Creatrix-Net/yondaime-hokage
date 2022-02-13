@@ -1,5 +1,6 @@
 import random
 import typing
+from datetime import timedelta
 
 import aiohttp
 import discord
@@ -68,6 +69,13 @@ class AntiRaid(discord.SlashCommand):
     def __init__(self, cog):
         self.cog = cog
     
+    async def command_check(self, response: discord.SlashCommandResponse) -> bool:
+        if response.channel.permissions_for(response.user).manage_guild:
+            return True
+        else:
+            await response.send_message("You don't have the `Manage Guild` permission", ephemeral=True)
+            return False
+    
     async def add_and_check_data(
         self,
         dict_to_add: dict,
@@ -117,12 +125,100 @@ class AntiRaid(discord.SlashCommand):
             await response.send_message("\N{WARNING SIGN} Could not set verification level.",ephemeral=True)
 
 
+class Kick(discord.UserCommand):
+    '''Kicks the user from guild'''
+    def __init__(self, cog):
+        self.cog = cog
+    
+    async def command_check(self, response: discord.SlashCommandResponse) -> bool:
+        if response.channel.permissions_for(response.user).kick_members:
+            return True
+        else:
+            await response.send_message("You don't have the `Kick Members` permission", ephemeral=True)
+            return False
+    
+    async def callback(self, response: discord.UserCommandResponse):
+        user = response.target
+        try:
+            await user.kick(reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
+            await response.send_message(f'{user} kicked :foot:', ephemeral=True)
+        except discord.Forbidden or discord.HTTPException:
+            await response.send_message('Something went wrong or I don\'t have the `Kick Members` permission', ephemeral=True)
+
+class Ban(discord.UserCommand):
+    '''Bans the user from guild'''
+    def __init__(self, cog):
+        self.cog = cog
+    
+    async def command_check(self, response: discord.SlashCommandResponse) -> bool:
+        if response.channel.permissions_for(response.user).ban_members:
+            return True
+        else:
+            await response.send_message("You don't have the `Ban Members` permission", ephemeral=True)
+            return False
+    
+    async def callback(self, response: discord.UserCommandResponse):
+        user = response.target
+        try:
+            await user.ban(reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
+            await response.send_message(f'{user} banned :hammer:', ephemeral=True)
+        except discord.Forbidden or discord.HTTPException:
+            await response.send_message('Something went wrong or I don\'t have the `Ban Members` permission', ephemeral=True)
+
+
+class Mute(discord.UserCommand):
+    '''Mute the user from guild for a day'''
+    def __init__(self, cog):
+        self.cog = cog
+    
+    async def command_check(self, response: discord.SlashCommandResponse) -> bool:
+        if response.channel.permissions_for(response.user).timeout_members:
+            return True
+        else:
+            await response.send_message("You don't have the `Timeout Members` permission", ephemeral=True)
+            return False
+    
+    async def callback(self, response: discord.UserCommandResponse):
+        user = response.target
+        try:
+            await user.edit(timed_out_until=discord.utils.utcnow()+timedelta(days=1) ,reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
+            await response.send_message(f'{user} muted for a day :x:', ephemeral=True)
+        except discord.Forbidden or discord.HTTPException:
+            await response.send_message('Something went wrong or I don\'t have the `Timeout Members` permission', ephemeral=True)
+
+
+class Unmute(discord.UserCommand):
+    '''Unmute the user from guild'''
+    def __init__(self, cog):
+        self.cog = cog
+    
+    async def command_check(self, response: discord.SlashCommandResponse) -> bool:
+        if response.channel.permissions_for(response.user).timeout_members:
+            return True
+        else:
+            await response.send_message("You don't have the `Timeout Members` permission", ephemeral=True)
+            return False
+    
+    async def callback(self, response: discord.UserCommandResponse):
+        user = response.target
+        try:
+            await user.edit(timed_out_until=discord.utils.utcnow() ,reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
+            await response.send_message(f'{user} unmuted :white_check_mark:', ephemeral=True)
+        except discord.Forbidden or discord.HTTPException:
+            await response.send_message('Something went wrong or I don\'t have the `Timeout Members` permission', ephemeral=True)
+
+
 class ModerationCog(discord.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.add_application_command(Badurls(self))
         self.add_application_command(BadurlsMessageCommand(self))
         self.add_application_command(AntiRaid(self))
+        self.add_application_command(Kick(self))
+        self.add_application_command(Ban(self))
+        self.add_application_command(Mute(self))
+        self.add_application_command(Unmute(self))
+
 
 def setup(bot):
     bot.add_cog(ModerationCog(bot))

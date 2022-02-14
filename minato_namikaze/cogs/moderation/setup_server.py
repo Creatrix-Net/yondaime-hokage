@@ -163,7 +163,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         if message is None or message.content == string.whitespace or message.content is None:
             return
         ctx = await self.bot.get_context(message)
-        detected_urls = await detect_bad_domains(message.content)
+        detected_urls = await detect_bad_domains(discord.utils.remove_markdown(message.content))
         if len(detected_urls) <= 0:  
             return 
         embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')

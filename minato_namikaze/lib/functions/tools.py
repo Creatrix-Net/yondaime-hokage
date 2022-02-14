@@ -43,18 +43,22 @@ async def copy_context_with(ctx: commands.Context,
     return await ctx.bot.get_context(alt_message, cls=type(ctx))
 
 
-def check_if_user_joined_a_channel(ctx):
-    try:
-        voice_state_author = ctx.author.voice
-        if voice_state_author is None:
-            return False
-        return True
-    except:
+def check_if_user_joined_a_voice(ctx):
+    '''Checks is a user joined a voice channel'''
+    voice_state_author = ctx.author.voice
+    if voice_state_author is None or isinstance(voice_state_author.channel,discord.VoiceChannel):
         return False
+    return True
+
+def check_if_user_joined_a_stage(ctx):
+    '''Checks is a user joined a stage channel'''
+    voice_state_author = ctx.author.voice
+    if voice_state_author is None or isinstance(voice_state_author.channel,discord.StageChannel):
+        return False
+    return True
 
 
-async def get_welcome_channel(guild: discord.Guild, bot: discord.Client,
-                              inviter_or_guild_owner: discord.User):
+async def get_welcome_channel(guild: discord.Guild, bot: discord.Client, inviter_or_guild_owner: discord.User):
     try:
         return guild.system_channel
     except:

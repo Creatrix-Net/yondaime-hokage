@@ -23,6 +23,9 @@ from lib import (
     format_relative,
     has_permissions,
     plural,
+    SuccessEmbed,
+    check_if_user_joined_a_voice,
+    check_if_user_joined_a_stage
 )
 
 
@@ -1146,6 +1149,7 @@ class Moderation(commands.Cog):
         *,
         reason: ActionReason = None,
     ):
+        '''Timeout the member for a specified duration of time'''
         if not await ctx.prompt(
                 f"Are you sure that you want to **time out** {member} until {format_relative(duration.dt)}?",
                 author_id=ctx.author.id,
@@ -1154,8 +1158,167 @@ class Moderation(commands.Cog):
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
         await member.edit(timed_out_until=duration.dt, reason=reason)
-        await ctx.send(embed=discord.Embed(description=f"**Timed out** {member} until {format_relative(duration.dt)}"))
+        await ctx.send(embed=ErrorEmbed(description=f"**Timed out** {member} until {format_relative(duration.dt)}"))
+    
+    @commands.command(aliases=["unmute"])
+    @commands.guild_only()
+    @commands.has_guild_permissions(timeout_members=True)
+    @has_permissions(timeout_members=True)
+    async def untimeout(
+        self,
+        ctx,
+        member: Union[commands.MemberConverter, MemberID],
+        *,
+        reason: ActionReason = None,
+    ):
+        '''Removes timeout from the member'''
+        if not await ctx.prompt(
+                f"Are you sure that you want to **remove the time out** {member} ?",
+                author_id=ctx.author.id,
+        ):
+            return
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+        await member.edit(timed_out_until=discord.utils.utcnow(), reason=reason)
+        await ctx.send(embed=SuccessEmbed(description=f"**Removed timed out** from {member}"))
 
+    @commands.command(aliases=["vcmute"])
+    @commands.guild_only()
+    @commands.has_guild_permissions(mute_members=True)
+    @has_permissions(mute_members=True)
+    @commands.check(check_if_user_joined_a_voice)
+    async def voicemute(
+        self,
+        ctx,
+        member: Union[commands.MemberConverter, MemberID],
+        *,
+        reason: ActionReason = None,
+    ):
+        '''Mutes the members from all the voice channels'''
+        if not await ctx.prompt(
+                f"Are you sure that you want to **mute** {member} from `all voice channels`?",
+                author_id=ctx.author.id,
+        ):
+            return
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+        await member.edit(mute=True, reason=reason)
+        await ctx.send(embed=ErrorEmbed(description=f"**Muted** {member} from `all voice channels`"))
+    
+    @commands.command(aliases=["vcunmute"])
+    @commands.guild_only()
+    @commands.has_guild_permissions(mute_members=True)
+    @has_permissions(mute_members=True)
+    @commands.check(check_if_user_joined_a_voice)
+    async def voiceunmute(
+        self,
+        ctx,
+        member: Union[commands.MemberConverter, MemberID],
+        *,
+        reason: ActionReason = None,
+    ):
+        '''Unmutes the members all from the voice channels'''
+        if not await ctx.prompt(
+                f"Are you sure that you want to **unmute** {member} from `all voice channels`?",
+                author_id=ctx.author.id,
+        ):
+            return
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+        await member.edit(mute=False, reason=reason)
+        await ctx.send(embed=SuccessEmbed(description=f"**Unmuted** {member} from `all voice channels`"))
+    
+    @commands.command(aliases=["serverdeaf"])
+    @commands.guild_only()
+    @commands.has_guild_permissions(mute_members=True)
+    @has_permissions(deafen_members=True)
+    @commands.check(check_if_user_joined_a_voice)
+    async def serverdeafen(
+        self,
+        ctx,
+        member: Union[commands.MemberConverter, MemberID],
+        *,
+        reason: ActionReason = None,
+    ):
+        '''Deafens the member from all the voice channels'''
+        if not await ctx.prompt(
+                f"Are you sure that you want to **deafen** {member}?",
+                author_id=ctx.author.id,
+        ):
+            return
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+        await member.edit(deafen=True, reason=reason)
+        await ctx.send(embed=ErrorEmbed(description=f"**Deafend** {member}"))
+    
+    @commands.command(aliases=["serverundeaf"])
+    @commands.guild_only()
+    @commands.has_guild_permissions(deafen_members=True)
+    @has_permissions(deafen_members=True)
+    @commands.check(check_if_user_joined_a_voice)
+    async def serverundeafen(
+        self,
+        ctx,
+        member: Union[commands.MemberConverter, MemberID],
+        *,
+        reason: ActionReason = None,
+    ):
+        '''Un-deafen the member all from the server'''
+        if not await ctx.prompt(
+                f"Are you sure that you want to **un-deafen** {member}?",
+                author_id=ctx.author.id,
+        ):
+            return
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+        await member.edit(deafen =False, reason=reason)
+        await ctx.send(embed=SuccessEmbed(description=f"**Un-Deafend** {member}"))
+    
+    @commands.command(aliases=["stagesuppress","stagemute"])
+    @commands.guild_only()
+    @commands.has_guild_permissions(mute_members=True)
+    @has_permissions(mute_members=True)
+    @commands.check(check_if_user_joined_a_stage)
+    async def suppress(
+        self,
+        ctx,
+        member: Union[commands.MemberConverter, MemberID],
+        *,
+        reason: ActionReason = None,
+    ):
+        '''Suppresses the members from all the stage channels'''
+        if not await ctx.prompt(
+                f"Are you sure that you want to **suppress** {member} from `all stage channels`?",
+                author_id=ctx.author.id,
+        ):
+            return
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+        await member.edit(suppress=True, reason=reason)
+        await ctx.send(embed=ErrorEmbed(description=f"**Suppressed** {member} from `all stage channels`"))
+    
+    @commands.command(aliases=["stageunsuppress","stageunmute"])
+    @commands.guild_only()
+    @commands.has_guild_permissions(mute_members=True)
+    @has_permissions(mute_members=True)
+    @commands.check(check_if_user_joined_a_stage)
+    async def unsuppress(
+        self,
+        ctx,
+        member: Union[commands.MemberConverter, MemberID],
+        *,
+        reason: ActionReason = None,
+    ):
+        '''Un-Suppresses the members from all the stage channels'''
+        if not await ctx.prompt(
+                f"Are you sure that you want to **un-suppress** {member} from `all stage channels`?",
+                author_id=ctx.author.id,
+        ):
+            return
+        if reason is None:
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+        await member.edit(suppress=False, reason=reason)
+        await ctx.send(embed=SuccessEmbed(description=f"**Un-Suppressed** {member} from `all stage channels`"))
 
 def setup(bot):
     bot.add_cog(Moderation(bot))

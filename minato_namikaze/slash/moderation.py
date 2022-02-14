@@ -7,7 +7,7 @@ import discord
 from discord.abc import GuildChannel
 from lib import (ErrorEmbed, LinksAndVars, RaidMode, SuccessEmbed,
                  antiraid_channel_name, database_category_name,
-                 detect_bad_domains)
+                 detect_bad_domains, database_channel_name, mentionspam_channel_name)
 
 
 class Badurls(discord.SlashCommand, name="badurls"):
@@ -64,7 +64,7 @@ class BadurlsMessageCommand(discord.MessageCommand, name="Flagged Urls"):
 class AntiRaid(discord.SlashCommand):
     """Enable or disable Antiraid system for the server"""
     switch: typing.Literal["on", "strict", "off"] = discord.application_command_option(description="Antiraid different modes",default="on")
-    channel: typing.Optional[GuildChannel] = discord.application_command_option(channel_types=[discord.TextChannel],description="Channel to broadcast join messages", default=None)
+    channel: GuildChannel = discord.application_command_option(channel_types=[discord.TextChannel],description="Channel to broadcast join messages")
     
     def __init__(self, cog):
         self.cog = cog
@@ -75,20 +75,6 @@ class AntiRaid(discord.SlashCommand):
         else:
             await response.send_message("You don't have the `Manage Guild` permission", ephemeral=True)
             return False
-    
-    async def add_and_check_data(
-        self,
-        dict_to_add: dict,
-        guild: discord.Guild
-    ) -> None:
-        database = await self.cog.bot.db.new(database_category_name,antiraid_channel_name)
-        guild_dict = await database.get(guild.id)
-        if guild_dict is None:
-            await database.set(guild.id, dict_to_add)
-            return
-        guild_dict.update(dict_to_add)
-        await database.set(guild.id, guild_dict)
-        return
     
     async def callback(self, response: discord.SlashCommandResponse):
         database = await self.cog.bot.db.new(database_category_name,antiraid_channel_name)
@@ -108,7 +94,7 @@ class AntiRaid(discord.SlashCommand):
                     "raid_mode": RaidMode.strict.value,
                     "broadcast_channel": response.options.channel.id
                 }
-                await self.add_and_check_data(update_dict,response.interaction.guild)
+                await self.cog.add_and_check_data(update_dict,response.interaction.guild, 'antiraid')
                 await response.send_message(f"Raid mode enabled. Broadcasting join messages to {response.options.channel.mention}.",ephemeral=True)
             except discord.HTTPException:
                 await response.send_message("\N{WARNING SIGN} Could not set verification level.",ephemeral=True)
@@ -119,7 +105,7 @@ class AntiRaid(discord.SlashCommand):
                 "raid_mode": RaidMode.on.value,
                 "broadcast_channel": response.options.channel.id
             }
-            await self.add_and_check_data(update_dict,response.interaction.guild)
+            await self.cog.add_and_check_data(update_dict,response.interaction.guild, 'antiraid')
             await response.send_message(f"Raid mode enabled. Broadcasting join messages to {response.options.channel.mention}.",ephemeral=True)
         except discord.HTTPException:
             await response.send_message("\N{WARNING SIGN} Could not set verification level.",ephemeral=True)
@@ -208,6 +194,72 @@ class Unmute(discord.UserCommand):
             await response.send_message('Something went wrong or I don\'t have the `Timeout Members` permission', ephemeral=True)
 
 
+class Setup(discord.SlashCommand, guild_ids=[920536143244709889]):
+    '''Setups some logging system for system for server with some nice features'''
+    def __init__(self, cog):
+        self.cog = cog
+    
+    async def command_check(self, response: discord.SlashCommandResponse) -> bool:
+        if response.channel.permissions_for(response.user).manage_guild:
+            return True
+        else:
+            await response.send_message("You don't have the `Manage Guild` permission", ephemeral=True)
+            return False
+
+
+class Add(discord.SlashCommand, parent=Setup):
+    '''This adds logging of the some things in the specified text channel'''
+
+    add_type: typing.Literal["ban", "feedback", "warns", "unban"] = discord.application_command_option(description="which to log", name="type", default=None)
+    channel: GuildChannel = discord.application_command_option(channel_types=[discord.TextChannel],description="The logging channel")
+
+    async def callback(self, response: discord.SlashCommandResponse):
+        dict_to_add = {str(response.options.type): response.options.channel.id}
+        await self.parent.cog.add_and_check_data(dict_to_add, response.interaction.guild, 'setupvar')
+        await response.send_message(f'Done! `Added {response.options.type} logging` to {response.options.channel.mention}')
+
+
+class Support(discord.SlashCommand, parent=Setup):
+    '''This adds support system to your server'''
+
+    channel: GuildChannel = discord.application_command_option(channel_types=[discord.TextChannel],description="The support logging channel")
+    role: discord.Role = discord.application_command_option(description="The role using which memebrs can access that support channel")
+
+    async def callback(self, response: discord.SlashCommandResponse):
+        dict_to_add = {"support": [response.options.channel.id, response.options.role.id]}
+        await self.parent.cog.add_and_check_data(dict_to_add, response.interaction.guild, 'setupvar')
+        await response.send_message(f'Done! Added `support logging` to {response.options.channel.mention} with {response.options.role.mention} `role`')
+
+
+class BadLinks(discord.SlashCommand, parent=Setup):
+    '''Checks against the scam links and take necessary action if stated'''
+    option: bool = discord.application_command_option(description="Enable or Disable", default=True)
+    action: typing.Optional[typing.Literal["ban", "mute", "timeout", "kick", "log"]] = discord.application_command_option(description="What kind of action to take", default=None)
+    channel: typing.Optional[GuildChannel] = discord.application_command_option(channel_types=[discord.TextChannel],description="Log channel", default=None)
+
+    async def callback(self, response: discord.SlashCommandResponse):
+        if not response.options.option:
+            database = await self.parent.cog.database_class()
+            guild_dict = await database.get(response.interaction.guild.id)
+            if guild_dict is None:
+                return
+            guild_dict.pop('badlinks')
+            await database.set(response.interaction.guild.id, guild_dict)
+            await response.send_message('Badlink system turned off!')
+            return
+        await self.parent.cog.add_and_check_data(
+            {
+                "badlinks": {
+                    "option": response.options.option,
+                    "action": response.options.action,
+                    "logging_channel": response.options.channel.id if response.options.channel is not None else response.options.channel
+            }
+        },
+            response.interaction.guild, 'setupvar'
+        )
+        await response.send_message(f'Done! If I detect any scam link then I `delete` that and will do a `{response.options.action}` action')
+
+
 class ModerationCog(discord.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -218,6 +270,31 @@ class ModerationCog(discord.Cog):
         self.add_application_command(Ban(self))
         self.add_application_command(Mute(self))
         self.add_application_command(Unmute(self))
+        self.add_application_command(Setup(self))
+    
+    async def database_class(self):
+        return await self.bot.db.new(database_category_name,database_channel_name)
+
+    async def database_class_antiraid(self):
+        return await self.bot.db.new(database_category_name,antiraid_channel_name)
+
+    async def database_class_mentionspam(self):
+        return await self.bot.db.new(database_category_name,mentionspam_channel_name)
+    
+    async def add_and_check_data(self, dict_to_add: dict, guild: discord.Guild, type_store: typing.Literal['antiraid', 'setupvar', 'mentionspam']) -> None:
+        if type_store == 'antiraid':
+            database = await self.database_class_antiraid()
+        if type_store == 'setupvar':
+            database = await self.database_class()
+        if type_store == 'mentionspam':
+            database = await self.database_class_mentionspam()
+        guild_dict = await database.get(guild.id)
+        if guild_dict is None:
+            await database.set(guild.id, dict_to_add)
+            return
+        guild_dict.update(dict_to_add)
+        await database.set(guild.id, guild_dict)
+        return
 
 
 def setup(bot):

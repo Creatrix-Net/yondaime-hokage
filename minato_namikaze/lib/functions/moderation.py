@@ -193,7 +193,7 @@ async def serverinfo(guild: discord.Guild, author: discord.Member, bot) -> disco
     )
     embed.add_field(name=":calendar: Created On",value=f"<t:{round(guild.created_at.timestamp())}:D>")
     embed.add_field(name=":level_slider: NSFW Level",value=nsfw_level[guild.nsfw_level])
-    embed.add_field(name=":key: 2FA", value="Enabled" if bool(guild.mfa_level) else "Disabled")
+    embed.add_field(name=":key: 2FA", value="Enabled" if bool(guild.mfa_level.value) else "Disabled")
     embed.add_field(name=":bell: Notifications", value="All Messages " if guild.default_notifications == discord.NotificationLevel.all_messages else "Disabled")
     embed.add_field(name="Categories", value=len(guild.categories))
     embed.add_field(name=f"{str(await return_matching_emoji(bot, 'text_channel'))} Text Channels", value=len(guild.text_channels))

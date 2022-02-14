@@ -41,7 +41,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     def __init__(self, bot):
         self.bot = bot
         self.bot.dagpi = Client(Tokens.dagpi.value)
-        self.description = "Some anime, manga and waifu related commands (vote locked)."
+        self.description = "Some anime, manga and waifu related commands"
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
@@ -67,7 +67,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     # search anime
     @commands.command(
-        description="Searches Anime from MAL and displays the first 10 search result. (vote locked)",
+        description="Searches Anime from MAL and displays the first 10 search result.",
         usage="<anime.name>",
         aliases=[
             "anisearch",
@@ -78,7 +78,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         ],
     )
     async def animesearch(self, ctx, *, anime_name: str):
-        """Searches Anime from MAL and displays the first 10 search result. (vote locked)"""
+        """Searches Anime from MAL and displays the first 10 search result."""
         search = AnimeSearch(str(anime_name).strip(" ").lower())
         search_results = search.results[:10]
         description = ""
@@ -117,7 +117,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     # about anime
     @commands.command(
-        description="Displays about the anime using the MAL ANIME ID. get it by using animesearch command. (vote locked)",
+        description="Displays about the anime using the MAL ANIME ID. get it by using animesearch command.",
         usage="<mal.id>",
         aliases=[
             "aniabout",
@@ -129,7 +129,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         ],
     )
     async def aboutanime(self, ctx, mal_id: int):
-        """Displays about the anime using the MAL ANIME ID. get it by using animesearch command. (vote locked)"""
+        """Displays about the anime using the MAL ANIME ID. get it by using animesearch command."""
         await ctx.send(":mag: Searching...", delete_after=5)
         anime = Anime(int(mal_id))
         embeds = []
@@ -280,7 +280,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     # search manga
     @commands.command(
-        description="Searches Manga from MAL and displays the first 10 search result. (vote locked)",
+        description="Searches Manga from MAL and displays the first 10 search result.",
         usage="<manga.name>",
         aliases=[
             "magsearch",
@@ -291,7 +291,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         ],
     )
     async def mangasearch(self, ctx, *, manga_name: str):
-        """Searches Manga from MAL and displays the first 10 search result. (vote locked)"""
+        """Searches Manga from MAL and displays the first 10 search result."""
         search = MangaSearch(str(manga_name).strip(" ").lower())
         search_results = search.results[:10]
         description = ""
@@ -330,7 +330,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     # about manga
     @commands.command(
-        description="Displays about the manga using the MAL MANGA ID. get it by using mangasearch command. (vote locked)",
+        description="Displays about the manga using the MAL MANGA ID. get it by using mangasearch command.",
         usage="<mal.id>",
         aliases=[
             "magabout",
@@ -342,7 +342,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         ],
     )
     async def aboutmanga(self, ctx, mal_id: int):
-        """Displays about the manga using the MAL MANGA ID. get it by using mangasearch command. (vote locked)"""
+        """Displays about the manga using the MAL MANGA ID. get it by using mangasearch command."""
         message = await ctx.send(":mag: Searching...", delete_after=5)
         manga = Manga(int(mal_id))
         embeds = []
@@ -434,7 +434,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     @commands.command(aliases=["w", "wfu", "wa"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
     async def waifu(self, ctx):
-        """Get random waifu and marry them! UwU! (vote locked)"""
+        """Get random waifu and marry them! UwU!"""
         async with ctx.typing():
             waifu = await self.get_waifu()
             message = await ctx.send(embed=waifu[0])
@@ -456,7 +456,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     @commands.command(aliases=["wtp", "whatsthatpokemon"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
     async def whosthatpokemon(self, ctx):
-        """Play Who\'s That Pokemon? (vote locked)"""
+        """Play Who\'s That Pokemon?"""
         async with ctx.typing():
             wtp = await self.bot.dagpi.wtp()
             question = wtp.question

@@ -5,7 +5,7 @@ from random import choice
 import discord
 from discord.ext import commands
 from discord.ext.commands import Cog, command, has_permissions
-from lib import Embed, convert
+from lib import Embed, convert, LinksAndVars
 
 
 class Giveaway(Cog):
@@ -28,7 +28,7 @@ class Giveaway(Cog):
         """Allowes you to to create giveaway by answering some simple questions!"""
         # Ask Questions
         embed = Embed(
-            title="Giveaway Time!!✨",
+            title="Giveaway Time!! \U00002728",
             description="Time for a new Giveaway. Answer the following questions in 25 seconds each for the Giveaway",
             color=ctx.author.color,
         )
@@ -74,7 +74,7 @@ class Giveaway(Cog):
             role = None
         else:
             try:
-                role_id = int(answers[3][3:-1])
+                int(answers[3][3:-1])
             except:
                 i = ctx.guild.roles
                 for j in i:
@@ -113,7 +113,7 @@ class Giveaway(Cog):
         embed.set_image(url="https://i.imgur.com/efLKnlh.png")
         embed.add_field(
             name="Giveway ends in",
-            value=f"{answers[1]} from now | [Timer](https://the-4th-hokage.github.io/giveaway_timer.html?start={int(timemod.time() * 1000)}&length={time * 1000})",
+            value=f"{answers[1]} from now | [Timer]{LinksAndVars.website.value}/giveaway_timer.html?start={int(timemod.time() * 1000)}&length={time * 1000})",
         )
         if role:
             embed.add_field(name="Role Required", value=f"{role}")
@@ -242,7 +242,7 @@ class Giveaway(Cog):
             await msg.edit(embed=newEmbed)
             await ctx.send("The giveaway cancelled")
             await ctx.send(
-                f"https://discordapp.com/channels/{ctx.guild.id}/{channel.id}/{GiveawayID}"
+                msg.jump_url
             )
         except:
             embed = Embed(title="Failure!",

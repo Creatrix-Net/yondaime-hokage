@@ -104,7 +104,7 @@ class Tokens(enum.Enum):
 
 
 class LinksAndVars(enum.Enum):
-    website = token_get("WEBSITE")
+    website = 'https://minato-namikaze.readthedocs.io/en/latest'
 
     github = "https://github.com/The-4th-Hokage/yondaime-hokage"
     github_branch = "master"

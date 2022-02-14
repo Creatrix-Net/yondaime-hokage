@@ -1,9 +1,7 @@
 import aiohttp
 import re
 import discord
-from .vars import ChannelAndMessageId, BASE_DIR, LinksAndVars
-import os
-import gzip
+from .vars import ChannelAndMessageId, LinksAndVars, url_regex
 import re
 import aiohttp
 from urllib.parse import urlparse,uses_netloc
@@ -69,8 +67,6 @@ async def return_matching_emoji(bot, name) -> discord.Emoji:
 
 
 async def detect_bad_domains(message_content: str) -> list:
-    with gzip.open(BASE_DIR / os.path.join("lib","data","url_regex.txt.gz",),"rt",encoding="utf-8",) as f:
-        url_regex = f.read()
     url = [x[0] for x in re.findall(url_regex,message_content)]
     for i in message_content.split():
         url.append(i.lower())

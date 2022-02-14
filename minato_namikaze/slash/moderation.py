@@ -42,7 +42,7 @@ class Badurls(discord.SlashCommand, name="badurls"):
         await response.send_message(embed=SuccessEmbed(title="The url or the text message is safe!"),ephemeral=True)
 
 
-class BadurlsMessageCommand(discord.MessageCommand, name="flagged urls"):
+class BadurlsMessageCommand(discord.MessageCommand, name="Flagged Urls"):
     """Check if a text has a malicious url or not from a extensive list 60k+ flagged domains"""
     def __init__(self, cog):
         self.cog = cog

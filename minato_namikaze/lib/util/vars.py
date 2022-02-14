@@ -188,15 +188,17 @@ mentionspam_channel_name = "mentionspam"
 reaction_roles_channel_name = "reaction roles"
 
 minato_gif = []
-with zipfile.ZipFile(BASE_DIR /
-                     os.path.join("lib", "data", "minato.zip")) as myzip:
+with zipfile.ZipFile(BASE_DIR / os.path.join("lib", "data", "minato.zip")) as myzip:
     for i in myzip.namelist():
         with myzip.open(i) as f:
             minato_gif.append((i, io.BytesIO(f.read())))
 
-with zipfile.ZipFile(BASE_DIR /
-                     os.path.join("lib", "data", "among_us.zip")) as myzip:
+with zipfile.ZipFile(BASE_DIR / os.path.join("lib", "data", "among_us.zip")) as myzip:
     with myzip.open("amongus.png") as f:
         among_us = io.BytesIO(f.read())
     with myzip.open("amoungus_friends.png") as f:
         among_us_friends = (i, io.BytesIO(f.read()))
+
+
+with gzip.open(BASE_DIR / os.path.join("lib","data","url_regex.txt.gz",),"rt",encoding="utf-8",) as f:
+    url_regex = f.read()

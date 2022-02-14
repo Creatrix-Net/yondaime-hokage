@@ -1,5 +1,5 @@
 import discord
-from lib import serverinfo, Embed
+from lib import serverinfo, Embed, userinfo
 
 class Server(discord.SlashCommand):
     '''Some server releated commands'''
@@ -30,10 +30,33 @@ class Icon(discord.SlashCommand, parent=Server):
         await response.send_message(embed=e)
 
 
+class UserInfo(discord.UserCommand, name="Info"):
+    '''Get some basic user info'''
+    def __init__(self, cog):
+        self.cog = cog
+    
+    async def callback(self, response: discord.UserCommandResponse):
+        await response.send_message(embed=await userinfo(response.target, response.target.guild, self.parent.cog.bot))
+
+
+class UserInfoSlash(discord.SlashCommand, name="user"):
+    """Get some basic user info"""
+
+    user: discord.Member = discord.application_command_option(description="user")
+
+    def __init__(self, cog):
+        self.cog = cog
+    
+    async def callback(self, response: discord.SlashCommandResponse):
+        await response.send_message(embed=await userinfo(response.options.user, response.interaction.guild, self.cog.bot))
+
+
 class InfoCog(discord.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.add_application_command(Server(self))
+        self.add_application_command(UserInfo(self))
+        self.add_application_command(UserInfoSlash(self))
 
 def setup(bot):
     bot.add_cog(InfoCog(bot))

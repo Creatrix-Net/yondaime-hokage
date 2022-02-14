@@ -5,36 +5,6 @@ from discord.abc import GuildChannel
 from discord import application_command_option, VoiceChannel
 from lib.functions import meek_api
 
-activities = [
-    "youtube",
-    "poker",
-    "chess",
-    "betrayal",
-    "fishing",
-    "letter-league",
-    "word-snack",
-    "sketch-heads",
-    "spellcast",
-    "awkword",
-    "checkers",
-]
-
-
-activities = [
-    "youtube",
-    "poker",
-    "chess",
-    "betrayal",
-    "fishing",
-    "letter-league",
-    "word-snack",
-    "sketch-heads",
-    "spellcast",
-    "awkword",
-    "checkers",
-]
-
-
 class Activities(discord.SlashCommand):
     """Get access to discord beta activities feature"""
 

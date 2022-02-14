@@ -133,7 +133,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
         Args:
             - action [Optional] (default: log) : What kind of action to take, It accepts the following options ; 'ban', 'mute', 'timeout', 'kick', 'log'
-            - logging_channel [Optional] : It will log in a specific channel if specified, otherwise it will log the message where the link was sent. Default
+            - logging_channel [Optional] : It will log in a specific channel if specified, otherwise it will log the message where the link was sent.
             - option [Optional] (default: True) : It accepts the following options ; True, False, yes, no, on, off
 
         `Note: If 'log' action is selected then, I will only delete the message and log it the current channel where the link was sent and will do nothing`
@@ -146,13 +146,13 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             guild_dict.pop('badlinks')
             await database.set(ctx.guild.id, guild_dict)
             await ctx.send(':ok_hand:')
-        
+            return
         await self.add_and_check_data(
             {
                 "badlinks": {
                     "option": option,
                     "action": action,
-                    "logging_channel": logging_channel.id
+                    "logging_channel": logging_channel.id if logging_channel is not None else logging_channel
             }
         },
             ctx=ctx,

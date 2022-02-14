@@ -25,13 +25,13 @@ class Activities(discord.SlashCommand):
             default="youtube",
     )
 
-    voice_channel: GuildChannel = application_command_option(channel_types=[VoiceChannel],description="A voice channel in the selected activity will start")
+    voice_channel: GuildChannel = application_command_option(channel_types=[VoiceChannel],description="A voice channel in the selected activity will start", name="channel")
 
     def __init__(self, cog):
         self.cog = cog
 
     async def callback(self, response: discord.SlashCommandResponse):
-        link = await self.cog.bot.togetherControl.create_link(response.options.voice_channel.id, str(response.options.activities))
+        link = await self.cog.bot.togetherControl.create_link(response.options.channel.id, str(response.options.activities))
         await response.send_message(f"Click the blue link!\n{link}")
 
 class Vocaloids(discord.SlashCommand):

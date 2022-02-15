@@ -262,7 +262,10 @@ class Giveaway(Cog):
     @has_permissions(manage_guild=True)
     @commands.guild_only()
     async def giveaway_stop(self, ctx, GiveawayID: int, channel=None):
-        """Cancels the specified giveaway"""
+        """
+        Cancels the specified giveaway
+        `Note: This also deletes that giveaway message`
+        """
         if not channel:
             channel = ctx.message.channel
         try:

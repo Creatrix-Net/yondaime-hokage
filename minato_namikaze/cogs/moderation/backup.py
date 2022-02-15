@@ -18,7 +18,7 @@ class BackUp(commands.Cog):
         async for message in (await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)).history(limit=None):
             try:
                 await self.bot.fetch_guild(int(message.content.strip()))
-            except discord.Forbidden or discord.HTTPException:
+            except (discord.Forbidden, discord.HTTPException):
                 await message.delete()
                 continue
 

@@ -128,7 +128,7 @@ class Kick(discord.UserCommand):
         try:
             await user.kick(reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
             await response.send_message(f'{user} kicked :foot:', ephemeral=True)
-        except discord.Forbidden or discord.HTTPException:
+        except (discord.Forbidden, discord.HTTPException):
             await response.send_message('Something went wrong or I don\'t have the `Kick Members` permission', ephemeral=True)
 
 class Ban(discord.UserCommand):
@@ -148,7 +148,7 @@ class Ban(discord.UserCommand):
         try:
             await user.ban(reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
             await response.send_message(f'{user} banned :hammer:', ephemeral=True)
-        except discord.Forbidden or discord.HTTPException:
+        except (discord.Forbidden, discord.HTTPException):
             await response.send_message('Something went wrong or I don\'t have the `Ban Members` permission', ephemeral=True)
 
 
@@ -169,7 +169,7 @@ class Mute(discord.UserCommand):
         try:
             await user.edit(timed_out_until=discord.utils.utcnow()+timedelta(days=1) ,reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
             await response.send_message(f'{user} muted for a day :x:', ephemeral=True)
-        except discord.Forbidden or discord.HTTPException:
+        except (discord.Forbidden, discord.HTTPException):
             await response.send_message('Something went wrong or I don\'t have the `Timeout Members` permission', ephemeral=True)
 
 
@@ -190,7 +190,7 @@ class Unmute(discord.UserCommand):
         try:
             await user.edit(timed_out_until=discord.utils.utcnow() ,reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
             await response.send_message(f'{user} unmuted :white_check_mark:', ephemeral=True)
-        except discord.Forbidden or discord.HTTPException:
+        except (discord.Forbidden, discord.HTTPException):
             await response.send_message('Something went wrong or I don\'t have the `Timeout Members` permission', ephemeral=True)
 
 

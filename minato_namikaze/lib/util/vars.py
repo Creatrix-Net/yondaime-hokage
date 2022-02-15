@@ -186,6 +186,7 @@ database_channel_name = "setup vars"
 antiraid_channel_name = "antiraid"
 mentionspam_channel_name = "mentionspam"
 reaction_roles_channel_name = "reaction roles"
+giveaway_time_channel_name = "giveaway"
 
 minato_gif = []
 with zipfile.ZipFile(BASE_DIR / os.path.join("lib", "data", "minato.zip")) as myzip:

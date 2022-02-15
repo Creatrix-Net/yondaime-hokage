@@ -60,7 +60,7 @@ class AntiRaid(commands.Cog):
                 data_keys = list(map(str, list(data.keys())))
                 try:
                     await self.bot.fetch_guild(int(data_keys[0]))
-                except discord.Forbidden or discord.HTTPException:
+                except (discord.Forbidden, discord.HTTPException):
                     await database.delete(data_keys[0])
             except JSONDecodeError:
                 await message.delete()
@@ -75,7 +75,7 @@ class AntiRaid(commands.Cog):
                 data_keys = list(map(str, list(data.keys())))
                 try:
                     await self.bot.fetch_guild(int(data_keys[0]))
-                except discord.Forbidden or discord.HTTPException:
+                except (discord.Forbidden, discord.HTTPException):
                     await database.delete(data_keys[0])
             except JSONDecodeError:
                 await message.delete()

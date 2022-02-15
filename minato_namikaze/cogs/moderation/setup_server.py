@@ -55,7 +55,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 data_keys = list(map(str, list(data.keys())))
                 try:
                     await self.bot.fetch_guild(int(data_keys[0]))
-                except discord.Forbidden or discord.HTTPException:
+                except (discord.Forbidden, discord.HTTPException):
                     await database.delete(data_keys[0])
             except JSONDecodeError:
                 await message.delete()
@@ -173,7 +173,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         message_sent = await ctx.send(embed=embed)
         try:
             await message.delete()
-        except discord.Forbidden or discord.NotFound or discord.HTTPException:
+        except (discord.Forbidden, discord.NotFound, discord.HTTPException):
             pass
         
         if message.guild is None:
@@ -198,21 +198,21 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 await message.author.ban(reason=action_reason_string)
                 embed.add_field(name="Action Taken", value="Ban :hammer:")
                 await message_sent.edit(embed=embed)
-            except discord.Forbidden or discord.HTTPException:
+            except (discord.Forbidden, discord.HTTPException):
                 pass
         if action_config.lower() in ['mute', 'timeout']:
             try:
                 await message.author.edit(timed_out_until=discord.utils.utcnow()+timedelta(days=2),reason=action_reason_string)
                 embed.add_field(name="Action Taken", value="Time Out :x:")
                 await message_sent.send(embed=embed)
-            except discord.Forbidden or discord.HTTPException:
+            except (discord.Forbidden, discord.HTTPException):
                 pass
         if action_config.lower() == "kick":
             try:
                 await message.author.kick(reason=action_reason_string)
                 embed.add_field(name="Action Taken", value="Kick :foot:")
                 await message_sent.send(embed=embed)
-            except discord.Forbidden or discord.HTTPException:
+            except (discord.Forbidden, discord.HTTPException):
                 pass
         
         log_config = bad_link_config.get('logging_channel')

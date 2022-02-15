@@ -32,10 +32,7 @@ class BackupDatabse:
                             "add_reactions": i.permissions.add_reactions,
                             "administrator": i.permissions.administrator,
                             "attach_files": i.permissions.attach_files,
-                            "read_message_history":
-                            i.permissions.read_message_history,
                             "ban_members": i.permissions.ban_members,
-                            "manage_channels": i.permissions.manage_channels,
                             "change_nickname": i.permissions.change_nickname,
                             "connect": i.permissions.connect,
                             "create_instant_invite":

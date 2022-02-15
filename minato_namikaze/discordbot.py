@@ -91,7 +91,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             messages=True,
             reactions=True,
         ).all()
-        self._cache = {}
 
         self.version = str(token_get("BOT_VER"))
         self.local = ast.literal_eval(token_get("LOCAL"))
@@ -191,16 +190,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             description=f"Bot ready by **{format_dt(datetime.now(), 'R',True)}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
         )
         e.set_thumbnail(url=self.user.avatar.url)
-
-        guild = (self.get_guild(ChannelAndMessageId.server_id.value)
-                 if not self.local else self.get_channel(
-                     ChannelAndMessageId.restartlog_channel2.value))
-        try:
-            self._cache[guild.id] = {}
-            for invite in await guild.invites():
-                self._cache[guild.id][invite.code] = invite
-        except:
-            pass
 
         if not self.persistent_views_added:
             database = await self.db.new(database_category_name,

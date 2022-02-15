@@ -189,8 +189,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             e.add_field(name=":stopwatch: **Duration**", value=anime.duration)
         if anime.rating:
             e.add_field(name="**Rating**", value=anime.rating)
-        if (anime.related_anime and
-                len(format_related_anime_manga(anime.related_anime)) < 1024):
+        if (anime.related_anime and len(format_related_anime_manga(anime.related_anime)) < 1024):
             e.add_field(
                 name="**Related Anime**",
                 value=format_related_anime_manga(anime.related_anime),

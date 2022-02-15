@@ -44,7 +44,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 data_keys = list(map(str, list(data.keys())))
                 try:
                     await bot_member_class.fetch_message(int(data_keys[0]))
-                except discord.NotFound or discord.Forbidden or discord.HTTPException:
+                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
                     await database.delete(data_keys[0])
             except JSONDecodeError:
                 await message.delete()

@@ -56,11 +56,10 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 try:
                     await self.bot.fetch_guild(int(data_keys[0]))
                 except (discord.Forbidden, discord.HTTPException):
-                    await database.delete(data_keys[0])
+                    await message.delete()
             except JSONDecodeError:
                 await message.delete()
-                continue
-
+    
     @commands.group()
     @commands.guild_only()
     @is_mod()

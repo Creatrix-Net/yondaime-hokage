@@ -1,18 +1,13 @@
 import asyncio
-import uuid, json
+import json
+import uuid
 from json.decoder import JSONDecodeError
-from discord.ext import tasks
 
 import discord
-from discord.ext import commands
-from lib import (
-    Embed,
-    ReactionPersistentView,
-    database_category_name,
-    has_permissions,
-    reaction_roles_channel_name,
-    ChannelAndMessageId
-)
+from discord.ext import commands, tasks
+from lib import (ChannelAndMessageId, Embed, ReactionPersistentView,
+                 database_category_name, has_permissions,
+                 reaction_roles_channel_name)
 
 
 class ReactionRoles(commands.Cog, name="Reaction Roles"):
@@ -45,10 +40,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 try:
                     await bot_member_class.fetch_message(int(data_keys[0]))
                 except (discord.NotFound, discord.Forbidden, discord.HTTPException):
-                    await database.delete(data_keys[0])
+                    await message.delete()
             except JSONDecodeError:
                 await message.delete()
-                continue
 
     @commands.command(name="new", aliases=["create"])
     @has_permissions(manage_roles=True)

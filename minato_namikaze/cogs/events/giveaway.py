@@ -1,19 +1,27 @@
+import json
 import time
 from asyncio import TimeoutError
-from random import choice
 from datetime import timedelta
-from typing import Optional, Union
+from json.decoder import JSONDecodeError
+from random import choice
+from typing import Union
 
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ext.commands import Cog, command, has_permissions
-from lib import Embed, convert, LinksAndVars, ErrorEmbed, format_relative, GiveawayConfig, cache
+from lib import (ChannelAndMessageId, Embed, ErrorEmbed, FutureTime,
+                 GiveawayConfig, LinksAndVars, cache, convert,
+                 database_category_name, format_relative,
+                 giveaway_time_channel_name)
+
 
 class Giveaway(Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Helps you to organise a simple giveaway."
         self.giveaway_image = "https://i.imgur.com/efLKnlh.png"
+        self.cleanup.start()
+        self.declare_results.start()
     
     @cache()
     async def get_giveaway_config(
@@ -25,6 +33,59 @@ class Giveaway(Cog):
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{PARTY POPPER}")
+    
+    async def database_class(self):
+        return await self.bot.db.new(database_category_name,giveaway_time_channel_name)
+    
+    async def create_timer_for_giveaway(self, giveaway_id: int, time_ends: Union[int, FutureTime]) -> None:
+        database = await self.database_class()
+        await database.set(giveaway_id, time_ends)
+    
+    @tasks.loop(hours=1)
+    async def declare_results(self):
+        database = await self.database_class()
+        server2 = await self.bot.fetch_guild(ChannelAndMessageId.server_id2.value)
+        bot_member_class = await self.bot.get_or_fetch_member(server2, self.bot.application_id)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(str, list(data.keys())))
+                try:
+                    giveaway_message = await bot_member_class.fetch_message(int(data_keys[0]))
+                    timestamp = data[data_keys[0]]
+                    if discord.utils.utcnow() >= int(timestamp):
+                        winner = await self.determine_winner(giveaway_message, self.bot)
+                        await giveaway_message.channel.send(
+                            f"\U0001f389 Congratulations **{winner.mention}** on winning the Giveaway \U0001f389",
+                            reference=giveaway_message
+                        )
+                        await message.delete()
+                        self.get_giveaway_config.invalidate(self, giveaway_message.id)
+                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                    await message.delete()
+            except JSONDecodeError:
+                await message.delete()
+    
+    @tasks.loop(minutes=30)
+    async def cleanup(self):
+        database = await self.database_class()
+        server2 = await self.bot.fetch_guild(ChannelAndMessageId.server_id2.value)
+        bot_member_class = await self.bot.get_or_fetch_member(server2, self.bot.application_id)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(str, list(data.keys())))
+                try:
+                    await bot_member_class.fetch_message(int(data_keys[0]))
+                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                    pass
+            except JSONDecodeError:
+                pass
+            await message.delete()
 
     @command(
         name="giveaway",
@@ -134,34 +195,20 @@ class Giveaway(Cog):
         await ctx.send(
             newMsg.jump_url
         )
-
-    @command(
-        name="giftrrl",
-        usage="<giveaway id> [channel]",
-        aliases=["gifreroll", "gftroll", "grr","giftroll","giveawayroll", "giveaway_roll"],
-    )
-    @has_permissions(manage_guild=True)
-    @commands.guild_only()
-    async def giveaway_reroll(self, ctx, giveaway_id: Union[commands.MessageConverter, discord.Message], channel: Optional[Union[commands.TextChannelConverter, discord.TextChannel, commands.ThreadConverter]] = None):
-        """
-        It picks out the giveaway winners
-        `Note: It dosen't checks for task, It only checks for roles if specified`
-        """
+        await self.create_timer_for_giveaway(newMsg.id, (discord.utils.utcnow() + timedelta(milliseconds=time_ends)).timestamp())
+    
+    async def determine_winner(self, giveaway_id: discord.Message, bot: commands.Bot) -> Union[str, discord.Member]:
         reactions = await discord.utils.get(giveaway_id.reactions, emoji=discord.PartialEmoji(name="\U0001f389"))
         if reactions is None:
-            await ctx.send("The channel or ID mentioned was incorrect")
-            return
-        if not channel:
-            channel = ctx.message.channel
+            return "The channel or ID mentioned was incorrect"
         try:
             giveaway_config = await self.get_giveaway_config(giveaway_id)
         except AttributeError as e:
-            await ctx.send(e)
-            return
+            return str(e)
         
         reacted_users = await reactions.users().flatten()
-        if discord.utils.get(reacted_users, id=ctx.me.id):
-            reacted_users.remove(discord.utils.get(reacted_users, id=ctx.me.id))
+        if discord.utils.get(reacted_users, id=bot.application_id):
+            reacted_users.remove(discord.utils.get(reacted_users, id=bot.application_id))
         if giveaway_config.role_required is not None and len(reacted_users) <= 0:
             reacted_users = list(filter(lambda a: giveaway_config.role_required in a.roles, reacted_users))
         if len(reacted_users) <= 0:
@@ -174,22 +221,38 @@ class Giveaway(Cog):
             emptyEmbed.set_image(url=self.giveaway_image)
             emptyEmbed.set_footer(text="No one won the Giveaway")
             await giveaway_id.edit(embed=emptyEmbed)
-            await ctx.send(
-                f"No one won the giveaway! As there were not enough participants!\n{giveaway_config.jump_url}"
-            )
-            return
+            return f"No one won the giveaway! As there were not enough participants!\n{giveaway_config.jump_url}"
         winner = choice(reacted_users)
         winnerEmbed = giveaway_config.embed
         if discord.utils.find(lambda a: a["name"].lower() == "\U0001f389 Congratulations On Winning Giveaway \U0001f389".lower(), self.embed_dict["fields"]) is not None:
             winnerEmbed.add_field(name="\U0001f389 Congratulations On Winning Giveaway \U0001f389",value=winner.mention)
         await giveaway_id.edit(embed=winnerEmbed)
+        return winner
+
+    @command(
+        name="giftrrl",
+        usage="<giveaway id> [channel]",
+        aliases=["gifreroll", "gftroll", "grr","giftroll","giveawayroll", "giveaway_roll"],
+    )
+    @has_permissions(manage_guild=True)
+    @commands.guild_only()
+    async def giveaway_reroll(self, ctx, giveaway_id: Union[commands.MessageConverter, discord.Message]):
+        """
+        It picks out the giveaway winners
+        `Note: It dosen't checks for task, It only checks for roles if specified`
+        """
+        channel = giveaway_id.channel
+        winner = self.determine_winner(giveaway_id, ctx.bot)
+        if isinstance(winner, str):
+            return await ctx.send(winner)
         await channel.send(
-            f"\U0001f389 Congratulations **{winner.mention}** on winning the Giveaway \U0001f389"
+            f"\U0001f389 Congratulations **{winner.mention}** on winning the Giveaway \U0001f389",
+            reference=giveaway_id
         )
         await ctx.send(
             giveaway_id.jump_url
         )
-        self.get_giveaway_config.invalidate(self, giveaway_id)
+        self.get_giveaway_config.invalidate(self, giveaway_id.id)
 
     @command(
         name="giftdel",

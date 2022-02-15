@@ -61,10 +61,9 @@ class AntiRaid(commands.Cog):
                 try:
                     await self.bot.fetch_guild(int(data_keys[0]))
                 except (discord.Forbidden, discord.HTTPException):
-                    await database.delete(data_keys[0])
+                    await message.delete()
             except JSONDecodeError:
                 await message.delete()
-                continue
         
         database = await self.database_class_mentionspam()
         async for message in database._Database__channel.history(limit=None):
@@ -76,10 +75,10 @@ class AntiRaid(commands.Cog):
                 try:
                     await self.bot.fetch_guild(int(data_keys[0]))
                 except (discord.Forbidden, discord.HTTPException):
-                    await database.delete(data_keys[0])
+                    await message.delete()
             except JSONDecodeError:
                 await message.delete()
-                continue
+
 
     async def add_and_check_data(
         self,

@@ -38,7 +38,7 @@ mal-api==0.5.2
 multidict==6.0.2
 mystbin.py==2.2.0
 num2words==0.5.10
-orjson==3.6.6
+orjson==3.6.7
 parsedatetime==2.6
 Pillow==9.0.1
 platformdirs==2.5.0

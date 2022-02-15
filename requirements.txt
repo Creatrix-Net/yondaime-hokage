@@ -32,7 +32,7 @@ greenlet==1.1.2
 gTTS==2.2.3
 idna==3.3
 import-expression==1.1.4
-importlib-metadata==4.11.0
+importlib-metadata==4.11.1
 jishaku @ git+https://github.com/Gorialis/jishaku.git@cba113f968524c5cc2cfb0c5a23bafdb35eeb6d4
 mal-api==0.5.2
 multidict==6.0.2

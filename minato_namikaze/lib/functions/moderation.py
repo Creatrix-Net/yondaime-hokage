@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 from datetime import timezone
 
-from ..util.util import return_matching_emoji
+from .util import return_matching_emoji
 from psutil._common import bytes2human
 
 

@@ -197,8 +197,7 @@ class AntiRaid(commands.Cog):
 
         guild_id = message.guild.id
         config_antiraid = await self.get_guild_config(guild_id)
-        config_mentionspam = await self.get_guild_config(
-            guild_id, "mentionspam")
+        config_mentionspam = await self.get_guild_config(guild_id, "mentionspam")
         if config_antiraid is None and config_mentionspam is None:
             return
 

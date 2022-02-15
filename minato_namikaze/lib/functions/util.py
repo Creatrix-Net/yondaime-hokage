@@ -1,7 +1,7 @@
 import aiohttp
 import re
 import discord
-from .vars import ChannelAndMessageId, LinksAndVars, url_regex
+from ..util.vars import ChannelAndMessageId, LinksAndVars, url_regex
 import re
 import aiohttp
 from urllib.parse import urlparse,uses_netloc

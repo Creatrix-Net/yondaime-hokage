@@ -154,6 +154,52 @@ class MentionSpamConfig:
         return self
 
 
+class GiveawayConfig:
+    __slots__ = (
+        "id", 
+        "host", 
+        "channel",
+        "message", 
+        "embed", 
+        "role_required", 
+        "tasks", 
+        "prize", 
+        "end_time", 
+        "embed_dict"
+    )
+
+    @classmethod
+    async def from_record(cls, record: discord.Message, bot: commands.Bot):
+        self = cls()
+
+        self.id = record.id
+        self.channel = record.channel
+        
+        if len(record.embeds) == 0 or len(record.embeds) > 1:
+            raise AttributeError("This is not a giveaway message")
+
+        self.embed = record.embeds[0]
+        self.embed_dict = self.embed.to_dict()
+
+        if self.embed_dict.get("fields") is None:
+            raise AttributeError("This is not a giveaway message")
+        
+        if self.embed.description == '\U0001f381 Win a Prize today':
+            raise AttributeError("This giveaway has already been ended!")
+
+        role_required = discord.utils.find(lambda a: a["name"].lower() == "Role Required".lower(), self.embed_dict["fields"])
+        self.role_required = role_required["value"] if role_required is not None else None
+        
+        tasks = discord.utils.find(lambda a: a["name"].lower() == "\U0001f3c1 Tasks".lower(), self.embed_dict["fields"])["value"]
+        self.tasks = tasks["value"] if tasks is not None else None
+        
+        self.end_time = discord.utils.find(lambda a: a["name"].lower() == "Giveway ends in".lower(), self.embed_dict["fields"])["value"].split('|')[0].strip()
+        self.prize = self.embed.description.split('**')[1]
+        self.host = self.embed.author
+        
+        return self
+
+
 class CooldownByContent(commands.CooldownMapping):
 
     def _bucket_key(self, message):

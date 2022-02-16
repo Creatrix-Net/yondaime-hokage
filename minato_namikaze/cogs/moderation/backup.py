@@ -13,12 +13,12 @@ class BackUp(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\U0001f4be")
     
-    @tasks.loop(hours=1)
+    @tasks.loop(hours=1, reconnect=True)
     async def cleanup(self):
         async for message in (await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)).history(limit=None):
             try:
-                await self.bot.fetch_guild(int(message.content.strip()))
-            except (discord.Forbidden, discord.HTTPException):
+                await commands.GuildConverter().convert(await self.bot.get_context(message), message.content.strip())
+            except (commands.CommandError, commands.BadArgument):
                 await message.delete()
                 continue
 

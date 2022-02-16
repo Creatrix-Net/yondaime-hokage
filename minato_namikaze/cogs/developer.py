@@ -8,7 +8,6 @@ import subprocess as sp
 import textwrap
 import traceback
 from contextlib import redirect_stdout
-from json.decoder import JSONDecodeError
 from pathlib import Path
 
 import discord

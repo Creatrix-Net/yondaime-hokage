@@ -2,8 +2,6 @@ import aiohttp
 import re
 import discord
 from ..util.vars import ChannelAndMessageId, LinksAndVars, url_regex
-import re
-import aiohttp
 from urllib.parse import urlparse,uses_netloc
 
 INVITE_URL_RE = re.compile(r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I)

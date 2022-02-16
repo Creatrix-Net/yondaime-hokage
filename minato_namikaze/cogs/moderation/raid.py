@@ -49,7 +49,7 @@ class AntiRaid(commands.Cog):
     async def database_class_mentionspam(self):
         return await self.bot.db.new(database_category_name,mentionspam_channel_name)
     
-    @tasks.loop(hours=1)
+    @tasks.loop(hours=1, reconnect=True)
     async def cleanup(self):
         database = await self.database_class_antiraid()
         async for message in database._Database__channel.history(limit=None):
@@ -59,8 +59,8 @@ class AntiRaid(commands.Cog):
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
-                    await self.bot.fetch_guild(int(data_keys[0]))
-                except (discord.Forbidden, discord.HTTPException):
+                    await commands.GuildConverter().convert(await self.bot.get_context(message), int(data_keys[0]))
+                except (commands.CommandError, commands.BadArgument):
                     await message.delete()
             except JSONDecodeError:
                 await message.delete()
@@ -73,8 +73,8 @@ class AntiRaid(commands.Cog):
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
-                    await self.bot.fetch_guild(int(data_keys[0]))
-                except (discord.Forbidden, discord.HTTPException):
+                    await commands.GuildConverter().convert(await self.bot.get_context(message), int(data_keys[0]))
+                except (commands.CommandError, commands.BadArgument):
                     await message.delete()
             except JSONDecodeError:
                 await message.delete()

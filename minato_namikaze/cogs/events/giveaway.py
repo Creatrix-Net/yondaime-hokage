@@ -8,11 +8,11 @@ from typing import Union
 
 import discord
 from discord.ext import commands, tasks
-from discord.ext.commands import Cog, command, has_permissions
-from lib import (ChannelAndMessageId, Embed, ErrorEmbed, FutureTime,
+from discord.ext.commands import Cog, command
+from lib import (Embed, ErrorEmbed, FutureTime,
                  GiveawayConfig, LinksAndVars, cache, convert,
                  database_category_name, format_relative,
-                 giveaway_time_channel_name)
+                 giveaway_time_channel_name, is_mod, SuccessEmbed)
 
 
 class Giveaway(Cog):
@@ -20,7 +20,6 @@ class Giveaway(Cog):
         self.bot = bot
         self.description = "Helps you to organise a simple giveaway."
         self.giveaway_image = "https://i.imgur.com/efLKnlh.png"
-        self.cleanup.start()
         self.declare_results.start()
     
     @cache()
@@ -37,15 +36,13 @@ class Giveaway(Cog):
     async def database_class(self):
         return await self.bot.db.new(database_category_name,giveaway_time_channel_name)
     
-    async def create_timer_for_giveaway(self, giveaway_id: int, time_ends: Union[int, FutureTime]) -> None:
+    async def create_timer_for_giveaway(self, giveaway_id: discord.Message, time_ends: Union[int, FutureTime]) -> None:
         database = await self.database_class()
-        await database.set(giveaway_id, time_ends)
+        await database.set(giveaway_id.id, [int(time_ends), giveaway_id.jump_url])
     
-    @tasks.loop(hours=1)
+    @tasks.loop(minutes=30, reconnect=True)
     async def declare_results(self):
         database = await self.database_class()
-        server2 = await self.bot.fetch_guild(ChannelAndMessageId.server_id2.value)
-        bot_member_class = await self.bot.get_or_fetch_member(server2, self.bot.application_id)
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
@@ -53,9 +50,9 @@ class Giveaway(Cog):
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
-                    giveaway_message = await bot_member_class.fetch_message(int(data_keys[0]))
-                    timestamp = data[data_keys[0]]
-                    if discord.utils.utcnow() >= int(timestamp):
+                    giveaway_message = await commands.MessageConverter().convert(await self.bot.get_context(message), data[data_keys[0]][1])
+                    timestamp = data[data_keys[0]][0]
+                    if discord.utils.utcnow().timestamp() >= int(timestamp):
                         winner = await self.determine_winner(giveaway_message, self.bot)
                         await giveaway_message.channel.send(
                             f"\U0001f389 Congratulations **{winner.mention}** on winning the Giveaway \U0001f389",
@@ -63,36 +60,17 @@ class Giveaway(Cog):
                         )
                         await message.delete()
                         self.get_giveaway_config.invalidate(self, giveaway_message.id)
-                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                except (commands.ChannelNotFound, commands.MessageNotFound, commands.ChannelNotReadable):
                     await message.delete()
             except JSONDecodeError:
                 await message.delete()
-    
-    @tasks.loop(minutes=30)
-    async def cleanup(self):
-        database = await self.database_class()
-        server2 = await self.bot.fetch_guild(ChannelAndMessageId.server_id2.value)
-        bot_member_class = await self.bot.get_or_fetch_member(server2, self.bot.application_id)
-        async for message in database._Database__channel.history(limit=None):
-            cnt = message.content
-            try:
-                data = json.loads(str(cnt))
-                data.pop("type")
-                data_keys = list(map(str, list(data.keys())))
-                try:
-                    await bot_member_class.fetch_message(int(data_keys[0]))
-                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
-                    pass
-            except JSONDecodeError:
-                pass
-            await message.delete()
 
     @command(
         name="giveaway",
         aliases=["gcreate", "gcr", "giftcr"],
     )
     @commands.guild_only()
-    @has_permissions(manage_guild=True)
+    @is_mod()
     async def create_giveaway(self, ctx):
         """Allowes you to to create giveaway by answering some simple questions!"""
         # Ask Questions
@@ -171,7 +149,7 @@ class Giveaway(Cog):
             task = None
 
         await ctx.send(
-            f"Your giveaway will be hosted in {channel.mention} and will last for {answers[1]}"
+            
         )
         embed = Embed(
             title="**:tada::tada: Giveaway Time !! :tada::tada:**",
@@ -182,7 +160,7 @@ class Giveaway(Cog):
         embed.set_image(url=self.giveaway_image)
         embed.add_field(
             name="Giveway ends in",
-            value=f"{format_relative(discord.utils.utcnow() + timedelta(milliseconds=time_ends))} from now | [Timer]{LinksAndVars.website.value}/giveaway_timer.html?start={int(time.time() * 1000)}&length={time_ends})",
+            value=f"{format_relative(discord.utils.utcnow() + timedelta(milliseconds=time_ends))} | [Timer]({LinksAndVars.website.value}/giveaway_timer.html?start={int(time.time() * 1000)}&length={time_ends})",
         )
         if role:
             embed.add_field(name="Role Required", value=f"{role}")
@@ -193,12 +171,12 @@ class Giveaway(Cog):
         await newMsg.edit(embed=embed)
         await newMsg.add_reaction(discord.PartialEmoji(name="\U0001f389"))
         await ctx.send(
-            newMsg.jump_url
+            f"Your giveaway will be hosted in {channel.mention} and will last for {answers[1]}\n{newMsg.jump_url}"
         )
-        await self.create_timer_for_giveaway(newMsg.id, (discord.utils.utcnow() + timedelta(milliseconds=time_ends)).timestamp())
+        await self.create_timer_for_giveaway(newMsg, (discord.utils.utcnow() + timedelta(milliseconds=time_ends)).timestamp())
     
     async def determine_winner(self, giveaway_id: discord.Message, bot: commands.Bot) -> Union[str, discord.Member]:
-        reactions = await discord.utils.get(giveaway_id.reactions, emoji=discord.PartialEmoji(name="\U0001f389"))
+        reactions = discord.utils.find(lambda a: str(a) == str(discord.PartialEmoji(name="\U0001f389")), giveaway_id.reactions)
         if reactions is None:
             return "The channel or ID mentioned was incorrect"
         try:
@@ -210,7 +188,7 @@ class Giveaway(Cog):
         if discord.utils.get(reacted_users, id=bot.application_id):
             reacted_users.remove(discord.utils.get(reacted_users, id=bot.application_id))
         if giveaway_config.role_required is not None and len(reacted_users) <= 0:
-            reacted_users = list(filter(lambda a: giveaway_config.role_required in a.roles, reacted_users))
+            reacted_users = list(filter(lambda a: discord.utils.get(a.roles, id=int(giveaway_config.role_required.lstrip('<@&').lstrip('<&').rstrip('>'))) is not None, reacted_users))
         if len(reacted_users) <= 0:
             emptyEmbed = Embed(title="\U0001f389\U0001f389 Giveaway Time !! \U0001f389\U0001f389", description="\U0001f381 Win a Prize today")
             emptyEmbed.set_author(name=giveaway_config.host.display_name, icon_url=giveaway_config.host.display_avatar.url)
@@ -224,25 +202,29 @@ class Giveaway(Cog):
             return f"No one won the giveaway! As there were not enough participants!\n{giveaway_config.jump_url}"
         winner = choice(reacted_users)
         winnerEmbed = giveaway_config.embed
-        if discord.utils.find(lambda a: a["name"].lower() == "\U0001f389 Congratulations On Winning Giveaway \U0001f389".lower(), self.embed_dict["fields"]) is not None:
-            winnerEmbed.add_field(name="\U0001f389 Congratulations On Winning Giveaway \U0001f389",value=winner.mention)
+        if discord.utils.find(lambda a: a["name"].lower() == "\U0001f389 Winner \U0001f389".lower(), giveaway_config.embed_dict["fields"]) is None:
+            winnerEmbed.add_field(name="\U0001f389 Winner \U0001f389",value=winner.mention, inline=False)
         await giveaway_id.edit(embed=winnerEmbed)
         return winner
 
     @command(
         name="giftrrl",
         usage="<giveaway id> [channel]",
-        aliases=["gifreroll", "gftroll", "grr","giftroll","giveawayroll", "giveaway_roll"],
+        aliases=["gifreroll", "gftroll", "grr","giftroll","giveawayroll", "giveaway_roll","reroll"],
     )
-    @has_permissions(manage_guild=True)
+    @is_mod()
     @commands.guild_only()
     async def giveaway_reroll(self, ctx, giveaway_id: Union[commands.MessageConverter, discord.Message]):
         """
         It picks out the giveaway winners
         `Note: It dosen't checks for task, It only checks for roles if specified`
         """
+        if not await ctx.prompt(
+                f"Do you really want to **reroll or declare the results for** giveaway with id **{giveaway_id.id}**, hosted in {giveaway_id.channel.mention}?"
+        ):
+            return
         channel = giveaway_id.channel
-        winner = self.determine_winner(giveaway_id, ctx.bot)
+        winner = await self.determine_winner(giveaway_id, ctx.bot)
         if isinstance(winner, str):
             return await ctx.send(winner)
         await channel.send(
@@ -256,32 +238,54 @@ class Giveaway(Cog):
 
     @command(
         name="giftdel",
-        usage="<giveaway id> <channel>",
+        usage="<giveaway id>",
         aliases=["gifdel", "gftdel", "gdl"],
     )
-    @has_permissions(manage_guild=True)
+    @is_mod()
     @commands.guild_only()
-    async def giveaway_stop(self, ctx, GiveawayID: int, channel=None):
+    async def giveaway_stop(self, ctx, giveaway_id: Union[commands.MessageConverter, discord.Message]):
         """
         Cancels the specified giveaway
         `Note: This also deletes that giveaway message`
         """
-        if not channel:
-            channel = ctx.message.channel
+        if not await ctx.prompt(
+                f"Do you really want to **stop/delete** the giveaway with id **{giveaway_id.id}** hosted in {giveaway_id.channel.mention}?\n`Note: This action is irreversible!`"
+        ):
+            return
         try:
-            msg = await channel.fetch_message(GiveawayID)
-            newEmbed = Embed(
-                title="Giveaway Cancelled",
-                description="The giveaway has been cancelled!!",
-            )
-            # Set Giveaway cancelled
-            self.cancelled = True
-            await msg.edit(embed=newEmbed)
-            await ctx.send(f"The giveaway cancelled\n{msg.jump_url}")
-        except:
-            embed = ErrorEmbed(title="Failure!", description="Cannot cancel Giveaway")
-            await ctx.send(emebed=embed)
+            await self.get_giveaway_config(giveaway_id)
+        except AttributeError as e:
+            return await ctx.send(ErrorEmbed(title=str(e)))
+        database = await self.database_class()
+        await database.delete(giveaway_id.id)
+        await giveaway_id.delete()
+        self.get_giveaway_config.invalidate(self, giveaway_id.id)
+        await ctx.send(embed=SuccessEmbed(title=f'The giveaway with id {giveaway_id.id} deleted successfully!'))
+    
 
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent) -> None:
+        if payload.guild_id is None:
+            return
+        reaction = str(payload.emoji)
+        if reaction != str(discord.PartialEmoji(name="\U0001f389")):
+            return
+        
+        if payload.user_id == self.bot.application_id:
+            return
+
+        msg = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
+        try:
+            giveaway_config = await self.get_giveaway_config(msg)
+        except AttributeError:
+            return
+        
+        if giveaway_config.role_required is None:
+            return
+        role_present = discord.utils.get(payload.member.roles, id=int(giveaway_config.role_required.lstrip('<@&').lstrip('<&').rstrip('>')))
+        if role_present is None:
+            await msg.remove_reaction(discord.PartialEmoji(name="\U0001f389"), payload.member)
+            await payload.member.send('\U000026a0 Sorry you don\'t have the required roles in order to enter the giveaway :(')
 
 def setup(bot):
     bot.add_cog(Giveaway(bot))

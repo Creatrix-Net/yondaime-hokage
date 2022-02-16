@@ -5,7 +5,7 @@ from json.decoder import JSONDecodeError
 
 import discord
 from discord.ext import commands, tasks
-from lib import (ChannelAndMessageId, Embed, ReactionPersistentView,
+from lib import (Embed, ReactionPersistentView,
                  database_category_name, has_permissions,
                  reaction_roles_channel_name)
 
@@ -29,8 +29,6 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
     @tasks.loop(hours=1)
     async def cleanup(self):
         database = await self.database_class()
-        server2 = await self.bot.fetch_guild(ChannelAndMessageId.server_id2.value)
-        bot_member_class = await self.bot.get_or_fetch_member(server2, self.bot.application_id)
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
@@ -38,8 +36,8 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
-                    await bot_member_class.fetch_message(int(data_keys[0]))
-                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                    await commands.MessageConverter().convert(await self.bot.get_context(message), data[data_keys[0]]["jump_url"])
+                except (commands.ChannelNotFound, commands.MessageNotFound, commands.ChannelNotReadable):
                     await message.delete()
             except JSONDecodeError:
                 await message.delete()
@@ -151,9 +149,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                                                           timeout=120,
                                                           check=check)
                 if channel_message.channel_mentions:
-                    rl_object[
-                        "target_channel"] = channel_message.channel_mentions[
-                            0].id
+                    target_channel = channel_message.channel_mentions[0]
                     break
                 else:
                     error_messages.append((await message.channel.send(
@@ -214,8 +210,6 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                                   or selector_embed.description else None)
                 database = await self.database_class()
                 if selector_msg_body or selector_embed:
-                    target_channel = ctx.bot.get_channel(
-                        rl_object["target_channel"])
                     sent_final_message = None
                     try:
                         custom_id = [
@@ -231,6 +225,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                             ),
                         )
                         rl_object["custom_id"] = custom_id
+                        rl_object["jump_url"] = str(sent_final_message.jump_url)
                         break
                     except discord.Forbidden:
                         error_messages.append((await message.channel.send(

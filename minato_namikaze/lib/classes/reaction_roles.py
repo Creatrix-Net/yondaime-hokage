@@ -20,15 +20,14 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
             roles_id_list = [
                 data.get("reactions")[i] for i in data.get("reactions")
             ]
-            if list(map(lambda i: i.id,
-                        interaction.user.roles)) in roles_id_list:
+            if list(map(lambda i: i.id,interaction.user.roles)) in roles_id_list:
                 await interaction.response.send_message(
                     "You cannot have more than 1 role from this message",
                     ephemeral=True)
                 return
 
         for i in data.get("reactions"):
-            if self.emoji == discord.PartialEmoji(name=i):
+            if str(self.emoji) == str(discord.PartialEmoji(name=i)):
                 role_id = data.get("reactions")[i]
                 role_model = discord.utils.get(interaction.guild.roles,
                                                id=role_id)

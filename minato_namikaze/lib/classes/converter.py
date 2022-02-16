@@ -190,7 +190,7 @@ class GiveawayConfig:
         role_required = discord.utils.find(lambda a: a["name"].lower() == "Role Required".lower(), self.embed_dict["fields"])
         self.role_required = role_required["value"] if role_required is not None else None
         
-        tasks = discord.utils.find(lambda a: a["name"].lower() == "\U0001f3c1 Tasks".lower(), self.embed_dict["fields"])["value"]
+        tasks = discord.utils.find(lambda a: a["name"].lower() == "\U0001f3c1 Tasks".lower(), self.embed_dict["fields"])
         self.tasks = tasks["value"] if tasks is not None else None
         
         self.end_time = discord.utils.find(lambda a: a["name"].lower() == "Giveway ends in".lower(), self.embed_dict["fields"])["value"].split('|')[0].strip()

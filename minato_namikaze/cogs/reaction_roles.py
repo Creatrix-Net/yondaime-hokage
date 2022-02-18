@@ -18,7 +18,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="discord_certified_moderator", id=922030031146995733)
+        return discord.PartialEmoji(name="idle", id=922030033067995187)
 
     def owners(ctx):
         return ctx.author.id == ctx.bot.owner_id

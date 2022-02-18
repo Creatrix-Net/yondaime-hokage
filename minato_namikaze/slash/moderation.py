@@ -231,6 +231,19 @@ class Support(discord.SlashCommand, parent=Setup):
         await response.send_message(f'Done! Added `support logging` to {response.options.channel.mention} with {response.options.role.mention} `role`')
 
 
+class Starboard(discord.SlashCommand, parent=Setup):
+    '''This adds starboard system to your server'''
+
+    channel: GuildChannel = discord.application_command_option(channel_types=[discord.TextChannel],description="The channel where the starred message will go")
+    stars: typing.Optional[int] = discord.application_command_option(description="Minimum number of stars required before posting it to the specified channel", default=5)
+    self_star: typing.Optional[bool]  = discord.application_command_option(description="Whether self  starring of message should be there or not", default=False)
+    ignore_nsfw: typing.Optional[bool]  = discord.application_command_option(description="Whether to ignore NSFW channels or not", default=True)
+
+    async def callback(self, response: discord.SlashCommandResponse):
+        dict_to_add = {"starboard": {"channel": response.options.channel.id,"no_of_stars": response.options.stars,"self_star": response.options.self_star, "ignore_nsfw": response.options.ignore_nsfw}}
+        await self.parent.cog.add_and_check_data(dict_to_add, response.interaction.guild, 'setupvar')
+        await response.send_message(f'Done! Added `starboard channel` as {response.options.channel.mention} with minimum `{response.options.stars} stars` requirement')
+
 class BadLinks(discord.SlashCommand, parent=Setup):
     '''Checks against the scam links and take necessary action if stated'''
     option: bool = discord.application_command_option(description="Enable or Disable", default=True)

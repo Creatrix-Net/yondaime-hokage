@@ -22,7 +22,7 @@ class Music(commands.Cog):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="🎵")
+        return discord.PartialEmoji(name="voice_channel", id=942447961210753047)
 
     async def cog_before_invoke(self, ctx: commands.Context):
         """

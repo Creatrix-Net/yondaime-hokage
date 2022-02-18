@@ -29,12 +29,15 @@ class Games(discord.Cog):
         Play Tictactoe with yourself or your friend!
         """
         member = member or ctx.me
-        if member is ctx.author or member.bot:
-            if member is not ctx.me:
-                await ctx.send(embed=ErrorEmbed(
-                    description="*You cannot play this game yourself or with a bot*"
-                ))
-                return
+        if (
+            member is ctx.author
+            or member.bot
+            and member is not ctx.me
+        ):
+            await ctx.send(embed=ErrorEmbed(
+                description="*You cannot play this game yourself or with a bot*"
+            ))
+            return
         view = TicTacToe(player2=member, player1=ctx.author, auto = member is ctx.me)
         view.message = await ctx.send(f"Tic Tac Toe: X goes first aka {ctx.author.mention}", view=view)
 
@@ -46,12 +49,15 @@ class Games(discord.Cog):
         https://en.wikipedia.org/wiki/Connect_Four#firstHeading
         """
         member = member or ctx.me
-        if member is ctx.author or member.bot:
-            if member is not ctx.me:
-                await ctx.send(embed=ErrorEmbed(
-                    description="*You cannot play this game yourself or with a bot*"
-                ))
-                return
+        if (
+            member is ctx.author
+            or member.bot
+            and member is not ctx.me
+        ):
+            await ctx.send(embed=ErrorEmbed(
+                description="*You cannot play this game yourself or with a bot*"
+            ))
+            return
         view = ConnectFour(red = ctx.author, blue=member, auto = member is ctx.me)
         view.message = await ctx.send(embeds=[view.embed, view.BoardString()],view=view)
 

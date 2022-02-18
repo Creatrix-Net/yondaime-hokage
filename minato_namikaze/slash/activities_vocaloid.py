@@ -63,7 +63,8 @@ class Vocaloids(discord.SlashCommand):
     def __init__(self, cog):
         self.cog = cog
 
-    async def callback(self, response: discord.SlashCommandResponse):
+    @staticmethod
+    async def callback(response: discord.SlashCommandResponse):
         await response.send_message(embed=await meek_api(response.options.vocaloid))
 
 

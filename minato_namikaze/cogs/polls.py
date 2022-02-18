@@ -41,7 +41,8 @@ class QuickPoll(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{BAR CHART}")
 
-    async def delete_message(self,message_list: List[discord.Message]) -> None:
+    @staticmethod
+    async def delete_message(message_list: List[discord.Message]) -> None:
         for i in message_list:
             try:
                 await i.delete()

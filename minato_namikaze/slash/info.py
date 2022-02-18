@@ -13,7 +13,8 @@ class Info(discord.SlashCommand, parent=Server):
 
 class Banner(discord.SlashCommand, parent=Server):
     '''Shows server banner, if there is any'''
-    async def callback(self, response: discord.SlashCommandResponse):
+    @staticmethod
+    async def callback(response: discord.SlashCommandResponse):
         if not response.interaction.guild.banner:
             return await response.send_message("This server does not have a banner...", ephemeral=True)
         e = Embed(title=f":information_source: Banner for {response.interaction.guild}")
@@ -22,7 +23,8 @@ class Banner(discord.SlashCommand, parent=Server):
 
 class Icon(discord.SlashCommand, parent=Server):
     '''Shows server icon, if there is any'''
-    async def callback(self, response: discord.SlashCommandResponse):
+    @staticmethod
+    async def callback(response: discord.SlashCommandResponse):
         if not response.interaction.guild.icon:
             return await response.send_message("This server does not have a avatar...", ephemeral=True)
         e = Embed(title=f":information_source: Icon for {response.interaction.guild}")

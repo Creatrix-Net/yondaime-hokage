@@ -205,7 +205,7 @@ class Unmute(discord.UserCommand):
             await response.send_message('Something went wrong or I don\'t have the `Timeout Members` permission', ephemeral=True)
 
 
-class Setup(discord.SlashCommand, guild_ids=[920536143244709889]):
+class Setup(discord.SlashCommand):
     '''Setups some logging system for system for server with some nice features'''
     def __init__(self, cog):
         self.cog = cog

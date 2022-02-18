@@ -410,15 +410,19 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             return
         
         channel = self.bot.get_channel(payload.channel_id)
-        if data.get('ignore_nsfw') is not None:
-            if data.get('ignore_nsfw'):
-                if channel.is_nsfw():
-                    return
+        if (
+            data.get('ignore_nsfw') is not None
+            and data.get('ignore_nsfw')
+            and channel.is_nsfw()
+        ):
+            return
 
         msg = await channel.fetch_message(payload.message_id)
-        if data.get('self_star'):
-            if int(payload.user_id) == msg.author.id:
-                return
+        if (
+            data.get('self_star')
+            and int(payload.user_id) == msg.author.id
+        ):
+            return
         no_of_reaction = discord.utils.find(lambda a: str(a.emoji) == discord.PartialEmoji(name="\U00002b50"),msg.reactions)
         if no_of_reaction.count < int(data.get('no_of_stars')):
             return
@@ -442,13 +446,15 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     description = embed_user.description
             if not isinstance(embed_user.image.url, discord.embeds._EmptyEmbed):
                 embed.set_image(url=embed_user.image.url)
-        if isinstance(embed.image.url,discord.embeds._EmptyEmbed):
-            if len(msg.attachments) > 0:
-                attachment = msg.attachments[0]
-                if attachment.content_type.lower() in ['image/jpeg', 'image/avif', 'image/png','image/svg+xml']:
-                    embed.set_image(url=attachment.url)
-                else:
-                    description = f'{description}\n\n**Attachment(s)**\n{attachment.url}'
+        if (
+            isinstance(embed.image.url,discord.embeds._EmptyEmbed)
+            and len(msg.attachments) > 0
+        ):
+            attachment = msg.attachments[0]
+            if attachment.content_type.lower() in ['image/jpeg', 'image/avif', 'image/png','image/svg+xml']:
+                embed.set_image(url=attachment.url)
+            else:
+                description = f'{description}\n\n**Attachment(s)**\n{attachment.url}'
         embed.description = f'{description}\n\n**Original**\n[Jump]({msg.jump_url})'
         embed.set_author(name=msg.author, icon_url=msg.author.display_avatar.url, url=msg.jump_url)
         embed.set_footer(text=str(msg.id))

@@ -24,3 +24,11 @@ class SuccessEmbed(embeds.Embed):
             kwargs["colour"] = discord.Color.green()
 
         super().__init__(**kwargs)
+
+
+class StarboardEmbed(embeds.Embed):
+    def __init__(self, **kwargs):
+        if "colour" not in kwargs:
+            kwargs["colour"] = discord.Color.yellow()
+
+        super().__init__(**kwargs)

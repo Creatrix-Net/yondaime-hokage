@@ -59,7 +59,7 @@ class AntiRaid(commands.Cog):
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
-                    await commands.GuildConverter().convert(await self.bot.get_context(message), int(data_keys[0]))
+                    await commands.GuildConverter().convert(await self.bot.get_context(message), str(data_keys[0]))
                 except (commands.CommandError, commands.BadArgument):
                     await message.delete()
             except JSONDecodeError:
@@ -73,7 +73,7 @@ class AntiRaid(commands.Cog):
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
-                    await commands.GuildConverter().convert(await self.bot.get_context(message), int(data_keys[0]))
+                    await commands.GuildConverter().convert(await self.bot.get_context(message), str(data_keys[0]))
                 except (commands.CommandError, commands.BadArgument):
                     await message.delete()
             except JSONDecodeError:

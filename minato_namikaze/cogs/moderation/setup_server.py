@@ -10,7 +10,7 @@ from discord.ext import commands
 from lib import (Embed, EmbedPaginator, ErrorEmbed,
                  antiraid_channel_name, database_category_name,
                  database_channel_name, detect_bad_domains, is_mod,
-                 mentionspam_channel_name)
+                 mentionspam_channel_name, StarboardEmbed)
 
 
 
@@ -54,7 +54,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
-                    await commands.GuildConverter().convert(await self.bot.get_context(message), int(data_keys[0]))
+                    await commands.GuildConverter().convert(await self.bot.get_context(message), str(data_keys[0]))
                 except (commands.CommandError, commands.BadArgument):
                     await message.delete()
             except JSONDecodeError:
@@ -152,6 +152,38 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     "option": option,
                     "action": action,
                     "logging_channel": logging_channel.id if logging_channel is not None else logging_channel
+            }
+        },
+            ctx=ctx,
+        )
+    
+
+    @setup.command(usage="<channel> [no_of_stars] [self_star] [ignore_nsfw]")
+    async def starboard(
+        self,
+        ctx,
+        channel: typing.Union[commands.TextChannelConverter, discord.TextChannel],
+        no_of_stars: typing.Optional[int] = 5,
+        self_star: typing.Optional[bool] = False,
+        ignore_nsfw: typing.Optional[bool] = True
+    ):
+        '''
+        Setups the starboard in your server. 
+        It posts the message in the specified channel whenever someone stars a message using \U00002b50 emoji
+
+        Args:
+            - channel : The channel where the starred message will go
+            - no_of_stars [Optional] [int] : Minimum number of stars required before posting it to the specified channel
+            - self_star [Optional] [bool] (default: False) : Whether self  starring of message should be there or not
+            - ignore_nsfw [Optional] [bool] (default: True) : Whether to ignore NSFW channels or not
+        '''
+        await self.add_and_check_data(
+            {
+                "starboard": {
+                    "channel": channel.id,
+                    "no_of_stars": no_of_stars,
+                    "self_star": self_star,
+                    "ignore_nsfw": ignore_nsfw
             }
         },
             ctx=ctx,
@@ -297,16 +329,13 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database_antiraid.delete(guild.id)
         await database_mentionspam.delete(guild.id)
 
-    @commands.command(alisases=["datadelete", "delete_data", "data_delete"],
-                      usage="[type_data]")
+    @commands.command(alisases=["datadelete", "delete_data", "data_delete"], usage="[type_data]")
     @commands.guild_only()
     @is_mod()
     async def deletedata(
         self,
         ctx,
-        type_data: typing.Literal["ban", "unban", "support", "warns",
-                                  "feedback", "mentionspam", "antiraid",
-                                  "badlinks", "all", ] = "all",
+        type_data: typing.Literal["ban", "unban", "support", "warns","feedback", "mentionspam", "antiraid", "starboard", "badlinks", "all", ] = "all",
     ):
         """
         This command deletes the available data:
@@ -319,7 +348,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             - `feedback`: Deletes the `feedback data` from database
             - `mentionspam`: Deletes the `mentionspam data` from database
             - `antiraid`: Deletes the `antiraid data` from database
-            - `badlinks`: Delets the `badlinks data` from database
+            - `badlinks`: Deletes the `badlinks data` from database
+            - `starboard`: Deletes the `starboard data` from database
 
         By default the `type_data` is set to `all`, which will delete all the data present in the database.
         """
@@ -327,7 +357,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 f"Do you really want to **delete {type_data}** data?"):
             return
         if type_data in [
-                "ban", "unban", "support", "warns", "feedback", "badlinks"
+                "ban", "unban", "support", "warns", "feedback", "badlinks", "starboard"
         ]:
             database = await self.database_class()
             data = await database.get(ctx.guild.id)
@@ -356,8 +386,75 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database_antiraid.delete(ctx.guild.id)
         await database_mentionspam.delete(ctx.guild.id)
         await ctx.send(":ok_hand:")
+    
 
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent) -> None:
+        if payload.guild_id is None:
+            return
+        reaction = str(payload.emoji)
+        if reaction != str(discord.PartialEmoji(name="\U00002b50")):
+            return
+        
+        if payload.user_id == self.bot.application_id:
+            return
 
+        database = await self.database_class()
+        data =  await database.get(int(payload.guild_id))
+        if data is None:
+            return
+        if data.get('starboard') is None:
+            return
+        data = data.get('starboard')
+        if int(data.get('channel')) == int(payload.channel_id):
+            return
+        
+        channel = self.bot.get_channel(payload.channel_id)
+        if data.get('ignore_nsfw') is not None:
+            if data.get('ignore_nsfw'):
+                if channel.is_nsfw():
+                    return
+
+        msg = await channel.fetch_message(payload.message_id)
+        if data.get('self_star'):
+            if int(payload.user_id) == msg.author.id:
+                return
+        no_of_reaction = discord.utils.find(lambda a: str(a.emoji) == discord.PartialEmoji(name="\U00002b50"),msg.reactions)
+        if no_of_reaction.count < int(data.get('no_of_stars')):
+            return
+
+        embed = StarboardEmbed(timestamp=msg.created_at)
+        description = msg.content
+        if len(msg.embeds) > 0:
+            embed_user = msg.embeds[0]
+            if not isinstance(embed_user.fields, discord.embeds._EmptyEmbed):
+                for i in embed_user.fields:
+                    embed.add_field(name=i.name,value=i.value,inline=i.inline)
+            if embed_user.title is not None or not isinstance(embed_user.title, discord.embeds._EmptyEmbed):
+                if description is not None:
+                    description = f'{description}\n\n**{embed_user.title}**\n{embed_user.description}'
+                else:
+                    description = f'**{embed_user.title}**\n{embed_user.description}'
+            else:
+                if description is not None:
+                    description = f'{description}\n\n{embed_user.description}'
+                else:
+                    description = embed_user.description
+            if not isinstance(embed_user.image.url, discord.embeds._EmptyEmbed):
+                embed.set_image(url=embed_user.image.url)
+        if isinstance(embed.image.url,discord.embeds._EmptyEmbed):
+            if len(msg.attachments) > 0:
+                attachment = msg.attachments[0]
+                if attachment.content_type.lower() in ['image/jpeg', 'image/avif', 'image/png','image/svg+xml']:
+                    embed.set_image(url=attachment.url)
+                else:
+                    description = f'{description}\n\n**Attachment(s)**\n{attachment.url}'
+        embed.description = f'{description}\n\n**Original**\n[Jump]({msg.jump_url})'
+        embed.set_author(name=msg.author, icon_url=msg.author.display_avatar.url, url=msg.jump_url)
+        embed.set_footer(text=str(msg.id))
+
+        starboard_channel = self.bot.get_channel(data.get('channel'))
+        await starboard_channel.send(content=f'\U00002b50 {channel.mention} by {msg.author.mention}',embed=embed, allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False, replied_user=False))
 
 def setup(bot):
     bot.add_cog(ServerSetup(bot))

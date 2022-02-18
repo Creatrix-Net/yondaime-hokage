@@ -224,7 +224,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             pass
         await self.change_presence(
             status=discord.Status.idle,
-            activity=discord.Activity(type=discord.ActivityType.watching,ame="over Naruto"),
+            activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
         )
 
         if ast.literal_eval(token_get("POST_STATS")):
@@ -239,8 +239,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
             await self.change_presence(
                 status=discord.Status.idle,
-                activity=discord.Activity(type=discord.ActivityType.watching,
-                                          name="over Naruto"),
+                activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
             )
 
     @staticmethod

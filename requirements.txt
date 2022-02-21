@@ -60,7 +60,7 @@ SQLAlchemy==1.4.31
 TenGiphPy==2.5.0
 tqdm==4.62.3
 urllib3==1.26.8
-websockets==10.1
+websockets==10.2
 yarl==1.7.2
 youtube-dl==2021.12.17
 youtube-search==2.1.0

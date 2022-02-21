@@ -41,7 +41,7 @@ num2words==0.5.10
 orjson==3.6.7
 parsedatetime==2.6
 Pillow==9.0.1
-platformdirs==2.5.0
+platformdirs==2.5.1
 psutil==5.9.0
 pycparser==2.21
 pyee==8.2.2

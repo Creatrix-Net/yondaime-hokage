@@ -3,14 +3,12 @@ from typing import Union
 import discord
 from discord.ext import commands
 from lib import (
-    Embed,
-    EmbedPaginator,
-    ErrorEmbed,
     MemberID,
     database_category_name,
     database_channel_name,
     is_mod,
 )
+from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
 
 
 def errorembed(ctx):

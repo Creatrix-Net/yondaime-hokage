@@ -1,11 +1,11 @@
 import asyncio
-from typing import Optional
 
 import discord
 from asyncdagpi import Client
 from discord.ext import commands
-from lib import Embed, EmbedPaginator, ErrorEmbed, Tokens
+from lib import Tokens
 from mal import Anime, AnimeSearch, Manga, MangaSearch
+from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
 
 
 def format_related_anime_manga(dict_related_anime):

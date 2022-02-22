@@ -5,9 +5,10 @@ from datetime import timedelta
 import aiohttp
 import discord
 from discord.abc import GuildChannel
-from lib import (ErrorEmbed, LinksAndVars, RaidMode, SuccessEmbed,
+from lib import (LinksAndVars, RaidMode,
                  antiraid_channel_name, database_category_name,
                  detect_bad_domains, database_channel_name, mentionspam_channel_name)
+from DiscordUtils import SuccessEmbed, ErrorEmbed
 
 
 class Badurls(discord.SlashCommand, name="badurls"):

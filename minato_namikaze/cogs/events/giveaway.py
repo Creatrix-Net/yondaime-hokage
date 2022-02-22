@@ -9,10 +9,11 @@ from typing import Union
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import Cog, command
-from lib import (Embed, ErrorEmbed, FutureTime,
+from lib import (FutureTime,
                  GiveawayConfig, LinksAndVars, cache, convert,
                  database_category_name, format_relative,
-                 giveaway_time_channel_name, is_mod, SuccessEmbed)
+                 giveaway_time_channel_name, is_mod)
+from DiscordUtils import SuccessEmbed, Embed, ErrorEmbed
 
 
 class Giveaway(Cog):

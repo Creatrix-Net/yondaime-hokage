@@ -1,7 +1,7 @@
 import discord
 import DiscordUtils
 from discord.ext import commands
-from lib import Embed, EmbedPaginator, ErrorEmbed
+from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
 
 
 class NoChannelProvided(commands.CommandError):

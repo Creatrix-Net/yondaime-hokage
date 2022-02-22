@@ -4,6 +4,7 @@ import logging
 from collections import defaultdict
 from typing import Literal, Optional
 import json
+import DiscordUtils
 from json.decoder import JSONDecodeError
 
 import discord
@@ -36,8 +37,10 @@ class AntiRaid(commands.Cog):
         self.autoban_threshold = 3
         self._spam_check = defaultdict(SpamChecker)
         self.message_batches = defaultdict(list)
+        self.tracker = DiscordUtils.InviteTracker(bot)
         self.bulk_send_messages.start()
         self.cleanup.start()
+
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
@@ -275,6 +278,7 @@ class AntiRaid(commands.Cog):
         e.add_field(name="Created",
                     value=format_relative(member.created_at),
                     inline=False)
+        e.add_field(name="Inviter")
 
         if config.broadcast_channel:
             try:

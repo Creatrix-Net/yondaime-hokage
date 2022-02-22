@@ -5,9 +5,10 @@ from json.decoder import JSONDecodeError
 
 import discord
 from discord.ext import commands, tasks
-from lib import (Embed, ReactionPersistentView,
+from lib import (ReactionPersistentView,
                  database_category_name, has_permissions,
                  reaction_roles_channel_name)
+from DiscordUtils import Embed
 
 
 class ReactionRoles(commands.Cog, name="Reaction Roles"):

@@ -8,8 +8,9 @@ import pkg_resources
 import psutil
 import pygit2
 from discord.ext import commands
-from lib import ChannelAndMessageId, Embed, LinksAndVars, PrivacyPolicy, VotingMenu
+from lib import ChannelAndMessageId, LinksAndVars, PrivacyPolicy, VotingMenu
 from lib import time_class as time
+from DiscordUtils import Embed
 
 
 class MySupport(commands.Cog, name="My Support"):

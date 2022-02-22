@@ -5,7 +5,7 @@ from random import choice
 
 import aiohttp
 
-from ..classes.embed import Embed, ErrorEmbed
+from DiscordUtils.embeds import Embed, ErrorEmbed
 
 with gzip.open(
         join(

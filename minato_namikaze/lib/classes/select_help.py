@@ -12,7 +12,7 @@ import discord
 from discord.ext import commands, menus
 
 from ..util import DEFAULT_COMMAND_SELECT_LENGTH, LinksAndVars
-from .paginator import *
+from DiscordUtils.paginator import *
 from .time_class import *
 
 

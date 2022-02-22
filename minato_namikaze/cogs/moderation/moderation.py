@@ -12,9 +12,6 @@ from lib import (
     ActionReason,
     Arguments,
     BannedMember,
-    Embed,
-    EmbedPaginator,
-    ErrorEmbed,
     FutureTime,
     MemberID,
     can_execute_action,
@@ -23,10 +20,11 @@ from lib import (
     format_relative,
     has_permissions,
     plural,
-    SuccessEmbed,
     check_if_user_joined_a_voice,
     check_if_user_joined_a_stage
 )
+from DiscordUtils.embeds import *
+from DiscordUtils import EmbedPaginator
 
 
 class Moderation(commands.Cog):

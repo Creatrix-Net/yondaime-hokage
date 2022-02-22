@@ -5,6 +5,7 @@ import logging
 import os
 import time
 from pathlib import Path
+import DiscordUtils
 
 import TenGiphPy
 from discord_together import DiscordTogether
@@ -23,12 +24,12 @@ import discord
 import dotenv
 import sentry_sdk
 from discord.ext import commands
+from DiscordUtils import Embed
 from DiscordDatabase import DiscordDatabase
 from lib import (
     BASE_DIR,
     ChannelAndMessageId,
     Context,
-    Embed,
     LinksAndVars,
     PaginatedHelpCommand,
     PostStats,

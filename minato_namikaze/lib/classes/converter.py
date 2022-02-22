@@ -117,11 +117,6 @@ def safe_reason_append(base, to_append):
     return appended
 
 
-def can_execute_action(ctx, user, target):
-    return (user.id == ctx.bot.owner_id or user == ctx.guild.owner
-            or user.top_role > target.top_role)
-
-
 class AntiRaidConfig:
     __slots__ = ("raid_mode", "id", "bot", "broadcast_channel_id")
 

@@ -7,7 +7,7 @@ from pathlib import Path
 import aiohttp
 import requests
 
-from ..classes.embed import Embed
+from DiscordUtils import Embed
 from .vars import *
 
 

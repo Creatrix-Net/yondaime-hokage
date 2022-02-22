@@ -13,6 +13,7 @@ from pathlib import Path
 import discord
 from discord.ext import commands
 from lib import *
+from DiscordUtils import *
 
 log = logging.getLogger(__name__)
 

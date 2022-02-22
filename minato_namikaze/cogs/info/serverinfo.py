@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
-from lib import Embed, serverinfo, userinfo
-
+from lib import serverinfo, userinfo
+from DiscordUtils import Embed
 
 class Info(commands.Cog):
     def __init__(self, bot):

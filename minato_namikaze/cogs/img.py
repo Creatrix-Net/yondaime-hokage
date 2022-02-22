@@ -6,9 +6,10 @@ from typing import Optional, Union
 import discord
 from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
-from lib import Embed, ErrorEmbed, MemberID, Tokens, among_us, among_us_friends
+from lib import MemberID, Tokens, among_us, among_us_friends
 from lib.util.vars import BASE_DIR
 from PIL import Image, ImageDraw, ImageFont
+from DiscordUtils import Embed, ErrorEmbed
 
 
 class ImageManipulation(commands.Cog, name="Image Manipulation"):

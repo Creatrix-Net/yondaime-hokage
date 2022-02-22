@@ -9,8 +9,9 @@ import async_cleverbot as ac
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
-from lib import ErrorEmbed, MemberID, Tokens
+from lib import MemberID, Tokens
 from lib.classes.games import *
+from DiscordUtils import ErrorEmbed
 
 class Games(discord.Cog):
     def __init__(self, bot):

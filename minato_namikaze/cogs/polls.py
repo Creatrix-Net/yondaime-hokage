@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from lib import Embed, ErrorEmbed
+from DiscordUtils import Embed, ErrorEmbed
 from operator import itemgetter
 from typing import List
 

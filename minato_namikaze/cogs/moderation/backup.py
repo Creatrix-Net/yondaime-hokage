@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands, tasks
-from lib import BackupDatabse, SuccessEmbed,ChannelAndMessageId
+from lib import BackupDatabse,ChannelAndMessageId
+from DiscordUtils import SuccessEmbed
 
 
 class BackUp(commands.Cog):

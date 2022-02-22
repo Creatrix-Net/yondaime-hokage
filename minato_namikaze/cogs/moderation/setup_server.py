@@ -7,11 +7,12 @@ from datetime import timedelta
 
 import discord
 from discord.ext import commands
-from lib import (Embed, EmbedPaginator, ErrorEmbed,
+from lib import (
                  antiraid_channel_name, database_category_name,
                  database_channel_name, detect_bad_domains, is_mod,
-                 mentionspam_channel_name, StarboardEmbed)
-
+                 mentionspam_channel_name)
+from DiscordUtils.embeds import *
+from DiscordUtils import EmbedPaginator
 
 
 class ServerSetup(commands.Cog, name="Server Setup"):

@@ -1,5 +1,6 @@
 import discord
-from lib import serverinfo, Embed, userinfo
+from lib import serverinfo, userinfo
+from DiscordUtils import Embed
 
 class Server(discord.SlashCommand):
     '''Some server releated commands'''

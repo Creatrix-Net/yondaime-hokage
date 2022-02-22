@@ -3,7 +3,8 @@ import traceback
 
 import discord
 from discord.ext import commands
-from lib import ChannelAndMessageId, Embed, ErrorEmbed
+from lib import ChannelAndMessageId
+from DiscordUtils import Embed, ErrorEmbed
 
 
 class BotEventsCommands(commands.Cog):

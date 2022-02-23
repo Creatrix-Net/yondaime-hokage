@@ -16,18 +16,27 @@ class BackUp(commands.Cog):
     
     @tasks.loop(hours=1, reconnect=True)
     async def cleanup(self):
+        '''Cleans the redunadant and useless backups'''
         async for message in (await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)).history(limit=None):
             try:
                 await commands.GuildConverter().convert(await self.bot.get_context(message), message.content.strip())
             except (commands.CommandError, commands.BadArgument):
                 await message.delete()
                 continue
-
-    @commands.command(description="Create backup of the server")
-    @commands.has_permissions(manage_guild=True)
+    
+    @commands.group(invoke_without_command=True)
     @commands.guild_only()
+    @commands.has_permissions(manage_guild=True)
     @commands.cooldown(2, 60, commands.BucketType.guild)
-    async def backup(self, ctx):
+    async def backup(self, ctx: commands.Context, command=None):
+        """Backup releated commands"""
+        if ctx.invoked_subcommand is None:
+            await ctx.send_help(ctx.command)
+            return
+
+
+    @backup.command(description="Create backup of the server")
+    async def create(self, ctx):
         """
         Create a backup of this guild, (it backups only those channels which is visible to the bot)
         And then dm you the backup code, (Phew keep it safe)
@@ -48,20 +57,18 @@ class BackUp(commands.Cog):
             ),
         )
 
-    @commands.command(description="Gets the json file which is stored")
-    @commands.has_permissions(manage_guild=True)
-    @commands.guild_only()
-    @commands.cooldown(2, 60, commands.BucketType.guild)
-    async def get_backup_data(self, ctx, code: commands.MessageConverter):
+    @backup.command()
+    async def get(self, ctx: commands.Context, code: int):
+        """Gets the json file which is stored as a backup"""
         backup_code_data_url = await BackupDatabse(ctx).get_backup_data(code)
         if backup_code_data_url is not None:
             await ctx.send(
-                content=f"The data for the :arrow_right: {code}\n{backup_code_data_url}"
+                content=f"The data for the ``{code}``\n{backup_code_data_url}"
             )
-        else:
-            await ctx.send(
-                f"Hey {ctx.author.mention}, \n there is no data associated with **{code}** backup code!"
-            )
+            return
+        await ctx.send(
+            f"Hey {ctx.author.mention}, \n there is no data associated with **{code}** backup code!"
+        )
 
 
 def setup(bot):

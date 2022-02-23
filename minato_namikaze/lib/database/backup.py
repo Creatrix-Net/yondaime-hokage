@@ -3,6 +3,7 @@ from typing import Optional
 
 import discord
 from discord import CategoryChannel, Role, StageChannel, TextChannel, VoiceChannel
+from discord.ext import commands
 from discord.ext.commands import Context
 from orjson import dumps
 
@@ -10,13 +11,19 @@ from ..util.vars import ChannelAndMessageId
 
 
 class BackupDatabse:
-
+    """The database class to handle the backup commands
+    """
     def __init__(self, ctx: Context):
-        self.ctx = ctx
-        self.backup_channel = ctx.get_config_channel_by_name_or_id(
-            ChannelAndMessageId.backup_channel.value)
+        self.ctx: commands.Context = ctx
+        self.backup_channel: TextChannel = ctx.get_config_channel_by_name_or_id(ChannelAndMessageId.backup_channel.value)
 
-    async def create_backup(self):
+    async def create_backup(self) -> int:
+        """|coro|
+        It creates the backup of the server
+
+        :return: The backup code
+        :rtype: int
+        """        
         roles_dict = {}
         fetch_roles = await self.ctx.guild.fetch_roles()
         for i in fetch_roles:
@@ -184,15 +191,34 @@ class BackupDatabse:
         )
         return message_reference.id
 
-    @staticmethod
-    async def get_backup_data(code: Optional[discord.Message]):
+    async def get_backup_data(self, code: int) -> Optional[discord.Attachment]:
+        """|coro|
+        It returns the backup of the specified server
+
+        :param code: The message containing that backup
+        :type code: int
+        :return: The json file which has the backup
+        :rtype: Optional[discord.Attachment]
+        """ 
+        try:
+            code = await commands.MessageConverter().convert(self.ctx, f'https://discord.com/channels/{ChannelAndMessageId.server_id2.value}/{ChannelAndMessageId.backup_channel.value}/{code}')
+        except (commands.CommandError, commands.BadArgument, commands.ChannelNotFound, commands.MessageNotFound, commands.ChannelNotReadable):
+            return       
         return code.attachments[0] if code else None
 
-    @staticmethod
     async def delete_backup_data(
-        code: Optional[discord.Message] = None,
-        guild: Optional[discord.Guild] = None,
+        self,
+        code: int,
     ):
-        if code is not None:
-            await code.delete()
-            return
+        """|coro|
+        Deletes the backup data against the specified code
+
+        :param code: The backup code to delete
+        :type code: int
+        """    
+        try:
+            code = await commands.MessageConverter().convert(self.ctx, f'https://discord.com/channels/{ChannelAndMessageId.server_id2.value}/{ChannelAndMessageId.backup_channel.value}/{code}')
+        except (commands.CommandError, commands.BadArgument, commands.ChannelNotFound, commands.MessageNotFound, commands.ChannelNotReadable):
+            return 
+        await code.delete()
+        return

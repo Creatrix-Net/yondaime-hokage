@@ -42,9 +42,18 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                     await message.delete()
             except JSONDecodeError:
                 await message.delete()
-
-    @commands.command(name="new", aliases=["create"])
+    
+    @commands.group(invoke_without_command=True, aliases=['reaction_roles'])
+    @commands.guild_only()
     @has_permissions(manage_roles=True)
+    @commands.cooldown(2, 60, commands.BucketType.guild)
+    async def rr(self, ctx: commands.Context, command=None):
+        """Reaction Roles releated commands"""
+        if ctx.invoked_subcommand is None:
+            await ctx.send_help(ctx.command)
+            return
+
+    @rr.command(name="new", aliases=["create"])
     async def new(self, ctx):
         """
         Create a new reaction role using some interactive setup.
@@ -244,8 +253,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
 
-    @commands.command(aliases=["del_rr"],usage="<reaction_roles_id aka message.id")
-    @has_permissions(manage_roles=True)
+    @rr.command(aliases=["del_rr"],usage="<reaction_roles_id aka message.id")
     async def delete_reaction_roles(
             self, ctx, reaction_roles_id: commands.MessageConverter):
         """

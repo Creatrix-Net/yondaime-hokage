@@ -506,8 +506,7 @@ class Moderation(commands.Cog):
         members = []
 
         if args.channel:
-            channel = await commands.TextChannelConverter().convert(
-                ctx, args.channel)
+            channel = await commands.TextChannelConverter().convert(ctx, args.channel)
             before = args.before and discord.Object(id=args.before)
             after = args.after and discord.Object(id=args.after)
             predicates = []

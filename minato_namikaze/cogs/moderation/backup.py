@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands, tasks
-from lib import BackupDatabse,ChannelAndMessageId
+from lib import BackupDatabse,ChannelAndMessageId, Arguments
 from DiscordUtils import SuccessEmbed
+import shlex, argparse
 
 
 class BackUp(commands.Cog):
@@ -69,6 +70,24 @@ class BackUp(commands.Cog):
         await ctx.send(
             f"Hey {ctx.author.mention}, \n there is no data associated with **{code}** backup code!"
         )
+    
+    @backup.command()
+    async def delete(self, ctx: commands.Context, *,args):
+        parser = Arguments(add_help=False, allow_abbrev=False)
+        parser.add_argument("--id", action="append_const",const=int)
+        parser.add_argument("--all", action=argparse.BooleanOptionalAction)
+        try:
+            args = parser.parse_args(shlex.split(args))
+        except Exception as e:
+            return await ctx.send(str(e))
+        
+        if args.id:
+            pass
+        
+        if args.all:
+            pass
+            
+        await ctx.send('No arguments were provided')
 
 
 def setup(bot):

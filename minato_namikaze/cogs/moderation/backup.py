@@ -73,19 +73,34 @@ class BackUp(commands.Cog):
     
     @backup.command()
     async def delete(self, ctx: commands.Context, *,args):
+        """Deletes the backup data if it is there in the database.
+        This command has a powerful "command line" syntax. To use this command
+        you and the bot must both have Manage Server permission. **-all option is optional.**
+        The following options are valid.
+        `--id` or `-id`: Array of backup id to delete.
+        `--all` or `-all`: To delete all backup(s) of the guild.
+        """
         parser = Arguments(add_help=False, allow_abbrev=False)
-        parser.add_argument("--id", action="append_const",const=int)
-        parser.add_argument("--all", action=argparse.BooleanOptionalAction)
+        parser.add_argument("--id", "-id", action="append_const",const=int)
+        parser.add_argument("--all", "-all", action="store_true")
         try:
             args = parser.parse_args(shlex.split(args))
         except Exception as e:
             return await ctx.send(str(e))
-        
         if args.id:
-            pass
-        
+            if len(args.id) <= 0:
+                await ctx.send('No Backup Id\'s provided')
+                return
+            await ctx.send("If any backup(s) with those id exists then it will deleted.")
+            for i in args.id:
+                await BackupDatabse(ctx).delete_backup_data(int(i))
+            return
         if args.all:
-            pass
+            await ctx.send("If any backup(s) of the guild exists then it will be deleted.")
+            async for message in (await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)).history(limit=None):
+                if int(message.content.strip()) == ctx.guild.id:
+                    await message.delete()
+            return
             
         await ctx.send('No arguments were provided')
 

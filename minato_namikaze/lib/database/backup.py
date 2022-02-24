@@ -5,7 +5,7 @@ import discord
 from discord import CategoryChannel, Role, StageChannel, TextChannel, VoiceChannel
 from discord.ext import commands
 from discord.ext.commands import Context
-from orjson import dumps
+from orjson import dumps, loads
 
 from ..util.vars import ChannelAndMessageId
 
@@ -35,67 +35,7 @@ class BackupDatabse:
                         "hoist": i.hoist,
                         "position": i.position,
                         "mentionable": i.mentionable,
-                        "permission": {
-                            "add_reactions": i.permissions.add_reactions,
-                            "administrator": i.permissions.administrator,
-                            "attach_files": i.permissions.attach_files,
-                            "ban_members": i.permissions.ban_members,
-                            "change_nickname": i.permissions.change_nickname,
-                            "connect": i.permissions.connect,
-                            "create_instant_invite":
-                            i.permissions.create_instant_invite,
-                            "create_private_threads":
-                            i.permissions.create_private_threads,
-                            "create_public_threads":
-                            i.permissions.create_public_threads,
-                            "deafen_members": i.permissions.deafen_members,
-                            "embed_links": i.permissions.embed_links,
-                            "external_emojis": i.permissions.external_emojis,
-                            "external_stickers":
-                            i.permissions.external_stickers,
-                            "kick_members": i.permissions.kick_members,
-                            "manage_channels": i.permissions.manage_channels,
-                            "manage_emojis": i.permissions.manage_emojis,
-                            "manage_emojis_and_stickers":
-                            i.permissions.manage_emojis_and_stickers,
-                            "manage_events": i.permissions.manage_events,
-                            "manage_guild": i.permissions.manage_guild,
-                            "manage_messages": i.permissions.manage_messages,
-                            "manage_nicknames": i.permissions.manage_nicknames,
-                            "manage_permissions":
-                            i.permissions.manage_permissions,
-                            "manage_roles": i.permissions.manage_roles,
-                            "manage_threads": i.permissions.manage_threads,
-                            "manage_webhooks": i.permissions.manage_webhooks,
-                            "mention_everyone": i.permissions.mention_everyone,
-                            "move_members": i.permissions.move_members,
-                            "mute_members": i.permissions.mute_members,
-                            "priority_speaker": i.permissions.priority_speaker,
-                            "read_message_history":
-                            i.permissions.read_message_history,
-                            "read_messages": i.permissions.read_messages,
-                            "request_to_speak": i.permissions.request_to_speak,
-                            "send_messages": i.permissions.send_messages,
-                            "send_messages_in_threads":
-                            i.permissions.send_messages_in_threads,
-                            "send_tts_messages":
-                            i.permissions.send_tts_messages,
-                            "speak": i.permissions.speak,
-                            "stream": i.permissions.stream,
-                            "use_external_emojis":
-                            i.permissions.use_external_emojis,
-                            "use_external_stickers":
-                            i.permissions.use_external_stickers,
-                            "use_slash_commands":
-                            i.permissions.use_slash_commands,
-                            "view_guild_insights":
-                            i.permissions.view_guild_insights,
-                            "use_voice_activation":
-                            i.permissions.use_voice_activation,
-                            "value": i.permissions.value,
-                            "view_audit_log": i.permissions.view_audit_log,
-                            "view_channel": i.permissions.view_channel,
-                        },
+                        "permission": i.permissions.value,
                     }
                 })
 
@@ -222,3 +162,18 @@ class BackupDatabse:
             return 
         await code.delete()
         return
+    
+    async def apply_backup(self, code:int):
+        backup: Optional[discord.Attachment] = self.get_backup_data(code)
+        try:
+            data = await backup.read(use_cached=True)
+        except (discord.HTTPException, discord.Forbidden, discord.NotFound):
+            return 'Can\'t apply due to some permission error'
+        data = loads(data)
+        guild = self.ctx.guild
+        for i in data:
+            if i.lower() == 'roles':
+                for j in data[i]:
+                    role_in_server = await commands.RoleConverter().convert(self.ctx,j)
+                    await role_in_server.edit(reason = self.reason)
+    

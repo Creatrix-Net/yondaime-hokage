@@ -7,7 +7,7 @@ Which is itself a port of python-barcode which is no longer available
 import gzip
 import os
 import string
-from typing import Generic
+from typing import Generic, Optional, Union, IO, Any, Callable
 from collections.abc import Iterable, Sequence, Iterator
 import xml.dom
 from xml.dom import DocumentType
@@ -381,13 +381,13 @@ class SVGWriter(BaseWriter):
         _set_attributes(element, **attributes)
         self._group.appendChild(element)
 
-    def _create_text(self, xpos, ypos):
-        """_summary_
+    def _create_text(self, xpos: int, ypos: int):
+        """Creates text in the svg file
 
-        :param xpos: _description_
-        :type xpos: _type_
-        :param ypos: _description_
-        :type ypos: _type_
+        :param xpos: x position
+        :type xpos: int
+        :param ypos: y position
+        :type ypos: int
         """        
         element = self._document.createElement("text")
         attributes = dict(
@@ -445,22 +445,39 @@ if Image is None:
 else:
 
     class ImageWriter(BaseWriter):
-        def __init__(self, COG):
+        """Writer object to handle image creation
+        """        
+        def __init__(self, COG: discord.Cog):
             BaseWriter.__init__(self, self._init, self._paint_module,
                                 self._paint_text, self._finish)
             self.format = "PNG"
             self.dpi = 300
             self._image = None
             self._draw = None
-            self.FONT = str(BASE_DIR /
-                            os.path.join("lib", "data", "arial.ttf"))
+            self.FONT = str(BASE_DIR / os.path.join("lib", "data", "arial.ttf"))
 
-        def _init(self, code):
+        def _init(self, code: Union[Iterable, Sequence, Iterator]):
+            """To initialize some extra attributes
+
+            :param code: An Iterator
+            :type code: Union[Iterable, Sequence, Iterator]
+            """    
             size = self.calculate_size(len(code[0]), len(code), self.dpi)
             self._image = Image.new("RGB", size, self.background)
             self._draw = ImageDraw.Draw(self._image)
 
-        def _paint_module(self, xpos, ypos, width, color):
+        def _paint_module(self, xpos: int, ypos: int, width: int, color: Union[int, str]):
+            """Paints in the module
+
+            :param xpos: The x position
+            :type xpos: int
+            :param ypos: The y position
+            :type ypos: int
+            :param width: Width of the module
+            :type width: int
+            :param color: The colour to be there
+            :type color: Union[int, str]
+            """
             size = [
                 (mm2px(xpos, self.dpi), mm2px(ypos, self.dpi)),
                 (
@@ -470,7 +487,14 @@ else:
             ]
             self._draw.rectangle(size, outline=color, fill=color)
 
-        def _paint_text(self, xpos, ypos):
+        def _paint_text(self, xpos: int, ypos: int):
+            """Creates text in the image file
+
+            :param xpos: x position
+            :type xpos: int
+            :param ypos: y position
+            :type ypos: int
+            """   
             font = ImageFont.truetype(self.FONT, self.font_size * 2)
             width, height = font.getsize(self.text)
             pos = (
@@ -479,10 +503,24 @@ else:
             )
             self._draw.text(pos, self.text, font=font, fill=self.foreground)
 
-        def _finish(self):
+        def _finish(self) -> Union[str,bytes]:
+            """Finishes the creating of image
+
+            :return: The image file
+            :rtype: Union[str,bytes]
+            """        
             return self._image
 
-        def save(self, filename, output):
+        def save(self, filename: str, output: Union[str,bytes]) -> str:
+            """Saves the image
+
+            :param filename: The filename
+            :type filename: str
+            :param output:The string or bytes data
+            :type output: Union[str, bytes]
+            :return: The filename
+            :rtype: str
+            """   
             filename = "{0}.{1}".format(filename, self.format.lower())
             output.save(filename, self.format.upper())
             return filename
@@ -510,7 +548,12 @@ class Barcode:
         "text": "",
     }
 
-    def to_ascii(self):
+    def to_ascii(self) -> str:
+        """Barcode ASCII conversion
+
+        :return: The acii code
+        :rtype: str
+        """
         code = self.build()
         for i, line in enumerate(code):
             code[i] = line.replace("1", "X").replace("0", " ")
@@ -530,13 +573,13 @@ class Barcode:
         """
         raise NotImplementedError
 
-    def save(self, filename, options=None):
+    def save(self, filename: str, options: Optional[dict]=None) -> str:
         """Renders the barcode and saves it in `filename`.
         :parameters:
             filename : String
                 Filename to save the barcode in (without filename
                 extension).
-            options : Dict
+            options : Optional[Dict]
                 The same as in `self.render`.
         :returns: The full filename with extension.
         :rtype: String
@@ -545,22 +588,22 @@ class Barcode:
         _filename = self.writer.save(filename, output)
         return _filename
 
-    def write(self, fp, options=None):
+    def write(self, fp: IO, options: Optional[dict]=None):
         """Renders the barcode and writes it to the file like object
         `fp`.
         :parameters:
             fp : File like object
                 Object to write the raw data in.
-            options : Dict
+            options : Optional[dict]
                 The same as in `self.render`.
         """
         output = self.render(options)
         output.save(fp, format=self.writer.format)
 
-    def render(self, writer_options=None):
+    def render(self, writer_options: Optional[dict]=None):
         """Renders the barcode using `self.writer`.
         :parameters:
-            writer_options : Dict
+            writer_options : Optional[dict]
                 Options for `self.writer`, see writer docs for details.
         :returns: Output of the writers render method.
         """
@@ -577,7 +620,17 @@ class Barcode:
         return raw
 
 
-def check_code(code, name, allowed):
+def check_code(code: Union[Iterable, Sequence] , name: str, allowed: Union[Iterable, Sequence]):
+    """Checks the barcode for the illegal characters
+
+    :param code: The barcode
+    :type code: Union[Iterable, Sequence]
+    :param name: Name
+    :type name: str
+    :param allowed: Allowed characters
+    :type allowed: Union[Iterable, Sequence]
+    :raises IllegalCharacterError: when illegal character is found
+    """
     wrong = []
     for char in code:
         if char not in allowed:
@@ -614,29 +667,63 @@ class Code39(Barcode):
 
     __str__ = __unicode__
 
-    def get_fullcode(self):
+    def get_fullcode(self) -> str:
+        """Returns the full code
+
+        :return: See above
+        :rtype: str
+        """        
         return self.code
 
-    def calculate_checksum(self):
+    def calculate_checksum(self) -> Any:
+        """Calculates the checksum
+
+        :return: Checksum
+        :rtype: Any
+        """
         check = sum([MAP[x][0] for x in self.code]) % 43
         for k, v in MAP.items():
             if check == v[0]:
                 return k
 
-    def build(self):
+    def build(self) -> list:
+        """Builds the code
+
+        :return: The whole code
+        :rtype: list
+        """
         chars = [EDGE]
         for char in self.code:
             chars.append(MAP[char][1])
         chars.append(EDGE)
         return [MIDDLE.join(chars)]
 
-    def render(self, writer_options):
+    def render(self, writer_options: dict) -> Callable:
+        """Renders the code
+
+        :param writer_options: The options to be there in the code
+        :type writer_options: dict
+        :return: The rendered code
+        :rtype: Callable
+        """
         options = dict(module_width=MIN_SIZE, quiet_zone=MIN_QUIET_ZONE)
         options.update(writer_options or {})
         return Barcode.render(self, options)
 
 
-def get_barcode(name, code=None, writer=None):
+def get_barcode(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,Any]]=None) -> Union[Code39, Any]:
+    """Gets the Barcode
+
+    :param name: Name of the bar code
+    :type name: str
+    :param code: The code, defaults to None
+    :type code: Optional[Any], optional
+    :param writer: The writer object or file pointer, defaults to None
+    :type writer: Optional[Union[IO,Any]], optional
+    :raises BarcodeNotFoundError: When the barcode is not found
+    :return: The barcode that was requested
+    :rtype: Union[Code39, Any]
+    """    
     try:
         barcode = Code39
     except KeyError:
@@ -647,7 +734,18 @@ def get_barcode(name, code=None, writer=None):
     return barcode
 
 
-def generate(name, code, writer=None, output=None, writer_options=None):
+def generate(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,Any]]=None, writer_options: Optional[Dict]=None):
+    """Generates the barcode
+
+    :param name: Name of the barcode
+    :type name: str
+    :param code: The code, defaults to None
+    :type code: Optional[Any], optional
+    :param writer:The writer object or the file pointer, defaults to None
+    :type writer: Optional[Union[IO,Any]], optional
+    :param writer_options: The extra options to be encode with the barcode, defaults to None
+    :type writer_options: Optional[Dict], optional
+    """    
     options = writer_options or {}
     barcode = get_barcode(name, code, writer)
     barcode.write(output, options)

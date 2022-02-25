@@ -2,7 +2,8 @@ import discord
 from discord.ext import commands, tasks
 from lib import BackupDatabse,ChannelAndMessageId, Arguments
 from DiscordUtils import SuccessEmbed
-import shlex, argparse
+import shlex, argparse, datetime, os
+from random import randint
 
 
 class BackUp(commands.Cog):
@@ -34,10 +35,171 @@ class BackUp(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
             return
+    
+    def save_json(self, filename, data):
+        """Atomically saves json file"""
+        rnd = randint(1000, 9999)
+        path, ext = os.path.splitext(filename)
+        tmp_file = "{}-{}.tmp".format(path, rnd)
+        self._save_json(tmp_file, data)
+        try:
+            self._read_json(tmp_file)
+        except json.decoder.JSONDecodeError:
+            self.logger.exception(
+                "Attempted to write file {} but JSON "
+                "integrity check on tmp file has failed. "
+                "The original file is unaltered."
+                "".format(filename)
+            )
+            return False
+        os.replace(tmp_file, filename)
+        return True
+
+    @backup.command(aliases=["channelbackup"], usage="[channel.mention | channel.id]")
+    async def channellogs(self, ctx, *, channel: Optional[commands.TextChannelConverter, discord.TextChannel] = None):
+        """
+        Creat a backup of all channel data as json files This might take a long time
+        `channel` is partial name or ID of the server you want to backup
+        defaults to the server the command was run in
+        """
+        if channel is None:
+            channel = ctx.channel
+        guild = ctx.guild
+        today = datetime.date.today().strftime("%Y-%m-%d")
+        total_msgs = 0
+        files_saved = 0
+        message_list = []
+        try:
+            async for message in channel.history(limit=None):
+                data = {
+                    "timestamp": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    "tts": message.tts,
+                    "author": {
+                        "name": message.author.name,
+                        "display_name": message.author.display_name,
+                        "discriminator": message.author.discriminator,
+                        "id": message.author.id,
+                        "bot": message.author.bot,
+                    },
+                    "content": message.content,
+                    "channel": {"name": message.channel.name, "id": message.channel.id},
+                    "mention_everyone": message.mention_everyone,
+                    "mentions": [
+                        {
+                            "name": user.name,
+                            "display_name": user.display_name,
+                            "discriminator": user.discriminator,
+                            "id": user.id,
+                            "bot": user.bot,
+                        }
+                        for user in message.mentions
+                    ],
+                    "channel_mentions": [
+                        {"name": channel.name, "id": channel.id}
+                        for channel in message.channel_mentions
+                    ],
+                    "role_mentions": [
+                        {"name": role.name, "id": role.id} for role in message.role_mentions
+                    ],
+                    "id": message.id,
+                    "pinned": message.pinned,
+                }
+                message_list.append(data)
+                if message.attachments:
+                    for a in message.attachments:
+                        files_saved += 1
+                        fp = "{}/{}/files/{}-{}".format(
+                            str(cog_data_path(self)), guild.name, message.id, a.filename
+                        )
+                        await a.save(fp)
+            total_msgs += len(message_list)
+            self.save_json(
+                "{}/{}/{}-{}.json".format(
+                    str(cog_data_path(self)), guild.name, channel.name, today
+                ),
+                message_list,
+            )
+        except discord.Forbidden:
+            return
+        await channel.send("{} messages saved from {}".format(total_msgs, channel.name))
+
+    @backup.command(aliases=["serverbackup"])
+    async def serverlogs(self, ctx):
+        """
+        Creat a backup of all server data as json files This might take a long time
+        """
+        guild = ctx.guild
+        today = datetime.date.today().strftime("%Y-%m-%d")
+        channel = ctx.message.channel
+        total_msgs = 0
+        files_saved = 0
+        for chn in guild.channels:
+            # await channel.send("backing up {}".format(chn.name))
+            message_list = []
+            try:
+                async for message in chn.history(limit=None):
+                    data = {
+                        "timestamp": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                        "tts": message.tts,
+                        "author": {
+                            "name": message.author.name,
+                            "display_name": message.author.display_name,
+                            "discriminator": message.author.discriminator,
+                            "id": message.author.id,
+                            "bot": message.author.bot,
+                        },
+                        "content": message.content,
+                        "channel": {"name": message.channel.name, "id": message.channel.id},
+                        "mention_everyone": message.mention_everyone,
+                        "mentions": [
+                            {
+                                "name": user.name,
+                                "display_name": user.display_name,
+                                "discriminator": user.discriminator,
+                                "id": user.id,
+                                "bot": user.bot,
+                            }
+                            for user in message.mentions
+                        ],
+                        "channel_mentions": [
+                            {"name": channel.name, "id": channel.id}
+                            for channel in message.channel_mentions
+                        ],
+                        "role_mentions": [
+                            {"name": role.name, "id": role.id} for role in message.role_mentions
+                        ],
+                        "id": message.id,
+                        "pinned": message.pinned,
+                    }
+                    message_list.append(data)
+                    if message.attachments:
+                        for a in message.attachments:
+                            files_saved += 1
+                            fp = "{}/{}/files/{}-{}".format(
+                                str(cog_data_path(self)), guild.name, message.id, a.filename
+                            )
+                            await a.save(fp)
+                total_msgs += len(message_list)
+                if len(message_list) == 0:
+                    continue
+                self.save_json(
+                    "{}/{}/{}-{}.json".format(
+                        str(cog_data_path(self)), guild.name, chn.name, today
+                    ),
+                    message_list,
+                )
+                await channel.send("{} messages saved from {}".format(len(message_list), chn.name))
+            except discord.errors.Forbidden:
+                await channel.send("0 messages saved from {}".format(chn.name))
+                pass
+            except AttributeError:
+                await channel.send("0 messages saved from {}".format(chn.name))
+                pass
+        await channel.send("{} messages saved from {}".format(total_msgs, guild.name))
 
 
     @backup.command(description="Create backup of the server")
-    async def create(self, ctx):
+    async def template(self, ctx):
         """
         Create a backup of this guild, (it backups only those channels which is visible to the bot)
         And then dm you the backup code, (Phew keep it safe)

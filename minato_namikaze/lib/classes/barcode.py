@@ -16,7 +16,7 @@ from ..util import BASE_DIR
 _strbase = str
 
 
-def mm2px(mm, dpi=300):
+def mm2px(mm: int, dpi:int =300) -> int:
     return (mm * dpi) / 25.4
 
 

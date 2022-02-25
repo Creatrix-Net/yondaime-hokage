@@ -1,4 +1,6 @@
 class Badge:
+    """A class to handle all the badge commands
+    """    
     def __init__(
         self,
         badge_name: str,
@@ -17,6 +19,11 @@ class Badge:
         self.watermark = watermark
 
     def to_json(self) -> dict:
+        """Converts the class to :class:`json`
+
+        :return: Data in the json format
+        :rtype: dict
+        """        
         return {
             "badge_name": self.badge_name,
             "code": self.code,
@@ -27,7 +34,14 @@ class Badge:
         }
 
     @classmethod
-    async def from_json(cls, data: dict):
+    async def from_json(cls, data: dict) -> Badge:
+        """generates badge from `json` or :class:`dict`
+
+        :param data: The data in :class:`dict` form
+        :type data: dict
+        :return: The :class:`~Badge` with the data provided
+        :rtype: Badge
+        """
         badge_name = data["badge_name"]
         code = data["code"]
         is_inverted = data["is_inverted"]

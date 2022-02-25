@@ -27,7 +27,7 @@ class BackUp(commands.Cog):
     
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
-    @commands.has_permissions(manage_guild=True)
+    @commands.has_permissions(manage_guild=True, manage_channels=True, manage_roles=True)
     @commands.cooldown(2, 60, commands.BucketType.guild)
     async def backup(self, ctx: commands.Context, command=None):
         """Backup releated commands"""

@@ -7,8 +7,10 @@ Which is itself a port of python-barcode which is no longer available
 import gzip
 import os
 import string
+from typing import Generic
+from collections.abc import Iterable, Sequence, Iterator
 import xml.dom
-
+from xml.dom import DocumentType
 from PIL import Image, ImageDraw, ImageFont  # lint:ok
 
 from ..util import BASE_DIR
@@ -16,20 +18,46 @@ from ..util import BASE_DIR
 _strbase = str
 
 
-def mm2px(mm: int, dpi:int =300) -> int:
+def mm2px(mm: int, dpi: int = 300) -> int:
+    """mm to px converter
+
+    :param mm: mm units
+    :type mm: int
+    :param dpi: default pixel unit, defaults to 300
+    :type dpi: int, optional
+    :return: mm converter to pixel
+    :rtype: int
+    """
     return (mm * dpi) / 25.4
 
 
-def pt2mm(pt):
+def pt2mm(pt: int) -> int:
+    """Point to mm converter
+
+    :param pt: point
+    :type pt: int
+    :return: point converted to mm
+    :rtype: int
+    """
     return pt * 0.352777778
 
 
-def _set_attributes(element, **attributes):
+def _set_attributes(element: Generic, **attributes):
+    """It sets attributes to your element
+
+    :param element: The element you want to set your attributes
+    :type element: Generic
+    """
     for key, value in attributes.items():
         element.setAttribute(key, value)
 
 
-def create_svg_object():
+def create_svg_object() -> DocumentType:
+    """Creates a blank svg object
+
+    :return: The blank svg document
+    :rtype: DocumentType
+    """
     imp = xml.dom.getDOMImplementation()
     doctype = imp.createDocumentType(
         "svg",
@@ -110,6 +138,9 @@ MAP = dict(zip(REF, enumerate(CODES)))
 
 
 class BarcodeError(Exception):
+    """Base :class:`Exception` class for the `barcode` module
+    """
+
     def __init__(self, msg):
         self.msg = msg
 
@@ -292,6 +323,8 @@ class BaseWriter:
 
 
 class SVGWriter(BaseWriter):
+    """SVG Write object to write `svg` files
+    """
     def __init__(self):
         BaseWriter.__init__(self, self._init, self._create_module,
                             self._create_text, self._finish)
@@ -301,7 +334,12 @@ class SVGWriter(BaseWriter):
         self._root = None
         self._group = None
 
-    def _init(self, code):
+    def _init(self, code: Union[Iterable, Sequence, Iterator]):
+        """To initialize some extra attributes
+
+        :param code: An Iterator
+        :type code: Union[Iterable, Sequence, Iterator]
+        """              
         width, height = self.calculate_size(len(code[0]), len(code), self.dpi)
         self._document = create_svg_object()
         self._root = self._document.documentElement
@@ -320,7 +358,18 @@ class SVGWriter(BaseWriter):
         _set_attributes(background, **attributes)
         self._group.appendChild(background)
 
-    def _create_module(self, xpos, ypos, width, color):
+    def _create_module(self, xpos: int, ypos: int, width:int, color: Union[int, str]):
+        """Creates a module
+
+        :param xpos: The x position
+        :type xpos: int
+        :param ypos: The y position
+        :type ypos: int
+        :param width: Width of the module
+        :type width: int
+        :param color: The colour to be there
+        :type color: Union[int, str]
+        """
         element = self._document.createElement("rect")
         attributes = dict(
             x=SIZE.format(xpos),
@@ -333,6 +382,13 @@ class SVGWriter(BaseWriter):
         self._group.appendChild(element)
 
     def _create_text(self, xpos, ypos):
+        """_summary_
+
+        :param xpos: _description_
+        :type xpos: _type_
+        :param ypos: _description_
+        :type ypos: _type_
+        """        
         element = self._document.createElement("text")
         attributes = dict(
             x=SIZE.format(xpos),
@@ -350,14 +406,28 @@ class SVGWriter(BaseWriter):
         element.appendChild(text_element)
         self._group.appendChild(element)
 
-    def _finish(self):
+    def _finish(self) -> Union[str,bytes, DocumentType]:
+        """Finishes the creating of svg document
+
+        :return: The xml document
+        :rtype: Union[str,bytes, DocumentType]
+        """        
         if self.compress:
             return self._document.toxml(encoding="UTF-8")
         return self._document.toprettyxml(indent=4 * " ",
                                           newl=os.linesep,
                                           encoding="UTF-8")
 
-    def save(self, filename, output):
+    def save(self, filename: str, output: Union[str, bytes]) -> str:
+        """Saves the SVG document
+
+        :param filename: The filename
+        :type filename: str
+        :param output:The string or bytes data
+        :type output: Union[str, bytes]
+        :return: The filename
+        :rtype: str
+        """        
         if self.compress:
             _filename = "{0}.svgz".format(filename)
             f = gzip.open(_filename, "wb")

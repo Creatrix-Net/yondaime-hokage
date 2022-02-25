@@ -1,5 +1,5 @@
 import io
-from typing import Optional
+from typing import Optional, Tuple, Union
 
 import discord
 from discord import CategoryChannel, Role, StageChannel, TextChannel, VoiceChannel
@@ -39,10 +39,10 @@ class BackupDatabse:
                     }
                 })
 
-        text_channel = []
-        category_channel = []
-        voice_channel = []
-        stage_channel = []
+        text_channel = {}
+        category_channel = {}
+        voice_channel = {}
+        stage_channel = {}
         fetch_channels = await self.ctx.guild.fetch_channels()
         for i in fetch_channels:
             if isinstance(i, CategoryChannel):
@@ -51,10 +51,10 @@ class BackupDatabse:
                     "position": i.position
                 }
                 for j in i.overwrites.keys():
-                    role_overwrites = []
+                    role_overwrites = {}
                     if isinstance(j, Role):
                         for key, value in i.overwrites.items():
-                            role_overwrites.append({
+                            role_overwrites.update({
                                 j.name: {
                                     "allow": value.pair()[0].value,
                                     "deny": value.pair()[-1].value,
@@ -62,15 +62,15 @@ class BackupDatabse:
                             })
                     category_channel_update_dict.update(
                         {"role_overwrites": role_overwrites})
-                category_channel.append({i.name: category_channel_update_dict})
+                category_channel.update({i.name: category_channel_update_dict})
 
             elif isinstance(i, VoiceChannel):
                 voice_channel_update_dict = {"position": i.position}
                 for j in i.overwrites.keys():
-                    role_overwrites = []
+                    role_overwrites = {}
                     if isinstance(j, Role):
                         for key, value in i.overwrites.items():
-                            role_overwrites.append({
+                            role_overwrites.update({
                                 key.name: {
                                     "allow": value.pair()[0].value,
                                     "deny": value.pair()[-1].value,
@@ -78,7 +78,7 @@ class BackupDatabse:
                             })
                     voice_channel_update_dict.update(
                         {"role_overwrites": role_overwrites})
-                voice_channel.append({i.name: voice_channel_update_dict})
+                voice_channel.update({i.name: voice_channel_update_dict})
 
             elif isinstance(i, TextChannel):
                 text_channel_update_dict = {
@@ -86,10 +86,10 @@ class BackupDatabse:
                     "position": i.position
                 }
                 for j in i.overwrites.keys():
-                    role_overwrites = []
+                    role_overwrites = {}
                     if isinstance(j, Role):
                         for key, value in i.overwrites.items():
-                            role_overwrites.append({
+                            role_overwrites.update({
                                 key.name: {
                                     "allow": value.pair()[0].value,
                                     "deny": value.pair()[-1].value,
@@ -97,7 +97,7 @@ class BackupDatabse:
                             })
                     text_channel_update_dict.update(
                         {"role_overwrites": role_overwrites})
-                text_channel.append({i.name: text_channel_update_dict})
+                text_channel.update({i.name: text_channel_update_dict})
 
             elif isinstance(i, StageChannel):
                 stage_channel_update_dict = {
@@ -105,10 +105,10 @@ class BackupDatabse:
                     "position": i.position
                 }
                 for j in i.overwrites.keys():
-                    role_overwrites = []
+                    role_overwrites = {}
                     if isinstance(j, Role):
                         for key, value in i.overwrites.items():
-                            role_overwrites.apppend({
+                            role_overwrites.update({
                                 key.name: {
                                     "allow": value.pair()[0].value,
                                     "deny": value.pair()[-1].value,
@@ -116,7 +116,7 @@ class BackupDatabse:
                             })
                     stage_channel_update_dict.update(
                         {"role_overwrites": role_overwrites})
-                stage_channel.append({i.name: stage_channel_update_dict})
+                stage_channel.update({i.name: stage_channel_update_dict})
         json_bytes = dumps({
             "roles": roles_dict,
             "category_channel": category_channel,
@@ -163,7 +163,15 @@ class BackupDatabse:
         await code.delete()
         return
     
-    async def apply_backup(self, code:int):
+    async def apply_backup(self, code:int) -> Optional[Union[str, bool]]:
+        """|coro|
+        It applied backup with the backup code specified
+
+        :param code:Backup Code
+        :type code: int
+        :return: :class:`str` is returned when there is a error otherwise a :class:`bool` with True value
+        :rtype: Optional[Union[str, bool]]
+        """        
         backup: Optional[discord.Attachment] = self.get_backup_data(code)
         try:
             data = await backup.read(use_cached=True)
@@ -171,9 +179,58 @@ class BackupDatabse:
             return 'Can\'t apply due to some permission error'
         data = loads(data)
         guild = self.ctx.guild
-        for i in data:
-            if i.lower() == 'roles':
-                for j in data[i]:
-                    role_in_server = await commands.RoleConverter().convert(self.ctx,j)
-                    await role_in_server.edit(reason = self.reason)
+
+        roles = data['roles']
+        for j in roles:
+            try:
+                role_in_server = await commands.RoleConverter().convert(self.ctx,j)
+                await role_in_server.edit(
+                    reason = self.reason(code, self.ctx.author),
+                    colour=roles[j]['colour'],
+                    hoist=roles[j]['hoist'],
+                    position=roles[j]['position'],
+                    mentionable=roles[j]['mentionable'],
+                    permission=discord.Permissions(roles[j]['hoist'])
+                )
+            except (commands.RoleNotFound, commands.CommandError, commands.BadArgument):
+                await guild.create_role(
+                    reason = self.reason(code, self.ctx.author),
+                    name=j,
+                    colour=roles[j]['colour'],
+                    hoist=roles[j]['hoist'],
+                    position=roles[j]['position'],
+                    mentionable=roles[j]['mentionable'],
+                    permission=discord.Permissions(roles[j]['hoist'])
+                )
+
+        category_data = data['category_channel']
+        for i in category_data:
+            try:
+                category_channel = await commands.CategoryChannelConverter().convert(self.ctx, i)
+                await category_channel.edit(
+                    position = category_data[i]["position"],
+                    nsfw = category_data[i]["nsfw"],
+                    reason  = self.reason(code, self.ctx.author),
+                    overwrites  = category_data[i][position],
+                )
+            except (commands.ChannelNotFound, commands.BadArgument, commands.CommandError):
+                pass
+        
+        return True
+
     
+
+    @staticmethod
+    def reason(code:int, author:Optional[Union[discord.Member, discord.User]] = None) -> str:
+        """It generates the mod reason
+
+        :param code: The backup code
+        :type code: int
+        :param author: The author who is using the backup, defaults to None
+        :type author: Optional[Union[discord.Member, discord.User]], optional
+        :return: The reason to be given in the `reason` parameter
+        :rtype: str
+        """        
+        if author is None:
+            return f'Backup applied [ID: {code}]'
+        return f'Backup applied [ID: {code}] by {author} [ID : {author.id}]'

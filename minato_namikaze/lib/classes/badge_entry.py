@@ -34,7 +34,7 @@ class Badge:
         }
 
     @classmethod
-    async def from_json(cls, data: dict) -> Badge:
+    async def from_json(cls, data: dict):
         """generates badge from `json` or :class:`dict`
 
         :param data: The data in :class:`dict` form

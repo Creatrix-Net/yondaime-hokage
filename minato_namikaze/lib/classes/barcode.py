@@ -6,11 +6,10 @@ Which is itself a port of python-barcode which is no longer available
 
 import gzip
 import os
-import string
-from typing import Generic, Optional, Union, IO, Any, Callable
+import string, discord
+from typing import Optional, Union, IO, Any, Callable, Dict
 from collections.abc import Iterable, Sequence, Iterator
 import xml.dom
-from xml.dom import DocumentType
 from PIL import Image, ImageDraw, ImageFont  # lint:ok
 
 from ..util import BASE_DIR
@@ -42,7 +41,7 @@ def pt2mm(pt: int) -> int:
     return pt * 0.352777778
 
 
-def _set_attributes(element: Generic, **attributes):
+def _set_attributes(element, **attributes):
     """It sets attributes to your element
 
     :param element: The element you want to set your attributes
@@ -52,7 +51,7 @@ def _set_attributes(element: Generic, **attributes):
         element.setAttribute(key, value)
 
 
-def create_svg_object() -> DocumentType:
+def create_svg_object():
     """Creates a blank svg object
 
     :return: The blank svg document
@@ -406,7 +405,7 @@ class SVGWriter(BaseWriter):
         element.appendChild(text_element)
         self._group.appendChild(element)
 
-    def _finish(self) -> Union[str,bytes, DocumentType]:
+    def _finish(self) -> Union[str,bytes]:
         """Finishes the creating of svg document
 
         :return: The xml document
@@ -748,4 +747,4 @@ def generate(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,Any]
     """    
     options = writer_options or {}
     barcode = get_barcode(name, code, writer)
-    barcode.write(output, options)
+    barcode.write(options)

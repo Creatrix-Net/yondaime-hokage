@@ -126,8 +126,7 @@ class BackupDatabse:
         })
         message_reference = await self.backup_channel.send(
             content=self.ctx.guild.id,
-            file=discord.File(io.BytesIO(json_bytes),
-                              filename=f"{self.ctx.guild.id}.json"),
+            file=discord.File(io.BytesIO(json_bytes),filename=f"{self.ctx.guild.id}.json"),
         )
         return message_reference.id
 
@@ -211,7 +210,7 @@ class BackupDatabse:
                     position = category_data[i]["position"],
                     nsfw = category_data[i]["nsfw"],
                     reason  = self.reason(code, self.ctx.author),
-                    overwrites  = category_data[i][position],
+                    overwrites  = category_data[i]['position'],
                 )
             except (commands.ChannelNotFound, commands.BadArgument, commands.CommandError):
                 pass

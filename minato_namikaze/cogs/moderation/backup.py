@@ -2,8 +2,10 @@ import discord
 from discord.ext import commands, tasks
 from lib import BackupDatabse,ChannelAndMessageId, Arguments
 from DiscordUtils import SuccessEmbed
-import shlex, argparse, datetime, os
-from random import randint
+import shlex, datetime, io
+from typing import Optional, Union
+from orjson import dumps
+import time
 
 
 class BackUp(commands.Cog):
@@ -35,40 +37,29 @@ class BackUp(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
             return
-    
-    def save_json(self, filename, data):
-        """Atomically saves json file"""
-        rnd = randint(1000, 9999)
-        path, ext = os.path.splitext(filename)
-        tmp_file = "{}-{}.tmp".format(path, rnd)
-        self._save_json(tmp_file, data)
-        try:
-            self._read_json(tmp_file)
-        except json.decoder.JSONDecodeError:
-            self.logger.exception(
-                "Attempted to write file {} but JSON "
-                "integrity check on tmp file has failed. "
-                "The original file is unaltered."
-                "".format(filename)
-            )
-            return False
-        os.replace(tmp_file, filename)
-        return True
 
     @backup.command(aliases=["channelbackup"], usage="[channel.mention | channel.id]")
-    async def channellogs(self, ctx, *, channel: Optional[commands.TextChannelConverter, discord.TextChannel] = None):
+    async def channellogs(
+        self, 
+        ctx,
+        channel: Optional[Union[commands.TextChannelConverter, discord.TextChannel]] = None,
+        send: Optional[Union[commands.TextChannelConverter, discord.TextChannel]] = None,
+    ):
         """
         Creat a backup of all channel data as json files This might take a long time
         `channel` is partial name or ID of the server you want to backup
         defaults to the server the command was run in
         """
+        start = time.time()
+        first_message = await ctx.send(':clock1: Scanning')
         if channel is None:
             channel = ctx.channel
+        if send is None:
+            send = ctx.channel
         guild = ctx.guild
         today = datetime.date.today().strftime("%Y-%m-%d")
         total_msgs = 0
-        files_saved = 0
-        message_list = []
+        message_dict = {}
         try:
             async for message in channel.history(limit=None):
                 data = {
@@ -104,39 +95,36 @@ class BackUp(commands.Cog):
                     "id": message.id,
                     "pinned": message.pinned,
                 }
-                message_list.append(data)
+                
                 if message.attachments:
-                    for a in message.attachments:
-                        files_saved += 1
-                        fp = "{}/{}/files/{}-{}".format(
-                            str(cog_data_path(self)), guild.name, message.id, a.filename
-                        )
-                        await a.save(fp)
-            total_msgs += len(message_list)
-            self.save_json(
-                "{}/{}/{}-{}.json".format(
-                    str(cog_data_path(self)), guild.name, channel.name, today
-                ),
-                message_list,
+                    attachements_data = [a.url for a in message.attachments]
+                    data.update({'attachements': attachements_data})
+                message_dict.update({str(message.id): data})
+            total_msgs += len(message_dict)
+            await send.send(
+                file=discord.File(io.BytesIO(dumps(message_dict)),filename=f"{guild.id}-{today}.json"),
             )
         except discord.Forbidden:
             return
-        await channel.send("{} messages saved from {}".format(total_msgs, channel.name))
+        await first_message.edit("{} messages saved from `{}` \nTime taken is {} sec".format(total_msgs, channel.name, round(time.time() - start)))
 
     @backup.command(aliases=["serverbackup"])
     async def serverlogs(self, ctx):
         """
         Creat a backup of all server data as json files This might take a long time
         """
+        start = time.time()
+        first_message = await ctx.send(':clock1: Scanning')
         guild = ctx.guild
         today = datetime.date.today().strftime("%Y-%m-%d")
         channel = ctx.message.channel
         total_msgs = 0
-        files_saved = 0
+        whole_data_dict = {}
         for chn in guild.channels:
             # await channel.send("backing up {}".format(chn.name))
             message_list = []
             try:
+                start_channel = time.time()
                 async for message in chn.history(limit=None):
                     data = {
                         "timestamp": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
@@ -171,34 +159,28 @@ class BackUp(commands.Cog):
                         "id": message.id,
                         "pinned": message.pinned,
                     }
-                    message_list.append(data)
                     if message.attachments:
-                        for a in message.attachments:
-                            files_saved += 1
-                            fp = "{}/{}/files/{}-{}".format(
-                                str(cog_data_path(self)), guild.name, message.id, a.filename
-                            )
-                            await a.save(fp)
+                        attachements_data = [a.url for a in message.attachments]
+                        data.update({'attachements': attachements_data})
+                    message_list.append(data)
                 total_msgs += len(message_list)
                 if len(message_list) == 0:
                     continue
-                self.save_json(
-                    "{}/{}/{}-{}.json".format(
-                        str(cog_data_path(self)), guild.name, chn.name, today
-                    ),
-                    message_list,
-                )
-                await channel.send("{} messages saved from {}".format(len(message_list), chn.name))
+                await channel.send("{} messages saved from `{}` \nTime taken is {} sec".format(len(message_list), chn.name, round(time.time() - start_channel)))
             except discord.errors.Forbidden:
-                await channel.send("0 messages saved from {}".format(chn.name))
+                await channel.send("0 messages saved from `{}`".format(chn.name))
                 pass
             except AttributeError:
-                await channel.send("0 messages saved from {}".format(chn.name))
+                await channel.send("0 messages saved from `{}`".format(chn.name))
                 pass
-        await channel.send("{} messages saved from {}".format(total_msgs, guild.name))
+            whole_data_dict.update({str(chn.id):message_list })
+        await channel.send(
+            file=discord.File(io.BytesIO(dumps(whole_data_dict)),filename=f"{guild.id}-{today}.json"),
+        )
+        await first_message.edit("{} messages saved from `{}` \nTime taken is {} sec".format(total_msgs, guild.name, round(time.time()-start)))
 
 
-    @backup.command(description="Create backup of the server")
+    @backup.command(description="Create backup of the server", aliases=['templates'])
     async def template(self, ctx):
         """
         Create a backup of this guild, (it backups only those channels which is visible to the bot)

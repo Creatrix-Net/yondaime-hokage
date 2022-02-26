@@ -2,6 +2,7 @@ import discord
 from typing import List
 
 class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
+    '''The Reaction Roles Button'''
     def __init__(self, database, custom_id: int, emoji, y: int):
         super().__init__(style=discord.ButtonStyle.primary,
                          emoji=emoji,
@@ -63,6 +64,7 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
 
 
 class ReactionPersistentView(discord.ui.View):
+    '''Persistant view for the Reaction Role using buton'''
     children: List[ReactionRolesButton]
     
     def __init__(self, reactions_dict: dict, database, custom_id: list):

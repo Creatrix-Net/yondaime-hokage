@@ -65,7 +65,14 @@ class BackupDatabse:
                 category_channel.update({i.name: category_channel_update_dict})
 
             elif isinstance(i, VoiceChannel):
-                voice_channel_update_dict = {"position": i.position}
+                voice_channel_update_dict = {
+                    "position": i.position,
+                    'bitrate': i.bitrate,
+                    'permissions_synced': i.permissions_synced,
+                    'video_quality_mode': i.video_quality_mode.name,
+                    'category': None if i.category is None else i.category.name,
+                    'user_limit': i.user_limit
+                }
                 for j in i.overwrites.keys():
                     role_overwrites = {}
                     if isinstance(j, Role):
@@ -76,14 +83,18 @@ class BackupDatabse:
                                     "deny": value.pair()[-1].value,
                                 }
                             })
-                    voice_channel_update_dict.update(
-                        {"role_overwrites": role_overwrites})
+                    voice_channel_update_dict.update({"role_overwrites": role_overwrites})
                 voice_channel.update({i.name: voice_channel_update_dict})
 
             elif isinstance(i, TextChannel):
                 text_channel_update_dict = {
                     "nsfw": i.nsfw,
-                    "position": i.position
+                    "position": i.position,
+                    'slowmode_delay': i.slowmode_delay,
+                    'default_auto_archive_duration': i.default_auto_archive_duration,
+                    'category': None if i.category is None else i.category.name,
+                    'topic': i.topic,
+                    'permissions_synced': i.permissions_synced,
                 }
                 for j in i.overwrites.keys():
                     role_overwrites = {}
@@ -101,8 +112,13 @@ class BackupDatabse:
 
             elif isinstance(i, StageChannel):
                 stage_channel_update_dict = {
-                    "nsfw": i.nsfw,
-                    "position": i.position
+                    "position": i.position,
+                    'bitrate': i.bitrate,
+                    'permissions_synced': i.permissions_synced,
+                    'video_quality_mode': i.video_quality_mode.name,
+                    'topic': i.topic,
+                    'category': None if i.category is None else i.category.name,
+                    'user_limit': i.user_limit
                 }
                 for j in i.overwrites.keys():
                     role_overwrites = {}
@@ -206,15 +222,32 @@ class BackupDatabse:
         for i in category_data:
             try:
                 category_channel = await commands.CategoryChannelConverter().convert(self.ctx, i)
+                role_overwrites = {}
+                for j in category_data[i]["category_channel"]:
+                    for k in j:
+                        object_role_or_member = None
+                        try:
+                            object_role_or_member = await commands.RoleConverter().convert(self.ctx, k)
+                        except (commands.RoleNotFound, commands.CommandError, commands.BadArgument):
+                            try:
+                                object_role_or_member = await commands.MemberConverter().convert(self.ctx, k)
+                            except (commands.MemberNotFound, commands.CommandError, commands.BadArgument):
+                                pass
+                        if object_role_or_member is not None:
+                            role_overwrites.update({object_role_or_member: discord.PermissionOverwrite(allow=j[k]['allow'], deny=j[k]['deny'])})
                 await category_channel.edit(
                     position = category_data[i]["position"],
                     nsfw = category_data[i]["nsfw"],
                     reason  = self.reason(code, self.ctx.author),
-                    overwrites  = category_data[i]['position'],
+                    overwrites  = role_overwrites
                 )
             except (commands.ChannelNotFound, commands.BadArgument, commands.CommandError):
-                pass
-        
+                await guild.create_category(
+                    reason = self.reason(code, self.ctx.author),
+                    nsfw = category_data[i]['nsfw'],
+                    position = category_data[i]["position"],
+                    overwrites  = role_overwrites
+                )
         return True
 
     

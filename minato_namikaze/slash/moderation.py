@@ -31,7 +31,6 @@ class Badurls(discord.SlashCommand, name="badurls"):
     def __init__(self, cog):
         self.cog = cog
 
-    @staticmethod
     async def callback(response: discord.SlashCommandResponse):
         detected_urls = await detect_bad_domains(response.options.content)
         if len(detected_urls) != 0:   
@@ -50,7 +49,6 @@ class BadurlsMessageCommand(discord.MessageCommand, name="Flagged Urls"):
         self.cog = cog
 
 
-    @staticmethod
     async def callback(response: discord.MessageCommandResponse):
         message = response.target
         detected_urls = await detect_bad_domains(message.content)
@@ -72,7 +70,6 @@ class AntiRaid(discord.SlashCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    @staticmethod
     async def command_check(response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).manage_guild:
             return True
@@ -119,8 +116,7 @@ class Kick(discord.UserCommand):
     '''Kicks the user from guild'''
     def __init__(self, cog):
         self.cog = cog
-    
-    @staticmethod
+
     async def command_check(response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).kick_members:
             return True
@@ -128,7 +124,6 @@ class Kick(discord.UserCommand):
             await response.send_message("You don't have the `Kick Members` permission", ephemeral=True)
             return False
     
-    @staticmethod
     async def callback(response: discord.UserCommandResponse):
         user = response.target
         try:
@@ -142,7 +137,6 @@ class Ban(discord.UserCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    @staticmethod
     async def command_check(response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).ban_members:
             return True
@@ -150,7 +144,6 @@ class Ban(discord.UserCommand):
             await response.send_message("You don't have the `Ban Members` permission", ephemeral=True)
             return False
     
-    @staticmethod
     async def callback(response: discord.UserCommandResponse):
         user = response.target
         try:
@@ -165,7 +158,6 @@ class Mute(discord.UserCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    @staticmethod
     async def command_check(response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).timeout_members:
             return True
@@ -173,7 +165,6 @@ class Mute(discord.UserCommand):
             await response.send_message("You don't have the `Timeout Members` permission", ephemeral=True)
             return False
     
-    @staticmethod
     async def callback(response: discord.UserCommandResponse):
         user = response.target
         try:
@@ -188,7 +179,6 @@ class Unmute(discord.UserCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    @staticmethod
     async def command_check(response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).timeout_members:
             return True
@@ -196,7 +186,6 @@ class Unmute(discord.UserCommand):
             await response.send_message("You don't have the `Timeout Members` permission", ephemeral=True)
             return False
     
-    @staticmethod
     async def callback(response: discord.UserCommandResponse):
         user = response.target
         try:
@@ -211,7 +200,6 @@ class Setup(discord.SlashCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    @staticmethod
     async def command_check(response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).manage_guild:
             return True

@@ -21,7 +21,8 @@ from lib import (
     has_permissions,
     plural,
     check_if_user_joined_a_voice,
-    check_if_user_joined_a_stage
+    check_if_user_joined_a_stage,
+    has_guild_permissions
 )
 from DiscordUtils.embeds import *
 from DiscordUtils import EmbedPaginator
@@ -1319,32 +1320,79 @@ class Moderation(commands.Cog):
     
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
-    async def lock(self, ctx):
+    async def lock(self, ctx: commands.Context):
+        '''Locking Commands'''
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
             return
     
-    @lock.command(aliases=['text'], usage='[text.channel]')
-    @commands.has_guild_permissions(manage_channels=True)
-    async def textchannel(self, ctx, channels: commands.Greedy[Union[discord.TextChannel, commands.TextChannelConverter]] = None):
-        if channels is None:
-            channels = [ctx.channel]
-        for channel in channels:    
-            overwrite = channel.overwrites_for(ctx.guild.default_role)
-            overwrite.send_messages = False
-            await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
-        await ctx.send(f'{" ,".join(channels)} locked.')
-    
     @lock.command(aliases=['thread'], usage='[thread.channel]')
     @commands.has_guild_permissions(manage_threads=True)
-    async def threadchannel(self, ctx, channels: commands.Greedy[Union[discord.TextChannel, commands.TextChannelConverter]] = None):
+    async def threadchannel(ctx: commands.Context ,channels: commands.Greedy[discord.Thread] = None):
+        '''Locks the specified thread channel(s), both member and bot required `Manage Thread` perms to operate'''
+        if channels is None:
+            if not isinstance(ctx.channel, discord.Thread):
+                await ctx.send(embed=ErrorEmbed(description='The channel is not a `Thread`'))
+                return
+            channels = [ctx.channel]
+        for channel in channels:    
+            await channel.edit(locked=True, archived=True)
+        await ctx.send(f'{" ,".join(list(map(lambda a: a.mention, channels)))} locked.')
+    
+    @lock.command(aliases=['text'], usage='[text.channel]')
+    @has_guild_permissions(manage_channels=True)
+    async def textchannel(ctx: commands.Context ,channels: commands.Greedy[discord.TextChannel] = None):
+        '''Locks the specified text channel(s), both member and bot required `Manage Channel` perms to operate'''
         if channels is None:
             channels = [ctx.channel]
         for channel in channels:    
             overwrite = channel.overwrites_for(ctx.guild.default_role)
             overwrite.send_messages = False
-            await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
-        await ctx.send(f'{" ,".join(channels)} locked.')
+            await channel.edit(overwrites = {ctx.guild.default_role: overwrite}, reason=f'Action initiated by {ctx.author} (ID: {ctx.author.id})')
+        await ctx.send(f'{" ,".join(list(map(lambda a: a.mention, channels)))} locked.')
+    
+    @commands.group(invoke_without_command=True)
+    @commands.guild_only()
+    async def unlock(self, ctx: commands.Context):
+        '''Unlocking Commands'''
+        if ctx.invoked_subcommand is None:
+            await ctx.send_help(ctx.command)
+            return
+    
+    @unlock.command(aliases=['thread'], usage='[thread.channel]')
+    @has_guild_permissions(manage_threads=True)
+    async def threadchannel(self, ctx : commands.Context):
+        '''Unlocks the  thread channel in which the command was rrun, both member and bot required `Manage Thread` perms to operate'''
+        if not isinstance(ctx.channel, discord.Thread):
+            await ctx.send(embed=ErrorEmbed(description='The channel is not a `Thread`'))
+            return
+        await ctx.channel.edit(locked=False, archived=False)
+        await ctx.send(f'{ctx.channel.mention} unlocked.')
+    
+    @unlock.command(aliases=['text'], usage='[text.channel]')
+    @has_guild_permissions(manage_channels=True)
+    async def textchannel(self, ctx: commands.Context, channels: commands.Greedy[discord.TextChannel] = None):
+        '''Unlocks the specified text channel(s), both member and bot required `Manage Channel` perms to operate'''
+        if channels is None:
+            channels = [ctx.channel]
+        for channel in channels:    
+            overwrite = channel.overwrites_for(ctx.guild.default_role)
+            overwrite.send_messages = True
+            await channel.edit(overwrites = {ctx.guild.default_role: overwrite}, reason=f'Action initiated by {ctx.author} (ID: {ctx.author.id})')
+        await ctx.send(f'{" ,".join(list(map(lambda a: a.mention, channels)))} unlocked.')
+    
+    @commands.command(aliases=['threadjoin'])
+    @commands.guild_only()
+    async def jointhread(self, ctx, channel: discord.Thread):
+        '''Joins the specified thread'''
+        if not isinstance(channel, discord.Thread):
+            await ctx.send(embed=ErrorEmbed(description='The channel is not a `Thread`'))
+            return
+        await channel.send('Hey!')
+        try:
+            await ctx.message.delete(reason='Just to indicate that the command was successfully completed')
+        except (discord.Forbidden, discord.NotFound, discord.HTTPException):
+            pass
 
 
 def setup(bot):

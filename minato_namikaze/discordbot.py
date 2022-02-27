@@ -391,9 +391,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     @staticmethod
     async def get_bot_inviter(guild: discord.Guild):
         try:
-            async for i in guild.audit_logs(limit=1):
+            async for i in guild.audit_logs(limit=1, action=discord.AuditLogAction.bot_add):
                 return i.user
-        except:
+        except (discord.Forbidden, discord.HTTPException):
             return guild.owner
 
     async def get_welcome_channel(
@@ -401,16 +401,13 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         guild: discord.Guild,
         inviter_or_guild_owner: Union[discord.User, discord.Member],
     ):
-        try:
+        if guild.system_channel is not None:
             return guild.system_channel
-        except:
-            try:
-                text_channels_list = guild.text_channels
-                for i in text_channels_list:
-                    if i.permissions_for(self.user).send_messages:
-                        return i
-            except:
-                return inviter_or_guild_owner
+        text_channels_list = guild.text_channels
+        for i in text_channels_list:
+            if i.permissions_for(self.user).send_messages:
+                return i
+        return inviter_or_guild_owner
 
     @property
     def get_admin_invite_link(self):

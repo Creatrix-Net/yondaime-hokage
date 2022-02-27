@@ -31,7 +31,7 @@ class Badurls(discord.SlashCommand, name="badurls"):
     def __init__(self, cog):
         self.cog = cog
 
-    async def callback(response: discord.SlashCommandResponse):
+    async def callback(self,response: discord.SlashCommandResponse):
         detected_urls = await detect_bad_domains(response.options.content)
         if len(detected_urls) != 0:   
             embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')
@@ -49,7 +49,7 @@ class BadurlsMessageCommand(discord.MessageCommand, name="Flagged Urls"):
         self.cog = cog
 
 
-    async def callback(response: discord.MessageCommandResponse):
+    async def callback(self,response: discord.MessageCommandResponse):
         message = response.target
         detected_urls = await detect_bad_domains(message.content)
         if len(detected_urls) != 0:   
@@ -70,7 +70,7 @@ class AntiRaid(discord.SlashCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    async def command_check(response: discord.SlashCommandResponse) -> bool:
+    async def command_check(self, response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).manage_guild:
             return True
         else:
@@ -117,14 +117,14 @@ class Kick(discord.UserCommand):
     def __init__(self, cog):
         self.cog = cog
 
-    async def command_check(response: discord.SlashCommandResponse) -> bool:
+    async def command_check(self,response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).kick_members:
             return True
         else:
             await response.send_message("You don't have the `Kick Members` permission", ephemeral=True)
             return False
     
-    async def callback(response: discord.UserCommandResponse):
+    async def callback(self,response: discord.UserCommandResponse):
         user = response.target
         try:
             await user.kick(reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
@@ -137,14 +137,14 @@ class Ban(discord.UserCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    async def command_check(response: discord.SlashCommandResponse) -> bool:
+    async def command_check(self,response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).ban_members:
             return True
         else:
             await response.send_message("You don't have the `Ban Members` permission", ephemeral=True)
             return False
     
-    async def callback(response: discord.UserCommandResponse):
+    async def callback(self,response: discord.UserCommandResponse):
         user = response.target
         try:
             await user.ban(reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
@@ -158,14 +158,14 @@ class Mute(discord.UserCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    async def command_check(response: discord.SlashCommandResponse) -> bool:
+    async def command_check(self,response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).timeout_members:
             return True
         else:
             await response.send_message("You don't have the `Timeout Members` permission", ephemeral=True)
             return False
     
-    async def callback(response: discord.UserCommandResponse):
+    async def callback(self,response: discord.UserCommandResponse):
         user = response.target
         try:
             await user.edit(timed_out_until=discord.utils.utcnow()+timedelta(days=1) ,reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
@@ -179,14 +179,14 @@ class Unmute(discord.UserCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    async def command_check(response: discord.SlashCommandResponse) -> bool:
+    async def command_check(self, response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).timeout_members:
             return True
         else:
             await response.send_message("You don't have the `Timeout Members` permission", ephemeral=True)
             return False
     
-    async def callback(response: discord.UserCommandResponse):
+    async def callback(self, response: discord.UserCommandResponse):
         user = response.target
         try:
             await user.edit(timed_out_until=discord.utils.utcnow() ,reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})")
@@ -200,7 +200,7 @@ class Setup(discord.SlashCommand):
     def __init__(self, cog):
         self.cog = cog
     
-    async def command_check(response: discord.SlashCommandResponse) -> bool:
+    async def command_check(self, response: discord.SlashCommandResponse) -> bool:
         if response.channel.permissions_for(response.user).manage_guild:
             return True
         else:

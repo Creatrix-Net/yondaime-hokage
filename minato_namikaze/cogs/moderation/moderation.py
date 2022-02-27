@@ -1316,6 +1316,36 @@ class Moderation(commands.Cog):
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
         await member.edit(suppress=False, reason=reason)
         await ctx.send(embed=SuccessEmbed(description=f"**Un-Suppressed** {member} from `all stage channels`"))
+    
+    @commands.group(invoke_without_command=True)
+    @commands.guild_only()
+    async def lock(self, ctx):
+        if ctx.invoked_subcommand is None:
+            await ctx.send_help(ctx.command)
+            return
+    
+    @lock.command(aliases=['text'], usage='[text.channel]')
+    @commands.has_guild_permissions(manage_channels=True)
+    async def textchannel(self, ctx, channels: commands.Greedy[Union[discord.TextChannel, commands.TextChannelConverter]] = None):
+        if channels is None:
+            channels = [ctx.channel]
+        for channel in channels:    
+            overwrite = channel.overwrites_for(ctx.guild.default_role)
+            overwrite.send_messages = False
+            await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
+        await ctx.send(f'{" ,".join(channels)} locked.')
+    
+    @lock.command(aliases=['thread'], usage='[thread.channel]')
+    @commands.has_guild_permissions(manage_threads=True)
+    async def threadchannel(self, ctx, channels: commands.Greedy[Union[discord.TextChannel, commands.TextChannelConverter]] = None):
+        if channels is None:
+            channels = [ctx.channel]
+        for channel in channels:    
+            overwrite = channel.overwrites_for(ctx.guild.default_role)
+            overwrite.send_messages = False
+            await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
+        await ctx.send(f'{" ,".join(channels)} locked.')
+
 
 def setup(bot):
     bot.add_cog(Moderation(bot))

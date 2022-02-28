@@ -143,7 +143,6 @@ class FrontPageSource(menus.PageSource):
                               colour=discord.Colour(0xA8B9CD))
         embed.description = inspect.cleandoc(f"""
             Hello! Welcome to the help page.
-
             Use "{menu.ctx.clean_prefix}help command" for more info on a command.
             Use "{menu.ctx.clean_prefix}help category" for more info on a category.
             Use the dropdown menu below to select a category.

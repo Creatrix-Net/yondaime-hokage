@@ -212,7 +212,7 @@ class BackUp(commands.Cog):
             ),
         )
 
-    @backup.command()
+    @backup.command(usage='<code>')
     async def get(self, ctx: commands.Context, code: int):
         """Gets the json file which is stored as a backup"""
         backup_code_data_url = await BackupDatabse(ctx).get_backup_data(code)
@@ -225,7 +225,7 @@ class BackUp(commands.Cog):
             f"Hey {ctx.author.mention}, \n there is no data associated with **{code}** backup code!"
         )
     
-    @backup.command()
+    @backup.command(usage='<args>')
     async def delete(self, ctx: commands.Context, *,args):
         """Deletes the backup data if it is there in the database.
         This command has a powerful "command line" syntax. To use this command
@@ -263,8 +263,15 @@ class BackUp(commands.Cog):
             
         await ctx.send('No arguments were provided')
     
-    @backup.command()
+    @backup.command(usage='<code>')
     async def apply(self, ctx: commands.Context, code: int):
+        '''Applies backup template to the server. This may take a lot of time.
+        
+        ```
+        Note: Some things like role position, some role colours, and some channel positioning may not be applied 
+        due to Discord limitations, so you may have to fine tune on your own.
+        ```
+        '''
         if not await ctx.prompt(
                 "Are you sure that you want to **apply the template backup** to this guild?",
                 author_id=ctx.author.id,
@@ -277,7 +284,7 @@ class BackUp(commands.Cog):
         if isinstance(backup_return_value, str):
             await ctx.send(backup_return_value, delete_after=5)
         else:
-            await ctx.send(f'Backup applied in {round(end-start)}', delete_after=5)
+            await ctx.send(f'Backup applied in {round(end-start)}')
         await first.delete()
 
 def setup(bot):

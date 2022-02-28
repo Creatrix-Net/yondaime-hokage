@@ -50,6 +50,11 @@ class BackUp(commands.Cog):
         `channel` is partial name or ID of the server you want to backup
         defaults to the server the command was run in
         """
+        if not await ctx.prompt(
+                "Are you sure that you want to **message a backup** of specified channel(s)?",
+                author_id=ctx.author.id,
+        ):
+            return
         start = time.time()
         first_message = await ctx.send(':clock1: Scanning')
         if channel is None:
@@ -113,6 +118,11 @@ class BackUp(commands.Cog):
         """
         Creat a backup of all server data as json files This might take a long time
         """
+        if not await ctx.prompt(
+                "Are you sure that you want to **create a message backup** of this guild?",
+                author_id=ctx.author.id,
+        ):
+            return
         start = time.time()
         first_message = await ctx.send(':clock1: Scanning')
         guild = ctx.guild
@@ -180,7 +190,7 @@ class BackUp(commands.Cog):
         await first_message.edit("{} messages saved from `{}` \nTime taken is {} sec".format(total_msgs, guild.name, round(time.time()-start)))
 
 
-    @backup.command(description="Create backup of the server", aliases=['templates'])
+    @backup.command(description="Creates a template backup of the server", aliases=['templates'])
     async def template(self, ctx):
         """
         Create a backup of this guild, (it backups only those channels which is visible to the bot)
@@ -224,6 +234,11 @@ class BackUp(commands.Cog):
         `--id` or `-id`: Array of backup id to delete.
         `--all` or `-all`: To delete all backup(s) of the guild.
         """
+        if not await ctx.prompt(
+                "Are you sure that you want to **delete the backup** of this guild?",
+                author_id=ctx.author.id,
+        ):
+            return
         parser = Arguments(add_help=False, allow_abbrev=False)
         parser.add_argument("--id", "-id", action="append_const",const=int)
         parser.add_argument("--all", "-all", action="store_true")
@@ -247,7 +262,23 @@ class BackUp(commands.Cog):
             return
             
         await ctx.send('No arguments were provided')
-
+    
+    @backup.command()
+    async def apply(self, ctx: commands.Context, code: int):
+        if not await ctx.prompt(
+                "Are you sure that you want to **apply the template backup** to this guild?",
+                author_id=ctx.author.id,
+        ):
+            return
+        first = await ctx.send('Backup will be applied, if backup with that id exists! and this message will be deleted!')
+        start = time.time()
+        backup_return_value = await BackupDatabse(ctx).apply_backup(int(code))
+        end=time.time()
+        if isinstance(backup_return_value, str):
+            await ctx.send(backup_return_value, delete_after=5)
+        else:
+            await ctx.send(f'Backup applied in {round(end-start)}', delete_after=5)
+        await first.delete()
 
 def setup(bot):
     bot.add_cog(BackUp(bot))

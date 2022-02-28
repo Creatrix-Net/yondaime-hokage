@@ -1,11 +1,14 @@
+import datetime
+import io
+import shlex
+import time
+from typing import Optional, Union
+
 import discord
 from discord.ext import commands, tasks
-from lib import BackupDatabse,ChannelAndMessageId, Arguments
 from DiscordUtils import SuccessEmbed
-import shlex, datetime, io
-from typing import Optional, Union
+from lib import Arguments, BackupDatabse, ChannelAndMessageId
 from orjson import dumps
-import time
 
 
 class BackUp(commands.Cog):
@@ -286,6 +289,11 @@ class BackUp(commands.Cog):
         else:
             await ctx.send(f'Backup applied in {round(end-start)}')
         await first.delete()
+    
+    @backup.command(usage='[channel.mention]')
+    async def attachments(self, ctx: commands.Context, channel: Optional[Union[discord.TextChannel, commands.TextChannelConverter]]):
+        '''Backups the attachement(s) of the specified channel or channel in which command was run'''
+        pass
 
 def setup(bot):
     bot.add_cog(BackUp(bot))

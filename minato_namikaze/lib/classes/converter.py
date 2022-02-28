@@ -14,7 +14,6 @@ time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
 
 class TimeConverter(commands.Converter):
 
-    @staticmethod
     async def convert(ctx, argument):
         args = argument.lower()
         matches = re.findall(time_regex, args)
@@ -44,7 +43,6 @@ def can_execute_action(ctx, user, target):
 
 class MemberID(commands.Converter):
 
-    @staticmethod
     async def convert(ctx, argument):
         try:
             member = await commands.MemberConverter().convert(ctx, argument)
@@ -77,7 +75,6 @@ class MemberID(commands.Converter):
 
 class BannedMember(commands.Converter):
 
-    @staticmethod
     async def convert(ctx, argument):
         if argument.isdigit():
             member_id = int(argument, base=10)
@@ -99,7 +96,6 @@ class BannedMember(commands.Converter):
 
 class ActionReason(commands.Converter):
 
-    @staticmethod
     async def convert(ctx, argument):
         ret = f"{ctx.author} (ID: {ctx.author.id}): {argument}"
 
@@ -201,7 +197,6 @@ class GiveawayConfig:
 
 class CooldownByContent(commands.CooldownMapping):
 
-    @staticmethod
     def _bucket_key(message):
         return (message.channel.id, message.content)
 

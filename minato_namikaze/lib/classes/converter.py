@@ -1,7 +1,7 @@
 import argparse
 import datetime
 import re
-
+from typing import Optional, Union
 import discord
 from discord.ext import commands
 
@@ -269,3 +269,104 @@ class SpamChecker:
         if is_fast:
             self.fast_joiners[member.id] = True
         return is_fast
+
+
+class Characters:
+    '''The characters model class'''
+    __slots__ = [
+        'id',
+        'name', 
+        'images', 
+        'emoji',
+        'category', 
+        'kwargs', 
+        'hitpoint', 
+        'regainpoint', 
+        'defensepoint', 
+        'specialpoint'
+    ]
+    def __init__(self, **kwargs):
+        self.name: Optional[str]  = kwargs.pop('name')
+        self.id: Optional[Union[str,int]] = ''.join(self.name.split()) if self.name is not None else None
+        self.images: Optional[list] = kwargs.pop('images')
+        self.category: Optional[str] = kwargs.get('category')
+        self.emoji: Optional[Union[discord.Emoji, discord.PartialEmoji]] = kwargs.get('emoji')
+        self.kwargs = kwargs
+    
+    @property
+    def hitpoint(self) -> int:
+        category = str(self.category)
+        if category.lower() == 'akatsuki':
+            return 7
+        if category.lower() == 'jinchuruki':
+            return 8
+        if category.lower() in ('kage', 'special'):
+            return 5
+        if category.lower() == 'otsutsuki':
+            return 10
+        if category.lower() == 'special':
+            return 6
+        else:
+            return 3
+    
+    @property
+    def regainpoint(self) -> int:
+        category = str(self.category)
+        if category.lower() == 'akatsuki':
+            return 5
+        if category.lower() == 'jinchuruki':
+            return 6
+        if category.lower() in ('kage', 'special'):
+            return 3
+        if category.lower() == 'otsutsuki':
+            return 7
+        if category.lower() == 'special':
+            return 4
+        else:
+            return 1
+    
+    @property
+    def defensepoint(self):
+        '''These are in percentages'''
+        category = str(self.category)
+        if category.lower() == 'akatsuki':
+            return 50
+        if category.lower() == 'jinchuruki':
+            return 60
+        if category.lower() in ('kage', 'special'):
+            return 30
+        if category.lower() == 'otsutsuki':
+            return 70
+        if category.lower() == 'special':
+            return 40
+        else:
+            return 10
+    
+    @property
+    def specialpoint(self):
+        '''These are in percentages'''
+        category = str(self.category)
+        if category.lower() == 'akatsuki':
+            return 40
+        if category.lower() == 'jinchuruki':
+            return 50
+        if category.lower() in ('kage', 'special'):
+            return 20
+        if category.lower() == 'otsutsuki':
+            return 60
+        if category.lower() == 'special':
+            return 30
+        else:
+            return 10
+
+    @classmethod
+    async def from_record(cls, record: dict, ctx: commands.Context):
+        self = cls()
+
+        self.name = record['name']
+        self.images = record['images']
+        self.category = record['category']
+        self.id = ''.join(self.name.split()) if self.name is not None else None
+        self.kwargs = record
+        await ctx.get_config_emoji_by_name_or_id(self.category)
+        return self

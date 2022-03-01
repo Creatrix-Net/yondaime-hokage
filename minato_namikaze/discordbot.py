@@ -5,7 +5,6 @@ import logging
 import os
 import time
 from pathlib import Path
-import DiscordUtils
 
 import TenGiphPy
 from discord_together import DiscordTogether
@@ -32,7 +31,6 @@ from lib import (
     Context,
     LinksAndVars,
     PaginatedHelpCommand,
-    PostStats,
     ReactionPersistentView,
     Tokens,
     api_image_store_dir,
@@ -97,7 +95,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.local = ast.literal_eval(token_get("LOCAL"))
 
         self.start_time = discord.utils.utcnow()
-        self.github = token_get("GITHUB")
+        self.github = LinksAndVars.github.value
 
         self._prev_events = deque(maxlen=10)
 
@@ -228,20 +226,20 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
         )
 
-        if ast.literal_eval(token_get("POST_STATS")):
-            await self.change_presence(
-                status=discord.Status.dnd,
-                activity=discord.Activity(type=discord.ActivityType.watching, name="over Naruto"),
-            )
-            await PostStats(self).post_guild_stats_all()
-            log.info("Status Posted")
-            await PostStats(self).post_commands()
-            log.info("Commands Status Posted")
-
-            await self.change_presence(
-                status=discord.Status.idle,
-                activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
-            )
+        await self.change_presence(
+            status=discord.Status.dnd,
+            activity=discord.Activity(type=discord.ActivityType.watching, name="over Naruto"),
+        )
+        developer = self.get_cog('Developer')
+        if developer is None:
+            log.warning('Developer cog is not available')
+        else:
+            await developer.post()
+        log.info("Status Posted")
+        await self.change_presence(
+            status=discord.Status.idle,
+            activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
+        )
 
     @staticmethod
     async def query_member_named(guild, argument, *, cache=False):

@@ -1,7 +1,7 @@
 import contextlib
 import inspect
 import io
-import json
+import json, orjson, aiohttp
 import logging
 import os
 import subprocess as sp
@@ -9,22 +9,28 @@ import textwrap
 import traceback
 from contextlib import redirect_stdout
 from pathlib import Path
+import statcord
 
 import discord
 from discord.ext import commands
 from lib import *
 from DiscordUtils import *
+import discordlists
 
 log = logging.getLogger(__name__)
 
 
 class Developer(commands.Cog):
-
     def __init__(self, bot):
         self.bot = bot
-        self.posting = PostStats(self.bot)
         self.minato_gif = []
+        self.key = Tokens.statcord.value
+        self.api = statcord.StatcordClient(self.bot, self.key)
+        self.api = discordlists.Client(self.bot)
         self.description = "These set of commands are only locked to the developer"
+    
+    def cog_unload(self):
+        self.statcord_client.close()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
@@ -415,12 +421,12 @@ class Developer(commands.Cog):
                           inline=True)
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(
-                content=f"We are now currently at **{len(self.bot.guilds)+1} servers**",
+                content=f"We are now currently at **{len(self.bot.guilds)} servers**",
                 embed=e34,
             )
         except:
             pass
-        await self.posting.post_guild_stats_all()
+        await self.post()
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -478,12 +484,34 @@ class Developer(commands.Cog):
                           inline=True)
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(
-                content=f"We are now currently at **{len(self.bot.guilds)+1} servers**",
+                content=f"We are now currently at **{len(self.bot.guilds)} servers**",
                 embed=e34,
             )
         except:
             pass
-        await self.posting.post_guild_stats_all()
+        await self.post()
+    
+    async def post(self):
+        """
+        Manually posts guild count using discordlists.py (BotBlock)
+        """
+        async with aiohttp.ClientSession() as session:
+            async with session.get(LinksAndVars.listing.value) as resp:
+                listing: dict = orjson.loads(await resp.text())
+        for i in listing:
+            self.api.set_auth(listing[i].split('/')[0], token_get(''.join(i.split())))
+        try:
+            await self.bot.change_presence(
+                status=discord.Status.dnd,
+                activity=discord.Activity(type=discord.ActivityType.watching, name="over Naruto"),
+            )
+            result = await self.api.post_count()
+        except Exception as e:
+            log.error(e)
+        await self.bot.change_presence(
+                status=discord.Status.idle,
+                activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
+            )
 
 
 def setup(bot):

@@ -109,9 +109,10 @@ class LinksAndVars(enum.Enum):
     github = "https://github.com/The-4th-Hokage/yondaime-hokage"
     github_branch = "master"
 
-    bad_links = 'https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/main/bad-domains.txt'
+    bad_links = 'https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt'
+    listing = 'https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json'
 
-    statuspage_link = "https://minatonamikaze.statuspage.io/"
+    statuspage_link = "https://minatonamikaze.statuspage.io"
 
     version = token_get("VERSION")
     invite_code = "wXVQahNM5c"
@@ -138,12 +139,6 @@ class RaidMode(enum.Enum):
     on = 1
     strict = 2
 
-
-with open(
-        os.path.join(
-            Path(__file__).resolve().parent.parent, "data",
-            "listing.json")) as f:
-    listing: dict = json.load(f)
 
 with gzip.open(
         os.path.join(

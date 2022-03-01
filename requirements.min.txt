@@ -35,4 +35,5 @@ TenGiphPy
 youtube-dl
 youtube-search
 pyppeteer
+discordlists.py
 uvloop; sys_platform != "win32"

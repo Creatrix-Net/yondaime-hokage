@@ -1,11 +1,11 @@
-import random
+from DiscordUtils import *
 from asyncio import sleep as sl
 
 import discord
 from discord.ext import menus
 
-from .vars import listing
-
+from .vars import LinksAndVars
+import aiohttp, orjson
 
 class VotingMenu(menus.Menu):
     def __init__(self, bot):
@@ -21,19 +21,22 @@ class VotingMenu(menus.Menu):
 
     @menus.button("\N{WHITE HEAVY CHECK MARK}")
     async def on_check_mark(self, payload):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(LinksAndVars.listing.value) as resp:
+                listing: dict = orjson.loads(await resp.text())
         listing_formatted_string = "\n".join(
             f"- **[{i}](https://{listing[i]}/{self.bot.application_id})**"
             for i in listing)
-        e1 = discord.Embed(
+        e1 = SuccessEmbed(
             title="Thanks!",
-            description=f"Thanks {self.ctx.author.mention}! Here's the links:{listing_formatted_string}",
+            description=f"Thanks {self.ctx.author.mention}! Here's the links:\n{listing_formatted_string}",
         )
         await self.message.edit(content="", embed=e1)
         self.stop()
 
     @menus.button("\N{NEGATIVE SQUARED CROSS MARK}")
     async def on_stop(self, payload):
-        e2 = discord.Embed(
+        e2 = ErrorEmbed(
             title="Sorry to see you go!",
             description="Remember you can always re-run the command :)",
         )
@@ -57,19 +60,17 @@ class PrivacyPolicy(menus.Menu):
 
     @menus.button("\N{WHITE HEAVY CHECK MARK}")
     async def on_add(self, payload):
-        e1 = discord.Embed(
+        e1 = SuccessEmbed(
             title="Well, Heres The Policy :)",
             description="Well well well, Nothing is stored! Really nothing is stored! All is based on internal cache provided by Discord! For more please visit [THIS LINK](https://dhruvacube.github.io/yondaime-hokage/privacy_policy)",
-            color=discord.Colour.from_hsv(random.random(), 1, 1),
         )
         await self.message.edit(content="", embed=e1)
 
     @menus.button("\N{NEGATIVE SQUARED CROSS MARK}")
     async def on_stop(self, payload):
-        e2 = discord.Embed(
+        e2 = Embed(
             title="Hey!",
             description=f"Hi, I'm {self.bot.user}, I am developed by {self.ctx.get_user(self.bot.owner_id)}, Who is a great fan of me i.e. {self.bot.user} aka Yondaime Hokage!",
-            color=discord.Colour.from_hsv(random.random(), 1, 1),
         )
 
         await self.message.edit(content="", embed=e2)

@@ -110,11 +110,12 @@ class BackUp(commands.Cog):
                 message_dict.update({str(message.id): data})
             total_msgs += len(message_dict)
             await send.send(
+                content = "{} messages saved from `{}` \nTime taken is {} sec".format(total_msgs, channel.name, round(time.time() - start)),
                 file=discord.File(io.BytesIO(dumps(message_dict)),filename=f"{guild.id}-{today}.json"),
             )
         except discord.Forbidden:
             return
-        await first_message.edit("{} messages saved from `{}` \nTime taken is {} sec".format(total_msgs, channel.name, round(time.time() - start)))
+        await first_message.delete()
 
     @backup.command(aliases=["serverbackup"])
     async def serverlogs(self, ctx):
@@ -188,9 +189,10 @@ class BackUp(commands.Cog):
                 pass
             whole_data_dict.update({str(chn.id):message_list })
         await channel.send(
+            content = "{} messages saved from `{}` \nTime taken is {} sec".format(total_msgs, guild.name, round(time.time()-start)),
             file=discord.File(io.BytesIO(dumps(whole_data_dict)),filename=f"{guild.id}-{today}.json"),
         )
-        await first_message.edit("{} messages saved from `{}` \nTime taken is {} sec".format(total_msgs, guild.name, round(time.time()-start)))
+        await first_message.delete()
 
 
     @backup.command(description="Creates a template backup of the server", aliases=['templates'])
@@ -287,13 +289,53 @@ class BackUp(commands.Cog):
         if isinstance(backup_return_value, str):
             await ctx.send(backup_return_value, delete_after=5)
         else:
-            await ctx.send(f'Backup applied in {round(end-start)}')
+            await ctx.send(f'Backup applied in {round(end-start)}sec')
         await first.delete()
     
     @backup.command(usage='[channel.mention]')
-    async def attachments(self, ctx: commands.Context, channel: Optional[Union[discord.TextChannel, commands.TextChannelConverter]]):
+    async def attachments(
+        self, 
+        ctx: commands.Context, 
+        channel: Optional[
+            Union[
+                discord.TextChannel, 
+                commands.TextChannelConverter,
+                discord.Thread,
+                commands.ThreadConverter
+            ]
+        ] = None
+    ):
         '''Backups the attachement(s) of the specified channel or channel in which command was run'''
-        pass
+        if channel is None:
+            channel = ctx.channel
+        whole_data = []
+        attachemnts_saved = 0
+        async for message in channel.history(limit=None):
+            if message.attachments:
+                data = {
+                    "timestamp": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    "tts": message.tts,
+                    "author": {
+                        "name": message.author.name,
+                        "display_name": message.author.display_name,
+                        "discriminator": message.author.discriminator,
+                        "id": message.author.id,
+                        "bot": message.author.bot,
+                    },
+                    "channel": {"name": message.channel.name, "id": message.channel.id},
+                    "id": message.id,
+                    "pinned": message.pinned,
+                }
+                attachements_data = [a.url for a in message.attachments]
+                data.update({'attachements': attachements_data})
+                whole_data.append(data)
+                attachemnts_saved+=len(attachements_data)
+        await channel.send(
+            content=f'{attachemnts_saved} attachemnt(s) saved from {channel.mention}',
+            file=discord.File(io.BytesIO(dumps(whole_data)),filename=f'{ctx.guild.id}-{datetime.date.today().strftime("%Y-%m-%d")}.json'),
+        )
+        
+
 
 def setup(bot):
     bot.add_cog(BackUp(bot))

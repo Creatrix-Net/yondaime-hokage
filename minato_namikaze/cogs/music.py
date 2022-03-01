@@ -24,8 +24,7 @@ class Music(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="voice_channel", id=942447961210753047)
 
-    @staticmethod
-    async def cog_before_invoke(ctx: commands.Context):
+    async def cog_before_invoke(self, ctx: commands.Context):
         """
         Coroutine called before command invocation.
         We mainly just want to check whether the user is in the players controller channel.
@@ -47,8 +46,7 @@ class Music(commands.Cog):
 
         return
 
-    @staticmethod
-    async def cog_command_error(ctx: commands.Context, error: Exception):
+    async def cog_command_error(self, ctx: commands.Context, error: Exception):
         """Cog wide error handler."""
         if isinstance(error, IncorrectChannelError):
             return
@@ -58,8 +56,7 @@ class Music(commands.Cog):
                 description="You must be in a voice channel or provide one to connect to.")
             )
 
-    @staticmethod
-    async def cog_check(ctx: commands.Context):
+    async def cog_check(self, ctx: commands.Context):
         """Cog wide check, which disallows commands in DMs."""
         if not ctx.guild:
             await ctx.send(embed=ErrorEmbed(

@@ -58,7 +58,7 @@ soupsieve==2.3.1
 spotify==0.10.2
 SQLAlchemy==1.4.31
 TenGiphPy==2.5.0
-tqdm==4.62.3
+tqdm==4.63.0
 urllib3==1.26.8
 websockets==10.2
 yarl==1.7.2

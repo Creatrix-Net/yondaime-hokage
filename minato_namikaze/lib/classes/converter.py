@@ -6,6 +6,7 @@ import discord
 from discord.ext import commands
 
 from ..functions import ExpiringCache
+from ..util.vars import LinksAndVars, ShinobiMatch
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 
@@ -280,15 +281,11 @@ class Characters:
         'emoji',
         'category', 
         'kwargs', 
-        'hitpoint', 
-        'regainpoint', 
-        'defensepoint', 
-        'specialpoint'
     ]
     def __init__(self, **kwargs):
-        self.name: Optional[str]  = kwargs.pop('name')
-        self.id: Optional[Union[str,int]] = ''.join(self.name.split()) if self.name is not None else None
-        self.images: Optional[list] = kwargs.pop('images')
+        self.name: Optional[str]  = kwargs.get('name')
+        self.id: Optional[Union[str,int]] = ''.join(self.name.split()).upper() if self.name is not None else None
+        self.images: Optional[list] = kwargs.get('images')
         self.category: Optional[str] = kwargs.get('category')
         self.emoji: Optional[Union[discord.Emoji, discord.PartialEmoji]] = kwargs.get('emoji')
         self.kwargs = kwargs
@@ -360,13 +357,22 @@ class Characters:
             return 10
 
     @classmethod
-    async def from_record(cls, record: dict, ctx: commands.Context):
+    def from_record(cls, record: dict, ctx: commands.Context, name: str):
         self = cls()
 
-        self.name = record['name']
+        self.name = name.replace("_", " ").title()
         self.images = record['images']
         self.category = record['category']
-        self.id = ''.join(self.name.split()) if self.name is not None else None
+        self.id = ''.join(self.name.split()).upper() if self.name is not None else None
         self.kwargs = record
-        await ctx.get_config_emoji_by_name_or_id(self.category)
+        self.emoji = self.return_emoji(url=record['images'][0],category=record['category'],ctx=ctx)
         return self
+    
+    @staticmethod
+    def return_emoji(url:str, category:str, ctx: commands.Context) -> Union[discord.Emoji, discord.PartialEmoji]:
+        STRIPPED_STRING_LIST: list = url.lstrip(LinksAndVars.character_data.value.rstrip('img_data.json')+'photo_data/').split('/')
+        STRIPPED_STRING_LIST.append(category)
+        for i in STRIPPED_STRING_LIST:
+            if i.lower() in ShinobiMatch.name_exclusion.value:
+                return ctx.get_config_emoji_by_name_or_id(i)
+        return discord.PartialEmoji(name='\U0001f5e1')

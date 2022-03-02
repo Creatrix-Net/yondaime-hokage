@@ -3,3 +3,4 @@ from .connect_four import *
 from .hangman import *
 from .tictactoe import *
 from .typeracer import *
+from .shinobi_match import *

@@ -111,6 +111,7 @@ class LinksAndVars(enum.Enum):
 
     bad_links = 'https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt'
     listing = 'https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json'
+    character_data = 'https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json'
 
     statuspage_link = "https://minatonamikaze.statuspage.io"
 

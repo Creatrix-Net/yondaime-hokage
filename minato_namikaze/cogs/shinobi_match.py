@@ -16,7 +16,7 @@ class ShinobiMatchCog(commands.Cog, name='Shinobi Match'):
     
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="dagger")
+        return discord.PartialEmoji(name="\U0001f5e1")
     
     @staticmethod
     @cache()

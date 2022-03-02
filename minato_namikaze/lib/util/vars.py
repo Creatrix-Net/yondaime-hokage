@@ -24,21 +24,6 @@ api_image_store_dir = BASE_DIR / "images_api_store"
 
 DEFAULT_COMMAND_SELECT_LENGTH = 25
 
-
-class BotList(enum.Enum):
-    dblst = token_get("DISCORDBOTLIST")
-    discordbotsgg = token_get("DISCORDBOTSGG")
-    topken = token_get("TOPGG")
-    bfd = token_get("BOTSFORDISCORD")
-    botlist = token_get("BOTLISTSPACE")  # discordlistspace
-    discordboats = token_get("DISCORDBOATS")
-    voidbot = token_get("VOIDBOT")
-    fateslist = token_get("FATESLIST")
-    bladebot = token_get("BLADEBOT")
-    discordlabs = token_get("DISCORDLABS")
-    infinity = token_get("INFINITY")
-
-
 class ShinobiMatch(list, enum.Enum):
     character_side_exclude = [
         "anbu",
@@ -79,9 +64,6 @@ class ChannelAndMessageId(enum.IntEnum):
 
     server_id = 920190307595874304
     server_id2 = 920536143244709889
-
-    tags = 920536143458598931
-    tags_aliases = 922539699409661972
 
     restartlog_channel1 = 920190310942908508
     restartlog_channel2 = 920536143458598926
@@ -140,6 +122,10 @@ class RaidMode(enum.Enum):
     on = 1
     strict = 2
 
+class Webhooks(enum.Enum):
+    logs = token_get("LOGS")
+    feedback = token_get("FEEDBACK")
+
 
 with gzip.open(
         os.path.join(
@@ -183,6 +169,8 @@ antiraid_channel_name = "antiraid"
 mentionspam_channel_name = "mentionspam"
 reaction_roles_channel_name = "reaction roles"
 giveaway_time_channel_name = "giveaway"
+user_blacklist_channel_name = "user blacklist"
+server_blacklist_channel_name = "user blacklist"
 
 minato_gif = []
 with zipfile.ZipFile(BASE_DIR / os.path.join("lib", "data", "minato.zip")) as myzip:

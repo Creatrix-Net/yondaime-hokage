@@ -8,7 +8,7 @@ from pathlib import Path
 
 import TenGiphPy
 from discord_together import DiscordTogether
-
+import aiohttp
 try:
     import uvloop
 except ImportError:
@@ -17,7 +17,7 @@ except ImportError:
 import random
 from collections import Counter, defaultdict, deque
 from datetime import datetime
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 import discord
 import dotenv
@@ -38,6 +38,9 @@ from lib import (
     format_dt,
     format_relative,
     reaction_roles_channel_name,
+    Webhooks,
+    user_blacklist_channel_name,
+    server_blacklist_channel_name
 )
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -112,6 +115,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         self.uptime = format_relative(self.start_time)
         self.persistent_views_added = False
+        self.blacklist: List[Optional[discord.abc.Snowflake]] = []
 
         super().__init__(
             command_prefix=get_prefix,
@@ -191,30 +195,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         e.set_thumbnail(url=self.user.avatar.url)
 
         if not self.persistent_views_added:
-            database = await self.db.new(database_category_name,
-                                         reaction_roles_channel_name)
-            async for message in database._Database__channel.history(
-                    limit=None):
-                cnt = message.content
-                try:
-                    data = json.loads(str(cnt))
-                    data.pop("type")
-                    data_keys = list(map(str, list(data.keys())))
-                    data = data[data_keys[0]]
-                    self.add_view(
-                        ReactionPersistentView(
-                            reactions_dict=data["reactions"],
-                            custom_id=data["custom_id"],
-                            database=database,
-                        ),
-                        message_id=int(data_keys[0]),
-                    )
-                    self.persistent_views_added = True
-                except Exception as e:
-                    log.error(e)
-                    continue
-            log.info("Persistent views added")
+            await self.add_persistant_views()
 
+        await self.update_blacklist()
         log.info("Started The Bot")
 
         try:
@@ -240,6 +223,54 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             status=discord.Status.idle,
             activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
         )
+    
+    async def add_persistant_views(self):
+        database = await self.db.new(database_category_name, reaction_roles_channel_name)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(str, list(data.keys())))
+                data = data[data_keys[0]]
+                self.add_view(
+                    ReactionPersistentView(
+                        reactions_dict=data["reactions"],
+                        custom_id=data["custom_id"],
+                        database=database,
+                    ),
+                    message_id=int(data_keys[0]),
+                    )
+                self.persistent_views_added = True
+            except Exception as e:
+                log.error(e)
+                continue
+        log.info("Persistent views added")
+
+    async def update_blacklist(self):
+        database = await self.db.new(database_category_name, user_blacklist_channel_name)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(str, list(data.keys())))
+                self.blacklist.append(data_keys[0])
+            except Exception as e:
+                log.error(e)
+                continue
+        database = await self.db.new(database_category_name, server_blacklist_channel_name)
+        async for message in database._Database__channel.history(limit=None):
+            cnt = message.content
+            try:
+                data = json.loads(str(cnt))
+                data.pop("type")
+                data_keys = list(map(str, list(data.keys())))
+                self.blacklist.append(data_keys[0])
+            except Exception as e:
+                log.error(e)
+                continue
+        log.info('Blacklist Data updated')
 
     @staticmethod
     async def query_member_named(guild, argument, *, cache=False):
@@ -374,22 +405,12 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         if not os.path.isdir(api_image_store_dir):
             shutil.rmtree(api_image_store_dir)
         await super().close()
-
-    async def process_commands(self, message):
-        ctx = await self.get_context(message, cls=Context)
-
-        if ctx.command is None:
-            return
-
-        try:
-            await self.invoke(ctx)
-        except:
-            pass
+        await self.session.close()
 
     @staticmethod
     async def get_bot_inviter(guild: discord.Guild):
         try:
-            async for i in guild.audit_logs(limit=1, action=discord.AuditLogAction.bot_add):
+            async for i in guild.audit_logs(limit=10, action=discord.AuditLogAction.bot_add):
                 return i.user
         except (discord.Forbidden, discord.HTTPException):
             return guild.owner
@@ -482,6 +503,65 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             ))["data"]["images"]["downsized_large"]["url"]
         except:
             return
+    
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+        await self.process_commands(message)
+    
+    async def log_spammer(self, ctx, message, retry_after, *, autoblock=False):
+        guild_name = getattr(ctx.guild, 'name', 'No Guild (DMs)')
+        guild_id = getattr(ctx.guild, 'id', None)
+        fmt = 'User %s (ID %s) in guild %r (ID %s) spamming, retry_after: %.2fs'
+        log.warning(fmt, message.author, message.author.id, guild_name, guild_id, retry_after)
+        if not autoblock:
+            return
+
+        embed = discord.Embed(title='Auto-blocked Member', colour=0xDDA453)
+        embed.add_field(name='Member', value=f'{message.author} (ID: {message.author.id})', inline=False)
+        embed.add_field(name='Guild Info', value=f'{guild_name} (ID: {guild_id})', inline=False)
+        embed.add_field(name='Channel Info', value=f'{message.channel} (ID: {message.channel.id}', inline=False)
+        embed.timestamp = discord.utils.utcnow()
+        async with aiohttp.ClientSession() as session:  
+            wh = discord.Webhook.from_url(Webhooks.logs.value, session=session)
+            await wh.send(embed=embed)
+        return
+
+    async def process_commands(self, message):
+        ctx = await self.get_context(message, cls=Context)
+
+        if ctx.command is None:
+            return
+
+        if ctx.author.id in self.blacklist:
+            return
+
+        if ctx.guild is not None and ctx.guild.id in self.blacklist:
+            return
+
+        bucket = self.spam_control.get_bucket(message)
+        current = message.created_at.timestamp()
+        retry_after = bucket.update_rate_limit(current)
+        author_id = message.author.id
+        if retry_after and author_id != self.owner_id:
+            self._auto_spam_count[author_id] += 1
+            if self._auto_spam_count[author_id] >= 5:
+                await self.add_to_blacklist(author_id)
+                del self._auto_spam_count[author_id]
+                await self.log_spammer(ctx, message, retry_after, autoblock=True)
+            else:
+                self.log_spammer(ctx, message, retry_after)
+            return
+        else:
+            self._auto_spam_count.pop(author_id, None)
+
+        try:
+            await self.invoke(ctx)
+        except:
+            pass
+    
+    async def add_to_blacklist(self, object_id):
+        self.blacklist.append(object_id)
 
 
 if __name__ == "__main__":

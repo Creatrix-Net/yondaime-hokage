@@ -6,7 +6,7 @@ import discord
 import orjson
 from discord.ext import commands
 from lib import (Characters, LinksAndVars, MemberID,
-                 ShinobiMatchCharacterSelection, cache)
+                 ShinobiMatchCharacterSelection, cache, MatchHandlerView)
 
 
 class ShinobiMatchCog(commands.Cog, name='Shinobi Match'):
@@ -28,7 +28,9 @@ class ShinobiMatchCog(commands.Cog, name='Shinobi Match'):
     
     @classmethod
     async def return_random_characters(self, ctx:commands.Context) -> List[Characters]:
-        return random.sample(await self.characters_data(ctx), 25)
+        characters_data = await self.characters_data(ctx)
+        random.shuffle(characters_data)
+        return random.sample(characters_data, 25)
     
     @staticmethod
     def return_select_help_embed(author: discord.Member):

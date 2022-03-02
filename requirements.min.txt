@@ -36,4 +36,5 @@ youtube-dl
 youtube-search
 pyppeteer
 discordlists.py
+StringProgressBar
 uvloop; sys_platform != "win32"

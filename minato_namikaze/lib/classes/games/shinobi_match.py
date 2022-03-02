@@ -1,9 +1,10 @@
 import random
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Tuple
 
 import discord
 from discord.ext import commands
 from DiscordUtils import Embed
+from StringProgressBar import progressBar
 
 from ..converter import Characters
 
@@ -76,7 +77,7 @@ class ShinobiMatchCharacterSelection(discord.ui.View):
     
     async def interaction_check(self, interaction: discord.Interaction):
         if interaction.user != self.player:
-            await interaction.response.send_message("This `Shinobi` match is not for you", ephemeral=True)
+            await interaction.response.send_message("This `Shinobi match` is not for you", ephemeral=True)
             return False
         return True
     
@@ -84,3 +85,50 @@ class ShinobiMatchCharacterSelection(discord.ui.View):
         for child in self.children:
             child.disabled = True
         await self.message.edit(view=self)
+
+
+class MatchHandlerView(discord.ui.View):
+    def __init__(self, player1: Tuple[discord.Member, Characters], player2: Tuple[discord.Member, Characters]):
+        super().__init__()
+        self.player1 = player1[0]
+        self.player2 = player2[0]
+
+        self.character1 = player1[1]
+        self.character2 = player2[1]
+
+        self.turn = self.player1
+
+        self.overall_health = 200
+        self.health1 = int(self.overall_health)
+        self.health2 = int(self.overall_health)
+
+        self.special_moves1 = 2
+        self.special_moves2 = 2
+
+        self.special_moves_enery_usage = 10 #this is in percentage
+    
+    def percentage_and_progess_bar(self, current_health: int) -> str:
+        bardata = progressBar.filledBar(self.overall_health, current_health)
+        return f'`{bardata[1]}`\n{bardata[0]}'
+    
+    def make_embed(self) -> Embed:
+        embed = Embed(title='Make your move')
+        if self.turn == self.player1:
+            embed.set_image(url=random.choice(self.character1.images))
+            embed.set_footer(text=f'{self.special_moves1} special moves left')
+            embed.description = self.percentage_and_progess_bar(self.health1)
+        else:
+            embed.set_image(url=random.choice(self.character2.images))
+            embed.set_footer(text=f'{self.special_moves2} special moves left')
+            embed.description = self.percentage_and_progess_bar(self.health2)
+        embed.set_author(name=self.turn.display_name,icon_url=self.turn.display_avatar.url)
+        return embed
+    
+    async def interaction_check(self, interaction: discord.Interaction):
+        if interaction.user != self.turn and interaction.user in (self.player1, self.player2):
+            await interaction.response.send_message("Please wait for your `turn`", ephemeral=True)
+            return False
+        if interaction.user != self.turn:
+            await interaction.response.send_message("This `Shinobi match` is not for you, please try to be `good spectator`", ephemeral=True)
+            return False
+        return True

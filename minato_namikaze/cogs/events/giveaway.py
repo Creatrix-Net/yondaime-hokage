@@ -35,9 +35,17 @@ class Giveaway(Cog):
         return discord.PartialEmoji(name="\N{PARTY POPPER}")
     
     async def database_class(self):
+        '''The database classs'''
         return await self.bot.db.new(database_category_name,giveaway_time_channel_name)
     
     async def create_timer_for_giveaway(self, giveaway_id: discord.Message, time_ends: Union[int, FutureTime]) -> None:
+        """Creates the timer for the giveaway
+
+        :param giveaway_id: Giveaway id
+        :type giveaway_id: discord.Message
+        :param time_ends: Time when the giveaway will end
+        :type time_ends: Union[int, FutureTime]
+        """        
         database = await self.database_class()
         await database.set(giveaway_id.id, [int(time_ends), giveaway_id.jump_url])
     
@@ -72,7 +80,7 @@ class Giveaway(Cog):
     )
     @commands.guild_only()
     @is_mod()
-    async def create_giveaway(self, ctx):
+    async def create_giveaway(self, ctx: commands.Context):
         """Allowes you to to create giveaway by answering some simple questions!"""
         # Ask Questions
         embed = Embed(
@@ -177,6 +185,15 @@ class Giveaway(Cog):
         await self.create_timer_for_giveaway(newMsg, (discord.utils.utcnow() + timedelta(milliseconds=time_ends)).timestamp())
     
     async def determine_winner(self, giveaway_id: discord.Message, bot: commands.Bot) -> Union[str, discord.Member]:
+        """Determines winner
+
+        :param giveaway_id: The giveaway id
+        :type giveaway_id: discord.Message
+        :param bot: The bot class
+        :type bot: commands.Bot
+        :return: The winner details
+        :rtype: Union[str, discord.Member]
+        """        
         reactions = discord.utils.find(lambda a: str(a) == str(discord.PartialEmoji(name="\U0001f389")), giveaway_id.reactions)
         if reactions is None:
             return "The channel or ID mentioned was incorrect"
@@ -215,7 +232,7 @@ class Giveaway(Cog):
     )
     @is_mod()
     @commands.guild_only()
-    async def giveaway_reroll(self, ctx, giveaway_id: Union[commands.MessageConverter, discord.Message]):
+    async def giveaway_reroll(self, ctx: commands.Context, giveaway_id: Union[commands.MessageConverter, discord.Message]):
         """
         It picks out the giveaway winners
         `Note: It dosen't checks for task, It only checks for roles if specified`
@@ -244,7 +261,7 @@ class Giveaway(Cog):
     )
     @is_mod()
     @commands.guild_only()
-    async def giveaway_stop(self, ctx, giveaway_id: Union[commands.MessageConverter, discord.Message]):
+    async def giveaway_stop(self, ctx: commands.Context, giveaway_id: Union[commands.MessageConverter, discord.Message]):
         """
         Cancels the specified giveaway
         `Note: This also deletes that giveaway message`

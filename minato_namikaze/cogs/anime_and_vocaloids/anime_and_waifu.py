@@ -4,11 +4,19 @@ import discord
 from asyncdagpi import Client
 from discord.ext import commands
 from lib import Tokens
-from mal import Anime, AnimeSearch, Manga, MangaSearch
+from mal import Anime, AnimeSearch, Manga, MangaSearch, AnimeCharacterResult, AnimeStaffResult, MangaCharacterResult
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
+from typing import Tuple, List, Dict
 
 
-def format_related_anime_manga(dict_related_anime):
+def format_related_anime_manga(dict_related_anime: Dict[str, List[str]]) -> str:
+    """Properly formats the related anime and manga list
+
+    :param dict_related_anime: The list you got it from the module
+    :type dict_related_anime: Dict[str, List[str]]
+    :return: The formatted string to put in the embed
+    :rtype: str
+    """    
     formatted_string = "\n"
     for i in dict_related_anime:
         formatted_string += (
@@ -16,21 +24,42 @@ def format_related_anime_manga(dict_related_anime):
     return formatted_string
 
 
-def format_staff(staff):
+def format_staff(staff:  List[AnimeStaffResult]) -> str:
+    """Properly formats the staff list
+
+    :param staff: The list you got it from the module
+    :type staff: List[AnimeStaffResult]
+    :return: The formatted string to put in the embed
+    :rtype: str
+    """    
     staff_string = "\n"
     for k in staff:
         staff_string += f"・**{k.name}**: {k.role}\n"
     return staff_string
 
 
-def format_characters(character):
+def format_characters(character: List[AnimeCharacterResult]) -> str:
+    """Properly formats the characters list
+
+    :param character: The list you got it from the module
+    :type character: List[AnimeCharacterResult]
+    :return: The formatted string to put in the embed
+    :rtype: str
+    """    
     character_string = "\n"
     for k in character:
         character_string += f"・**{k.name}** \n@role: **{k.role}** \nVoice Actor: **{k.voice_actor}**\n\n"
     return character_string
 
 
-def format_manga_characters(character):
+def format_manga_characters(character: List[MangaCharacterResult]) -> str:
+    """Properly formats the manga characters list
+
+    :param character: The list you got it from the module
+    :type character: List[MangaCharacterResult]
+    :return: The formatted string to put in the embed
+    :rtype: str
+    """    
     character_string = "\n"
     for k in character:
         character_string += f"・**{k.name}** \n@role: **{k.role}**\n\n"
@@ -47,7 +76,12 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="anime", id=874922782964731934)
 
-    async def get_waifu(self):
+    async def get_waifu(self) -> Tuple[Embed, str]:
+        """Returns a random waifu from the api
+
+        :return: tuple of (Embed, name)
+        :rtype: Tuple[Embed, str]
+        """        
         waifu = await self.bot.dagpi.waifu()
         pic = waifu["display_picture"]
         name = waifu["name"]
@@ -77,7 +111,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "searchani",
         ],
     )
-    async def animesearch(self, ctx, *, anime_name: str):
+    async def animesearch(self, ctx: commands.Context, *, anime_name: str):
         """Searches Anime from MAL and displays the first 10 search result."""
         search = AnimeSearch(str(anime_name).strip(" ").lower())
         search_results = search.results[:10]
@@ -128,7 +162,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "anime",
         ],
     )
-    async def aboutanime(self, ctx, mal_id: int):
+    async def aboutanime(self, ctx: commands.Context, mal_id: int):
         """Displays about the anime using the MAL ANIME ID. get it by using animesearch command."""
         await ctx.send(":mag: Searching...", delete_after=5)
         anime = Anime(int(mal_id))
@@ -289,7 +323,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "searchmag",
         ],
     )
-    async def mangasearch(self, ctx, *, manga_name: str):
+    async def mangasearch(self, ctx: commands.Context, *, manga_name: str):
         """Searches Manga from MAL and displays the first 10 search result."""
         search = MangaSearch(str(manga_name).strip(" ").lower())
         search_results = search.results[:10]
@@ -340,7 +374,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "manga",
         ],
     )
-    async def aboutmanga(self, ctx, mal_id: int):
+    async def aboutmanga(self, ctx: commands.Context, mal_id: int):
         """Displays about the manga using the MAL MANGA ID. get it by using mangasearch command."""
         message = await ctx.send(":mag: Searching...", delete_after=5)
         manga = Manga(int(mal_id))
@@ -432,7 +466,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     @commands.command(aliases=["w", "wfu", "wa"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
-    async def waifu(self, ctx):
+    async def waifu(self, ctx: commands.Context):
         """Get random waifu and marry them! UwU!"""
         async with ctx.typing():
             waifu = await self.get_waifu()
@@ -454,7 +488,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     @commands.command(aliases=["wtp", "whatsthatpokemon"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
-    async def whosthatpokemon(self, ctx):
+    async def whosthatpokemon(self, ctx: commands.Context):
         """Play Who\'s That Pokemon?"""
         async with ctx.typing():
             wtp = await self.bot.dagpi.wtp()

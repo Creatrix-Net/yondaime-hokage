@@ -13,8 +13,7 @@ class BotEventsCommands(commands.Cog):
         self.delete_after_time = 5
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        print(error)
+    async def on_command_error(self, ctx: commands.Context, error):
         error_channel = await self.bot.fetch_channel(ChannelAndMessageId.error_logs_channel.value)
         if isinstance(error, commands.CommandOnCooldown):
             e1 = ErrorEmbed(title="Command Error!", description=f"`{error}`")

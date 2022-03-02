@@ -87,25 +87,40 @@ class ShinobiMatchCharacterSelection(discord.ui.View):
         await self.message.edit(view=self)
 
 
+class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
+    def __init__(self, label: str):
+        super().__init__(style=discord.ButtonStyle.primary,label=label,row=0)
+    
+    async def callback(self,interaction: discord.Interaction):
+        if self.view is None:
+            raise AssertionError
+        view = self.view
+
 class MatchHandlerView(discord.ui.View):
+    children: List[MatchHandlerViewButton]
     def __init__(self, player1: Tuple[discord.Member, Characters], player2: Tuple[discord.Member, Characters]):
         super().__init__()
-        self.player1 = player1[0]
-        self.player2 = player2[0]
+        self.player1: discord.Member = player1[0]
+        self.player2: discord.Member = player2[0]
 
-        self.character1 = player1[1]
-        self.character2 = player2[1]
+        self.character1: Characters = player1[1]
+        self.character2: Characters = player2[1]
 
-        self.turn = self.player1
+        self.turn: discord.Member = self.player1
 
-        self.overall_health = 200
-        self.health1 = int(self.overall_health)
-        self.health2 = int(self.overall_health)
+        self.overall_health: int = 200
+        self.health1: int = int(self.overall_health)
+        self.health2: int = int(self.overall_health)
 
-        self.special_moves1 = 2
-        self.special_moves2 = 2
+        self.special_moves1: int = 2
+        self.special_moves2: int = 2
 
-        self.special_moves_enery_usage = 10 #this is in percentage
+        self.previous_move: Optional[str] = None
+
+        self.special_moves_enery_usage: int = 10 #this is in percentage
+        self.button_names: list = ['Kick', 'Punch', 'Ninjutsu Attack', 'Defense', 'Special Power Attack']
+        for i in self.button_names:
+            self.add_item(MatchHandlerViewButton(label=i))
     
     def percentage_and_progess_bar(self, current_health: int) -> str:
         bardata = progressBar.filledBar(self.overall_health, current_health)
@@ -124,7 +139,7 @@ class MatchHandlerView(discord.ui.View):
         embed.set_author(name=self.turn.display_name,icon_url=self.turn.display_avatar.url)
         return embed
     
-    async def interaction_check(self, interaction: discord.Interaction):
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user != self.turn and interaction.user in (self.player1, self.player2):
             await interaction.response.send_message("Please wait for your `turn`", ephemeral=True)
             return False

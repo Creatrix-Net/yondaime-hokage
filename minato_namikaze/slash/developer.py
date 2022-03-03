@@ -32,7 +32,7 @@ class FeedbackModal(discord.ui.Modal):
             await wh.send(embed=embed)
         await interaction.response.send_message('Your message was successfully sent to my developer', ephemeral=True)
 
-class Feedback(discord.SlashCommand, guild_ids=[920536143244709889, 920190307595874304]):
+class Feedback(discord.SlashCommand):
     '''Send feedback, suggestion or report regarding me to my developer'''
 
     def __init__(self, cog):

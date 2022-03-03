@@ -323,7 +323,7 @@ class Characters:
             return 1
     
     @property
-    def defensepoint(self):
+    def healpoint(self):
         '''These are in percentages'''
         category = str(self.category)
         if category.lower() == 'akatsuki':

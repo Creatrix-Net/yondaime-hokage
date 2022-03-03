@@ -1,12 +1,14 @@
+import asyncio
 import random
-from typing import List, Union, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 import discord
 from discord.ext import commands
-from DiscordUtils import Embed
+from DiscordUtils import Embed, StarboardEmbed
 from StringProgressBar import progressBar
 
 from ..converter import Characters
+
 
 class CharacterSelect(discord.ui.Select["ShinobiMatchCharacterSelection"]):
     def __init__(
@@ -89,17 +91,88 @@ class ShinobiMatchCharacterSelection(discord.ui.View):
 
 class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
     def __init__(self, label: str):
-        super().__init__(style=discord.ButtonStyle.primary,label=label,row=0)
+        super().__init__(style=discord.ButtonStyle.primary,label=label.upper(),row=0)
     
     async def callback(self,interaction: discord.Interaction):
         if self.view is None:
             raise AssertionError
         view = self.view
+        if self.label.lower() in ['kick', 'punch']:
+            await self.reduce_health(amount=random.randint(1,5))
+        elif self.label.lower() == 'Ninjutsu Attack'.lower():
+            await self.reduce_health(amount=view.character1.hitpoint - view.character2.regainpoint if view.turn == view.player1 else view.character2.hitpoint - view.character1.regainpoint)
+        elif self.label.lower() == 'Special Power Attack'.lower():
+            await self.reduce_health(amount=(view.character1.specialpoint/100)*view.overall_health if view.turn == view.player1 else (view.character2.specialpoint/100)*view.overall_health)
+            if view.turn == view.player1:
+                view.special_moves1 -=1
+                view.health1 -= (view.character1.specialpoint/100)* view.health1
+            else:
+                view.special_moves2 -=1
+                view.health2 -= (view.character2.specialpoint/100)* view.health2
+            if view.special_moves1 < 0:
+                view.special_moves1 = 0
+            
+            if view.special_moves2 < 0:
+                view.special_moves2 = 0
+        elif self.label.lower() == 'Heal'.lower():
+            health = view.health1 if view.turn == view.player1 else view.health2
+            if health < view.overall_health:
+                character = view.character1 if view.turn == view.player1 else view.character2
+                await self.reduce_health(amount=character.specialpoint)
+        
+        if view.turn == view.player1:
+            view.previous_move1 = self.label
+        else:
+            view.previous_move2 = self.label
+        
+        winner = await view.determine_winer()
+        if winner is not None:
+            for i in view.children:
+                i.disabled = True
+            return await interaction.response.edit_message(content=None, embeds=winner, view=view)
+
+        await interaction.response.edit_message(content=f'{view.turn.mention} your stats', embed=view.make_embed())
+        await interaction.response.defer()
+        await asyncio.sleep(2)
+        view.turn = view.player2 if view.turn == view.player1 else view.player1
+        for i in view.children:
+            if view.turn == view.player1:
+                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves1:
+                    i.disabled = True
+                elif i.label.lower() == view.previous_move1:
+                    i.disabled = True
+                else:
+                    i.disabled = True
+            else:
+                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves2:
+                    i.disabled = True
+                elif i.label.lower() == view.previous_move2:
+                    i.disabled = True
+                else:
+                    i.disabled = True
+        
+        await interaction.response.edit_message(content=f'{view.turn.mention} now your turn', embed=view.make_embed())
+
+    async def reduce_health(self, amount: int) -> None:
+        if self.view is None:
+            raise AssertionError
+        view=self.view
+        if view.turn == view.player1:
+            view.health1 -= amount
+        else:
+            view.health2 -= amount
+        
+        if view.health2 < 0:
+            view.health2 = 0
+        
+        if view.health1 < 0:
+            view.health1 = 0
 
 class MatchHandlerView(discord.ui.View):
     children: List[MatchHandlerViewButton]
-    def __init__(self, player1: Tuple[discord.Member, Characters], player2: Tuple[discord.Member, Characters]):
+    def __init__(self, player1: Tuple[discord.Member, Characters], player2: Tuple[discord.Member, Characters], message: Optional[discord.Message] = None):
         super().__init__()
+        self.message = message
         self.player1: discord.Member = player1[0]
         self.player2: discord.Member = player2[0]
 
@@ -115,10 +188,11 @@ class MatchHandlerView(discord.ui.View):
         self.special_moves1: int = 2
         self.special_moves2: int = 2
 
-        self.previous_move: Optional[str] = None
+        self.previous_move1: Optional[str] = None
+        self.previous_move2: Optional[str] = None
 
-        self.special_moves_enery_usage: int = 10 #this is in percentage
-        self.button_names: list = ['Kick', 'Punch', 'Ninjutsu Attack', 'Defense', 'Special Power Attack']
+        self.special_moves_energy_usage: int = 10 #this is in percentage
+        self.button_names: list = ['Kick', 'Punch', 'Ninjutsu Attack', 'Heal', 'Special Power Attack']
         for i in self.button_names:
             self.add_item(MatchHandlerViewButton(label=i))
     
@@ -126,17 +200,23 @@ class MatchHandlerView(discord.ui.View):
         bardata = progressBar.filledBar(self.overall_health, current_health)
         return f'`{bardata[1]}`\n{bardata[0]}'
     
-    def make_embed(self) -> Embed:
-        embed = Embed(title='Make your move')
-        if self.turn == self.player1:
-            embed.set_image(url=random.choice(self.character1.images))
-            embed.set_footer(text=f'{self.special_moves1} special moves left')
-            embed.description = self.percentage_and_progess_bar(self.health1)
-        else:
-            embed.set_image(url=random.choice(self.character2.images))
-            embed.set_footer(text=f'{self.special_moves2} special moves left')
-            embed.description = self.percentage_and_progess_bar(self.health2)
-        embed.set_author(name=self.turn.display_name,icon_url=self.turn.display_avatar.url)
+    def make_embed(
+        self, 
+        character: Optional[Characters] = None, 
+        author: Optional[discord.Member] = None,
+        color: Optional[discord.Color] = None,
+    ) -> Embed:
+        character = character or (self.character1 if self.turn == self.player1 else self.character2)
+        author = author or self.turn
+
+        embed = Embed()
+        embed.title = character.name
+        embed.set_image(url=random.choice(character.images))
+        embed.set_footer(text=f'{self.special_moves1 if self.turn == self.player1 else self.special_moves2} special moves left')
+        embed.description = self.percentage_and_progess_bar(self.health1 if self.turn == self.player1 else self.health2)
+        embed.set_author(name=author.display_name,icon_url=author.display_avatar.url)
+        if color is not None:
+            embed.color = color
         return embed
     
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
@@ -147,3 +227,34 @@ class MatchHandlerView(discord.ui.View):
             await interaction.response.send_message("This `Shinobi match` is not for you, please try to be `good spectator`", ephemeral=True)
             return False
         return True
+    
+    async def on_timeout(self):
+        if self.message is None:
+            return
+        for i in self.children:
+            i.disabled = True
+        await self.message.edit(content = None, embeds=await self.determine_winer(force=True), view=self)
+    
+    async def determine_winer(self, force: bool = False) -> Optional[List[discord.Embed]]:
+        if not force:
+            if not self.health1 <= 0 and not self.health2 <= 0:
+                return
+        
+        if self.health1 == self.health2:
+            embed = StarboardEmbed(title="No one won the match!")
+            embed.description = f'In a fight of `{winner_character.name.title()} vs {looser_character.name.title()}` [{winner.author.mention} `vs` {looser.author.mention}]\n No one won the match'
+            embed.timestamp = discord.utils.utcnow()
+            return [embed]
+
+        winner = self.player1 if self.health1 > 0 else self.player2
+        winner_character = self.player1 if self.health1 > 0 else self.player2
+        looser = self.player1 if self.health1 < 0 else self.player2
+        looser_character = self.player1 if self.health1 < 0 else self.player2
+        embed = StarboardEmbed(title=f'{winner_character.name.title()} won the match')
+        embed.description = f'In a fight of `{winner_character.name.title()} vs {looser_character.name.title()}` [{winner.author.mention} `vs` {looser.author.mention}]\n `{winner_character.name.title()}` [{winner.author.mention}] won the match.\n Congratulations! :tada:'
+        embed.timestamp = discord.utils.utcnow()
+        return [
+            embed,
+            self.make_embed(character=winner_character,author=winner,color=discord.Color.green()),
+            self.make_embed(character=looser_character,author=looser,color=discord.Color.red())
+        ]

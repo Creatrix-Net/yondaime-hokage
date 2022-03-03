@@ -69,7 +69,7 @@ class Developer(commands.Cog):
         paginator = EmbedPaginator(entries=all_pages, ctx=ctx)
         await paginator.start()
 
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, hidden=True)
     @commands.guild_only()
     @commands.check(owners)
     async def dev(self, ctx, command=None):

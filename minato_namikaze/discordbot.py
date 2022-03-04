@@ -23,7 +23,7 @@ import discord
 import dotenv
 import sentry_sdk
 from discord.ext import commands
-from DiscordUtils import Embed
+from DiscordUtils import Embed, ErrorEmbed
 from DiscordDatabase import DiscordDatabase
 from lib import (
     BASE_DIR,
@@ -255,7 +255,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 data = json.loads(str(cnt))
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
-                self.blacklist.append(data_keys[0])
+                self.blacklist.append(int(data_keys[0]))
             except Exception as e:
                 log.error(e)
                 continue
@@ -266,10 +266,24 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 data = json.loads(str(cnt))
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
-                self.blacklist.append(data_keys[0])
+                self.blacklist.append(int(data_keys[0]))
+                guild = self.get_guild(int(data_keys[0]))
+                if guild is not None:
+                    channel = await self.get_welcome_channel(guild)
+                    embed = ErrorEmbed(title=f'Left {guild.name}')
+                    embed.description = f'I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer.'
+                    embed.add_field(name = 'Developer', value=f'[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})')
+                    embed.add_field(
+                        name="Support Server",
+                        value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
+                    )
+                    await channel.send(embed=embed)
+                    await guild.leave()
+                    log.info(f'Left guild {guild.id} [Marked as spam]')
             except Exception as e:
                 log.error(e)
                 continue
+        self.blacklist = list(set(self.blacklist))
         log.info('Blacklist Data updated')
 
     @staticmethod
@@ -417,8 +431,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def get_welcome_channel(
         self,
         guild: discord.Guild,
-        inviter_or_guild_owner: Union[discord.User, discord.Member],
+        inviter_or_guild_owner: Optional[Union[discord.User, discord.Member]] = None,
     ):
+        if inviter_or_guild_owner is None:
+            inviter_or_guild_owner = guild.owner
         if guild.system_channel is not None:
             return guild.system_channel
         text_channels_list = guild.text_channels
@@ -533,6 +549,14 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             return
 
         if ctx.author.id in self.blacklist:
+            embed = ErrorEmbed(title='Blacklisted User!')
+            embed.description = f'You have been `blacklisted` from using my commands. For further queries please contact my developer.'
+            embed.add_field(name = 'Developer', value=f'[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})')
+            embed.add_field(
+                name="Support Server",
+                value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
+            )
+            await ctx.send(embed=embed, delete_after=5)
             return
 
         if ctx.guild is not None and ctx.guild.id in self.blacklist:
@@ -560,8 +584,21 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             pass
     
     async def add_to_blacklist(self, object_id):
-        self.blacklist.append(object_id)
+        self.blacklist.append(int(object_id))
 
+    async def on_guild_join(self, guild: discord.Guild):
+        if guild.id in self.blacklist:
+            channel = await self.get_welcome_channel(guild)
+            embed = ErrorEmbed(title=f'Left {guild.name}')
+            embed.description = f'I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer.'
+            embed.add_field(name = 'Developer', value=f'[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})')
+            embed.add_field(
+                name="Support Server",
+                value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
+            )
+            await channel.send(embed=embed)
+            await guild.leave()
+            log.info(f'Left guild {guild.id} [Marked as spam]')
 
 if __name__ == "__main__":
     try:

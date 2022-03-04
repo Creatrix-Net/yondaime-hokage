@@ -94,26 +94,25 @@ class MySupport(commands.Cog, name="My Support"):
 
         memory_usage = self.process.memory_full_info().uss / 1024**2
         cpu_usage = self.process.cpu_percent() / psutil.cpu_count()
-        embed.add_field(name="Process",
-                        value=f"{memory_usage:.2f} MiB\n{cpu_usage:.2f}% CPU")
+        embed.add_field(name="Process",value=f"{memory_usage:.2f} MiB\n{cpu_usage:.2f}% CPU")
 
         version = pkg_resources.get_distribution("discord.py").version
         embed.add_field(name="Guilds", value=guilds)
         embed.add_field(name="Uptime", value=self.bot.uptime)
         embed.add_field(
-            name="**Bot Developers:**",
+            name="Developer",
             value=f"[{ctx.get_user(self.bot.owner_id)}](https://discord.com/users/{self.bot.owner_id})",
         )
         embed.add_field(
-            name="**More Info:**",
+            name="More Info",
             value=f"[Click Here](https://statcord.com/bot/{self.bot.application_id})",
         )
         embed.add_field(
-            name="**Incidents/Maintenance Reports:**",
+            name="Incidents/Maintenance Reports",
             value=f"[Click Here]({LinksAndVars.statuspage_link.value})",
         )
         embed.add_field(
-            name="**Website**",
+            name="Website",
             value=f"[Click Here]({LinksAndVars.website.value})",
         )
         embed.set_footer(
@@ -128,7 +127,7 @@ class MySupport(commands.Cog, name="My Support"):
     async def inviteme(self, ctx):
         """Generates my invite link for your server"""
         embed = discord.Embed(
-            title="**Invite Link**",
+            title="Invite Link",
             description=f":point_right: [Required Perms Invite]({self.bot.get_required_perms_invite_link}) \n :point_right: [Admin Perms Invite]({self.bot.get_admin_invite_link})",
         )
         embed.set_thumbnail(url=ctx.bot.user.avatar.url)

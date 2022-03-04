@@ -12,7 +12,7 @@ from pathlib import Path
 import statcord
 
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from lib import *
 from DiscordUtils import *
 import discordlists
@@ -28,6 +28,7 @@ class Developer(commands.Cog):
         self.api = statcord.StatcordClient(self.bot, self.key)
         self.api = discordlists.Client(self.bot)
         self.description = "These set of commands are only locked to the developer"
+        self.update_blacklist_task.start()
     
     def cog_unload(self):
         self.statcord_client.close()
@@ -35,6 +36,10 @@ class Developer(commands.Cog):
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{GEAR}\ufe0f")
+    
+    @tasks.loop(minutes=30)
+    async def update_blacklist_task(self):
+        await self.bot.update_blacklist()
 
     def owners(ctx):
         return ctx.author.id == ctx.bot.owner_id

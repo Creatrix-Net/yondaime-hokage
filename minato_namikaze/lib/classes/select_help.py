@@ -158,7 +158,7 @@ class FrontPageSource(menus.PageSource):
         if self.index == 0:
             embed.add_field(
                 name="Who are you?",
-                value=(":pray: Konichiwa :pray:, myself **Minato Namikaze**, **Konohagakure <:uzumaki_naruto:874930645405675521> Yondaime Hokage**"
+                value=(":pray: Konichiwa :pray:, myself **Minato Namikaze**, **Konohagakure Yondaime Hokage**"
                        f"I joined discord on {created_at}. I try my best to do every work of a **hokage**. You can get more "
                        "information on my commands by using the *dropdown* below.\n\n"
                        f"I'm also open source. You can see my code on [GitHub]({LinksAndVars.github.value})!"

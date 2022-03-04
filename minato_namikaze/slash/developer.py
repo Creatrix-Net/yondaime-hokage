@@ -41,6 +41,12 @@ class Feedback(discord.SlashCommand):
     async def callback(self,response: discord.SlashCommandResponse):
         await response.send_modal(FeedbackModal())
 
+
+class Dev(discord.SlashCommand):
+    '''Some developer releated secret commands'''
+    def __init__(self, cog):
+        self.cog = cog
+
 class DeveloperCog(discord.Cog):
     def __init__(self, bot):
         self.bot = bot

@@ -41,9 +41,32 @@ class ShinobiMatchCog(commands.Cog, name='Shinobi Match'):
         embed.set_author(name=author.display_name, icon_url=author.display_avatar.url)
         return embed
     
-    @commands.command(usage='<opponent.mention>')
+    @commands.command(usage='<opponent.mention>', aliases=['shinobi_match', 'matchwith', 'shinobimatch', 'match_with'])
     async def match(self, ctx:commands.Context, opponent: Union[discord.Member, MemberID]):
-        '''Play shinobi match with your friends using the characters from `Naruto Verse`'''
+        '''
+        Play shinobi match with your friends using the characters from `Naruto Verse`
+
+        **Steps**
+        > 1. Type `{prefix}match @player_mention`
+        > 2. Then both player selects the character from their respection selection boxes
+        > 3. Then starts the amazing match!
+
+        **Rules**
+        > 1. You cannot repeat a move `twice` in a row
+        > 2. You will have only `2 Special Moves` to perform, so use wisely
+        > 3. `On timeout`, by the default the user with high health value would be decalred as a winner
+        > 4. Also you can perform `healing operations twice` in the whole game, so use the heal wisely.
+        '''
+
+        if (
+            opponent is ctx.author
+            or opponent.bot
+        ):
+            await ctx.send(embed=ErrorEmbed(
+                description="*You cannot play this game yourself or with a bot*"
+            ))
+            return
+        
         view1=ShinobiMatchCharacterSelection(characters_data=await self.return_random_characters(ctx), player=ctx.author, ctx=ctx)
         select_msg1: discord.Message = await ctx.send(embed=self.return_select_help_embed(ctx.author), view=view1) 
 

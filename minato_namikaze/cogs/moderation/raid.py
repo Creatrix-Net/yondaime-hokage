@@ -268,7 +268,7 @@ class AntiRaid(commands.Cog):
                 colour = discord.Color.yellow()  # yellow
                 title = "Member Joined (Very New Member)"
 
-        e = discord.Embed(title=title, colour=colour)
+        e = discord.Embed(title=title, col9our=colour)
         e.timestamp = now
         e.set_author(name=str(member), icon_url=member.display_avatar.url)
         e.add_field(name="ID", value=member.id)
@@ -276,7 +276,9 @@ class AntiRaid(commands.Cog):
         e.add_field(name="Created",
                     value=format_relative(member.created_at),
                     inline=False)
-        e.add_field(name="Inviter")
+        e.add_field(name="Inviter", value=str((await self.tracker.fetch_inviter(member)).inviter))
+        e.add_field(name="Invite Code", value=str((await self.tracker.fetch_inviter(member)).code))
+        e.add_field(name="Invite Code Uses", value=str((await self.tracker.fetch_inviter(member)).uses))
 
         if config.broadcast_channel:
             try:

@@ -135,7 +135,7 @@ class Database(enum.Enum):
     reaction_roles_channel_name = "reaction roles"
     giveaway_time_channel_name = "giveaway"
     user_blacklist_channel_name = "user blacklist"
-    server_blacklist_channel_name = "user blacklist"
+    server_blacklist_channel_name = "server blacklist"
 
 
 with gzip.open(

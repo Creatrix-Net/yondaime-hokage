@@ -31,7 +31,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         return await self.bot.db.new(Database.database_category_name.value,Database.antiraid_channel_name.value)
 
     async def database_class_mentionspam(self):
-        return await self.bot.db.new(Database.database_category_name,Database.mentionspam_channel_name.value)
+        return await self.bot.db.new(Database.database_category_name.value,Database.mentionspam_channel_name.value)
 
     async def add_and_check_data(self, dict_to_add: dict,ctx: commands.Context) -> None:
         database = await self.database_class()

@@ -2,9 +2,20 @@ from typing import List
 
 import aiohttp
 import discord
-from DiscordUtils import StarboardEmbed
-from lib import Webhooks, Database
+from DiscordUtils import StarboardEmbed, ErrorEmbed, SuccessEmbed
+from lib import Webhooks, Database, LinksAndVars
 import typing
+import logging
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(message)s")
+ch.setFormatter(formatter)
+log.addHandler(ch)
+
 
 class FeedbackModal(discord.ui.Modal):
     children: List[discord.ui.InputText]
@@ -48,32 +59,105 @@ class Blacklist(discord.SlashCommand):
         self.cog = cog
     
     async def command_check(self, response: discord.SlashCommandResponse):
-        if await self.client.is_owner(response.user):
+        if await self.cog.bot.is_owner(response.user):
             return True
         else:
             await response.send_message("Sorry! but only developer can use this", ephemeral=True)
             return False
 
-class Add(discord.SlashCommand, parent=Blacklist, group=True):
-    '''Adds user or guild to the blacklist'''
-
-class User(discord.SlashCommand, parent=Add):
+class User(discord.SlashCommand, parent=Blacklist):
     '''Adds user to the blacklist'''
-    user: typing.Union[discord.Member, discord.User, discord.abc.Snowflake] = discord.application_command_option(description="The user to add to the blacklist", default=None)
+    id: str = discord.application_command_option(description="The user to add to the blacklist", default=None)
+    reason: typing.Optional[str] = discord.application_command_option(description='Reason', default=None)
 
-    async def callback(self, interaction: discord.Interaction) -> None:
-        pass
+    async def callback(self, response: discord.SlashCommandResponse) -> None:
+        user_id = response.options.id
+        if not str(user_id).isdigit():
+            return await response.send_message('Not a valid userid', ephemeral=True)
+        if self.parent.cog.bot.get_user(int(user_id)):
+            database = await self.parent.cog.database_class_user()
+            await database.set(user_id, response.options.reason)
+            self.parent.cog.bot.blacklist.append(int(user_id))
+            await response.send_message('User added to the blacklist', ephemeral=True)
+            return 
+        else:
+            await response.send_message('User not found', ephemeral=True)
+
+
+class Server(discord.SlashCommand, parent=Blacklist):
+    '''Adds guild to the blacklist'''
+    id: str = discord.application_command_option(description="The server which is to be added", default=None)
+    reason: typing.Optional[str] = discord.application_command_option(description='Reason', default=None)
+
+    async def callback(self, response: discord.SlashCommandResponse) -> None:
+        server_id = response.options.id or response.guild_id
+        if not str(server_id).isdigit():
+            return await response.send_message('Not a valid serverid', ephemeral=True)
+        guild = self.parent.cog.bot.get_guild(int(server_id))
+        if guild is not None:
+            database = await self.parent.cog.database_class_server()
+            await database.set(server_id, response.options.reason)
+            self.parent.cog.bot.blacklist.append(int(server_id))
+            channel = await self.parent.cog.bot.get_welcome_channel(guild)
+            embed = ErrorEmbed(title=f'Left {guild.name}')
+            embed.description = f'I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer.'
+            embed.add_field(name = 'Developer', value=f'[{self.parent.cog.bot.get_user(self.parent.cog.bot.owner_id)}](https://discord.com/users/{self.parent.cog.bot.owner_id})')
+            embed.add_field(
+                name="Support Server",
+                value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
+            )
+            await channel.send(embed=embed)
+            await guild.leave()
+            log.info(f'Left guild {guild.id} [Marked as spam]')
+            await response.send_message('Server added to the blacklist', ephemeral=True)
+            return
+        else:
+            return await response.send_message('Server not found', ephemeral=True)
+
+class Fetch(discord.SlashCommand, parent=Blacklist):
+    '''Fetches data from the blacklist list of users and server'''
+    id: str = discord.application_command_option(description="The server/user data which is to be fetched", default=None)
+
+    async def callback(self, response: discord.SlashCommandResponse) -> None:
+        database_user = await self.parent.cog.database_class_user()
+        database_server = await self.parent.cog.database_class_server()
+        user_check = await database_user.get(response.options.id)
+        server_check  = await database_server.get(response.options.id)
+        if user_check is None and server_check is None:
+            return await response.send_message(embed=ErrorEmbed(title='No data found'), ephemeral=True)
+        return await response.send_message(embed=SuccessEmbed(title=response.options.id,description=f'Found in {database_user._Database__channel.mention if user_check is not None else database_server._Database__channel.mention}\n\n **Reason**\n```\n{user_check or server_check}\n```'))
+
+class Delete(discord.SlashCommand, parent=Blacklist):
+    '''Delete the data if found blacklist list'''
+
+    id: str = discord.application_command_option(description="The server/user data which is to be fetched", default=None)
+
+    async def callback(self, response: discord.SlashCommandResponse) -> None:
+        if not str(response.options.id).isdigit():
+            return await response.send_message('Not a valid serverid/userid', ephemeral=True)
+        await response.send_message('If data is available then will be removed from the blacklist', ephemeral=True)
+        database_user = await self.parent.cog.database_class_user()
+        database_server = await self.parent.cog.database_class_server()
+        await database_user.delete(response.options.id)
+        await database_server.delete(response.options.id)
+
+        try:
+            self.parent.cog.bot.blacklist.remove(int(response.options.id))
+        except ValueError:
+            pass
+
 
 class DeveloperCog(discord.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.add_application_command(Feedback(self))
+        self.add_application_command(Blacklist(self))
     
     async def database_class_user(self):
-        return await self.bot.db.new(Database.database_category_name.value,Database.database_channel_name.value)
+        return await self.bot.db.new(Database.database_category_name.value,Database.user_blacklist_channel_name.value)
 
-    async def database_class_user(self):
-        return await self.bot.db.new(Database.database_category_name.value,Database.antiraid_channel_name.value)
+    async def database_class_server(self):
+        return await self.bot.db.new(Database.database_category_name.value,Database.server_blacklist_channel_name.value)
 
 def setup(bot):
     bot.add_cog(DeveloperCog(bot))

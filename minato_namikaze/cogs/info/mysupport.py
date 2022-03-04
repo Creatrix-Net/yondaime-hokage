@@ -116,7 +116,7 @@ class MySupport(commands.Cog, name="My Support"):
             value=f"[Click Here]({LinksAndVars.website.value})",
         )
         embed.set_footer(
-            text=f"Made with Stocker's discord.py v{version}",
+            text=f"Made with StockerMC/discord.py v{version}",
             icon_url="https://i.imgur.com/5BFecvA.png",
         )
         embed.timestamp = discord.utils.utcnow()
@@ -136,8 +136,7 @@ class MySupport(commands.Cog, name="My Support"):
     @commands.command(description="Generates my support server invite")
     async def supportserver(self, ctx):
         """Generates my support server invite"""
-        await ctx.send("**Here you go, my support server invite**")
-        await ctx.send(f"https://discord.gg/{LinksAndVars.invite_code.value}")
+        await ctx.send(f"**Here you go, my support server invite**\nhttps://discord.gg/{LinksAndVars.invite_code.value}")
 
     @commands.command()
     async def privacy(self, ctx):

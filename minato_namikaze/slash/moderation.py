@@ -6,8 +6,7 @@ import aiohttp
 import discord
 from discord.abc import GuildChannel
 from lib import (LinksAndVars, RaidMode,
-                 antiraid_channel_name, database_category_name,
-                 detect_bad_domains, database_channel_name, mentionspam_channel_name)
+                 Database, detect_bad_domains)
 from DiscordUtils import SuccessEmbed, ErrorEmbed
 
 
@@ -78,7 +77,7 @@ class AntiRaid(discord.SlashCommand):
             return False
     
     async def callback(self, response: discord.SlashCommandResponse):
-        database = await self.cog.bot.db.new(database_category_name,antiraid_channel_name)
+        database = await self.cog.bot.db.new(Database.database_category_name.value,Database.antiraid_channel_name.value)
         switch = response.options.switch
         if switch.lower() == "off":
             await database.delete(response.interaction.guild_id)
@@ -287,13 +286,13 @@ class ModerationCog(discord.Cog):
         self.add_application_command(Setup(self))
     
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,database_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,Database.database_channel_name.value)
 
     async def database_class_antiraid(self):
-        return await self.bot.db.new(database_category_name,antiraid_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,Database.antiraid_channel_name.value)
 
     async def database_class_mentionspam(self):
-        return await self.bot.db.new(database_category_name,mentionspam_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,Database.mentionspam_channel_name.value)
     
     async def add_and_check_data(self, dict_to_add: dict, guild: discord.Guild, type_store: typing.Literal['antiraid', 'setupvar', 'mentionspam']) -> None:
         if type_store == 'antiraid':

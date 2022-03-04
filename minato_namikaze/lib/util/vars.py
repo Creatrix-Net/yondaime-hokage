@@ -127,6 +127,17 @@ class Webhooks(enum.Enum):
     feedback = token_get("FEEDBACK")
 
 
+class Database(enum.Enum):
+    database_category_name = "DATABASE"
+    database_channel_name = "setup vars"
+    antiraid_channel_name = "antiraid"
+    mentionspam_channel_name = "mentionspam"
+    reaction_roles_channel_name = "reaction roles"
+    giveaway_time_channel_name = "giveaway"
+    user_blacklist_channel_name = "user blacklist"
+    server_blacklist_channel_name = "user blacklist"
+
+
 with gzip.open(
         os.path.join(
             Path(__file__).resolve().parent.parent,
@@ -162,15 +173,6 @@ with gzip.open(
         encoding="utf-8",
 ) as f:
     UNITS: dict = json.load(f)
-
-database_category_name = "DATABASE"
-database_channel_name = "setup vars"
-antiraid_channel_name = "antiraid"
-mentionspam_channel_name = "mentionspam"
-reaction_roles_channel_name = "reaction roles"
-giveaway_time_channel_name = "giveaway"
-user_blacklist_channel_name = "user blacklist"
-server_blacklist_channel_name = "user blacklist"
 
 minato_gif = []
 with zipfile.ZipFile(BASE_DIR / os.path.join("lib", "data", "minato.zip")) as myzip:

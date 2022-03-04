@@ -8,9 +8,8 @@ from datetime import timedelta
 import discord
 from discord.ext import commands
 from lib import (
-                 antiraid_channel_name, database_category_name,
-                 database_channel_name, detect_bad_domains, is_mod,
-                 mentionspam_channel_name)
+                 Database, detect_bad_domains, is_mod,
+                 )
 from DiscordUtils.embeds import *
 from DiscordUtils import EmbedPaginator
 
@@ -26,13 +25,13 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,database_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,Database.database_channel_name.value)
 
     async def database_class_antiraid(self):
-        return await self.bot.db.new(database_category_name,antiraid_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,Database.antiraid_channel_name.value)
 
     async def database_class_mentionspam(self):
-        return await self.bot.db.new(database_category_name,mentionspam_channel_name)
+        return await self.bot.db.new(Database.database_category_name,Database.mentionspam_channel_name.value)
 
     async def add_and_check_data(self, dict_to_add: dict,ctx: commands.Context) -> None:
         database = await self.database_class()

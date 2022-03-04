@@ -11,8 +11,8 @@ from discord.ext import commands, tasks
 from discord.ext.commands import Cog, command
 from lib import (FutureTime,
                  GiveawayConfig, LinksAndVars, cache, convert,
-                 database_category_name, format_relative,
-                 giveaway_time_channel_name, is_mod)
+                 Database, format_relative,
+                 is_mod)
 from DiscordUtils import SuccessEmbed, Embed, ErrorEmbed
 
 
@@ -36,7 +36,7 @@ class Giveaway(Cog):
     
     async def database_class(self):
         '''The database classs'''
-        return await self.bot.db.new(database_category_name,giveaway_time_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value, Database.giveaway_time_channel_name.value)
     
     async def create_timer_for_giveaway(self, giveaway_id: discord.Message, time_ends: Union[int, FutureTime]) -> None:
         """Creates the timer for the giveaway

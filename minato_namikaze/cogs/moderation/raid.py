@@ -15,14 +15,12 @@ from lib import (
     MentionSpamConfig,
     RaidMode,
     SpamChecker,
-    antiraid_channel_name,
     cache,
-    database_category_name,
+    Database,
     format_dt,
     format_relative,
     has_permissions,
     is_mod,
-    mentionspam_channel_name,
 )
 
 log = logging.getLogger(__name__)
@@ -47,10 +45,10 @@ class AntiRaid(commands.Cog):
         return discord.PartialEmoji(name="discord_certified_moderator",id=922030031146995733)
 
     async def database_class_antiraid(self):
-        return await self.bot.db.new(database_category_name,antiraid_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,Database.antiraid_channel_name.value)
 
     async def database_class_mentionspam(self):
-        return await self.bot.db.new(database_category_name,mentionspam_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,Database.mentionspam_channel_name.value)
     
     @tasks.loop(hours=1, reconnect=True)
     async def cleanup(self):

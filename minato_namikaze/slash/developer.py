@@ -3,8 +3,8 @@ from typing import List
 import aiohttp
 import discord
 from DiscordUtils import StarboardEmbed
-from lib import Webhooks
-
+from lib import Webhooks, Database
+import typing
 
 class FeedbackModal(discord.ui.Modal):
     children: List[discord.ui.InputText]
@@ -42,15 +42,38 @@ class Feedback(discord.SlashCommand):
         await response.send_modal(FeedbackModal())
 
 
-class Dev(discord.SlashCommand):
+class Blacklist(discord.SlashCommand):
     '''Some developer releated secret commands'''
     def __init__(self, cog):
         self.cog = cog
+    
+    async def command_check(self, response: discord.SlashCommandResponse):
+        if await self.client.is_owner(response.user):
+            return True
+        else:
+            await response.send_message("Sorry! but only developer can use this", ephemeral=True)
+            return False
+
+class Add(discord.SlashCommand, parent=Blacklist, group=True):
+    '''Adds user or guild to the blacklist'''
+
+class User(discord.SlashCommand, parent=Add):
+    '''Adds user to the blacklist'''
+    user: typing.Union[discord.Member, discord.User, discord.abc.Snowflake] = discord.application_command_option(description="The user to add to the blacklist", default=None)
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        pass
 
 class DeveloperCog(discord.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.add_application_command(Feedback(self))
+    
+    async def database_class_user(self):
+        return await self.bot.db.new(Database.database_category_name.value,Database.database_channel_name.value)
+
+    async def database_class_user(self):
+        return await self.bot.db.new(Database.database_category_name.value,Database.antiraid_channel_name.value)
 
 def setup(bot):
     bot.add_cog(DeveloperCog(bot))

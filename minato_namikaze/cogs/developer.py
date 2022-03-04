@@ -25,7 +25,7 @@ class Developer(commands.Cog):
         self.bot = bot
         self.minato_gif = []
         self.key = Tokens.statcord.value
-        self.api = statcord.StatcordClient(self.bot, self.key)
+        self.statcord_client = statcord.StatcordClient(self.bot, self.key)
         self.api = discordlists.Client(self.bot)
         self.description = "These set of commands are only locked to the developer"
         self.update_blacklist_task.start()
@@ -42,7 +42,7 @@ class Developer(commands.Cog):
         await self.bot.update_blacklist()
 
     def owners(ctx):
-        return ctx.author.id == ctx.bot.owner_id
+        return ctx.bot.is_owner(ctx.author.id)
 
     @staticmethod
     async def _send_guilds(ctx, guilds, title):

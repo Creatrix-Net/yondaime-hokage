@@ -100,15 +100,15 @@ class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
         if self.label.lower() in ['kick', 'punch']:
             await self.reduce_health(amount=random.randint(1,5))
         elif self.label.lower() == 'Ninjutsu Attack'.lower():
-            await self.reduce_health(amount=view.character1.hitpoint - view.character2.regainpoint if view.turn == view.player1 else view.character2.hitpoint - view.character1.regainpoint)
+            await self.reduce_health(amount=abs(view.character1.hitpoint - view.character2.regainpoint) if view.turn == view.player1 else abs(view.character2.hitpoint - view.character1.regainpoint))
         elif self.label.lower() == 'Special Power Attack'.lower():
             await self.reduce_health(amount=(view.character1.specialpoint/100)*view.overall_health if view.turn == view.player1 else (view.character2.specialpoint/100)*view.overall_health)
             if view.turn == view.player1:
                 view.special_moves1 -=1
-                view.health1 -= (view.character1.specialpoint/100)* view.health1
+                view.health1 -= (view.character1.specialpoint/1000)* view.health1
             else:
                 view.special_moves2 -=1
-                view.health2 -= (view.character2.specialpoint/100)* view.health2
+                view.health2 -= (view.character2.specialpoint/1000)* view.health2
             if view.special_moves1 < 0:
                 view.special_moves1 = 0
             
@@ -118,49 +118,58 @@ class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
             health = view.health1 if view.turn == view.player1 else view.health2
             if health < view.overall_health:
                 character = view.character1 if view.turn == view.player1 else view.character2
-                await self.reduce_health(amount=character.specialpoint)
+                await self.reduce_health(amount=character.specialpoint, heal=True)
         
         if view.turn == view.player1:
             view.previous_move1 = self.label
         else:
             view.previous_move2 = self.label
         
+        for i in view.children:
+            i.disabled = True
+        
         winner = await view.determine_winer()
         if winner is not None:
-            for i in view.children:
-                i.disabled = True
-            return await interaction.response.edit_message(content=None, embeds=winner, view=view)
-
-        await interaction.response.edit_message(content=f'{view.turn.mention} your stats', embed=view.make_embed())
+            await interaction.response.defer()
+            await interaction.message.edit(content=None, embeds=winner, view=view)
+            return view.stop()
+        
         await interaction.response.defer()
+        await interaction.message.edit(content=f'{view.turn.mention} your stats', embed=view.make_embed(), view=view)
         await asyncio.sleep(2)
         view.turn = view.player2 if view.turn == view.player1 else view.player1
         for i in view.children:
             if view.turn == view.player1:
-                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves1:
+                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves1 == 0:
                     i.disabled = True
-                elif i.label.lower() == view.previous_move1:
+                elif i.label.lower() == str(view.previous_move1).lower():
                     i.disabled = True
                 else:
-                    i.disabled = True
+                    i.disabled = False
             else:
-                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves2:
+                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves2 == 0:
                     i.disabled = True
-                elif i.label.lower() == view.previous_move2:
+                elif i.label.lower() == str(view.previous_move2).lower():
                     i.disabled = True
                 else:
-                    i.disabled = True
+                    i.disabled = False
         
-        await interaction.response.edit_message(content=f'{view.turn.mention} now your turn', embed=view.make_embed())
+        await interaction.message.edit(content=f'{view.turn.mention} now your turn', embed=view.make_embed(), view=view)
 
-    async def reduce_health(self, amount: int) -> None:
+    async def reduce_health(self, amount: int, heal: bool = False) -> None:
         if self.view is None:
             raise AssertionError
         view=self.view
-        if view.turn == view.player1:
-            view.health1 -= amount
+        if not heal:
+            if view.turn == view.player1:
+                view.health2 -= amount
+            else:
+                view.health1 -= amount
         else:
-            view.health2 -= amount
+            if view.turn == view.player1:
+                view.health1 += abs(amount)
+            else:
+                view.health2 += abs(amount)
         
         if view.health2 < 0:
             view.health2 = 0
@@ -181,7 +190,7 @@ class MatchHandlerView(discord.ui.View):
 
         self.turn: discord.Member = self.player1
 
-        self.overall_health: int = 200
+        self.overall_health: int = 100
         self.health1: int = int(self.overall_health)
         self.health2: int = int(self.overall_health)
 
@@ -197,7 +206,7 @@ class MatchHandlerView(discord.ui.View):
             self.add_item(MatchHandlerViewButton(label=i))
     
     def percentage_and_progess_bar(self, current_health: int) -> str:
-        bardata = progressBar.filledBar(self.overall_health, current_health)
+        bardata = progressBar.filledBar(self.overall_health, int(current_health))
         return f'`{bardata[1]}`\n{bardata[0]}'
     
     def make_embed(
@@ -234,24 +243,28 @@ class MatchHandlerView(discord.ui.View):
         for i in self.children:
             i.disabled = True
         await self.message.edit(content = None, embeds=await self.determine_winer(force=True), view=self)
+        return self.stop()
     
     async def determine_winer(self, force: bool = False) -> Optional[List[discord.Embed]]:
         if not force:
             if not self.health1 <= 0 and not self.health2 <= 0:
                 return
         
+        winner = self.player1 if self.health1 > 0 else self.player2
+        winner_character = self.character1 if self.health1 > 0 else self.character2
+        looser = self.player1 if self.health1 <= 0 else self.player2
+        looser_character = self.character1 if self.health1 <= 0 else self.character2
+        
         if self.health1 == self.health2:
             embed = StarboardEmbed(title="No one won the match!")
-            embed.description = f'In a fight of `{winner_character.name.title()} vs {looser_character.name.title()}` [{winner.author.mention} `vs` {looser.author.mention}]\n No one won the match'
+            embed.description = f'In a fight of `{winner_character.name.title()} vs {looser_character.name.title()}` [{winner.mention} `vs` {looser.mention}]\n No one won the match'
             embed.timestamp = discord.utils.utcnow()
             return [embed]
-
-        winner = self.player1 if self.health1 > 0 else self.player2
-        winner_character = self.player1 if self.health1 > 0 else self.player2
-        looser = self.player1 if self.health1 < 0 else self.player2
-        looser_character = self.player1 if self.health1 < 0 else self.player2
+        
         embed = StarboardEmbed(title=f'{winner_character.name.title()} won the match')
-        embed.description = f'In a fight of `{winner_character.name.title()} vs {looser_character.name.title()}` [{winner.author.mention} `vs` {looser.author.mention}]\n `{winner_character.name.title()}` [{winner.author.mention}] won the match.\n Congratulations! :tada:'
+        if force:
+            embed.title = f'{winner_character.name.title()} won the match, due the timeout'
+        embed.description = f'In a fight of `{winner_character.name.title()} vs {looser_character.name.title()}` [{winner.mention} `vs` {looser.mention}]\n `{winner_character.name.title()}` [{winner.mention}] won the match.\n Congratulations! :tada:'
         embed.timestamp = discord.utils.utcnow()
         return [
             embed,

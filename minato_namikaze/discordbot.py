@@ -405,7 +405,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         if not os.path.isdir(api_image_store_dir):
             shutil.rmtree(api_image_store_dir)
         await super().close()
-        await self.session.close()
 
     @staticmethod
     async def get_bot_inviter(guild: discord.Guild):

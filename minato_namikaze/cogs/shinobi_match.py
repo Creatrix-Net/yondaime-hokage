@@ -48,24 +48,25 @@ class ShinobiMatchCog(commands.Cog, name='Shinobi Match'):
         select_msg1: discord.Message = await ctx.send(embed=self.return_select_help_embed(ctx.author), view=view1) 
 
         view2=ShinobiMatchCharacterSelection(characters_data=await self.return_random_characters(ctx), player=opponent, ctx=ctx)
-        select_msg2: discord.Message = await ctx.send(embed=self.return_select_help_embed(ctx.author), view=view1) 
+        select_msg2: discord.Message = await ctx.send(embed=self.return_select_help_embed(opponent), view=view2) 
         
         await view1.wait()
         await view2.wait()
 
         if view1.character is None or view2.character is None: 
-            return ctx.send(embed=ErrorEmbed(title="One of the shinobi didn't choose his character on time."))
+            return await ctx.send(embed=ErrorEmbed(title="One of the shinobi didn't choose his character on time."))
         
         await select_msg1.delete()
-        await select_msg2.delete(),
+        await select_msg2.delete()
 
         timer = await ctx.send('Starting the match in `3 seconds`')
         for i in range(1,3):
             await timer.edit(f'Starting the match in `{3-i} seconds`')
-            asyncio.sleep(1)
+            await asyncio.sleep(1)
+        await timer.delete()
         
         view = MatchHandlerView(player1 = (ctx.author, view1.character), player2 = (opponent, view2.character))
-        view.message = await ctx.send(content=f'{ctx.author.mention} now your turn',embed=view.make_embed())
+        view.message = await ctx.send(content=f'{ctx.author.mention} now your turn',embed=view.make_embed(), view=view)
 
 
 def setup(bot):

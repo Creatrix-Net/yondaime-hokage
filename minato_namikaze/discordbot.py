@@ -596,6 +596,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             await channel.send(embed=embed)
             await guild.leave()
             log.info(f'Left guild {guild.id} [Marked as spam]')
+    
+    async def on_application_command_error(self, response, exception):
+        log.error(f'Error; Command: {response.command}, {str(exception)}')
 
 if __name__ == "__main__":
     try:

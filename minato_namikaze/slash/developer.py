@@ -1,11 +1,12 @@
 from typing import List
 
-import aiohttp
+import aiohttp, os, json
 import discord
 from DiscordUtils import StarboardEmbed, ErrorEmbed, SuccessEmbed
-from lib import Webhooks, Database, LinksAndVars
+from lib import Webhooks, Database, LinksAndVars, BASE_DIR
 import typing
 import logging
+from orjson import dumps
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -54,7 +55,7 @@ class Feedback(discord.SlashCommand):
 
 
 class Blacklist(discord.SlashCommand):
-    '''Some developer releated secret commands'''
+    '''Some blacklist releated secret commands'''
     def __init__(self, cog):
         self.cog = cog
     
@@ -146,12 +147,67 @@ class Delete(discord.SlashCommand, parent=Blacklist):
         except ValueError:
             pass
 
+class Commands(discord.SlashCommand):
+    '''Some bot commands releated secret commands'''
+    def __init__(self, cog):
+        self.cog = cog
+    
+    async def command_check(self, response: discord.SlashCommandResponse):
+        if await self.cog.bot.is_owner(response.user):
+            return True
+        else:
+            await response.send_message("Sorry! but only developer can use this", ephemeral=True)
+            return False
+    
+    async def callback(self, response: discord.SlashCommandResponse) -> None:
+        await response.send_message("Will be soon updated", ephemeral=True)
+        json_to_be_given = {}
+        for command in self.cog.bot.walk_commands():
+            cog_commands_list = []
+            if not command.hidden:
+                command_dict = {
+                    "name": command.name,
+                    "short_doc": command.short_doc,
+                }
+                if command.usage:
+                    command_dict.update({"usage": command.usage})
+                if command.aliases:
+                    command_dict.update({"aliases": command.aliases})
+                if command.description:
+                    command_dict.update({"description": command.description})
+                if command.clean_params or len(command.params) != 0:
+                    command_dict.update({"params": list(command.clean_params)})
+                if command.full_parent_name is not None:
+                    command_dict.update({"parent": list(command.full_parent_name)})
+                cog_commands_list.append(command_dict)
+            if len(cog_commands_list) != 0:
+                json_to_be_given.update({
+                    str(command.cog_name): {
+                        "cog_commands_list": cog_commands_list,
+                        "description": command.cog.description if command.cog is not None else None,
+                    }
+                })
+        application_commands = []
+        for i in self.cog.bot.application_commands:
+            app_command_dict = {
+                'name': i.name,
+                'description': i.description
+            }
+            options = []
+            for j in i.options:
+                options.append({'name': j.name, 'description': j.description, 'required': j.required, 'type': j.type.name})
+            app_command_dict.update({'options': options})
+            application_commands.append(app_command_dict)
+        with open(BASE_DIR / os.path.join("lib", "data", "commands.json"),"w") as f:
+            json.dump({'commands': json_to_be_given, 'application_commands': application_commands} , f)
+
 
 class DeveloperCog(discord.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.add_application_command(Feedback(self))
         self.add_application_command(Blacklist(self))
+        self.add_application_command(Commands(self))
     
     async def database_class_user(self):
         return await self.bot.db.new(Database.database_category_name.value,Database.user_blacklist_channel_name.value)

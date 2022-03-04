@@ -20,7 +20,7 @@ import discordlists
 log = logging.getLogger(__name__)
 
 
-class Developer(commands.Cog):
+class Developer(commands.Cog,command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
         self.minato_gif = []
@@ -74,7 +74,7 @@ class Developer(commands.Cog):
         paginator = EmbedPaginator(entries=all_pages, ctx=ctx)
         await paginator.start()
 
-    @commands.group(invoke_without_command=True, hidden=True)
+    @commands.group(invoke_without_command=True)
     @commands.guild_only()
     @commands.check(owners)
     async def dev(self, ctx, command=None):
@@ -281,47 +281,6 @@ class Developer(commands.Cog):
                 f'Command "{alt_ctx.invoked_with}" is not found')
 
         return await alt_ctx.command.invoke(alt_ctx)
-
-    @dev.command()
-    async def get_commands_in_json(self, ctx):
-        """
-        Give you all commands details in a json format
-        """
-        json_to_be_given = {}
-        for name in self.bot.cogs:
-            cog_commands_list = []
-            for command in self.bot.cogs[name].get_commands():
-                if not command.hidden:
-                    command_dict = {
-                        "name": command.name,
-                        "short_doc": command.short_doc,
-                    }
-                    if command.usage:
-                        command_dict.update({"usage": command.usage})
-                    if command.aliases:
-                        command_dict.update({"aliases": command.aliases})
-                    if command.description:
-                        command_dict.update(
-                            {"description": command.description})
-                    if command.clean_params or len(command.params) != 0:
-                        command_dict.update(
-                            {"params": list(command.clean_params)})
-                    cog_commands_list.append(command_dict)
-            if len(cog_commands_list) != 0:
-                json_to_be_given.update({
-                    name: {
-                        "cog_commands_list": cog_commands_list,
-                        "description": self.bot.cogs[name].description,
-                    }
-                })
-        with open(BASE_DIR / os.path.join("lib", "data", "commands.json"),
-                  "w") as f:
-            json.dump(json_to_be_given, f)
-        try:
-            await ctx.message.delete()
-        except (discord.Forbidden, discord.HTTPException):
-            pass
-        await ctx.send(":ok_hand:")
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)

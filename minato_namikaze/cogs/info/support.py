@@ -4,9 +4,8 @@ import discord
 from discord.ext import commands
 from lib import (
     MemberID,
-    database_category_name,
-    database_channel_name,
     is_mod,
+    Database
 )
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
 
@@ -29,8 +28,8 @@ class Support(commands.Cog):
         return discord.PartialEmoji(name="support", id=922030091800829954)
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,
-                                     database_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,
+                                     Database.database_channel_name.value)
 
     @commands.command()
     @commands.cooldown(1, 120, commands.BucketType.user)

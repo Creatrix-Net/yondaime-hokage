@@ -10,7 +10,7 @@ class Vocaloid(commands.Cog):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="miku_hello", id=852809647357820968)
+        return discord.PartialEmoji(name="miku_wave", id=940993740967931914)
 
     @commands.command()
     @commands.cooldown(1, 2, commands.BucketType.user)

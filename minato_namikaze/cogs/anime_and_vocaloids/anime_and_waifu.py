@@ -74,7 +74,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="anime", id=874922782964731934)
+        return discord.PartialEmoji(name="uzumaki", id=940993645593632808)
 
     async def get_waifu(self) -> Tuple[Embed, str]:
         """Returns a random waifu from the api

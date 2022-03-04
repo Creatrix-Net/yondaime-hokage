@@ -15,8 +15,7 @@ from lib import (
     FutureTime,
     MemberID,
     can_execute_action,
-    database_category_name,
-    database_channel_name,
+    Database,
     format_relative,
     has_permissions,
     plural,
@@ -40,8 +39,8 @@ class Moderation(commands.Cog):
                                     id=922030031146995733)
 
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,
-                                     database_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,
+                                     Database.database_channel_name.value)
 
     # set delay
     @commands.command(usage="<time in seconds>")

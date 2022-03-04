@@ -34,13 +34,10 @@ from lib import (
     ReactionPersistentView,
     Tokens,
     api_image_store_dir,
-    database_category_name,
+    Database,
     format_dt,
     format_relative,
-    reaction_roles_channel_name,
     Webhooks,
-    user_blacklist_channel_name,
-    server_blacklist_channel_name
 )
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -225,7 +222,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         )
     
     async def add_persistant_views(self):
-        database = await self.db.new(database_category_name, reaction_roles_channel_name)
+        database = await self.db.new(Database.database_category_name.value, Database.reaction_roles_channel_name.value)
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
@@ -248,7 +245,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         log.info("Persistent views added")
 
     async def update_blacklist(self):
-        database = await self.db.new(database_category_name, user_blacklist_channel_name)
+        database = await self.db.new(Database.database_category_name.value, Database.user_blacklist_channel_name.value)
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
@@ -259,7 +256,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             except Exception as e:
                 log.error(e)
                 continue
-        database = await self.db.new(database_category_name, server_blacklist_channel_name)
+        database = await self.db.new(Database.database_category_name.value, Database.server_blacklist_channel_name.value)
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:

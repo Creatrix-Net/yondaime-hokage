@@ -6,8 +6,8 @@ from json.decoder import JSONDecodeError
 import discord
 from discord.ext import commands, tasks
 from lib import (ReactionPersistentView,
-                 database_category_name, has_permissions,
-                 reaction_roles_channel_name)
+                 Database, has_permissions,
+                 )
 from DiscordUtils import Embed
 
 
@@ -21,11 +21,8 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="idle", id=922030033067995187)
 
-    def owners(ctx):
-        return ctx.author.id == ctx.bot.owner_id
-
     async def database_class(self):
-        return await self.bot.db.new(database_category_name,reaction_roles_channel_name)
+        return await self.bot.db.new(Database.database_category_name.value,Database.reaction_roles_channel_name.value)
     
     @tasks.loop(hours=1)
     async def cleanup(self):

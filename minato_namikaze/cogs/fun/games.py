@@ -81,6 +81,11 @@ class Games(discord.Cog):
         view = Akinator()
         await view.start()
         view.message = await ctx.send(embed=await view.build_embed(), view=view)
+    
+    @commands.command(aliases=['wpm', 'typingspeed'])
+    async def typeracer(self, ctx):
+        '''Check your typing speed via a simple typeracer test'''
+        await TypeRacer().start(ctx=ctx)
 
     @commands.max_concurrency(1, per=BucketType.channel, wait=False)
     @commands.command(aliases=["cb"])

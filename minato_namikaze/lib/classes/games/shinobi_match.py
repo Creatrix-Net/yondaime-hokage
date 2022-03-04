@@ -119,6 +119,17 @@ class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
             if health < view.overall_health:
                 character = view.character1 if view.turn == view.player1 else view.character2
                 await self.reduce_health(amount=character.specialpoint, heal=True)
+            
+                if view.turn == view.player1:
+                    view.heal_moves1 -= 1
+                else:
+                    view.heal_moves2 -= 1
+            
+            if view.heal_moves1 < 0:
+                view.heal_moves1 = 0
+            
+            if view.heal_moves2 < 0:
+                view.heal_moves2 = 0
         
         if view.turn == view.player1:
             view.previous_move1 = self.label
@@ -140,14 +151,18 @@ class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
         view.turn = view.player2 if view.turn == view.player1 else view.player1
         for i in view.children:
             if view.turn == view.player1:
-                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves1 == 0:
+                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves1 <= 0:
+                    i.disabled = True
+                elif i.label.lower() == 'Heal'.lower() and view.heal_moves1 <= 0:
                     i.disabled = True
                 elif i.label.lower() == str(view.previous_move1).lower():
                     i.disabled = True
                 else:
                     i.disabled = False
             else:
-                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves2 == 0:
+                if i.label.lower() == 'Special Power Attack'.lower() and view.special_moves2 <= 0:
+                    i.disabled = True
+                elif i.label.lower() == 'Heal'.lower() and view.heal_moves2 <= 0:
                     i.disabled = True
                 elif i.label.lower() == str(view.previous_move2).lower():
                     i.disabled = True
@@ -176,6 +191,12 @@ class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
         
         if view.health1 < 0:
             view.health1 = 0
+        
+        if view.health2 > view.overall_health:
+            view.health2 = view.overall_health
+        
+        if view.health1 > view.overall_health:
+            view.health1 = view.overall_health
 
 class MatchHandlerView(discord.ui.View):
     children: List[MatchHandlerViewButton]
@@ -197,6 +218,9 @@ class MatchHandlerView(discord.ui.View):
         self.special_moves1: int = 2
         self.special_moves2: int = 2
 
+        self.heal_moves1: int = 2
+        self.heal_moves2: int = 2
+
         self.previous_move1: Optional[str] = None
         self.previous_move2: Optional[str] = None
 
@@ -207,7 +231,7 @@ class MatchHandlerView(discord.ui.View):
     
     def percentage_and_progess_bar(self, current_health: int) -> str:
         bardata = progressBar.filledBar(self.overall_health, int(current_health))
-        return f'`{bardata[1]}`\n{bardata[0]}'
+        return f'`{bardata[1]}%`\n{bardata[0]}'
     
     def make_embed(
         self, 
@@ -216,13 +240,12 @@ class MatchHandlerView(discord.ui.View):
         color: Optional[discord.Color] = None,
     ) -> Embed:
         character = character or (self.character1 if self.turn == self.player1 else self.character2)
-        author = author or self.turn
-
+        author = author or (self.player1 if character == self.character1 else self.player2)
         embed = Embed()
         embed.title = character.name
         embed.set_image(url=random.choice(character.images))
-        embed.set_footer(text=f'{self.special_moves1 if self.turn == self.player1 else self.special_moves2} special moves left')
-        embed.description = self.percentage_and_progess_bar(self.health1 if self.turn == self.player1 else self.health2)
+        embed.set_footer(text=f'{self.special_moves1 if character == self.character1 else self.special_moves2} special moves left | {self.heal_moves1 if character == self.character1 else self.heal_moves2} heal operations left')
+        embed.description = self.percentage_and_progess_bar(self.health1 if character== self.character1 else self.health2)
         embed.set_author(name=author.display_name,icon_url=author.display_avatar.url)
         if color is not None:
             embed.color = color
@@ -250,16 +273,21 @@ class MatchHandlerView(discord.ui.View):
             if not self.health1 <= 0 and not self.health2 <= 0:
                 return
         
-        winner = self.player1 if self.health1 > 0 else self.player2
-        winner_character = self.character1 if self.health1 > 0 else self.character2
-        looser = self.player1 if self.health1 <= 0 else self.player2
-        looser_character = self.character1 if self.health1 <= 0 else self.character2
-        
         if self.health1 == self.health2:
             embed = StarboardEmbed(title="No one won the match!")
-            embed.description = f'In a fight of `{winner_character.name.title()} vs {looser_character.name.title()}` [{winner.mention} `vs` {looser.mention}]\n No one won the match'
+            embed.description = f'In a fight of `{self.character1.name.title()} vs {self.character2.name.title()}` [{self.player1.mention} `vs` {self.player2.mention}]\n No one won the match'
             embed.timestamp = discord.utils.utcnow()
             return [embed]
+        
+        if not force:
+            winner = self.player1 if self.health1 > 0 else self.player2
+            looser = self.player1 if self.health1 <= 0 else self.player2
+        else:
+            winner = self.player1 if self.health1 > self.health2 else self.player2
+            looser = self.player1 if self.health1 < self.health2 else self.player2
+
+        winner_character = self.character1 if winner == self.player1 else self.character2
+        looser_character = self.character1 if looser == self.player1 else self.character2
         
         embed = StarboardEmbed(title=f'{winner_character.name.title()} won the match')
         if force:
@@ -268,6 +296,6 @@ class MatchHandlerView(discord.ui.View):
         embed.timestamp = discord.utils.utcnow()
         return [
             embed,
-            self.make_embed(character=winner_character,author=winner,color=discord.Color.green()),
+            self.make_embed(character=winner_character, author=winner,color=discord.Color.green()),
             self.make_embed(character=looser_character,author=looser,color=discord.Color.red())
         ]

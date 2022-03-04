@@ -106,11 +106,15 @@ class MySupport(commands.Cog, name="My Support"):
         )
         embed.add_field(
             name="**More Info:**",
-            value=f"[Click Here](https://statcord.com/bot/{self.bot.owner_id})",
+            value=f"[Click Here](https://statcord.com/bot/{self.bot.application_id})",
         )
         embed.add_field(
             name="**Incidents/Maintenance Reports:**",
             value=f"[Click Here]({LinksAndVars.statuspage_link.value})",
+        )
+        embed.add_field(
+            name="**Website**",
+            value=f"[Click Here]({LinksAndVars.website.value})",
         )
         embed.set_footer(
             text=f"Made with Stocker's discord.py v{version}",

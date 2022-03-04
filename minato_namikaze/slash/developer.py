@@ -178,7 +178,7 @@ class Commands(discord.SlashCommand):
                 if command.clean_params or len(command.params) != 0:
                     command_dict.update({"params": list(command.clean_params)})
                 if command.full_parent_name is not None:
-                    command_dict.update({"parent": list(command.full_parent_name)})
+                    command_dict.update({"parent": command.full_parent_name})
                 cog_commands_list.append(command_dict)
             if len(cog_commands_list) != 0:
                 json_to_be_given.update({

@@ -352,7 +352,7 @@ class TypeRacer:
                               color=embed_color,
                               timestamp=dt.utcnow())
         embed.set_image(url="attachment://tr.png")
-        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+        embed.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
 
         await ctx.send(embed=embed, file=discord.File(buffer, "tr.png"))
 

@@ -37,7 +37,7 @@ class UserInfo(discord.UserCommand, name="Info"):
         self.cog = cog
     
     async def callback(self, response: discord.UserCommandResponse):
-        await response.send_message(embed=await userinfo(response.target, response.target.guild, self.parent.cog.bot))
+        await response.send_message(embed=await userinfo(response.target, response.target.guild, self.cog.bot))
 
 
 class UserInfoSlash(discord.SlashCommand, name="user"):

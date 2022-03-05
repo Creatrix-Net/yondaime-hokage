@@ -166,21 +166,22 @@ class Commands(discord.SlashCommand):
             cog = self.cog.bot.cogs[cog_name]
             cog_commands_list = []
             for command in cog.walk_commands():
-                command_dict = {
-                    "name": command.name,
-                    "short_doc": command.short_doc,
-                }
-                if command.usage:
-                    command_dict.update({"usage": command.usage})
-                if command.aliases:
-                    command_dict.update({"aliases": command.aliases})
-                if command.description:
-                    command_dict.update({"description": command.description})
-                if command.clean_params or len(command.params) != 0:
-                    command_dict.update({"params": list(command.clean_params)})
-                if command.full_parent_name is not None:
-                    command_dict.update({"parent": command.full_parent_name})
-                cog_commands_list.append(command_dict)
+                if not command.hidden:
+                    command_dict = {
+                        "name": command.name,
+                        "short_doc": command.short_doc,
+                    }
+                    if command.usage:
+                        command_dict.update({"usage": command.usage})
+                    if command.aliases:
+                        command_dict.update({"aliases": command.aliases})
+                    if command.description:
+                        command_dict.update({"description": command.description})
+                    if command.clean_params or len(command.params) != 0:
+                        command_dict.update({"params": list(command.clean_params)})
+                    if command.full_parent_name is not None:
+                        command_dict.update({"parent": command.full_parent_name})
+                    cog_commands_list.append(command_dict)
             if len(cog_commands_list) != 0:
                 json_to_be_given.update({
                     str(cog_name): {

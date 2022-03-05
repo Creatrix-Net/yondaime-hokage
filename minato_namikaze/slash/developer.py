@@ -162,9 +162,10 @@ class Commands(discord.SlashCommand):
     async def callback(self, response: discord.SlashCommandResponse) -> None:
         await response.send_message("Will be soon updated", ephemeral=True)
         json_to_be_given = {}
-        for command in self.cog.bot.walk_commands():
+        for cog_name in self.cog.bot.cogs:
+            cog = self.cog.bot.cogs[cog_name]
             cog_commands_list = []
-            if not command.hidden:
+            for command in cog.walk_commands():
                 command_dict = {
                     "name": command.name,
                     "short_doc": command.short_doc,
@@ -182,9 +183,9 @@ class Commands(discord.SlashCommand):
                 cog_commands_list.append(command_dict)
             if len(cog_commands_list) != 0:
                 json_to_be_given.update({
-                    str(command.cog_name): {
+                    str(cog_name): {
                         "cog_commands_list": cog_commands_list,
-                        "description": command.cog.description if command.cog is not None else None,
+                        "description": cog.description,
                     }
                 })
         application_commands = []

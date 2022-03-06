@@ -18,7 +18,13 @@ from DiscordUtils import *
 import discordlists
 
 log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(message)s")
+ch.setFormatter(formatter)
+log.addHandler(ch)
 
 class Developer(commands.Cog,command_attrs=dict(hidden=True)):
     def __init__(self, bot):
@@ -470,12 +476,20 @@ class Developer(commands.Cog,command_attrs=dict(hidden=True)):
                 activity=discord.Activity(type=discord.ActivityType.watching, name="over Naruto"),
             )
             result = await self.api.post_count()
+            log.info(result)
         except Exception as e:
-            log.error(e)
+            log.warning(e)
         await self.bot.change_presence(
                 status=discord.Status.idle,
                 activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
             )
+    
+    async def post_commands(self, ctx):
+        await self.post()
+        try:
+            await ctx.delete()
+        except (discord.Forbidden, discord.HTTPException):
+            pass
 
 
 def setup(bot):

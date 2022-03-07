@@ -28,7 +28,8 @@ class BackUp(commands.Cog):
             try:
                 await commands.GuildConverter().convert(await self.bot.get_context(message), message.content.strip())
             except (commands.CommandError, commands.BadArgument):
-                await message.delete()
+                if not self.bot.local:
+                    await message.delete()
                 continue
     
     @commands.group(invoke_without_command=True)

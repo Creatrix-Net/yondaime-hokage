@@ -56,9 +56,11 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 try:
                     await commands.GuildConverter().convert(await self.bot.get_context(message), str(data_keys[0]))
                 except (commands.CommandError, commands.BadArgument):
-                    await message.delete()
+                    if not self.bot.local:
+                        await message.delete()
             except JSONDecodeError:
-                await message.delete()
+                if not self.bot.local:
+                    await message.delete()
     
     @commands.group()
     @commands.guild_only()
@@ -422,8 +424,13 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             data.get('self_star')
             and int(payload.user_id) == msg.author.id
         ):
+            pass
+        elif (
+            not data.get('self_star')
+            and int(payload.user_id) == msg.author.id
+        ):
             return
-        no_of_reaction = discord.utils.find(lambda a: str(a.emoji) == discord.PartialEmoji(name="\U00002b50"),msg.reactions)
+        no_of_reaction = discord.utils.find(lambda a: str(a.emoji) == str(discord.PartialEmoji(name="\U00002b50")),msg.reactions)
         if no_of_reaction.count < int(data.get('no_of_stars')):
             return
 

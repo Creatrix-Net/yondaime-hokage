@@ -62,9 +62,11 @@ class AntiRaid(commands.Cog):
                 try:
                     await commands.GuildConverter().convert(await self.bot.get_context(message), str(data_keys[0]))
                 except (commands.CommandError, commands.BadArgument):
-                    await message.delete()
+                    if not self.bot.local:
+                        await message.delete()
             except JSONDecodeError:
-                await message.delete()
+                if not self.bot.local:
+                    await message.delete()
         
         database = await self.database_class_mentionspam()
         async for message in database._Database__channel.history(limit=None):

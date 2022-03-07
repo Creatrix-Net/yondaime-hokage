@@ -1,7 +1,7 @@
 import contextlib
 import inspect
 import io
-import json, orjson, aiohttp
+import orjson, aiohttp
 import logging
 import os
 import subprocess as sp

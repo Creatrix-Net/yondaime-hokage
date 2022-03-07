@@ -6,7 +6,6 @@ from DiscordUtils import StarboardEmbed, ErrorEmbed, SuccessEmbed
 from lib import Webhooks, Database, LinksAndVars, BASE_DIR
 import typing
 import logging
-from orjson import dumps
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)

@@ -35,4 +35,4 @@ class Badges:
         :return: Badge Code
         :rtype: str
         """        
-        return "".join([i[0] for i in badge_name.split(" ")])
+        return "".join([i for i in badge_name.split(" ")])

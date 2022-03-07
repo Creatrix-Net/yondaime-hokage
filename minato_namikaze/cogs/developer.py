@@ -461,7 +461,7 @@ class Developer(commands.Cog,command_attrs=dict(hidden=True)):
             pass
         await self.post()
     
-    async def post(self):
+    async def post(self, print_logs=False):
         """
         Manually posts guild count using discordlists.py (BotBlock)
         """
@@ -476,7 +476,8 @@ class Developer(commands.Cog,command_attrs=dict(hidden=True)):
                 activity=discord.Activity(type=discord.ActivityType.watching, name="over Naruto"),
             )
             result = await self.api.post_count()
-            log.info(result)
+            if print_logs:
+                log.info(result)
         except Exception as e:
             log.warning(e)
         await self.bot.change_presence(
@@ -484,9 +485,10 @@ class Developer(commands.Cog,command_attrs=dict(hidden=True)):
                 activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
             )
     
-    @dev.command()
-    async def post_commands(self, ctx):
-        await self.post()
+    @dev.command(usage="[print_logs]")
+    async def post_statss(self, ctx, print_logs: bool=False):
+        '''Posts stats to different botlist'''
+        await self.post(print_logs=print_logs)
         try:
             await ctx.delete()
         except (discord.Forbidden, discord.HTTPException):

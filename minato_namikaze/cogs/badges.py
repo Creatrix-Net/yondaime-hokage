@@ -8,26 +8,23 @@ from typing import Union
 import aiohttp
 import discord
 from discord.ext import commands
-from lib import BASE_DIR, Badge, Badges, ImageWriter, SimplePages, generate
+from lib import BASE_DIR, Badge, Badges, ImageWriter, generate
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
+from DiscordUtils import EmbedPaginator, StarboardEmbed
 
 
 class BadgesPageEntry:
-    __slots__ = ("code", "name")
+    __slots__ = ("code", "name", "file", "embed")
 
     def __init__(self, entry):
         self.code = entry["code"]
         self.name = entry["badge_name"]
+        self.file: discord.Attachment = entry["file_name"]
+        self.embed = StarboardEmbed(title=self.name, description=f'BADGE CODE: `{self.code}`')
+        self.embed.set_image(url=entry["file_name"].url)
 
     def __str__(self):
         return f"{self.name} (CODE: {self.code})"
-
-
-class BadgePages(SimplePages):
-
-    def __init__(self, entries, *, ctx: commands.Context, per_page: int = 5):
-        converted = [BadgesPageEntry(entry) for entry in entries]
-        super().__init__(converted, per_page=per_page, ctx=ctx)
 
 
 class BadgesCog(commands.Cog, name="Badges"):
@@ -305,7 +302,7 @@ class BadgesCog(commands.Cog, name="Badges"):
         List the available badges that can be created
         """
         global_badges = await Badges(ctx).get_all_badges()
-        embed_paginator = BadgePages(ctx=ctx, entries=global_badges)
+        embed_paginator = EmbedPaginator(entries=[BadgesPageEntry(i).embed for i in global_badges], ctx=ctx)
         await embed_paginator.start()
 
 

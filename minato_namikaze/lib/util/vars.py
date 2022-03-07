@@ -98,7 +98,7 @@ class LinksAndVars(enum.Enum):
     statuspage_link = "https://minatonamikaze.statuspage.io"
 
     version = token_get("VERSION")
-    invite_code = "wXVQahNM5c"
+    invite_code = "vfXHwS3nmQ"
     timeout = 3.0
     owner_ids = [887549958931247137, 837223478934896670, 747729781369602049]
 

@@ -484,6 +484,7 @@ class Developer(commands.Cog,command_attrs=dict(hidden=True)):
                 activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
             )
     
+    @dev.command()
     async def post_commands(self, ctx):
         await self.post()
         try:

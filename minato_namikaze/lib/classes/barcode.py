@@ -733,7 +733,7 @@ def get_barcode(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,A
     return barcode
 
 
-def generate(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,Any]]=None, writer_options: Optional[Dict]=None):
+def generate(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,Any]]=None, writer_options: Optional[Dict]=None, output=None):
     """Generates the barcode
 
     :param name: Name of the barcode
@@ -747,4 +747,4 @@ def generate(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,Any]
     """    
     options = writer_options or {}
     barcode = get_barcode(name, code, writer)
-    barcode.write(options)
+    barcode.write(output,options)

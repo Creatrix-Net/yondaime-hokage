@@ -261,9 +261,12 @@ class AntiRaid(commands.Cog):
         e.add_field(name="Created",
                     value=format_relative(member.created_at),
                     inline=False)
-        e.add_field(name="Inviter", value=str((await self.tracker.fetch_inviter(member)).inviter))
-        e.add_field(name="Invite Code", value=str((await self.tracker.fetch_inviter(member)).code))
-        e.add_field(name="Invite Code Uses", value=str((await self.tracker.fetch_inviter(member)).uses))
+        try:
+            e.add_field(name="Inviter", value=str((await self.tracker.fetch_inviter(member)).inviter))
+            e.add_field(name="Invite Code", value=str((await self.tracker.fetch_inviter(member)).code))
+            e.add_field(name="Invite Code Uses", value=str((await self.tracker.fetch_inviter(member)).uses))
+        except AttributeError:
+            pass
 
         if config.broadcast_channel:
             try:

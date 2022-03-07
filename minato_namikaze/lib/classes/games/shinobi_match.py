@@ -270,7 +270,7 @@ class MatchHandlerView(discord.ui.View):
     
     async def determine_winer(self, force: bool = False) -> Optional[List[discord.Embed]]:
         if not force:
-            if not self.health1 <= 0 and not self.health2 <= 0:
+            if self.health1 > 0 and self.health2 > 0:
                 return
         
         if self.health1 == self.health2:

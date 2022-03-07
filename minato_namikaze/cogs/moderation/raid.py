@@ -176,21 +176,6 @@ class AntiRaid(commands.Cog):
         if author.bot:
             return
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        author = message.author
-        if author.id in (self.bot.user.id, self.bot.owner_id):
-            return
-
-        if message.guild is None:
-            return
-
-        if not isinstance(author, discord.Member):
-            return
-
-        if author.bot:
-            return
-
         # we're going to ignore members with manage messages
         if author.guild_permissions.manage_messages:
             return
@@ -268,7 +253,7 @@ class AntiRaid(commands.Cog):
                 colour = discord.Color.yellow()  # yellow
                 title = "Member Joined (Very New Member)"
 
-        e = discord.Embed(title=title, col9our=colour)
+        e = discord.Embed(title=title, colour=colour)
         e.timestamp = now
         e.set_author(name=str(member), icon_url=member.display_avatar.url)
         e.add_field(name="ID", value=member.id)

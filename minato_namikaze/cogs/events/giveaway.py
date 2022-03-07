@@ -198,7 +198,7 @@ class Giveaway(Cog):
         if reactions is None:
             return "The channel or ID mentioned was incorrect"
         try:
-            giveaway_config = await self.get_giveaway_config(giveaway_id)
+            giveaway_config = await self.get_giveaway_config(giveaway_id.id)
         except AttributeError as e:
             return str(e)
         
@@ -271,7 +271,7 @@ class Giveaway(Cog):
         ):
             return
         try:
-            await self.get_giveaway_config(giveaway_id)
+            await self.get_giveaway_config(giveaway_id.id)
         except AttributeError as e:
             return await ctx.send(ErrorEmbed(title=str(e)))
         database = await self.database_class()
@@ -292,9 +292,9 @@ class Giveaway(Cog):
         if payload.user_id == self.bot.application_id:
             return
 
-        msg = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
+        msg = await (await self.bot.fetch_channel(payload.channel_id)).fetch_message(payload.message_id)
         try:
-            giveaway_config = await self.get_giveaway_config(msg)
+            giveaway_config = await self.get_giveaway_config(payload.message_id)
         except AttributeError:
             return
         
@@ -302,8 +302,11 @@ class Giveaway(Cog):
             return
         role_present = discord.utils.get(payload.member.roles, id=int(giveaway_config.role_required.lstrip('<@&').lstrip('<&').rstrip('>')))
         if role_present is None:
-            await msg.remove_reaction(discord.PartialEmoji(name="\U0001f389"), payload.member)
-            await payload.member.send('\U000026a0 Sorry you don\'t have the required roles in order to enter the giveaway :(')
+            try:
+                await msg.remove_reaction(discord.PartialEmoji(name="\U0001f389"), payload.member)
+                await payload.member.send('\U000026a0 Sorry you don\'t have the required roles in order to enter the giveaway :(')
+            except (discord.HTTPException, discord.Forbidden, discord.InvalidArgument, discord.NotFound):
+                pass
 
 def setup(bot):
     bot.add_cog(Giveaway(bot))

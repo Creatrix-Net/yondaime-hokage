@@ -436,7 +436,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             return guild.system_channel
         text_channels_list = guild.text_channels
         for i in text_channels_list:
-            if i.permissions_for(self.user).send_messages:
+            if i.permissions_for(guild.me).send_messages:
                 return i
         return inviter_or_guild_owner
 

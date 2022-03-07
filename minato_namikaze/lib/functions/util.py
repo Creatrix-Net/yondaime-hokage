@@ -65,26 +65,29 @@ async def return_matching_emoji(bot, name) -> discord.Emoji:
 
 
 async def detect_bad_domains(message_content: str) -> list:
-    url1 = [x[0] for x in re.findall(url_regex,message_content)]
-    regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-    url2 = [x[0] for x in re.findall(regex,message_content)] 
-    url = url1 + url2
-    for i in message_content.split():
-        url.append(i.lower())
-    if len(url) == 0:
+    try:
+        url1 = [x[0] for x in re.findall(url_regex,message_content)]
+        regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+        url2 = [x[0] for x in re.findall(regex,message_content)] 
+        url = url1 + url2
+        for i in message_content.split():
+            url.append(i.lower())
+        if len(url) == 0:
+            return []
+            
+        async with aiohttp.ClientSession() as session:
+            async with session.get(LinksAndVars.bad_links.value) as resp:
+                list_of_bad_domains = (await resp.text()).split('\n')
+            
+        detected_urls = []
+        for i in url:
+            if len(i.split('//')) != 0:
+                try:
+                    parsed_url = urlparse(i.lower().strip('/') if i.split('://')[0].lower() in uses_netloc else f'//{i.strip("/")}')
+                    if parsed_url.hostname in list_of_bad_domains:
+                        detected_urls.append(parsed_url.hostname)
+                except:
+                    pass
+    except IndexError:
         return []
-        
-    async with aiohttp.ClientSession() as session:
-        async with session.get(LinksAndVars.bad_links.value) as resp:
-            list_of_bad_domains = (await resp.text()).split('\n')
-        
-    detected_urls = []
-    for i in url:
-        if len(i.split('//')) != 0:
-            try:
-                parsed_url = urlparse(i.lower().strip('/') if i.split('://')[0].lower() in uses_netloc else f'//{i.strip("/")}')
-                if parsed_url.hostname in list_of_bad_domains:
-                    detected_urls.append(parsed_url.hostname)
-            except:
-                pass
     return detected_urls

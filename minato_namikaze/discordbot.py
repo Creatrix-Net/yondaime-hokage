@@ -425,8 +425,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         except (discord.Forbidden, discord.HTTPException):
             return guild.owner
 
+    @staticmethod
     async def get_welcome_channel(
-        self,
         guild: discord.Guild,
         inviter_or_guild_owner: Optional[Union[discord.User, discord.Member]] = None,
     ):
@@ -521,7 +521,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             return
         await self.process_commands(message)
     
-    async def log_spammer(self, ctx, message, retry_after, *, autoblock=False):
+    @staticmethod
+    async def log_spammer(ctx, message, retry_after, *, autoblock=False):
         guild_name = getattr(ctx.guild, 'name', 'No Guild (DMs)')
         guild_id = getattr(ctx.guild, 'id', None)
         fmt = 'User %s (ID %s) in guild %r (ID %s) spamming, retry_after: %.2fs'

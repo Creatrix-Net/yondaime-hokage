@@ -195,7 +195,7 @@ class Giveaway(Cog):
         if reactions is None:
             return "The channel or ID mentioned was incorrect"
         try:
-            giveaway_config = await self.get_giveaway_config(giveaway_id.id)
+            giveaway_config = await self.get_giveaway_config(giveaway_id.id if not isinstance(giveaway_id.id, int) else giveaway_id)
         except AttributeError as e:
             return str(e)
         

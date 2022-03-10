@@ -28,15 +28,16 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Prove that you are not sus!"""
         if member == "@everyone":
             await ctx.send(
-                f"** {ctx.author.mention} yes yes bro!!! Everyone is not sus!**"
+                f"** {ctx.author.mention} yes yes!!! Everyone is not sus!**"
             )
             return
-        desc = f"** {member}  was not the imposter**"
+        member = member or ctx.author
+        desc = f"** {member.mention}  was not the imposter**"
 
-        file = discord.File(among_us)
+        file = discord.File(fp=among_us, filename='wni.png')
 
         embed = Embed(description=desc, timestamp=discord.utils.utcnow())
-        embed.set_image(url="attachment://amongus.png")
+        embed.set_image(url="attachment://wni.png")
         await ctx.send(file=file, embed=embed)
 
     @commands.command(usage="[member.mention | member.id]")
@@ -47,7 +48,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             desc = f"Hmmmmmmm ** {ctx.author.mention} , Hey guys {ctx.author.mention} is the sus !!!**"
             await ctx.send(ErrorEmbed(description=desc))
             return
-
+        member = member or ctx.author
         desc = f"** {member.mention}  is the imposter**"
         text = f"{member.display_name}  is the imposter"
 

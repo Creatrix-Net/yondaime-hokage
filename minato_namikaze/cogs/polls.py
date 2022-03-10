@@ -142,7 +142,7 @@ class QuickPoll(commands.Cog):
             await react_message.add_reaction(reaction)
         embed.set_footer(text="Poll ID: {}".format(react_message.id))
         await react_message.edit(embed=embed)
-        await ctx.sendf(f'Done :ok_hand: Hosted the poll in {poll_channel.mention}', delete_after=2)
+        await ctx.send(f'Done :ok_hand: Hosted the poll in {poll_channel.mention}', delete_after=2)
         await self.delete_message(all_messages)
 
     @commands.command(pass_context=True,usage="<poll id>",aliases=["result", "results"])

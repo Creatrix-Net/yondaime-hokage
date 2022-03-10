@@ -20,7 +20,7 @@ class Giveaway(Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Helps you to organise a simple giveaway."
-        self.giveaway_image = "https://i.imgur.com/efLKnlh.png"
+        self.giveaway_image = LinksAndVars.giveaway_image.value
         self.declare_results.start()
     
     @cache()

@@ -26,7 +26,7 @@ formatter = logging.Formatter("%(asctime)s - %(message)s")
 ch.setFormatter(formatter)
 log.addHandler(ch)
 
-class Developer(commands.Cog,command_attrs=dict(hidden=True)):
+class Developer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.minato_gif = []
@@ -486,7 +486,7 @@ class Developer(commands.Cog,command_attrs=dict(hidden=True)):
             )
     
     @dev.command(usage="[print_logs]")
-    async def post_statss(self, ctx, print_logs: bool=False):
+    async def post_stats(self, ctx, print_logs: bool=False):
         '''Posts stats to different botlist'''
         await self.post(print_logs=print_logs)
         try:

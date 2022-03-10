@@ -96,6 +96,8 @@ class LinksAndVars(enum.Enum):
     character_data = 'https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json'
 
     statuspage_link = "https://minatonamikaze.statuspage.io"
+    mal_logo = "https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png"
+    giveaway_image = "https://i.imgur.com/efLKnlh.png"
 
     version = token_get("VERSION")
     invite_code = "vfXHwS3nmQ"

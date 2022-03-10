@@ -3,7 +3,7 @@ import asyncio
 import discord
 from asyncdagpi import Client
 from discord.ext import commands
-from lib import Tokens
+from lib import Tokens, LinksAndVars
 from mal import Anime, AnimeSearch, Manga, MangaSearch, AnimeCharacterResult, AnimeStaffResult, MangaCharacterResult
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
 from typing import Tuple, List, Dict
@@ -124,8 +124,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             timestamp=ctx.message.created_at,
         )
         e1.set_footer(
-            text=f"Showing 10 results out of {len(search.results)} | Use the recations of this message to paginate",
-            icon_url="https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png",
+            text=f"Showing 10 results out of {len(search.results)} | Use the reactions of this message to paginate",
+            icon_url=LinksAndVars.mal_logo.value,
         )
         embeds = [e1]
         for i in search_results:
@@ -140,8 +140,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 e.add_field(name="**MAL Url**", value=f"[CLICK HERE]({i.url})")
             if i.mal_id:
                 e.add_field(name="**MAL ID**", value=i.mal_id)
-            if i.image_url:
-                e.set_image(url=i.image_url)
+            # if i.image_url:
+            #     e.set_image(url=i.image_url) #later it the comment will be removed
             e.set_footer(text=f"{i.title} | {i.mal_id} | {i.score} stars",
                          icon_url=i.image_url)
             embeds.append(e)
@@ -528,63 +528,63 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                     check=lambda m: m.author == ctx.author and m.channel == ctx
                     .channel,
                 )
-                await asyncio.sleep(0.8)
-                if answer_content.content.lower() != answer:
-                    try:
-                        await answer_content.delete()
-                    except:
-                        pass
-                    await ctx.send(
-                        embed=ErrorEmbed(
-                            description="Please try again! :no_entry:"),
-                        delete_after=3,
-                    )
-                    await question_message.edit(
-                        content=f"You have {3-(i+1)} chances, **Chance: {i+1}/3**",
-                        embed=e,
-                    )
-                    pass
-                elif answer_content.content.lower() == answer:
-                    try:
-                        await answer_content.delete()
-                    except:
-                        pass
-                    answerembed.color = discord.Color.green()
-                    await question_message.edit(
-                        content=f"**Yes you guessed it right!** in {i+1} chance(s), {ctx.author.mention}",
-                        embed=answerembed,
-                    )
-                    return
-                elif i + 1 == 3 and answer_content.content.lower() != answer:
-                    try:
-                        await answer_content.delete()
-                    except:
-                        pass
-                    answerembed.color = discord.Color.red()
-                    await question_message.edit(
-                        content=f"Well you couldn't **guess it right in 3 chances**. Here is your **answer**!, {ctx.author.mention}",
-                        embed=answerembed,
-                    )
-                    return
             except TimeoutError:
                 try:
                     await answer_content.delete()
-                except:
+                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
                     pass
                 await ctx.send(embed=ErrorEmbed(
                     description="Well you didn't atleast once.\n Thus I won't be telling you the answer! :rofl:. **Baka**"
                 ))
                 return
+            await asyncio.sleep(0.8)
+            if answer_content.content.lower() != answer:
+                try:
+                    await answer_content.delete()
+                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                    pass
+                await ctx.send(
+                    embed=ErrorEmbed(
+                        description="Please try again! :no_entry:"),
+                    delete_after=3,
+                )
+                await question_message.edit(
+                    content=f"You have {3-(i+1)} chances, **Chance: {i+1}/3**",
+                    embed=e,
+                )
+                pass
+            elif answer_content.content.lower() == answer:
+                try:
+                    await answer_content.delete()
+                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                    pass
+                answerembed.color = discord.Color.green()
+                await question_message.edit(
+                    content=f"**Yes you guessed it right!** in {i+1} chance(s), {ctx.author.mention}",
+                    embed=answerembed,
+                )
+                return
+            elif i + 1 == 3 and answer_content.content.lower() != answer:
+                try:
+                    await answer_content.delete()
+                except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                    pass
+                answerembed.color = discord.Color.red()
+                await question_message.edit(
+                    content=f"Well you couldn't **guess it right in 3 chances**. Here is your **answer**!, {ctx.author.mention}",
+                    embed=answerembed,
+                )
+                return
+            
         try:
             await answer_content.delete()
-        except:
+        except (discord.NotFound, discord.Forbidden, discord.HTTPException):
             pass
         answerembed.color = discord.Color.red()
         await question_message.edit(
             content=f"Well you couldn't **guess it right in 3 chances**. Here is your **answer**!, {ctx.author.mention}",
             embed=answerembed,
         )
-        return
 
 
 def setup(bot):

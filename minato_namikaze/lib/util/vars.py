@@ -186,7 +186,7 @@ with zipfile.ZipFile(BASE_DIR / os.path.join("lib", "data", "among_us.zip")) as 
     with myzip.open("amongus.png") as f:
         among_us = io.BytesIO(f.read())
     with myzip.open("amoungus_friends.png") as f:
-        among_us_friends = (i, io.BytesIO(f.read()))
+        among_us_friends = io.BytesIO(f.read())
 
 
 with gzip.open(BASE_DIR / os.path.join("lib","data","url_regex.txt.gz",),"rt",encoding="utf-8",) as f:

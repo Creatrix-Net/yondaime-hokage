@@ -3,7 +3,7 @@ import traceback
 
 import discord
 from discord.ext import commands
-from lib import ChannelAndMessageId
+from lib import ChannelAndMessageId, NoChannelProvided, IncorrectChannelError
 from DiscordUtils import Embed, ErrorEmbed
 
 
@@ -20,6 +20,9 @@ class BotEventsCommands(commands.Cog):
             e1.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e1,
                                    delete_after=self.delete_after_time)
+        
+        elif isinstance(error, NoChannelProvided) or isinstance(error,IncorrectChannelError):
+            return
 
         elif isinstance(error, commands.MissingRequiredArgument):
             e4 = ErrorEmbed(title="Command Error!", description=f"`{error}`")

@@ -15,7 +15,7 @@ from DiscordUtils import Embed, ErrorEmbed
 class ImageManipulation(commands.Cog, name="Image Manipulation"):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.dagpi = Client(Tokens.dagpi.value)
+        self.dagpi = Client(Tokens.dagpi.value)
         self.description = "Some fun Image Manipulation Commands"
 
     @property
@@ -72,7 +72,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.triggered(),
+        img = await self.dagpi.image_process(ImageFeatures.triggered(),
                                                  url)
         e2file = discord.File(fp=img.image, filename=f"triggered.{img.format}")
         e = Embed(title="Here You Go! Filter used is triggered!")
@@ -91,7 +91,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         uname = member.display_name
         text = str(text)
         pfp = str(member.display_avatar.url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.discord(),
+        img = await self.dagpi.image_process(ImageFeatures.discord(),
                                                  url=pfp,
                                                  username=uname,
                                                  text=text)
@@ -118,7 +118,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             await ctx.send("Maybe text length something smaller then 13?")
         else:
             pfp = str(member.avatar.with_format("png").with_size(1024).url)
-            img = await self.bot.dagpi.image_process(ImageFeatures.captcha(),
+            img = await self.dagpi.image_process(ImageFeatures.captcha(),
                                                      url=pfp,
                                                      text=text)
             e2file = discord.File(fp=img.image,
@@ -134,7 +134,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.pixel(), url)
+        img = await self.dagpi.image_process(ImageFeatures.pixel(), url)
         e2file = discord.File(fp=img.image, filename=f"pixel.{img.format}")
         e = Embed(title="Here You Go! Filter used is pixel!")
         e.set_image(url=f"attachment://pixel.{img.format}")
@@ -147,7 +147,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.jail(), url=url)
+        img = await self.dagpi.image_process(ImageFeatures.jail(), url=url)
         e2file = discord.File(fp=img.image, filename=f"jail.{img.format}")
         e = Embed(title="Here You Go! Filter used is jail!")
         e.set_image(url=f"attachment://jail.{img.format}")
@@ -160,7 +160,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.wanted(), url)
+        img = await self.dagpi.image_process(ImageFeatures.wanted(), url)
         e2file = discord.File(fp=img.image, filename=f"wanted.{img.format}")
         e = Embed(title="Here You Go! Filter used is wanted!")
         e.set_image(url=f"attachment://wanted.{img.format}")
@@ -173,7 +173,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.gay(), url)
+        img = await self.dagpi.image_process(ImageFeatures.gay(), url)
         e2file = discord.File(fp=img.image, filename=f"rainbow.{img.format}")
         e = Embed(title="Here You Go! Filter used is gay!")
         e.set_image(url=f"attachment://rainbow.{img.format}")
@@ -186,7 +186,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.gay(), url)
+        img = await self.dagpi.image_process(ImageFeatures.gay(), url)
         e2file = discord.File(fp=img.image, filename=f"gay.{img.format}")
         e = Embed(title="There you go gay!")
         e.set_image(url=f"attachment://gay.{img.format}")
@@ -199,7 +199,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(512).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.trash(), url)
+        img = await self.dagpi.image_process(ImageFeatures.trash(), url)
         e2file = discord.File(fp=img.image, filename=f"trash.{img.format}")
         e = Embed(title="There you go piece of Trash!")
         e.set_image(url=f"attachment://trash.{img.format}")
@@ -213,7 +213,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.delete(), url)
+        img = await self.dagpi.image_process(ImageFeatures.delete(), url)
         e2file = discord.File(fp=img.image, filename=f"delete.{img.format}")
         e = Embed(title="There you go piece of trash removed!")
         e.set_image(url=f"attachment://delete.{img.format}")
@@ -226,7 +226,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(512).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.angel(), url)
+        img = await self.dagpi.image_process(ImageFeatures.angel(), url)
         e2file = discord.File(fp=img.image, filename=f"angel.{img.format}")
         e = Embed(title="Our dear Angel!")
         e.set_image(url=f"attachment://angel.{img.format}")
@@ -238,7 +238,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Be the Devil"""
         member = member or ctx.author
         url = str(member.avatar.with_format("png").with_size(64).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.satan(), url)
+        img = await self.dagpi.image_process(ImageFeatures.satan(), url)
         e2file = discord.File(fp=img.image, filename=f"satan.{img.format}")
         e = Embed(title="Satan!!!")
         e.set_image(url=f"attachment://satan.{img.format}")
@@ -254,7 +254,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.charcoal(), url)
+        img = await self.dagpi.image_process(ImageFeatures.charcoal(), url)
         e2file = discord.File(fp=img.image, filename=f"charcoal.{img.format}")
         e = Embed(title="There you go your lovely charcoal paintaing")
         e.set_image(url=f"attachment://charcoal.{img.format}")
@@ -267,7 +267,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(64).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.hitler(), url)
+        img = await self.dagpi.image_process(ImageFeatures.hitler(), url)
         e2file = discord.File(fp=img.image, filename=f"hitler.{img.format}")
         e = Embed(title="Worse than Hitler!!!")
         e.set_image(url=f"attachment://hitler.{img.format}")
@@ -280,7 +280,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.wasted(), url)
+        img = await self.dagpi.image_process(ImageFeatures.wasted(), url)
         e2file = discord.File(fp=img.image, filename=f"wasted.{img.format}")
         e = Embed(title="Wasted! :skull_crossbones:")
         e.set_image(url=f"attachment://wasted.{img.format}")
@@ -294,7 +294,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.bomb(), url)
+        img = await self.dagpi.image_process(ImageFeatures.bomb(), url)
         e2file = discord.File(fp=img.image, filename=f"bomb.{img.format}")
         e.set_image(url=f"attachment://bomb.{img.format}")
         await ctx.send(embed=e, file=e2file)
@@ -306,7 +306,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.petpet(), url)
+        img = await self.dagpi.image_process(ImageFeatures.petpet(), url)
         e2file = discord.File(fp=img.image, filename=f"petpet.{img.format}")
         e = Embed(title="UwU Pat!")
         e.set_image(url=f"attachment://petpet.{img.format}")
@@ -351,7 +351,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             desc = f"** {ctx.author.mention} slaps themselves !!! LOL! **"
 
         url = str(member.avatar.with_format("png").with_size(1024))
-        img = await self.bot.dagpi.image_process(
+        img = await self.dagpi.image_process(
             ImageFeatures.slap(),
             url2=str(ctx.author.avatar.with_format("png").with_size(1024).url),
             url=url,

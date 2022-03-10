@@ -34,7 +34,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         member = member or ctx.author
         desc = f"** {member.mention}  was not the imposter**"
 
-        file = discord.File(fp=among_us, filename='wni.png')
+        file = discord.File(fp=among_us, filename='wni.png',description=f"** {member.display_name}  was not the imposter**")
 
         embed = Embed(description=desc, timestamp=discord.utils.utcnow())
         embed.set_image(url="attachment://wni.png")
@@ -61,7 +61,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         draw.text((250, 300), text, font=font, fill="red", align="right")
         img.save("wi.png")
         embed.set_image(url="attachment://wi.png")
-        await ctx.send(file=discord.File("wi.png"), embed=embed)
+        await ctx.send(file=discord.File("wi.png",description=text), embed=embed)
         await sleep(3)
         os.remove("wi.png")
 
@@ -69,8 +69,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def triggered(self, ctx, member: Optional[Union[discord.Member,
                                                           MemberID]]):
         """Make anyone triggered"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.triggered(),
@@ -87,12 +86,11 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def message(self, ctx, member: Optional[Union[discord.Member,
                                                         MemberID]], *, text):
         """Send a fake Discord message"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         uname = member.display_name
         text = str(text)
-        pfp = str(member.with_format("png").with_size(1024).url)
+        pfp = str(member.display_avatar.url)
         img = await self.bot.dagpi.image_process(ImageFeatures.discord(),
                                                  url=pfp,
                                                  username=uname,
@@ -112,8 +110,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         text="Detect Face",
     ):
         """Captcha v3 Image mockup"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         text = str(text)
         textaslen = len(text)
@@ -134,8 +131,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def pixel(self, ctx, member: Optional[Union[discord.Member,
                                                       MemberID]]):
         """Pixallate your pfp"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.pixel(), url)
@@ -148,8 +144,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def jail(self, ctx, member: Optional[Union[discord.Member,
                                                      MemberID]]):
         """Jail yourself or someone"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.jail(), url=url)
@@ -162,8 +157,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def wanted(self, ctx, member: Optional[Union[discord.Member,
                                                        MemberID]]):
         """Get yourself or someone listed in Bingo Book"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.wanted(), url)
@@ -176,8 +170,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def rainbow(self, ctx, member: Optional[Union[discord.Member,
                                                         MemberID]]):
         """Rainbow light effect"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.gay(), url)
@@ -190,8 +183,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def gay(self, ctx, member: Optional[Union[discord.Member,
                                                     MemberID]]):
         """Seperate yourself/others and mark them/yourself as gay!"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.gay(), url)
@@ -204,8 +196,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def trash(self, ctx, member: Optional[Union[discord.Member,
                                                       MemberID]]):
         """Puts trash into trashbin"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(512).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.trash(), url)
@@ -219,8 +210,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def delete(self, ctx, member: Optional[Union[discord.Member,
                                                        MemberID]]):
         """Removes trash from bin"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.delete(), url)
@@ -233,8 +223,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def angel(self, ctx, member: Optional[Union[discord.Member,
                                                       MemberID]]):
         """Be an Angel"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(512).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.angel(), url)
@@ -247,9 +236,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def satan(self, ctx, member: Optional[Union[discord.Member,
                                                       MemberID]]):
         """Be the Devil"""
-        if member is None:
-            member = ctx.author
-
+        member = member or ctx.author
         url = str(member.avatar.with_format("png").with_size(64).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.satan(), url)
         e2file = discord.File(fp=img.image, filename=f"satan.{img.format}")
@@ -264,8 +251,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def charcoal(self, ctx, member: Optional[Union[discord.Member,
                                                          MemberID]]):
         """Get your pfp beautiful charcoal paint"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.charcoal(), url)
@@ -278,8 +264,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def hitler(self, ctx, member: Optional[Union[discord.Member,
                                                        MemberID]]):
         """Hail Hitler"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(64).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.hitler(), url)
@@ -292,8 +277,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def wasted(self, ctx, member: Optional[Union[discord.Member,
                                                        MemberID]]):
         """GTA V wasted screen"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.wasted(), url)
@@ -307,8 +291,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
                                                      MemberID]]):
         """Bomb someone"""
         e = Embed(title="Boooom! :skull_crossbones:")
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.bomb(), url)
@@ -320,8 +303,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def pat(self, ctx, member: Optional[Union[discord.Member,
                                                     MemberID]]):
         """Pat someone, UwU!"""
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
 
         url = str(member.avatar.with_format("png").with_size(1024).url)
         img = await self.bot.dagpi.image_process(ImageFeatures.petpet(), url)
@@ -335,9 +317,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def spank(self, ctx, member: Optional[Union[discord.Member,
                                                       MemberID]]):
         """Spank someone"""
-        if member is None:
-            desc = f"** {ctx.author.mention} spanks themselves !!! LOL!**"
-        elif member in ["@everyone", "@here"]:
+        member = member or ctx.author
+        if member in ["@everyone", "@here"]:
             await ctx.send(
                 f"** {ctx.author.mention} why would you spank @everyone? **",
                 allowed_mentions=discord.AllowedMentions(everyone=False),
@@ -345,7 +326,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             return
         else:
             desc = f"** {ctx.author.mention} spanks {member.mention} !!! Damm! **"
-        if member is ctx.author:
+        if member == ctx.author:
             desc = f"** {ctx.author.mention} spanks themselves !!! LOL! **"
 
         embed = Embed(description=desc, timestamp=discord.utils.utcnow())
@@ -357,9 +338,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def slap(self, ctx, member: Optional[Union[discord.Member,
                                                      MemberID]]):
         """Slap someone"""
-        if member is None:
-            desc = f"** {ctx.author.mention} slaps themselves !!! LOL!**"
-        elif member in ["@everyone", "@here"]:
+        member = member or ctx.author
+        if member in ["@everyone", "@here"]:
             await ctx.send(
                 f"** {ctx.author.mention} why would you slap @everyone? **",
                 allowed_mentions=discord.AllowedMentions(everyone=False),
@@ -367,7 +347,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             return
         else:
             desc = f"** {ctx.author.mention} slaps {member.mention} !!! Damm! **"
-        if member is ctx.author:
+        if member == ctx.author:
             desc = f"** {ctx.author.mention} slaps themselves !!! LOL! **"
 
         url = str(member.avatar.with_format("png").with_size(1024))
@@ -386,9 +366,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def hug(self, ctx, member: Optional[Union[discord.Member,
                                                     MemberID]]):
         """Hug someone"""
-        if member is None:
-            desc = f"** {ctx.author.mention} hugs themselves :heart: :heart: :heart: :heart: **"
-        elif member in ["@everyone", "@here"]:
+        member = member or ctx.author
+        if member in ["@everyone", "@here"]:
             await ctx.send(
                 f"** {ctx.author.mention} why would you hug @everyone? **",
                 allowed_mentions=discord.AllowedMentions(everyone=False),
@@ -396,7 +375,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             return
         else:
             desc = f"** {ctx.author.mention} hugs {member.mention} !!! :heart: :heart: :heart: **"
-        if member is ctx.author:
+        if member == ctx.author:
             desc = f"** {ctx.author.mention} hugs themselves !!! :heart: :heart: :heart: :heart: **"
 
         embed = Embed(description=desc, timestamp=discord.utils.utcnow())
@@ -408,7 +387,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def poke(self, ctx, member: Optional[Union[discord.Member,
                                                      MemberID]]):
         """Poke someone"""
-        if member is None:
+        member = member or ctx.author
+        if member == ctx.author:
             desc = f"** {ctx.author.mention} pokes themselves! **"
         elif member in ["@everyone", "@here"]:
             await ctx.send(
@@ -418,7 +398,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             return
         else:
             desc = f"** {ctx.author.mention} pokes {member} !!! **"
-        if member is ctx.author:
+        if member == ctx.author:
             desc = f"** {ctx.author.id} pokes themselves !!! **"
 
         embed = Embed(description=desc, timestamp=discord.utils.utcnow())
@@ -430,13 +410,12 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def high5(self, ctx, member: Optional[Union[discord.Member,
                                                       MemberID]]):
         """Do a highfive"""
-        if member is None:
-            desc = f"**{ctx.author.mention} high-fives **"
-        elif member in ["@everyone", "@here"]:
+        member = member or ctx.author
+        if member in ["@everyone", "@here"]:
             desc = f"**@everyone , {ctx.author.mention} high-fives **"
         else:
             desc = f"**{ctx.author.mention} high fives {member.mention} !!! **"
-        if member is ctx.author:
+        if member == ctx.author:
             desc = f"**{ctx.author.mention} high-fives **"
 
         embed = Embed(description=desc, timestamp=discord.utils.utcnow())
@@ -448,9 +427,8 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     async def party(self, ctx, member: Optional[Union[discord.Member,
                                                       MemberID]]):
         """Party with someone"""
-        if member is None:
-            desc = f"**{ctx.author.mention} is partying !!**"
-        elif member in ["@everyone", "@here"]:
+        member = member or ctx.author
+        if member in ["@everyone", "@here"]:
             desc = (
                 f"**@everyone {ctx.author.mention} is partying!! come join them !! **"
             )
@@ -458,7 +436,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             desc = (
                 f"**{ctx.author.mention} parties with {member.mention} !!! Yaay !!! **"
             )
-        if member is ctx.author:
+        if member == ctx.author:
             desc = f"**{ctx.author.mention} is partying !!!**"
 
         embed = Embed(description=desc, timestamp=discord.utils.utcnow())

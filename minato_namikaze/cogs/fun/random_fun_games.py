@@ -10,23 +10,39 @@ from typing import Optional, Union
 import discord
 import eight_ball
 import mystbin
-import pyppeteer
 from asyncdagpi import ImageFeatures
 from discord.ext import commands, owoify
 from gtts import gTTS
 from lib import Embed, LinksAndVars, MemberID, TimeConverter
 from PIL import Image
-from pyppeteer import launch
 
 
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.mystbin_client = mystbin.Client() 
         self.description = "Some random fun and usefull commands."
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{GAME DIE}")
+    
+    @commands.command()
+    @commands.cooldown(1, 40, commands.BucketType.guild)
+    async def braille(self, ctx, user: discord.Member=None):
+        user = user or ctx.author
+        file = await self.bot.se.braille(f'{user.avatar_url}')
+        await ctx.send(file)
+        
+    @braille.error
+    async def braille_handler(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            l = self.bot.get_command("braille")
+            left = l.get_cooldown_retry_after(ctx)
+            msg = await ctx.send("Just Getting The Cooldown")
+            e = discord.Embed(
+                title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
+            await msg.edit(content="", embed=e)
 
     @commands.command(aliases=["takeitback"], usage="<member.mention>")
     async def insult(self,
@@ -168,7 +184,7 @@ class Random(commands.Cog):
     @commands.command(aliases=["myst"], usage="<text>")
     async def mystbin(self, ctx, *, text):
         """Generate an Mystbin for yourself"""
-        paste = await self.bot.mystbin_client.post(f"{text}", syntax="python")
+        paste = await self.mystbin_client.post(f"{text}", syntax="python")
         e = discord.Embed(
             title="I have created a mystbin link for you!",
             description=f"[Click Here]({paste.url})",
@@ -179,7 +195,7 @@ class Random(commands.Cog):
     async def getmystbin(self, ctx, id):
         """Get your Mystbi using your id"""
         try:
-            get_paste = await self.bot.mystbin_client.get(
+            get_paste = await self.mystbin_client.get(
                 f"https://mystb.in/{id}")
             lis = ["awesome", "bad", "good"]
             content = get_paste.content
@@ -206,37 +222,37 @@ class Random(commands.Cog):
         async with ctx.channel.typing():
             await ctx.send(ball.response(question))
 
-    @commands.bot_has_permissions(attach_files=True)
-    @commands.command(aliases=["ss"])
-    async def screenshot(self, ctx, link: str, wait: int = 3):
-        """
-        Screenshots a given link.
-        If no time is given, it will wait 3 seconds to screenshot
-        """
+    # @commands.bot_has_permissions(attach_files=True)
+    # @commands.command(aliases=["ss"])
+    # async def screenshot(self, ctx, link: str, wait: int = 3):
+    #     """
+    #     Screenshots a given link.
+    #     If no time is given, it will wait 3 seconds to screenshot
+    #     """
 
-        await ctx.trigger_typing()
-        browser = await launch()
-        page = await browser.newPage()
-        await page.setViewport({"width": 1280, "height": 720})
-        try:
-            await page.goto(link)
-        except pyppeteer.page.PageError:
-            await ctx.send("Sorry, I couldn't find anything at that link!")
-            await browser.close()
-            return
-        except Exception:
-            await ctx.send(
-                "Sorry, I ran into an issue! Make sure to include https:// or https:// at the beginning of the link."
-            )
-            await browser.close()
-            return
+    #     await ctx.trigger_typing()
+    #     browser = await launch()
+    #     page = await browser.newPage()
+    #     await page.setViewport({"width": 1280, "height": 720})
+    #     try:
+    #         await page.goto(link)
+    #     except pyppeteer.page.PageError:
+    #         await ctx.send("Sorry, I couldn't find anything at that link!")
+    #         await browser.close()
+    #         return
+    #     except Exception:
+    #         await ctx.send(
+    #             "Sorry, I ran into an issue! Make sure to include https:// or https:// at the beginning of the link."
+    #         )
+    #         await browser.close()
+    #         return
 
-        await asyncio.sleep(wait)
-        result = await page.screenshot()
-        await browser.close()
-        f = io.BytesIO(result)
-        file = discord.File(f, filename="screenshot.png")
-        await ctx.send(file=file)
+    #     await asyncio.sleep(wait)
+    #     result = await page.screenshot()
+    #     await browser.close()
+    #     f = io.BytesIO(result)
+    #     file = discord.File(f, filename="screenshot.png")
+    #     await ctx.send(file=file)
 
 
 def setup(bot):

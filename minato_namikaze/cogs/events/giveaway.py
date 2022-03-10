@@ -157,9 +157,6 @@ class Giveaway(Cog):
         if task.lower() in ("none", "no", "no task"):
             task = None
 
-        await ctx.send(
-            
-        )
         embed = Embed(
             title="**:tada::tada: Giveaway Time !! :tada::tada:**",
             description=f":gift: Win a **{prize}** today",

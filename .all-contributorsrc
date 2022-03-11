@@ -13,6 +13,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "EitoZX",
+      "name": "Eito",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72309146?v=4",
+      "profile": "http://eitozx.github.io",
+      "contributions": [
+        "infra",
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -32,6 +32,15 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "ooliver1",
+      "name": "Oliver Wilkes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34910574?v=4",
+      "profile": "https://github.com/ooliver1",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,

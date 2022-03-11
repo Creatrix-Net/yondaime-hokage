@@ -1,6 +1,7 @@
 import discord
 import DiscordUtils
 from discord.ext import commands
+from typing import Union
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed, StarboardEmbed, SuccessEmbed
 from lib import NoChannelProvided, IncorrectChannelError
 
@@ -164,20 +165,40 @@ class Music(commands.Cog):
         else:
             await ctx.send(embed=SuccessEmbed(description=f"```Skipped {data[0].name}```"))
 
-    @commands.command(usage="<value between 1-100>")
-    async def volume(self, ctx, vol):
-        """Changes the volume for the current song"""
+    @commands.command(usage="<value between 1-100>", aliases=['vol'])
+    async def volume(self, ctx, vol: Union[int, float]):
+        """
+        Changes the volume for the current song
+        `Note: Negative volume numbers will be converted to 0`
+        """
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
+        vol = abs(vol)
+        if vol < 0:
+            vol = 0
+        if vol > 100:
+            return await ctx.send(embed=ErrorEmbed(description='The volume should be between 0 and 100'))
         # volume should be a float between 0 to 1
-        song, volume = await player.change_volume(float(vol) / 100)
-        await ctx.send(embed=SuccessEmbed(description=f"Changed volume for {song.name} to {volume*100}%"))
+        song, volume = await player.change_volume(float(vol/100))
+        await ctx.send(embed=SuccessEmbed(description=f"Changed volume for **{song.name}** to {volume:.2}%"))
 
     @commands.command(usage="<song.index.value>")
-    async def remove_song(self, ctx, index):
+    async def remove_song(self, ctx, index: int):
         """Song the specified song using its index value"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         song = await player.remove_from_queue(int(index))
         await ctx.send(embed=ErrorEmbed(f"```Removed {song.name} from queue```"))
+    
+    @volume.error
+    @remove_song.error
+    @skip.error
+    @np.error
+    @queue.error
+    @pause.error
+    @stop.error
+    @resume.error
+    @loop.error
+    async def error_handler(self, ctx, error, *args, **kwargs):
+        await ctx.send(embed=ErrorEmbed(description='No song in the queue'), delete_after=5)
 
 
 def setup(bot):

@@ -4,7 +4,7 @@
 
 
 [![Owner](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=owner&style=for-the-badge&color=orange)](http://discord.com/users/887549958931247137) [![Status](https://top.gg/api/widget/status/935242576343224352.svg)](http://discord.com/users/935242576343224352)  ![Servers](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=servers&style=flat-square&color=informational) [![Support](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=support&style=flat-square&color=yellow)](https://discord.gg/vfXHwS3nmQ) [![Documentation Status](https://readthedocs.org/projects/minato-namikaze/badge/?version=latest)](https://minato-namikaze.readthedocs.io/en/latest/?badge=latest) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -40,6 +40,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://eitozx.github.io"><img src="https://avatars.githubusercontent.com/u/72309146?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Eito</b></sub></a><br /><a href="#infra-EitoZX" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#design-EitoZX" title="Design">🎨</a> <a href="#security-EitoZX" title="Security">🛡️</a></td>
     <td align="center"><a href="https://github.com/QuartzAl"><img src="https://avatars.githubusercontent.com/u/55610038?v=4?s=100" width="100px;" alt=""/><br /><sub><b>QuartzAl</b></sub></a><br /><a href="#maintenance-QuartzAl" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://github.com/ooliver1"><img src="https://avatars.githubusercontent.com/u/34910574?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Oliver Wilkes</b></sub></a><br /><a href="#maintenance-ooliver1" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://dsc.gg/izumi"><img src="https://avatars.githubusercontent.com/u/69662328?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Onii-chan</b></sub></a><br /><a href="#design-Onii-Chan-Discord" title="Design">🎨</a></td>
   </tr>
 </table>
 

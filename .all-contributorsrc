@@ -42,6 +42,15 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "Onii-Chan-Discord",
+      "name": "Onii-chan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69662328?v=4",
+      "profile": "https://dsc.gg/izumi",
+      "contributions": [
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,

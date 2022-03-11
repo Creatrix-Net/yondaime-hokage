@@ -48,7 +48,7 @@ class Developer(commands.Cog):
         await self.bot.update_blacklist()
 
     def owners(ctx):
-        return ctx.bot.is_owner(ctx.author.id)
+        return ctx.bot.is_owner(ctx.author)
 
     @staticmethod
     async def _send_guilds(ctx, guilds, title):

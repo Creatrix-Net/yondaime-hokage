@@ -23,6 +23,15 @@
         "infra",
         "design"
       ]
+    },
+    {
+      "login": "QuartzAl",
+      "name": "QuartzAl",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55610038?v=4",
+      "profile": "https://github.com/QuartzAl",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,

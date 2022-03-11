@@ -490,7 +490,7 @@ class Developer(commands.Cog):
         '''Posts stats to different botlist'''
         await self.post(print_logs=print_logs)
         try:
-            await ctx.msg.delete()
+            await ctx.message.delete()
         except (discord.Forbidden, discord.HTTPException):
             pass
 

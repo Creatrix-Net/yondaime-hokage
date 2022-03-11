@@ -448,7 +448,7 @@ class AntiRaid(commands.Cog):
 
         if count <= self.autoban_threshold:
             await ctx.send(
-                f"\N{NO ENTRY SIGN} Auto-ban threshold must be greater than {num2words(self.autoban_threshold)}."
+                f"\N{NO ENTRY SIGN} Auto-ban threshold must be greater than `{' '.join(num2words.num2words(self.autoban_threshold).split('-'))}`."
             )
             return
 

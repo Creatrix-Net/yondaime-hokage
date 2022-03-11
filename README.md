@@ -1,6 +1,6 @@
 # **Minato Namikaze**
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ### Konichiwa 👋, myself Minato Namikaze, Konohagakure Yondaime Hokage. I do every work of a Hokage in a swift and clean way ⚡
@@ -39,6 +39,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://deepsource.io"><img src="https://avatars.githubusercontent.com/u/60907429?v=4?s=100" width="100px;" alt=""/><br /><sub><b>DeepSource Bot</b></sub></a><br /><a href="https://github.com/The-4th-Hokage/yondaime-hokage/commits?author=deepsourcebot" title="Code">💻</a></td>
     <td align="center"><a href="http://eitozx.github.io"><img src="https://avatars.githubusercontent.com/u/72309146?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Eito</b></sub></a><br /><a href="#infra-EitoZX" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#design-EitoZX" title="Design">🎨</a></td>
+    <td align="center"><a href="https://github.com/QuartzAl"><img src="https://avatars.githubusercontent.com/u/55610038?v=4?s=100" width="100px;" alt=""/><br /><sub><b>QuartzAl</b></sub></a><br /><a href="#maintenance-QuartzAl" title="Maintenance">🚧</a></td>
   </tr>
 </table>
 

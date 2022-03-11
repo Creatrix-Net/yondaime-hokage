@@ -51,6 +51,15 @@
       "contributions": [
         "design"
       ]
+    },
+    {
+      "login": "Pagasis",
+      "name": "Pagasis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/74396469?v=4",
+      "profile": "https://github.com/Pagasis",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,

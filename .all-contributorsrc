@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "deepsourcebot",
+      "name": "DeepSource Bot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/60907429?v=4",
+      "profile": "https://deepsource.io",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "yondaime-hokage",
+  "projectOwner": "The-4th-Hokage",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

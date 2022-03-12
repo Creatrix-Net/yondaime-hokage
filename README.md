@@ -4,7 +4,7 @@
 
 
 [![Owner](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=owner&style=for-the-badge&color=orange)](http://discord.com/users/887549958931247137) [![Status](https://top.gg/api/widget/status/935242576343224352.svg)](http://discord.com/users/935242576343224352)  ![Servers](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=servers&style=flat-square&color=informational) [![Support](https://api.discordlist.space/v2/bots/935242576343224352/badge?property=support&style=flat-square&color=yellow)](https://discord.gg/vfXHwS3nmQ) [![Documentation Status](https://readthedocs.org/projects/minato-namikaze/badge/?version=latest)](https://minato-namikaze.readthedocs.io/en/latest/?badge=latest) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -42,6 +42,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/ooliver1"><img src="https://avatars.githubusercontent.com/u/34910574?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Oliver Wilkes</b></sub></a><br /><a href="#maintenance-ooliver1" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://dsc.gg/izumi"><img src="https://avatars.githubusercontent.com/u/69662328?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Onii-chan</b></sub></a><br /><a href="#design-Onii-Chan-Discord" title="Design">🎨</a></td>
     <td align="center"><a href="https://github.com/Pagasis"><img src="https://avatars.githubusercontent.com/u/74396469?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Pagasis</b></sub></a><br /><a href="#maintenance-Pagasis" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/features/security"><img src="https://avatars.githubusercontent.com/u/27347476?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dependabot</b></sub></a><br /><a href="#maintenance-dependabot" title="Maintenance">🚧</a></td>
   </tr>
 </table>
 

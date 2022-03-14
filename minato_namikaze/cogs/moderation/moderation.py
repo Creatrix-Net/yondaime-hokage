@@ -76,7 +76,7 @@ class Moderation(commands.Cog):
     async def kick(
         self,
         ctx,
-        member: Optional[Union[commands.MemberConverter, MemberID]],
+        member: Union[commands.MemberConverter, MemberID],
         *,
         reason=None,
     ):
@@ -145,9 +145,7 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def banlist(self, ctx, *,
-                      member: Optional[Union[commands.MemberConverter,
-                                             MemberID]]):
+    async def banlist(self, ctx, *,member:Union[commands.MemberConverter,MemberID]):
         """Shows list of users who have been banned! Or position of a specified user who was banned!"""
         banned_users = list(await ctx.guild.bans())
         if member is not None:
@@ -642,8 +640,7 @@ class Moderation(commands.Cog):
         await ctx.send(f"Banned {count}/{len(members)}")
 
     # Warn
-    @commands.command(pass_context=True,
-                      usage="<member.mention> <optional: reason>")
+    @commands.command(pass_context=True,usage="<member.mention> [optional: reason]")
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
     async def warn(
@@ -651,7 +648,7 @@ class Moderation(commands.Cog):
         ctx,
         member: Union[commands.MemberConverter, MemberID],
         *,
-        reason: str = None,
+        reason: Optional[str] = None,
     ):
         """Warn a user"""
         data = await (await self.database_class()).get(ctx.guild.id)
@@ -686,12 +683,11 @@ class Moderation(commands.Cog):
             delete_after=10,
         )
 
-    @commands.command(pass_context=True, usage="<member.mention>")
+    @commands.command(pass_context=True, usage="[member.mention]")
     @commands.guild_only()
     async def warnlist(self,
                        ctx,
-                       member: Optional[Union[commands.MemberConverter,
-                                              MemberID]] = None):
+                       member: Optional[Union[commands.MemberConverter,MemberID]] = None):
         """Get the no. of warns for a specified user"""
         data = await (await self.database_class()).get(ctx.guild.id)
         if data is None or data.get("warns") is None:
@@ -715,7 +711,7 @@ class Moderation(commands.Cog):
         message = f"mentions: {member}  in: {warning_channel}"
         await ctx.send(message)
 
-    @commands.command(aliases=["newmembers"])
+    @commands.command(aliases=["newmembers"],usage="[count]")
     @commands.guild_only()
     async def newusers(self, ctx, *, count: Optional[int] = 5):
         """

@@ -470,19 +470,29 @@ class Developer(commands.Cog):
                 listing: dict = orjson.loads(await resp.text())
         for i in listing:
             self.api.set_auth(listing[i].split('/')[0], token_get(''.join(i.split())))
+        await self.bot.change_presence(
+            status=discord.Status.dnd,
+            activity=discord.Activity(type=discord.ActivityType.watching, name="over Naruto"),
+        )
         try:
-            await self.bot.change_presence(
-                status=discord.Status.dnd,
-                activity=discord.Activity(type=discord.ActivityType.watching, name="over Naruto"),
-            )
             result = await self.api.post_count()
             if print_logs:
                 log.info(result)
         except Exception as e:
             log.warning(e)
+        members = len(set(self.bot.get_all_members()))
+        
+        #Discord Botlist
+        await post_handler(
+            Methods.POST, 
+            f'https://discordbotlist.com/api/v1/bots{self.bot.application_id}/stats', 
+            data={'users': members},
+            log_data=print_logs,
+            return_data=False
+        )
         await self.bot.change_presence(
                 status=discord.Status.idle,
-                activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
+                activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto")
             )
     
     @dev.command(usage="[print_logs]")

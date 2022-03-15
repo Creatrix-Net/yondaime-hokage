@@ -117,7 +117,7 @@ async def post_commands(
                     "cmd_type": 0,
                     "vote_locked": False,
                     "premium_only": False,
-                    "notes": [],
+                    "notes": ['Message Command', 'Prefix Required'],
                     "nsfw": False,
                     "examples": [],
                     "doc_link": LinksAndVars.website.value+f"/commands/message_commands/#--{command.name}"
@@ -138,7 +138,7 @@ async def post_commands(
             "cmd_type": 0,
             "vote_locked": False,
             "premium_only": False,
-            "notes": [],
+            "notes": ['Slash Command'],
             "nsfw": False,
             "examples": [],
             "doc_link": LinksAndVars.website.value+f"/commands/application_commands/#{i.name}",
@@ -147,27 +147,29 @@ async def post_commands(
             "usage": f'/{i.name}'
         }
         list_to_be_given.append(app_command_dict)
-    req = await post_handler(
-        Methods.POST,
-        FATESLIST_BASE_URI + f"bots/{bot.application_id}/commands",
-        headers={
-            "Authorization": token_get('FATESLIST'),
-        },
-        json={"commands": list_to_be_given},
-        return_data=False,
-        getrequestobj=True,
-        log_data=print_logs
-    )
-    await ratelimit_handler(
-        req,
-        FATESLIST_BASE_URI + f"bots/{bot.application_id}/commands",
-        Methods.POST,
-        data={"commands": list_to_be_given},
-        headers={
-            "Authorization": token_get('FATESLIST'),
-        },
-        print_logs=print_logs
-    )
+    final_list = discord.utils.as_chunks(list_to_be_given, 10)
+    for to_be_post_list in final_list:
+        req = await post_handler(
+            Methods.POST,
+            FATESLIST_BASE_URI + f"bots/{bot.application_id}/commands",
+            headers={
+                "Authorization": token_get('FATESLIST'),
+            },
+            json={"commands": to_be_post_list},
+            return_data=False,
+            getrequestobj=True,
+            log_data=print_logs
+        )
+        await ratelimit_handler(
+            req,
+            FATESLIST_BASE_URI + f"bots/{bot.application_id}/commands",
+            Methods.POST,
+            data={"commands": to_be_post_list},
+            headers={
+                "Authorization": token_get('FATESLIST'),
+            },
+            print_logs=print_logs
+        )
 
     #Discord Services
     list_to_be_given = []

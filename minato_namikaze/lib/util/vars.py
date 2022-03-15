@@ -144,6 +144,7 @@ class Database(enum.Enum):
 class Methods(enum.IntEnum):
     GET = 1
     POST = 2
+    DELETE = 3
 
 
 with gzip.open(

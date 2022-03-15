@@ -38,6 +38,7 @@ from lib import (
     format_dt,
     format_relative,
     Webhooks,
+    post_commands
 )
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -189,6 +190,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             title="Bot Loaded!",
             description=f"Bot ready by **{format_dt(datetime.now(), 'R',True)}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
         )
+        await self.change_presence(
+            status=discord.Status.idle,
+            activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
+        )
         e.set_thumbnail(url=self.user.avatar.url)
 
         if not self.persistent_views_added:
@@ -201,10 +206,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             await stats.send(embed=e)
         except:
             pass
-        await self.change_presence(
-            status=discord.Status.idle,
-            activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
-        )
 
         await self.change_presence(
             status=discord.Status.dnd,
@@ -215,7 +216,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             log.warning('Developer cog is not available')
         else:
             await developer.post()
-        log.info("Status Posted")
+            log.info("Status Posted")
+        await post_commands(self, True if self.local else False)
+        log.info('Commands Posted')
         await self.change_presence(
             status=discord.Status.idle,
             activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),

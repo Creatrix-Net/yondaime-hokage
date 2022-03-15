@@ -486,6 +486,7 @@ class Developer(commands.Cog):
         await post_handler(
             Methods.POST, 
             f'https://discordbotlist.com/api/v1/bots{self.bot.application_id}/stats', 
+            header={"Authorization": token_get('DISCORDBOTLIST')},
             data={'users': members},
             log_data=print_logs,
             return_data=False
@@ -499,6 +500,15 @@ class Developer(commands.Cog):
     async def post_stats(self, ctx, print_logs: bool=False):
         '''Posts stats to different botlist'''
         await self.post(print_logs=print_logs)
+        try:
+            await ctx.message.delete()
+        except (discord.Forbidden, discord.HTTPException):
+            pass
+    
+    @dev.command(usage="[print_logs]", aliases=["post_command"])
+    async def post_commands(self, ctx, print_logs: bool=False):
+        '''Posts commands to different botlist'''
+        await post_commands(self.bot, print_logs=print_logs)
         try:
             await ctx.message.delete()
         except (discord.Forbidden, discord.HTTPException):

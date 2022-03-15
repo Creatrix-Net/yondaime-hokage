@@ -1,4 +1,5 @@
-﻿akinator.py
+﻿aiohttp[speedups]
+akinator.py
 async-cleverbot
 async-timeout
 discord-together

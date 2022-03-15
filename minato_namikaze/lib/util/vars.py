@@ -140,6 +140,12 @@ class Database(enum.Enum):
     server_blacklist_channel_name = "server blacklist"
 
 
+@enum.unique
+class Methods(enum.IntEnum):
+    GET = 1
+    POST = 2
+
+
 with gzip.open(
         os.path.join(
             Path(__file__).resolve().parent.parent,

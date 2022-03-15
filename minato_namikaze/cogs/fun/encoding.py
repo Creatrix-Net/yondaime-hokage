@@ -119,10 +119,12 @@ class Encoding(commands.Cog):
             return await ctx.send("Output too long to display.")
         await ctx.send(msg)
 
-    @commands.group(name="hash")
+    @commands.group(name="hash", invoke_without_command=True)
     async def hash_cmd(self, ctx: commands.Context) -> None:
         """Various hashing commands"""
-        pass
+        if ctx.invoked_subcommand is None:
+            await ctx.send_help(ctx.command)
+            return
 
     @hash_cmd.group(name="md5")
     async def hash_md5(self, ctx: commands.Context, *, txt: str) -> None:

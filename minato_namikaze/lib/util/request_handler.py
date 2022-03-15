@@ -135,7 +135,7 @@ async def post_commands(
         app_command_dict = {
             'name': i.name,
             'description': i.description,
-            "cmd_type": 0,
+            "cmd_type": 1,
             "vote_locked": False,
             "premium_only": False,
             "notes": ['Slash Command'],

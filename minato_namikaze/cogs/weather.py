@@ -119,7 +119,7 @@ class Weather(commands.Cog):
     ) -> None:
         guild = ctx.message.guild
         author = ctx.message.author
-        units = choice(["kelvin", "imperial", "metric"])
+        units = "metric"
         params = {"appid": Tokens.weather.value, "units": units}
         if units == "kelvin":
             params["units"] = "metric"

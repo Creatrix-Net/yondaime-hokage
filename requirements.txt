@@ -54,7 +54,7 @@ pygit2==1.9.1
 PyNaCl==1.5.0
 python-dateutil==2.8.2
 python-dotenv==0.19.2
-pytz==2021.3
+pytz==2022.1
 requests==2.27.1
 sentry-sdk==1.5.7
 six==1.16.0

@@ -64,7 +64,7 @@ SQLAlchemy==1.4.32
 StringProgressBar==1.1.1
 TenGiphPy==2.5.0
 tqdm==4.63.0
-urllib3==1.26.8
+urllib3==1.26.9
 websockets==10.2
 yarl==1.7.2
 youtube-dl==2021.12.17

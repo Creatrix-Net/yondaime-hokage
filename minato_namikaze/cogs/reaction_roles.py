@@ -42,9 +42,11 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
     
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload: discord.RawMessageDeleteEvent):
-        if payload.cached_message is not None:
-            if payload.cached_message.author.id != self.bot.application_id:
-                return
+        if (
+            payload.cached_message is not None
+            and payload.cached_message.author.id != self.bot.application_id
+        ):
+            return
         database = await self.database_class()
         reaction_roles = await database.get(payload.message_id)
         if reaction_roles is not None:

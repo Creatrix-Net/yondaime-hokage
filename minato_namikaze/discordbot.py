@@ -217,7 +217,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         else:
             await developer.post()
             log.info("Status Posted")
-        await post_commands(self, True if self.local else False)
+        await post_commands(self, bool(self.local))
         log.info('Commands Posted')
         await self.change_presence(
             status=discord.Status.idle,

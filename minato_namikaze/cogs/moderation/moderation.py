@@ -294,15 +294,11 @@ class Moderation(commands.Cog):
         if ban_entry.reason:
             e.add_field(name="**Reason** :", value=ban_entry.reason)
         try:
-            await user.send(f"You were **banned** from **{guild.name}**",
-                            embed=e)
+            await user.send(f"You were **banned** from **{guild.name}**",embed=e)
             dmed = True
         except:
             dmed = False
-        if dmed:
-            e.add_field(name="DM-Members:", value="\U00002611")
-        else:
-            e.add_field(name="DM-Members:", value="\U0000274c")
+        e.description += f"\n**DM-Members**: {'\U00002611' if dmed else '\U0000274c'}"
         await ban.send(embed=e)
 
     # unban
@@ -316,8 +312,7 @@ class Moderation(commands.Cog):
         unban = self.bot.get_channel((await
                                       database.get(guild.id)).get("unban"))
         try:
-            event = await guild.audit_logs().find(
-                lambda x: x.action is discord.AuditLogAction.unban)
+            event = await guild.audit_logs().find(lambda x: x.action is discord.AuditLogAction.unban)
         except:
             event = False
 

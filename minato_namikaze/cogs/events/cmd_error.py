@@ -24,7 +24,7 @@ class BotEventsCommands(commands.Cog):
             await ctx.channel.send(embed=e1,
                                    delete_after=self.delete_after_time)
         
-        elif isinstance(error, NoChannelProvided) or isinstance(error,IncorrectChannelError):
+        elif isinstance(error, (NoChannelProvided, IncorrectChannelError)):
             return
 
         elif isinstance(error, commands.MissingRequiredArgument):

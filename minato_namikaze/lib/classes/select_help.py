@@ -6,7 +6,7 @@ from __future__ import annotations
 import inspect
 import itertools
 from itertools import islice
-from typing import List, Union
+from typing import List, Union, Dict, Any, Optional
 
 import discord
 from discord.ext import commands, menus

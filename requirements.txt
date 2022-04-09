@@ -44,7 +44,7 @@ mystbin.py==3.1.1
 num2words==0.5.10
 orjson==3.6.7
 parsedatetime==2.6
-Pillow==9.0.1
+Pillow==9.1.0
 platformdirs==2.5.1
 psutil==5.9.0
 pycares==4.1.2

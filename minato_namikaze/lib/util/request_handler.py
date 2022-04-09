@@ -120,7 +120,6 @@ async def post_commands(
             if not command.hidden:
                 command_dict = {
                     "name": command.name,
-                    "cmd_type": 0,
                     "description": command.description or command.short_doc,
                     "cmd_type": 0,
                     "vote_locked": False,

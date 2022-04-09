@@ -14,9 +14,11 @@ class BotEventsCommands(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
-        if ctx.cog is not None:
-            if ctx.cog.qualified_name.lower() == 'Music'.lower():
-                return
+        if (
+            ctx.cog is not None
+            and ctx.cog.qualified_name.lower() == 'Music'.lower()
+        ):
+            return
         error_channel = await self.bot.fetch_channel(ChannelAndMessageId.error_logs_channel.value)
         if isinstance(error, commands.CommandOnCooldown):
             e1 = ErrorEmbed(title="Command Error!", description=f"`{error}`")

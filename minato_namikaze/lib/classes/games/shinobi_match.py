@@ -269,9 +269,8 @@ class MatchHandlerView(discord.ui.View):
         return self.stop()
     
     async def determine_winer(self, force: bool = False) -> Optional[List[discord.Embed]]:
-        if not force:
-            if self.health1 > 0 and self.health2 > 0:
-                return
+        if not force and self.health1 > 0 and self.health2 > 0:
+            return
         
         if self.health1 == self.health2:
             embed = StarboardEmbed(title="No one won the match!")

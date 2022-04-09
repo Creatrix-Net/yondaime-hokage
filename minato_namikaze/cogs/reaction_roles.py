@@ -40,6 +40,16 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             except JSONDecodeError:
                 await message.delete()
     
+    @commands.Cog.listener()
+    async def on_raw_message_delete(self, payload: discord.RawMessageDeleteEvent):
+        if payload.cached_message is not None:
+            if payload.cached_message.author.id != self.bot.application_id:
+                return
+        database = await self.database_class()
+        reaction_roles = await database.get(payload.message_id)
+        if reaction_roles is not None:
+            await database.delete(payload.message_id)
+    
     @commands.group(invoke_without_command=True, aliases=['reaction_roles'])
     @commands.guild_only()
     @has_permissions(manage_roles=True)

@@ -15,7 +15,7 @@ time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
 
 class TimeConverter(commands.Converter):
 
-    async def convert(ctx, argument):
+    async def convert(self, ctx, argument):
         args = argument.lower()
         matches = re.findall(time_regex, args)
         time = 0
@@ -44,7 +44,7 @@ def can_execute_action(ctx, user, target):
 
 class MemberID(commands.Converter):
 
-    async def convert(ctx, argument):
+    async def convert(self, ctx, argument):
         try:
             member = await commands.MemberConverter().convert(ctx, argument)
         except commands.BadArgument:
@@ -75,8 +75,7 @@ class MemberID(commands.Converter):
 
 
 class BannedMember(commands.Converter):
-
-    async def convert(ctx, argument):
+    async def convert(self, ctx, argument):
         if argument.isdigit():
             member_id = int(argument, base=10)
             try:
@@ -97,7 +96,7 @@ class BannedMember(commands.Converter):
 
 class ActionReason(commands.Converter):
 
-    async def convert(ctx, argument):
+    async def convert(self, ctx, argument):
         ret = f"{ctx.author} (ID: {ctx.author.id}): {argument}"
 
         if len(ret) > 512:

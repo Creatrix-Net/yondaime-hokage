@@ -51,6 +51,16 @@ class UserInfoSlash(discord.SlashCommand, name="user"):
     async def callback(self, response: discord.SlashCommandResponse):
         await response.send_message(embed=await userinfo(response.options.user, response.interaction.guild, self.cog.bot))
 
+class UserInfoContextMenu(discord.MessageCommand, name="Message Author Info"):
+    """Display the user info of the author of the message"""
+    def __init__(self, cog):
+        self.cog = cog
+
+
+    async def callback(self,response: discord.MessageCommandResponse):
+        message = response.target
+        await response.send_message(embed=await userinfo(message.author, response.interaction.guild, self.cog.bot))
+
 
 class InfoCog(discord.Cog):
     def __init__(self, bot):
@@ -58,6 +68,7 @@ class InfoCog(discord.Cog):
         self.add_application_command(Server(self))
         self.add_application_command(UserInfo(self))
         self.add_application_command(UserInfoSlash(self))
+        self.add_application_command(UserInfoContextMenu(self))
 
 def setup(bot):
     bot.add_cog(InfoCog(bot))

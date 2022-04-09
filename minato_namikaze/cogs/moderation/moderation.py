@@ -298,7 +298,7 @@ class Moderation(commands.Cog):
             dmed = True
         except:
             dmed = False
-        e.description += f"\n**DM-Members**: {'\U00002611' if dmed else '\U0000274c'}"
+        e.description += "\n**DM-Members**: " + '\U00002611' if dmed else '\U0000274c'
         await ban.send(embed=e)
 
     # unban
@@ -332,10 +332,7 @@ class Moderation(commands.Cog):
             dmed = True
         except:
             dmed = False
-        if dmed:
-            e.add_field(name="DM-Members:", value="\U00002611")
-        else:
-            e.add_field(name="DM-Members:", value="\U0000274c")
+        e.description += "\n**DM-Members**: " + '\U00002611' if dmed else '\U0000274c'
 
     # Add Roles
     @commands.command(pass_context=True,

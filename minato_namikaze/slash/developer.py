@@ -146,10 +146,12 @@ class Delete(discord.SlashCommand, parent=Blacklist):
         except ValueError:
             pass
 
-class Commands(discord.SlashCommand):
+class Commands(discord.SlashCommand, global_command=False, guild_ids=[920536143244709889, 920190307595874304]):
     '''Some bot commands releated secret commands'''
     def __init__(self, cog):
         self.cog = cog
+        # if not cog.bot.local:
+        #     self.disabled = True
     
     async def command_check(self, response: discord.SlashCommandResponse):
         if await self.cog.bot.is_owner(response.user):

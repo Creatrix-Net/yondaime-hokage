@@ -551,7 +551,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         if ctx.author.id in self.blacklist:
             embed = ErrorEmbed(title='Blacklisted User!')
-            embed.description = f'You have been `blacklisted` from using my commands. For further queries please contact my developer.'
+            embed.description = 'You have been `blacklisted` from using my commands. For further queries please contact my developer.'
             embed.add_field(name = 'Developer', value=f'[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})')
             embed.add_field(
                 name="Support Server",

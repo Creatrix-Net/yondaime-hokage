@@ -18,11 +18,11 @@ cchardet==2.1.7
 certifi==2021.10.8
 cffi==1.15.0
 charset-normalizer==2.0.12
-click==8.1.1
+click==8.1.2
 colorama==0.4.4
 discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@master
 discord-ext-owoify==0.0.7.9a0
-discord-together==1.2.3
+discord-together==1.2.4
 discord.py @ git+https://github.com/StockerMC/discord.py.git@master
 DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@master
 discordlists.py==1.1.1
@@ -44,7 +44,7 @@ mystbin.py==3.1.1
 num2words==0.5.10
 orjson==3.6.7
 parsedatetime==2.6
-Pillow==9.0.1
+Pillow==9.1.0
 platformdirs==2.5.1
 psutil==5.9.0
 pycares==4.1.2
@@ -69,5 +69,5 @@ websockets==10.2
 yarl==1.7.2
 youtube-dl==2021.12.17
 youtube-search==2.1.0
-zipp==3.7.0
+zipp==3.8.0
 uvloop==0.16.0; sys_platform != "win32"

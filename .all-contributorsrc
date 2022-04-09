@@ -69,11 +69,21 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "wrac4242",
+      "name": "wrac4242",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42539664?v=4",
+      "profile": "https://github.com/wrac4242",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "yondaime-hokage",
-  "projectOwner": "Dhruvacube",
+  "projectOwner": "The-4th-Hokage",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true

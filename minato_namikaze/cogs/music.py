@@ -173,8 +173,7 @@ class Music(commands.Cog):
         """
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         vol = abs(vol)
-        if vol < 0:
-            vol = 0
+        vol = max(vol, 0)
         if vol > 100:
             return await ctx.send(embed=ErrorEmbed(description='The volume should be between 0 and 100'))
         # volume should be a float between 0 to 1

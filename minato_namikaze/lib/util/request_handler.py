@@ -38,15 +38,23 @@ DISCORD_SERVERVICES_BASE_URI = 'https://api.discordservices.net/bot/'
 async def post_handler(
     method: Methods,
     url: str,
-    header: Optional[Dict] = {}, 
-    headers: Optional[Dict] = {},
-    data: Optional[Dict] = {}, 
-    json: Optional[Dict] = {},
+    header: Optional[Dict] = None, 
+    headers: Optional[Dict] = None,
+    data: Optional[Dict] = None, 
+    json: Optional[Dict] = None,
     log_data: Optional[bool] = False, 
     return_data: Optional[bool] = True, 
     return_json: Optional[bool] = False,
     getrequestobj: Optional[bool] = False
 ) -> Any:
+    if header is None:
+        header = {}
+    if headers is None:
+        headers = {}
+    if data is None:
+        data = {}
+    if json is None:
+        json = {}
     header_post = {
         "User-Agent": "Minato Namikaze#6413",
         "X-Ratelimit-Precision": "millisecond",

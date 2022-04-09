@@ -1,5 +1,4 @@
 import datetime
-from random import choice
 from typing import Literal, Optional
 from urllib.parse import urlencode
 

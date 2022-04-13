@@ -58,7 +58,7 @@ pytz==2022.1
 requests==2.27.1
 sentry-sdk==1.5.8
 six==1.16.0
-soupsieve==2.3.1
+soupsieve==2.3.2
 spotify==0.10.2
 SQLAlchemy==1.4.35
 StringProgressBar==1.1.1

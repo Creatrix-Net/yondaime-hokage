@@ -38,7 +38,7 @@ gTTS==2.2.3
 idna==3.3
 imagesize==1.3.0
 import-expression==1.1.4
-importlib-metadata==4.11.2
+importlib-metadata==4.11.3
 Jinja2==3.0.3
 jishaku @ git+https://github.com/Gorialis/jishaku.git@0d877a9506f7d4d5cab1f30567123aec937451cc
 lazy-object-proxy==1.7.1

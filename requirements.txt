@@ -3,7 +3,7 @@ aiosignal==1.2.0
 akinator.py==5.0.0
 alabaster==0.7.12
 appdirs==1.4.4
-astroid==2.10.0
+astroid==2.11.4
 astunparse==1.6.3
 async-cleverbot==0.2.2
 async-timeout==4.0.2

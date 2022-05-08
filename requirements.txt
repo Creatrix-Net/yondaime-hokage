@@ -68,7 +68,7 @@ requests==2.27.1
 sentry-sdk==1.5.6
 six==1.16.0
 snowballstemmer==2.2.0
-soupsieve==2.3.1
+soupsieve==2.3.2.post1
 Sphinx==4.4.0
 sphinx-autoapi==1.8.4
 sphinxcontrib-applehelp==1.0.2

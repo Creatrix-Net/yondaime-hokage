@@ -80,7 +80,7 @@ sphinxcontrib-serializinghtml==1.1.5
 sphinxcontrib-trio==1.1.2
 sphinxcontrib-websupport==1.2.4
 spotify==0.10.2
-SQLAlchemy==1.4.31
+SQLAlchemy==1.4.36
 TenGiphPy==2.5.0
 tqdm==4.63.0
 typing_extensions==4.2.0

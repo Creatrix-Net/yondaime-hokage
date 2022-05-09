@@ -28,7 +28,7 @@ DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@6c84
 discordlists.py==1.1.1
 DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@6e5ad80d6bcdf79c175596562fca599c0332aa2d
 docopt==0.6.2
-docutils==0.17.1
+docutils==0.18.1
 eight-ball==3.0.3
 english-words @ git+https://github.com/The-4th-Hokage/english-words-py.git@571021953746e20fbb642438b58aa7c7dc5b15b7
 ffmpeg==1.4

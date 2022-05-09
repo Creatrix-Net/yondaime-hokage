@@ -43,7 +43,7 @@ Jinja2==3.1.2
 jishaku @ git+https://github.com/Gorialis/jishaku.git@0d877a9506f7d4d5cab1f30567123aec937451cc
 lazy-object-proxy==1.7.1
 mal-api==0.5.2
-MarkupSafe==2.1.0
+MarkupSafe==2.1.1
 multidict==6.0.2
 mystbin.py==2.2.0
 num2words==0.5.10

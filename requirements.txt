@@ -28,7 +28,7 @@ DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@6c84
 discordlists.py==1.1.1
 DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@6e5ad80d6bcdf79c175596562fca599c0332aa2d
 docopt==0.6.2
-docutils==0.17.1
+docutils==0.18.1
 eight-ball==3.0.3
 english-words @ git+https://github.com/The-4th-Hokage/english-words-py.git@571021953746e20fbb642438b58aa7c7dc5b15b7
 ffmpeg==1.4
@@ -47,7 +47,7 @@ MarkupSafe==2.1.0
 multidict==6.0.2
 mystbin.py==2.2.0
 num2words==0.5.10
-orjson==3.6.7
+orjson==3.6.8
 packaging==21.3
 parsedatetime==2.6
 Pillow==9.0.1
@@ -86,7 +86,7 @@ tqdm==4.63.0
 typing_extensions==4.2.0
 Unidecode==1.3.3
 urllib3==1.26.8
-websockets==10.2
+websockets==10.3
 wrapt==1.14.1
 yarl==1.7.2
 youtube-dl==2021.12.17

@@ -51,7 +51,7 @@ orjson==3.6.8
 packaging==21.3
 parsedatetime==2.6
 Pillow==9.0.1
-platformdirs==2.5.1
+platformdirs==2.5.2
 psutil==5.9.0
 pycparser==2.21
 pyee==8.2.2

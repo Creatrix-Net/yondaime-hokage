@@ -34,7 +34,7 @@ english-words @ git+https://github.com/The-4th-Hokage/english-words-py.git@57102
 ffmpeg==1.4
 frozenlist==1.3.0
 greenlet==1.1.2
-gTTS==2.2.3
+gTTS==2.2.4
 idna==3.3
 imagesize==1.3.0
 import-expression==1.1.4

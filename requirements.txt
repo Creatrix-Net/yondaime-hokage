@@ -22,7 +22,7 @@ click==8.1.3
 colorama==0.4.4
 discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@fbb8803779373357e274e1540b368365fd9d8074
 discord-ext-owoify==0.0.7.9a0
-discord-together==1.2.3
+discord-together==1.2.4
 discord.py @ git+https://github.com/StockerMC/discord.py.git@e004a590fb4a52506961f41d8edc7285fe747da0
 DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@6c8430118b8242c08f13f6035fc528e2b3ed0432
 discordlists.py==1.1.1

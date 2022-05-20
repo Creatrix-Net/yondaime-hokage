@@ -91,5 +91,5 @@ wrapt==1.14.1
 yarl==1.7.2
 youtube-dl==2021.12.17
 youtube-search==2.1.0
-zipp==3.7.0
+zipp==3.8.0
 uvloop; sys_platform != "win32"

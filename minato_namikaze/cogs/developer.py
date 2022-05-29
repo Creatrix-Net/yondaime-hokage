@@ -385,9 +385,6 @@ class Developer(commands.Cog):
             e34.add_field(name="**Bots**",
                           value=sum(1 for member in guild.members
                                     if member.bot))
-            e34.add_field(name="**Region**",
-                          value=str(guild.region).capitalize(),
-                          inline=True)
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(
                 content=f"We are now currently at **{len(self.bot.guilds)} servers**",
@@ -448,9 +445,6 @@ class Developer(commands.Cog):
             e34.add_field(name="**Bots**",
                           value=sum(1 for member in guild.members
                                     if member.bot))
-            e34.add_field(name="**Region**",
-                          value=str(guild.region).capitalize(),
-                          inline=True)
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(
                 content=f"We are now currently at **{len(self.bot.guilds)} servers**",

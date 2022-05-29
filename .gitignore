@@ -1,6 +1,8 @@
 .vscode
 images_api_store
 traceback
+_build
+_build/*
 
 *copy.py
 

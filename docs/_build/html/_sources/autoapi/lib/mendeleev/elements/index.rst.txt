@@ -1,6 +1,0 @@
-:py:mod:`lib.mendeleev.elements`
-================================
-
-.. py:module:: lib.mendeleev.elements
-
-

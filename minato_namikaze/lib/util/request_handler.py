@@ -138,22 +138,22 @@ async def post_commands(
                 else:
                     command_dict.update({"groups": [command.full_parent_name,cog_name]})
                 list_to_be_given.append(command_dict)
-    for i in bot.application_commands:
-        app_command_dict = {
-            'name': i.name,
-            'description': i.description,
-            "cmd_type": 1,
-            "vote_locked": False,
-            "premium_only": False,
-            "notes": ['Slash Command'],
-            "nsfw": False,
-            "examples": [],
-            "doc_link": LinksAndVars.website.value+f"/commands/application_commands/#{i.name}",
-            "groups": [],
-            "args": [j.name for j in i.options if i.options],
-            "usage": f'/{i.name}'
-        }
-        list_to_be_given.append(app_command_dict)
+    # for i in bot.application_commands:
+    #     app_command_dict = {
+    #         'name': i.name,
+    #         'description': i.description,
+    #         "cmd_type": 1,
+    #         "vote_locked": False,
+    #         "premium_only": False,
+    #         "notes": ['Slash Command'],
+    #         "nsfw": False,
+    #         "examples": [],
+    #         "doc_link": LinksAndVars.website.value+f"/commands/application_commands/#{i.name}",
+    #         "groups": [],
+    #         "args": [j.name for j in i.options if i.options],
+    #         "usage": f'/{i.name}'
+    #     }
+    #     list_to_be_given.append(app_command_dict)
     final_list = discord.utils.as_chunks(list_to_be_given, 10)
     for to_be_post_list in final_list:
         req = await post_handler(

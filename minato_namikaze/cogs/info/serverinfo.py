@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from lib import serverinfo, userinfo
 from DiscordUtils import Embed
+from typing import Union
 
 class Info(commands.Cog):
     def __init__(self, bot):
@@ -73,5 +74,5 @@ class Info(commands.Cog):
         await ctx.send(embed=await userinfo(user, ctx.guild, self.bot))
 
 
-async def setup(bot):
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
     await bot.add_cog(Info(bot))

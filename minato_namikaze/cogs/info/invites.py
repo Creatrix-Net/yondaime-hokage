@@ -1,7 +1,7 @@
 import asyncio
 import datetime
 import time
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 
 import discord
 from discord.ext import commands, tasks
@@ -269,5 +269,5 @@ class Invites(commands.Cog):
         await ctx.send(embed=embed)
 
 
-async def setup(bot: commands.Bot):
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
     await bot.add_cog(Invites(bot))

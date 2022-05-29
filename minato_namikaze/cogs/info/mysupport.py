@@ -7,6 +7,7 @@ import discord
 import pkg_resources
 import psutil
 import pygit2
+from typing import Union
 from discord.ext import commands
 from lib import ChannelAndMessageId, LinksAndVars, PrivacyPolicy, VotingMenu
 from lib import time_class as time
@@ -203,5 +204,5 @@ class MySupport(commands.Cog, name="My Support"):
         await ctx.send(final_url)
 
 
-def setup(bot):
-    bot.add_cog(MySupport(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(MySupport(bot))

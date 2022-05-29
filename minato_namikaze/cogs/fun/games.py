@@ -13,7 +13,7 @@ from lib import MemberID, Tokens
 from lib.classes.games import *
 from DiscordUtils import ErrorEmbed
 
-class Games(discord.Cog):
+class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.chatbot = ac.Cleverbot(Tokens.chatbot.value)

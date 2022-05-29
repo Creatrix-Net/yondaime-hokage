@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import discord
 from discord.ext import commands
@@ -188,5 +188,5 @@ class Elements(commands.Cog):
         return embed
 
 
-def setup(bot):
-    bot.add_cog(Elements(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(Elements(bot))

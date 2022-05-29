@@ -1124,8 +1124,8 @@ class Moderation(commands.Cog):
 
     @commands.command(aliases=["mute"])
     @commands.guild_only()
-    @commands.has_guild_permissions(timeout_members=True)
-    @has_permissions(timeout_members=True)
+    @commands.has_guild_permissions(moderate_members=True)
+    @has_permissions(moderate_members=True)
     async def timeout(
         self,
         ctx,
@@ -1147,8 +1147,8 @@ class Moderation(commands.Cog):
     
     @commands.command(aliases=["unmute"])
     @commands.guild_only()
-    @commands.has_guild_permissions(timeout_members=True)
-    @has_permissions(timeout_members=True)
+    @commands.has_guild_permissions(moderate_members=True)
+    @has_permissions(moderate_members=True)
     async def untimeout(
         self,
         ctx,

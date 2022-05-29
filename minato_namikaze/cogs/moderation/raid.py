@@ -3,7 +3,7 @@ import datetime
 import logging
 from collections import defaultdict
 from typing import Literal, Optional, Union
-import json
+from orjson import loads
 import DiscordUtils
 from json.decoder import JSONDecodeError
 
@@ -56,7 +56,7 @@ class AntiRaid(commands.Cog):
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
-                data = json.loads(str(cnt))
+                data = loads(str(cnt))
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
@@ -72,7 +72,7 @@ class AntiRaid(commands.Cog):
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
-                data = json.loads(str(cnt))
+                data = loads(str(cnt))
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:

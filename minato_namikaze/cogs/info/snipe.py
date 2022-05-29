@@ -1,5 +1,5 @@
 import re
-
+from typing import Union
 import discord
 from discord.ext import commands
 
@@ -115,5 +115,5 @@ class Snipe(commands.Cog):
         self.snipes[ctx.channel.id] = None
 
 
-async def setup(bot):
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
     await bot.add_cog(Snipe(bot))

@@ -241,5 +241,5 @@ class Support(commands.Cog):
         await channel.send(embed=e2)
 
 
-async def setup(bot):
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
     await bot.add_cog(Support(bot))

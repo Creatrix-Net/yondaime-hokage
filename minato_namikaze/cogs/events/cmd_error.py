@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 from lib import ChannelAndMessageId, NoChannelProvided, IncorrectChannelError
 from DiscordUtils import Embed, ErrorEmbed
-
+from typing import Union
 
 class BotEventsCommands(commands.Cog):
     def __init__(self, bot):
@@ -284,5 +284,5 @@ class BotEventsCommands(commands.Cog):
                 )
 
 
-async def setup(bot):
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
     await bot.add_cog(BotEventsCommands(bot))

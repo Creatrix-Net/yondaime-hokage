@@ -175,9 +175,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 if filename.endswith(".py"):
                     await self.load_extension(f"cogs.{filename[:-3]}")
         try:
-            self.load_extension("jishaku")
-        except discord.errors.ExtensionAlreadyLoaded:
+            await self.load_extension("jishaku")
+        except discord.ext.commands.ExtensionAlreadyLoaded:
             pass
+        await bot.tree.sync()
 
 
         difference = int(round(time.time() - self.start_time.timestamp()))

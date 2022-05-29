@@ -255,5 +255,5 @@ class Random(commands.Cog):
     #     await ctx.send(file=file)
 
 
-def setup(bot):
-    bot.add_cog(Random(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(Random(bot))

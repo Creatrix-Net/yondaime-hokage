@@ -6,7 +6,7 @@ from discord.ext import commands
 from lib import Tokens, LinksAndVars
 from mal import Anime, AnimeSearch, Manga, MangaSearch, AnimeCharacterResult, AnimeStaffResult, MangaCharacterResult
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Union
 
 
 def format_related_anime_manga(dict_related_anime: Dict[str, List[str]]) -> str:
@@ -528,7 +528,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                     check=lambda m: m.author == ctx.author and m.channel == ctx
                     .channel,
                 )
-            except TimeoutError:
+            except asyncio.TimeoutError:
                 try:
                     await answer_content.delete()
                 except (discord.NotFound, discord.Forbidden, discord.HTTPException):
@@ -587,5 +587,5 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         )
 
 
-def setup(bot):
-    bot.add_cog(AnimeaMangaandWaifu(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(AnimeaMangaandWaifu(bot))

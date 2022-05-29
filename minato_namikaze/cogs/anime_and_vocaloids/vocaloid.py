@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from lib.functions import meek_api
-
+from typing import Union
 
 class Vocaloid(commands.Cog):
     def __init__(self, bot):
@@ -121,5 +121,5 @@ class Vocaloid(commands.Cog):
         await ctx.send(embed=await meek_api("diva"))
 
 
-def setup(bot):
-    bot.add_cog(Vocaloid(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(Vocaloid(bot))

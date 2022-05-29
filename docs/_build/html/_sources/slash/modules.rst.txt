@@ -1,9 +1,0 @@
-slash
-=====
-
-.. toctree::
-   :maxdepth: 4
-
-   activities_vocaloid
-   info
-   moderation

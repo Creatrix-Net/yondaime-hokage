@@ -1,7 +1,0 @@
-badges module
-=============
-
-.. automodule:: badges
-   :members:
-   :undoc-members:
-   :show-inheritance:

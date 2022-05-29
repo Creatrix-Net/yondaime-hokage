@@ -241,5 +241,5 @@ class Support(commands.Cog):
         await channel.send(embed=e2)
 
 
-def setup(bot):
-    bot.add_cog(Support(bot))
+async def setup(bot):
+    await bot.add_cog(Support(bot))

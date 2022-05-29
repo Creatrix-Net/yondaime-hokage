@@ -1,0 +1,142 @@
+:py:mod:`lib.mendeleev.electronegativity`
+=========================================
+
+.. py:module:: lib.mendeleev.electronegativity
+
+.. autoapi-nested-parse::
+
+   Electronegativity scale formulas
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.mendeleev.electronegativity.allred_rochow
+   lib.mendeleev.electronegativity.cottrell_sutton
+   lib.mendeleev.electronegativity.gordy
+   lib.mendeleev.electronegativity.li_xue
+   lib.mendeleev.electronegativity.martynov_batsanov
+   lib.mendeleev.electronegativity.mulliken
+   lib.mendeleev.electronegativity.nagle
+   lib.mendeleev.electronegativity.sanderson
+   lib.mendeleev.electronegativity.generic
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.mendeleev.electronegativity.RY
+
+
+.. py:data:: RY
+   :annotation: = 13.605693009
+
+   
+
+.. py:function:: allred_rochow(zeff, radius)
+
+   Calculate the electronegativity of an atom according to the definition
+   of Allred and Rochow
+   :param zeff: effective nuclear charge
+   :param radius: value of the radius
+
+
+.. py:function:: cottrell_sutton(zeff, radius)
+
+   Calculate the electronegativity of an atom according to the definition
+   of Allred and Rochow
+   :param zeff: effective nuclear charge
+   :param radius: value of the radius
+
+
+.. py:function:: gordy(zeff, radius)
+
+   Calculate the electronegativity of an atom according to the definition
+   of Allred and Rochow
+   :param zeff: effective nuclear charge
+   :param radius: value of the radius
+
+
+.. py:function:: li_xue(ionization_energy, radius, valence_pqn)
+
+   Calculate the electronegativity of an atom according to the definition
+   of Li and Xue
+   :param charge: Charge of the ion
+   :param radius: Type of radius to be used in the calculation, either `crystal_radius` as recommended in the paper or `ionic_radius`
+   :param valence_pqn: valence principal quantum number
+
+
+.. py:function:: martynov_batsanov(ionization_energies)
+
+   Calculates the electronegativity value according to Martynov and
+   Batsanov as the average of the ionization energies of the valence
+   electrons
+   :param ionization_energies: ionization energies for the valence electrons
+
+   .. math::
+      \chi_{MB} = \sqrt{\\frac{1}{n_{v}}\sum^{n_{v}}_{k=1} I_{k}}
+   where:
+   - :math:`n_{v}` is the number of valence electrons and
+   - :math:`I_{k}` is the :math:`k` th ionization potential.
+
+
+.. py:function:: mulliken(ionization_energy, electron_affinity, missing_is_zero = False, allow_negative_ea = False)
+
+   Return the absolute electronegativity (Mulliken scale), calculated as
+   :param ionization_energy: ionization energy
+   :param electron_affinity: electron affinity
+   :param missing_is_zero: missing values are substituted with zero
+   :param allow_negative_ea: if `True` negative EA values will be allowed
+
+   .. math::
+      \chi = \\frac{I + A}{2}
+   where:
+   - :math:`I` is the ionization energy,
+   - :math:`A` is the electron affinity
+
+
+.. py:function:: nagle(nvalence, polarizability)
+
+   Calculate the electronegativity of an atom according to the definition
+   of Nagle
+   :param nvalence: number of valence electrons
+   :param polarizability: dipole polarizability
+
+
+.. py:function:: sanderson(radius, noble_gas_radius)
+
+   Calculate Sanderson's electronegativity
+   :param radius: radius value for the element
+   :param noble_gas_radius: value of the radius of a hypothetical noble gas with
+   :param the atomic number of element for which electronegativity is calculated:
+
+   .. math::
+       \chi = \\frac{AD}{AD_{\\text{ng}}}
+
+
+.. py:function:: generic(zeff, radius, rpow = 1, apow = 1)
+
+   Calculate the electronegativity from a general formula
+   :param zeff: effective nuclear charge
+   :param radius: radius value for the element
+   :param rpow: power to raise the radius to (see equation below)
+   :param apow: power to raise the fraction to (see equation below)
+
+   .. math::
+       \chi = \left(\\frac{Z_{\\text{eff}}}{r^{\\beta}}\\right)^{\\alpha}
+   where:
+   - :math:`Z_{\\text{eff}}` is the effective nuclear charge
+   - :math:`r` is the covalent radius
+   - :math:`\\alpha,\\beta` parameters
+
+

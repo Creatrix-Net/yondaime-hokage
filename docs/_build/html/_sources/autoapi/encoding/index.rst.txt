@@ -1,0 +1,224 @@
+:py:mod:`encoding`
+==================
+
+.. py:module:: encoding
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   encoding.Encoding
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   encoding.escape
+   encoding.pagify
+   encoding.setup
+
+
+
+.. py:function:: escape(text, *, mass_mentions = False, formatting = False)
+
+
+.. py:function:: pagify(text, delims = None, *, priority = False, escape_mass_mentions = True, shorten_by = 8, page_length = 2000)
+
+
+.. py:class:: Encoding(bot)
+
+   Bases: :py:obj:`discord.ext.commands.Cog`
+
+   The base class that all cogs must inherit from.
+
+   A cog is a collection of commands, listeners, and optional state to
+   help group commands together. More information on them can be found on
+   the :ref:`ext_commands_cogs` page.
+
+   When inheriting from this class, the options shown in :class:`CogMeta`
+   are equally valid here.
+
+   .. py:method:: display_emoji(self)
+      :property:
+
+
+   .. py:method:: search_words(data)
+      :staticmethod:
+
+
+   .. py:method:: charinfo(self, ctx, *, characters)
+      :async:
+
+      Shows you information about a number of characters.
+      Only up to 25 characters at a time.
+
+
+   .. py:method:: hash_cmd(self, ctx)
+      :async:
+
+      Various hashing commands
+
+
+   .. py:method:: hash_md5(self, ctx, *, txt)
+      :async:
+
+      MD5 Encrypt Text
+
+
+   .. py:method:: hash_sha1(self, ctx, *, txt)
+      :async:
+
+      SHA1 Encrypt Text
+
+
+   .. py:method:: hash_sha256(self, ctx, *, txt)
+      :async:
+
+      SHA256 Encrypt Text
+
+
+   .. py:method:: hash_sha512(self, ctx, *, txt)
+      :async:
+
+      SHA512 Encrypt Text
+
+
+   .. py:method:: _encode(self, ctx)
+      :async:
+
+      Encode a string.
+
+
+   .. py:method:: _decode(self, ctx)
+      :async:
+
+      Decode a string.
+
+
+   .. py:method:: encode_binary(self, ctx, *, message)
+      :async:
+
+      Encode text into binary sequences of 8
+
+
+   .. py:method:: decode_binary(self, ctx, *, message)
+      :async:
+
+      Decode binary sequences of 8
+
+
+   .. py:method:: encode_hex(self, ctx, *, message)
+      :async:
+
+      Encode text into hexadecimal
+
+
+   .. py:method:: decode_hex(self, ctx, *, message)
+      :async:
+
+      Decode a hexadecimal sequence to text
+
+
+   .. py:method:: encode_b16(self, ctx, *, message)
+      :async:
+
+      Encode text into base 16
+
+
+   .. py:method:: decode_b16(self, ctx, *, message)
+      :async:
+
+      Decode base16 text
+
+
+   .. py:method:: encode_b32(self, ctx, *, message)
+      :async:
+
+      Encode text into base 32
+
+
+   .. py:method:: decode_b32(self, ctx, *, message)
+      :async:
+
+      Decode base32 text
+
+
+   .. py:method:: encode_b64(self, ctx, *, message)
+      :async:
+
+      Encode text into base 64
+
+
+   .. py:method:: decode_b64(self, ctx, *, message)
+      :async:
+
+      Decode base 64 text
+
+
+   .. py:method:: encode_char(self, ctx, *, message)
+      :async:
+
+      Encode message into character numbers
+
+
+   .. py:method:: decode_char(self, ctx, *, message)
+      :async:
+
+      Decode character numbers to a message
+
+
+   .. py:method:: encode_braille(self, ctx, *, message)
+      :async:
+
+      Encode text into braille unicode characters
+
+
+   .. py:method:: decode_braille(self, ctx, *, message)
+      :async:
+
+      Decide braille unicode characters to ascii
+
+
+   .. py:method:: rot_encode(n, text)
+      :staticmethod:
+
+      https://stackoverflow.com/questions/47580337/short-rot-n-decode-function-in-python
+
+
+   .. py:method:: caeser_encode(self, ctx, rot_key, *, message)
+      :async:
+
+      Encode a caeser cipher message with specified key
+
+
+   .. py:method:: caeser_decode(self, ctx, rot_key, *, message)
+      :async:
+
+      Decode a caeser cipher message with specified key
+
+
+   .. py:method:: dna_encode(self, ctx, *, message)
+      :async:
+
+      Encodes a string into DNA 4 byte ACGT format
+
+
+   .. py:method:: dna_decode(self, ctx, *, message)
+      :async:
+
+      Decodes a string of DNA in 4 byte ACGT format.
+
+
+
+.. py:function:: setup(bot)
+   :async:
+
+

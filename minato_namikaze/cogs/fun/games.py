@@ -167,5 +167,5 @@ class Games(discord.Cog):
             pass
 
 
-def setup(bot):
-    bot.add_cog(Games(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(Games(bot))

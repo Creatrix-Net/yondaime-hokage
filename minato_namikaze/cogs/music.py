@@ -200,5 +200,5 @@ class Music(commands.Cog):
         await ctx.send(embed=ErrorEmbed(description='No song in the queue'), delete_after=5)
 
 
-def setup(bot):
-    bot.add_cog(Music(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(Music(bot))

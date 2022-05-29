@@ -1,0 +1,23 @@
+:py:mod:`lib.classes.music`
+===========================
+
+.. py:module:: lib.classes.music
+
+
+Module Contents
+---------------
+
+.. py:exception:: NoChannelProvided(message = None, *args)
+
+   Bases: :py:obj:`discord.ext.commands.CommandError`
+
+   Error raised when no suitable voice channel was supplied.
+
+
+.. py:exception:: IncorrectChannelError(message = None, *args)
+
+   Bases: :py:obj:`discord.ext.commands.CommandError`
+
+   Error raised when commands are issued outside of the players session channel.
+
+

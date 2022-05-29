@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lib.functions.cache</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+  <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+  <script src="../../../../_static/jquery.js"></script>
+  <script src="../../../../_static/underscore.js"></script>
+  <script src="../../../../_static/doctools.js"></script>
+  <script src="../../../../_static/custom.js"></script>
+  <script src="../../../../_static/settings.js"></script>
+  <script src="../../../../_static/copy.js"></script>
+  <script src="../../../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.functions.cache</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#lib.functions.cache._wrap_and_store_coroutine">_wrap_and_store_coroutine</a></li>
+<li><a class="reference internal" href="#lib.functions.cache._wrap_new_coroutine">_wrap_new_coroutine</a></li>
+<li><a class="reference internal" href="#lib.functions.cache.ExpiringCache">ExpiringCache</a><ul>
+<li><a class="reference internal" href="#lib.functions.cache.ExpiringCache.__verify_cache_integrity">__verify_cache_integrity</a></li>
+<li><a class="reference internal" href="#lib.functions.cache.ExpiringCache.__contains__">__contains__</a></li>
+<li><a class="reference internal" href="#lib.functions.cache.ExpiringCache.__getitem__">__getitem__</a></li>
+<li><a class="reference internal" href="#lib.functions.cache.ExpiringCache.__setitem__">__setitem__</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.functions.cache.Strategy">Strategy</a><ul>
+<li><a class="reference internal" href="#lib.functions.cache.Strategy.lru">lru</a></li>
+<li><a class="reference internal" href="#lib.functions.cache.Strategy.raw">raw</a></li>
+<li><a class="reference internal" href="#lib.functions.cache.Strategy.timed">timed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.functions.cache.cache">cache</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-lib.functions.cache">
+<span id="lib-functions-cache"></span><h1><a class="reference internal" href="../index.html#lib.functions.cache" title="lib.functions.cache"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.functions.cache</span></code></a><a class="headerlink" href="#module-lib.functions.cache" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.functions.cache.ExpiringCache" title="lib.functions.cache.ExpiringCache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExpiringCache</span></code></a></p></td>
+<td><p>dict() -&gt; new empty dictionary</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.functions.cache.Strategy" title="lib.functions.cache.Strategy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Strategy</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.functions.cache._wrap_and_store_coroutine" title="lib.functions.cache._wrap_and_store_coroutine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_wrap_and_store_coroutine</span></code></a>(cache, key, coro)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.functions.cache._wrap_new_coroutine" title="lib.functions.cache._wrap_new_coroutine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_wrap_new_coroutine</span></code></a>(value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.functions.cache.cache" title="lib.functions.cache.cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cache</span></code></a>(maxsize=128, strategy=Strategy.lru, ignore_kwargs=False)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py function">
+<dt class="sig sig-object py" id="lib.functions.cache._wrap_and_store_coroutine">
+<span class="sig-prename descclassname"><span class="pre">lib.functions.cache.</span></span><span class="sig-name descname"><span class="pre">_wrap_and_store_coroutine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coro</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.functions.cache._wrap_and_store_coroutine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.functions.cache._wrap_new_coroutine">
+<span class="sig-prename descclassname"><span class="pre">lib.functions.cache.</span></span><span class="sig-name descname"><span class="pre">_wrap_new_coroutine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.functions.cache._wrap_new_coroutine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.functions.cache.ExpiringCache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.functions.cache.</span></span><span class="sig-name descname"><span class="pre">ExpiringCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.functions.cache.ExpiringCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object’s</p>
+<blockquote>
+<div><p>(key, value) pairs</p>
+</div></blockquote>
+<dl>
+<dt>dict(iterable) -&gt; new dictionary initialized as if via:</dt><dd><p>d = {}
+for k, v in iterable:</p>
+<blockquote>
+<div><p>d[k] = v</p>
+</div></blockquote>
+</dd>
+<dt>dict(<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs) -&gt; new dictionary initialized with the name=value pairs</dt><dd><p>in the keyword argument list.  For example:  dict(one=1, two=2)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.functions.cache.ExpiringCache.__verify_cache_integrity">
+<span class="sig-name descname"><span class="pre">__verify_cache_integrity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.functions.cache.ExpiringCache.__verify_cache_integrity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.functions.cache.ExpiringCache.__contains__">
+<span class="sig-name descname"><span class="pre">__contains__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.functions.cache.ExpiringCache.__contains__" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the dictionary has the specified key, else False.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.functions.cache.ExpiringCache.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.functions.cache.ExpiringCache.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__getitem__(y) &lt;==&gt; x[y]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.functions.cache.ExpiringCache.__setitem__">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.functions.cache.ExpiringCache.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set self[key] to value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.functions.cache.Strategy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.functions.cache.</span></span><span class="sig-name descname"><span class="pre">Strategy</span></span><a class="headerlink" href="#lib.functions.cache.Strategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.functions.cache.Strategy.lru">
+<span class="sig-name descname"><span class="pre">lru</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#lib.functions.cache.Strategy.lru" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.functions.cache.Strategy.raw">
+<span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#lib.functions.cache.Strategy.raw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.functions.cache.Strategy.timed">
+<span class="sig-name descname"><span class="pre">timed</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#lib.functions.cache.Strategy.timed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.functions.cache.cache">
+<span class="sig-prename descclassname"><span class="pre">lib.functions.cache.</span></span><span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Strategy.lru</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.functions.cache.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

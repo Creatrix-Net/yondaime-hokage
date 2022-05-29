@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>polls</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+  <script src="../../_static/jquery.js"></script>
+  <script src="../../_static/underscore.js"></script>
+  <script src="../../_static/doctools.js"></script>
+  <script src="../../_static/custom.js"></script>
+  <script src="../../_static/settings.js"></script>
+  <script src="../../_static/copy.js"></script>
+  <script src="../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">polls</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#polls.QuickPoll">QuickPoll</a><ul>
+<li><a class="reference internal" href="#polls.QuickPoll.display_emoji">display_emoji</a></li>
+<li><a class="reference internal" href="#polls.QuickPoll.delete_message">delete_message</a></li>
+<li><a class="reference internal" href="#polls.QuickPoll.polltime">polltime</a></li>
+<li><a class="reference internal" href="#polls.QuickPoll.tally">tally</a></li>
+<li><a class="reference internal" href="#polls.QuickPoll.quickpoll">quickpoll</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#polls.setup">setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-polls">
+<span id="polls"></span><h1><a class="reference internal" href="#module-polls" title="polls"><code class="xref py py-mod docutils literal notranslate"><span class="pre">polls</span></code></a><a class="headerlink" href="#module-polls" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#polls.QuickPoll" title="polls.QuickPoll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuickPoll</span></code></a></p></td>
+<td><p>The base class that all cogs must inherit from.</p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#polls.setup" title="polls.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(bot)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="polls.QuickPoll">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polls.</span></span><span class="sig-name descname"><span class="pre">QuickPoll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polls.QuickPoll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Cog" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Cog</span></code></a></p>
+<p>The base class that all cogs must inherit from.</p>
+<p>A cog is a collection of commands, listeners, and optional state to
+help group commands together. More information on them can be found on
+the <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html#ext-commands-cogs" title="(in discord.py v2.0.0a)"><span>Cogs</span></a> page.</p>
+<p>When inheriting from this class, the options shown in <code class="xref py py-class docutils literal notranslate"><span class="pre">CogMeta</span></code>
+are equally valid here.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polls.QuickPoll.display_emoji">
+<span class="sig-name descname"><span class="pre">display_emoji</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polls.QuickPoll.display_emoji" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.PartialEmoji" title="(in discord.py v2.0.0a)">discord.PartialEmoji</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polls.QuickPoll.delete_message">
+<em class="property"><span class="pre">staticmethod</span> <span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">delete_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polls.QuickPoll.delete_message" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message_list</strong> (<em>List</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><em>discord.Message</em></a><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polls.QuickPoll.polltime">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">polltime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polls.QuickPoll.polltime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create polls easily</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polls.QuickPoll.tally">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">tally</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poll_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polls.QuickPoll.tally" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get polls results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>poll_id</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.MessageConverter" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.MessageConverter</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polls.QuickPoll.quickpoll">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">quickpoll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">questions_and_choices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polls.QuickPoll.quickpoll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a poll quickly.</p>
+<p>The first argument is the question and the rest are the choices.</p>
+<p>Also can’t use the tally command here</p>
+<p><strong>Example:</strong> <cite>)quickpoll question option1 option2</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>questions_and_choices</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="polls.setup">
+<em class="property"><span class="pre">await</span> </em><span class="sig-prename descclassname"><span class="pre">polls.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polls.setup" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bot</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Bot" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Bot</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.AutoShardedBot" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.AutoShardedBot</em></a><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

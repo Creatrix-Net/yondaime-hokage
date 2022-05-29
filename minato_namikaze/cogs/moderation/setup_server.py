@@ -469,5 +469,5 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         starboard_channel = self.bot.get_channel(data.get('channel'))
         await starboard_channel.send(content=f'\U00002b50 {channel.mention} by {msg.author.mention}',embed=embed, allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False, replied_user=False))
 
-def setup(bot):
-    bot.add_cog(ServerSetup(bot))
+async def setup(bot):
+    await bot.add_cog(ServerSetup(bot))

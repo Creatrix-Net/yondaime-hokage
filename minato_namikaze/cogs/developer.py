@@ -234,14 +234,13 @@ class Developer(commands.Cog):
                 for i in os.listdir(cog_dir / file):
                     if i.endswith(".py"):
                         try:
-                            self.bot.reload_extension(
-                                f"cogs.{file.strip(' ')}.{i[:-3]}")
+                            await self.bot.reload_extension(f"cogs.{file.strip(' ')}.{i[:-3]}")
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
                 if file.endswith(".py"):
                     try:
-                        self.bot.reload_extension(f"cogs.{file[:-3]}")
+                        await self.bot.reload_extension(f"cogs.{file[:-3]}")
                     except Exception as e:
                         return await ctx.send(f"```py\n{e}```")
 
@@ -515,5 +514,5 @@ class Developer(commands.Cog):
             pass
 
 
-def setup(bot):
-    bot.add_cog(Developer(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(Developer(bot))

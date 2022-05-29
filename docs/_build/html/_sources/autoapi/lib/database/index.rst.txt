@@ -1,0 +1,247 @@
+:py:mod:`lib.database`
+======================
+
+.. py:module:: lib.database
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   backup/index.rst
+   badges/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.database.ChannelAndMessageId
+   lib.database.BackupDatabse
+   lib.database.ChannelAndMessageId
+   lib.database.Badges
+
+
+
+
+.. py:class:: ChannelAndMessageId
+
+   Bases: :py:obj:`enum.IntEnum`
+
+   Enum where members are also (and must be) ints
+
+   .. py:attribute:: badges_channel
+      :annotation: = 920536143458598930
+
+      
+
+   .. py:attribute:: backup_channel
+      :annotation: = 922544732918415390
+
+      
+
+   .. py:attribute:: error_logs_channel
+      :annotation: = 920190310942908513
+
+      
+
+   .. py:attribute:: server_id
+      :annotation: = 920190307595874304
+
+      
+
+   .. py:attribute:: server_id2
+      :annotation: = 920536143244709889
+
+      
+
+   .. py:attribute:: restartlog_channel1
+      :annotation: = 920190310942908508
+
+      
+
+   .. py:attribute:: restartlog_channel2
+      :annotation: = 920536143458598926
+
+      
+
+   .. py:attribute:: serverlog_channel1
+      :annotation: = 920190310942908509
+
+      
+
+   .. py:attribute:: serverlog_channel2
+      :annotation: = 920536143458598927
+
+      
+
+
+.. py:class:: BackupDatabse(ctx)
+
+   The database class to handle the backup commands
+
+
+   .. py:method:: create_backup(self)
+      :async:
+
+      |coro|
+      It creates the backup of the server
+
+      :return: The backup code
+      :rtype: int
+
+
+   .. py:method:: get_backup_data(self, code)
+      :async:
+
+      |coro|
+      It returns the backup of the specified server
+
+      :param code: The message containing that backup
+      :type code: int
+      :return: The json file which has the backup
+      :rtype: Optional[discord.Attachment]
+
+
+   .. py:method:: delete_backup_data(self, code)
+      :async:
+
+      |coro|
+      Deletes the backup data against the specified code
+
+      :param code: The backup code to delete
+      :type code: int
+
+
+   .. py:method:: apply_backup(self, code)
+      :async:
+
+      |coro|
+      It applied backup with the backup code specified
+
+      :param code:Backup Code
+      :type code: int
+      :return: :class:`str` is returned when there is a error otherwise a :class:`bool` with True value
+      :rtype: Optional[Union[str, bool]]
+
+
+   .. py:method:: return_category_channel(self, name)
+      :async:
+
+      It returns the category channel from the category name
+
+      :param name: Category channel name
+      :type name: str
+      :return: See Above
+      :rtype: Optional[discord.CategoryChannel]
+
+
+   .. py:method:: return_role_overwrites(self, data)
+      :async:
+
+      Return the role overwrites dict with proper formatting
+
+      :param data: Dict containing the role overwrites data
+      :type data: dict
+      :return: Role Overwrites with the proper formatting
+      :rtype: dict
+
+
+   .. py:method:: reason(code, author = None)
+      :staticmethod:
+
+      It generates the mod reason
+
+      :param code: The backup code
+      :type code: int
+      :param author: The author who is using the backup, defaults to None
+      :type author: Optional[Union[discord.Member, discord.User]], optional
+      :return: The reason to be given in the `reason` parameter
+      :rtype: str
+
+
+
+.. py:class:: ChannelAndMessageId
+
+   Bases: :py:obj:`enum.IntEnum`
+
+   Enum where members are also (and must be) ints
+
+   .. py:attribute:: badges_channel
+      :annotation: = 920536143458598930
+
+      
+
+   .. py:attribute:: backup_channel
+      :annotation: = 922544732918415390
+
+      
+
+   .. py:attribute:: error_logs_channel
+      :annotation: = 920190310942908513
+
+      
+
+   .. py:attribute:: server_id
+      :annotation: = 920190307595874304
+
+      
+
+   .. py:attribute:: server_id2
+      :annotation: = 920536143244709889
+
+      
+
+   .. py:attribute:: restartlog_channel1
+      :annotation: = 920190310942908508
+
+      
+
+   .. py:attribute:: restartlog_channel2
+      :annotation: = 920536143458598926
+
+      
+
+   .. py:attribute:: serverlog_channel1
+      :annotation: = 920190310942908509
+
+      
+
+   .. py:attribute:: serverlog_channel2
+      :annotation: = 920536143458598927
+
+      
+
+
+.. py:class:: Badges(ctx)
+
+   A database handler for the Badges class
+
+   .. py:method:: get_all_badges(self)
+      :async:
+
+      |coro|
+      Returns all the badges
+
+      :return: List of all badges data
+      :rtype: list
+
+
+   .. py:method:: get_badge_code(badge_name)
+      :staticmethod:
+
+      Returns the badge code from its name
+
+      :param badge_name: The name of the badge image
+      :type badge_name: str
+      :return: Badge Code
+      :rtype: str
+
+
+

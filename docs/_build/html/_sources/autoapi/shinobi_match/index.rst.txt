@@ -1,0 +1,80 @@
+:py:mod:`shinobi_match`
+=======================
+
+.. py:module:: shinobi_match
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   shinobi_match.ShinobiMatchCog
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   shinobi_match.setup
+
+
+
+.. py:class:: ShinobiMatchCog(bot)
+
+   Bases: :py:obj:`discord.ext.commands.Cog`
+
+   The base class that all cogs must inherit from.
+
+   A cog is a collection of commands, listeners, and optional state to
+   help group commands together. More information on them can be found on
+   the :ref:`ext_commands_cogs` page.
+
+   When inheriting from this class, the options shown in :class:`CogMeta`
+   are equally valid here.
+
+   .. py:method:: display_emoji(self)
+      :property:
+
+
+   .. py:method:: characters_data(ctx)
+      :staticmethod:
+      :async:
+
+
+   .. py:method:: return_random_characters(self, ctx)
+      :classmethod:
+      :async:
+
+
+   .. py:method:: return_select_help_embed(author)
+      :staticmethod:
+
+
+   .. py:method:: match(self, ctx, opponent)
+      :async:
+
+      Play shinobi match with your friends using the characters from `Naruto Verse`
+
+      **Steps**
+      > 1. Type `{prefix}match @player_mention`
+      > 2. Then both player selects the character from their respection selection boxes
+      > 3. Then starts the amazing match!
+
+      **Rules**
+      > 1. You cannot repeat a move `twice` in a row
+      > 2. You will have only `2 Special Moves` to perform, so use wisely
+      > 3. `On timeout`, by the default the user with high health value would be decalred as a winner
+      > 4. Also you can perform `healing operations twice` in the whole game, so use the heal wisely.
+
+
+
+.. py:function:: setup(bot)
+   :async:
+
+

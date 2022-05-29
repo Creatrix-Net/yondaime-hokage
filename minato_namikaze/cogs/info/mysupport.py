@@ -116,7 +116,7 @@ class MySupport(commands.Cog, name="My Support"):
             value=f"[Click Here]({LinksAndVars.website.value})",
         )
         embed.set_footer(
-            text=f"Made with StockerMC/discord.py v{version}",
+            text=f"Made with discord.py v{version}",
             icon_url="https://i.imgur.com/5BFecvA.png",
         )
         embed.timestamp = discord.utils.utcnow()
@@ -160,8 +160,7 @@ class MySupport(commands.Cog, name="My Support"):
             difference = float(int(starttime - endtime))
             e.add_field(name=":inbox_tray: Script Speed :outbox_tray:",
                         value=f"{difference}ms")
-            e.set_image(url=await self.bot.get_random_image_from_tag(
-                "ping pong anime"))
+            e.set_image(url=await self.bot.get_random_image_from_tag("ping pong anime"))
             await msg.edit(content="", embed=e)
 
     @commands.command()
@@ -197,7 +196,7 @@ class MySupport(commands.Cog, name="My Support"):
             location = os.path.relpath(filename).replace("\\", "/")
         else:
             location = module.replace(".", "/") + ".py"
-            source_url = "https://github.com/StockerMC/discord.py"
+            source_url = "https://github.com/Rapptz/discord.py"
             branch = "master"
 
         final_url = f"<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"

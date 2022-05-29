@@ -1,5 +1,5 @@
 import datetime
-from typing import Literal, Optional
+from typing import Union, Optional
 from urllib.parse import urlencode
 
 import aiohttp
@@ -197,5 +197,5 @@ class Weather(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(Weather(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(Weather(bot))

@@ -1,0 +1,341 @@
+:py:mod:`lib.classes.converter`
+===============================
+
+.. py:module:: lib.classes.converter
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.converter.TimeConverter
+   lib.classes.converter.Arguments
+   lib.classes.converter.MemberID
+   lib.classes.converter.BannedMember
+   lib.classes.converter.ActionReason
+   lib.classes.converter.AntiRaidConfig
+   lib.classes.converter.MentionSpamConfig
+   lib.classes.converter.GiveawayConfig
+   lib.classes.converter.CooldownByContent
+   lib.classes.converter.SpamChecker
+   lib.classes.converter.Characters
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.converter.can_execute_action
+   lib.classes.converter.safe_reason_append
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.converter.time_regex
+   lib.classes.converter.time_dict
+
+
+.. py:data:: time_regex
+   
+
+   
+
+.. py:data:: time_dict
+   
+
+   
+
+.. py:class:: TimeConverter
+
+   Bases: :py:obj:`discord.ext.commands.Converter`
+
+   The base class of custom converters that require the :class:`.Context`
+   to be passed to be useful.
+
+   This allows you to implement converters that function similar to the
+   special cased ``discord`` classes.
+
+   Classes that derive from this should override the :meth:`~.Converter.convert`
+   method to do its conversion logic. This method must be a :ref:`coroutine <coroutine>`.
+
+   .. py:method:: convert(self, ctx, argument)
+      :async:
+
+      |coro|
+
+      The method to override to do conversion logic.
+
+      If an error is found while converting, it is recommended to
+      raise a :exc:`.CommandError` derived exception as it will
+      properly propagate to the error handlers.
+
+      :param ctx: The invocation context that the argument is being used in.
+      :type ctx: :class:`.Context`
+      :param argument: The argument that is being converted.
+      :type argument: :class:`str`
+
+      :raises CommandError: A generic exception occurred when converting the argument.
+      :raises BadArgument: The converter failed to convert the argument.
+
+
+
+.. py:class:: Arguments(prog=None, usage=None, description=None, epilog=None, parents=[], formatter_class=HelpFormatter, prefix_chars='-', fromfile_prefix_chars=None, argument_default=None, conflict_handler='error', add_help=True, allow_abbrev=True)
+
+   Bases: :py:obj:`argparse.ArgumentParser`
+
+   Object for parsing command line strings into Python objects.
+
+   :keyword - prog -- The name of the program (default: sys.argv[0])
+   :keyword - usage -- A usage message (default: auto-generated from arguments)
+   :keyword - description -- A description of what the program does:
+   :keyword - epilog -- Text following the argument descriptions:
+   :keyword - parents -- Parsers whose arguments should be copied into this one:
+   :keyword - formatter_class -- HelpFormatter class for printing help messages:
+   :keyword - prefix_chars -- Characters that prefix optional arguments:
+   :keyword - fromfile_prefix_chars -- Characters that prefix files containing: additional arguments
+   :keyword - argument_default -- The default value for all arguments:
+   :keyword - conflict_handler -- String indicating how to handle conflicts:
+   :keyword - add_help -- Add a -h/-help option:
+   :keyword - allow_abbrev -- Allow long options to be abbreviated unambiguously:
+
+   .. py:method:: error(self, message)
+
+      error(message: string)
+
+      Prints a usage message incorporating the message to stderr and
+      exits.
+
+      If you override this in a subclass, it should not return -- it
+      should either exit or raise an exception.
+
+
+
+.. py:function:: can_execute_action(ctx, user, target)
+
+
+.. py:class:: MemberID
+
+   Bases: :py:obj:`discord.ext.commands.Converter`
+
+   The base class of custom converters that require the :class:`.Context`
+   to be passed to be useful.
+
+   This allows you to implement converters that function similar to the
+   special cased ``discord`` classes.
+
+   Classes that derive from this should override the :meth:`~.Converter.convert`
+   method to do its conversion logic. This method must be a :ref:`coroutine <coroutine>`.
+
+   .. py:method:: convert(self, ctx, argument)
+      :async:
+
+      |coro|
+
+      The method to override to do conversion logic.
+
+      If an error is found while converting, it is recommended to
+      raise a :exc:`.CommandError` derived exception as it will
+      properly propagate to the error handlers.
+
+      :param ctx: The invocation context that the argument is being used in.
+      :type ctx: :class:`.Context`
+      :param argument: The argument that is being converted.
+      :type argument: :class:`str`
+
+      :raises CommandError: A generic exception occurred when converting the argument.
+      :raises BadArgument: The converter failed to convert the argument.
+
+
+
+.. py:class:: BannedMember
+
+   Bases: :py:obj:`discord.ext.commands.Converter`
+
+   The base class of custom converters that require the :class:`.Context`
+   to be passed to be useful.
+
+   This allows you to implement converters that function similar to the
+   special cased ``discord`` classes.
+
+   Classes that derive from this should override the :meth:`~.Converter.convert`
+   method to do its conversion logic. This method must be a :ref:`coroutine <coroutine>`.
+
+   .. py:method:: convert(self, ctx, argument)
+      :async:
+
+      |coro|
+
+      The method to override to do conversion logic.
+
+      If an error is found while converting, it is recommended to
+      raise a :exc:`.CommandError` derived exception as it will
+      properly propagate to the error handlers.
+
+      :param ctx: The invocation context that the argument is being used in.
+      :type ctx: :class:`.Context`
+      :param argument: The argument that is being converted.
+      :type argument: :class:`str`
+
+      :raises CommandError: A generic exception occurred when converting the argument.
+      :raises BadArgument: The converter failed to convert the argument.
+
+
+
+.. py:class:: ActionReason
+
+   Bases: :py:obj:`discord.ext.commands.Converter`
+
+   The base class of custom converters that require the :class:`.Context`
+   to be passed to be useful.
+
+   This allows you to implement converters that function similar to the
+   special cased ``discord`` classes.
+
+   Classes that derive from this should override the :meth:`~.Converter.convert`
+   method to do its conversion logic. This method must be a :ref:`coroutine <coroutine>`.
+
+   .. py:method:: convert(self, ctx, argument)
+      :async:
+
+      |coro|
+
+      The method to override to do conversion logic.
+
+      If an error is found while converting, it is recommended to
+      raise a :exc:`.CommandError` derived exception as it will
+      properly propagate to the error handlers.
+
+      :param ctx: The invocation context that the argument is being used in.
+      :type ctx: :class:`.Context`
+      :param argument: The argument that is being converted.
+      :type argument: :class:`str`
+
+      :raises CommandError: A generic exception occurred when converting the argument.
+      :raises BadArgument: The converter failed to convert the argument.
+
+
+
+.. py:function:: safe_reason_append(base, to_append)
+
+
+.. py:class:: AntiRaidConfig
+
+   .. py:attribute:: __slots__
+      :annotation: = ['raid_mode', 'id', 'bot', 'broadcast_channel_id']
+
+      
+
+   .. py:method:: from_record(cls, record, bot)
+      :classmethod:
+      :async:
+
+
+   .. py:method:: broadcast_channel(self)
+      :property:
+
+
+
+.. py:class:: MentionSpamConfig
+
+   .. py:attribute:: __slots__
+      :annotation: = ['id', 'bot', 'mention_count', 'safe_mention_channel_ids']
+
+      
+
+   .. py:method:: from_record(cls, record, bot)
+      :classmethod:
+      :async:
+
+
+
+.. py:class:: GiveawayConfig
+
+   .. py:attribute:: __slots__
+      :annotation: = ['id', 'host', 'channel', 'message', 'embed', 'role_required', 'tasks', 'prize', 'end_time',...
+
+      
+
+   .. py:method:: from_record(cls, record, bot)
+      :classmethod:
+      :async:
+
+
+
+.. py:class:: CooldownByContent(original, type)
+
+   Bases: :py:obj:`discord.ext.commands.CooldownMapping`
+
+   .. py:method:: _bucket_key(message)
+
+
+
+.. py:class:: SpamChecker
+
+   This spam checker does a few things.
+   1) It checks if a user has spammed more than 10 times in 12 seconds
+   2) It checks if the content has been spammed 15 times in 17 seconds.
+   3) It checks if new users have spammed 30 times in 35 seconds.
+   4) It checks if "fast joiners" have spammed 10 times in 12 seconds.
+   The second case is meant to catch alternating spam bots while the first one
+   just catches regular singular spam bots.
+   From experience these values aren't reached unless someone is actively spamming.
+
+   .. py:method:: is_new(member)
+      :staticmethod:
+
+
+   .. py:method:: is_spamming(self, message)
+
+
+   .. py:method:: is_fast_join(self, member)
+
+
+
+.. py:class:: Characters(**kwargs)
+
+   The characters model class
+
+   .. py:attribute:: __slots__
+      :annotation: = ['id', 'name', 'images', 'emoji', 'category', 'kwargs']
+
+      
+
+   .. py:method:: hitpoint(self)
+      :property:
+
+
+   .. py:method:: regainpoint(self)
+      :property:
+
+
+   .. py:method:: healpoint(self)
+      :property:
+
+      These are in percentages
+
+
+   .. py:method:: specialpoint(self)
+      :property:
+
+      These are in percentages
+
+
+   .. py:method:: from_record(cls, record, ctx, name)
+      :classmethod:
+
+
+   .. py:method:: return_emoji(url, category, ctx)
+      :staticmethod:
+
+
+

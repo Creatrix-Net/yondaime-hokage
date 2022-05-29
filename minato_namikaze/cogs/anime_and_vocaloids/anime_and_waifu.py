@@ -100,7 +100,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         return e, name
 
     # search anime
-    @commands.command(
+    @commands.hybrid_command(
         description="Searches Anime from MAL and displays the first 10 search result.",
         usage="<anime.name>",
         aliases=[
@@ -150,7 +150,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         await paginator.start()
 
     # about anime
-    @commands.command(
+    @commands.hybrid_command(
         description="Displays about the anime using the MAL ANIME ID. get it by using animesearch command.",
         usage="<mal.id>",
         aliases=[
@@ -312,7 +312,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         await paginator.start()
 
     # search manga
-    @commands.command(
+    @commands.hybrid_command(
         description="Searches Manga from MAL and displays the first 10 search result.",
         usage="<manga.name>",
         aliases=[
@@ -362,7 +362,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         await paginator.start()
 
     # about manga
-    @commands.command(
+    @commands.hybrid_command(
         description="Displays about the manga using the MAL MANGA ID. get it by using mangasearch command.",
         usage="<mal.id>",
         aliases=[
@@ -464,7 +464,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         paginator = EmbedPaginator(entries=[e] + embeds, ctx=ctx)
         await paginator.start()
 
-    @commands.command(aliases=["w", "wfu", "wa"])
+    @commands.hybrid_command(aliases=["w", "wfu", "wa"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
     async def waifu(self, ctx: commands.Context):
         """Get random waifu and marry them! UwU!"""
@@ -486,7 +486,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         except asyncio.TimeoutError:
             pass
 
-    @commands.command(aliases=["wtp", "whatsthatpokemon"])
+    @commands.hybrid_command(aliases=["wtp", "whatsthatpokemon"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
     async def whosthatpokemon(self, ctx: commands.Context):
         """Play Who\'s That Pokemon?"""

@@ -1,0 +1,7 @@
+discordbot module
+=================
+
+.. automodule:: discordbot
+   :members:
+   :undoc-members:
+   :show-inheritance:

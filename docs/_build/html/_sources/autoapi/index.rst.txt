@@ -1,0 +1,39 @@
+API Reference
+=============
+
+This page contains auto-generated API reference documentation [#f1]_.
+
+.. toctree::
+   :titlesonly:
+
+   /autoapi/discordbot/index
+   /autoapi/badges/index
+   /autoapi/developer/index
+   /autoapi/img/index
+   /autoapi/music/index
+   /autoapi/polls/index
+   /autoapi/reaction_roles/index
+   /autoapi/shinobi_match/index
+   /autoapi/weather/index
+   /autoapi/anime_and_waifu/index
+   /autoapi/vocaloid/index
+   /autoapi/cmd_error/index
+   /autoapi/giveaway/index
+   /autoapi/encoding/index
+   /autoapi/games/index
+   /autoapi/periodic_table/index
+   /autoapi/random_fun_games/index
+   /autoapi/invites/index
+   /autoapi/mysupport/index
+   /autoapi/serverinfo/index
+   /autoapi/snipe/index
+   /autoapi/support/index
+   /autoapi/backup/index
+   /autoapi/moderation/index
+   /autoapi/raid/index
+   /autoapi/setup_server/index
+   /autoapi/lib/index
+   /autoapi/activities_vocaloid/index
+   /autoapi/info/index
+
+.. [#f1] Created with `sphinx-autoapi <https://github.com/readthedocs/sphinx-autoapi>`_

@@ -1,0 +1,14 @@
+cogs
+====
+
+.. toctree::
+   :maxdepth: 4
+
+   badges
+   developer
+   img
+   music
+   polls
+   reaction_roles
+   statuspost
+   weather

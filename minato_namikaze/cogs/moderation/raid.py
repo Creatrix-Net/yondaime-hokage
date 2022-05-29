@@ -2,7 +2,7 @@ import asyncio
 import datetime
 import logging
 from collections import defaultdict
-from typing import Literal, Optional
+from typing import Literal, Optional, Union
 import json
 import DiscordUtils
 from json.decoder import JSONDecodeError
@@ -537,5 +537,5 @@ class AntiRaid(commands.Cog):
         await ctx.send("Updated mentionspam ignore list.")
 
 
-def setup(bot):
-    bot.add_cog(AntiRaid(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(AntiRaid(bot))

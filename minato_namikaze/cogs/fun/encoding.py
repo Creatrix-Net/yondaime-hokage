@@ -4,21 +4,13 @@ import re
 import unicodedata
 from string import ascii_lowercase as lc
 from string import ascii_uppercase as uc
-from typing import Iterator, Optional, Sequence
+from typing import Iterator, Optional, Sequence, Union
 
 import discord
 from discord.ext import commands
-from lib.data.braille import (
-    contractions,
-    dna,
-    letters,
-    numbers,
-    punctuation,
-    r_contractions,
-    r_letters,
-    r_numbers,
-    r_punctuation,
-)
+from lib.data.braille import (contractions, dna, letters, numbers, punctuation,
+                              r_contractions, r_letters, r_numbers,
+                              r_punctuation)
 
 
 def escape(text: str,
@@ -428,5 +420,5 @@ class Encoding(commands.Cog):
             await ctx.send(f"```\n{page}\n```")
 
 
-def setup(bot):
-    bot.add_cog(Encoding(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(Encoding(bot))

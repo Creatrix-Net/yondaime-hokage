@@ -1,0 +1,70 @@
+:py:mod:`lib.util.request_handler`
+==================================
+
+.. py:module:: lib.util.request_handler
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.util.request_handler.post_handler
+   lib.util.request_handler.ratelimit_handler
+   lib.util.request_handler.post_commands
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.util.request_handler.log
+   lib.util.request_handler.ch
+   lib.util.request_handler.formatter
+   lib.util.request_handler.FATESLIST_BASE_URI
+   lib.util.request_handler.DISCORD_SERVERVICES_BASE_URI
+
+
+.. py:data:: log
+   
+
+   
+
+.. py:data:: ch
+   
+
+   
+
+.. py:data:: formatter
+   
+
+   
+
+.. py:data:: FATESLIST_BASE_URI
+   :annotation: = https://api.fateslist.xyz/
+
+   
+
+.. py:data:: DISCORD_SERVERVICES_BASE_URI
+   :annotation: = https://api.discordservices.net/bot/
+
+   
+
+.. py:function:: post_handler(method, url, header = None, headers = None, data = None, json = None, log_data = False, return_data = True, return_json = False, getrequestobj = False)
+   :async:
+
+
+.. py:function:: ratelimit_handler(req, url, method, headers, data, print_logs = False)
+   :async:
+
+
+.. py:function:: post_commands(bot, print_logs = False)
+   :async:
+
+

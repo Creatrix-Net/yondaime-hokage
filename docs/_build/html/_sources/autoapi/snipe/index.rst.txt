@@ -1,0 +1,84 @@
+:py:mod:`snipe`
+===============
+
+.. py:module:: snipe
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   snipe.Snipe
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   snipe.setup
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   snipe.invitere
+   snipe.invitere2
+
+
+.. py:data:: invitere
+   :annotation: = (?:https?:\/\/)?discord(?:\.gg|app\.com\/invite)?\/(?:#\/)([a-zA-Z0-9-]*)
+
+   
+
+.. py:data:: invitere2
+   :annotation: = (http[s]?:\/\/)*discord((app\.com\/invite)|(\.gg))\/(invite\/)?(#\/)?([A-Za-z0-9\-]+)(\/)?
+
+   
+
+.. py:class:: Snipe(bot)
+
+   Bases: :py:obj:`discord.ext.commands.Cog`
+
+   The base class that all cogs must inherit from.
+
+   A cog is a collection of commands, listeners, and optional state to
+   help group commands together. More information on them can be found on
+   the :ref:`ext_commands_cogs` page.
+
+   When inheriting from this class, the options shown in :class:`CogMeta`
+   are equally valid here.
+
+   .. py:method:: display_emoji(self)
+      :property:
+
+
+   .. py:method:: sanitise(string)
+      :staticmethod:
+
+
+   .. py:method:: minDis(self, s1, s2, n, m, dp)
+
+
+   .. py:method:: eval(self, str1, str2)
+
+
+   .. py:method:: snipe(self, ctx)
+      :async:
+
+      "Snipes" someone's message that's been edited or deleted.
+
+
+
+.. py:function:: setup(bot)
+   :async:
+
+

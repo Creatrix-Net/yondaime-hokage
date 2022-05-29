@@ -1,0 +1,84 @@
+:py:mod:`reaction_roles`
+========================
+
+.. py:module:: reaction_roles
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   reaction_roles.ReactionRoles
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   reaction_roles.setup
+
+
+
+.. py:class:: ReactionRoles(bot)
+
+   Bases: :py:obj:`discord.ext.commands.Cog`
+
+   The base class that all cogs must inherit from.
+
+   A cog is a collection of commands, listeners, and optional state to
+   help group commands together. More information on them can be found on
+   the :ref:`ext_commands_cogs` page.
+
+   When inheriting from this class, the options shown in :class:`CogMeta`
+   are equally valid here.
+
+   .. py:method:: display_emoji(self)
+      :property:
+
+
+   .. py:method:: database_class(self)
+      :async:
+
+
+   .. py:method:: cleanup(self)
+      :async:
+
+
+   .. py:method:: on_raw_message_delete(self, payload)
+      :async:
+
+
+   .. py:method:: rr(self, ctx, command=None)
+      :async:
+
+      Reaction Roles releated commands
+
+
+   .. py:method:: new(self, ctx)
+      :async:
+
+      Create a new reaction role using some interactive setup.
+
+      ``Note: You can have upto 15 reaction buttons in a message, if it exceeds that it will automatically proceed to next step``
+
+
+   .. py:method:: delete_reaction_roles(self, ctx, reaction_roles_id)
+      :async:
+
+      It deletes the reaction roles
+      :param reaction_roles_id: It is the message id of the reaction roles messages
+
+      https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
+
+
+
+.. py:function:: setup(bot)
+   :async:
+
+

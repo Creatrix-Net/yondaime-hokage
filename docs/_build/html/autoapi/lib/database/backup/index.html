@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lib.database.backup</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+  <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+  <script src="../../../../_static/jquery.js"></script>
+  <script src="../../../../_static/underscore.js"></script>
+  <script src="../../../../_static/doctools.js"></script>
+  <script src="../../../../_static/custom.js"></script>
+  <script src="../../../../_static/settings.js"></script>
+  <script src="../../../../_static/copy.js"></script>
+  <script src="../../../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.database.backup</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#lib.database.backup.BackupDatabse">BackupDatabse</a><ul>
+<li><a class="reference internal" href="#lib.database.backup.BackupDatabse.create_backup">create_backup</a></li>
+<li><a class="reference internal" href="#lib.database.backup.BackupDatabse.get_backup_data">get_backup_data</a></li>
+<li><a class="reference internal" href="#lib.database.backup.BackupDatabse.delete_backup_data">delete_backup_data</a></li>
+<li><a class="reference internal" href="#lib.database.backup.BackupDatabse.apply_backup">apply_backup</a></li>
+<li><a class="reference internal" href="#lib.database.backup.BackupDatabse.return_category_channel">return_category_channel</a></li>
+<li><a class="reference internal" href="#lib.database.backup.BackupDatabse.return_role_overwrites">return_role_overwrites</a></li>
+<li><a class="reference internal" href="#lib.database.backup.BackupDatabse.reason">reason</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-lib.database.backup">
+<span id="lib-database-backup"></span><h1><a class="reference internal" href="#module-lib.database.backup" title="lib.database.backup"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.database.backup</span></code></a><a class="headerlink" href="#module-lib.database.backup" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.database.backup.BackupDatabse" title="lib.database.backup.BackupDatabse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BackupDatabse</span></code></a></p></td>
+<td><p>The database class to handle the backup commands</p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="lib.database.backup.BackupDatabse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.database.backup.</span></span><span class="sig-name descname"><span class="pre">BackupDatabse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.database.backup.BackupDatabse" title="Permalink to this definition">¶</a></dt>
+<dd><p>The database class to handle the backup commands</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ctx</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Context</em></a>) – </p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.database.backup.BackupDatabse.create_backup">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">create_backup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.database.backup.BackupDatabse.create_backup" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id1"><span class="problematic" id="id2">|coro|</span></a>
+It creates the backup of the server</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The backup code</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.database.backup.BackupDatabse.get_backup_data">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">get_backup_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.database.backup.BackupDatabse.get_backup_data" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id3"><span class="problematic" id="id4">|coro|</span></a>
+It returns the backup of the specified server</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The message containing that backup</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The json file which has the backup</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Attachment" title="(in discord.py v2.0.0a)">discord.Attachment</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.database.backup.BackupDatabse.delete_backup_data">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">delete_backup_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.database.backup.BackupDatabse.delete_backup_data" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id5"><span class="problematic" id="id6">|coro|</span></a>
+Deletes the backup data against the specified code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The backup code to delete</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.database.backup.BackupDatabse.apply_backup">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">apply_backup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.database.backup.BackupDatabse.apply_backup" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id7"><span class="problematic" id="id8">|coro|</span></a>
+It applied backup with the backup code specified</p>
+<p>:param code:Backup Code
+:type code: int
+:return: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> is returned when there is a error otherwise a <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> with True value
+:rtype: Optional[Union[str, bool]]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[Union[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.database.backup.BackupDatabse.return_category_channel">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">return_category_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.database.backup.BackupDatabse.return_category_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>It returns the category channel from the category name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Category channel name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>See Above</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.CategoryChannel" title="(in discord.py v2.0.0a)">discord.CategoryChannel</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.database.backup.BackupDatabse.return_role_overwrites">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">return_role_overwrites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.database.backup.BackupDatabse.return_role_overwrites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the role overwrites dict with proper formatting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Dict containing the role overwrites data</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Role Overwrites with the proper formatting</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.database.backup.BackupDatabse.reason">
+<em class="property"><span class="pre">staticmethod</span> </em><span class="sig-name descname"><span class="pre">reason</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.database.backup.BackupDatabse.reason" title="Permalink to this definition">¶</a></dt>
+<dd><p>It generates the mod reason</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The backup code</p></li>
+<li><p><strong>author</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.User" title="(in discord.py v2.0.0a)"><em>discord.User</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – The author who is using the backup, defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The reason to be given in the <cite>reason</cite> parameter</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

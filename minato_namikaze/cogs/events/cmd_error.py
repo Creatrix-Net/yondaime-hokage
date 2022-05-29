@@ -198,7 +198,6 @@ class BotEventsCommands(commands.Cog):
             e7.add_field(name="Command Error Caused By:",
                          value=f"{ctx.command}")
             e7.add_field(name="By", value=f"{ctx.author.name}")
-            e7.set_thumbnail(url="https://i.imgur.com/1zey3je.jpg")
             e7.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e7,
                                    delete_after=self.delete_after_time)
@@ -285,5 +284,5 @@ class BotEventsCommands(commands.Cog):
                 )
 
 
-def setup(bot):
-    bot.add_cog(BotEventsCommands(bot))
+async def setup(bot):
+    await bot.add_cog(BotEventsCommands(bot))

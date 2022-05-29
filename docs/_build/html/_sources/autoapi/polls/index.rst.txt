@@ -1,0 +1,78 @@
+:py:mod:`polls`
+===============
+
+.. py:module:: polls
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   polls.QuickPoll
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   polls.setup
+
+
+
+.. py:class:: QuickPoll(bot)
+
+   Bases: :py:obj:`discord.ext.commands.Cog`
+
+   The base class that all cogs must inherit from.
+
+   A cog is a collection of commands, listeners, and optional state to
+   help group commands together. More information on them can be found on
+   the :ref:`ext_commands_cogs` page.
+
+   When inheriting from this class, the options shown in :class:`CogMeta`
+   are equally valid here.
+
+   .. py:method:: display_emoji(self)
+      :property:
+
+
+   .. py:method:: delete_message(message_list)
+      :staticmethod:
+      :async:
+
+
+   .. py:method:: polltime(self, ctx)
+      :async:
+
+      Create polls easily
+
+
+   .. py:method:: tally(self, ctx, poll_id)
+      :async:
+
+      Get polls results
+
+
+   .. py:method:: quickpoll(self, ctx, *questions_and_choices)
+      :async:
+
+      Makes a poll quickly.
+
+      The first argument is the question and the rest are the choices.
+
+      Also can't use the tally command here
+
+      **Example:** `)quickpoll question option1 option2`
+
+
+
+.. py:function:: setup(bot)
+   :async:
+
+

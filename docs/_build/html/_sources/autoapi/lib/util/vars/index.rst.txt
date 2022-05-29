@@ -1,0 +1,413 @@
+:py:mod:`lib.util.vars`
+=======================
+
+.. py:module:: lib.util.vars
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.util.vars.ShinobiMatch
+   lib.util.vars.ChannelAndMessageId
+   lib.util.vars.Tokens
+   lib.util.vars.LinksAndVars
+   lib.util.vars.RaidMode
+   lib.util.vars.Webhooks
+   lib.util.vars.Database
+   lib.util.vars.Methods
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.util.vars.token_get
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.util.vars.BASE_DIR
+   lib.util.vars.dotenv_file
+   lib.util.vars.api_image_store_dir
+   lib.util.vars.DEFAULT_COMMAND_SELECT_LENGTH
+   lib.util.vars.LATTICES
+   lib.util.vars.IMAGES
+   lib.util.vars.UNITS
+   lib.util.vars.minato_gif
+   lib.util.vars.among_us
+   lib.util.vars.url_regex
+
+
+.. py:data:: BASE_DIR
+   
+
+   
+
+.. py:data:: dotenv_file
+   
+
+   
+
+.. py:function:: token_get(tokenname)
+
+
+.. py:data:: api_image_store_dir
+   
+
+   
+
+.. py:data:: DEFAULT_COMMAND_SELECT_LENGTH
+   :annotation: = 25
+
+   
+
+.. py:class:: ShinobiMatch
+
+   Bases: :py:obj:`list`, :py:obj:`enum.Enum`
+
+   Built-in mutable sequence.
+
+   If no argument is given, the constructor creates a new empty list.
+   The argument must be an iterable if specified.
+
+   .. py:attribute:: character_side_exclude
+      :annotation: = ['anbu', 'iwagakure', 'kumogakure', 'kirigakure', 'otogakure', 'sunagakure', 'akatsuki', 'konohagakure']
+
+      
+
+   .. py:attribute:: name_exclusion
+      
+
+      
+
+
+.. py:class:: ChannelAndMessageId
+
+   Bases: :py:obj:`enum.IntEnum`
+
+   Enum where members are also (and must be) ints
+
+   .. py:attribute:: badges_channel
+      :annotation: = 920536143458598930
+
+      
+
+   .. py:attribute:: backup_channel
+      :annotation: = 922544732918415390
+
+      
+
+   .. py:attribute:: error_logs_channel
+      :annotation: = 920190310942908513
+
+      
+
+   .. py:attribute:: server_id
+      :annotation: = 920190307595874304
+
+      
+
+   .. py:attribute:: server_id2
+      :annotation: = 920536143244709889
+
+      
+
+   .. py:attribute:: restartlog_channel1
+      :annotation: = 920190310942908508
+
+      
+
+   .. py:attribute:: restartlog_channel2
+      :annotation: = 920536143458598926
+
+      
+
+   .. py:attribute:: serverlog_channel1
+      :annotation: = 920190310942908509
+
+      
+
+   .. py:attribute:: serverlog_channel2
+      :annotation: = 920536143458598927
+
+      
+
+
+.. py:class:: Tokens
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: statcord
+      
+
+      
+
+   .. py:attribute:: dagpi
+      
+
+      
+
+   .. py:attribute:: chatbot
+      
+
+      
+
+   .. py:attribute:: sentry_link
+      
+
+      
+
+   .. py:attribute:: tenor
+      
+
+      
+
+   .. py:attribute:: giphy
+      
+
+      
+
+   .. py:attribute:: token
+      
+
+      
+
+   .. py:attribute:: weather
+      
+
+      
+
+
+.. py:class:: LinksAndVars
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: website
+      :annotation: = https://minato-namikaze.readthedocs.io/en/latest
+
+      
+
+   .. py:attribute:: github
+      :annotation: = https://github.com/The-4th-Hokage/yondaime-hokage
+
+      
+
+   .. py:attribute:: github_branch
+      :annotation: = master
+
+      
+
+   .. py:attribute:: bad_links
+      :annotation: = https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt
+
+      
+
+   .. py:attribute:: listing
+      :annotation: = https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json
+
+      
+
+   .. py:attribute:: character_data
+      :annotation: = https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json
+
+      
+
+   .. py:attribute:: statuspage_link
+      :annotation: = https://minatonamikaze.statuspage.io
+
+      
+
+   .. py:attribute:: mal_logo
+      :annotation: = https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png
+
+      
+
+   .. py:attribute:: giveaway_image
+      :annotation: = https://i.imgur.com/efLKnlh.png
+
+      
+
+   .. py:attribute:: version
+      
+
+      
+
+   .. py:attribute:: invite_code
+      :annotation: = vfXHwS3nmQ
+
+      
+
+   .. py:attribute:: timeout
+      :annotation: = 3.0
+
+      
+
+   .. py:attribute:: owner_ids
+      :annotation: = [887549958931247137, 837223478934896670, 747729781369602049]
+
+      
+
+
+.. py:class:: RaidMode
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: off
+      :annotation: = 0
+
+      
+
+   .. py:attribute:: on
+      :annotation: = 1
+
+      
+
+   .. py:attribute:: strict
+      :annotation: = 2
+
+      
+
+
+.. py:class:: Webhooks
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: logs
+      
+
+      
+
+   .. py:attribute:: feedback
+      
+
+      
+
+
+.. py:class:: Database
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: database_category_name
+      :annotation: = DATABASE
+
+      
+
+   .. py:attribute:: database_channel_name
+      :annotation: = setup vars
+
+      
+
+   .. py:attribute:: antiraid_channel_name
+      :annotation: = antiraid
+
+      
+
+   .. py:attribute:: mentionspam_channel_name
+      :annotation: = mentionspam
+
+      
+
+   .. py:attribute:: reaction_roles_channel_name
+      :annotation: = reaction roles
+
+      
+
+   .. py:attribute:: giveaway_time_channel_name
+      :annotation: = giveaway
+
+      
+
+   .. py:attribute:: user_blacklist_channel_name
+      :annotation: = user blacklist
+
+      
+
+   .. py:attribute:: server_blacklist_channel_name
+      :annotation: = server blacklist
+
+      
+
+
+.. py:class:: Methods
+
+   Bases: :py:obj:`enum.IntEnum`
+
+   Enum where members are also (and must be) ints
+
+   .. py:attribute:: GET
+      :annotation: = 1
+
+      
+
+   .. py:attribute:: POST
+      :annotation: = 2
+
+      
+
+   .. py:attribute:: DELETE
+      :annotation: = 3
+
+      
+
+
+.. py:data:: LATTICES
+   :annotation: :dict
+
+   
+
+.. py:data:: IMAGES
+   :annotation: :dict
+
+   
+
+.. py:data:: UNITS
+   :annotation: :dict
+
+   
+
+.. py:data:: minato_gif
+   :annotation: = []
+
+   
+
+.. py:data:: among_us
+   
+
+   
+
+.. py:data:: url_regex
+   
+
+   
+

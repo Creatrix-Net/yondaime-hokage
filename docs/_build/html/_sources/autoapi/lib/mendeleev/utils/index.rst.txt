@@ -1,0 +1,42 @@
+:py:mod:`lib.mendeleev.utils`
+=============================
+
+.. py:module:: lib.mendeleev.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.mendeleev.utils.coeffs
+   lib.mendeleev.utils.n_effective
+
+
+
+.. py:function:: coeffs(a, b = 2)
+
+   Return stoichometric coefficients from oxidation states
+   :param a: oxidation state of the first element
+   :param b: oxidation state  of the second element
+
+
+.. py:function:: n_effective(n, source = 'slater')
+
+   Effective principal quantum number
+   :param n: Principal quantum number
+   :param source: either `slater` or `zhang`, for more information see note below.
+
+   .. note::
+      Slater's values are taken from J. A. Pople, D. L. Beveridge,
+      "Approximate Molecular Orbital Theory", McGraw-Hill, 1970
+      Zhang's values are taken from Zhang, Y. (1982). Electronegativities
+      of elements in valence states and their applications.
+      1. Electronegativities of elements in valence states.
+      Inorganic Chemistry, 21(11), 3886–3889. https://doi.org/10.1021/ic00141a005
+
+

@@ -170,11 +170,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             if os.path.isdir(cog_dir / filename):
                 for i in os.listdir(cog_dir / filename):
                     if i.endswith(".py"):
-                        self.load_extension(
-                            f'cogs.{filename.strip(" ")}.{i[:-3]}')
+                        await self.load_extension(f'cogs.{filename.strip(" ")}.{i[:-3]}')
             else:
                 if filename.endswith(".py"):
-                    self.load_extension(f"cogs.{filename[:-3]}")
+                    await self.load_extension(f"cogs.{filename[:-3]}")
         try:
             self.load_extension("jishaku")
         except discord.errors.ExtensionAlreadyLoaded:
@@ -611,13 +610,13 @@ if __name__ == "__main__":
     except:
         pass
     bot = MinatoNamikazeBot()
-    slash_dir = BASE_DIR / "slash"
-    for filename in list(set(os.listdir(slash_dir))):
-        if os.path.isdir(slash_dir / filename):
-            for i in os.listdir(slash_dir / filename):
-                if i.endswith(".py"):
-                    bot.load_extension(f'slash.{filename.strip(" ")}.{i[:-3]}')
-        else:
-            if filename.endswith(".py"):
-                bot.load_extension(f"slash.{filename[:-3]}")
+    # slash_dir = BASE_DIR / "slash"
+    # for filename in list(set(os.listdir(slash_dir))):
+    #     if os.path.isdir(slash_dir / filename):
+    #         for i in os.listdir(slash_dir / filename):
+    #             if i.endswith(".py"):
+    #                 bot.load_extension(f'slash.{filename.strip(" ")}.{i[:-3]}')
+    #     else:
+    #         if filename.endswith(".py"):
+    #             bot.load_extension(f"slash.{filename[:-3]}")
     bot.run()

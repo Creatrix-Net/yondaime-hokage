@@ -446,7 +446,7 @@ else:
     class ImageWriter(BaseWriter):
         """Writer object to handle image creation
         """        
-        def __init__(self, COG: discord.Cog):
+        def __init__(self, COG: discord.ext.commands.Cog):
             BaseWriter.__init__(self, self._init, self._paint_module,
                                 self._paint_text, self._finish)
             self.format = "PNG"

@@ -306,5 +306,5 @@ class BadgesCog(commands.Cog, name="Badges"):
         await embed_paginator.start()
 
 
-def setup(bot):
-    bot.add_cog(BadgesCog(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(BadgesCog(bot))

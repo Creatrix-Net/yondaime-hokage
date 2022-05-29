@@ -1,0 +1,110 @@
+:py:mod:`giveaway`
+==================
+
+.. py:module:: giveaway
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   giveaway.Giveaway
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   giveaway.setup
+
+
+
+.. py:class:: Giveaway(bot)
+
+   Bases: :py:obj:`discord.ext.commands.Cog`
+
+   The base class that all cogs must inherit from.
+
+   A cog is a collection of commands, listeners, and optional state to
+   help group commands together. More information on them can be found on
+   the :ref:`ext_commands_cogs` page.
+
+   When inheriting from this class, the options shown in :class:`CogMeta`
+   are equally valid here.
+
+   .. py:method:: get_giveaway_config(self, giveaway_id)
+      :async:
+
+
+   .. py:method:: display_emoji(self)
+      :property:
+
+
+   .. py:method:: database_class(self)
+      :async:
+
+      The database classs
+
+
+   .. py:method:: create_timer_for_giveaway(self, giveaway_id, time_ends)
+      :async:
+
+      Creates the timer for the giveaway
+
+      :param giveaway_id: Giveaway id
+      :type giveaway_id: discord.Message
+      :param time_ends: Time when the giveaway will end
+      :type time_ends: Union[int, FutureTime]
+
+
+   .. py:method:: declare_results(self)
+      :async:
+
+
+   .. py:method:: create_giveaway(self, ctx)
+      :async:
+
+      Allowes you to to create giveaway by answering some simple questions!
+
+
+   .. py:method:: determine_winner(self, giveaway_id, bot)
+      :async:
+
+      Determines winner
+
+      :param giveaway_id: The giveaway id
+      :type giveaway_id: discord.Message
+      :param bot: The bot class
+      :type bot: commands.Bot
+      :return: The winner details
+      :rtype: Union[str, discord.Member]
+
+
+   .. py:method:: giveaway_reroll(self, ctx, giveaway_id)
+      :async:
+
+      It picks out the giveaway winners
+      `Note: It dosen't checks for task, It only checks for roles if specified`
+
+
+   .. py:method:: giveaway_stop(self, ctx, giveaway_id)
+      :async:
+
+      Cancels the specified giveaway
+      `Note: This also deletes that giveaway message`
+
+
+   .. py:method:: on_raw_reaction_add(self, payload)
+      :async:
+
+
+
+.. py:function:: setup(bot)
+
+

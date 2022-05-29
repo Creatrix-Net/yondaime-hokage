@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>support</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+  <script src="../../_static/jquery.js"></script>
+  <script src="../../_static/underscore.js"></script>
+  <script src="../../_static/doctools.js"></script>
+  <script src="../../_static/custom.js"></script>
+  <script src="../../_static/settings.js"></script>
+  <script src="../../_static/copy.js"></script>
+  <script src="../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">support</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#support.errorembed">errorembed</a></li>
+<li><a class="reference internal" href="#support.Support">Support</a><ul>
+<li><a class="reference internal" href="#support.Support.display_emoji">display_emoji</a></li>
+<li><a class="reference internal" href="#support.Support.database_class">database_class</a></li>
+<li><a class="reference internal" href="#support.Support.support">support</a></li>
+<li><a class="reference internal" href="#support.Support.resolved">resolved</a></li>
+<li><a class="reference internal" href="#support.Support.chksupreq">chksupreq</a></li>
+<li><a class="reference internal" href="#support.Support.feedback">feedback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#support.setup">setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-support">
+<span id="support"></span><h1><a class="reference internal" href="#module-support" title="support"><code class="xref py py-mod docutils literal notranslate"><span class="pre">support</span></code></a><a class="headerlink" href="#module-support" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.Support" title="support.Support"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Support</span></code></a></p></td>
+<td><p>The base class that all cogs must inherit from.</p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.errorembed" title="support.errorembed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">errorembed</span></code></a>(ctx)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.setup" title="support.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(bot)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py function">
+<dt class="sig sig-object py" id="support.errorembed">
+<span class="sig-prename descclassname"><span class="pre">support.</span></span><span class="sig-name descname"><span class="pre">errorembed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#support.errorembed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="support.Support">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">support.</span></span><span class="sig-name descname"><span class="pre">Support</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#support.Support" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Cog" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Cog</span></code></a></p>
+<p>The base class that all cogs must inherit from.</p>
+<p>A cog is a collection of commands, listeners, and optional state to
+help group commands together. More information on them can be found on
+the <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html#ext-commands-cogs" title="(in discord.py v2.0.0a)"><span>Cogs</span></a> page.</p>
+<p>When inheriting from this class, the options shown in <code class="xref py py-class docutils literal notranslate"><span class="pre">CogMeta</span></code>
+are equally valid here.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="support.Support.display_emoji">
+<span class="sig-name descname"><span class="pre">display_emoji</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#support.Support.display_emoji" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.PartialEmoji" title="(in discord.py v2.0.0a)">discord.PartialEmoji</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="support.Support.database_class">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">database_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#support.Support.database_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="support.Support.support">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">support</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#support.Support.support" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open support ticket if enabled by the server admins</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="support.Support.resolved">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">resolved</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">member</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#support.Support.resolved" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves the existing ticket!
+One needs to have manage server permission in order to run this command</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>member</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../lib/index.html#id37" title="lib.MemberID"><em>lib.MemberID</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="support.Support.chksupreq">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">chksupreq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#support.Support.chksupreq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks who still requires the support.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="support.Support.feedback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">feedback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#support.Support.feedback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server admin)
+<code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">feedback</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">less</span> <span class="pre">than</span> <span class="pre">2000</span> <span class="pre">characters</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="support.setup">
+<em class="property"><span class="pre">await</span> </em><span class="sig-prename descclassname"><span class="pre">support.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#support.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

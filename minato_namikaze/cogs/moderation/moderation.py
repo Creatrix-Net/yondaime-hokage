@@ -1382,5 +1382,5 @@ class Moderation(commands.Cog):
             pass
 
 
-def setup(bot):
-    bot.add_cog(Moderation(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(Moderation(bot))

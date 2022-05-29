@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lib.classes.badge_entry</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+  <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+  <script src="../../../../_static/jquery.js"></script>
+  <script src="../../../../_static/underscore.js"></script>
+  <script src="../../../../_static/doctools.js"></script>
+  <script src="../../../../_static/custom.js"></script>
+  <script src="../../../../_static/settings.js"></script>
+  <script src="../../../../_static/copy.js"></script>
+  <script src="../../../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.classes.badge_entry</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#lib.classes.badge_entry.Badge">Badge</a><ul>
+<li><a class="reference internal" href="#lib.classes.badge_entry.Badge.to_json">to_json</a></li>
+<li><a class="reference internal" href="#lib.classes.badge_entry.Badge.from_json">from_json</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-lib.classes.badge_entry">
+<span id="lib-classes-badge-entry"></span><h1><a class="reference internal" href="#module-lib.classes.badge_entry" title="lib.classes.badge_entry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.classes.badge_entry</span></code></a><a class="headerlink" href="#module-lib.classes.badge_entry" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.badge_entry.Badge" title="lib.classes.badge_entry.Badge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Badge</span></code></a></p></td>
+<td><p>A class to handle all the badge commands</p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.badge_entry.Badge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.badge_entry.</span></span><span class="sig-name descname"><span class="pre">Badge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">badge_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watermark</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_inverted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.badge_entry.Badge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class to handle all the badge commands</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>badge_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>watermark</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>is_inverted</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.badge_entry.Badge.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.badge_entry.Badge.to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the class to <code class="xref py py-class docutils literal notranslate"><span class="pre">json</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Data in the json format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.badge_entry.Badge.from_json">
+<em class="property"><span class="pre">classmethod</span> <span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.badge_entry.Badge.from_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates badge from <cite>json</cite> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – The data in <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> form</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The <a class="reference internal" href="#lib.classes.badge_entry.Badge" title="lib.classes.badge_entry.Badge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Badge</span></code></a> with the data provided</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lib.classes.badge_entry.Badge" title="lib.classes.badge_entry.Badge">Badge</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

@@ -338,5 +338,5 @@ class BackUp(commands.Cog):
         
 
 
-def setup(bot):
-    bot.add_cog(BackUp(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(BackUp(bot))

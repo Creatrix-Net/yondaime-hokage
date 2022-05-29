@@ -1,49 +1,33 @@
 import ast
 import asyncio
-import json
 import logging
 import os
-import time
-from pathlib import Path
-
-import TenGiphPy
-from discord_together import DiscordTogether
-import aiohttp
-try:
-    import uvloop
-except ImportError:
-    pass
-
 import random
+import time
 from collections import Counter, defaultdict, deque
 from datetime import datetime
-from typing import Optional, Union, List
+from pathlib import Path
+from typing import List, Optional, Union
 
+import aiohttp
 import discord
 import dotenv
 import sentry_sdk
+import TenGiphPy
 from discord.ext import commands
-from DiscordUtils import Embed, ErrorEmbed
+from discord_together import DiscordTogether
 from DiscordDatabase import DiscordDatabase
-from lib import (
-    BASE_DIR,
-    ChannelAndMessageId,
-    Context,
-    LinksAndVars,
-    PaginatedHelpCommand,
-    ReactionPersistentView,
-    Tokens,
-    api_image_store_dir,
-    Database,
-    format_dt,
-    format_relative,
-    Webhooks,
-    post_commands
-)
+from DiscordUtils import Embed, ErrorEmbed
+from orjson import loads
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
+
+from lib import (BASE_DIR, ChannelAndMessageId, Context, Database,
+                 LinksAndVars, PaginatedHelpCommand, ReactionPersistentView,
+                 Tokens, Webhooks, api_image_store_dir, format_dt,
+                 format_relative, post_commands)
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -178,7 +162,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             await self.load_extension("jishaku")
         except discord.ext.commands.ExtensionAlreadyLoaded:
             pass
-        await bot.tree.sync()
+        try:
+            await bot.tree.sync(guild=discord.Object(id=920536143244709889))
+        except (discord.HTTPException, discord.Forbidden, discord.app_commands.MissingApplicationID):
+            pass
 
 
         difference = int(round(time.time() - self.start_time.timestamp()))
@@ -229,7 +216,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
-                data = json.loads(str(cnt))
+                data = loads(str(cnt))
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 data = data[data_keys[0]]
@@ -252,7 +239,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
-                data = json.loads(str(cnt))
+                data = loads(str(cnt))
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 self.blacklist.append(int(data_keys[0]))
@@ -263,7 +250,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
-                data = json.loads(str(cnt))
+                data = loads(str(cnt))
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 self.blacklist.append(int(data_keys[0]))
@@ -606,10 +593,13 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
 if __name__ == "__main__":
     try:
+        import uvloop
         asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
         uvloop.install()
-    except:
-        pass
+    except ImportError:
+        import sys
+        if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
+            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     bot = MinatoNamikazeBot()
     # slash_dir = BASE_DIR / "slash"
     # for filename in list(set(os.listdir(slash_dir))):

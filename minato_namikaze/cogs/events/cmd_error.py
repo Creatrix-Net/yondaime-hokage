@@ -215,9 +215,6 @@ class BotEventsCommands(commands.Cog):
                 name="**Bots**",
                 value=sum(1 for member in ctx.guild.members if member.bot),
             )
-            e.add_field(name="**Region**",
-                        value=str(ctx.guild.region).capitalize(),
-                        inline=True)
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await ctx.send(
                 "**Error report was successfully sent**",
@@ -263,9 +260,6 @@ class BotEventsCommands(commands.Cog):
                 name="**Bots**",
                 value=sum(1 for member in ctx.guild.members if member.bot),
             )
-            e.add_field(name="**Region**",
-                        value=str(ctx.guild.region).capitalize(),
-                        inline=True)
             e.add_field(name="**Server ID**", value=ctx.guild.id, inline=True)
             await ctx.send(
                 "**Error report was successfully sent**",

@@ -1,0 +1,120 @@
+:py:mod:`info`
+==============
+
+.. py:module:: info
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   info.Server
+   info.Info
+   info.Banner
+   info.Icon
+   info.UserInfo
+   info.UserInfoSlash
+   info.UserInfoContextMenu
+   info.InfoCog
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   info.setup
+
+
+
+.. py:class:: Server(cog)
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Some server releated commands
+
+
+.. py:class:: Info
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Shows some basic server info
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Banner
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Shows server banner, if there is any
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Icon
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Shows server icon, if there is any
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: UserInfo(cog)
+
+   Bases: :py:obj:`discord.UserCommand`
+
+   Get some basic user info
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: UserInfoSlash(cog)
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Get some basic user info
+
+   .. py:attribute:: user
+      :annotation: :discord.Member
+
+      
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: UserInfoContextMenu(cog)
+
+   Bases: :py:obj:`discord.MessageCommand`
+
+   Display the user info of the author of the message
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: InfoCog(bot)
+
+   Bases: :py:obj:`discord.Cog`
+
+
+.. py:function:: setup(bot)
+
+

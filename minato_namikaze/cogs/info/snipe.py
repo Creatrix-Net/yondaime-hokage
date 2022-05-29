@@ -115,5 +115,5 @@ class Snipe(commands.Cog):
         self.snipes[ctx.channel.id] = None
 
 
-def setup(bot):
-    bot.add_cog(Snipe(bot))
+async def setup(bot):
+    await bot.add_cog(Snipe(bot))

@@ -1,0 +1,7 @@
+activities\_vocaloid module
+===========================
+
+.. automodule:: activities_vocaloid
+   :members:
+   :undoc-members:
+   :show-inheritance:

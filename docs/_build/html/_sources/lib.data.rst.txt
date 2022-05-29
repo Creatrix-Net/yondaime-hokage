@@ -1,0 +1,21 @@
+lib.data package
+================
+
+Submodules
+----------
+
+lib.data.braille module
+-----------------------
+
+.. automodule:: lib.data.braille
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: lib.data
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>random_fun_games</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+  <script src="../../_static/jquery.js"></script>
+  <script src="../../_static/underscore.js"></script>
+  <script src="../../_static/doctools.js"></script>
+  <script src="../../_static/custom.js"></script>
+  <script src="../../_static/settings.js"></script>
+  <script src="../../_static/copy.js"></script>
+  <script src="../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">random_fun_games</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#random_fun_games.Random">Random</a><ul>
+<li><a class="reference internal" href="#random_fun_games.Random.display_emoji">display_emoji</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.braille">braille</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.braille_handler">braille_handler</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.insult">insult</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.owoify">owoify</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.magic">magic</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.qr">qr</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.remind">remind</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.sn">sn</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.tts">tts</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.show_color">show_color</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.mystbin">mystbin</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random.getmystbin">getmystbin</a></li>
+<li><a class="reference internal" href="#random_fun_games.Random._8ball">_8ball</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#random_fun_games.setup">setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-random_fun_games">
+<span id="random-fun-games"></span><h1><a class="reference internal" href="#module-random_fun_games" title="random_fun_games"><code class="xref py py-mod docutils literal notranslate"><span class="pre">random_fun_games</span></code></a><a class="headerlink" href="#module-random_fun_games" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#random_fun_games.Random" title="random_fun_games.Random"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Random</span></code></a></p></td>
+<td><p>The base class that all cogs must inherit from.</p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#random_fun_games.setup" title="random_fun_games.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(bot)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="random_fun_games.Random">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">random_fun_games.</span></span><span class="sig-name descname"><span class="pre">Random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Cog" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Cog</span></code></a></p>
+<p>The base class that all cogs must inherit from.</p>
+<p>A cog is a collection of commands, listeners, and optional state to
+help group commands together. More information on them can be found on
+the <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html#ext-commands-cogs" title="(in discord.py v2.0.0a)"><span>Cogs</span></a> page.</p>
+<p>When inheriting from this class, the options shown in <code class="xref py py-class docutils literal notranslate"><span class="pre">CogMeta</span></code>
+are equally valid here.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.display_emoji">
+<span class="sig-name descname"><span class="pre">display_emoji</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.display_emoji" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.PartialEmoji" title="(in discord.py v2.0.0a)">discord.PartialEmoji</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.braille">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">braille</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.braille" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.braille_handler">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">braille_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.braille_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.insult">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">insult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.insult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insult a user
+<cite>user</cite> the user you would like to insult</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="../lib/index.html#id37" title="lib.MemberID"><em>lib.MemberID</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a><em>]</em><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.owoify">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">owoify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.owoify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Owoify the message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.magic">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">magic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.magic" title="Permalink to this definition">¶</a></dt>
+<dd><p>See magic!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.qr">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">qr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'255-255-255'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates easy QR Code</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.remind">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">remind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reminder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.remind" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple reminder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time</strong> (<a class="reference internal" href="../lib/index.html#lib.TimeConverter" title="lib.TimeConverter"><em>lib.TimeConverter</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.sn">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">sn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.sn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce yourself to everyone</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.tts">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">tts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.tts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate text to speech messages</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.show_color">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">show_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.show_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enter a color and you will see it!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>color</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Colour" title="(in discord.py v2.0.0a)"><em>discord.Colour</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.mystbin">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">mystbin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.mystbin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an Mystbin for yourself</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random.getmystbin">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">getmystbin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random.getmystbin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get your Mystbi using your id</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random_fun_games.Random._8ball">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">_8ball</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">question</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.Random._8ball" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ask questions about your future</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random_fun_games.setup">
+<span class="sig-prename descclassname"><span class="pre">random_fun_games.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random_fun_games.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

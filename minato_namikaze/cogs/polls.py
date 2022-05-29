@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from DiscordUtils import Embed, ErrorEmbed
 from operator import itemgetter
-from typing import List
+from typing import List, Union
 
 class QuickPoll(commands.Cog):
     def __init__(self, bot):
@@ -240,5 +240,5 @@ class QuickPoll(commands.Cog):
             await poll.add_reaction(discord.PartialEmoji(name=self.reactions[int(emoji)]))
 
 
-def setup(bot):
-    bot.add_cog(QuickPoll(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(QuickPoll(bot))

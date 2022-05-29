@@ -1,0 +1,199 @@
+:py:mod:`img`
+=============
+
+.. py:module:: img
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   img.ImageManipulation
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   img.setup
+
+
+
+.. py:class:: ImageManipulation(bot)
+
+   Bases: :py:obj:`discord.ext.commands.Cog`
+
+   The base class that all cogs must inherit from.
+
+   A cog is a collection of commands, listeners, and optional state to
+   help group commands together. More information on them can be found on
+   the :ref:`ext_commands_cogs` page.
+
+   When inheriting from this class, the options shown in :class:`CogMeta`
+   are equally valid here.
+
+   .. py:method:: display_emoji(self)
+      :property:
+
+
+   .. py:method:: wni(self, ctx, *, member)
+      :async:
+
+      Prove that you are not sus!
+
+
+   .. py:method:: wi(self, ctx, *, member)
+      :async:
+
+      Prove anyone that they are sus!
+
+
+   .. py:method:: triggered(self, ctx, member)
+      :async:
+
+      Make anyone triggered
+
+
+   .. py:method:: message(self, ctx, member, *, text)
+      :async:
+
+      Send a fake Discord message
+
+
+   .. py:method:: captcha(self, ctx, member, *, text='Detect Face')
+      :async:
+
+      Captcha v3 Image mockup
+
+
+   .. py:method:: pixel(self, ctx, member)
+      :async:
+
+      Pixallate your pfp
+
+
+   .. py:method:: jail(self, ctx, member)
+      :async:
+
+      Jail yourself or someone
+
+
+   .. py:method:: wanted(self, ctx, member)
+      :async:
+
+      Get yourself or someone listed in Bingo Book
+
+
+   .. py:method:: rainbow(self, ctx, member)
+      :async:
+
+      Rainbow light effect
+
+
+   .. py:method:: gay(self, ctx, member)
+      :async:
+
+      Seperate yourself/others and mark them/yourself as gay!
+
+
+   .. py:method:: trash(self, ctx, member)
+      :async:
+
+      Puts trash into trashbin
+
+
+   .. py:method:: delete(self, ctx, member)
+      :async:
+
+      Removes trash from bin
+
+
+   .. py:method:: angel(self, ctx, member)
+      :async:
+
+      Be an Angel
+
+
+   .. py:method:: satan(self, ctx, member)
+      :async:
+
+      Be the Devil
+
+
+   .. py:method:: charcoal(self, ctx, member)
+      :async:
+
+      Get your pfp beautiful charcoal paint
+
+
+   .. py:method:: hitler(self, ctx, member)
+      :async:
+
+      Hail Hitler
+
+
+   .. py:method:: wasted(self, ctx, member)
+      :async:
+
+      GTA V wasted screen
+
+
+   .. py:method:: bomb(self, ctx, member)
+      :async:
+
+      Bomb someone
+
+
+   .. py:method:: pat(self, ctx, member)
+      :async:
+
+      Pat someone, UwU!
+
+
+   .. py:method:: spank(self, ctx, member)
+      :async:
+
+      Spank someone
+
+
+   .. py:method:: slap(self, ctx, member)
+      :async:
+
+      Slap someone
+
+
+   .. py:method:: hug(self, ctx, member)
+      :async:
+
+      Hug someone
+
+
+   .. py:method:: poke(self, ctx, member)
+      :async:
+
+      Poke someone
+
+
+   .. py:method:: high5(self, ctx, member)
+      :async:
+
+      Do a highfive
+
+
+   .. py:method:: party(self, ctx, member)
+      :async:
+
+      Party with someone
+
+
+
+.. py:function:: setup(bot)
+   :async:
+
+

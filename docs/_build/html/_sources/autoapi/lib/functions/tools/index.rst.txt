@@ -1,0 +1,81 @@
+:py:mod:`lib.functions.tools`
+=============================
+
+.. py:module:: lib.functions.tools
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.functions.tools.plural
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.functions.tools.insert_returns
+   lib.functions.tools.copy_context_with
+   lib.functions.tools.check_if_user_joined_a_voice
+   lib.functions.tools.check_if_user_joined_a_stage
+   lib.functions.tools.get_welcome_channel
+   lib.functions.tools.human_join
+   lib.functions.tools.secure_delete
+   lib.functions.tools.format_dt
+
+
+
+.. py:function:: insert_returns(body)
+
+
+.. py:function:: copy_context_with(ctx, *, author=None, channel=None, **kwargs)
+   :async:
+
+
+.. py:function:: check_if_user_joined_a_voice(ctx)
+
+   Checks is a user joined a voice channel
+
+
+.. py:function:: check_if_user_joined_a_stage(ctx)
+
+   Checks is a user joined a stage channel
+
+
+.. py:function:: get_welcome_channel(guild, bot, inviter_or_guild_owner)
+   :async:
+
+
+.. py:class:: plural(value)
+
+   .. py:method:: __format__(self, format_spec)
+
+      Default object formatter.
+
+
+
+.. py:function:: human_join(seq, delim=', ', final='or')
+
+
+.. py:function:: secure_delete(path, passes = 3)
+
+   At first it write the file with some random data , even repeatedly, then delete it
+   Meaning the entire contents of the file were still intact and every pass just added to the overall size of the file. So it ended up being [Original Contents][Random Data of that Size][Random Data of that Size][Random Data of that Size] which is not the desired effect obviously
+   Firstopen the file in append to find the length,
+   then reopen in r+ so that it can seek to the beginning
+   (in append mode it seems like what caused the undesired effect is that it was not actually possible to seek to 0)
+
+   Answer was copied from stackoverflow with some type hinting changes :)
+   https://stackoverflow.com/questions/17455300/python-securely-remove-file
+
+
+.. py:function:: format_dt(dt, style = None, ist = False)
+
+

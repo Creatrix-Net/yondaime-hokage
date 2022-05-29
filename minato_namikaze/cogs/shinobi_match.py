@@ -92,5 +92,5 @@ class ShinobiMatchCog(commands.Cog, name='Shinobi Match'):
         view.message = await ctx.send(content=f'{ctx.author.mention} now your turn',embed=view.make_embed(), view=view)
 
 
-def setup(bot):
-    bot.add_cog(ShinobiMatchCog(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(ShinobiMatchCog(bot))

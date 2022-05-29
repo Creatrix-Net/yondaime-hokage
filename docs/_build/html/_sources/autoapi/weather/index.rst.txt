@@ -1,0 +1,122 @@
+:py:mod:`weather`
+=================
+
+.. py:module:: weather
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   weather.UnitConverter
+   weather.Weather
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   weather.setup
+
+
+
+.. py:class:: UnitConverter
+
+   Bases: :py:obj:`discord.ext.commands.converter.Converter`
+
+   The base class of custom converters that require the :class:`.Context`
+   to be passed to be useful.
+
+   This allows you to implement converters that function similar to the
+   special cased ``discord`` classes.
+
+   Classes that derive from this should override the :meth:`~.Converter.convert`
+   method to do its conversion logic. This method must be a :ref:`coroutine <coroutine>`.
+
+   .. py:method:: convert(self, ctx, argument)
+      :async:
+
+      |coro|
+
+      The method to override to do conversion logic.
+
+      If an error is found while converting, it is recommended to
+      raise a :exc:`.CommandError` derived exception as it will
+      properly propagate to the error handlers.
+
+      :param ctx: The invocation context that the argument is being used in.
+      :type ctx: :class:`.Context`
+      :param argument: The argument that is being converted.
+      :type argument: :class:`str`
+
+      :raises CommandError: A generic exception occurred when converting the argument.
+      :raises BadArgument: The converter failed to convert the argument.
+
+
+
+.. py:class:: Weather(bot)
+
+   Bases: :py:obj:`discord.ext.commands.Cog`
+
+   The base class that all cogs must inherit from.
+
+   A cog is a collection of commands, listeners, and optional state to
+   help group commands together. More information on them can be found on
+   the :ref:`ext_commands_cogs` page.
+
+   When inheriting from this class, the options shown in :class:`CogMeta`
+   are equally valid here.
+
+   .. py:method:: display_emoji(self)
+      :property:
+
+
+   .. py:method:: weather(self, ctx, *, location)
+      :async:
+
+      Display weather in a given location
+      `location` must take the form of `city, Country Code`
+      example: `)weather New York,US`
+
+
+   .. py:method:: weather_by_zip(self, ctx, *, zipcode)
+      :async:
+
+      Display weather in a given location
+      `zipcode` must be a valid ZIP code or `ZIP code, Country Code` (assumes US otherwise)
+      example: `)weather zip 700082`
+
+
+   .. py:method:: weather_by_cityid(self, ctx, *, cityid)
+      :async:
+
+      Display weather in a given location
+      `cityid` must be a valid openweathermap city ID
+      (get list here: <https://bulk.openweathermap.org/sample/city.list.json.gz>)
+      example: `)weather cityid 2172797`
+
+
+   .. py:method:: weather_by_coordinates(self, ctx, lat, lon)
+      :async:
+
+      Display weather in a given location
+      `lat` and `lon` specify a precise point on Earth using the
+      geographic coordinates specified by latitude (north-south) and longitude (east-west).
+      example: `)weather coordinates 35 139`
+
+
+   .. py:method:: get_weather(self, ctx, *, location = None, zipcode = None, cityid = None, lat = None, lon = None)
+      :async:
+
+
+
+.. py:function:: setup(bot)
+   :async:
+
+

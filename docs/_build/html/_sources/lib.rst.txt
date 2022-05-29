@@ -1,0 +1,23 @@
+lib package
+===========
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   lib.classes
+   lib.data
+   lib.database
+   lib.functions
+   lib.mendeleev
+   lib.util
+
+Module contents
+---------------
+
+.. automodule:: lib
+   :members:
+   :undoc-members:
+   :show-inheritance:

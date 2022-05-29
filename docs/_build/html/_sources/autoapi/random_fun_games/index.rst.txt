@@ -1,0 +1,123 @@
+:py:mod:`random_fun_games`
+==========================
+
+.. py:module:: random_fun_games
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   random_fun_games.Random
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   random_fun_games.setup
+
+
+
+.. py:class:: Random(bot)
+
+   Bases: :py:obj:`discord.ext.commands.Cog`
+
+   The base class that all cogs must inherit from.
+
+   A cog is a collection of commands, listeners, and optional state to
+   help group commands together. More information on them can be found on
+   the :ref:`ext_commands_cogs` page.
+
+   When inheriting from this class, the options shown in :class:`CogMeta`
+   are equally valid here.
+
+   .. py:method:: display_emoji(self)
+      :property:
+
+
+   .. py:method:: braille(self, ctx, user = None)
+      :async:
+
+
+   .. py:method:: braille_handler(self, ctx, error)
+      :async:
+
+
+   .. py:method:: insult(self, ctx, user = None)
+      :async:
+
+      Insult a user
+      `user` the user you would like to insult
+
+
+   .. py:method:: owoify(self, ctx, text)
+      :async:
+
+      Owoify the message
+
+
+   .. py:method:: magic(self, ctx, user = None)
+      :async:
+
+      See magic!
+
+
+   .. py:method:: qr(self, ctx, colour='255-255-255', *, url=None)
+      :async:
+
+      Generates easy QR Code
+
+
+   .. py:method:: remind(self, ctx, time, *, reminder)
+      :async:
+
+      A simple reminder
+
+
+   .. py:method:: sn(self, ctx, *, name)
+      :async:
+
+      Introduce yourself to everyone
+
+
+   .. py:method:: tts(self, ctx, *, text)
+      :async:
+
+      Generate text to speech messages
+
+
+   .. py:method:: show_color(self, ctx, *, color)
+      :async:
+
+      Enter a color and you will see it!
+
+
+   .. py:method:: mystbin(self, ctx, *, text)
+      :async:
+
+      Generate an Mystbin for yourself
+
+
+   .. py:method:: getmystbin(self, ctx, id)
+      :async:
+
+      Get your Mystbi using your id
+
+
+   .. py:method:: _8ball(self, ctx, *, question)
+      :async:
+
+      Ask questions about your future
+
+
+
+.. py:function:: setup(bot)
+
+

@@ -1,0 +1,69 @@
+lib.mendeleev package
+=====================
+
+Submodules
+----------
+
+lib.mendeleev.db module
+-----------------------
+
+.. automodule:: lib.mendeleev.db
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+lib.mendeleev.econf module
+--------------------------
+
+.. automodule:: lib.mendeleev.econf
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+lib.mendeleev.electronegativity module
+--------------------------------------
+
+.. automodule:: lib.mendeleev.electronegativity
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+lib.mendeleev.elements module
+-----------------------------
+
+.. automodule:: lib.mendeleev.elements
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+lib.mendeleev.mendeleev module
+------------------------------
+
+.. automodule:: lib.mendeleev.mendeleev
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+lib.mendeleev.models module
+---------------------------
+
+.. automodule:: lib.mendeleev.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+lib.mendeleev.utils module
+--------------------------
+
+.. automodule:: lib.mendeleev.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: lib.mendeleev
+   :members:
+   :undoc-members:
+   :show-inheritance:

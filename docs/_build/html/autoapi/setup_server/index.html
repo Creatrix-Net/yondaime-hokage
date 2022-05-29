@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>setup_server</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+  <script src="../../_static/jquery.js"></script>
+  <script src="../../_static/underscore.js"></script>
+  <script src="../../_static/doctools.js"></script>
+  <script src="../../_static/custom.js"></script>
+  <script src="../../_static/settings.js"></script>
+  <script src="../../_static/copy.js"></script>
+  <script src="../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">setup_server</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#setup_server.ServerSetup">ServerSetup</a><ul>
+<li><a class="reference internal" href="#setup_server.ServerSetup.display_emoji">display_emoji</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.database_class">database_class</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.database_class_antiraid">database_class_antiraid</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.database_class_mentionspam">database_class_mentionspam</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.add_and_check_data">add_and_check_data</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.cleanup">cleanup</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.setup">setup</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.add">add</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.support">support</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.badlinks">badlinks</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.starboard">starboard</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.on_message">on_message</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.raw_data">raw_data</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.on_guild_remove">on_guild_remove</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.deletedata">deletedata</a></li>
+<li><a class="reference internal" href="#setup_server.ServerSetup.on_raw_reaction_add">on_raw_reaction_add</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setup_server.setup">setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-setup_server">
+<span id="setup-server"></span><h1><a class="reference internal" href="#module-setup_server" title="setup_server"><code class="xref py py-mod docutils literal notranslate"><span class="pre">setup_server</span></code></a><a class="headerlink" href="#module-setup_server" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#setup_server.ServerSetup" title="setup_server.ServerSetup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ServerSetup</span></code></a></p></td>
+<td><p>The base class that all cogs must inherit from.</p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#setup_server.setup" title="setup_server.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(bot)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="setup_server.ServerSetup">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">setup_server.</span></span><span class="sig-name descname"><span class="pre">ServerSetup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Cog" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Cog</span></code></a></p>
+<p>The base class that all cogs must inherit from.</p>
+<p>A cog is a collection of commands, listeners, and optional state to
+help group commands together. More information on them can be found on
+the <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html#ext-commands-cogs" title="(in discord.py v2.0.0a)"><span>Cogs</span></a> page.</p>
+<p>When inheriting from this class, the options shown in <code class="xref py py-class docutils literal notranslate"><span class="pre">CogMeta</span></code>
+are equally valid here.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.display_emoji">
+<span class="sig-name descname"><span class="pre">display_emoji</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.display_emoji" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DiscordUtils.embeds.discord.PartialEmoji</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.database_class">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">database_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.database_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.database_class_antiraid">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">database_class_antiraid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.database_class_antiraid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.database_class_mentionspam">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">database_class_mentionspam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.database_class_mentionspam" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.add_and_check_data">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">add_and_check_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_to_add</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.add_and_check_data" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dict_to_add</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – </p></li>
+<li><p><strong>ctx</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Context</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.cleanup">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.setup">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>This commands setups some logging system for system for server with some nice features</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.add">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>This command adds logging of the following things in the specified text channel
+&gt;   - ban
+&gt;   - warns
+&gt;   - unban
+&gt;   - feedback</p>
+<p><cite>If the data for the any of the above is already available in database then it rewrite the data.</cite></p>
+<dl class="simple">
+<dt>Example usage:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">)add</span> <span class="pre">ban</span> <span class="pre">#bans</span></code></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>add_type</strong> (<em>Literal</em><em>[</em><em>ban</em><em>, </em><em>feedback</em><em>, </em><em>warns</em><em>, </em><em>unban</em><em>]</em>) – </p></li>
+<li><p><strong>channel</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.TextChannelConverter" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.TextChannelConverter</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.support">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">support</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">textchannel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">support_required_role</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.support" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <strong>public support system</strong> in an interactive manner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>textchannel</strong> (<em>-</em>) – A text channel where the support request will be logged.</p></li>
+<li><p><strong>support_required_role</strong> (<em>-</em>) – A role which will be provided to the users, when a support request lodged</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.badlinks">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">badlinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.badlinks" title="Permalink to this definition">¶</a></dt>
+<dd><p>If enabled then it checks against any scam, phishing or adult links which is posted by members and take actions accordingly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>default</strong> (<em>- option</em><em> [</em><em>Optional</em><em>]</em>) – log) : What kind of action to take, It accepts the following options ; ‘ban’, ‘mute’, ‘timeout’, ‘kick’, ‘log’</p></li>
+<li><p><strong>[</strong><strong>Optional</strong><strong>]</strong> (<em>- logging_channel</em>) – It will log in a specific channel if specified, otherwise it will log the message where the link was sent.</p></li>
+<li><p><strong>(</strong><strong>default</strong> – True) : It accepts the following options ; True, False, yes, no, on, off</p></li>
+<li><p><strong>action</strong> (<em>Optional</em><em>[</em><em>Literal</em><em>[</em><em>ban</em><em>, </em><em>mute</em><em>, </em><em>timeout</em><em>, </em><em>kick</em><em>, </em><em>log</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>logging_channel</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.TextChannelConverter" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.TextChannelConverter</em></a><em>]</em>) – </p></li>
+<li><p><strong>option</strong> (<em>Literal</em><em>[</em><em>yes</em><em>, </em><em>no</em><em>, </em><em>on</em><em>, </em><em>off</em><em>, </em><em>True</em><em>, </em><em>False</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<p><cite>Note: If ‘log’ action is selected then, I will only delete the message and log it the current channel where the link was sent and will do nothing</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.starboard">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">starboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_of_stars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_nsfw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.starboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setups the starboard in your server.
+It posts the message in the specified channel whenever someone stars a message using ⭐ emoji</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>-</em>) – The channel where the starred message will go</p></li>
+<li><p><strong>[</strong><strong>int</strong><strong>]</strong> (<em>- no_of_stars</em><em> [</em><em>Optional</em><em>]</em>) – Minimum number of stars required before posting it to the specified channel</p></li>
+<li><p><strong>(</strong><strong>default</strong> (<em>- ignore_nsfw</em><em> [</em><em>Optional</em><em>] </em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – False) : Whether self  starring of message should be there or not</p></li>
+<li><p><strong>(</strong><strong>default</strong> – True) : Whether to ignore NSFW channels or not</p></li>
+<li><p><strong>no_of_stars</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – </p></li>
+<li><p><strong>self_star</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+<li><p><strong>ignore_nsfw</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.on_message">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.on_message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.raw_data">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">raw_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.raw_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>It returns the raw data which is stored in the database in the form of json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.on_guild_remove">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_guild_remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guild</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.on_guild_remove" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.deletedata">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">deletedata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.deletedata" title="Permalink to this definition">¶</a></dt>
+<dd><p>This command deletes the available data:
+It accepts an optional parameter <cite>type_data</cite>, You can pass the following things through <cite>type_data</cite> parameter:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><cite>ban</cite> : Deletes the <cite>ban data</cite> from database</p></li>
+<li><p><cite>unban</cite> : Deletes the <cite>unban data</cite> from database</p></li>
+<li><p><cite>support</cite> : Deletes the <cite>support data</cite> from database</p></li>
+<li><p><cite>warns</cite> : Deletes the <cite>warns data</cite> from database</p></li>
+<li><p><cite>feedback</cite>: Deletes the <cite>feedback data</cite> from database</p></li>
+<li><p><cite>mentionspam</cite>: Deletes the <cite>mentionspam data</cite> from database</p></li>
+<li><p><cite>antiraid</cite>: Deletes the <cite>antiraid data</cite> from database</p></li>
+<li><p><cite>badlinks</cite>: Deletes the <cite>badlinks data</cite> from database</p></li>
+<li><p><cite>starboard</cite>: Deletes the <cite>starboard data</cite> from database</p></li>
+</ul>
+</div></blockquote>
+<p>By default the <cite>type_data</cite> is set to <cite>all</cite>, which will delete all the data present in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>type_data</strong> (<em>Literal</em><em>[</em><em>ban</em><em>, </em><em>unban</em><em>, </em><em>support</em><em>, </em><em>warns</em><em>, </em><em>feedback</em><em>, </em><em>mentionspam</em><em>, </em><em>antiraid</em><em>, </em><em>starboard</em><em>, </em><em>badlinks</em><em>, </em><em>all</em><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="setup_server.ServerSetup.on_raw_reaction_add">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_raw_reaction_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.ServerSetup.on_raw_reaction_add" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>payload</strong> (<em>DiscordUtils.embeds.discord.RawReactionActionEvent</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="setup_server.setup">
+<em class="property"><span class="pre">await</span> </em><span class="sig-prename descclassname"><span class="pre">setup_server.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setup_server.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

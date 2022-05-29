@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>info</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+  <script src="../../_static/jquery.js"></script>
+  <script src="../../_static/underscore.js"></script>
+  <script src="../../_static/doctools.js"></script>
+  <script src="../../_static/custom.js"></script>
+  <script src="../../_static/settings.js"></script>
+  <script src="../../_static/copy.js"></script>
+  <script src="../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">info</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#info.Server">Server</a></li>
+<li><a class="reference internal" href="#info.Info">Info</a><ul>
+<li><a class="reference internal" href="#info.Info.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#info.Banner">Banner</a><ul>
+<li><a class="reference internal" href="#info.Banner.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#info.Icon">Icon</a><ul>
+<li><a class="reference internal" href="#info.Icon.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#info.UserInfo">UserInfo</a><ul>
+<li><a class="reference internal" href="#info.UserInfo.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#info.UserInfoSlash">UserInfoSlash</a><ul>
+<li><a class="reference internal" href="#info.UserInfoSlash.user">user</a></li>
+<li><a class="reference internal" href="#info.UserInfoSlash.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#info.UserInfoContextMenu">UserInfoContextMenu</a><ul>
+<li><a class="reference internal" href="#info.UserInfoContextMenu.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#info.InfoCog">InfoCog</a></li>
+<li><a class="reference internal" href="#info.setup">setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-info">
+<span id="info"></span><h1><a class="reference internal" href="#module-info" title="info"><code class="xref py py-mod docutils literal notranslate"><span class="pre">info</span></code></a><a class="headerlink" href="#module-info" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#info.Server" title="info.Server"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Server</span></code></a></p></td>
+<td><p>Some server releated commands</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#info.Info" title="info.Info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Info</span></code></a></p></td>
+<td><p>Shows some basic server info</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#info.Banner" title="info.Banner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Banner</span></code></a></p></td>
+<td><p>Shows server banner, if there is any</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#info.Icon" title="info.Icon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Icon</span></code></a></p></td>
+<td><p>Shows server icon, if there is any</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#info.UserInfo" title="info.UserInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserInfo</span></code></a></p></td>
+<td><p>Get some basic user info</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#info.UserInfoSlash" title="info.UserInfoSlash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserInfoSlash</span></code></a></p></td>
+<td><p>Get some basic user info</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#info.UserInfoContextMenu" title="info.UserInfoContextMenu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserInfoContextMenu</span></code></a></p></td>
+<td><p>Display the user info of the author of the message</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#info.InfoCog" title="info.InfoCog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InfoCog</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#info.setup" title="info.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(bot)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="info.Server">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">info.</span></span><span class="sig-name descname"><span class="pre">Server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.Server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>Some server releated commands</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="info.Info">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">info.</span></span><span class="sig-name descname"><span class="pre">Info</span></span><a class="headerlink" href="#info.Info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>Shows some basic server info</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="info.Info.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.Info.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="info.Banner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">info.</span></span><span class="sig-name descname"><span class="pre">Banner</span></span><a class="headerlink" href="#info.Banner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>Shows server banner, if there is any</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="info.Banner.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.Banner.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="info.Icon">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">info.</span></span><span class="sig-name descname"><span class="pre">Icon</span></span><a class="headerlink" href="#info.Icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>Shows server icon, if there is any</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="info.Icon.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.Icon.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="info.UserInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">info.</span></span><span class="sig-name descname"><span class="pre">UserInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.UserInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.UserCommand</span></code></p>
+<p>Get some basic user info</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="info.UserInfo.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.UserInfo.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.UserCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="info.UserInfoSlash">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">info.</span></span><span class="sig-name descname"><span class="pre">UserInfoSlash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.UserInfoSlash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>Get some basic user info</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="info.UserInfoSlash.user">
+<span class="sig-name descname"><span class="pre">user</span></span><em class="property"><span class="w"> </span><span class="pre">:discord.Member</span></em><a class="headerlink" href="#info.UserInfoSlash.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="info.UserInfoSlash.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.UserInfoSlash.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="info.UserInfoContextMenu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">info.</span></span><span class="sig-name descname"><span class="pre">UserInfoContextMenu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.UserInfoContextMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.MessageCommand</span></code></p>
+<p>Display the user info of the author of the message</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="info.UserInfoContextMenu.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.UserInfoContextMenu.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.MessageCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="info.InfoCog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">info.</span></span><span class="sig-name descname"><span class="pre">InfoCog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.InfoCog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.Cog</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="info.setup">
+<span class="sig-prename descclassname"><span class="pre">info.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#info.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

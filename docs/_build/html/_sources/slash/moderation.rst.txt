@@ -1,0 +1,7 @@
+moderation module
+=================
+
+.. automodule:: moderation
+   :members:
+   :undoc-members:
+   :show-inheritance:

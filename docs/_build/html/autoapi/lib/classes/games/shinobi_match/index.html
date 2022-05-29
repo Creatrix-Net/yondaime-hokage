@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lib.classes.games.shinobi_match</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../../../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+  <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+  <script src="../../../../../_static/jquery.js"></script>
+  <script src="../../../../../_static/underscore.js"></script>
+  <script src="../../../../../_static/doctools.js"></script>
+  <script src="../../../../../_static/custom.js"></script>
+  <script src="../../../../../_static/settings.js"></script>
+  <script src="../../../../../_static/copy.js"></script>
+  <script src="../../../../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../../../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../../../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../../../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.classes.games.shinobi_match</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.CharacterSelect">CharacterSelect</a><ul>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.CharacterSelect.__fill_options">__fill_options</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.CharacterSelect.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection">ShinobiMatchCharacterSelection</a><ul>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.children">children</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.get_character_config">get_character_config</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.select">select</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.cancel">cancel</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.interaction_check">interaction_check</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.on_timeout">on_timeout</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerViewButton">MatchHandlerViewButton</a><ul>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerViewButton.callback">callback</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerViewButton.reduce_health">reduce_health</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerView">MatchHandlerView</a><ul>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerView.children">children</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerView.percentage_and_progess_bar">percentage_and_progess_bar</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerView.make_embed">make_embed</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerView.interaction_check">interaction_check</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerView.on_timeout">on_timeout</a></li>
+<li><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerView.determine_winer">determine_winer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-lib.classes.games.shinobi_match">
+<span id="lib-classes-games-shinobi-match"></span><h1><a class="reference internal" href="#module-lib.classes.games.shinobi_match" title="lib.classes.games.shinobi_match"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.classes.games.shinobi_match</span></code></a><a class="headerlink" href="#module-lib.classes.games.shinobi_match" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.games.shinobi_match.CharacterSelect" title="lib.classes.games.shinobi_match.CharacterSelect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CharacterSelect</span></code></a></p></td>
+<td><p>Represents a UI select menu.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection" title="lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShinobiMatchCharacterSelection</span></code></a></p></td>
+<td><p>Represents a UI view.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerViewButton" title="lib.classes.games.shinobi_match.MatchHandlerViewButton"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatchHandlerViewButton</span></code></a></p></td>
+<td><p>Represents a UI button.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerView" title="lib.classes.games.shinobi_match.MatchHandlerView"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatchHandlerView</span></code></a></p></td>
+<td><p>Represents a UI view.</p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.CharacterSelect">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.games.shinobi_match.</span></span><span class="sig-name descname"><span class="pre">CharacterSelect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">characters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.CharacterSelect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ui.Select" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ui.Select</span></code></a>[<a class="reference internal" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection" title="lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShinobiMatchCharacterSelection</span></code></a>]</p>
+<p>Represents a UI select menu.</p>
+<p>This is usually represented as a drop down menu.</p>
+<p>In order to get the selected items that the user has chosen, use <code class="xref py py-attr docutils literal notranslate"><span class="pre">Select.values</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>custom_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The ID of the select menu that gets received during an interaction.
+If not given then one is generated for you.</p></li>
+<li><p><strong>placeholder</strong> (Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The placeholder text that is shown if nothing is selected, if any.</p></li>
+<li><p><strong>min_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The minimum number of items that must be chosen for this select menu.
+Defaults to 1 and must be between 1 and 25.</p></li>
+<li><p><strong>max_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The maximum number of items that must be chosen for this select menu.
+Defaults to 1 and must be between 1 and 25.</p></li>
+<li><p><strong>options</strong> (List[<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.SelectOption" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.SelectOption</span></code></a>]) – A list of options that can be selected in this menu.</p></li>
+<li><p><strong>disabled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether the select is disabled or not.</p></li>
+<li><p><strong>row</strong> (Optional[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The relative row this select menu belongs to. A Discord component can only have 5
+rows. By default, items are arranged automatically into those 5 rows. If you’d
+like to control the relative positioning of the row then passing an index is advised.
+For example, row=1 will show up before row=2. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, which is automatic
+ordering. The row number must be between 0 and 4 (i.e. zero indexed).</p></li>
+<li><p><strong>characters</strong> (<em>List</em><em>[</em><a class="reference internal" href="../../converter/index.html#lib.classes.converter.Characters" title="lib.classes.converter.Characters"><em>lib.classes.converter.Characters</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.CharacterSelect.__fill_options">
+<span class="sig-name descname"><span class="pre">__fill_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.CharacterSelect.__fill_options" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.CharacterSelect.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.CharacterSelect.callback" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id1"><span class="problematic" id="id2">|coro|</span></a></p>
+<p>The callback associated with this UI item.</p>
+<p>This can be overridden by subclasses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interaction</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Interaction</span></code>) – The interaction that triggered this UI item.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.games.shinobi_match.</span></span><span class="sig-name descname"><span class="pre">ShinobiMatchCharacterSelection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">characters_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">player</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ui.View" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ui.View</span></code></a></p>
+<p>Represents a UI view.</p>
+<p>This object must be inherited to create a UI within Discord.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timeout</strong> (Optional[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – Timeout in seconds from last interaction with the UI before no longer accepting input.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code> then there is no timeout.</p></li>
+<li><p><strong>characters_data</strong> (<em>List</em><em>[</em><a class="reference internal" href="../../converter/index.html#lib.classes.converter.Characters" title="lib.classes.converter.Characters"><em>lib.classes.converter.Characters</em></a><em>]</em>) – </p></li>
+<li><p><strong>ctx</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Context</em></a>) – </p></li>
+<li><p><strong>player</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a>) – </p></li>
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><em>discord.Message</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.children">
+<span class="sig-name descname"><span class="pre">children</span></span><em class="property"><span class="w"> </span><span class="pre">:List[Union[CharacterSelect,</span> <span class="pre">discord.Button,</span> <span class="pre">discord.ui.Button]]</span></em><a class="headerlink" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.get_character_config">
+<span class="sig-name descname"><span class="pre">get_character_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">character_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.get_character_config" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>character_id</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../../converter/index.html#lib.classes.converter.Characters" title="lib.classes.converter.Characters">lib.classes.converter.Characters</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.select">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">button</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.select" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>button</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ui.Button" title="(in discord.py v2.0.0a)"><em>discord.ui.Button</em></a>) – </p></li>
+<li><p><strong>interaction</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.Interaction" title="(in discord.py v2.0.0a)"><em>discord.Interaction</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.cancel">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">button</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>button</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ui.Button" title="(in discord.py v2.0.0a)"><em>discord.ui.Button</em></a>) – </p></li>
+<li><p><strong>interaction</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.Interaction" title="(in discord.py v2.0.0a)"><em>discord.Interaction</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.interaction_check">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">interaction_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.interaction_check" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id3"><span class="problematic" id="id4">|coro|</span></a></p>
+<p>A callback that is called when an interaction happens within the view
+that checks whether the view should process item callbacks for the interaction.</p>
+<p>This is useful to override if, for example, you want to ensure that the
+interaction author is a given user.</p>
+<p>The default implementation of this returns <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an exception occurs within the body then the check
+is considered a failure and <code class="xref py py-meth docutils literal notranslate"><span class="pre">on_error()</span></code> is called.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interaction</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.Interaction" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Interaction</span></code></a>) – The interaction that occurred.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether the view children’s callbacks should be called.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.on_timeout">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.ShinobiMatchCharacterSelection.on_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id5"><span class="problematic" id="id6">|coro|</span></a></p>
+<p>A callback that is called when a view’s timeout elapses without being explicitly stopped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerViewButton">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.games.shinobi_match.</span></span><span class="sig-name descname"><span class="pre">MatchHandlerViewButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerViewButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ui.Button" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ui.Button</span></code></a>[<a class="reference internal" href="#lib.classes.games.shinobi_match.MatchHandlerView" title="lib.classes.games.shinobi_match.MatchHandlerView"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatchHandlerView</span></code></a>]</p>
+<p>Represents a UI button.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>style</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ButtonStyle" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.ButtonStyle</span></code></a>) – The style of the button.</p></li>
+<li><p><strong>custom_id</strong> (Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The ID of the button that gets received during an interaction.
+If this button is for a URL, it does not have a custom ID.</p></li>
+<li><p><strong>url</strong> (Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The URL this button sends you to.</p></li>
+<li><p><strong>disabled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether the button is disabled or not.</p></li>
+<li><p><strong>label</strong> (Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The label of the button, if any.</p></li>
+<li><p><strong>emoji</strong> (Optional[Union[<code class="xref py py-class docutils literal notranslate"><span class="pre">PartialEmoji</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Emoji</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – The emoji of the button, if available.</p></li>
+<li><p><strong>row</strong> (Optional[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The relative row this button belongs to. A Discord component can only have 5
+rows. By default, items are arranged automatically into those 5 rows. If you’d
+like to control the relative positioning of the row then passing an index is advised.
+For example, row=1 will show up before row=2. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, which is automatic
+ordering. The row number must be between 0 and 4 (i.e. zero indexed).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerViewButton.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerViewButton.callback" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id7"><span class="problematic" id="id8">|coro|</span></a></p>
+<p>The callback associated with this UI item.</p>
+<p>This can be overridden by subclasses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interaction</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Interaction</span></code>) – The interaction that triggered this UI item.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerViewButton.reduce_health">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">reduce_health</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerViewButton.reduce_health" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amount</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – </p></li>
+<li><p><strong>heal</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.games.shinobi_match.</span></span><span class="sig-name descname"><span class="pre">MatchHandlerView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">player2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ui.View" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ui.View</span></code></a></p>
+<p>Represents a UI view.</p>
+<p>This object must be inherited to create a UI within Discord.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timeout</strong> (Optional[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – Timeout in seconds from last interaction with the UI before no longer accepting input.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code> then there is no timeout.</p></li>
+<li><p><strong>player1</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a><em>, </em><a class="reference internal" href="../../converter/index.html#lib.classes.converter.Characters" title="lib.classes.converter.Characters"><em>lib.classes.converter.Characters</em></a><em>]</em>) – </p></li>
+<li><p><strong>player2</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a><em>, </em><a class="reference internal" href="../../converter/index.html#lib.classes.converter.Characters" title="lib.classes.converter.Characters"><em>lib.classes.converter.Characters</em></a><em>]</em>) – </p></li>
+<li><p><strong>message</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><em>discord.Message</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerView.children">
+<span class="sig-name descname"><span class="pre">children</span></span><em class="property"><span class="w"> </span><span class="pre">:List[MatchHandlerViewButton]</span></em><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerView.children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerView.percentage_and_progess_bar">
+<span class="sig-name descname"><span class="pre">percentage_and_progess_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_health</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerView.percentage_and_progess_bar" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>current_health</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerView.make_embed">
+<span class="sig-name descname"><span class="pre">make_embed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">character</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerView.make_embed" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>character</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="../../converter/index.html#lib.classes.converter.Characters" title="lib.classes.converter.Characters"><em>lib.classes.converter.Characters</em></a><em>]</em>) – </p></li>
+<li><p><strong>author</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a><em>]</em>) – </p></li>
+<li><p><strong>color</strong> (<em>Optional</em><em>[</em><em>discord.Color</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>DiscordUtils.Embed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerView.interaction_check">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">interaction_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerView.interaction_check" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id9"><span class="problematic" id="id10">|coro|</span></a></p>
+<p>A callback that is called when an interaction happens within the view
+that checks whether the view should process item callbacks for the interaction.</p>
+<p>This is useful to override if, for example, you want to ensure that the
+interaction author is a given user.</p>
+<p>The default implementation of this returns <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an exception occurs within the body then the check
+is considered a failure and <code class="xref py py-meth docutils literal notranslate"><span class="pre">on_error()</span></code> is called.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interaction</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.Interaction" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Interaction</span></code></a>) – The interaction that occurred.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether the view children’s callbacks should be called.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerView.on_timeout">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerView.on_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id11"><span class="problematic" id="id12">|coro|</span></a></p>
+<p>A callback that is called when a view’s timeout elapses without being explicitly stopped.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.shinobi_match.MatchHandlerView.determine_winer">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">determine_winer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.shinobi_match.MatchHandlerView.determine_winer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>force</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[List[<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Embed" title="(in discord.py v2.0.0a)">discord.Embed</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

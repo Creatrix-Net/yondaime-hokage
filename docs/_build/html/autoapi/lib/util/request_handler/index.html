@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lib.util.request_handler</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+  <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+  <script src="../../../../_static/jquery.js"></script>
+  <script src="../../../../_static/underscore.js"></script>
+  <script src="../../../../_static/doctools.js"></script>
+  <script src="../../../../_static/custom.js"></script>
+  <script src="../../../../_static/settings.js"></script>
+  <script src="../../../../_static/copy.js"></script>
+  <script src="../../../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.util.request_handler</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#lib.util.request_handler.log">log</a></li>
+<li><a class="reference internal" href="#lib.util.request_handler.ch">ch</a></li>
+<li><a class="reference internal" href="#lib.util.request_handler.formatter">formatter</a></li>
+<li><a class="reference internal" href="#lib.util.request_handler.FATESLIST_BASE_URI">FATESLIST_BASE_URI</a></li>
+<li><a class="reference internal" href="#lib.util.request_handler.DISCORD_SERVERVICES_BASE_URI">DISCORD_SERVERVICES_BASE_URI</a></li>
+<li><a class="reference internal" href="#lib.util.request_handler.post_handler">post_handler</a></li>
+<li><a class="reference internal" href="#lib.util.request_handler.ratelimit_handler">ratelimit_handler</a></li>
+<li><a class="reference internal" href="#lib.util.request_handler.post_commands">post_commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-lib.util.request_handler">
+<span id="lib-util-request-handler"></span><h1><a class="reference internal" href="#module-lib.util.request_handler" title="lib.util.request_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.util.request_handler</span></code></a><a class="headerlink" href="#module-lib.util.request_handler" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.request_handler.post_handler" title="lib.util.request_handler.post_handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_handler</span></code></a>(method, url, header = None, headers = None, data = None, json = None, log_data = False, return_data = True, return_json = False, getrequestobj = False)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.request_handler.ratelimit_handler" title="lib.util.request_handler.ratelimit_handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratelimit_handler</span></code></a>(req, url, method, headers, data, print_logs = False)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.request_handler.post_commands" title="lib.util.request_handler.post_commands"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_commands</span></code></a>(bot, print_logs = False)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.request_handler.log" title="lib.util.request_handler.log"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.request_handler.ch" title="lib.util.request_handler.ch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ch</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.request_handler.formatter" title="lib.util.request_handler.formatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">formatter</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.request_handler.FATESLIST_BASE_URI" title="lib.util.request_handler.FATESLIST_BASE_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FATESLIST_BASE_URI</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.request_handler.DISCORD_SERVERVICES_BASE_URI" title="lib.util.request_handler.DISCORD_SERVERVICES_BASE_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DISCORD_SERVERVICES_BASE_URI</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py data">
+<dt class="sig sig-object py" id="lib.util.request_handler.log">
+<span class="sig-prename descclassname"><span class="pre">lib.util.request_handler.</span></span><span class="sig-name descname"><span class="pre">log</span></span><a class="headerlink" href="#lib.util.request_handler.log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.request_handler.ch">
+<span class="sig-prename descclassname"><span class="pre">lib.util.request_handler.</span></span><span class="sig-name descname"><span class="pre">ch</span></span><a class="headerlink" href="#lib.util.request_handler.ch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.request_handler.formatter">
+<span class="sig-prename descclassname"><span class="pre">lib.util.request_handler.</span></span><span class="sig-name descname"><span class="pre">formatter</span></span><a class="headerlink" href="#lib.util.request_handler.formatter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.request_handler.FATESLIST_BASE_URI">
+<span class="sig-prename descclassname"><span class="pre">lib.util.request_handler.</span></span><span class="sig-name descname"><span class="pre">FATESLIST_BASE_URI</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://api.fateslist.xyz/</span></em><a class="headerlink" href="#lib.util.request_handler.FATESLIST_BASE_URI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.request_handler.DISCORD_SERVERVICES_BASE_URI">
+<span class="sig-prename descclassname"><span class="pre">lib.util.request_handler.</span></span><span class="sig-name descname"><span class="pre">DISCORD_SERVERVICES_BASE_URI</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://api.discordservices.net/bot/</span></em><a class="headerlink" href="#lib.util.request_handler.DISCORD_SERVERVICES_BASE_URI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.util.request_handler.post_handler">
+<em class="property"><span class="pre">await</span> </em><span class="sig-prename descclassname"><span class="pre">lib.util.request_handler.</span></span><span class="sig-name descname"><span class="pre">post_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getrequestobj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.request_handler.post_handler" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> (<a class="reference internal" href="../vars/index.html#lib.util.vars.Methods" title="lib.util.vars.Methods"><em>lib.util.vars.Methods</em></a>) – </p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>header</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – </p></li>
+<li><p><strong>headers</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – </p></li>
+<li><p><strong>data</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – </p></li>
+<li><p><strong>json</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – </p></li>
+<li><p><strong>log_data</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+<li><p><strong>return_data</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+<li><p><strong>return_json</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+<li><p><strong>getrequestobj</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.util.request_handler.ratelimit_handler">
+<em class="property"><span class="pre">await</span> </em><span class="sig-prename descclassname"><span class="pre">lib.util.request_handler.</span></span><span class="sig-name descname"><span class="pre">ratelimit_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_logs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.request_handler.ratelimit_handler" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>method</strong> (<a class="reference internal" href="../vars/index.html#lib.util.vars.Methods" title="lib.util.vars.Methods"><em>lib.util.vars.Methods</em></a>) – </p></li>
+<li><p><strong>headers</strong> (<em>Dict</em>) – </p></li>
+<li><p><strong>data</strong> (<em>Dict</em>) – </p></li>
+<li><p><strong>print_logs</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.util.request_handler.post_commands">
+<em class="property"><span class="pre">await</span> </em><span class="sig-prename descclassname"><span class="pre">lib.util.request_handler.</span></span><span class="sig-name descname"><span class="pre">post_commands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_logs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.request_handler.post_commands" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bot</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.AutoShardedBot" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.AutoShardedBot</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Bot" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Bot</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Client" title="(in discord.py v2.0.0a)"><em>discord.Client</em></a><em>]</em>) – </p></li>
+<li><p><strong>print_logs</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

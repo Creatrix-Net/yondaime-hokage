@@ -1,0 +1,7 @@
+statuspost module
+=================
+
+.. automodule:: statuspost
+   :members:
+   :undoc-members:
+   :show-inheritance:

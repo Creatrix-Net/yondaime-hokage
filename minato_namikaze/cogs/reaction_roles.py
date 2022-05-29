@@ -1,6 +1,7 @@
 import asyncio
-import json
+from orjson import loads
 import uuid
+from typing import Union
 from json.decoder import JSONDecodeError
 
 import discord
@@ -30,7 +31,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
-                data = json.loads(str(cnt))
+                data = loads(str(cnt))
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
@@ -284,5 +285,5 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         await ctx.send(":ok_hand:")
 
 
-def setup(bot):
-    bot.add_cog(ReactionRoles(bot))
+async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+    await bot.add_cog(ReactionRoles(bot))

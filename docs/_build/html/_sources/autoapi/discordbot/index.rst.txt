@@ -1,0 +1,265 @@
+:py:mod:`discordbot`
+====================
+
+.. py:module:: discordbot
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   discordbot.MinatoNamikazeBot
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   discordbot.token_get
+   discordbot.get_prefix
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   discordbot.log
+   discordbot.ch
+   discordbot.formatter
+   discordbot.dotenv_file
+   discordbot.bot
+
+
+.. py:data:: log
+   
+
+   
+
+.. py:data:: ch
+   
+
+   
+
+.. py:data:: formatter
+   
+
+   
+
+.. py:data:: dotenv_file
+   
+
+   
+
+.. py:function:: token_get(tokenname)
+
+
+.. py:function:: get_prefix(bot, message)
+
+   A callable Prefix for our bot. This could be edited to allow per server prefixes.
+
+
+.. py:class:: MinatoNamikazeBot
+
+   Bases: :py:obj:`discord.ext.commands.AutoShardedBot`
+
+   This is similar to :class:`.Bot` except that it is inherited from
+   :class:`discord.AutoShardedClient` instead.
+
+   .. py:method:: run(self)
+
+      A blocking call that abstracts away the event loop
+      initialisation from you.
+
+      If you want more control over the event loop then this
+      function should not be used. Use :meth:`start` coroutine
+      or :meth:`connect` + :meth:`login`.
+
+      Roughly Equivalent to: ::
+
+          try:
+              asyncio.run(self.start(*args, **kwargs))
+          except KeyboardInterrupt:
+              return
+
+      .. warning::
+
+          This function must be the last function to call due to the fact that it
+          is blocking. That means that registration of events or anything being
+          called after this function call will not execute until it returns.
+
+
+   .. py:method:: on_ready(self)
+      :async:
+
+
+   .. py:method:: add_persistant_views(self)
+      :async:
+
+
+   .. py:method:: update_blacklist(self)
+      :async:
+
+
+   .. py:method:: query_member_named(guild, argument, *, cache=False)
+      :staticmethod:
+      :async:
+
+      Queries a member by their name, name + discrim, or nickname.
+      :param guild: The guild to query the member in.
+      :type guild: Guild
+      :param argument: The name, nickname, or name + discrim combo to check.
+      :type argument: str
+      :param cache: Whether to cache the results of the query.
+      :type cache: bool
+
+      :returns: The member matching the query or None if not found.
+      :rtype: Optional[Member]
+
+
+   .. py:method:: get_or_fetch_member(self, guild, member_id)
+      :async:
+
+      Looks up a member in cache or fetches if not found.
+      :param guild: The guild to look in.
+      :type guild: Guild
+      :param member_id: The member ID to search for.
+      :type member_id: int
+
+      :returns: The member or None if not found.
+      :rtype: Optional[Member]
+
+
+   .. py:method:: resolve_member_ids(self, guild, member_ids)
+      :async:
+
+      Bulk resolves member IDs to member instances, if possible.
+      Members that can't be resolved are discarded from the list.
+      This is done lazily using an asynchronous iterator.
+      Note that the order of the resolved members is not the same as the input.
+      :param guild: The guild to resolve from.
+      :type guild: Guild
+      :param member_ids: An iterable of member IDs.
+      :type member_ids: Iterable[int]
+
+      :Yields: *Member* -- The resolved members.
+
+
+   .. py:method:: on_shard_resumed(self, shard_id)
+      :async:
+
+
+   .. py:method:: close(self)
+      :async:
+
+      |coro|
+
+      Closes the connection to Discord.
+
+
+   .. py:method:: get_bot_inviter(guild)
+      :staticmethod:
+      :async:
+
+
+   .. py:method:: get_welcome_channel(guild, inviter_or_guild_owner = None)
+      :staticmethod:
+      :async:
+
+
+   .. py:method:: get_admin_invite_link(self)
+      :property:
+
+
+   .. py:method:: get_required_perms_invite_link(self)
+      :property:
+
+
+   .. py:method:: get_random_image_from_tag(tag_name)
+      :staticmethod:
+
+
+   .. py:method:: get_random_image_from_tag(tag_name)
+      :staticmethod:
+      :async:
+
+
+   .. py:method:: tenor(tag_name)
+      :staticmethod:
+
+
+   .. py:method:: giphy(tag_name)
+      :staticmethod:
+
+
+   .. py:method:: tenor(tag_name)
+      :staticmethod:
+      :async:
+
+
+   .. py:method:: giphy(tag_name)
+      :staticmethod:
+      :async:
+
+
+   .. py:method:: on_message(self, message)
+      :async:
+
+
+   .. py:method:: log_spammer(ctx, message, retry_after, *, autoblock=False)
+      :staticmethod:
+      :async:
+
+
+   .. py:method:: process_commands(self, message)
+      :async:
+
+      |coro|
+
+      This function processes the commands that have been registered
+      to the bot and other groups. Without this coroutine, none of the
+      commands will be triggered.
+
+      By default, this coroutine is called inside the :func:`.on_message`
+      event. If you choose to override the :func:`.on_message` event, then
+      you should invoke this coroutine as well.
+
+      This is built using other low level tools, and is equivalent to a
+      call to :meth:`~.Bot.get_context` followed by a call to :meth:`~.Bot.invoke`.
+
+      This also checks if the message's author is a bot and doesn't
+      call :meth:`~.Bot.get_context` or :meth:`~.Bot.invoke` if so.
+
+      .. versionchanged:: 2.0
+
+          ``message`` parameter is now positional-only.
+
+      :param message: The message to process commands for.
+      :type message: :class:`discord.Message`
+
+
+   .. py:method:: add_to_blacklist(self, object_id)
+      :async:
+
+
+   .. py:method:: on_guild_join(self, guild)
+      :async:
+
+
+   .. py:method:: on_application_command_error(self, response, exception)
+      :async:
+
+
+
+.. py:data:: bot
+   
+
+   
+

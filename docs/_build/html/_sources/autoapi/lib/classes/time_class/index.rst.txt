@@ -1,0 +1,126 @@
+:py:mod:`lib.classes.time_class`
+================================
+
+.. py:module:: lib.classes.time_class
+
+.. autoapi-nested-parse::
+
+   This code has been fully copied from here https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/paginator.py
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.time_class.ShortTime
+   lib.classes.time_class.HumanTime
+   lib.classes.time_class.Time
+   lib.classes.time_class.FutureTime
+   lib.classes.time_class.UserFriendlyTime
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.time_class.human_timedelta
+   lib.classes.time_class.format_relative
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.time_class.units
+
+
+.. py:data:: units
+   
+
+   
+
+.. py:class:: ShortTime(argument, *, now=None)
+
+   .. py:attribute:: compiled
+      
+
+      
+
+   .. py:method:: convert(cls, ctx, argument)
+      :classmethod:
+      :async:
+
+
+
+.. py:class:: HumanTime(argument, *, now=None)
+
+   .. py:attribute:: calendar
+      
+
+      
+
+   .. py:method:: convert(cls, ctx, argument)
+      :classmethod:
+      :async:
+
+
+
+.. py:class:: Time(argument, *, now=None)
+
+   Bases: :py:obj:`HumanTime`
+
+
+.. py:class:: FutureTime(argument, *, now=None)
+
+   Bases: :py:obj:`Time`
+
+
+.. py:class:: UserFriendlyTime(converter=None, *, default=None)
+
+   Bases: :py:obj:`discord.ext.commands.Converter`
+
+   That way quotes aren't absolutely necessary.
+
+   .. py:method:: check_constraints(self, ctx, now, remaining)
+      :async:
+
+
+   .. py:method:: copy(self)
+
+
+   .. py:method:: convert(self, ctx, argument)
+      :async:
+
+      |coro|
+
+      The method to override to do conversion logic.
+
+      If an error is found while converting, it is recommended to
+      raise a :exc:`.CommandError` derived exception as it will
+      properly propagate to the error handlers.
+
+      :param ctx: The invocation context that the argument is being used in.
+      :type ctx: :class:`.Context`
+      :param argument: The argument that is being converted.
+      :type argument: :class:`str`
+
+      :raises CommandError: A generic exception occurred when converting the argument.
+      :raises BadArgument: The converter failed to convert the argument.
+
+
+
+.. py:function:: human_timedelta(dt, *, source=None, accuracy=3, brief=False, suffix=True)
+
+
+.. py:function:: format_relative(dt)
+
+

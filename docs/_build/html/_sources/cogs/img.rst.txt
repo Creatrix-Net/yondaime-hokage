@@ -1,0 +1,7 @@
+img module
+==========
+
+.. automodule:: img
+   :members:
+   :undoc-members:
+   :show-inheritance:

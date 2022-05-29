@@ -1,0 +1,195 @@
+:py:mod:`lib.classes.games.connect_four`
+========================================
+
+.. py:module:: lib.classes.games.connect_four
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.games.connect_four.ConnectFourButton
+   lib.classes.games.connect_four.Quit
+   lib.classes.games.connect_four.ConnectFour
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.games.connect_four.RED
+   lib.classes.games.connect_four.BLUE
+   lib.classes.games.connect_four.BLANK
+
+
+.. py:data:: RED
+   :annotation: = 🔴
+
+   
+
+.. py:data:: BLUE
+   :annotation: = 🔵
+
+   
+
+.. py:data:: BLANK
+   :annotation: = ⬛
+
+   
+
+.. py:class:: ConnectFourButton(y, emoji)
+
+   Bases: :py:obj:`discord.ui.Button`\ [\ :py:obj:`ConnectFour`\ ]
+
+   Represents a UI button.
+
+   .. versionadded:: 2.0
+
+   :param style: The style of the button.
+   :type style: :class:`discord.ButtonStyle`
+   :param custom_id: The ID of the button that gets received during an interaction.
+                     If this button is for a URL, it does not have a custom ID.
+   :type custom_id: Optional[:class:`str`]
+   :param url: The URL this button sends you to.
+   :type url: Optional[:class:`str`]
+   :param disabled: Whether the button is disabled or not.
+   :type disabled: :class:`bool`
+   :param label: The label of the button, if any.
+   :type label: Optional[:class:`str`]
+   :param emoji: The emoji of the button, if available.
+   :type emoji: Optional[Union[:class:`.PartialEmoji`, :class:`.Emoji`, :class:`str`]]
+   :param row: The relative row this button belongs to. A Discord component can only have 5
+               rows. By default, items are arranged automatically into those 5 rows. If you'd
+               like to control the relative positioning of the row then passing an index is advised.
+               For example, row=1 will show up before row=2. Defaults to ``None``, which is automatic
+               ordering. The row number must be between 0 and 4 (i.e. zero indexed).
+   :type row: Optional[:class:`int`]
+
+   .. py:method:: callback(self, interaction)
+      :async:
+
+      |coro|
+
+      The callback associated with this UI item.
+
+      This can be overridden by subclasses.
+
+      :param interaction: The interaction that triggered this UI item.
+      :type interaction: :class:`.Interaction`
+
+
+
+.. py:class:: Quit
+
+   Bases: :py:obj:`discord.ui.Button`\ [\ :py:obj:`ConnectFour`\ ]
+
+   Represents a UI button.
+
+   .. versionadded:: 2.0
+
+   :param style: The style of the button.
+   :type style: :class:`discord.ButtonStyle`
+   :param custom_id: The ID of the button that gets received during an interaction.
+                     If this button is for a URL, it does not have a custom ID.
+   :type custom_id: Optional[:class:`str`]
+   :param url: The URL this button sends you to.
+   :type url: Optional[:class:`str`]
+   :param disabled: Whether the button is disabled or not.
+   :type disabled: :class:`bool`
+   :param label: The label of the button, if any.
+   :type label: Optional[:class:`str`]
+   :param emoji: The emoji of the button, if available.
+   :type emoji: Optional[Union[:class:`.PartialEmoji`, :class:`.Emoji`, :class:`str`]]
+   :param row: The relative row this button belongs to. A Discord component can only have 5
+               rows. By default, items are arranged automatically into those 5 rows. If you'd
+               like to control the relative positioning of the row then passing an index is advised.
+               For example, row=1 will show up before row=2. Defaults to ``None``, which is automatic
+               ordering. The row number must be between 0 and 4 (i.e. zero indexed).
+   :type row: Optional[:class:`int`]
+
+   .. py:method:: callback(self, interaction)
+      :async:
+
+      |coro|
+
+      The callback associated with this UI item.
+
+      This can be overridden by subclasses.
+
+      :param interaction: The interaction that triggered this UI item.
+      :type interaction: :class:`.Interaction`
+
+
+
+.. py:class:: ConnectFour(*, red, blue, auto = False)
+
+   Bases: :py:obj:`discord.ui.View`
+
+   Represents a UI view.
+
+   This object must be inherited to create a UI within Discord.
+
+   .. versionadded:: 2.0
+
+   :param timeout: Timeout in seconds from last interaction with the UI before no longer accepting input.
+                   If ``None`` then there is no timeout.
+   :type timeout: Optional[:class:`float`]
+
+   .. py:attribute:: children
+      :annotation: :List[ConnectFourButton]
+
+      
+
+   .. py:method:: BoardString(self)
+
+
+   .. py:method:: make_embed(self)
+
+
+   .. py:method:: PlacePiece(self, emoji, user)
+
+
+   .. py:method:: GameOver(self)
+
+
+   .. py:method:: interaction_check(self, interaction)
+      :async:
+
+      |coro|
+
+      A callback that is called when an interaction happens within the view
+      that checks whether the view should process item callbacks for the interaction.
+
+      This is useful to override if, for example, you want to ensure that the
+      interaction author is a given user.
+
+      The default implementation of this returns ``True``.
+
+      .. note::
+
+          If an exception occurs within the body then the check
+          is considered a failure and :meth:`on_error` is called.
+
+      :param interaction: The interaction that occurred.
+      :type interaction: :class:`~discord.Interaction`
+
+      :returns: Whether the view children's callbacks should be called.
+      :rtype: :class:`bool`
+
+
+   .. py:method:: on_timeout(self)
+      :async:
+
+      |coro|
+
+      A callback that is called when a view's timeout elapses without being explicitly stopped.
+
+
+

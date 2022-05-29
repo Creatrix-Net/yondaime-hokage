@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lib.classes.converter</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+  <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+  <script src="../../../../_static/jquery.js"></script>
+  <script src="../../../../_static/underscore.js"></script>
+  <script src="../../../../_static/doctools.js"></script>
+  <script src="../../../../_static/custom.js"></script>
+  <script src="../../../../_static/settings.js"></script>
+  <script src="../../../../_static/copy.js"></script>
+  <script src="../../../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.classes.converter</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.time_regex">time_regex</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.time_dict">time_dict</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.TimeConverter">TimeConverter</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.TimeConverter.convert">convert</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.Arguments">Arguments</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.Arguments.error">error</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.can_execute_action">can_execute_action</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.MemberID">MemberID</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.MemberID.convert">convert</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.BannedMember">BannedMember</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.BannedMember.convert">convert</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.ActionReason">ActionReason</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.ActionReason.convert">convert</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.safe_reason_append">safe_reason_append</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.AntiRaidConfig">AntiRaidConfig</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.AntiRaidConfig.__slots__">__slots__</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.AntiRaidConfig.from_record">from_record</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.AntiRaidConfig.broadcast_channel">broadcast_channel</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.MentionSpamConfig">MentionSpamConfig</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.MentionSpamConfig.__slots__">__slots__</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.MentionSpamConfig.from_record">from_record</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.GiveawayConfig">GiveawayConfig</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.GiveawayConfig.__slots__">__slots__</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.GiveawayConfig.from_record">from_record</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.CooldownByContent">CooldownByContent</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.CooldownByContent._bucket_key">_bucket_key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.SpamChecker">SpamChecker</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.SpamChecker.is_new">is_new</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.SpamChecker.is_spamming">is_spamming</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.SpamChecker.is_fast_join">is_fast_join</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.classes.converter.Characters">Characters</a><ul>
+<li><a class="reference internal" href="#lib.classes.converter.Characters.__slots__">__slots__</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.Characters.hitpoint">hitpoint</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.Characters.regainpoint">regainpoint</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.Characters.healpoint">healpoint</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.Characters.specialpoint">specialpoint</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.Characters.from_record">from_record</a></li>
+<li><a class="reference internal" href="#lib.classes.converter.Characters.return_emoji">return_emoji</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-lib.classes.converter">
+<span id="lib-classes-converter"></span><h1><a class="reference internal" href="#module-lib.classes.converter" title="lib.classes.converter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.classes.converter</span></code></a><a class="headerlink" href="#module-lib.classes.converter" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.converter.TimeConverter" title="lib.classes.converter.TimeConverter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TimeConverter</span></code></a></p></td>
+<td><p>The base class of custom converters that require the <a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.classes.converter.Arguments" title="lib.classes.converter.Arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Arguments</span></code></a></p></td>
+<td><p>Object for parsing command line strings into Python objects.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.converter.MemberID" title="lib.classes.converter.MemberID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MemberID</span></code></a></p></td>
+<td><p>The base class of custom converters that require the <a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.classes.converter.BannedMember" title="lib.classes.converter.BannedMember"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BannedMember</span></code></a></p></td>
+<td><p>The base class of custom converters that require the <a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.converter.ActionReason" title="lib.classes.converter.ActionReason"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActionReason</span></code></a></p></td>
+<td><p>The base class of custom converters that require the <a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.classes.converter.AntiRaidConfig" title="lib.classes.converter.AntiRaidConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AntiRaidConfig</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.converter.MentionSpamConfig" title="lib.classes.converter.MentionSpamConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MentionSpamConfig</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.classes.converter.GiveawayConfig" title="lib.classes.converter.GiveawayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GiveawayConfig</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.converter.CooldownByContent" title="lib.classes.converter.CooldownByContent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CooldownByContent</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.classes.converter.SpamChecker" title="lib.classes.converter.SpamChecker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpamChecker</span></code></a></p></td>
+<td><p>This spam checker does a few things.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.converter.Characters" title="lib.classes.converter.Characters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Characters</span></code></a></p></td>
+<td><p>The characters model class</p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.converter.can_execute_action" title="lib.classes.converter.can_execute_action"><code class="xref py py-obj docutils literal notranslate"><span class="pre">can_execute_action</span></code></a>(ctx, user, target)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.classes.converter.safe_reason_append" title="lib.classes.converter.safe_reason_append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_reason_append</span></code></a>(base, to_append)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.converter.time_regex" title="lib.classes.converter.time_regex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_regex</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.classes.converter.time_dict" title="lib.classes.converter.time_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_dict</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py data">
+<dt class="sig sig-object py" id="lib.classes.converter.time_regex">
+<span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">time_regex</span></span><a class="headerlink" href="#lib.classes.converter.time_regex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.classes.converter.time_dict">
+<span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">time_dict</span></span><a class="headerlink" href="#lib.classes.converter.time_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.TimeConverter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">TimeConverter</span></span><a class="headerlink" href="#lib.classes.converter.TimeConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Converter" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Converter</span></code></a></p>
+<p>The base class of custom converters that require the <a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>
+to be passed to be useful.</p>
+<p>This allows you to implement converters that function similar to the
+special cased <code class="docutils literal notranslate"><span class="pre">discord</span></code> classes.</p>
+<p>Classes that derive from this should override the <code class="xref py py-meth docutils literal notranslate"><span class="pre">convert()</span></code>
+method to do its conversion logic. This method must be a <a class="reference external" href="https://docs.python.org/3/library/asyncio-task.html#coroutine" title="(in Python v3.10)"><span class="xref std std-ref">coroutine</span></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.TimeConverter.convert">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argument</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.TimeConverter.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id1"><span class="problematic" id="id2">|coro|</span></a></p>
+<p>The method to override to do conversion logic.</p>
+<p>If an error is found while converting, it is recommended to
+raise a <code class="xref py py-exc docutils literal notranslate"><span class="pre">CommandError</span></code> derived exception as it will
+properly propagate to the error handlers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>) – The invocation context that the argument is being used in.</p></li>
+<li><p><strong>argument</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The argument that is being converted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>CommandError</strong> – A generic exception occurred when converting the argument.</p></li>
+<li><p><strong>BadArgument</strong> – The converter failed to convert the argument.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.Arguments">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">Arguments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epilog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formatter_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">HelpFormatter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix_chars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromfile_prefix_chars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argument_default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conflict_handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'error'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_help</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_abbrev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.Arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">argparse.ArgumentParser</span></code></a></p>
+<p>Object for parsing command line strings into Python objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>default</strong> (<em>- usage -- A usage message</em>) – sys.argv[0])</p></li>
+<li><p><strong>(</strong><strong>default</strong> – auto-generated from arguments)</p></li>
+<li><p><strong>does</strong> (<em>- description -- A description of what the program</em>) – </p></li>
+<li><p><strong>descriptions</strong> (<em>- epilog -- Text following the argument</em>) – </p></li>
+<li><p><strong>one</strong> (<em>- parents -- Parsers whose arguments should be copied into this</em>) – </p></li>
+<li><p><strong>messages</strong> (<em>- formatter_class -- HelpFormatter class for printing help</em>) – </p></li>
+<li><p><strong>arguments</strong> (<em>- argument_default -- The default value for all</em>) – </p></li>
+<li><p><strong>containing</strong> (<em>- fromfile_prefix_chars -- Characters that prefix files</em>) – additional arguments</p></li>
+<li><p><strong>arguments</strong> – </p></li>
+<li><p><strong>conflicts</strong> (<em>- conflict_handler -- String indicating how to handle</em>) – </p></li>
+<li><p><strong>option</strong> (<em>- add_help -- Add a -h/-help</em>) – </p></li>
+<li><p><strong>unambiguously</strong> (<em>- allow_abbrev -- Allow long options to be abbreviated</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.Arguments.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.Arguments.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>error(message: string)</p>
+<p>Prints a usage message incorporating the message to stderr and
+exits.</p>
+<p>If you override this in a subclass, it should not return – it
+should either exit or raise an exception.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.classes.converter.can_execute_action">
+<span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">can_execute_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.can_execute_action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.MemberID">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">MemberID</span></span><a class="headerlink" href="#lib.classes.converter.MemberID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Converter" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Converter</span></code></a></p>
+<p>The base class of custom converters that require the <a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>
+to be passed to be useful.</p>
+<p>This allows you to implement converters that function similar to the
+special cased <code class="docutils literal notranslate"><span class="pre">discord</span></code> classes.</p>
+<p>Classes that derive from this should override the <code class="xref py py-meth docutils literal notranslate"><span class="pre">convert()</span></code>
+method to do its conversion logic. This method must be a <a class="reference external" href="https://docs.python.org/3/library/asyncio-task.html#coroutine" title="(in Python v3.10)"><span class="xref std std-ref">coroutine</span></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.MemberID.convert">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argument</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.MemberID.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id3"><span class="problematic" id="id4">|coro|</span></a></p>
+<p>The method to override to do conversion logic.</p>
+<p>If an error is found while converting, it is recommended to
+raise a <code class="xref py py-exc docutils literal notranslate"><span class="pre">CommandError</span></code> derived exception as it will
+properly propagate to the error handlers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>) – The invocation context that the argument is being used in.</p></li>
+<li><p><strong>argument</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The argument that is being converted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>CommandError</strong> – A generic exception occurred when converting the argument.</p></li>
+<li><p><strong>BadArgument</strong> – The converter failed to convert the argument.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.BannedMember">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">BannedMember</span></span><a class="headerlink" href="#lib.classes.converter.BannedMember" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Converter" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Converter</span></code></a></p>
+<p>The base class of custom converters that require the <a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>
+to be passed to be useful.</p>
+<p>This allows you to implement converters that function similar to the
+special cased <code class="docutils literal notranslate"><span class="pre">discord</span></code> classes.</p>
+<p>Classes that derive from this should override the <code class="xref py py-meth docutils literal notranslate"><span class="pre">convert()</span></code>
+method to do its conversion logic. This method must be a <a class="reference external" href="https://docs.python.org/3/library/asyncio-task.html#coroutine" title="(in Python v3.10)"><span class="xref std std-ref">coroutine</span></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.BannedMember.convert">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argument</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.BannedMember.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id5"><span class="problematic" id="id6">|coro|</span></a></p>
+<p>The method to override to do conversion logic.</p>
+<p>If an error is found while converting, it is recommended to
+raise a <code class="xref py py-exc docutils literal notranslate"><span class="pre">CommandError</span></code> derived exception as it will
+properly propagate to the error handlers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>) – The invocation context that the argument is being used in.</p></li>
+<li><p><strong>argument</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The argument that is being converted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>CommandError</strong> – A generic exception occurred when converting the argument.</p></li>
+<li><p><strong>BadArgument</strong> – The converter failed to convert the argument.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.ActionReason">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">ActionReason</span></span><a class="headerlink" href="#lib.classes.converter.ActionReason" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Converter" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Converter</span></code></a></p>
+<p>The base class of custom converters that require the <a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>
+to be passed to be useful.</p>
+<p>This allows you to implement converters that function similar to the
+special cased <code class="docutils literal notranslate"><span class="pre">discord</span></code> classes.</p>
+<p>Classes that derive from this should override the <code class="xref py py-meth docutils literal notranslate"><span class="pre">convert()</span></code>
+method to do its conversion logic. This method must be a <a class="reference external" href="https://docs.python.org/3/library/asyncio-task.html#coroutine" title="(in Python v3.10)"><span class="xref std std-ref">coroutine</span></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.ActionReason.convert">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argument</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.ActionReason.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id7"><span class="problematic" id="id8">|coro|</span></a></p>
+<p>The method to override to do conversion logic.</p>
+<p>If an error is found while converting, it is recommended to
+raise a <code class="xref py py-exc docutils literal notranslate"><span class="pre">CommandError</span></code> derived exception as it will
+properly propagate to the error handlers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference internal" href="../../index.html#lib.Context" title="lib.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>) – The invocation context that the argument is being used in.</p></li>
+<li><p><strong>argument</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The argument that is being converted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>CommandError</strong> – A generic exception occurred when converting the argument.</p></li>
+<li><p><strong>BadArgument</strong> – The converter failed to convert the argument.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.classes.converter.safe_reason_append">
+<span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">safe_reason_append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_append</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.safe_reason_append" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.AntiRaidConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">AntiRaidConfig</span></span><a class="headerlink" href="#lib.classes.converter.AntiRaidConfig" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="lib.classes.converter.AntiRaidConfig.__slots__">
+<span class="sig-name descname"><span class="pre">__slots__</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">['raid_mode',</span> <span class="pre">'id',</span> <span class="pre">'bot',</span> <span class="pre">'broadcast_channel_id']</span></em><a class="headerlink" href="#lib.classes.converter.AntiRaidConfig.__slots__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.AntiRaidConfig.from_record">
+<em class="property"><span class="pre">classmethod</span> <span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">from_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.AntiRaidConfig.from_record" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.AntiRaidConfig.broadcast_channel">
+<span class="sig-name descname"><span class="pre">broadcast_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.AntiRaidConfig.broadcast_channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.MentionSpamConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">MentionSpamConfig</span></span><a class="headerlink" href="#lib.classes.converter.MentionSpamConfig" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="lib.classes.converter.MentionSpamConfig.__slots__">
+<span class="sig-name descname"><span class="pre">__slots__</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">['id',</span> <span class="pre">'bot',</span> <span class="pre">'mention_count',</span> <span class="pre">'safe_mention_channel_ids']</span></em><a class="headerlink" href="#lib.classes.converter.MentionSpamConfig.__slots__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.MentionSpamConfig.from_record">
+<em class="property"><span class="pre">classmethod</span> <span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">from_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.MentionSpamConfig.from_record" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.GiveawayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">GiveawayConfig</span></span><a class="headerlink" href="#lib.classes.converter.GiveawayConfig" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="lib.classes.converter.GiveawayConfig.__slots__">
+<span class="sig-name descname"><span class="pre">__slots__</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">['id',</span> <span class="pre">'host',</span> <span class="pre">'channel',</span> <span class="pre">'message',</span> <span class="pre">'embed',</span> <span class="pre">'role_required',</span> <span class="pre">'tasks',</span> <span class="pre">'prize',</span> <span class="pre">'end_time',...</span></em><a class="headerlink" href="#lib.classes.converter.GiveawayConfig.__slots__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.GiveawayConfig.from_record">
+<em class="property"><span class="pre">classmethod</span> <span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">from_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.GiveawayConfig.from_record" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>record</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><em>discord.Message</em></a>) – </p></li>
+<li><p><strong>bot</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Bot" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Bot</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.CooldownByContent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">CooldownByContent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">original</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.CooldownByContent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.CooldownMapping</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>original</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.app_commands.Cooldown" title="(in discord.py v2.0.0a)"><em>discord.app_commands.Cooldown</em></a><em>]</em>) – </p></li>
+<li><p><strong>type</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><em>discord.message.Message</em></a><em>]</em><em>, </em><em>Any</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.CooldownByContent._bucket_key">
+<span class="sig-name descname"><span class="pre">_bucket_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.CooldownByContent._bucket_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.SpamChecker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">SpamChecker</span></span><a class="headerlink" href="#lib.classes.converter.SpamChecker" title="Permalink to this definition">¶</a></dt>
+<dd><p>This spam checker does a few things.
+1) It checks if a user has spammed more than 10 times in 12 seconds
+2) It checks if the content has been spammed 15 times in 17 seconds.
+3) It checks if new users have spammed 30 times in 35 seconds.
+4) It checks if “fast joiners” have spammed 10 times in 12 seconds.
+The second case is meant to catch alternating spam bots while the first one
+just catches regular singular spam bots.
+From experience these values aren’t reached unless someone is actively spamming.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.SpamChecker.is_new">
+<em class="property"><span class="pre">staticmethod</span> </em><span class="sig-name descname"><span class="pre">is_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">member</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.SpamChecker.is_new" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.SpamChecker.is_spamming">
+<span class="sig-name descname"><span class="pre">is_spamming</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.SpamChecker.is_spamming" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.SpamChecker.is_fast_join">
+<span class="sig-name descname"><span class="pre">is_fast_join</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">member</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.SpamChecker.is_fast_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.converter.Characters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.converter.</span></span><span class="sig-name descname"><span class="pre">Characters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.Characters" title="Permalink to this definition">¶</a></dt>
+<dd><p>The characters model class</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.classes.converter.Characters.__slots__">
+<span class="sig-name descname"><span class="pre">__slots__</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">['id',</span> <span class="pre">'name',</span> <span class="pre">'images',</span> <span class="pre">'emoji',</span> <span class="pre">'category',</span> <span class="pre">'kwargs']</span></em><a class="headerlink" href="#lib.classes.converter.Characters.__slots__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.Characters.hitpoint">
+<span class="sig-name descname"><span class="pre">hitpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.Characters.hitpoint" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.Characters.regainpoint">
+<span class="sig-name descname"><span class="pre">regainpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.Characters.regainpoint" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.Characters.healpoint">
+<span class="sig-name descname"><span class="pre">healpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.Characters.healpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>These are in percentages</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.Characters.specialpoint">
+<span class="sig-name descname"><span class="pre">specialpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.Characters.specialpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>These are in percentages</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.Characters.from_record">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.Characters.from_record" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>record</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – </p></li>
+<li><p><strong>ctx</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Context</em></a>) – </p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.converter.Characters.return_emoji">
+<em class="property"><span class="pre">staticmethod</span> </em><span class="sig-name descname"><span class="pre">return_emoji</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.converter.Characters.return_emoji" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>ctx</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Context</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Union[<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Emoji" title="(in discord.py v2.0.0a)">discord.Emoji</a>, <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.PartialEmoji" title="(in discord.py v2.0.0a)">discord.PartialEmoji</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

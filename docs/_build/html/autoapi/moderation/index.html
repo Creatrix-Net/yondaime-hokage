@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>moderation</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+  <script src="../../_static/jquery.js"></script>
+  <script src="../../_static/underscore.js"></script>
+  <script src="../../_static/doctools.js"></script>
+  <script src="../../_static/custom.js"></script>
+  <script src="../../_static/settings.js"></script>
+  <script src="../../_static/copy.js"></script>
+  <script src="../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">moderation</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#moderation.Badurls">Badurls</a><ul>
+<li><a class="reference internal" href="#moderation.Badurls.name">name</a></li>
+<li><a class="reference internal" href="#moderation.Badurls.content">content</a></li>
+<li><a class="reference internal" href="#moderation.Badurls.content_autocomplete">content_autocomplete</a></li>
+<li><a class="reference internal" href="#moderation.Badurls.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.BadurlsMessageCommand">BadurlsMessageCommand</a><ul>
+<li><a class="reference internal" href="#moderation.BadurlsMessageCommand.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.AntiRaid">AntiRaid</a><ul>
+<li><a class="reference internal" href="#moderation.AntiRaid.switch">switch</a></li>
+<li><a class="reference internal" href="#moderation.AntiRaid.channel">channel</a></li>
+<li><a class="reference internal" href="#moderation.AntiRaid.command_check">command_check</a></li>
+<li><a class="reference internal" href="#moderation.AntiRaid.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.Kick">Kick</a><ul>
+<li><a class="reference internal" href="#moderation.Kick.command_check">command_check</a></li>
+<li><a class="reference internal" href="#moderation.Kick.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.Ban">Ban</a><ul>
+<li><a class="reference internal" href="#moderation.Ban.command_check">command_check</a></li>
+<li><a class="reference internal" href="#moderation.Ban.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.Mute">Mute</a><ul>
+<li><a class="reference internal" href="#moderation.Mute.command_check">command_check</a></li>
+<li><a class="reference internal" href="#moderation.Mute.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.Unmute">Unmute</a><ul>
+<li><a class="reference internal" href="#moderation.Unmute.command_check">command_check</a></li>
+<li><a class="reference internal" href="#moderation.Unmute.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.Setup">Setup</a><ul>
+<li><a class="reference internal" href="#moderation.Setup.command_check">command_check</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.Add">Add</a><ul>
+<li><a class="reference internal" href="#moderation.Add.add_type">add_type</a></li>
+<li><a class="reference internal" href="#moderation.Add.channel">channel</a></li>
+<li><a class="reference internal" href="#moderation.Add.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.Support">Support</a><ul>
+<li><a class="reference internal" href="#moderation.Support.channel">channel</a></li>
+<li><a class="reference internal" href="#moderation.Support.role">role</a></li>
+<li><a class="reference internal" href="#moderation.Support.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.Starboard">Starboard</a><ul>
+<li><a class="reference internal" href="#moderation.Starboard.channel">channel</a></li>
+<li><a class="reference internal" href="#moderation.Starboard.stars">stars</a></li>
+<li><a class="reference internal" href="#moderation.Starboard.self_star">self_star</a></li>
+<li><a class="reference internal" href="#moderation.Starboard.ignore_nsfw">ignore_nsfw</a></li>
+<li><a class="reference internal" href="#moderation.Starboard.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.BadLinks">BadLinks</a><ul>
+<li><a class="reference internal" href="#moderation.BadLinks.option">option</a></li>
+<li><a class="reference internal" href="#moderation.BadLinks.action">action</a></li>
+<li><a class="reference internal" href="#moderation.BadLinks.channel">channel</a></li>
+<li><a class="reference internal" href="#moderation.BadLinks.callback">callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.ModerationCog">ModerationCog</a><ul>
+<li><a class="reference internal" href="#moderation.ModerationCog.database_class">database_class</a></li>
+<li><a class="reference internal" href="#moderation.ModerationCog.database_class_antiraid">database_class_antiraid</a></li>
+<li><a class="reference internal" href="#moderation.ModerationCog.database_class_mentionspam">database_class_mentionspam</a></li>
+<li><a class="reference internal" href="#moderation.ModerationCog.add_and_check_data">add_and_check_data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moderation.setup">setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-moderation">
+<span id="moderation"></span><h1><a class="reference internal" href="#module-moderation" title="moderation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">moderation</span></code></a><a class="headerlink" href="#module-moderation" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#moderation.Badurls" title="moderation.Badurls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Badurls</span></code></a></p></td>
+<td><p>Check if a text has a malicious url or not from a extensive list 60k+ flagged domains</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#moderation.BadurlsMessageCommand" title="moderation.BadurlsMessageCommand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BadurlsMessageCommand</span></code></a></p></td>
+<td><p>Check if a text has a malicious url or not from a extensive list 60k+ flagged domains</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#moderation.AntiRaid" title="moderation.AntiRaid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AntiRaid</span></code></a></p></td>
+<td><p>Enable or disable Antiraid system for the server</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#moderation.Kick" title="moderation.Kick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Kick</span></code></a></p></td>
+<td><p>Kicks the user from guild</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#moderation.Ban" title="moderation.Ban"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ban</span></code></a></p></td>
+<td><p>Bans the user from guild</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#moderation.Mute" title="moderation.Mute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mute</span></code></a></p></td>
+<td><p>Mute the user from guild for a day</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#moderation.Unmute" title="moderation.Unmute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unmute</span></code></a></p></td>
+<td><p>Unmute the user from guild</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#moderation.Setup" title="moderation.Setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Setup</span></code></a></p></td>
+<td><p>Setups some logging system for system for server with some nice features</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#moderation.Add" title="moderation.Add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Add</span></code></a></p></td>
+<td><p>This adds logging of the some things in the specified text channel</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#moderation.Support" title="moderation.Support"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Support</span></code></a></p></td>
+<td><p>This adds support system to your server</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#moderation.Starboard" title="moderation.Starboard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Starboard</span></code></a></p></td>
+<td><p>This adds starboard system to your server</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#moderation.BadLinks" title="moderation.BadLinks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BadLinks</span></code></a></p></td>
+<td><p>Checks against the scam links and take necessary action if stated</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#moderation.ModerationCog" title="moderation.ModerationCog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModerationCog</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#moderation.setup" title="moderation.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(bot)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="moderation.Badurls">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">Badurls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Badurls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>Check if a text has a malicious url or not from a extensive list 60k+ flagged domains</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Badurls.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bad</span> <span class="pre">urls</span></em><a class="headerlink" href="#moderation.Badurls.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Badurls.content">
+<span class="sig-name descname"><span class="pre">content</span></span><a class="headerlink" href="#moderation.Badurls.content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Badurls.content_autocomplete">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">content_autocomplete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Badurls.content_autocomplete" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.AutocompleteResponse</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AsyncIterator[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Badurls.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Badurls.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.BadurlsMessageCommand">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">BadurlsMessageCommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.BadurlsMessageCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.MessageCommand</span></code></p>
+<p>Check if a text has a malicious url or not from a extensive list 60k+ flagged domains</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.BadurlsMessageCommand.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.BadurlsMessageCommand.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.MessageCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.AntiRaid">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">AntiRaid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.AntiRaid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>Enable or disable Antiraid system for the server</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.AntiRaid.switch">
+<span class="sig-name descname"><span class="pre">switch</span></span><em class="property"><span class="w"> </span><span class="pre">:Literal[on,</span> <span class="pre">strict,</span> <span class="pre">off]</span></em><a class="headerlink" href="#moderation.AntiRaid.switch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.AntiRaid.channel">
+<span class="sig-name descname"><span class="pre">channel</span></span><em class="property"><span class="w"> </span><span class="pre">:discord.abc.GuildChannel</span></em><a class="headerlink" href="#moderation.AntiRaid.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.AntiRaid.command_check">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">command_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.AntiRaid.command_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.AntiRaid.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.AntiRaid.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.Kick">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">Kick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Kick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.UserCommand</span></code></p>
+<p>Kicks the user from guild</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Kick.command_check">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">command_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Kick.command_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Kick.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Kick.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.UserCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.Ban">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">Ban</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Ban" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.UserCommand</span></code></p>
+<p>Bans the user from guild</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Ban.command_check">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">command_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Ban.command_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Ban.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Ban.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.UserCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.Mute">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">Mute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Mute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.UserCommand</span></code></p>
+<p>Mute the user from guild for a day</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Mute.command_check">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">command_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Mute.command_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Mute.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Mute.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.UserCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.Unmute">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">Unmute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Unmute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.UserCommand</span></code></p>
+<p>Unmute the user from guild</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Unmute.command_check">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">command_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Unmute.command_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Unmute.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Unmute.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.UserCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.Setup">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">Setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>Setups some logging system for system for server with some nice features</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Setup.command_check">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">command_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Setup.command_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.Add">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">Add</span></span><a class="headerlink" href="#moderation.Add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>This adds logging of the some things in the specified text channel</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Add.add_type">
+<span class="sig-name descname"><span class="pre">add_type</span></span><em class="property"><span class="w"> </span><span class="pre">:Literal[ban,</span> <span class="pre">feedback,</span> <span class="pre">warns,</span> <span class="pre">unban]</span></em><a class="headerlink" href="#moderation.Add.add_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Add.channel">
+<span class="sig-name descname"><span class="pre">channel</span></span><em class="property"><span class="w"> </span><span class="pre">:discord.abc.GuildChannel</span></em><a class="headerlink" href="#moderation.Add.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Add.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Add.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.Support">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">Support</span></span><a class="headerlink" href="#moderation.Support" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>This adds support system to your server</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Support.channel">
+<span class="sig-name descname"><span class="pre">channel</span></span><em class="property"><span class="w"> </span><span class="pre">:discord.abc.GuildChannel</span></em><a class="headerlink" href="#moderation.Support.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Support.role">
+<span class="sig-name descname"><span class="pre">role</span></span><em class="property"><span class="w"> </span><span class="pre">:discord.Role</span></em><a class="headerlink" href="#moderation.Support.role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Support.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Support.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.Starboard">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">Starboard</span></span><a class="headerlink" href="#moderation.Starboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>This adds starboard system to your server</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Starboard.channel">
+<span class="sig-name descname"><span class="pre">channel</span></span><em class="property"><span class="w"> </span><span class="pre">:discord.abc.GuildChannel</span></em><a class="headerlink" href="#moderation.Starboard.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Starboard.stars">
+<span class="sig-name descname"><span class="pre">stars</span></span><em class="property"><span class="w"> </span><span class="pre">:Optional[int]</span></em><a class="headerlink" href="#moderation.Starboard.stars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Starboard.self_star">
+<span class="sig-name descname"><span class="pre">self_star</span></span><em class="property"><span class="w"> </span><span class="pre">:Optional[bool]</span></em><a class="headerlink" href="#moderation.Starboard.self_star" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.Starboard.ignore_nsfw">
+<span class="sig-name descname"><span class="pre">ignore_nsfw</span></span><em class="property"><span class="w"> </span><span class="pre">:Optional[bool]</span></em><a class="headerlink" href="#moderation.Starboard.ignore_nsfw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.Starboard.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.Starboard.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.BadLinks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">BadLinks</span></span><a class="headerlink" href="#moderation.BadLinks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.SlashCommand</span></code></p>
+<p>Checks against the scam links and take necessary action if stated</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.BadLinks.option">
+<span class="sig-name descname"><span class="pre">option</span></span><em class="property"><span class="w"> </span><span class="pre">:bool</span></em><a class="headerlink" href="#moderation.BadLinks.option" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.BadLinks.action">
+<span class="sig-name descname"><span class="pre">action</span></span><em class="property"><span class="w"> </span><span class="pre">:Optional[Literal[ban,</span> <span class="pre">mute,</span> <span class="pre">timeout,</span> <span class="pre">kick,</span> <span class="pre">log]]</span></em><a class="headerlink" href="#moderation.BadLinks.action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="moderation.BadLinks.channel">
+<span class="sig-name descname"><span class="pre">channel</span></span><em class="property"><span class="w"> </span><span class="pre">:Optional[discord.abc.GuildChannel]</span></em><a class="headerlink" href="#moderation.BadLinks.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.BadLinks.callback">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.BadLinks.callback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>discord.SlashCommandResponse</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="moderation.ModerationCog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">ModerationCog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.ModerationCog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.Cog</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.ModerationCog.database_class">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">database_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.ModerationCog.database_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.ModerationCog.database_class_antiraid">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">database_class_antiraid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.ModerationCog.database_class_antiraid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.ModerationCog.database_class_mentionspam">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">database_class_mentionspam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.ModerationCog.database_class_mentionspam" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moderation.ModerationCog.add_and_check_data">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">add_and_check_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_to_add</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guild</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_store</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.ModerationCog.add_and_check_data" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dict_to_add</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – </p></li>
+<li><p><strong>guild</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Guild" title="(in discord.py v2.0.0a)"><em>discord.Guild</em></a>) – </p></li>
+<li><p><strong>type_store</strong> (<em>Literal</em><em>[</em><em>antiraid</em><em>, </em><em>setupvar</em><em>, </em><em>mentionspam</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="moderation.setup">
+<span class="sig-prename descclassname"><span class="pre">moderation.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#moderation.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

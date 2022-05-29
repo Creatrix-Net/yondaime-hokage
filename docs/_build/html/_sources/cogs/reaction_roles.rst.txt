@@ -1,0 +1,7 @@
+reaction\_roles module
+======================
+
+.. automodule:: reaction_roles
+   :members:
+   :undoc-members:
+   :show-inheritance:

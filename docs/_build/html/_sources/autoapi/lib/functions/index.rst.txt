@@ -1,0 +1,422 @@
+:py:mod:`lib.functions`
+=======================
+
+.. py:module:: lib.functions
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   cache/index.rst
+   meek_moe/index.rst
+   moderation/index.rst
+   tools/index.rst
+   util/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.functions.ExpiringCache
+   lib.functions.Strategy
+   lib.functions.plural
+   lib.functions.ChannelAndMessageId
+   lib.functions.LinksAndVars
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.functions._wrap_and_store_coroutine
+   lib.functions._wrap_new_coroutine
+   lib.functions.cache
+   lib.functions.meek_api
+   lib.functions.return_matching_emoji
+   lib.functions.insert_returns
+   lib.functions.copy_context_with
+   lib.functions.check_permissions
+   lib.functions.has_permissions
+   lib.functions.check_guild_permissions
+   lib.functions.has_guild_permissions
+   lib.functions.is_mod
+   lib.functions.is_admin
+   lib.functions.mod_or_permissions
+   lib.functions.admin_or_permissions
+   lib.functions.is_in_guilds
+   lib.functions.serverinfo
+   lib.functions.userinfo
+   lib.functions.insert_returns
+   lib.functions.copy_context_with
+   lib.functions.check_if_user_joined_a_voice
+   lib.functions.check_if_user_joined_a_stage
+   lib.functions.get_welcome_channel
+   lib.functions.human_join
+   lib.functions.secure_delete
+   lib.functions.format_dt
+   lib.functions.filter_invites
+   lib.functions.convert
+   lib.functions.humanize_attachments
+   lib.functions.format_character_name
+   lib.functions.return_matching_emoji
+   lib.functions.detect_bad_domains
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.functions.imageslist
+   lib.functions.url_regex
+   lib.functions.INVITE_URL_RE
+
+
+.. py:function:: _wrap_and_store_coroutine(cache, key, coro)
+
+
+.. py:function:: _wrap_new_coroutine(value)
+
+
+.. py:class:: ExpiringCache(seconds)
+
+   Bases: :py:obj:`dict`
+
+   dict() -> new empty dictionary
+   dict(mapping) -> new dictionary initialized from a mapping object's
+       (key, value) pairs
+   dict(iterable) -> new dictionary initialized as if via:
+       d = {}
+       for k, v in iterable:
+           d[k] = v
+   dict(**kwargs) -> new dictionary initialized with the name=value pairs
+       in the keyword argument list.  For example:  dict(one=1, two=2)
+
+   .. py:method:: __verify_cache_integrity(self)
+
+
+   .. py:method:: __contains__(self, key)
+
+      True if the dictionary has the specified key, else False.
+
+
+   .. py:method:: __getitem__(self, key)
+
+      x.__getitem__(y) <==> x[y]
+
+
+   .. py:method:: __setitem__(self, key, value)
+
+      Set self[key] to value.
+
+
+
+.. py:class:: Strategy
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: lru
+      :annotation: = 1
+
+      
+
+   .. py:attribute:: raw
+      :annotation: = 2
+
+      
+
+   .. py:attribute:: timed
+      :annotation: = 3
+
+      
+
+
+.. py:function:: cache(maxsize=128, strategy=Strategy.lru, ignore_kwargs=False)
+
+
+.. py:data:: imageslist
+   :annotation: :list
+
+   
+
+.. py:function:: meek_api(name)
+   :async:
+
+
+.. py:function:: return_matching_emoji(bot, name)
+   :async:
+
+
+.. py:function:: insert_returns(body)
+
+
+.. py:function:: copy_context_with(ctx, *, author=None, channel=None, **kwargs)
+   :async:
+
+
+.. py:function:: check_permissions(ctx, perms, *, check=all)
+   :async:
+
+
+.. py:function:: has_permissions(check=all, **perms)
+
+
+.. py:function:: check_guild_permissions(ctx, perms, *, check=all)
+   :async:
+
+
+.. py:function:: has_guild_permissions(check=all, **perms)
+
+
+.. py:function:: is_mod()
+
+
+.. py:function:: is_admin()
+
+
+.. py:function:: mod_or_permissions(**perms)
+
+
+.. py:function:: admin_or_permissions(**perms)
+
+
+.. py:function:: is_in_guilds(*guild_ids)
+
+
+.. py:function:: serverinfo(guild, author, bot)
+   :async:
+
+
+.. py:function:: userinfo(user, guild, bot)
+   :async:
+
+
+.. py:function:: insert_returns(body)
+
+
+.. py:function:: copy_context_with(ctx, *, author=None, channel=None, **kwargs)
+   :async:
+
+
+.. py:function:: check_if_user_joined_a_voice(ctx)
+
+   Checks is a user joined a voice channel
+
+
+.. py:function:: check_if_user_joined_a_stage(ctx)
+
+   Checks is a user joined a stage channel
+
+
+.. py:function:: get_welcome_channel(guild, bot, inviter_or_guild_owner)
+   :async:
+
+
+.. py:class:: plural(value)
+
+   .. py:method:: __format__(self, format_spec)
+
+      Default object formatter.
+
+
+
+.. py:function:: human_join(seq, delim=', ', final='or')
+
+
+.. py:function:: secure_delete(path, passes = 3)
+
+   At first it write the file with some random data , even repeatedly, then delete it
+   Meaning the entire contents of the file were still intact and every pass just added to the overall size of the file. So it ended up being [Original Contents][Random Data of that Size][Random Data of that Size][Random Data of that Size] which is not the desired effect obviously
+   Firstopen the file in append to find the length,
+   then reopen in r+ so that it can seek to the beginning
+   (in append mode it seems like what caused the undesired effect is that it was not actually possible to seek to 0)
+
+   Answer was copied from stackoverflow with some type hinting changes :)
+   https://stackoverflow.com/questions/17455300/python-securely-remove-file
+
+
+.. py:function:: format_dt(dt, style = None, ist = False)
+
+
+.. py:class:: ChannelAndMessageId
+
+   Bases: :py:obj:`enum.IntEnum`
+
+   Enum where members are also (and must be) ints
+
+   .. py:attribute:: badges_channel
+      :annotation: = 920536143458598930
+
+      
+
+   .. py:attribute:: backup_channel
+      :annotation: = 922544732918415390
+
+      
+
+   .. py:attribute:: error_logs_channel
+      :annotation: = 920190310942908513
+
+      
+
+   .. py:attribute:: server_id
+      :annotation: = 920190307595874304
+
+      
+
+   .. py:attribute:: server_id2
+      :annotation: = 920536143244709889
+
+      
+
+   .. py:attribute:: restartlog_channel1
+      :annotation: = 920190310942908508
+
+      
+
+   .. py:attribute:: restartlog_channel2
+      :annotation: = 920536143458598926
+
+      
+
+   .. py:attribute:: serverlog_channel1
+      :annotation: = 920190310942908509
+
+      
+
+   .. py:attribute:: serverlog_channel2
+      :annotation: = 920536143458598927
+
+      
+
+
+.. py:class:: LinksAndVars
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: website
+      :annotation: = https://minato-namikaze.readthedocs.io/en/latest
+
+      
+
+   .. py:attribute:: github
+      :annotation: = https://github.com/The-4th-Hokage/yondaime-hokage
+
+      
+
+   .. py:attribute:: github_branch
+      :annotation: = master
+
+      
+
+   .. py:attribute:: bad_links
+      :annotation: = https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt
+
+      
+
+   .. py:attribute:: listing
+      :annotation: = https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json
+
+      
+
+   .. py:attribute:: character_data
+      :annotation: = https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json
+
+      
+
+   .. py:attribute:: statuspage_link
+      :annotation: = https://minatonamikaze.statuspage.io
+
+      
+
+   .. py:attribute:: mal_logo
+      :annotation: = https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png
+
+      
+
+   .. py:attribute:: giveaway_image
+      :annotation: = https://i.imgur.com/efLKnlh.png
+
+      
+
+   .. py:attribute:: version
+      
+
+      
+
+   .. py:attribute:: invite_code
+      :annotation: = vfXHwS3nmQ
+
+      
+
+   .. py:attribute:: timeout
+      :annotation: = 3.0
+
+      
+
+   .. py:attribute:: owner_ids
+      :annotation: = [887549958931247137, 837223478934896670, 747729781369602049]
+
+      
+
+
+.. py:data:: url_regex
+   
+
+   
+
+.. py:data:: INVITE_URL_RE
+   
+
+   
+
+.. py:function:: filter_invites(to_filter)
+
+   Get a string with discord invites sanitized.
+
+   Will match any discord.gg, discordapp.com/invite, discord.com/invite, discord.me, or discord.io/discord.li
+   invite URL.
+
+   :param to_filter: The string to filter.
+   :type to_filter: str
+
+   :returns: The sanitized string.
+   :rtype: str
+
+
+.. py:function:: convert(time)
+
+
+.. py:function:: humanize_attachments(attachments)
+
+
+.. py:function:: format_character_name(character_name)
+
+
+.. py:function:: return_matching_emoji(bot, name)
+   :async:
+
+
+.. py:function:: detect_bad_domains(message_content)
+   :async:
+
+

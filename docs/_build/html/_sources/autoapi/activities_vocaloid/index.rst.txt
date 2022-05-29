@@ -1,0 +1,74 @@
+:py:mod:`activities_vocaloid`
+=============================
+
+.. py:module:: activities_vocaloid
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   activities_vocaloid.Activities
+   activities_vocaloid.Vocaloids
+   activities_vocaloid.ActivitiesCog
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   activities_vocaloid.setup
+
+
+
+.. py:class:: Activities(cog)
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Get access to discord beta activities feature
+
+   .. py:attribute:: activities
+      :annotation: :Literal[youtube, poker, chess, betrayal, fishing, letter-league, word-snack, sketch-heads, spellcast, awkword, checkers]
+
+      
+
+   .. py:attribute:: voice_channel
+      :annotation: :discord.abc.GuildChannel
+
+      
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Vocaloids(cog)
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Get kawaii pictures of different vocaloids
+
+   .. py:attribute:: vocaloid
+      :annotation: :Optional[Literal[rin, una, gumi, ia, luka, fukase, miku, len, kaito, teto, meiko, yukari, miki, lily, mayu, aoki, zola, diva]]
+
+      
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: ActivitiesCog(bot)
+
+   Bases: :py:obj:`discord.Cog`
+
+
+.. py:function:: setup(bot)
+
+

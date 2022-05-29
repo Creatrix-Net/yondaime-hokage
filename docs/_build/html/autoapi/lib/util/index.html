@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lib.util</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+  <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+  <script src="../../../_static/jquery.js"></script>
+  <script src="../../../_static/underscore.js"></script>
+  <script src="../../../_static/doctools.js"></script>
+  <script src="../../../_static/custom.js"></script>
+  <script src="../../../_static/settings.js"></script>
+  <script src="../../../_static/copy.js"></script>
+  <script src="../../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.util</span></code></a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#package-contents">Package Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#lib.util.MemberID">MemberID</a><ul>
+<li><a class="reference internal" href="#lib.util.MemberID.convert">convert</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId">ChannelAndMessageId</a><ul>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId.badges_channel">badges_channel</a></li>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId.backup_channel">backup_channel</a></li>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId.error_logs_channel">error_logs_channel</a></li>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId.server_id">server_id</a></li>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId.server_id2">server_id2</a></li>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId.restartlog_channel1">restartlog_channel1</a></li>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId.restartlog_channel2">restartlog_channel2</a></li>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId.serverlog_channel1">serverlog_channel1</a></li>
+<li><a class="reference internal" href="#lib.util.ChannelAndMessageId.serverlog_channel2">serverlog_channel2</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.Tokens">Tokens</a><ul>
+<li><a class="reference internal" href="#lib.util.Tokens.statcord">statcord</a></li>
+<li><a class="reference internal" href="#lib.util.Tokens.dagpi">dagpi</a></li>
+<li><a class="reference internal" href="#lib.util.Tokens.chatbot">chatbot</a></li>
+<li><a class="reference internal" href="#lib.util.Tokens.sentry_link">sentry_link</a></li>
+<li><a class="reference internal" href="#lib.util.Tokens.tenor">tenor</a></li>
+<li><a class="reference internal" href="#lib.util.Tokens.giphy">giphy</a></li>
+<li><a class="reference internal" href="#lib.util.Tokens.token">token</a></li>
+<li><a class="reference internal" href="#lib.util.Tokens.weather">weather</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.ConfirmationView">ConfirmationView</a><ul>
+<li><a class="reference internal" href="#lib.util.ConfirmationView.interaction_check">interaction_check</a></li>
+<li><a class="reference internal" href="#lib.util.ConfirmationView.on_timeout">on_timeout</a></li>
+<li><a class="reference internal" href="#lib.util.ConfirmationView.confirm">confirm</a></li>
+<li><a class="reference internal" href="#lib.util.ConfirmationView.cancel">cancel</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.Context">Context</a><ul>
+<li><a class="reference internal" href="#lib.util.Context.message">message</a></li>
+<li><a class="reference internal" href="#lib.util.Context.bot">bot</a></li>
+<li><a class="reference internal" href="#lib.util.Context.args">args</a></li>
+<li><a class="reference internal" href="#lib.util.Context.kwargs">kwargs</a></li>
+<li><a class="reference internal" href="#lib.util.Context.current_parameter">current_parameter</a></li>
+<li><a class="reference internal" href="#lib.util.Context.current_argument">current_argument</a></li>
+<li><a class="reference internal" href="#lib.util.Context.interaction">interaction</a></li>
+<li><a class="reference internal" href="#lib.util.Context.prefix">prefix</a></li>
+<li><a class="reference internal" href="#lib.util.Context.command">command</a></li>
+<li><a class="reference internal" href="#lib.util.Context.invoked_with">invoked_with</a></li>
+<li><a class="reference internal" href="#lib.util.Context.invoked_parents">invoked_parents</a></li>
+<li><a class="reference internal" href="#lib.util.Context.invoked_subcommand">invoked_subcommand</a></li>
+<li><a class="reference internal" href="#lib.util.Context.subcommand_passed">subcommand_passed</a></li>
+<li><a class="reference internal" href="#lib.util.Context.command_failed">command_failed</a></li>
+<li><a class="reference internal" href="#lib.util.Context.entry_to_code">entry_to_code</a></li>
+<li><a class="reference internal" href="#lib.util.Context.indented_entry_to_code">indented_entry_to_code</a></li>
+<li><a class="reference internal" href="#lib.util.Context.__repr__">__repr__</a></li>
+<li><a class="reference internal" href="#lib.util.Context.session">session</a></li>
+<li><a class="reference internal" href="#lib.util.Context.replied_reference">replied_reference</a></li>
+<li><a class="reference internal" href="#lib.util.Context.disambiguate">disambiguate</a></li>
+<li><a class="reference internal" href="#lib.util.Context.prompt">prompt</a></li>
+<li><a class="reference internal" href="#lib.util.Context.show_help">show_help</a></li>
+<li><a class="reference internal" href="#lib.util.Context.safe_send">safe_send</a></li>
+<li><a class="reference internal" href="#lib.util.Context.get_user">get_user</a></li>
+<li><a class="reference internal" href="#lib.util.Context.get_dm">get_dm</a></li>
+<li><a class="reference internal" href="#lib.util.Context.get_roles">get_roles</a></li>
+<li><a class="reference internal" href="#lib.util.Context.get_emoji">get_emoji</a></li>
+<li><a class="reference internal" href="#lib.util.Context.get_guild">get_guild</a></li>
+<li><a class="reference internal" href="#lib.util.Context.get_config_emoji_by_name_or_id">get_config_emoji_by_name_or_id</a></li>
+<li><a class="reference internal" href="#lib.util.Context.get_config_channel_by_name_or_id">get_config_channel_by_name_or_id</a></li>
+<li><a class="reference internal" href="#lib.util.Context.get_random_image_from_tag">get_random_image_from_tag</a></li>
+<li><a class="reference internal" href="#id0">get_random_image_from_tag</a></li>
+<li><a class="reference internal" href="#lib.util.Context.tenor">tenor</a></li>
+<li><a class="reference internal" href="#lib.util.Context.giphy">giphy</a></li>
+<li><a class="reference internal" href="#id1">tenor</a></li>
+<li><a class="reference internal" href="#id2">giphy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars">LinksAndVars</a><ul>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.website">website</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.github">github</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.github_branch">github_branch</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.bad_links">bad_links</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.listing">listing</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.character_data">character_data</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.statuspage_link">statuspage_link</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.mal_logo">mal_logo</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.giveaway_image">giveaway_image</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.version">version</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.invite_code">invite_code</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.timeout">timeout</a></li>
+<li><a class="reference internal" href="#lib.util.LinksAndVars.owner_ids">owner_ids</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.VotingMenu">VotingMenu</a><ul>
+<li><a class="reference internal" href="#lib.util.VotingMenu.timeout">timeout</a></li>
+<li><a class="reference internal" href="#lib.util.VotingMenu.delete_message_after">delete_message_after</a></li>
+<li><a class="reference internal" href="#lib.util.VotingMenu.clear_reactions_after">clear_reactions_after</a></li>
+<li><a class="reference internal" href="#lib.util.VotingMenu.check_embeds">check_embeds</a></li>
+<li><a class="reference internal" href="#lib.util.VotingMenu.ctx">ctx</a></li>
+<li><a class="reference internal" href="#lib.util.VotingMenu.bot">bot</a></li>
+<li><a class="reference internal" href="#lib.util.VotingMenu.message">message</a></li>
+<li><a class="reference internal" href="#lib.util.VotingMenu.send_initial_message">send_initial_message</a></li>
+<li><a class="reference internal" href="#lib.util.VotingMenu.on_check_mark">on_check_mark</a></li>
+<li><a class="reference internal" href="#lib.util.VotingMenu.on_stop">on_stop</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy">PrivacyPolicy</a><ul>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.timeout">timeout</a></li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.delete_message_after">delete_message_after</a></li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.clear_reactions_after">clear_reactions_after</a></li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.check_embeds">check_embeds</a></li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.ctx">ctx</a></li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.bot">bot</a></li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.message">message</a></li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.send_initial_message">send_initial_message</a></li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.on_add">on_add</a></li>
+<li><a class="reference internal" href="#lib.util.PrivacyPolicy.on_stop">on_stop</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.MenuSource">MenuSource</a><ul>
+<li><a class="reference internal" href="#lib.util.MenuSource.entries">entries</a></li>
+<li><a class="reference internal" href="#lib.util.MenuSource.per_page">per_page</a></li>
+<li><a class="reference internal" href="#lib.util.MenuSource.format_page">format_page</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.BASE_DIR">BASE_DIR</a></li>
+<li><a class="reference internal" href="#lib.util.dotenv_file">dotenv_file</a></li>
+<li><a class="reference internal" href="#lib.util.token_get">token_get</a></li>
+<li><a class="reference internal" href="#lib.util.api_image_store_dir">api_image_store_dir</a></li>
+<li><a class="reference internal" href="#lib.util.DEFAULT_COMMAND_SELECT_LENGTH">DEFAULT_COMMAND_SELECT_LENGTH</a></li>
+<li><a class="reference internal" href="#lib.util.ShinobiMatch">ShinobiMatch</a><ul>
+<li><a class="reference internal" href="#lib.util.ShinobiMatch.character_side_exclude">character_side_exclude</a></li>
+<li><a class="reference internal" href="#lib.util.ShinobiMatch.name_exclusion">name_exclusion</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id3">ChannelAndMessageId</a><ul>
+<li><a class="reference internal" href="#id4">badges_channel</a></li>
+<li><a class="reference internal" href="#id5">backup_channel</a></li>
+<li><a class="reference internal" href="#id6">error_logs_channel</a></li>
+<li><a class="reference internal" href="#id7">server_id</a></li>
+<li><a class="reference internal" href="#id8">server_id2</a></li>
+<li><a class="reference internal" href="#id9">restartlog_channel1</a></li>
+<li><a class="reference internal" href="#id10">restartlog_channel2</a></li>
+<li><a class="reference internal" href="#id11">serverlog_channel1</a></li>
+<li><a class="reference internal" href="#id12">serverlog_channel2</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id13">Tokens</a><ul>
+<li><a class="reference internal" href="#id14">statcord</a></li>
+<li><a class="reference internal" href="#id15">dagpi</a></li>
+<li><a class="reference internal" href="#id16">chatbot</a></li>
+<li><a class="reference internal" href="#id17">sentry_link</a></li>
+<li><a class="reference internal" href="#id18">tenor</a></li>
+<li><a class="reference internal" href="#id19">giphy</a></li>
+<li><a class="reference internal" href="#id20">token</a></li>
+<li><a class="reference internal" href="#id21">weather</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id22">LinksAndVars</a><ul>
+<li><a class="reference internal" href="#id23">website</a></li>
+<li><a class="reference internal" href="#id24">github</a></li>
+<li><a class="reference internal" href="#id25">github_branch</a></li>
+<li><a class="reference internal" href="#id26">bad_links</a></li>
+<li><a class="reference internal" href="#id27">listing</a></li>
+<li><a class="reference internal" href="#id28">character_data</a></li>
+<li><a class="reference internal" href="#id29">statuspage_link</a></li>
+<li><a class="reference internal" href="#id30">mal_logo</a></li>
+<li><a class="reference internal" href="#id31">giveaway_image</a></li>
+<li><a class="reference internal" href="#id32">version</a></li>
+<li><a class="reference internal" href="#id33">invite_code</a></li>
+<li><a class="reference internal" href="#id34">timeout</a></li>
+<li><a class="reference internal" href="#id35">owner_ids</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.RaidMode">RaidMode</a><ul>
+<li><a class="reference internal" href="#lib.util.RaidMode.off">off</a></li>
+<li><a class="reference internal" href="#lib.util.RaidMode.on">on</a></li>
+<li><a class="reference internal" href="#lib.util.RaidMode.strict">strict</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.Webhooks">Webhooks</a><ul>
+<li><a class="reference internal" href="#lib.util.Webhooks.logs">logs</a></li>
+<li><a class="reference internal" href="#lib.util.Webhooks.feedback">feedback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.Database">Database</a><ul>
+<li><a class="reference internal" href="#lib.util.Database.database_category_name">database_category_name</a></li>
+<li><a class="reference internal" href="#lib.util.Database.database_channel_name">database_channel_name</a></li>
+<li><a class="reference internal" href="#lib.util.Database.antiraid_channel_name">antiraid_channel_name</a></li>
+<li><a class="reference internal" href="#lib.util.Database.mentionspam_channel_name">mentionspam_channel_name</a></li>
+<li><a class="reference internal" href="#lib.util.Database.reaction_roles_channel_name">reaction_roles_channel_name</a></li>
+<li><a class="reference internal" href="#lib.util.Database.giveaway_time_channel_name">giveaway_time_channel_name</a></li>
+<li><a class="reference internal" href="#lib.util.Database.user_blacklist_channel_name">user_blacklist_channel_name</a></li>
+<li><a class="reference internal" href="#lib.util.Database.server_blacklist_channel_name">server_blacklist_channel_name</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.Methods">Methods</a><ul>
+<li><a class="reference internal" href="#lib.util.Methods.GET">GET</a></li>
+<li><a class="reference internal" href="#lib.util.Methods.POST">POST</a></li>
+<li><a class="reference internal" href="#lib.util.Methods.DELETE">DELETE</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.LATTICES">LATTICES</a></li>
+<li><a class="reference internal" href="#lib.util.IMAGES">IMAGES</a></li>
+<li><a class="reference internal" href="#lib.util.UNITS">UNITS</a></li>
+<li><a class="reference internal" href="#lib.util.minato_gif">minato_gif</a></li>
+<li><a class="reference internal" href="#lib.util.among_us">among_us</a></li>
+<li><a class="reference internal" href="#lib.util.url_regex">url_regex</a></li>
+<li><a class="reference internal" href="#id36">Methods</a><ul>
+<li><a class="reference internal" href="#id37">GET</a></li>
+<li><a class="reference internal" href="#id38">POST</a></li>
+<li><a class="reference internal" href="#id39">DELETE</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id40">Tokens</a><ul>
+<li><a class="reference internal" href="#id41">statcord</a></li>
+<li><a class="reference internal" href="#id42">dagpi</a></li>
+<li><a class="reference internal" href="#id43">chatbot</a></li>
+<li><a class="reference internal" href="#id44">sentry_link</a></li>
+<li><a class="reference internal" href="#id45">tenor</a></li>
+<li><a class="reference internal" href="#id46">giphy</a></li>
+<li><a class="reference internal" href="#id47">token</a></li>
+<li><a class="reference internal" href="#id48">weather</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id49">token_get</a></li>
+<li><a class="reference internal" href="#id50">LinksAndVars</a><ul>
+<li><a class="reference internal" href="#id51">website</a></li>
+<li><a class="reference internal" href="#id52">github</a></li>
+<li><a class="reference internal" href="#id53">github_branch</a></li>
+<li><a class="reference internal" href="#id54">bad_links</a></li>
+<li><a class="reference internal" href="#id55">listing</a></li>
+<li><a class="reference internal" href="#id56">character_data</a></li>
+<li><a class="reference internal" href="#id57">statuspage_link</a></li>
+<li><a class="reference internal" href="#id58">mal_logo</a></li>
+<li><a class="reference internal" href="#id59">giveaway_image</a></li>
+<li><a class="reference internal" href="#id60">version</a></li>
+<li><a class="reference internal" href="#id61">invite_code</a></li>
+<li><a class="reference internal" href="#id62">timeout</a></li>
+<li><a class="reference internal" href="#id63">owner_ids</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib.util.log">log</a></li>
+<li><a class="reference internal" href="#lib.util.ch">ch</a></li>
+<li><a class="reference internal" href="#lib.util.formatter">formatter</a></li>
+<li><a class="reference internal" href="#lib.util.FATESLIST_BASE_URI">FATESLIST_BASE_URI</a></li>
+<li><a class="reference internal" href="#lib.util.DISCORD_SERVERVICES_BASE_URI">DISCORD_SERVERVICES_BASE_URI</a></li>
+<li><a class="reference internal" href="#lib.util.post_handler">post_handler</a></li>
+<li><a class="reference internal" href="#lib.util.ratelimit_handler">ratelimit_handler</a></li>
+<li><a class="reference internal" href="#lib.util.post_commands">post_commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-lib.util">
+<span id="lib-util"></span><h1><a class="reference internal" href="#module-lib.util" title="lib.util"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.util</span></code></a><a class="headerlink" href="#module-lib.util" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.util.context</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="privacy_vote/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.util.privacy_vote</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="request_handler/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.util.request_handler</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vars/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.util.vars</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.MemberID" title="lib.util.MemberID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MemberID</span></code></a></p></td>
+<td><p>The base class of custom converters that require the <a class="reference internal" href="#lib.util.Context" title="lib.util.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id3" title="lib.util.ChannelAndMessageId"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChannelAndMessageId</span></code></a></p></td>
+<td><p>Enum where members are also (and must be) ints</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id40" title="lib.util.Tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tokens</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.ConfirmationView" title="lib.util.ConfirmationView"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfirmationView</span></code></a></p></td>
+<td><p>Represents a UI view.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.Context" title="lib.util.Context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Context</span></code></a></p></td>
+<td><p>Represents the context in which a command is being invoked under.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id50" title="lib.util.LinksAndVars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LinksAndVars</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.VotingMenu" title="lib.util.VotingMenu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VotingMenu</span></code></a></p></td>
+<td><p>An interface that allows handling menus by using reactions as buttons.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.PrivacyPolicy" title="lib.util.PrivacyPolicy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PrivacyPolicy</span></code></a></p></td>
+<td><p>An interface that allows handling menus by using reactions as buttons.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.MenuSource" title="lib.util.MenuSource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MenuSource</span></code></a></p></td>
+<td><p>A data source for a sequence of items.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.ShinobiMatch" title="lib.util.ShinobiMatch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShinobiMatch</span></code></a></p></td>
+<td><p>Built-in mutable sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id3" title="lib.util.ChannelAndMessageId"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChannelAndMessageId</span></code></a></p></td>
+<td><p>Enum where members are also (and must be) ints</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id40" title="lib.util.Tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tokens</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id50" title="lib.util.LinksAndVars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LinksAndVars</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.RaidMode" title="lib.util.RaidMode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RaidMode</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.Webhooks" title="lib.util.Webhooks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Webhooks</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.Database" title="lib.util.Database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Database</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id36" title="lib.util.Methods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Methods</span></code></a></p></td>
+<td><p>Enum where members are also (and must be) ints</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id36" title="lib.util.Methods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Methods</span></code></a></p></td>
+<td><p>Enum where members are also (and must be) ints</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id40" title="lib.util.Tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tokens</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id50" title="lib.util.LinksAndVars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LinksAndVars</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id49" title="lib.util.token_get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">token_get</span></code></a>(tokenname)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id49" title="lib.util.token_get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">token_get</span></code></a>(tokenname)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.post_handler" title="lib.util.post_handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_handler</span></code></a>(method, url, header = None, headers = None, data = None, json = None, log_data = False, return_data = True, return_json = False, getrequestobj = False)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.ratelimit_handler" title="lib.util.ratelimit_handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratelimit_handler</span></code></a>(req, url, method, headers, data, print_logs = False)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.post_commands" title="lib.util.post_commands"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_commands</span></code></a>(bot, print_logs = False)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.BASE_DIR" title="lib.util.BASE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BASE_DIR</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.dotenv_file" title="lib.util.dotenv_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dotenv_file</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.api_image_store_dir" title="lib.util.api_image_store_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">api_image_store_dir</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.DEFAULT_COMMAND_SELECT_LENGTH" title="lib.util.DEFAULT_COMMAND_SELECT_LENGTH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_COMMAND_SELECT_LENGTH</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.LATTICES" title="lib.util.LATTICES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LATTICES</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.IMAGES" title="lib.util.IMAGES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IMAGES</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.UNITS" title="lib.util.UNITS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UNITS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.minato_gif" title="lib.util.minato_gif"><code class="xref py py-obj docutils literal notranslate"><span class="pre">minato_gif</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.among_us" title="lib.util.among_us"><code class="xref py py-obj docutils literal notranslate"><span class="pre">among_us</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.url_regex" title="lib.util.url_regex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">url_regex</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.log" title="lib.util.log"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.ch" title="lib.util.ch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ch</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.formatter" title="lib.util.formatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">formatter</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lib.util.FATESLIST_BASE_URI" title="lib.util.FATESLIST_BASE_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FATESLIST_BASE_URI</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.util.DISCORD_SERVERVICES_BASE_URI" title="lib.util.DISCORD_SERVERVICES_BASE_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DISCORD_SERVERVICES_BASE_URI</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="lib.util.MemberID">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">MemberID</span></span><a class="headerlink" href="#lib.util.MemberID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Converter" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Converter</span></code></a></p>
+<p>The base class of custom converters that require the <a class="reference internal" href="#lib.util.Context" title="lib.util.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>
+to be passed to be useful.</p>
+<p>This allows you to implement converters that function similar to the
+special cased <code class="docutils literal notranslate"><span class="pre">discord</span></code> classes.</p>
+<p>Classes that derive from this should override the <code class="xref py py-meth docutils literal notranslate"><span class="pre">convert()</span></code>
+method to do its conversion logic. This method must be a <a class="reference external" href="https://docs.python.org/3/library/asyncio-task.html#coroutine" title="(in Python v3.10)"><span class="xref std std-ref">coroutine</span></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.MemberID.convert">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argument</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.MemberID.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id64"><span class="problematic" id="id65">|coro|</span></a></p>
+<p>The method to override to do conversion logic.</p>
+<p>If an error is found while converting, it is recommended to
+raise a <code class="xref py py-exc docutils literal notranslate"><span class="pre">CommandError</span></code> derived exception as it will
+properly propagate to the error handlers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference internal" href="#lib.util.Context" title="lib.util.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>) – The invocation context that the argument is being used in.</p></li>
+<li><p><strong>argument</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The argument that is being converted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>CommandError</strong> – A generic exception occurred when converting the argument.</p></li>
+<li><p><strong>BadArgument</strong> – The converter failed to convert the argument.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">ChannelAndMessageId</span></span><a class="headerlink" href="#lib.util.ChannelAndMessageId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntEnum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></a></p>
+<p>Enum where members are also (and must be) ints</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId.badges_channel">
+<span class="sig-name descname"><span class="pre">badges_channel</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920536143458598930</span></em><a class="headerlink" href="#lib.util.ChannelAndMessageId.badges_channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId.backup_channel">
+<span class="sig-name descname"><span class="pre">backup_channel</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">922544732918415390</span></em><a class="headerlink" href="#lib.util.ChannelAndMessageId.backup_channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId.error_logs_channel">
+<span class="sig-name descname"><span class="pre">error_logs_channel</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920190310942908513</span></em><a class="headerlink" href="#lib.util.ChannelAndMessageId.error_logs_channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId.server_id">
+<span class="sig-name descname"><span class="pre">server_id</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920190307595874304</span></em><a class="headerlink" href="#lib.util.ChannelAndMessageId.server_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId.server_id2">
+<span class="sig-name descname"><span class="pre">server_id2</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920536143244709889</span></em><a class="headerlink" href="#lib.util.ChannelAndMessageId.server_id2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId.restartlog_channel1">
+<span class="sig-name descname"><span class="pre">restartlog_channel1</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920190310942908508</span></em><a class="headerlink" href="#lib.util.ChannelAndMessageId.restartlog_channel1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId.restartlog_channel2">
+<span class="sig-name descname"><span class="pre">restartlog_channel2</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920536143458598926</span></em><a class="headerlink" href="#lib.util.ChannelAndMessageId.restartlog_channel2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId.serverlog_channel1">
+<span class="sig-name descname"><span class="pre">serverlog_channel1</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920190310942908509</span></em><a class="headerlink" href="#lib.util.ChannelAndMessageId.serverlog_channel1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ChannelAndMessageId.serverlog_channel2">
+<span class="sig-name descname"><span class="pre">serverlog_channel2</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920536143458598927</span></em><a class="headerlink" href="#lib.util.ChannelAndMessageId.serverlog_channel2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.Tokens">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">Tokens</span></span><a class="headerlink" href="#lib.util.Tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Tokens.statcord">
+<span class="sig-name descname"><span class="pre">statcord</span></span><a class="headerlink" href="#lib.util.Tokens.statcord" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Tokens.dagpi">
+<span class="sig-name descname"><span class="pre">dagpi</span></span><a class="headerlink" href="#lib.util.Tokens.dagpi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Tokens.chatbot">
+<span class="sig-name descname"><span class="pre">chatbot</span></span><a class="headerlink" href="#lib.util.Tokens.chatbot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Tokens.sentry_link">
+<span class="sig-name descname"><span class="pre">sentry_link</span></span><a class="headerlink" href="#lib.util.Tokens.sentry_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Tokens.tenor">
+<span class="sig-name descname"><span class="pre">tenor</span></span><a class="headerlink" href="#lib.util.Tokens.tenor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Tokens.giphy">
+<span class="sig-name descname"><span class="pre">giphy</span></span><a class="headerlink" href="#lib.util.Tokens.giphy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Tokens.token">
+<span class="sig-name descname"><span class="pre">token</span></span><a class="headerlink" href="#lib.util.Tokens.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Tokens.weather">
+<span class="sig-name descname"><span class="pre">weather</span></span><a class="headerlink" href="#lib.util.Tokens.weather" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.ConfirmationView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">ConfirmationView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_after</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.ConfirmationView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ui.View" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ui.View</span></code></a></p>
+<p>Represents a UI view.</p>
+<p>This object must be inherited to create a UI within Discord.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timeout</strong> (Optional[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – Timeout in seconds from last interaction with the UI before no longer accepting input.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code> then there is no timeout.</p></li>
+<li><p><strong>author_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – </p></li>
+<li><p><strong>ctx</strong> (<a class="reference internal" href="#lib.util.Context" title="lib.util.Context"><em>Context</em></a>) – </p></li>
+<li><p><strong>delete_after</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.ConfirmationView.interaction_check">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">interaction_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.ConfirmationView.interaction_check" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id66"><span class="problematic" id="id67">|coro|</span></a></p>
+<p>A callback that is called when an interaction happens within the view
+that checks whether the view should process item callbacks for the interaction.</p>
+<p>This is useful to override if, for example, you want to ensure that the
+interaction author is a given user.</p>
+<p>The default implementation of this returns <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an exception occurs within the body then the check
+is considered a failure and <code class="xref py py-meth docutils literal notranslate"><span class="pre">on_error()</span></code> is called.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interaction</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.Interaction" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Interaction</span></code></a>) – The interaction that occurred.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether the view children’s callbacks should be called.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.ConfirmationView.on_timeout">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.ConfirmationView.on_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id68"><span class="problematic" id="id69">|coro|</span></a></p>
+<p>A callback that is called when a view’s timeout elapses without being explicitly stopped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.ConfirmationView.confirm">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">confirm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">button</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.ConfirmationView.confirm" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>button</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ui.Button" title="(in discord.py v2.0.0a)"><em>discord.ui.Button</em></a>) – </p></li>
+<li><p><strong>interaction</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.Interaction" title="(in discord.py v2.0.0a)"><em>discord.Interaction</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.ConfirmationView.cancel">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">button</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.ConfirmationView.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>button</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.ui.Button" title="(in discord.py v2.0.0a)"><em>discord.ui.Button</em></a>) – </p></li>
+<li><p><strong>interaction</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.Interaction" title="(in discord.py v2.0.0a)"><em>discord.Interaction</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.Context">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">Context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MISSING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MISSING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invoked_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invoked_parents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MISSING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invoked_subcommand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subcommand_passed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command_failed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_parameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_argument</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context" title="(in discord.py v2.0.0a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.commands.Context</span></code></a></p>
+<p>Represents the context in which a command is being invoked under.</p>
+<p>This class contains a lot of meta data to help you understand more about
+the invocation context. This class is not created manually and is instead
+passed around to commands as the first parameter.</p>
+<p>This class implements the <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.abc.Messageable" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Messageable</span></code></a> ABC.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><em>discord.Message</em></a>) – </p></li>
+<li><p><strong>bot</strong> (<em>discord.ext.commands._types.BotT</em>) – </p></li>
+<li><p><strong>view</strong> (<em>discord.ext.commands.view.StringView</em>) – </p></li>
+<li><p><strong>args</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>) – </p></li>
+<li><p><strong>kwargs</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – </p></li>
+<li><p><strong>prefix</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – </p></li>
+<li><p><strong>command</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Command" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.core.Command</em></a><em>[</em><em>Any</em><em>, </em><em>Ellipsis</em><em>, </em><em>Any</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>invoked_with</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – </p></li>
+<li><p><strong>invoked_parents</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – </p></li>
+<li><p><strong>invoked_subcommand</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Command" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.core.Command</em></a><em>[</em><em>Any</em><em>, </em><em>Ellipsis</em><em>, </em><em>Any</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>subcommand_passed</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – </p></li>
+<li><p><strong>command_failed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – </p></li>
+<li><p><strong>current_parameter</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Parameter" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.parameters.Parameter</em></a><em>]</em>) – </p></li>
+<li><p><strong>current_argument</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – </p></li>
+<li><p><strong>interaction</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.Interaction" title="(in discord.py v2.0.0a)"><em>discord.Interaction</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.message">
+<span class="sig-name descname"><span class="pre">message</span></span><a class="headerlink" href="#lib.util.Context.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message that triggered the command being executed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the case of an interaction based context, this message is “synthetic”
+and does not actually exist. Therefore, the ID on it is invalid similar
+to ephemeral messages.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.bot">
+<span class="sig-name descname"><span class="pre">bot</span></span><a class="headerlink" href="#lib.util.Context.bot" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bot that contains the command being executed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Bot</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.args">
+<span class="sig-name descname"><span class="pre">args</span></span><a class="headerlink" href="#lib.util.Context.args" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of transformed arguments that were passed into the command.
+If this is accessed during the <code class="xref py py-func docutils literal notranslate"><span class="pre">on_command_error()</span></code> event
+then this list could be incomplete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.kwargs">
+<span class="sig-name descname"><span class="pre">kwargs</span></span><a class="headerlink" href="#lib.util.Context.kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary of transformed arguments that were passed into the command.
+Similar to <a class="reference internal" href="#lib.util.Context.args" title="lib.util.Context.args"><code class="xref py py-attr docutils literal notranslate"><span class="pre">args</span></code></a>, if this is accessed in the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">on_command_error()</span></code> event then this dict could be incomplete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.current_parameter">
+<span class="sig-name descname"><span class="pre">current_parameter</span></span><a class="headerlink" href="#lib.util.Context.current_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parameter that is currently being inspected and converted.
+This is only of use for within converters.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.current_argument">
+<span class="sig-name descname"><span class="pre">current_argument</span></span><a class="headerlink" href="#lib.util.Context.current_argument" title="Permalink to this definition">¶</a></dt>
+<dd><p>The argument string of the <a class="reference internal" href="#lib.util.Context.current_parameter" title="lib.util.Context.current_parameter"><code class="xref py py-attr docutils literal notranslate"><span class="pre">current_parameter</span></code></a> that is currently being converted.
+This is only of use for within converters.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.interaction">
+<span class="sig-name descname"><span class="pre">interaction</span></span><a class="headerlink" href="#lib.util.Context.interaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The interaction associated with this context.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/interactions/api.html#discord.Interaction" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Interaction</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.prefix">
+<span class="sig-name descname"><span class="pre">prefix</span></span><a class="headerlink" href="#lib.util.Context.prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>The prefix that was used to invoke the command. For interaction based contexts,
+this is <code class="docutils literal notranslate"><span class="pre">/</span></code> for slash commands and <code class="docutils literal notranslate"><span class="pre">\u200b</span></code> for context menu commands.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.command">
+<span class="sig-name descname"><span class="pre">command</span></span><a class="headerlink" href="#lib.util.Context.command" title="Permalink to this definition">¶</a></dt>
+<dd><p>The command that is being invoked currently.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<code class="xref py py-class docutils literal notranslate"><span class="pre">Command</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.invoked_with">
+<span class="sig-name descname"><span class="pre">invoked_with</span></span><a class="headerlink" href="#lib.util.Context.invoked_with" title="Permalink to this definition">¶</a></dt>
+<dd><p>The command name that triggered this invocation. Useful for finding out
+which alias called the command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.invoked_parents">
+<span class="sig-name descname"><span class="pre">invoked_parents</span></span><a class="headerlink" href="#lib.util.Context.invoked_parents" title="Permalink to this definition">¶</a></dt>
+<dd><p>The command names of the parents that triggered this invocation. Useful for
+finding out which aliases called the command.</p>
+<p>For example in commands <code class="docutils literal notranslate"><span class="pre">?a</span> <span class="pre">b</span> <span class="pre">c</span> <span class="pre">test</span></code>, the invoked parents are <code class="docutils literal notranslate"><span class="pre">['a',</span> <span class="pre">'b',</span> <span class="pre">'c']</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.7.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.invoked_subcommand">
+<span class="sig-name descname"><span class="pre">invoked_subcommand</span></span><a class="headerlink" href="#lib.util.Context.invoked_subcommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>The subcommand that was invoked.
+If no valid subcommand was invoked then this is equal to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<code class="xref py py-class docutils literal notranslate"><span class="pre">Command</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.subcommand_passed">
+<span class="sig-name descname"><span class="pre">subcommand_passed</span></span><a class="headerlink" href="#lib.util.Context.subcommand_passed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The string that was attempted to call a subcommand. This does not have
+to point to a valid registered subcommand and could just point to a
+nonsense string. If nothing was passed to attempt a call to a
+subcommand then this is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Context.command_failed">
+<span class="sig-name descname"><span class="pre">command_failed</span></span><a class="headerlink" href="#lib.util.Context.command_failed" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean that indicates if the command failed to be parsed, checked,
+or invoked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.entry_to_code">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">entry_to_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entries</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.entry_to_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.indented_entry_to_code">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">indented_entry_to_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entries</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.indented_entry_to_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.session">
+<span class="sig-name descname"><span class="pre">session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.session" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.replied_reference">
+<span class="sig-name descname"><span class="pre">replied_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.replied_reference" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.disambiguate">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">disambiguate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matches</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.disambiguate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.prompt">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_after</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.prompt" title="Permalink to this definition">¶</a></dt>
+<dd><p>An interactive reaction confirmation dialog.
+:param message: The message to show along with the prompt.
+:type message: str
+:param timeout: How long to wait before returning.
+:type timeout: float
+:param delete_after: Whether to delete the confirmation message after we’re done.
+:type delete_after: bool
+:param author_id: The member who should respond to the prompt. Defaults to the author of the</p>
+<blockquote>
+<div><p>Context’s message.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if explicit confirm,
+<code class="docutils literal notranslate"><span class="pre">False</span></code> if explicit deny,
+<code class="docutils literal notranslate"><span class="pre">None</span></code> if deny due to timeout</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a>]</p>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – </p></li>
+<li><p><strong>delete_after</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – </p></li>
+<li><p><strong>author_id</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.show_help">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">show_help</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.show_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows the help command for the specified command if given.
+If no command is given, then it’ll show help for the current
+command.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.safe_send">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">safe_send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">escape_mentions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.safe_send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as send except with some safe guards.
+1) If the message is too long then it sends a file with the results instead.
+2) If <code class="docutils literal notranslate"><span class="pre">escape_mentions</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> then it escapes mentions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.get_user">
+<span class="sig-name descname"><span class="pre">get_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.get_user" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a><em>, </em><a class="reference internal" href="../classes/converter/index.html#lib.classes.converter.MemberID" title="lib.classes.converter.MemberID"><em>lib.classes.converter.MemberID</em></a><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.get_dm">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">get_dm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.get_dm" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Member" title="(in discord.py v2.0.0a)"><em>discord.Member</em></a><em>, </em><a class="reference internal" href="../classes/converter/index.html#lib.classes.converter.MemberID" title="lib.classes.converter.MemberID"><em>lib.classes.converter.MemberID</em></a><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.get_roles">
+<span class="sig-name descname"><span class="pre">get_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.get_roles" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>role</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Role" title="(in discord.py v2.0.0a)"><em>discord.Role</em></a><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.get_emoji">
+<span class="sig-name descname"><span class="pre">get_emoji</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emoji</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.get_emoji" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>emoji</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Emoji" title="(in discord.py v2.0.0a)"><em>discord.Emoji</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.PartialEmoji" title="(in discord.py v2.0.0a)"><em>discord.PartialEmoji</em></a><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.get_guild">
+<span class="sig-name descname"><span class="pre">get_guild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guild</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.get_guild" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>guild</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Guild" title="(in discord.py v2.0.0a)"><em>discord.Guild</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.PartialInviteGuild" title="(in discord.py v2.0.0a)"><em>discord.PartialInviteGuild</em></a><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.get_config_emoji_by_name_or_id">
+<span class="sig-name descname"><span class="pre">get_config_emoji_by_name_or_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emoji</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.get_config_emoji_by_name_or_id" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>emoji</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.get_config_channel_by_name_or_id">
+<span class="sig-name descname"><span class="pre">get_config_channel_by_name_or_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.get_config_channel_by_name_or_id" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.get_random_image_from_tag">
+<em class="property"><span class="pre">staticmethod</span> </em><span class="sig-name descname"><span class="pre">get_random_image_from_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.get_random_image_from_tag" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tag_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">staticmethod</span> <span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">get_random_image_from_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tag_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.tenor">
+<em class="property"><span class="pre">staticmethod</span> </em><span class="sig-name descname"><span class="pre">tenor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.tenor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tag_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.Context.giphy">
+<em class="property"><span class="pre">staticmethod</span> </em><span class="sig-name descname"><span class="pre">giphy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.Context.giphy" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tag_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">staticmethod</span> <span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">tenor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tag_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">staticmethod</span> <span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">giphy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tag_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">LinksAndVars</span></span><a class="headerlink" href="#lib.util.LinksAndVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.website">
+<span class="sig-name descname"><span class="pre">website</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://minato-namikaze.readthedocs.io/en/latest</span></em><a class="headerlink" href="#lib.util.LinksAndVars.website" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.github">
+<span class="sig-name descname"><span class="pre">github</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://github.com/The-4th-Hokage/yondaime-hokage</span></em><a class="headerlink" href="#lib.util.LinksAndVars.github" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.github_branch">
+<span class="sig-name descname"><span class="pre">github_branch</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">master</span></em><a class="headerlink" href="#lib.util.LinksAndVars.github_branch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.bad_links">
+<span class="sig-name descname"><span class="pre">bad_links</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt</span></em><a class="headerlink" href="#lib.util.LinksAndVars.bad_links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.listing">
+<span class="sig-name descname"><span class="pre">listing</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json</span></em><a class="headerlink" href="#lib.util.LinksAndVars.listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.character_data">
+<span class="sig-name descname"><span class="pre">character_data</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json</span></em><a class="headerlink" href="#lib.util.LinksAndVars.character_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.statuspage_link">
+<span class="sig-name descname"><span class="pre">statuspage_link</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://minatonamikaze.statuspage.io</span></em><a class="headerlink" href="#lib.util.LinksAndVars.statuspage_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.mal_logo">
+<span class="sig-name descname"><span class="pre">mal_logo</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png</span></em><a class="headerlink" href="#lib.util.LinksAndVars.mal_logo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.giveaway_image">
+<span class="sig-name descname"><span class="pre">giveaway_image</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://i.imgur.com/efLKnlh.png</span></em><a class="headerlink" href="#lib.util.LinksAndVars.giveaway_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#lib.util.LinksAndVars.version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.invite_code">
+<span class="sig-name descname"><span class="pre">invite_code</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">vfXHwS3nmQ</span></em><a class="headerlink" href="#lib.util.LinksAndVars.invite_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">3.0</span></em><a class="headerlink" href="#lib.util.LinksAndVars.timeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.LinksAndVars.owner_ids">
+<span class="sig-name descname"><span class="pre">owner_ids</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">[887549958931247137,</span> <span class="pre">837223478934896670,</span> <span class="pre">747729781369602049]</span></em><a class="headerlink" href="#lib.util.LinksAndVars.owner_ids" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.VotingMenu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">VotingMenu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.VotingMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.menus.Menu</span></code></p>
+<p>An interface that allows handling menus by using reactions as buttons.</p>
+<p>Buttons should be marked with the <code class="xref py py-func docutils literal notranslate"><span class="pre">button()</span></code> decorator. Please note that
+this expects the methods to have a single parameter, the <code class="docutils literal notranslate"><span class="pre">payload</span></code>. This
+<code class="docutils literal notranslate"><span class="pre">payload</span></code> is of type <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.RawReactionActionEvent" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.RawReactionActionEvent</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#lib.util.VotingMenu.timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>The timeout to wait between button inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.delete_message_after">
+<span class="sig-name descname"><span class="pre">delete_message_after</span></span><a class="headerlink" href="#lib.util.VotingMenu.delete_message_after" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to delete the message after the menu interaction is done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.clear_reactions_after">
+<span class="sig-name descname"><span class="pre">clear_reactions_after</span></span><a class="headerlink" href="#lib.util.VotingMenu.clear_reactions_after" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to clear reactions after the menu interaction is done.
+Note that <a class="reference internal" href="#lib.util.VotingMenu.delete_message_after" title="lib.util.VotingMenu.delete_message_after"><code class="xref py py-attr docutils literal notranslate"><span class="pre">delete_message_after</span></code></a> takes priority over this attribute.
+If the bot does not have permissions to clear the reactions then it will
+delete the reactions one by one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.check_embeds">
+<span class="sig-name descname"><span class="pre">check_embeds</span></span><a class="headerlink" href="#lib.util.VotingMenu.check_embeds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to verify embed permissions as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.ctx">
+<span class="sig-name descname"><span class="pre">ctx</span></span><a class="headerlink" href="#lib.util.VotingMenu.ctx" title="Permalink to this definition">¶</a></dt>
+<dd><p>The context that started this pagination session or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it hasn’t
+been started yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<code class="xref py py-class docutils literal notranslate"><span class="pre">commands.Context</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.bot">
+<span class="sig-name descname"><span class="pre">bot</span></span><a class="headerlink" href="#lib.util.VotingMenu.bot" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bot that is running this pagination session or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it hasn’t
+been started yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<code class="xref py py-class docutils literal notranslate"><span class="pre">commands.Bot</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.message">
+<span class="sig-name descname"><span class="pre">message</span></span><a class="headerlink" href="#lib.util.VotingMenu.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message that has been sent for handling the menu. This is the returned
+message of <a class="reference internal" href="#lib.util.VotingMenu.send_initial_message" title="lib.util.VotingMenu.send_initial_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">send_initial_message()</span></code></a>. You can set it in order to avoid
+calling <a class="reference internal" href="#lib.util.VotingMenu.send_initial_message" title="lib.util.VotingMenu.send_initial_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">send_initial_message()</span></code></a>, if for example you have a pre-existing
+message you want to attach a menu to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.Message</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.send_initial_message">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">send_initial_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.VotingMenu.send_initial_message" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id70"><span class="problematic" id="id71">|coro|</span></a></p>
+<p>Sends the initial message for the menu session.</p>
+<p>This is internally assigned to the <a class="reference internal" href="#lib.util.VotingMenu.message" title="lib.util.VotingMenu.message"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message</span></code></a> attribute.</p>
+<p>Subclasses must implement this if they don’t set the
+<a class="reference internal" href="#lib.util.VotingMenu.message" title="lib.util.VotingMenu.message"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message</span></code></a> attribute themselves before starting the
+menu via <code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference internal" href="#lib.util.Context" title="lib.util.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>) – The invocation context to use.</p></li>
+<li><p><strong>channel</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.abc.Messageable" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.abc.Messageable</span></code></a>) – The messageable to send the message to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The message that has been sent.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.Message</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.on_check_mark">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_check_mark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.VotingMenu.on_check_mark" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.VotingMenu.on_stop">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.VotingMenu.on_stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">PrivacyPolicy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.PrivacyPolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.menus.Menu</span></code></p>
+<p>An interface that allows handling menus by using reactions as buttons.</p>
+<p>Buttons should be marked with the <code class="xref py py-func docutils literal notranslate"><span class="pre">button()</span></code> decorator. Please note that
+this expects the methods to have a single parameter, the <code class="docutils literal notranslate"><span class="pre">payload</span></code>. This
+<code class="docutils literal notranslate"><span class="pre">payload</span></code> is of type <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.RawReactionActionEvent" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.RawReactionActionEvent</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#lib.util.PrivacyPolicy.timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>The timeout to wait between button inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.delete_message_after">
+<span class="sig-name descname"><span class="pre">delete_message_after</span></span><a class="headerlink" href="#lib.util.PrivacyPolicy.delete_message_after" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to delete the message after the menu interaction is done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.clear_reactions_after">
+<span class="sig-name descname"><span class="pre">clear_reactions_after</span></span><a class="headerlink" href="#lib.util.PrivacyPolicy.clear_reactions_after" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to clear reactions after the menu interaction is done.
+Note that <a class="reference internal" href="#lib.util.PrivacyPolicy.delete_message_after" title="lib.util.PrivacyPolicy.delete_message_after"><code class="xref py py-attr docutils literal notranslate"><span class="pre">delete_message_after</span></code></a> takes priority over this attribute.
+If the bot does not have permissions to clear the reactions then it will
+delete the reactions one by one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.check_embeds">
+<span class="sig-name descname"><span class="pre">check_embeds</span></span><a class="headerlink" href="#lib.util.PrivacyPolicy.check_embeds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to verify embed permissions as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.ctx">
+<span class="sig-name descname"><span class="pre">ctx</span></span><a class="headerlink" href="#lib.util.PrivacyPolicy.ctx" title="Permalink to this definition">¶</a></dt>
+<dd><p>The context that started this pagination session or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it hasn’t
+been started yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<code class="xref py py-class docutils literal notranslate"><span class="pre">commands.Context</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.bot">
+<span class="sig-name descname"><span class="pre">bot</span></span><a class="headerlink" href="#lib.util.PrivacyPolicy.bot" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bot that is running this pagination session or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it hasn’t
+been started yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<code class="xref py py-class docutils literal notranslate"><span class="pre">commands.Bot</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.message">
+<span class="sig-name descname"><span class="pre">message</span></span><a class="headerlink" href="#lib.util.PrivacyPolicy.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message that has been sent for handling the menu. This is the returned
+message of <a class="reference internal" href="#lib.util.PrivacyPolicy.send_initial_message" title="lib.util.PrivacyPolicy.send_initial_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">send_initial_message()</span></code></a>. You can set it in order to avoid
+calling <a class="reference internal" href="#lib.util.PrivacyPolicy.send_initial_message" title="lib.util.PrivacyPolicy.send_initial_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">send_initial_message()</span></code></a>, if for example you have a pre-existing
+message you want to attach a menu to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optional[<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.Message</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.send_initial_message">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">send_initial_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.PrivacyPolicy.send_initial_message" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id72"><span class="problematic" id="id73">|coro|</span></a></p>
+<p>Sends the initial message for the menu session.</p>
+<p>This is internally assigned to the <a class="reference internal" href="#lib.util.PrivacyPolicy.message" title="lib.util.PrivacyPolicy.message"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message</span></code></a> attribute.</p>
+<p>Subclasses must implement this if they don’t set the
+<a class="reference internal" href="#lib.util.PrivacyPolicy.message" title="lib.util.PrivacyPolicy.message"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message</span></code></a> attribute themselves before starting the
+menu via <code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference internal" href="#lib.util.Context" title="lib.util.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a>) – The invocation context to use.</p></li>
+<li><p><strong>channel</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.abc.Messageable" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.abc.Messageable</span></code></a>) – The messageable to send the message to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The message that has been sent.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.Message</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.on_add">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.PrivacyPolicy.on_add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.PrivacyPolicy.on_stop">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">on_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.PrivacyPolicy.on_stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.MenuSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">MenuSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.MenuSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">discord.ext.menus.ListPageSource</span></code></p>
+<p>A data source for a sequence of items.</p>
+<p>This page source does not handle any sort of formatting, leaving it up
+to the user. To do so, implement the <a class="reference internal" href="#lib.util.MenuSource.format_page" title="lib.util.MenuSource.format_page"><code class="xref py py-meth docutils literal notranslate"><span class="pre">format_page()</span></code></a> method.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.MenuSource.entries">
+<span class="sig-name descname"><span class="pre">entries</span></span><a class="headerlink" href="#lib.util.MenuSource.entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sequence of items to paginate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Sequence[Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.MenuSource.per_page">
+<span class="sig-name descname"><span class="pre">per_page</span></span><a class="headerlink" href="#lib.util.MenuSource.per_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many elements are in a page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.util.MenuSource.format_page">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">format_page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">menu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.MenuSource.format_page" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id74"><span class="problematic" id="id75">|maybecoro|</span></a></p>
+<p>An abstract method to format the page.</p>
+<p>This method must return one of the following types.</p>
+<p>If this method returns a <code class="docutils literal notranslate"><span class="pre">str</span></code> then it is interpreted as returning
+the <code class="docutils literal notranslate"><span class="pre">content</span></code> keyword argument in <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message.edit" title="(in discord.py v2.0.0a)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">discord.Message.edit()</span></code></a>
+and <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.abc.Messageable.send" title="(in discord.py v2.0.0a)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">discord.abc.Messageable.send()</span></code></a>.</p>
+<p>If this method returns a <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Embed" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.Embed</span></code></a> then it is interpreted
+as returning the <code class="docutils literal notranslate"><span class="pre">embed</span></code> keyword argument in <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message.edit" title="(in discord.py v2.0.0a)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">discord.Message.edit()</span></code></a>
+and <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.abc.Messageable.send" title="(in discord.py v2.0.0a)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">discord.abc.Messageable.send()</span></code></a>.</p>
+<p>If this method returns a <code class="docutils literal notranslate"><span class="pre">dict</span></code> then it is interpreted as the
+keyword-arguments that are used in both <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Message.edit" title="(in discord.py v2.0.0a)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">discord.Message.edit()</span></code></a>
+and <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.abc.Messageable.send" title="(in discord.py v2.0.0a)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">discord.abc.Messageable.send()</span></code></a>. The two of interest are
+<code class="docutils literal notranslate"><span class="pre">embed</span></code> and <code class="docutils literal notranslate"><span class="pre">content</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>menu</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Menu</span></code>) – The menu that wants to format this page.</p></li>
+<li><p><strong>page</strong> (<em>Any</em>) – The page returned by <code class="xref py py-meth docutils literal notranslate"><span class="pre">PageSource.get_page()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>See above.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Union[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Embed" title="(in discord.py v2.0.0a)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discord.Embed</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.BASE_DIR">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">BASE_DIR</span></span><a class="headerlink" href="#lib.util.BASE_DIR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.dotenv_file">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">dotenv_file</span></span><a class="headerlink" href="#lib.util.dotenv_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.util.token_get">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">token_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.token_get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.api_image_store_dir">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">api_image_store_dir</span></span><a class="headerlink" href="#lib.util.api_image_store_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.DEFAULT_COMMAND_SELECT_LENGTH">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_COMMAND_SELECT_LENGTH</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">25</span></em><a class="headerlink" href="#lib.util.DEFAULT_COMMAND_SELECT_LENGTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.ShinobiMatch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">ShinobiMatch</span></span><a class="headerlink" href="#lib.util.ShinobiMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Built-in mutable sequence.</p>
+<p>If no argument is given, the constructor creates a new empty list.
+The argument must be an iterable if specified.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ShinobiMatch.character_side_exclude">
+<span class="sig-name descname"><span class="pre">character_side_exclude</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">['anbu',</span> <span class="pre">'iwagakure',</span> <span class="pre">'kumogakure',</span> <span class="pre">'kirigakure',</span> <span class="pre">'otogakure',</span> <span class="pre">'sunagakure',</span> <span class="pre">'akatsuki',</span> <span class="pre">'konohagakure']</span></em><a class="headerlink" href="#lib.util.ShinobiMatch.character_side_exclude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.ShinobiMatch.name_exclusion">
+<span class="sig-name descname"><span class="pre">name_exclusion</span></span><a class="headerlink" href="#lib.util.ShinobiMatch.name_exclusion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">ChannelAndMessageId</span></span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntEnum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></a></p>
+<p>Enum where members are also (and must be) ints</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">badges_channel</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920536143458598930</span></em><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">backup_channel</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">922544732918415390</span></em><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">error_logs_channel</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920190310942908513</span></em><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">server_id</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920190307595874304</span></em><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">server_id2</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920536143244709889</span></em><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">restartlog_channel1</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920190310942908508</span></em><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">restartlog_channel2</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920536143458598926</span></em><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">serverlog_channel1</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920190310942908509</span></em><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">serverlog_channel2</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">920536143458598927</span></em><a class="headerlink" href="#id12" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id13">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">Tokens</span></span><a class="headerlink" href="#id13" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">statcord</span></span><a class="headerlink" href="#id14" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">dagpi</span></span><a class="headerlink" href="#id15" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">chatbot</span></span><a class="headerlink" href="#id16" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">sentry_link</span></span><a class="headerlink" href="#id17" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">tenor</span></span><a class="headerlink" href="#id18" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">giphy</span></span><a class="headerlink" href="#id19" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">token</span></span><a class="headerlink" href="#id20" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">weather</span></span><a class="headerlink" href="#id21" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id22">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">LinksAndVars</span></span><a class="headerlink" href="#id22" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">website</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://minato-namikaze.readthedocs.io/en/latest</span></em><a class="headerlink" href="#id23" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">github</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://github.com/The-4th-Hokage/yondaime-hokage</span></em><a class="headerlink" href="#id24" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">github_branch</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">master</span></em><a class="headerlink" href="#id25" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">bad_links</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt</span></em><a class="headerlink" href="#id26" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">listing</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json</span></em><a class="headerlink" href="#id27" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">character_data</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json</span></em><a class="headerlink" href="#id28" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">statuspage_link</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://minatonamikaze.statuspage.io</span></em><a class="headerlink" href="#id29" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">mal_logo</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png</span></em><a class="headerlink" href="#id30" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">giveaway_image</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://i.imgur.com/efLKnlh.png</span></em><a class="headerlink" href="#id31" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id32">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#id32" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">invite_code</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">vfXHwS3nmQ</span></em><a class="headerlink" href="#id33" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">timeout</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">3.0</span></em><a class="headerlink" href="#id34" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id35">
+<span class="sig-name descname"><span class="pre">owner_ids</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">[887549958931247137,</span> <span class="pre">837223478934896670,</span> <span class="pre">747729781369602049]</span></em><a class="headerlink" href="#id35" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.RaidMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">RaidMode</span></span><a class="headerlink" href="#lib.util.RaidMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.RaidMode.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#lib.util.RaidMode.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.RaidMode.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#lib.util.RaidMode.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.RaidMode.strict">
+<span class="sig-name descname"><span class="pre">strict</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#lib.util.RaidMode.strict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.Webhooks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">Webhooks</span></span><a class="headerlink" href="#lib.util.Webhooks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Webhooks.logs">
+<span class="sig-name descname"><span class="pre">logs</span></span><a class="headerlink" href="#lib.util.Webhooks.logs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Webhooks.feedback">
+<span class="sig-name descname"><span class="pre">feedback</span></span><a class="headerlink" href="#lib.util.Webhooks.feedback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.Database">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">Database</span></span><a class="headerlink" href="#lib.util.Database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Database.database_category_name">
+<span class="sig-name descname"><span class="pre">database_category_name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">DATABASE</span></em><a class="headerlink" href="#lib.util.Database.database_category_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Database.database_channel_name">
+<span class="sig-name descname"><span class="pre">database_channel_name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">setup</span> <span class="pre">vars</span></em><a class="headerlink" href="#lib.util.Database.database_channel_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Database.antiraid_channel_name">
+<span class="sig-name descname"><span class="pre">antiraid_channel_name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">antiraid</span></em><a class="headerlink" href="#lib.util.Database.antiraid_channel_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Database.mentionspam_channel_name">
+<span class="sig-name descname"><span class="pre">mentionspam_channel_name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mentionspam</span></em><a class="headerlink" href="#lib.util.Database.mentionspam_channel_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Database.reaction_roles_channel_name">
+<span class="sig-name descname"><span class="pre">reaction_roles_channel_name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">reaction</span> <span class="pre">roles</span></em><a class="headerlink" href="#lib.util.Database.reaction_roles_channel_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Database.giveaway_time_channel_name">
+<span class="sig-name descname"><span class="pre">giveaway_time_channel_name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">giveaway</span></em><a class="headerlink" href="#lib.util.Database.giveaway_time_channel_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Database.user_blacklist_channel_name">
+<span class="sig-name descname"><span class="pre">user_blacklist_channel_name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">user</span> <span class="pre">blacklist</span></em><a class="headerlink" href="#lib.util.Database.user_blacklist_channel_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Database.server_blacklist_channel_name">
+<span class="sig-name descname"><span class="pre">server_blacklist_channel_name</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">server</span> <span class="pre">blacklist</span></em><a class="headerlink" href="#lib.util.Database.server_blacklist_channel_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib.util.Methods">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">Methods</span></span><a class="headerlink" href="#lib.util.Methods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntEnum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></a></p>
+<p>Enum where members are also (and must be) ints</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Methods.GET">
+<span class="sig-name descname"><span class="pre">GET</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#lib.util.Methods.GET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Methods.POST">
+<span class="sig-name descname"><span class="pre">POST</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#lib.util.Methods.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.util.Methods.DELETE">
+<span class="sig-name descname"><span class="pre">DELETE</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#lib.util.Methods.DELETE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.LATTICES">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">LATTICES</span></span><em class="property"><span class="w"> </span><span class="pre">:dict</span></em><a class="headerlink" href="#lib.util.LATTICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.IMAGES">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">IMAGES</span></span><em class="property"><span class="w"> </span><span class="pre">:dict</span></em><a class="headerlink" href="#lib.util.IMAGES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.UNITS">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">UNITS</span></span><em class="property"><span class="w"> </span><span class="pre">:dict</span></em><a class="headerlink" href="#lib.util.UNITS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.minato_gif">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">minato_gif</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">[]</span></em><a class="headerlink" href="#lib.util.minato_gif" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.among_us">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">among_us</span></span><a class="headerlink" href="#lib.util.among_us" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.url_regex">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">url_regex</span></span><a class="headerlink" href="#lib.util.url_regex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id36">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">Methods</span></span><a class="headerlink" href="#id36" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntEnum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></a></p>
+<p>Enum where members are also (and must be) ints</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id37">
+<span class="sig-name descname"><span class="pre">GET</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#id37" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id38">
+<span class="sig-name descname"><span class="pre">POST</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#id38" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id39">
+<span class="sig-name descname"><span class="pre">DELETE</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#id39" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id40">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">Tokens</span></span><a class="headerlink" href="#id40" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id41">
+<span class="sig-name descname"><span class="pre">statcord</span></span><a class="headerlink" href="#id41" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id42">
+<span class="sig-name descname"><span class="pre">dagpi</span></span><a class="headerlink" href="#id42" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id43">
+<span class="sig-name descname"><span class="pre">chatbot</span></span><a class="headerlink" href="#id43" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id44">
+<span class="sig-name descname"><span class="pre">sentry_link</span></span><a class="headerlink" href="#id44" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id45">
+<span class="sig-name descname"><span class="pre">tenor</span></span><a class="headerlink" href="#id45" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id46">
+<span class="sig-name descname"><span class="pre">giphy</span></span><a class="headerlink" href="#id46" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id47">
+<span class="sig-name descname"><span class="pre">token</span></span><a class="headerlink" href="#id47" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id48">
+<span class="sig-name descname"><span class="pre">weather</span></span><a class="headerlink" href="#id48" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id49">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">token_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id49" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id50">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">LinksAndVars</span></span><a class="headerlink" href="#id50" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id51">
+<span class="sig-name descname"><span class="pre">website</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://minato-namikaze.readthedocs.io/en/latest</span></em><a class="headerlink" href="#id51" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id52">
+<span class="sig-name descname"><span class="pre">github</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://github.com/The-4th-Hokage/yondaime-hokage</span></em><a class="headerlink" href="#id52" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id53">
+<span class="sig-name descname"><span class="pre">github_branch</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">master</span></em><a class="headerlink" href="#id53" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id54">
+<span class="sig-name descname"><span class="pre">bad_links</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt</span></em><a class="headerlink" href="#id54" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id55">
+<span class="sig-name descname"><span class="pre">listing</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json</span></em><a class="headerlink" href="#id55" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id56">
+<span class="sig-name descname"><span class="pre">character_data</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json</span></em><a class="headerlink" href="#id56" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id57">
+<span class="sig-name descname"><span class="pre">statuspage_link</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://minatonamikaze.statuspage.io</span></em><a class="headerlink" href="#id57" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id58">
+<span class="sig-name descname"><span class="pre">mal_logo</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png</span></em><a class="headerlink" href="#id58" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id59">
+<span class="sig-name descname"><span class="pre">giveaway_image</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://i.imgur.com/efLKnlh.png</span></em><a class="headerlink" href="#id59" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id60">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#id60" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id61">
+<span class="sig-name descname"><span class="pre">invite_code</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">vfXHwS3nmQ</span></em><a class="headerlink" href="#id61" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id62">
+<span class="sig-name descname"><span class="pre">timeout</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">3.0</span></em><a class="headerlink" href="#id62" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id63">
+<span class="sig-name descname"><span class="pre">owner_ids</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">[887549958931247137,</span> <span class="pre">837223478934896670,</span> <span class="pre">747729781369602049]</span></em><a class="headerlink" href="#id63" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.log">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">log</span></span><a class="headerlink" href="#lib.util.log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.ch">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">ch</span></span><a class="headerlink" href="#lib.util.ch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.formatter">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">formatter</span></span><a class="headerlink" href="#lib.util.formatter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.FATESLIST_BASE_URI">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">FATESLIST_BASE_URI</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://api.fateslist.xyz/</span></em><a class="headerlink" href="#lib.util.FATESLIST_BASE_URI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lib.util.DISCORD_SERVERVICES_BASE_URI">
+<span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">DISCORD_SERVERVICES_BASE_URI</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://api.discordservices.net/bot/</span></em><a class="headerlink" href="#lib.util.DISCORD_SERVERVICES_BASE_URI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.util.post_handler">
+<em class="property"><span class="pre">await</span> </em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">post_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getrequestobj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.post_handler" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> (<a class="reference internal" href="vars/index.html#lib.util.vars.Methods" title="lib.util.vars.Methods"><em>lib.util.vars.Methods</em></a>) – </p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>header</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – </p></li>
+<li><p><strong>headers</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – </p></li>
+<li><p><strong>data</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – </p></li>
+<li><p><strong>json</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – </p></li>
+<li><p><strong>log_data</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+<li><p><strong>return_data</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+<li><p><strong>return_json</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+<li><p><strong>getrequestobj</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.util.ratelimit_handler">
+<em class="property"><span class="pre">await</span> </em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">ratelimit_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_logs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.ratelimit_handler" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>method</strong> (<a class="reference internal" href="vars/index.html#lib.util.vars.Methods" title="lib.util.vars.Methods"><em>lib.util.vars.Methods</em></a>) – </p></li>
+<li><p><strong>headers</strong> (<em>Dict</em>) – </p></li>
+<li><p><strong>data</strong> (<em>Dict</em>) – </p></li>
+<li><p><strong>print_logs</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib.util.post_commands">
+<em class="property"><span class="pre">await</span> </em><span class="sig-prename descclassname"><span class="pre">lib.util.</span></span><span class="sig-name descname"><span class="pre">post_commands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_logs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.util.post_commands" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bot</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.AutoShardedBot" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.AutoShardedBot</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Bot" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Bot</em></a><em>, </em><a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#discord.Client" title="(in discord.py v2.0.0a)"><em>discord.Client</em></a><em>]</em>) – </p></li>
+<li><p><strong>print_logs</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

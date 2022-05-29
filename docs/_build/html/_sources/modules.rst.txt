@@ -1,0 +1,8 @@
+minato_namikaze
+===============
+
+.. toctree::
+   :maxdepth: 4
+
+   discordbot
+   lib

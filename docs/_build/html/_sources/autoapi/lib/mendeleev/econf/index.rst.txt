@@ -1,0 +1,232 @@
+:py:mod:`lib.mendeleev.econf`
+=============================
+
+.. py:module:: lib.mendeleev.econf
+
+.. autoapi-nested-parse::
+
+   Class abstracting the elctronic configuration
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.mendeleev.econf.ElectronicConfiguration
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.mendeleev.econf.get_l
+   lib.mendeleev.econf.subshell_degeneracy
+   lib.mendeleev.econf.subshell_capacity
+   lib.mendeleev.econf.shell_capactity
+   lib.mendeleev.econf.get_spin_strings
+   lib.mendeleev.econf.print_spin_occupations
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.mendeleev.econf.ORBITALS
+   lib.mendeleev.econf.SHELLS
+
+
+.. py:data:: ORBITALS
+   :annotation: = ['s', 'p', 'd', 'f', 'g', 'h', 'i', 'j', 'k']
+
+   
+
+.. py:data:: SHELLS
+   :annotation: = ['K', 'L', 'M', 'N', 'O', 'P', 'Q']
+
+   
+
+.. py:function:: get_l(subshell)
+
+   Return the orbital angular momentum quantum number for a given subshell
+
+
+.. py:function:: subshell_degeneracy(subshell)
+
+   Return the degeneracy of a given subshell
+
+
+.. py:function:: subshell_capacity(subshell)
+
+   Return the subshell capacity (max number of electrons)
+
+
+.. py:function:: shell_capactity(shell)
+
+   Return the shell capacity (max number of electrons)
+   The capacity is :math:`N=2n^{2}`, where :math:`n` is the principal
+   quantum number.
+
+
+.. py:class:: ElectronicConfiguration(conf=None, atomre=None, shellre=None)
+
+   Electronic configuration handler
+
+   .. py:attribute:: noble
+      
+
+      
+
+   .. py:method:: conf(self)
+      :property:
+
+      Return the configuration
+
+
+   .. py:method:: atomre(self)
+      :property:
+
+      Regular expression for atomic symbols
+
+
+   .. py:method:: shellre(self)
+      :property:
+
+      Regular expression for the shell
+
+
+   .. py:method:: parse(self, string)
+
+      Parse a ``string`` with electronic configuration into an
+      ``OrderedDict`` representation
+
+
+   .. py:method:: get_largest_core(self)
+
+      Find the largest noble gas core possible for the current
+      configuration and return the symbol of the corresponding noble
+      gas element.
+
+
+   .. py:method:: get_valence(self)
+
+      Find the valence configuration i.e. remove the largest noble gas
+      core from the current configuration and return the result.
+
+
+   .. py:method:: sort(self, inplace=True)
+
+      Sort the occupations OD
+
+
+   .. py:method:: electrons_per_shell(self)
+
+      Return number of electrons per shell as dict
+
+
+   .. py:method:: shell2int(self)
+
+      configuration as list of tuples (n, l, e)
+
+
+   .. py:method:: max_n(self)
+
+      Return the largest value of principal quantum number for the atom
+
+
+   .. py:method:: max_l(self, n)
+
+      Return the largest value of azimutal quantum number for a given
+      value of principal quantum number
+      :param n: int
+                Principal quantum number
+
+
+   .. py:method:: last_subshell(self, wrt='order')
+
+      Return the valence shell
+
+
+   .. py:method:: nvalence(self, block, method=None)
+
+      Return the number of valence electrons
+
+
+   .. py:method:: ne(self)
+
+      Return the number of electrons
+
+
+   .. py:method:: unpaired_electrons(self)
+
+      Return the number of unpaired electrons
+
+
+   .. py:method:: ionize(self, n=1)
+
+      Remove `n` electrons from and return a new `ElectronicConfiguration`
+      object
+
+
+   .. py:method:: spin_occupations(self)
+
+      For each subshell calculate the number of `alpha`, `beta` electrons,
+      electron pairs and unpaired electrons
+
+
+   .. py:method:: spin_only_magnetic_moment(self)
+
+      Return the magnetic moment insluding only spin of the electrons
+      and not the angular momentum
+
+
+   .. py:method:: slater_screening(self, n, o, alle=False)
+
+      Calculate the screening constant using the approach introduced by
+      Slater in Slater, J. C. (1930). Atomic Shielding Constants. Physical
+      Review, 36(1), 57-64.
+      `doi:10.1103/PhysRev.36.57 <https://www.dx.doi.org/10.1103/PhysRev.36.57>`_
+      :param n: int
+                Principal quantum number
+      :param o: str
+                orbtial label, (s, p, d, ...)
+      :param alle: bool
+                   Use all the valence electrons, i.e. calculate screening for
+                   an extra electron
+
+
+   .. py:method:: to_str(self)
+
+      Return a string with the configuration
+
+
+   .. py:method:: __repr__(self)
+
+      Return repr(self).
+
+
+   .. py:method:: __str__(self)
+
+      Return str(self).
+
+
+
+.. py:function:: get_spin_strings(sodict, average=True)
+
+   spin strings as numpy arrays
+   This should be called for valence only
+
+
+.. py:function:: print_spin_occupations(sodict, average=True)
+
+   Pretty format for the spin occupations
+
+

@@ -1,0 +1,96 @@
+:py:mod:`lib.functions.cache`
+=============================
+
+.. py:module:: lib.functions.cache
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.functions.cache.ExpiringCache
+   lib.functions.cache.Strategy
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.functions.cache._wrap_and_store_coroutine
+   lib.functions.cache._wrap_new_coroutine
+   lib.functions.cache.cache
+
+
+
+.. py:function:: _wrap_and_store_coroutine(cache, key, coro)
+
+
+.. py:function:: _wrap_new_coroutine(value)
+
+
+.. py:class:: ExpiringCache(seconds)
+
+   Bases: :py:obj:`dict`
+
+   dict() -> new empty dictionary
+   dict(mapping) -> new dictionary initialized from a mapping object's
+       (key, value) pairs
+   dict(iterable) -> new dictionary initialized as if via:
+       d = {}
+       for k, v in iterable:
+           d[k] = v
+   dict(**kwargs) -> new dictionary initialized with the name=value pairs
+       in the keyword argument list.  For example:  dict(one=1, two=2)
+
+   .. py:method:: __verify_cache_integrity(self)
+
+
+   .. py:method:: __contains__(self, key)
+
+      True if the dictionary has the specified key, else False.
+
+
+   .. py:method:: __getitem__(self, key)
+
+      x.__getitem__(y) <==> x[y]
+
+
+   .. py:method:: __setitem__(self, key, value)
+
+      Set self[key] to value.
+
+
+
+.. py:class:: Strategy
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: lru
+      :annotation: = 1
+
+      
+
+   .. py:attribute:: raw
+      :annotation: = 2
+
+      
+
+   .. py:attribute:: timed
+      :annotation: = 3
+
+      
+
+
+.. py:function:: cache(maxsize=128, strategy=Strategy.lru, ignore_kwargs=False)
+
+

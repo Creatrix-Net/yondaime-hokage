@@ -1,0 +1,546 @@
+:py:mod:`lib.classes.barcode`
+=============================
+
+.. py:module:: lib.classes.barcode
+
+.. autoapi-nested-parse::
+
+   All the code below was hacked together from https://github.com/mvictor212/pyBarcode
+   Which is itself a port of python-barcode which is no longer available
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.barcode.BaseWriter
+   lib.classes.barcode.SVGWriter
+   lib.classes.barcode.Barcode
+   lib.classes.barcode.Code39
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.barcode.mm2px
+   lib.classes.barcode.pt2mm
+   lib.classes.barcode._set_attributes
+   lib.classes.barcode.create_svg_object
+   lib.classes.barcode.check_code
+   lib.classes.barcode.get_barcode
+   lib.classes.barcode.generate
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.classes.barcode._strbase
+   lib.classes.barcode.SIZE
+   lib.classes.barcode.COMMENT
+   lib.classes.barcode.PATH
+   lib.classes.barcode.MIN_SIZE
+   lib.classes.barcode.MIN_QUIET_ZONE
+   lib.classes.barcode.REF
+   lib.classes.barcode.B
+   lib.classes.barcode.E
+   lib.classes.barcode.CODES
+   lib.classes.barcode.EDGE
+   lib.classes.barcode.MIDDLE
+   lib.classes.barcode.MAP
+   lib.classes.barcode.ImageWriter
+
+
+.. py:data:: _strbase
+   
+
+   
+
+.. py:function:: mm2px(mm, dpi = 300)
+
+   mm to px converter
+
+   :param mm: mm units
+   :type mm: int
+   :param dpi: default pixel unit, defaults to 300
+   :type dpi: int, optional
+   :return: mm converter to pixel
+   :rtype: int
+
+
+.. py:function:: pt2mm(pt)
+
+   Point to mm converter
+
+   :param pt: point
+   :type pt: int
+   :return: point converted to mm
+   :rtype: int
+
+
+.. py:function:: _set_attributes(element, **attributes)
+
+   It sets attributes to your element
+
+   :param element: The element you want to set your attributes
+   :type element: Generic
+
+
+.. py:function:: create_svg_object()
+
+   Creates a blank svg object
+
+   :return: The blank svg document
+   :rtype: DocumentType
+
+
+.. py:data:: SIZE
+   :annotation: = {0:.3f}mm
+
+   
+
+.. py:data:: COMMENT
+   
+
+   
+
+.. py:data:: PATH
+   
+
+   
+
+.. py:data:: MIN_SIZE
+   :annotation: = 0.2
+
+   
+
+.. py:data:: MIN_QUIET_ZONE
+   :annotation: = 2.54
+
+   
+
+.. py:data:: REF
+   
+
+   
+
+.. py:data:: B
+   :annotation: = 1
+
+   
+
+.. py:data:: E
+   :annotation: = 0
+
+   
+
+.. py:data:: CODES
+   :annotation: = ['101000111011101', '111010001010111', '101110001010111', '111011100010101', '101000111010111',...
+
+   
+
+.. py:data:: EDGE
+   :annotation: = 100010111011101
+
+   
+
+.. py:data:: MIDDLE
+   :annotation: = 0
+
+   
+
+.. py:data:: MAP
+   
+
+   
+
+.. py:exception:: BarcodeError(msg)
+
+   Bases: :py:obj:`Exception`
+
+   Base :class:`Exception` class for the `barcode` module
+
+
+   .. py:method:: __str__(self)
+
+      Return str(self).
+
+
+
+.. py:exception:: IllegalCharacterError(msg)
+
+   Bases: :py:obj:`BarcodeError`
+
+   Raised when a barcode-string contains illegal characters.
+
+
+.. py:exception:: BarcodeNotFoundError(msg)
+
+   Bases: :py:obj:`BarcodeError`
+
+   Raised when an unknown barcode is requested.
+
+
+.. py:exception:: NumberOfDigitsError(msg)
+
+   Bases: :py:obj:`BarcodeError`
+
+   Raised when the number of digits do not match.
+
+
+.. py:exception:: WrongCountryCodeError(msg)
+
+   Bases: :py:obj:`BarcodeError`
+
+   Raised when a JAN (Japan Article Number) don't starts with 450-459
+   or 490-499.
+
+
+.. py:class:: BaseWriter(initialize=None, paint_module=None, paint_text=None, finish=None)
+
+   Baseclass for all writers.
+   Initializes the basic writer options. Childclasses can add more
+   attributes and can set them directly or using
+   `self.set_options(option=value)`.
+   :parameters:
+       initialize : Function
+           Callback for initializing the inheriting writer.
+           Is called: `callback_initialize(raw_code)`
+       paint_module : Function
+           Callback for painting one barcode module.
+           Is called: `callback_paint_module(xpos, ypos, width, color)`
+       paint_text : Function
+           Callback for painting the text under the barcode.
+           Is called: `callback_paint_text(xpos, ypos)` using `self.text`
+           as text.
+       finish : Function
+           Callback for doing something with the completely rendered
+           output.
+           Is called: `return callback_finish()` and must return the
+           rendered output.
+
+   .. py:method:: calculate_size(self, modules_per_line, number_of_lines, dpi=300)
+
+      Calculates the size of the barcode in pixel.
+      :parameters:
+          modules_per_line : Integer
+              Number of modules in one line.
+          number_of_lines : Integer
+              Number of lines of the barcode.
+          dpi : Integer
+              DPI to calculate.
+      :returns: Width and height of the barcode in pixel.
+      :rtype: Tuple
+
+
+   .. py:method:: save(self, filename, output)
+      :abstractmethod:
+
+      Saves the rendered output to `filename`.
+      :parameters:
+          filename : String
+              Filename without extension.
+          output : String
+              The rendered output.
+      :returns: The full filename with extension.
+      :rtype: String
+
+
+   .. py:method:: register_callback(self, action, callback)
+
+      Register one of the three callbacks if not given at instance
+      creation.
+      :parameters:
+          action : String
+              One of 'initialize', 'paint_module', 'paint_text', 'finish'.
+          callback : Function
+              The callback function for the given action.
+
+
+   .. py:method:: set_options(self, options)
+
+      Sets the given options as instance attributes (only
+      if they are known).
+      :parameters:
+          options : Dict
+              All known instance attributes and more if the childclass
+              has defined them before this call.
+      :rtype: None
+
+
+   .. py:method:: render(self, code)
+
+      Renders the barcode to whatever the inheriting writer provides,
+      using the registered callbacks.
+      :parameters:
+          code : List
+              List of strings matching the writer spec
+              (only contain 0 or 1).
+
+
+
+.. py:class:: SVGWriter
+
+   Bases: :py:obj:`BaseWriter`
+
+   SVG Write object to write `svg` files
+
+
+   .. py:method:: _init(self, code)
+
+      To initialize some extra attributes
+
+      :param code: An Iterator
+      :type code: Union[Iterable, Sequence, Iterator]
+
+
+   .. py:method:: _create_module(self, xpos, ypos, width, color)
+
+      Creates a module
+
+      :param xpos: The x position
+      :type xpos: int
+      :param ypos: The y position
+      :type ypos: int
+      :param width: Width of the module
+      :type width: int
+      :param color: The colour to be there
+      :type color: Union[int, str]
+
+
+   .. py:method:: _create_text(self, xpos, ypos)
+
+      Creates text in the svg file
+
+      :param xpos: x position
+      :type xpos: int
+      :param ypos: y position
+      :type ypos: int
+
+
+   .. py:method:: _finish(self)
+
+      Finishes the creating of svg document
+
+      :return: The xml document
+      :rtype: Union[str,bytes, DocumentType]
+
+
+   .. py:method:: save(self, filename, output)
+
+      Saves the SVG document
+
+      :param filename: The filename
+      :type filename: str
+      :param output:The string or bytes data
+      :type output: Union[str, bytes]
+      :return: The filename
+      :rtype: str
+
+
+
+.. py:data:: ImageWriter
+   
+
+   
+
+.. py:class:: Barcode
+
+   .. py:attribute:: name
+      :annotation: = 
+
+      
+
+   .. py:attribute:: raw
+      
+
+      
+
+   .. py:attribute:: digits
+      :annotation: = 0
+
+      
+
+   .. py:attribute:: default_writer
+      
+
+      
+
+   .. py:attribute:: default_writer_options
+      
+
+      
+
+   .. py:method:: to_ascii(self)
+
+      Barcode ASCII conversion
+
+      :return: The acii code
+      :rtype: str
+
+
+   .. py:method:: __repr__(self)
+
+      Return repr(self).
+
+
+   .. py:method:: build(self)
+      :abstractmethod:
+
+
+   .. py:method:: get_fullcode(self)
+      :abstractmethod:
+
+      Returns the full code, encoded in the barcode.
+      :returns: Full human readable code.
+      :rtype: String
+
+
+   .. py:method:: save(self, filename, options = None)
+
+      Renders the barcode and saves it in `filename`.
+      :parameters:
+          filename : String
+              Filename to save the barcode in (without filename
+              extension).
+          options : Optional[Dict]
+              The same as in `self.render`.
+      :returns: The full filename with extension.
+      :rtype: String
+
+
+   .. py:method:: write(self, fp, options = None)
+
+      Renders the barcode and writes it to the file like object
+      `fp`.
+      :parameters:
+          fp : File like object
+              Object to write the raw data in.
+          options : Optional[dict]
+              The same as in `self.render`.
+
+
+   .. py:method:: render(self, writer_options = None)
+
+      Renders the barcode using `self.writer`.
+      :parameters:
+          writer_options : Optional[dict]
+              Options for `self.writer`, see writer docs for details.
+      :returns: Output of the writers render method.
+
+
+
+.. py:function:: check_code(code, name, allowed)
+
+   Checks the barcode for the illegal characters
+
+   :param code: The barcode
+   :type code: Union[Iterable, Sequence]
+   :param name: Name
+   :type name: str
+   :param allowed: Allowed characters
+   :type allowed: Union[Iterable, Sequence]
+   :raises IllegalCharacterError: when illegal character is found
+
+
+.. py:class:: Code39(code, writer=None, add_checksum=True)
+
+   Bases: :py:obj:`Barcode`
+
+   Initializes a new Code39 instance.
+   :parameters:
+       code : String
+           Code 39 string without \* and checksum (added automatically if
+           `add_checksum` is True).
+       writer : barcode.writer Instance
+           The writer to render the barcode (default: SVGWriter).
+       add_checksum : Boolean
+           Add the checksum to code or not (default: True).
+
+   .. py:attribute:: name
+      :annotation: = Code 39
+
+      
+
+   .. py:attribute:: __str__
+      
+
+      
+
+   .. py:method:: __unicode__(self)
+
+
+   .. py:method:: get_fullcode(self)
+
+      Returns the full code
+
+      :return: See above
+      :rtype: str
+
+
+   .. py:method:: calculate_checksum(self)
+
+      Calculates the checksum
+
+      :return: Checksum
+      :rtype: Any
+
+
+   .. py:method:: build(self)
+
+      Builds the code
+
+      :return: The whole code
+      :rtype: list
+
+
+   .. py:method:: render(self, writer_options)
+
+      Renders the code
+
+      :param writer_options: The options to be there in the code
+      :type writer_options: dict
+      :return: The rendered code
+      :rtype: Callable
+
+
+
+.. py:function:: get_barcode(name, code = None, writer = None)
+
+   Gets the Barcode
+
+   :param name: Name of the bar code
+   :type name: str
+   :param code: The code, defaults to None
+   :type code: Optional[Any], optional
+   :param writer: The writer object or file pointer, defaults to None
+   :type writer: Optional[Union[IO,Any]], optional
+   :raises BarcodeNotFoundError: When the barcode is not found
+   :return: The barcode that was requested
+   :rtype: Union[Code39, Any]
+
+
+.. py:function:: generate(name, code = None, writer = None, writer_options = None, output=None)
+
+   Generates the barcode
+
+   :param name: Name of the barcode
+   :type name: str
+   :param code: The code, defaults to None
+   :type code: Optional[Any], optional
+   :param writer:The writer object or the file pointer, defaults to None
+   :type writer: Optional[Union[IO,Any]], optional
+   :param writer_options: The extra options to be encode with the barcode, defaults to None
+   :type writer_options: Optional[Dict], optional
+
+

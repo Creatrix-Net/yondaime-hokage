@@ -1,0 +1,294 @@
+:py:mod:`moderation`
+====================
+
+.. py:module:: moderation
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   moderation.Badurls
+   moderation.BadurlsMessageCommand
+   moderation.AntiRaid
+   moderation.Kick
+   moderation.Ban
+   moderation.Mute
+   moderation.Unmute
+   moderation.Setup
+   moderation.Add
+   moderation.Support
+   moderation.Starboard
+   moderation.BadLinks
+   moderation.ModerationCog
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   moderation.setup
+
+
+
+.. py:class:: Badurls(cog)
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Check if a text has a malicious url or not from a extensive list 60k+ flagged domains
+
+   .. py:attribute:: name
+      :annotation: = bad urls
+
+      
+
+   .. py:attribute:: content
+      
+
+      
+
+   .. py:method:: content_autocomplete(self, response)
+      :async:
+
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: BadurlsMessageCommand(cog)
+
+   Bases: :py:obj:`discord.MessageCommand`
+
+   Check if a text has a malicious url or not from a extensive list 60k+ flagged domains
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: AntiRaid(cog)
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Enable or disable Antiraid system for the server
+
+   .. py:attribute:: switch
+      :annotation: :Literal[on, strict, off]
+
+      
+
+   .. py:attribute:: channel
+      :annotation: :discord.abc.GuildChannel
+
+      
+
+   .. py:method:: command_check(self, response)
+      :async:
+
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Kick(cog)
+
+   Bases: :py:obj:`discord.UserCommand`
+
+   Kicks the user from guild
+
+   .. py:method:: command_check(self, response)
+      :async:
+
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Ban(cog)
+
+   Bases: :py:obj:`discord.UserCommand`
+
+   Bans the user from guild
+
+   .. py:method:: command_check(self, response)
+      :async:
+
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Mute(cog)
+
+   Bases: :py:obj:`discord.UserCommand`
+
+   Mute the user from guild for a day
+
+   .. py:method:: command_check(self, response)
+      :async:
+
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Unmute(cog)
+
+   Bases: :py:obj:`discord.UserCommand`
+
+   Unmute the user from guild
+
+   .. py:method:: command_check(self, response)
+      :async:
+
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Setup(cog)
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Setups some logging system for system for server with some nice features
+
+   .. py:method:: command_check(self, response)
+      :async:
+
+
+
+.. py:class:: Add
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   This adds logging of the some things in the specified text channel
+
+   .. py:attribute:: add_type
+      :annotation: :Literal[ban, feedback, warns, unban]
+
+      
+
+   .. py:attribute:: channel
+      :annotation: :discord.abc.GuildChannel
+
+      
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Support
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   This adds support system to your server
+
+   .. py:attribute:: channel
+      :annotation: :discord.abc.GuildChannel
+
+      
+
+   .. py:attribute:: role
+      :annotation: :discord.Role
+
+      
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: Starboard
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   This adds starboard system to your server
+
+   .. py:attribute:: channel
+      :annotation: :discord.abc.GuildChannel
+
+      
+
+   .. py:attribute:: stars
+      :annotation: :Optional[int]
+
+      
+
+   .. py:attribute:: self_star
+      :annotation: :Optional[bool]
+
+      
+
+   .. py:attribute:: ignore_nsfw
+      :annotation: :Optional[bool]
+
+      
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: BadLinks
+
+   Bases: :py:obj:`discord.SlashCommand`
+
+   Checks against the scam links and take necessary action if stated
+
+   .. py:attribute:: option
+      :annotation: :bool
+
+      
+
+   .. py:attribute:: action
+      :annotation: :Optional[Literal[ban, mute, timeout, kick, log]]
+
+      
+
+   .. py:attribute:: channel
+      :annotation: :Optional[discord.abc.GuildChannel]
+
+      
+
+   .. py:method:: callback(self, response)
+      :async:
+
+
+
+.. py:class:: ModerationCog(bot)
+
+   Bases: :py:obj:`discord.Cog`
+
+   .. py:method:: database_class(self)
+      :async:
+
+
+   .. py:method:: database_class_antiraid(self)
+      :async:
+
+
+   .. py:method:: database_class_mentionspam(self)
+      :async:
+
+
+   .. py:method:: add_and_check_data(self, dict_to_add, guild, type_store)
+      :async:
+
+
+
+.. py:function:: setup(bot)
+
+

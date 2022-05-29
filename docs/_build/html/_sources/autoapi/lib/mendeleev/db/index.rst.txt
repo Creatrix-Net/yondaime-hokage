@@ -1,0 +1,49 @@
+:py:mod:`lib.mendeleev.db`
+==========================
+
+.. py:module:: lib.mendeleev.db
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.mendeleev.db.get_package_dbpath
+   lib.mendeleev.db.get_engine
+   lib.mendeleev.db.get_session
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   lib.mendeleev.db.DBNAME
+
+
+.. py:data:: DBNAME
+   :annotation: = elements.db
+
+   
+
+.. py:function:: get_package_dbpath()
+
+   Return the default database path
+
+
+.. py:function:: get_engine(dbpath=None)
+
+   Return the db engine
+
+
+.. py:function:: get_session(dbpath=None)
+
+   Return the database session connection.
+
+

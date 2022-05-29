@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lib.classes.games.typeracer</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css" />
+  <link rel="stylesheet" href="../../../../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+  <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+  <script src="../../../../../_static/jquery.js"></script>
+  <script src="../../../../../_static/underscore.js"></script>
+  <script src="../../../../../_static/doctools.js"></script>
+  <script src="../../../../../_static/custom.js"></script>
+  <script src="../../../../../_static/settings.js"></script>
+  <script src="../../../../../_static/copy.js"></script>
+  <script src="../../../../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../../../../_static/logo.png"/>
+  <link rel="index" title="Index" href="../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../search.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../../../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/The-4th-Hokage/yondaime-hokage" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/fluxpoint" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../../../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <aside class="grid-item">
+      <span id="hamburger-toggle">
+        <span class="material-icons">menu</span>
+      </span>
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+  <div>
+    <h3><a href="../../../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.classes.games.typeracer</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#lib.classes.games.typeracer.TypeRacer">TypeRacer</a><ul>
+<li><a class="reference internal" href="#lib.classes.games.typeracer.TypeRacer.SENTENCE_URL">SENTENCE_URL</a></li>
+<li><a class="reference internal" href="#lib.classes.games.typeracer.TypeRacer.GRAMMAR_WORDS">GRAMMAR_WORDS</a></li>
+<li><a class="reference internal" href="#lib.classes.games.typeracer.TypeRacer._tr_img">_tr_img</a></li>
+<li><a class="reference internal" href="#lib.classes.games.typeracer.TypeRacer.wait_for_tr_response">wait_for_tr_response</a></li>
+<li><a class="reference internal" href="#lib.classes.games.typeracer.TypeRacer.start">start</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="module-lib.classes.games.typeracer">
+<span id="lib-classes-games-typeracer"></span><h1><a class="reference internal" href="#module-lib.classes.games.typeracer" title="lib.classes.games.typeracer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.classes.games.typeracer</span></code></a><a class="headerlink" href="#module-lib.classes.games.typeracer" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lib.classes.games.typeracer.TypeRacer" title="lib.classes.games.typeracer.TypeRacer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TypeRacer</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div><dl class="py class">
+<dt class="sig sig-object py" id="lib.classes.games.typeracer.TypeRacer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib.classes.games.typeracer.</span></span><span class="sig-name descname"><span class="pre">TypeRacer</span></span><a class="headerlink" href="#lib.classes.games.typeracer.TypeRacer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="lib.classes.games.typeracer.TypeRacer.SENTENCE_URL">
+<span class="sig-name descname"><span class="pre">SENTENCE_URL</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">https://api.quotable.io/random</span></em><a class="headerlink" href="#lib.classes.games.typeracer.TypeRacer.SENTENCE_URL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib.classes.games.typeracer.TypeRacer.GRAMMAR_WORDS">
+<span class="sig-name descname"><span class="pre">GRAMMAR_WORDS</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">['the',</span> <span class="pre">'of',</span> <span class="pre">'to',</span> <span class="pre">'and',</span> <span class="pre">'a',</span> <span class="pre">'in',</span> <span class="pre">'is',</span> <span class="pre">'it',</span> <span class="pre">'you',</span> <span class="pre">'that',</span> <span class="pre">'he',</span> <span class="pre">'was',</span> <span class="pre">'for',</span> <span class="pre">'on',...</span></em><a class="headerlink" href="#lib.classes.games.typeracer.TypeRacer.GRAMMAR_WORDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.typeracer.TypeRacer._tr_img">
+<em class="property"><span class="pre">staticmethod</span> </em><span class="sig-name descname"><span class="pre">_tr_img</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.typeracer.TypeRacer._tr_img" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>font</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.typeracer.TypeRacer.wait_for_tr_response">
+<em class="property"><span class="pre">staticmethod</span> <span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">wait_for_tr_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.typeracer.TypeRacer.wait_for_tr_response" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Context</em></a>) – </p></li>
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib.classes.games.typeracer.TypeRacer.start">
+<em class="property"><span class="pre">await</span> </em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Type</span> <span class="pre">the</span> <span class="pre">following</span> <span class="pre">sentence</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">chat</span> <span class="pre">now!'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">discord.Color.greyple()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_text_font</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'arial.ttf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sentence'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib.classes.games.typeracer.TypeRacer.start" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context" title="(in discord.py v2.0.0a)"><em>discord.ext.commands.Context</em></a>) – </p></li>
+<li><p><strong>embed_title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>embed_color</strong> (<em>Union</em><em>[</em><em>discord.Color</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – </p></li>
+<li><p><strong>path_to_text_font</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+<li><p><strong>timeout</strong> (<em>SupportsFloat</em>) – </p></li>
+<li><p><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2022, Dhruva Shaw.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>

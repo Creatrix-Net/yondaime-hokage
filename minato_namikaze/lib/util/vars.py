@@ -5,24 +5,46 @@ import json
 import os
 import zipfile
 from pathlib import Path
-from typing import List
+from typing import List, Optional, Any
+import configparser
 
-import dotenv
-
-BASE_DIR = Path(
-    __file__).resolve().parent.parent.parent  # In minato_namikaze/ folder
-dotenv_file = Path(__file__).resolve().parent.parent.parent.parent / ".env"
-
-
-def token_get(tokenname):
-    if os.path.isfile(dotenv_file):
-        dotenv.load_dotenv(dotenv_file)
-    return os.environ.get(tokenname, "False").strip("\n")
-
-
-api_image_store_dir = BASE_DIR / "images_api_store"
-
+BASE_DIR = Path(__file__).resolve().parent.parent.parent  # In minato_namikaze/ folder
+CONFIG_FILE = Path(__file__).resolve().parent.parent.parent.parent / ".ini"
+# api_image_store_dir = BASE_DIR / "images_api_store"
 DEFAULT_COMMAND_SELECT_LENGTH = 25
+
+class envConfig:
+    def __init__(self):
+        self.token = token_get("TOKEN")
+
+
+def token_get(tokenname: Optional[str] = None, all: bool = False) -> Any:
+    """Helper function to get the credentials from the environment variables or from the configuration file
+
+    :param tokenname: The token name to access
+    :type tokenname: str
+    :param all: Return all values from config filename, defaults to False
+    :type all: bool, optional
+    :raises RuntimeError: When all set :bool:`True` and `.ini` file is not found
+    :return: The environment variables data requested if not found then None is returned
+    :rtype: Any
+    """
+    if not all:
+        if os.path.isfile(CONFIG_FILE):
+            config = configparser.ConfigParser()
+            config.read(CONFIG_FILE)
+            sections = config._sections
+            for i in sections:
+                for j in i:
+                    if j.lower() == tokenname:
+                        return config[i][j]
+            return
+        return os.environ.get(tokenname, "False").strip("\n")
+    if os.path.isfile(CONFIG_FILE):
+        config = configparser.ConfigParser()
+        config.read(CONFIG_FILE)
+        return config._sections
+    raise RuntimeError("Could not find .ini file")
 
 class ShinobiMatch(list, enum.Enum):
     character_side_exclude = [
@@ -75,7 +97,6 @@ class ChannelAndMessageId(enum.IntEnum):
 class Tokens(enum.Enum):
     statcord = token_get("STATCORD")
     dagpi = token_get("DAGPI")
-    chatbot = token_get("CHATBOTTOKEN")
     sentry_link = token_get("SENTRY")
 
     tenor = token_get("TENOR")
@@ -102,6 +123,7 @@ class LinksAndVars(enum.Enum):
     version = token_get("VERSION")
     invite_code = "vfXHwS3nmQ"
     timeout = 3.0
+    delete_message = 5.0
     owner_ids = [887549958931247137, 837223478934896670, 747729781369602049]
 
     with gzip.open(

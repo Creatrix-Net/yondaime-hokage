@@ -3,7 +3,8 @@ from __future__ import annotations
 import asyncio
 import io
 import random
-from typing import Optional, Union
+from typing import (TYPE_CHECKING, Any, Callable, Generator, Iterable,
+                    Optional, TypeVar, Union)
 
 import discord
 import TenGiphPy
@@ -11,6 +12,31 @@ from discord.ext import commands
 
 from ..classes.converter import MemberID
 from .vars import ChannelAndMessageId, Tokens
+
+T = TypeVar('T')
+
+
+if TYPE_CHECKING:
+    from minato_namikaze import MinatoNamikazeBot
+    from aiohttp import ClientSession
+    from asyncpg import Pool, Connection
+
+class _ContextDBAcquire:
+    __slots__ = ('ctx', 'timeout')
+
+    def __init__(self, ctx: Context, timeout: Optional[float]):
+        self.ctx: Context = ctx
+        self.timeout: Optional[float] = timeout
+
+    def __await__(self) -> Generator[Any, None, Connection]:
+        return self.ctx._acquire(self.timeout).__await__()
+
+    async def __aenter__(self) -> Union[Pool, Connection]:
+        await self.ctx._acquire(self.timeout)
+        return self.ctx.db
+
+    async def __aexit__(self, *args) -> None:
+        await self.ctx.release()
 
 
 class ConfirmationView(discord.ui.View):
@@ -57,6 +83,15 @@ class ConfirmationView(discord.ui.View):
 
 
 class Context(commands.Context):
+    channel: Union[discord.VoiceChannel, discord.TextChannel, discord.Thread, discord.DMChannel]
+    prefix: str
+    command: commands.Command[Any, ..., Any]
+    bot: MinatoNamikazeBot
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.pool = self.bot.pool
+        self._db: Optional[Union[Pool, Connection]] = None
 
     async def entry_to_code(self, entries):
         width = max(len(a) for a, b in entries)
@@ -89,43 +124,38 @@ class Context(commands.Context):
             return ref.resolved.to_reference()
         return None
 
-    async def disambiguate(self, matches, entry):
+    async def disambiguate(self, matches: list[T], entry: Callable[[T], Any]) -> T:
         if len(matches) == 0:
-            raise ValueError("No results found.")
+            raise ValueError('No results found.')
 
         if len(matches) == 1:
             return matches[0]
 
-        await self.send(
-            "There are too many matches... Which one did you mean? **Only say the number**."
-        )
-        await self.send("\n".join(f"{index}: {entry(item)}"
-                                  for index, item in enumerate(matches, 1)))
+        await self.send('There are too many matches... Which one did you mean? **Only say the number**.')
+        await self.send('\n'.join(f'{index}: {entry(item)}' for index, item in enumerate(matches, 1)))
 
         def check(m):
-            return (m.content.isdigit() and m.author.id == self.author.id
-                    and m.channel.id == self.channel.id)
+            return m.content.isdigit() and m.author.id == self.author.id and m.channel.id == self.channel.id
+
+        await self.release()
 
         # only give them 3 tries.
         try:
             for i in range(3):
                 try:
-                    message = await self.bot.wait_for("message",
-                                                      check=check,
-                                                      timeout=30.0)
+                    message = await self.bot.wait_for('message', check=check, timeout=30.0)
                 except asyncio.TimeoutError:
-                    raise ValueError("Took too long. Goodbye.")
+                    raise ValueError('Took too long. Goodbye.')
 
                 index = int(message.content)
                 try:
                     return matches[index - 1]
                 except:
-                    await self.send(
-                        f"Please give me a valid number. {2 - i} tries remaining..."
-                    )
+                    await self.send(f'Please give me a valid number. {2 - i} tries remaining...')
 
-            raise ValueError("Too many tries. Goodbye.")
+            raise ValueError('Too many tries. Goodbye.')
         finally:
+            await self.acquire()
             pass
 
     async def prompt(
@@ -134,6 +164,7 @@ class Context(commands.Context):
         *,
         timeout: float = 60.0,
         delete_after: bool = True,
+        reacquire: bool = True,
         author_id: Optional[int] = None,
     ) -> Optional[bool]:
         """An interactive reaction confirmation dialog.
@@ -145,6 +176,9 @@ class Context(commands.Context):
             How long to wait before returning.
         delete_after: bool
             Whether to delete the confirmation message after we're done.
+        reacquire: bool
+            Whether to release the database connection and then acquire it
+            again when we're done.
         author_id: Optional[int]
             The member who should respond to the prompt. Defaults to the author of the
             Context's message.
@@ -161,11 +195,47 @@ class Context(commands.Context):
             timeout=timeout,
             delete_after=delete_after,
             ctx=self,
+            reacquire=reacquire,
             author_id=author_id,
         )
         view.message = await self.send(message, view=view)
         await view.wait()
         return view.value
+
+    @property
+    def db(self) -> Union[Pool, Connection]:
+        return self._db if self._db else self.pool
+
+    async def _acquire(self, timeout: Optional[float]) -> Connection:
+        if self._db is None:
+            self._db = await self.pool.acquire(timeout=timeout)
+        return self._db
+
+    def acquire(self, *, timeout=300.0) -> _ContextDBAcquire:
+        """Acquires a database connection from the pool. e.g. ::
+            async with ctx.acquire():
+                await ctx.db.execute(...)
+        or: ::
+            await ctx.acquire()
+            try:
+                await ctx.db.execute(...)
+            finally:
+                await ctx.release()
+        """
+        return _ContextDBAcquire(self, timeout)
+
+    async def release(self) -> None:
+        """Releases the database connection from the pool.
+        Useful if needed for "long" interactive commands where
+        we want to release the connection and re-acquire later.
+        Otherwise, this is called automatically by the bot.
+        """
+        # from source digging asyncpg source, releasing an already
+        # released connection does nothing
+
+        if self._db is not None:
+            await self.bot.pool.release(self._db)
+            self._db = None
 
     async def show_help(self, command=None):
         """Shows the help command for the specified command if given.
@@ -317,3 +387,11 @@ class Context(commands.Context):
             ))["data"]["images"]["downsized_large"]["url"]
         except:
             return
+    
+class GuildContext(Context):
+    author: discord.Member
+    guild: discord.Guild
+    channel: Union[discord.VoiceChannel, discord.TextChannel, discord.Thread]
+    me: discord.Member
+    prefix: str
+

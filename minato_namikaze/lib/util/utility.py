@@ -1,11 +1,13 @@
-import aiohttp
 import re
-import discord
-from ..util.vars import ChannelAndMessageId, LinksAndVars, url_regex
-from urllib.parse import urlparse,uses_netloc
+from typing import List
+from urllib.parse import urlparse, uses_netloc
+
+import aiohttp
+import discord, os
+
+from .vars import ChannelAndMessageId, LinksAndVars, url_regex, BASE_DIR
 
 INVITE_URL_RE = re.compile(r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I)
-
 
 def filter_invites(to_filter: str) -> str:
     """Get a string with discord invites sanitized.
@@ -91,3 +93,21 @@ async def detect_bad_domains(message_content: str) -> list:
     except IndexError:
         return []
     return detected_urls
+
+
+def return_all_cogs() -> List[str]:
+    """A Helper function to return all the cogs except the jishkaku
+
+    :return: List of all cogs present as a file
+    :rtype: List[str]
+    """
+    list_to_be_given: list = []
+    cog_dir = BASE_DIR / "cogs"
+    for filename in list(set(os.listdir(cog_dir))):
+        if os.path.isdir(cog_dir / filename):
+            for i in os.listdir(cog_dir / filename):
+                if i.endswith(".py"):
+                    list_to_be_given.append(f'{filename.strip(" ")}.{i[:-3]}')
+        else:
+            if filename.endswith(".py"):
+                list_to_be_given.append(filename[:-3])

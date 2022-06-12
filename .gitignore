@@ -3,6 +3,7 @@ images_api_store
 traceback
 _build
 _build/*
+.ini
 
 *copy.py
 

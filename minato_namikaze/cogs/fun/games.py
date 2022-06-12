@@ -5,7 +5,6 @@ from random import choice
 from string import ascii_letters
 from typing import Union, Optional
 
-import async_cleverbot as ac
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
@@ -16,7 +15,6 @@ from DiscordUtils import ErrorEmbed
 class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.chatbot = ac.Cleverbot(Tokens.chatbot.value)
         self.description = "Play some amazing games"
 
     @property
@@ -87,38 +85,38 @@ class Games(commands.Cog):
         '''Check your typing speed via a simple typeracer test'''
         await TypeRacer().start(ctx=ctx)
 
-    @commands.max_concurrency(1, per=BucketType.channel, wait=False)
-    @commands.command(aliases=["cb"])
-    async def chatbot(self, ctx):
-        """Talk with me!"""
-        lis = "cancel"
-        transmit = True
-        await ctx.send(
-            f"Chatbot Started!\nType the following items `{lis}` to end.")
-        while transmit is True:
-            try:
-                m = await self.bot.wait_for(
-                    "message",
-                    timeout=30,
-                    check=lambda m:
-                    (ctx.author == m.author and ctx.channel == m.channel),
-                )
-            except asyncio.TimeoutError:
-                await ctx.send("I'm bored now, you should of been quicker...")
-                transmit = False
-            else:
-                if m.content.lower() == lis:
-                    transmit = False
-                    left = await self.bot.chatbot.ask("bye")
-                    await ctx.send(
-                        f"{left.text}... Waiting... OH you said cancel, bye!")
-                else:
-                    async with ctx.channel.typing():
-                        response = await self.bot.chatbot.ask(
-                            m.content if len(m.content) >= 3 else
-                            f"{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}"
-                        )
-                        await ctx.send(response.text)
+    # @commands.max_concurrency(1, per=BucketType.channel, wait=False)
+    # @commands.command(aliases=["cb"])
+    # async def chatbot(self, ctx):
+    #     """Talk with me!"""
+    #     lis = "cancel"
+    #     transmit = True
+    #     await ctx.send(
+    #         f"Chatbot Started!\nType the following items `{lis}` to end.")
+    #     while transmit is True:
+    #         try:
+    #             m = await self.bot.wait_for(
+    #                 "message",
+    #                 timeout=30,
+    #                 check=lambda m:
+    #                 (ctx.author == m.author and ctx.channel == m.channel),
+    #             )
+    #         except asyncio.TimeoutError:
+    #             await ctx.send("I'm bored now, you should of been quicker...")
+    #             transmit = False
+    #         else:
+    #             if m.content.lower() == lis:
+    #                 transmit = False
+    #                 left = await self.bot.chatbot.ask("bye")
+    #                 await ctx.send(
+    #                     f"{left.text}... Waiting... OH you said cancel, bye!")
+    #             else:
+    #                 async with ctx.channel.typing():
+    #                     response = await self.bot.chatbot.ask(
+    #                         m.content if len(m.content) >= 3 else
+    #                         f"{m.content} {ascii_letters[choice(range(len(ascii_letters)))]}"
+    #                     )
+    #                     await ctx.send(response.text)
 
     @commands.max_concurrency(1, per=commands.BucketType.channel)
     @commands.command()

@@ -1,15 +1,18 @@
 import os
 from asyncio import sleep
 from io import FileIO
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import discord
 from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
+from DiscordUtils import Embed, ErrorEmbed
 from lib import MemberID, Tokens, among_us, among_us_friends
 from lib.util.vars import BASE_DIR
 from PIL import Image, ImageDraw, ImageFont
-from DiscordUtils import Embed, ErrorEmbed
+
+if TYPE_CHECKING:
+    from .. import MinatoNamikazeBot
 
 
 class ImageManipulation(commands.Cog, name="Image Manipulation"):
@@ -442,5 +445,5 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=embed)
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(ImageManipulation(bot))

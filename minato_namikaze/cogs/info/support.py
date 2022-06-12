@@ -1,13 +1,12 @@
-from typing import Union
+from typing import TYPE_CHECKING, Union
 
 import discord
 from discord.ext import commands
-from lib import (
-    MemberID,
-    is_mod,
-    Database
-)
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
+from lib import Database, MemberID, is_mod
+
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 
 def errorembed(ctx):
@@ -241,5 +240,5 @@ class Support(commands.Cog):
         await channel.send(embed=e2)
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Support(bot))

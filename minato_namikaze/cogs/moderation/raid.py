@@ -2,26 +2,20 @@ import asyncio
 import datetime
 import logging
 from collections import defaultdict
-from typing import Literal, Optional, Union
-from orjson import loads
-import DiscordUtils
 from json.decoder import JSONDecodeError
+from typing import TYPE_CHECKING, Literal, Optional
 
 import discord
+import DiscordUtils
 import num2words
 from discord.ext import commands, tasks
-from lib import (
-    AntiRaidConfig,
-    MentionSpamConfig,
-    RaidMode,
-    SpamChecker,
-    cache,
-    Database,
-    format_dt,
-    format_relative,
-    has_permissions,
-    is_mod,
-)
+from lib import (AntiRaidConfig, Database, MentionSpamConfig, RaidMode,
+                 SpamChecker, cache, format_dt, format_relative,
+                 has_permissions, is_mod)
+from orjson import loads
+
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 log = logging.getLogger(__name__)
 
@@ -537,5 +531,5 @@ class AntiRaid(commands.Cog):
         await ctx.send("Updated mentionspam ignore list.")
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(AntiRaid(bot))

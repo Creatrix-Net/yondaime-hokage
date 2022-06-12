@@ -1,8 +1,12 @@
+from typing import TYPE_CHECKING
+
 import discord
 from discord.ext import commands
-from lib import serverinfo, userinfo
 from DiscordUtils import Embed
-from typing import Union
+from lib import serverinfo, userinfo
+
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 class Info(commands.Cog):
     def __init__(self, bot):
@@ -74,5 +78,5 @@ class Info(commands.Cog):
         await ctx.send(embed=await userinfo(user, ctx.guild, self.bot))
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Info(bot))

@@ -3,7 +3,7 @@ import functools
 import os
 import sys
 from io import BytesIO
-from typing import Union
+from typing import Union, TYPE_CHECKING
 
 import aiohttp
 import discord
@@ -11,6 +11,9 @@ from discord.ext import commands
 from lib import BASE_DIR, Badge, Badges, ImageWriter, generate
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
 from DiscordUtils import EmbedPaginator, StarboardEmbed
+
+if TYPE_CHECKING:
+    from .. import MinatoNamikazeBot
 
 
 class BadgesPageEntry:
@@ -306,5 +309,5 @@ class BadgesCog(commands.Cog, name="Badges"):
         await embed_paginator.start()
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(BadgesCog(bot))

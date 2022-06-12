@@ -1,10 +1,13 @@
 import asyncio
 import datetime
 import time
-from typing import Dict, Optional, Union
+from typing import TYPE_CHECKING, Dict, Optional
 
 import discord
 from discord.ext import commands, tasks
+
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 # poll period in minutes for the
 # update_invite_expiry task
@@ -269,5 +272,5 @@ class Invites(commands.Cog):
         await ctx.send(embed=embed)
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Invites(bot))

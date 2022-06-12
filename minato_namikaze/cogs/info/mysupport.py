@@ -2,16 +2,19 @@ import datetime
 import inspect
 import itertools
 import os
+from typing import TYPE_CHECKING
 
 import discord
 import pkg_resources
 import psutil
 import pygit2
-from typing import Union
 from discord.ext import commands
+from DiscordUtils import Embed
 from lib import ChannelAndMessageId, LinksAndVars, PrivacyPolicy, VotingMenu
 from lib import time_class as time
-from DiscordUtils import Embed
+
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 
 class MySupport(commands.Cog, name="My Support"):
@@ -204,5 +207,5 @@ class MySupport(commands.Cog, name="My Support"):
         await ctx.send(final_url)
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(MySupport(bot))

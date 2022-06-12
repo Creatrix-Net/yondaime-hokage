@@ -1,7 +1,11 @@
 import re
-from typing import Union
+from typing import TYPE_CHECKING
+
 import discord
 from discord.ext import commands
+
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 invitere = r"(?:https?:\/\/)?discord(?:\.gg|app\.com\/invite)?\/(?:#\/)([a-zA-Z0-9-]*)"
 invitere2 = r"(http[s]?:\/\/)*discord((app\.com\/invite)|(\.gg))\/(invite\/)?(#\/)?([A-Za-z0-9\-]+)(\/)?"
@@ -115,5 +119,5 @@ class Snipe(commands.Cog):
         self.snipes[ctx.channel.id] = None
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Snipe(bot))

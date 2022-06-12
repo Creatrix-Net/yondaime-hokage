@@ -305,5 +305,5 @@ class Giveaway(Cog):
             except (discord.HTTPException, discord.Forbidden, discord.InvalidArgument, discord.NotFound):
                 pass
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Giveaway(bot))

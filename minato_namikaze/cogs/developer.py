@@ -508,5 +508,5 @@ class Developer(commands.Cog):
             pass
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Developer(bot))

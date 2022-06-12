@@ -1,12 +1,17 @@
+import asyncio
 import random
-from typing import List, Union
-from DiscordUtils import Embed, ErrorEmbed
+from typing import TYPE_CHECKING, List, Union
+
 import aiohttp
-import discord, asyncio
+import discord
 import orjson
 from discord.ext import commands
-from lib import (Characters, LinksAndVars, MemberID,
-                 ShinobiMatchCharacterSelection, cache, MatchHandlerView)
+from DiscordUtils import Embed, ErrorEmbed
+from lib import (Characters, LinksAndVars, MatchHandlerView, MemberID,
+                 ShinobiMatchCharacterSelection, cache)
+
+if TYPE_CHECKING:
+    from .. import MinatoNamikazeBot
 
 
 class ShinobiMatchCog(commands.Cog, name='Shinobi Match'):
@@ -92,5 +97,5 @@ class ShinobiMatchCog(commands.Cog, name='Shinobi Match'):
         view.message = await ctx.send(content=f'{ctx.author.mention} now your turn',embed=view.make_embed(), view=view)
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(ShinobiMatchCog(bot))

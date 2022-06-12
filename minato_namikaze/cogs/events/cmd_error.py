@@ -278,5 +278,5 @@ class BotEventsCommands(commands.Cog):
                 )
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(BotEventsCommands(bot))

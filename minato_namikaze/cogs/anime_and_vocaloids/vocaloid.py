@@ -1,7 +1,11 @@
+from typing import TYPE_CHECKING
+
 import discord
 from discord.ext import commands
 from lib.functions import meek_api
-from typing import Union
+
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 class Vocaloid(commands.Cog):
     def __init__(self, bot):
@@ -121,5 +125,5 @@ class Vocaloid(commands.Cog):
         await ctx.send(embed=await meek_api("diva"))
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Vocaloid(bot))

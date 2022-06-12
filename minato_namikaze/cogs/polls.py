@@ -1,8 +1,12 @@
+from operator import itemgetter
+from typing import TYPE_CHECKING, List
+
 import discord
 from discord.ext import commands
 from DiscordUtils import Embed, ErrorEmbed
-from operator import itemgetter
-from typing import List, Union
+
+if TYPE_CHECKING:
+    from .. import MinatoNamikazeBot
 
 class QuickPoll(commands.Cog):
     def __init__(self, bot):
@@ -240,5 +244,5 @@ class QuickPoll(commands.Cog):
             await poll.add_reaction(discord.PartialEmoji(name=self.reactions[int(emoji)]))
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(QuickPoll(bot))

@@ -255,5 +255,5 @@ class Random(commands.Cog):
     #     await ctx.send(file=file)
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Random(bot))

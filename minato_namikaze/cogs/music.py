@@ -1,10 +1,14 @@
+from typing import TYPE_CHECKING, Union
+
 import discord
 import DiscordUtils
 from discord.ext import commands
-from typing import Union
-from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed, StarboardEmbed, SuccessEmbed
-from lib import NoChannelProvided, IncorrectChannelError
+from DiscordUtils import (Embed, EmbedPaginator, ErrorEmbed, StarboardEmbed,
+                          SuccessEmbed)
+from lib import IncorrectChannelError, NoChannelProvided
 
+if TYPE_CHECKING:
+    from .. import MinatoNamikazeBot
 
 class Music(commands.Cog):
     def __init__(self, bot):
@@ -200,5 +204,5 @@ class Music(commands.Cog):
         await ctx.send(embed=ErrorEmbed(description='No song in the queue'), delete_after=5)
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Music(bot))

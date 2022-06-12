@@ -1,13 +1,16 @@
 import asyncio
+from typing import TYPE_CHECKING, Dict, List, Tuple
 
 import discord
 from asyncdagpi import Client
 from discord.ext import commands
-from lib import Tokens, LinksAndVars
-from mal import Anime, AnimeSearch, Manga, MangaSearch, AnimeCharacterResult, AnimeStaffResult, MangaCharacterResult
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
-from typing import Tuple, List, Dict, Union
+from lib import LinksAndVars, Tokens
+from mal import (Anime, AnimeCharacterResult, AnimeSearch, AnimeStaffResult,
+                 Manga, MangaCharacterResult, MangaSearch)
 
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 def format_related_anime_manga(dict_related_anime: Dict[str, List[str]]) -> str:
     """Properly formats the related anime and manga list
@@ -587,5 +590,5 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         )
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(AnimeaMangaandWaifu(bot))

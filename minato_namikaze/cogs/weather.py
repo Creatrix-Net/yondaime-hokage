@@ -1,5 +1,5 @@
 import datetime
-from typing import Union, Optional
+from typing import TYPE_CHECKING, Optional
 from urllib.parse import urlencode
 
 import aiohttp
@@ -9,6 +9,8 @@ from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
 from lib import Tokens
 
+if TYPE_CHECKING:
+    from .. import MinatoNamikazeBot
 
 class UnitConverter(Converter):
     async def convert(self, ctx: commands.Context,
@@ -197,5 +199,5 @@ class Weather(commands.Cog):
         await ctx.send(embed=embed)
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Weather(bot))

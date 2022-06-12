@@ -2,13 +2,16 @@ import datetime
 import io
 import shlex
 import time
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import discord
 from discord.ext import commands, tasks
 from DiscordUtils import SuccessEmbed
 from lib import Arguments, BackupDatabse, ChannelAndMessageId
 from orjson import dumps
+
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 
 class BackUp(commands.Cog):
@@ -338,5 +341,5 @@ class BackUp(commands.Cog):
         
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(BackUp(bot))

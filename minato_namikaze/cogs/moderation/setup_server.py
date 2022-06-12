@@ -1,17 +1,17 @@
 import json
-import typing, string
-from discord.ext import tasks
+import string
+import typing
+from datetime import timedelta
 from json.decoder import JSONDecodeError
 
-from datetime import timedelta
-
 import discord
-from discord.ext import commands
-from lib import (
-                 Database, detect_bad_domains, is_mod,
-                 )
-from DiscordUtils.embeds import *
+from discord.ext import commands, tasks
 from DiscordUtils import EmbedPaginator
+from DiscordUtils.embeds import *
+from lib import Database, detect_bad_domains, is_mod
+
+if typing.TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 
 class ServerSetup(commands.Cog, name="Server Setup"):
@@ -469,5 +469,5 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         starboard_channel = self.bot.get_channel(data.get('channel'))
         await starboard_channel.send(content=f'\U00002b50 {channel.mention} by {msg.author.mention}',embed=embed, allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False, replied_user=False))
 
-async def setup(bot):
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(ServerSetup(bot))

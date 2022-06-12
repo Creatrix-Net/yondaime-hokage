@@ -420,5 +420,5 @@ class Encoding(commands.Cog):
             await ctx.send(f"```\n{page}\n```")
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Encoding(bot))

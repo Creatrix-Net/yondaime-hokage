@@ -4,28 +4,19 @@ import re
 import shlex
 from collections import Counter
 from os.path import join
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import discord
 from discord.ext import commands
-from lib import (
-    ActionReason,
-    Arguments,
-    BannedMember,
-    FutureTime,
-    MemberID,
-    can_execute_action,
-    Database,
-    format_relative,
-    has_permissions,
-    plural,
-    check_if_user_joined_a_voice,
-    check_if_user_joined_a_stage,
-    has_guild_permissions
-)
-from DiscordUtils.embeds import *
 from DiscordUtils import EmbedPaginator
+from DiscordUtils.embeds import *
+from lib import (ActionReason, Arguments, BannedMember, Database, FutureTime,
+                 MemberID, can_execute_action, check_if_user_joined_a_stage,
+                 check_if_user_joined_a_voice, format_relative,
+                 has_guild_permissions, has_permissions, plural)
 
+if TYPE_CHECKING:
+    from ... import MinatoNamikazeBot
 
 class Moderation(commands.Cog):
 
@@ -1382,5 +1373,5 @@ class Moderation(commands.Cog):
             pass
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Moderation(bot))

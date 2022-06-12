@@ -1,17 +1,15 @@
 import ast
-import asyncio
 import logging
 import os
 import random
 import time
 from collections import Counter, defaultdict, deque
 from datetime import datetime
-from pathlib import Path
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union, TYPE_CHECKING
 
 import aiohttp
+import asyncpg
 import discord
-import dotenv
 import sentry_sdk
 import TenGiphPy
 from discord.ext import commands
@@ -24,28 +22,15 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
 
-from lib import (BASE_DIR, ChannelAndMessageId, Context, Database,
+from lib import (return_all_cogs, ChannelAndMessageId, Context, Database,
                  LinksAndVars, PaginatedHelpCommand, ReactionPersistentView,
-                 Tokens, Webhooks, api_image_store_dir, format_dt,
-                 format_relative, post_commands)
+                 Tokens, Webhooks, format_dt, format_relative, post_commands,
+                 token_get)
+
+if TYPE_CHECKING:
+    from .cogs.reminder import Reminder
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(message)s")
-ch.setFormatter(formatter)
-log.addHandler(ch)
-
-dotenv_file = os.path.join(Path(__file__).resolve().parent.parent / ".env")
-
-
-def token_get(tokenname):
-    if os.path.isfile(dotenv_file):
-        dotenv.load_dotenv(dotenv_file)
-    return os.environ.get(tokenname, "False").strip("\n")
-
 
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
@@ -61,11 +46,20 @@ def get_prefix(bot, message):
 
 
 class MinatoNamikazeBot(commands.AutoShardedBot):
+    pool: asyncpg.Pool
+    user: discord.ClientUser
+    pool: asyncpg.Pool
+    command_stats: Counter[str] # type: ignore
+    socket_stats: Counter[str] # type: ignore
+    gateway_handler: Any
+    bot_app_info: discord.AppInfo
 
     def __init__(self):
-        allowed_mentions = discord.AllowedMentions(roles=False,
-                                                   everyone=False,
-                                                   users=True)
+        allowed_mentions = discord.AllowedMentions(
+            roles=False,
+            everyone=False,
+            users=True
+        )
         intents = discord.Intents(
             guilds=True,
             members=True,
@@ -97,6 +91,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         self.uptime = format_relative(self.start_time)
         self.persistent_views_added = False
+        self.session = aiohttp.ClientSession()
         self.blacklist: List[Optional[discord.abc.Snowflake]] = []
 
         super().__init__(
@@ -113,7 +108,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             owner_id=LinksAndVars.owner_ids.value[0],
         )
 
-    def run(self):
+    def start(self):
         try:
 
             sentry_sdk.init(
@@ -144,26 +139,16 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             log.critical("An exception occured, %s", e)
 
     async def on_ready(self):
-        if not os.path.isdir(api_image_store_dir):
-            os.mkdir(api_image_store_dir)
-
         self.togetherControl = await DiscordTogether(Tokens.token.value)
 
-        cog_dir = BASE_DIR / "cogs"
-        for filename in list(set(os.listdir(cog_dir))):
-            if os.path.isdir(cog_dir / filename):
-                for i in os.listdir(cog_dir / filename):
-                    if i.endswith(".py"):
-                        await self.load_extension(f'cogs.{filename.strip(" ")}.{i[:-3]}')
-            else:
-                if filename.endswith(".py"):
-                    await self.load_extension(f"cogs.{filename[:-3]}")
+        for i in return_all_cogs():
+            await self.load_extension(f"cogs.{i}")
         try:
             await self.load_extension("jishaku")
         except discord.ext.commands.ExtensionAlreadyLoaded:
             pass
         try:
-            await bot.tree.sync(guild=discord.Object(id=920536143244709889))
+            await self.tree.sync(guild=discord.Object(id=920536143244709889))
         except (discord.HTTPException, discord.Forbidden, discord.app_commands.MissingApplicationID):
             pass
 
@@ -400,12 +385,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         log.info(f"Shard ID {shard_id} has resumed...")
         self.resumes[shard_id].append(discord.utils.utcnow())
 
-    async def close(self):
-        import shutil
-
-        if not os.path.isdir(api_image_store_dir):
-            shutil.rmtree(api_image_store_dir)
+    async def close(self) -> None:
         await super().close()
+        await self.session.close()
 
     @staticmethod
     async def get_bot_inviter(guild: discord.Guild):
@@ -432,6 +414,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     @property
     def get_admin_invite_link(self):
+        # discord.utils.oauth_url(self.application_id, permissions=discord.Permissions(administrator=True), redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite", scope=("bot", "applications.commands"))
         return f"https://discord.com/oauth2/authorize?client_id={self.application_id}&permissions=8&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot"
 
     @property
@@ -590,24 +573,28 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     
     async def on_application_command_error(self, response, exception):
         log.error(f'Error; Command: {response.command}, {str(exception)}')
+    
+    async def get_context(self, origin: Union[discord.Interaction, discord.Message], /, *, cls=Context) -> Context:
+        return await super().get_context(origin, cls=cls)
+    
+    @property
+    def reminder(self) -> Optional[Reminder]:
+        return self.get_cog('Reminder')
+    
+    def _clear_gateway_data(self) -> None:
+        one_week_ago = discord.utils.utcnow() - datetime.timedelta(days=7)
+        for shard_id, dates in self.identifies.items():
+            to_remove = [index for index, dt in enumerate(dates) if dt < one_week_ago]
+            for index in reversed(to_remove):
+                del dates[index]
 
-if __name__ == "__main__":
-    try:
-        import uvloop
-        asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-        uvloop.install()
-    except ImportError:
-        import sys
-        if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
-            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    bot = MinatoNamikazeBot()
-    # slash_dir = BASE_DIR / "slash"
-    # for filename in list(set(os.listdir(slash_dir))):
-    #     if os.path.isdir(slash_dir / filename):
-    #         for i in os.listdir(slash_dir / filename):
-    #             if i.endswith(".py"):
-    #                 bot.load_extension(f'slash.{filename.strip(" ")}.{i[:-3]}')
-    #     else:
-    #         if filename.endswith(".py"):
-    #             bot.load_extension(f"slash.{filename[:-3]}")
-    bot.run()
+        for shard_id, dates in self.resumes.items():
+            to_remove = [index for index, dt in enumerate(dates) if dt < one_week_ago]
+            for index in reversed(to_remove):
+                del dates[index]
+
+    async def before_identify_hook(self, shard_id: int, *, initial: bool):
+        self._clear_gateway_data()
+        self.identifies[shard_id].append(discord.utils.utcnow())
+        await super().before_identify_hook(shard_id, initial=initial)
+

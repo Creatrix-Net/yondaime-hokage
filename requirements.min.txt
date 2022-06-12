@@ -8,7 +8,7 @@ betterstatcord.py
 discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@master
 discord-ext-owoify
 discord.py @ git+https://github.com/Rapptz/discord.py@master
-DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@master
+asyncpg
 eight-ball
 num2words
 english-words @ git+https://github.com/The-4th-Hokage/english-words-py.git@master
@@ -27,14 +27,9 @@ psutil
 pygit2
 PyNaCl
 python-dateutil
-python-dotenv
 pytz
 sentry-sdk
 spotify
-sphinx
-sphinxcontrib_trio
-sphinxcontrib-websupport
-sphinx-autoapi
 typing-extensions
 SQLAlchemy
 TenGiphPy

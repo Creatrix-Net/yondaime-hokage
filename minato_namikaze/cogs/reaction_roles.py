@@ -1,15 +1,28 @@
 import asyncio
-from orjson import loads
 import uuid
-from typing import Union
 from json.decoder import JSONDecodeError
+from typing import TYPE_CHECKING
 
 import discord
 from discord.ext import commands, tasks
-from lib import (ReactionPersistentView,
-                 Database, has_permissions,
-                 )
 from DiscordUtils import Embed
+from lib import ReactionPersistentView, db, has_permissions, LinksAndVars
+from orjson import loads
+
+if TYPE_CHECKING:
+    from lib import Context
+
+    from .. import MinatoNamikazeBot
+
+class ReactionRoles(db.Table):
+    id = db.PrimaryKeyColumn()
+
+    message_id = db.Column(db.Integer(big=True), primary_key=True, index=True, nullable=False)
+    server_id = db.Column(db.Integer(big=True), primary_key=True, index=True, nullable=False)
+    reactions = db.Column(db.JSON, nullable=False)
+    limit_to_one = db.Column(db.Boolean, nullable=False)
+    custom_id = db.Column(db.String, nullable=False)
+    jump_url = db.Column(db.String, nullable=False)
 
 
 class ReactionRoles(commands.Cog, name="Reaction Roles"):
@@ -21,9 +34,6 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="idle", id=922030033067995187)
-
-    async def database_class(self):
-        return await self.bot.db.new(Database.database_category_name.value,Database.reaction_roles_channel_name.value)
     
     @tasks.loop(hours=1)
     async def cleanup(self):
@@ -53,17 +63,17 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         if reaction_roles is not None:
             await database.delete(payload.message_id)
     
-    @commands.group(invoke_without_command=True, aliases=['reaction_roles'])
+    @commands.hybrid_group(invoke_without_command=True, aliases=['reaction_roles'])
     @commands.guild_only()
     @has_permissions(manage_roles=True)
     @commands.cooldown(2, 60, commands.BucketType.guild)
-    async def rr(self, ctx: commands.Context, command=None):
+    async def rr(self, ctx: Context, command=None):
         """Reaction Roles releated commands"""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
             return
 
-    @rr.command(name="new", aliases=["create"])
+    @rr.hybrid_command(name="new", aliases=["create"])
     async def new(self, ctx):
         """
         Create a new reaction role using some interactive setup.
@@ -263,9 +273,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
 
-    @rr.command(aliases=["del_rr"],usage="<reaction_roles_id aka message.id")
+    @rr.hybrid_command(aliases=["del_rr"],usage="<reaction_roles_id aka message.id")
     async def delete_reaction_roles(
-            self, ctx, reaction_roles_id: commands.MessageConverter):
+            self, ctx: Context, reaction_roles_id: commands.MessageConverter):
         """
         It deletes the reaction roles
         args:
@@ -282,8 +292,8 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             return
         await reaction_roles_id.delete()
         await database.delete(reaction_roles_id.id)
-        await ctx.send(":ok_hand:")
+        await ctx.send(":ok_hand:", delete_after=LinksAndVars.delete_message.value)
 
 
-async def setup(bot: Union[commands.Bot, commands.AutoShardedBot]) -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(ReactionRoles(bot))

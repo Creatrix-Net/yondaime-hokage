@@ -6,6 +6,7 @@ from discord.ext import commands
 from lib import ChannelAndMessageId, NoChannelProvided, IncorrectChannelError
 from DiscordUtils import Embed, ErrorEmbed
 from typing import Union
+from ... import MinatoNamikazeBot
 
 class BotEventsCommands(commands.Cog):
     def __init__(self, bot):

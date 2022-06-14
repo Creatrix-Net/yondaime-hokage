@@ -15,7 +15,7 @@ from discord.ext import commands, owoify
 from gtts import gTTS
 from lib import Embed, LinksAndVars, MemberID, TimeConverter
 from PIL import Image
-
+from ... import MinatoNamikazeBot
 
 class Random(commands.Cog):
     def __init__(self, bot):

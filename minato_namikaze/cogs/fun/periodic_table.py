@@ -6,7 +6,7 @@ from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
 from lib import IMAGES, LATTICES, UNITS, EmbedPaginator
 from lib.mendeleev import element as ELEMENTS
-
+from ... import MinatoNamikazeBot
 
 class ElementConverter(Converter):
     """Converts a given argument to an element object"""

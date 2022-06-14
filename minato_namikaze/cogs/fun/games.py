@@ -11,6 +11,7 @@ from discord.ext.commands.cooldowns import BucketType
 from lib import MemberID, Tokens
 from lib.classes.games import *
 from DiscordUtils import ErrorEmbed
+from ... import MinatoNamikazeBot
 
 class Games(commands.Cog):
     def __init__(self, bot):

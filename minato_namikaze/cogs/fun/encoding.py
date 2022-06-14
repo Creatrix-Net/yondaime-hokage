@@ -12,6 +12,8 @@ from lib.data.braille import (contractions, dna, letters, numbers, punctuation,
                               r_contractions, r_letters, r_numbers,
                               r_punctuation)
 
+from ... import MinatoNamikazeBot
+
 
 def escape(text: str,
            *,

@@ -14,7 +14,7 @@ from lib import (FutureTime,
                  Database, format_relative,
                  is_mod)
 from DiscordUtils import SuccessEmbed, Embed, ErrorEmbed
-
+from ... import MinatoNamikazeBot
 
 class Giveaway(Cog):
     def __init__(self, bot):

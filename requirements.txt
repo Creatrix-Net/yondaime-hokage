@@ -49,7 +49,7 @@ lazy-object-proxy==1.7.1
 mal-api==0.5.2
 MarkupSafe==2.1.1
 multidict==6.0.2
-mystbin.py==2.2.0
+mystbin.py==4.0.1
 num2words==0.5.10
 orjson==3.7.2
 packaging==21.3

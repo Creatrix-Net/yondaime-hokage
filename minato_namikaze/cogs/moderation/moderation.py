@@ -10,10 +10,21 @@ import discord
 from discord.ext import commands
 from DiscordUtils import EmbedPaginator
 from DiscordUtils.embeds import *
-from lib import (ActionReason, Arguments, BannedMember, Database, FutureTime,
-                 MemberID, can_execute_action, check_if_user_joined_a_stage,
-                 check_if_user_joined_a_voice, format_relative,
-                 has_guild_permissions, has_permissions, plural)
+from lib import (
+    ActionReason,
+    Arguments,
+    BannedMember,
+    Database,
+    FutureTime,
+    MemberID,
+    can_execute_action,
+    check_if_user_joined_a_stage,
+    check_if_user_joined_a_voice,
+    format_relative,
+    has_guild_permissions,
+    has_permissions,
+    plural,
+)
 
 if TYPE_CHECKING:
     from lib import Context
@@ -146,7 +157,9 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def banlist(self, ctx: "Context", *, member: Union[commands.MemberConverter, MemberID]):
+    async def banlist(
+        self, ctx: "Context", *, member: Union[commands.MemberConverter, MemberID]
+    ):
         """Shows list of users who have been banned! Or position of a specified user who was banned!"""
         banned_users = list(await ctx.guild.bans())
         if member is not None:
@@ -249,7 +262,9 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @has_permissions(ban_members=True)
-    async def unban(self, ctx: "Context", member: BannedMember, *, reason: ActionReason = None):
+    async def unban(
+        self, ctx: "Context", member: BannedMember, *, reason: ActionReason = None
+    ):
         """Unbans a member from the server.
 
         You can pass either the ID of the banned member or the Name#Discrim
@@ -278,7 +293,9 @@ class Moderation(commands.Cog):
 
     # ban
     @commands.Cog.listener()
-    async def on_member_ban(self, guild: discord.Guild, user: Union[discord.User, discord.Member]):
+    async def on_member_ban(
+        self, guild: discord.Guild, user: Union[discord.User, discord.Member]
+    ):
         database = await self.database_class()
         if (
             await database.get(guild.id) is None
@@ -306,7 +323,9 @@ class Moderation(commands.Cog):
 
     # unban
     @commands.Cog.listener()
-    async def on_member_unban(self, guild: discord.Guild, user: Union[discord.User, discord.Member]):
+    async def on_member_unban(
+        self, guild: discord.Guild, user: Union[discord.User, discord.Member]
+    ):
         database = await self.database_class()
         if (
             await database.get(guild.id) is None
@@ -689,7 +708,9 @@ class Moderation(commands.Cog):
     @commands.command(pass_context=True, usage="[member.mention]")
     @commands.guild_only()
     async def warnlist(
-        self, ctx: "Context", member: Optional[Union[commands.MemberConverter, MemberID]] = None
+        self,
+        ctx: "Context",
+        member: Optional[Union[commands.MemberConverter, MemberID]] = None,
     ):
         """Get the no. of warns for a specified user"""
         data = await (await self.database_class()).get(ctx.guild.id)

@@ -151,9 +151,7 @@ class Elements(commands.Cog):
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
-    async def elements(
-        self, ctx: "Context", *elements: ElementConverter
-    ) -> None:
+    async def elements(self, ctx: "Context", *elements: ElementConverter) -> None:
         """
         Display information about multiple elements
         `elements` can be the name, symbol or atomic number of the element

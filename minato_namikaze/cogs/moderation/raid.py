@@ -9,9 +9,19 @@ import discord
 import DiscordUtils
 import num2words
 from discord.ext import commands, tasks
-from lib import (AntiRaidConfig, Database, MemberID, MentionSpamConfig,
-                 RaidMode, SpamChecker, cache, format_dt, format_relative,
-                 has_permissions, is_mod)
+from lib import (
+    AntiRaidConfig,
+    Database,
+    MemberID,
+    MentionSpamConfig,
+    RaidMode,
+    SpamChecker,
+    cache,
+    format_dt,
+    format_relative,
+    has_permissions,
+    is_mod,
+)
 from orjson import loads
 
 if TYPE_CHECKING:
@@ -226,7 +236,9 @@ class AntiRaid(commands.Cog):
             )
 
     @commands.Cog.listener()
-    async def on_member_join(self, member: Union[discord.Member, MemberID, discord.User]):
+    async def on_member_join(
+        self, member: Union[discord.Member, MemberID, discord.User]
+    ):
         guild_id = member.guild.id
         config = await self.get_guild_config(guild_id)
         if config is None:
@@ -516,7 +528,9 @@ class AntiRaid(commands.Cog):
     @mentionspam.command(name="unignore", aliases=["protect"])
     @commands.guild_only()
     @has_permissions(ban_members=True)
-    async def mentionspam_unignore(self, ctx: "Context", *channels: discord.TextChannel):
+    async def mentionspam_unignore(
+        self, ctx: "Context", *channels: discord.TextChannel
+    ):
         """Specifies what channels to take off the ignore list.
         To use this command you must have the Ban Members permission.
         """

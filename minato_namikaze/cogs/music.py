@@ -21,6 +21,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 class Music(commands.Cog):
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot

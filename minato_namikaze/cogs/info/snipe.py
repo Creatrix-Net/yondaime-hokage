@@ -27,8 +27,9 @@ class Snipe(commands.Cog):
         async def on_message_edit(before, after):
             if before.author.bot or after.author.bot:
                 return  # DEPARTMENT OF REDUNDANCY DEPARTMENT
-            if (self.eval(before.content, after.content) >= 10) and (len(
-                    before.content) > len(after.content)):
+            if (self.eval(before.content, after.content) >= 10) and (
+                len(before.content) > len(after.content)
+            ):
                 self.snipes[before.channel.id] = [before, after]
 
     @property
@@ -97,27 +98,28 @@ class Snipe(commands.Cog):
             return await ctx.send("No snipes in this channel!")
         emb = discord.Embed()
         if type(snipe) is list:  # edit snipe
-            emb.set_author(name=str(snipe[0].author),
-                           icon_url=snipe[0].author.avatar.url)
+            emb.set_author(
+                name=str(snipe[0].author), icon_url=snipe[0].author.avatar.url
+            )
             emb.colour = snipe[0].author.colour
-            emb.add_field(name="Before",
-                          value=self.sanitise(snipe[0].content),
-                          inline=False)
-            emb.add_field(name="After",
-                          value=self.sanitise(snipe[1].content),
-                          inline=False)
+            emb.add_field(
+                name="Before", value=self.sanitise(snipe[0].content), inline=False
+            )
+            emb.add_field(
+                name="After", value=self.sanitise(snipe[1].content), inline=False
+            )
             emb.timestamp = snipe[0].created_at
         else:  # delete snipe
-            emb.set_author(name=str(snipe.author),
-                           icon_url=snipe.author.avatar.url)
+            emb.set_author(name=str(snipe.author), icon_url=snipe.author.avatar.url)
             emb.description = self.sanitise(snipe.content)
             emb.colour = snipe.author.colour
             emb.timestamp = snipe.created_at
-        emb.set_footer(text=f"Message sniped by {str(ctx.author)}",
-                       icon_url=ctx.author.avatar.url)
+        emb.set_footer(
+            text=f"Message sniped by {str(ctx.author)}", icon_url=ctx.author.avatar.url
+        )
         await ctx.send(embed=emb)
         self.snipes[ctx.channel.id] = None
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(Snipe(bot))

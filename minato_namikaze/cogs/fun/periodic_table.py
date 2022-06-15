@@ -8,21 +8,21 @@ from lib import IMAGES, LATTICES, UNITS, EmbedPaginator
 from lib.mendeleev import element as ELEMENTS
 from ... import MinatoNamikazeBot
 
+
 class ElementConverter(Converter):
     """Converts a given argument to an element object"""
+
     async def convert(self, ctx: commands.Context, argument: str) -> ELEMENTS:
         result = None
         if argument.isdigit():
             if int(argument) > 118 or int(argument) < 1:
-                raise BadArgument(
-                    "`{}` is not a valid element!".format(argument))
+                raise BadArgument("`{}` is not a valid element!".format(argument))
             result = ELEMENTS(int(argument))
         else:
             try:
                 result = ELEMENTS(argument.title())
             except Exception:
-                raise BadArgument(
-                    "`{}` is not a valid element!".format(argument))
+                raise BadArgument("`{}` is not a valid element!".format(argument))
         if not result:
             raise BadArgument("`{}` is not a valid element!".format(argument))
         return result
@@ -30,15 +30,19 @@ class ElementConverter(Converter):
 
 class MeasurementConverter(Converter):
     """Converts a given measurement type into usable strings"""
-    async def convert(self, ctx: commands.Context,
-                      argument: str) -> List[Tuple[str, str, str]]:
+
+    async def convert(
+        self, ctx: commands.Context, argument: str
+    ) -> List[Tuple[str, str, str]]:
         result = []
         if argument.lower() in UNITS:
-            result.append((
-                argument.lower(),
-                UNITS[argument.lower()]["name"],
-                UNITS[argument.lower()]["units"],
-            ))
+            result.append(
+                (
+                    argument.lower(),
+                    UNITS[argument.lower()]["name"],
+                    UNITS[argument.lower()]["units"],
+                )
+            )
         else:
             for k, v in UNITS.items():
                 if argument.lower() in v["name"].lower():
@@ -46,8 +50,7 @@ class MeasurementConverter(Converter):
                 elif argument.lower() in k:
                     result.append((k, v["name"], v["units"]))
         if not result:
-            raise BadArgument(
-                "`{}` is not a valid measurement!".format(argument))
+            raise BadArgument("`{}` is not a valid measurement!".format(argument))
         return result
 
 
@@ -70,23 +73,35 @@ class Elements(commands.Cog):
     @staticmethod
     def get_xray_wavelength(element: ELEMENTS) -> str:
         try:
-            ka = 1239.84 / (13.6057 * ((element.atomic_number - 1)**2) *
-                            ((1 / 1**2) - (1 / 2**2)))
+            ka = 1239.84 / (
+                13.6057
+                * ((element.atomic_number - 1) ** 2)
+                * ((1 / 1**2) - (1 / 2**2))
+            )
         except Exception:
             ka = ""
         try:
-            kb = 1239.84 / (13.6057 * ((element.atomic_number - 1)**2) *
-                            ((1 / 1**2) - (1 / 3**2)))
+            kb = 1239.84 / (
+                13.6057
+                * ((element.atomic_number - 1) ** 2)
+                * ((1 / 1**2) - (1 / 3**2))
+            )
         except Exception:
             kb = ""
         try:
-            la = 1239.84 / (13.6057 * ((element.atomic_number - 7.4)**2) *
-                            ((1 / 1**2) - (1 / 2**3)))
+            la = 1239.84 / (
+                13.6057
+                * ((element.atomic_number - 7.4) ** 2)
+                * ((1 / 1**2) - (1 / 2**3))
+            )
         except Exception:
             la = ""
         try:
-            lb = 1239.84 / (13.6057 * ((element.atomic_number - 7.4)**2) *
-                            ((1 / 1**2) - (1 / 2**4)))
+            lb = 1239.84 / (
+                13.6057
+                * ((element.atomic_number - 7.4) ** 2)
+                * ((1 / 1**2) - (1 / 2**4))
+            )
         except Exception:
             lb = ""
 
@@ -127,8 +142,9 @@ class Elements(commands.Cog):
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
-    async def elements(self, ctx: commands.Context,
-                       *elements: ElementConverter) -> None:
+    async def elements(
+        self, ctx: commands.Context, *elements: ElementConverter
+    ) -> None:
         """
         Display information about multiple elements
         `elements` can be the name, symbol or atomic number of the element
@@ -137,7 +153,8 @@ class Elements(commands.Cog):
         if not elements:
             elements = [ELEMENTS(e) for e in range(1, 119)]
         paginator = EmbedPaginator(
-            ctx=ctx, entries=[await self.element_embed(e) for e in elements])
+            ctx=ctx, entries=[await self.element_embed(e) for e in elements]
+        )
         await paginator.start()
 
     @commands.command()
@@ -154,12 +171,11 @@ class Elements(commands.Cog):
             f"[{element.name} ({element.symbol})"
             f" - {element.atomic_number}](https://en.wikipedia.org/wiki/{element.name})"
         )
-        embed.description = (
-            "{embed_title}\n\n{desc}\n\n{sources}\n\n{uses}").format(
-                embed_title=embed_title,
-                desc=element.description,
-                sources=element.sources,
-                uses=element.uses,
+        embed.description = ("{embed_title}\n\n{desc}\n\n{sources}\n\n{uses}").format(
+            embed_title=embed_title,
+            desc=element.description,
+            sources=element.sources,
+            uses=element.uses,
         )
         if element.name in IMAGES:
             embed.set_thumbnail(url=IMAGES[element.name]["image"])
@@ -173,20 +189,20 @@ class Elements(commands.Cog):
             "abundance_crust": ("Abundance in the Crust", "mg/kg"),
             "abundance_sea": ("Abundance in the Sea", "mg/L"),
             "name_origin": ("Name Origin", ""),
-            "lattice_structure":
-            ("Crystal Lattice", self.get_lattice_string(element)),
+            "lattice_structure": ("Crystal Lattice", self.get_lattice_string(element)),
         }
         for attr, name in attributes.items():
             x = getattr(element, attr, "")
             if x:
                 embed.add_field(name=name[0], value=f"{x} {name[1]}")
-        embed.add_field(name="X-ray Fluorescence",
-                        value=self.get_xray_wavelength(element))
+        embed.add_field(
+            name="X-ray Fluorescence", value=self.get_xray_wavelength(element)
+        )
         discovery = f"{element.discoverers} ({element.discovery_year}) in {element.discovery_location}"
         embed.add_field(name="Discovery", value=discovery)
 
         return embed
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(Elements(bot))

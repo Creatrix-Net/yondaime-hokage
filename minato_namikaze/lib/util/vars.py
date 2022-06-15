@@ -13,6 +13,7 @@ CONFIG_FILE = Path(__file__).resolve().parent.parent.parent.parent / ".ini"
 # api_image_store_dir = BASE_DIR / "images_api_store"
 DEFAULT_COMMAND_SELECT_LENGTH = 25
 
+
 class envConfig:
     def __init__(self):
         self.token = token_get("TOKEN")
@@ -46,6 +47,7 @@ def token_get(tokenname: Optional[str] = None, all: bool = False) -> Any:
         return config._sections
     raise RuntimeError("Could not find .ini file")
 
+
 class ShinobiMatch(list, enum.Enum):
     character_side_exclude = [
         "anbu",
@@ -60,8 +62,7 @@ class ShinobiMatch(list, enum.Enum):
 
     name_exclusion = character_side_exclude + [
         "naruto",
-        "sasuke"
-        "jiraya",
+        "sasuke" "jiraya",
         "namikaze",
         "sarutobi",
         "yamanaka",
@@ -107,17 +108,21 @@ class Tokens(enum.Enum):
 
 
 class LinksAndVars(enum.Enum):
-    website = 'https://minato-namikaze.readthedocs.io/en/latest'
+    website = "https://minato-namikaze.readthedocs.io/en/latest"
 
     github = "https://github.com/The-4th-Hokage/yondaime-hokage"
     github_branch = "master"
 
-    bad_links = 'https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt'
-    listing = 'https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json'
-    character_data = 'https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json'
+    bad_links = "https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt"
+    listing = (
+        "https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json"
+    )
+    character_data = "https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json"
 
     statuspage_link = "https://minatonamikaze.statuspage.io"
-    mal_logo = "https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png"
+    mal_logo = (
+        "https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png"
+    )
     giveaway_image = "https://i.imgur.com/efLKnlh.png"
 
     version = token_get("VERSION")
@@ -127,24 +132,23 @@ class LinksAndVars(enum.Enum):
     owner_ids = [887549958931247137, 837223478934896670, 747729781369602049]
 
     with gzip.open(
-            os.path.join(
-                Path(__file__).resolve().parent.parent, "data",
-                "insult.txt.gz"),
-            "rt",
-            encoding="utf-8",
+        os.path.join(Path(__file__).resolve().parent.parent, "data", "insult.txt.gz"),
+        "rt",
+        encoding="utf-8",
     ) as f:
         insults: List[str] = list(
             map(
-                lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip(
-                    "\\"),
+                lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip("\\"),
                 f.read().split(","),
-            ))
+            )
+        )
 
 
 class RaidMode(enum.Enum):
     off = 0
     on = 1
     strict = 2
+
 
 class Webhooks(enum.Enum):
     logs = token_get("LOGS")
@@ -170,38 +174,38 @@ class Methods(enum.IntEnum):
 
 
 with gzip.open(
-        os.path.join(
-            Path(__file__).resolve().parent.parent,
-            "data",
-            "periodic_table_data",
-            "LATTICES.json.gz",
-        ),
-        "rt",
-        encoding="utf-8",
+    os.path.join(
+        Path(__file__).resolve().parent.parent,
+        "data",
+        "periodic_table_data",
+        "LATTICES.json.gz",
+    ),
+    "rt",
+    encoding="utf-8",
 ) as f:
     LATTICES: dict = json.load(f)
 
 with gzip.open(
-        os.path.join(
-            Path(__file__).resolve().parent.parent,
-            "data",
-            "periodic_table_data",
-            "IMAGES.json.gz",
-        ),
-        "rt",
-        encoding="utf-8",
+    os.path.join(
+        Path(__file__).resolve().parent.parent,
+        "data",
+        "periodic_table_data",
+        "IMAGES.json.gz",
+    ),
+    "rt",
+    encoding="utf-8",
 ) as f:
     IMAGES: dict = json.load(f)
 
 with gzip.open(
-        os.path.join(
-            Path(__file__).resolve().parent.parent,
-            "data",
-            "periodic_table_data",
-            "UNITS.json.gz",
-        ),
-        "rt",
-        encoding="utf-8",
+    os.path.join(
+        Path(__file__).resolve().parent.parent,
+        "data",
+        "periodic_table_data",
+        "UNITS.json.gz",
+    ),
+    "rt",
+    encoding="utf-8",
 ) as f:
     UNITS: dict = json.load(f)
 
@@ -218,5 +222,14 @@ with zipfile.ZipFile(BASE_DIR / os.path.join("lib", "data", "among_us.zip")) as 
         among_us_friends = io.BytesIO(f.read())
 
 
-with gzip.open(BASE_DIR / os.path.join("lib","data","url_regex.txt.gz",),"rt",encoding="utf-8",) as f:
+with gzip.open(
+    BASE_DIR
+    / os.path.join(
+        "lib",
+        "data",
+        "url_regex.txt.gz",
+    ),
+    "rt",
+    encoding="utf-8",
+) as f:
     url_regex = f.read()

@@ -51,8 +51,8 @@ def element(ids: Union[int, str]) -> Element:
     if isinstance(ids, (six.string_types, int)):
         return _get_element(ids)
     raise ValueError(
-        "Expected a <list>, <tuple>, <str> or <int>, got: {0:s}".format(
-            type(ids)))
+        "Expected a <list>, <tuple>, <str> or <int>, got: {0:s}".format(type(ids))
+    )
 
 
 def _get_element(ids):
@@ -65,14 +65,11 @@ def _get_element(ids):
 
     if isinstance(ids, six.string_types):
         if len(ids) <= 3 and ids.lower() != "tin":
-            return session.query(Element).filter(
-                Element.symbol == str(ids)).one()
+            return session.query(Element).filter(Element.symbol == str(ids)).one()
         return session.query(Element).filter(Element.name == str(ids)).one()
     if isinstance(ids, int):
-        return session.query(Element).filter(
-            Element.atomic_number == ids).one()
-    raise ValueError("Expecting a <str> or <int>, got: {0:s}".format(
-        type(ids)))
+        return session.query(Element).filter(Element.atomic_number == ids).one()
+    raise ValueError("Expecting a <str> or <int>, got: {0:s}".format(type(ids)))
 
 
 def get_all_elements():
@@ -122,8 +119,7 @@ def deltaN(id1, id2, charge1=0, charge2=0, missingIsZero=True):
     atns = ids_to_attr([id1, id2], attr="atomic_number")
 
     e1, e2 = [
-        session.query(Element).filter(Element.atomic_number == a).one()
-        for a in atns
+        session.query(Element).filter(Element.atomic_number == a).one() for a in atns
     ]
 
     chi = [
@@ -133,5 +129,6 @@ def deltaN(id1, id2, charge1=0, charge2=0, missingIsZero=True):
 
     if all(x is not None for x in chi):
         return (chi[0] - chi[1]) / (
-            2.0 * (e1.hardness(charge=charge1) + e2.hardness(charge=charge2)))
+            2.0 * (e1.hardness(charge=charge1) + e2.hardness(charge=charge2))
+        )
     return None

@@ -7,6 +7,7 @@ from lib.functions import meek_api
 if TYPE_CHECKING:
     from ... import MinatoNamikazeBot
 
+
 class Vocaloid(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -125,5 +126,5 @@ class Vocaloid(commands.Cog):
         await ctx.send(embed=await meek_api("diva"))
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(Vocaloid(bot))

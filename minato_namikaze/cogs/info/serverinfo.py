@@ -8,6 +8,7 @@ from lib import serverinfo, userinfo
 if TYPE_CHECKING:
     from ... import MinatoNamikazeBot
 
+
 class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -74,9 +75,9 @@ class Info(commands.Cog):
     @commands.guild_only()
     async def user(self, ctx, *, user: discord.Member = None):
         """Get user information"""
-        user = user or ctx.author        
+        user = user or ctx.author
         await ctx.send(embed=await userinfo(user, ctx.guild, self.bot))
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(Info(bot))

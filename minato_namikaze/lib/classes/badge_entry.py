@@ -1,6 +1,6 @@
 class Badge:
-    """A class to handle all the badge commands
-    """    
+    """A class to handle all the badge commands"""
+
     def __init__(
         self,
         badge_name: str,
@@ -23,7 +23,7 @@ class Badge:
 
         :return: Data in the json format
         :rtype: dict
-        """        
+        """
         return {
             "badge_name": self.badge_name,
             "code": self.code,

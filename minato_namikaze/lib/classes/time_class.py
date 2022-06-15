@@ -51,7 +51,8 @@ class HumanTime:
         dt, status = self.calendar.parseDT(argument, sourceTime=now)
         if not status.hasDateOrTime:
             raise commands.BadArgument(
-                'invalid time provided, try e.g. "tomorrow" or "3 days"')
+                'invalid time provided, try e.g. "tomorrow" or "3 days"'
+            )
 
         if not status.hasTime:
             # replace it with the current time
@@ -93,12 +94,10 @@ class UserFriendlyTime(commands.Converter):
     """That way quotes aren't absolutely necessary."""
 
     def __init__(self, converter=None, *, default=None):
-        if isinstance(converter, type) and issubclass(converter,
-                                                      commands.Converter):
+        if isinstance(converter, type) and issubclass(converter, commands.Converter):
             converter = converter()
 
-        if converter is not None and not isinstance(converter,
-                                                    commands.Converter):
+        if converter is not None and not isinstance(converter, commands.Converter):
             raise TypeError("commands.Converter subclass necessary.")
 
         self.converter = converter
@@ -137,11 +136,8 @@ class UserFriendlyTime(commands.Converter):
 
             match = regex.match(argument)
             if match is not None and match.group(0):
-                data = {
-                    k: int(v)
-                    for k, v in match.groupdict(default=0).items()
-                }
-                remaining = argument[match.end():].strip()
+                data = {k: int(v) for k, v in match.groupdict(default=0).items()}
+                remaining = argument[match.end() :].strip()
                 result.dt = now + relativedelta(**data)
                 return await result.check_constraints(ctx, now, remaining)
 
@@ -158,7 +154,8 @@ class UserFriendlyTime(commands.Converter):
             elements = calendar.nlp(argument, sourceTime=now)
             if elements is None or len(elements) == 0:
                 raise commands.BadArgument(
-                    'Invalid time provided, try e.g. "tomorrow" or "3 days".')
+                    'Invalid time provided, try e.g. "tomorrow" or "3 days".'
+                )
 
             # handle the following cases:
             # "date time" foo
@@ -170,7 +167,8 @@ class UserFriendlyTime(commands.Converter):
 
             if not status.hasDateOrTime:
                 raise commands.BadArgument(
-                    'Invalid time provided, try e.g. "tomorrow" or "3 days".')
+                    'Invalid time provided, try e.g. "tomorrow" or "3 days".'
+                )
 
             if begin not in (0, 1) and end != len(argument):
                 raise commands.BadArgument(
@@ -199,13 +197,15 @@ class UserFriendlyTime(commands.Converter):
                     # check if it's quoted:
                     if argument[0] != '"':
                         raise commands.BadArgument(
-                            "Expected quote before time input...")
+                            "Expected quote before time input..."
+                        )
 
                     if not (end < len(argument) and argument[end] == '"'):
                         raise commands.BadArgument(
-                            "If the time is quoted, you must unquote it.")
+                            "If the time is quoted, you must unquote it."
+                        )
 
-                    remaining = argument[end + 1:].lstrip(" ,.!")
+                    remaining = argument[end + 1 :].lstrip(" ,.!")
                 else:
                     remaining = argument[end:].lstrip(" ,.!")
             elif len(argument) == end:

@@ -4,11 +4,13 @@ from ..util import ChannelAndMessageId
 
 
 class Badges:
-    '''A database handler for the Badges class'''
+    """A database handler for the Badges class"""
+
     def __init__(self, ctx: Context):
         self.ctx = ctx
         self.channel = ctx.get_config_channel_by_name_or_id(
-            ChannelAndMessageId.badges_channel.value)
+            ChannelAndMessageId.badges_channel.value
+        )
 
     async def get_all_badges(self) -> list:
         """|coro|
@@ -16,14 +18,15 @@ class Badges:
 
         :return: List of all badges data
         :rtype: list
-        """        
+        """
         return [
             dict(
                 badge_name=i.content,
                 code=self.get_badge_code(i.content),
                 file_name=i.attachments[0],
                 is_inverted=False,
-            ) async for i in self.channel.history(limit=None)
+            )
+            async for i in self.channel.history(limit=None)
         ]
 
     @staticmethod
@@ -34,5 +37,5 @@ class Badges:
         :type badge_name: str
         :return: Badge Code
         :rtype: str
-        """        
+        """
         return "".join(list(badge_name.split(" ")))

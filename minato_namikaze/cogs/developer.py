@@ -1,7 +1,6 @@
 import contextlib
 import inspect
 import io
-import orjson, aiohttp
 import logging
 import os
 import subprocess as sp
@@ -9,40 +8,42 @@ import textwrap
 import traceback
 from contextlib import redirect_stdout
 from pathlib import Path
-import statcord
+from typing import TYPE_CHECKING
 
+import aiohttp
 import discord
-from discord.ext import commands, tasks
-from lib import *
-from DiscordUtils import *
 import discordlists
+import orjson
+import statcord
+from discord.ext import commands, tasks
+from DiscordUtils import *
+from lib import *
+
+if TYPE_CHECKING:
+    from lib import Context
+
+    from .. import MinatoNamikazeBot
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
 
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(message)s")
-ch.setFormatter(formatter)
-log.addHandler(ch)
 
 class Developer(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.minato_gif = []
         self.key = Tokens.statcord.value
         self.statcord_client = statcord.StatcordClient(self.bot, self.key)
         self.api = discordlists.Client(self.bot)
         self.description = "These set of commands are only locked to the developer"
         self.update_blacklist_task.start()
-    
+
     def cog_unload(self):
         self.statcord_client.close()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{GEAR}\ufe0f")
-    
+
     @tasks.loop(minutes=30)
     async def update_blacklist_task(self):
         await self.bot.update_blacklist()
@@ -51,15 +52,14 @@ class Developer(commands.Cog):
         return ctx.bot.is_owner(ctx.author)
 
     @staticmethod
-    async def _send_guilds(ctx, guilds, title):
+    async def _send_guilds(ctx: "Context", guilds, title):
         if len(guilds) == 0:
-            await ctx.send(embed=ErrorEmbed(
-                description="No such guild was found."))
+            await ctx.send(embed=ErrorEmbed(description="No such guild was found."))
             return
 
         all_pages = []
 
-        for chunk in [guilds[i:i + 20] for i in range(0, len(guilds), 20)]:
+        for chunk in [guilds[i : i + 20] for i in range(0, len(guilds), 20)]:
             page = Embed(title=title)
 
             for guild in chunk:
@@ -83,15 +83,16 @@ class Developer(commands.Cog):
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
     @commands.check(owners)
-    async def dev(self, ctx, command=None):
+    async def dev(self, ctx: "Context", command=None):
         """These set of commands are only locked to the developer"""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
             return
 
     @dev.command(name="sharedservers", usage="<user>")
-    async def sharedservers(self, ctx, *, user: Union[discord.Member,
-                                                      MemberID]):
+    async def sharedservers(
+        self, ctx: "Context", *, user: Union[discord.Member, MemberID]
+    ):
         """Get a list of servers the bot shares with the user."""
         guilds = [
             f"{guild.name} `{guild.id}` ({guild.member_count} members)"
@@ -101,30 +102,35 @@ class Developer(commands.Cog):
         await self._send_guilds(ctx, guilds, "Shared Servers")
 
     @dev.command(usage="<server ID>")
-    async def createinvite(self, ctx, *, guild: commands.GuildConverter):
+    async def createinvite(self, ctx: "Context", *, guild: commands.GuildConverter):
         """Create an invite to the specified server"""
         try:
             try:
                 invite = (await guild.invites())[0]
             except:
                 try:
-                    invite = (await guild.text_channels())[0].create_invite(
-                        max_age=120)
+                    invite = (await guild.text_channels())[0].create_invite(max_age=120)
                 except:
-                    await ctx.send(embed=ErrorEmbed(
-                        description="No permissions to create an invite link.")
+                    await ctx.send(
+                        embed=ErrorEmbed(
+                            description="No permissions to create an invite link."
+                        )
                     )
                     return
 
-            await ctx.send(embed=Embed(
-                description=f"Here is the invite link: {invite.url}"))
+            await ctx.send(
+                embed=Embed(description=f"Here is the invite link: {invite.url}")
+            )
         except Exception as e:
             log.error(e)
-            await ctx.send(embed=ErrorEmbed(
-                description="Sorry! This is not possible for this server!"))
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description="Sorry! This is not possible for this server!"
+                )
+            )
 
     @dev.command(invoke_without_command=True, name="eval")
-    async def _eval(self, ctx, *, body):
+    async def _eval(self, ctx: "Context", *, body):
         """Evaluates python code"""
         env = {
             "self": self,
@@ -180,8 +186,7 @@ class Developer(commands.Cog):
                 ret = await func()
         except Exception as e:
             value = stdout.getvalue()
-            err = await ctx.send(f"```py\n{value}{traceback.format_exc()}\n```"
-                                 )
+            err = await ctx.send(f"```py\n{value}{traceback.format_exc()}\n```")
         else:
             value = stdout.getvalue()
             if ret is None:
@@ -215,17 +220,18 @@ class Developer(commands.Cog):
             await ctx.message.add_reaction("\u2705")
 
     @dev.command(invoke_without_command=True)
-    async def sync(self, ctx):
+    async def sync(self, ctx: "Context"):
         """Sync with GitHub and reload all the cogs"""
-        embed = Embed(title="Syncing...",
-                      description=":joy: Syncing and reloading cogs.")
+        embed = Embed(
+            title="Syncing...", description=":joy: Syncing and reloading cogs."
+        )
         embed.set_footer(text=f"{ctx.author} | Minato Namikaze")
         msg = await ctx.send(embed=embed)
         async with ctx.channel.typing():
             output = sp.getoutput("git pull")
         embed = Embed(
-            title="Synced",
-            description="Synced with GitHub and reloaded all the cogs.")
+            title="Synced", description="Synced with GitHub and reloaded all the cogs."
+        )
         # Reload Cogs as well
         cog_dir = Path(__file__).resolve(strict=True).parent.parent
         error_collection = []
@@ -234,7 +240,9 @@ class Developer(commands.Cog):
                 for i in os.listdir(cog_dir / file):
                     if i.endswith(".py"):
                         try:
-                            await self.bot.reload_extension(f"cogs.{file.strip(' ')}.{i[:-3]}")
+                            await self.bot.reload_extension(
+                                f"cogs.{file.strip(' ')}.{i[:-3]}"
+                            )
                         except Exception as e:
                             return await ctx.send(f"```py\n{e}```")
             else:
@@ -246,17 +254,19 @@ class Developer(commands.Cog):
 
         if error_collection:
             err = "\n".join(
-                [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection])
+                [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection]
+            )
             return await ctx.send(
                 f"Attempted to reload all extensions, was able to reload, "
-                f"however the following failed...\n\n{err}")
+                f"however the following failed...\n\n{err}"
+            )
 
         await msg.edit(embed=embed)
 
     @dev.command(name="pretend")
     async def pretend(
         self,
-        ctx: commands.Context,
+        ctx: "Context",
         target: Union[discord.User, MemberID],
         *,
         command_string: str,
@@ -270,99 +280,103 @@ class Developer(commands.Cog):
 
             with contextlib.suppress(discord.HTTPException):
                 target_member = ctx.guild.get_member(
-                    target.id) or await ctx.guild.fetch_member(target.id)
+                    target.id
+                ) or await ctx.guild.fetch_member(target.id)
 
             target = target_member or target
 
-        alt_ctx = await copy_context_with(ctx,
-                                          author=target,
-                                          content=ctx.prefix + command_string)
+        alt_ctx = await copy_context_with(
+            ctx, author=target, content=ctx.prefix + command_string
+        )
 
         if alt_ctx.command is None:
             if alt_ctx.invoked_with is None:
                 return await ctx.send(
-                    "This bot has been hard-configured to ignore this user.")
-            return await ctx.send(
-                f'Command "{alt_ctx.invoked_with}" is not found')
+                    "This bot has been hard-configured to ignore this user."
+                )
+            return await ctx.send(f'Command "{alt_ctx.invoked_with}" is not found')
 
         return await alt_ctx.command.invoke(alt_ctx)
 
     @dev.group(invoke_without_command=True)
     @commands.check(owners)
-    async def changestat(self, ctx):
+    async def changestat(self, ctx: "Context"):
         """Change the bot status"""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
             return
 
     @changestat.command(invoke_without_command=True)
-    async def stream(self, ctx, *, activity="placeholder (owner to lazy lol)"):
+    async def stream(
+        self, ctx: "Context", *, activity="placeholder (owner to lazy lol)"
+    ):
         """Streaming Activity"""
-        await self.bot.change_presence(activity=discord.Streaming(
-            status=discord.Status.idle,
-            name=activity,
-            url="https://www.twitch.tv/dhruvacube",
-        ))
+        await self.bot.change_presence(
+            activity=discord.Streaming(
+                status=discord.Status.idle,
+                name=activity,
+                url="https://www.twitch.tv/dhruvacube",
+            )
+        )
         await ctx.send(
             f"```diff\n- Changed activity to {activity} using Stream status.```"
         )
 
     @changestat.command(invoke_without_command=True)
-    async def game(self, ctx, *, activity="placeholder (owner to lazy lol)"):
+    async def game(self, ctx: "Context", *, activity="placeholder (owner to lazy lol)"):
         """Game Activity"""
-        await self.bot.change_presence(status=discord.Status.idle,
-                                       activity=discord.Game(name=activity))
-        await ctx.send(
-            f"```md\n# Changed activity to {activity} using Game status.```")
+        await self.bot.change_presence(
+            status=discord.Status.idle, activity=discord.Game(name=activity)
+        )
+        await ctx.send(f"```md\n# Changed activity to {activity} using Game status.```")
 
     @changestat.command(invoke_without_command=True)
-    async def watching(self,
-                       ctx,
-                       *,
-                       activity="placeholder (owner to lazy lol)"):
+    async def watching(self, ctx: "Context", *, activity="placeholder (owner to lazy lol)"):
         """Watching activity"""
-        await self.bot.change_presence(activity=discord.Activity(
-            status=discord.Status.idle,
-            type=discord.ActivityType.watching,
-            name=activity,
-        ))
+        await self.bot.change_presence(
+            activity=discord.Activity(
+                status=discord.Status.idle,
+                type=discord.ActivityType.watching,
+                name=activity,
+            )
+        )
         await ctx.send(
             f"```arm\nChanged activity to {activity} using Watching status.```"
         )
 
     @changestat.command(invoke_without_command=True)
-    async def listening(self,
-                        ctx,
-                        *,
-                        activity="placeholder (owner to lazy lol)"):
+    async def listening(self, ctx: "Context", *, activity="placeholder (owner to lazy lol)"):
         """Listenting Activity"""
-        await self.bot.change_presence(activity=discord.Activity(
-            status=discord.Status.idle,
-            type=discord.ActivityType.listening,
-            name=activity,
-        ))
+        await self.bot.change_presence(
+            activity=discord.Activity(
+                status=discord.Status.idle,
+                type=discord.ActivityType.listening,
+                name=activity,
+            )
+        )
         await ctx.send(
             f"```fix\nChanged activity to {activity} using Listening status.```"
         )
 
     # on message event
     @commands.Cog.listener()
-    async def on_message(self, message):
-        if (self.bot.user.mentioned_in(message)
-                and message.mention_everyone is False
-                and message.content.lower() in
-            (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
-                or message.content.lower() in (
-                    f"<@!{self.bot.application_id}> prefix",
-                    f"<@{self.bot.application_id}> prefix",
-        )) and not message.author.bot:
+    async def on_message(self, message: discord.Message):
+        if (
+            self.bot.user.mentioned_in(message)
+            and message.mention_everyone is False
+            and message.content.lower()
+            in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
+            or message.content.lower()
+            in (
+                f"<@!{self.bot.application_id}> prefix",
+                f"<@{self.bot.application_id}> prefix",
+            )
+        ) and not message.author.bot:
             await message.channel.send(
                 "The prefix is **)** ,A full list of all commands is available by typing ```)help```"
             )
 
-        if message.channel.id in (
-                ChannelAndMessageId.error_logs_channel.value,
-        ):
+        if message.channel.id in (ChannelAndMessageId.error_logs_channel.value,):
             try:
                 await message.publish()
             except:
@@ -370,21 +384,22 @@ class Developer(commands.Cog):
 
     # when bot leaves the server
     @commands.Cog.listener()
-    async def on_guild_remove(self, guild):
+    async def on_guild_remove(self, guild: discord.Guild):
         try:
             e34 = ErrorEmbed(title=f"{guild.name}", description="Left")
             if guild.icon:
                 e34.set_thumbnail(url=guild.icon.url)
             if guild.banner:
                 e34.set_image(url=guild.banner.with_format("png").url)
-            c = (self.bot.get_channel(
-                ChannelAndMessageId.serverlog_channel2.value)
-                if self.bot.local else self.bot.get_channel(
-                ChannelAndMessageId.serverlog_channel1.value))
+            c = (
+                self.bot.get_channel(ChannelAndMessageId.serverlog_channel2.value)
+                if self.bot.local
+                else self.bot.get_channel(ChannelAndMessageId.serverlog_channel1.value)
+            )
             e34.add_field(name="**Total Members**", value=guild.member_count)
-            e34.add_field(name="**Bots**",
-                          value=sum(1 for member in guild.members
-                                    if member.bot))
+            e34.add_field(
+                name="**Bots**", value=sum(1 for member in guild.members if member.bot)
+            )
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(
                 content=f"We are now currently at **{len(self.bot.guilds)} servers**",
@@ -395,10 +410,11 @@ class Developer(commands.Cog):
         await self.post()
 
     @commands.Cog.listener()
-    async def on_guild_join(self, guild):
+    async def on_guild_join(self, guild: discord.Guild):
         inviter_or_guild_owner = await self.bot.get_bot_inviter(guild)
         welcome_channel = await self.bot.get_welcome_channel(
-            guild, inviter_or_guild_owner)
+            guild, inviter_or_guild_owner
+        )
         try:
             img = random.choice(minato_gif)
             file = discord.File(img[-1], filename=img[0])
@@ -430,21 +446,22 @@ class Developer(commands.Cog):
 
         # Send it to server count channel the support server
         try:
-            e34 = discord.Embed(title=f"{guild.name}",
-                                color=discord.Color.green(),
-                                description="Added")
+            e34 = discord.Embed(
+                title=f"{guild.name}", color=discord.Color.green(), description="Added"
+            )
             if guild.icon:
                 e34.set_thumbnail(url=guild.icon.url)
             if guild.banner:
                 e34.set_image(url=guild.banner.with_format("png").url)
-            c = (self.bot.get_channel(
-                ChannelAndMessageId.serverlog_channel2.value)
-                if self.bot.local else self.bot.get_channel(
-                ChannelAndMessageId.serverlog_channel1.value))
+            c = (
+                self.bot.get_channel(ChannelAndMessageId.serverlog_channel2.value)
+                if self.bot.local
+                else self.bot.get_channel(ChannelAndMessageId.serverlog_channel1.value)
+            )
             e34.add_field(name="**Total Members**", value=guild.member_count)
-            e34.add_field(name="**Bots**",
-                          value=sum(1 for member in guild.members
-                                    if member.bot))
+            e34.add_field(
+                name="**Bots**", value=sum(1 for member in guild.members if member.bot)
+            )
             e34.add_field(name="**Server ID**", value=guild.id, inline=True)
             await c.send(
                 content=f"We are now currently at **{len(self.bot.guilds)} servers**",
@@ -453,7 +470,7 @@ class Developer(commands.Cog):
         except:
             pass
         await self.post()
-    
+
     async def post(self, print_logs=False):
         """
         Manually posts guild count using discordlists.py (BotBlock)
@@ -462,10 +479,12 @@ class Developer(commands.Cog):
             async with session.get(LinksAndVars.listing.value) as resp:
                 listing: dict = orjson.loads(await resp.text())
         for i in listing:
-            self.api.set_auth(listing[i].split('/')[0], token_get(''.join(i.split())))
+            self.api.set_auth(listing[i].split("/")[0], token_get("".join(i.split())))
         await self.bot.change_presence(
             status=discord.Status.dnd,
-            activity=discord.Activity(type=discord.ActivityType.watching, name="over Naruto"),
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name="over Naruto"
+            ),
         )
         try:
             result = await self.api.post_count()
@@ -474,33 +493,35 @@ class Developer(commands.Cog):
         except Exception as e:
             log.warning(e)
         members = len(set(self.bot.get_all_members()))
-        
-        #Discord Botlist
+
+        # Discord Botlist
         await post_handler(
-            Methods.POST, 
-            f'https://discordbotlist.com/api/v1/bots{self.bot.application_id}/stats', 
-            header={"Authorization": token_get('DISCORDBOTLIST')},
-            data={'users': members},
+            Methods.POST,
+            f"https://discordbotlist.com/api/v1/bots{self.bot.application_id}/stats",
+            header={"Authorization": token_get("DISCORDBOTLIST")},
+            data={"users": members},
             log_data=print_logs,
-            return_data=False
+            return_data=False,
         )
         await self.bot.change_presence(
-                status=discord.Status.idle,
-                activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto")
-            )
-    
+            status=discord.Status.idle,
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name="over Naruto"
+            ),
+        )
+
     @dev.command(usage="[print_logs]")
-    async def post_stats(self, ctx, print_logs: bool=False):
-        '''Posts stats to different botlist'''
+    async def post_stats(self, ctx: "Context", print_logs: bool = False):
+        """Posts stats to different botlist"""
         await self.post(print_logs=print_logs)
         try:
             await ctx.message.delete()
         except (discord.Forbidden, discord.HTTPException):
             pass
-    
+
     @dev.command(usage="[print_logs]", aliases=["post_command"])
-    async def post_commands(self, ctx, print_logs: bool=False):
-        '''Posts commands to different botlist'''
+    async def post_commands(self, ctx: "Context", print_logs: bool = False):
+        """Posts commands to different botlist"""
         await post_commands(self.bot, print_logs=print_logs)
         try:
             await ctx.message.delete()
@@ -508,5 +529,5 @@ class Developer(commands.Cog):
             pass
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(Developer(bot))

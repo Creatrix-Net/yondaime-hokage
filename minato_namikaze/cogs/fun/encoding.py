@@ -8,17 +8,22 @@ from typing import Iterator, Optional, Sequence, Union
 
 import discord
 from discord.ext import commands
-from lib.data.braille import (contractions, dna, letters, numbers, punctuation,
-                              r_contractions, r_letters, r_numbers,
-                              r_punctuation)
+from lib.data.braille import (
+    contractions,
+    dna,
+    letters,
+    numbers,
+    punctuation,
+    r_contractions,
+    r_letters,
+    r_numbers,
+    r_punctuation,
+)
 
 from ... import MinatoNamikazeBot
 
 
-def escape(text: str,
-           *,
-           mass_mentions: bool = False,
-           formatting: bool = False) -> str:
+def escape(text: str, *, mass_mentions: bool = False, formatting: bool = False) -> str:
     if mass_mentions:
         text = text.replace("@everyone", "@\u200beveryone")
         text = text.replace("@here", "@\u200bhere")
@@ -43,9 +48,9 @@ def pagify(
     while len(in_text) > page_length:
         this_page_len = page_length
         if escape_mass_mentions:
-            this_page_len -= in_text.count("@here", 0,
-                                           page_length) + in_text.count(
-                                               "@everyone", 0, page_length)
+            this_page_len -= in_text.count("@here", 0, page_length) + in_text.count(
+                "@everyone", 0, page_length
+            )
         closest_delim = (in_text.rfind(d, 1, this_page_len) for d in delims)
         if priority:
             closest_delim = next((x for x in closest_delim if x > 0), -1)
@@ -103,6 +108,7 @@ class Encoding(commands.Cog):
         """Shows you information about a number of characters.
         Only up to 25 characters at a time.
         """
+
         def to_string(c):
             digit = f"{ord(c):x}"
             name = unicodedata.name(c, "Name not found.")
@@ -163,27 +169,23 @@ class Encoding(commands.Cog):
         pass
 
     @_encode.command(name="binary")
-    async def encode_binary(self, ctx: commands.Context, *,
-                            message: str) -> None:
+    async def encode_binary(self, ctx: commands.Context, *, message: str) -> None:
         """
         Encode text into binary sequences of 8
         """
-        ascii_bin = " ".join(
-            bin(x)[2:].zfill(8) for x in message.encode("utf-8"))
+        ascii_bin = " ".join(bin(x)[2:].zfill(8) for x in message.encode("utf-8"))
         await ctx.send(ascii_bin)
 
     @_decode.command(name="binary")
-    async def decode_binary(self, ctx: commands.Context, *,
-                            message: str) -> None:
+    async def decode_binary(self, ctx: commands.Context, *, message: str) -> None:
         """
         Decode binary sequences of 8
         """
         try:
             message = re.sub(r"[\s]+", "", message)
-            bin_ascii = "".join([
-                chr(int(message[i:i + 8], 2))
-                for i in range(0, len(message), 8)
-            ])
+            bin_ascii = "".join(
+                [chr(int(message[i : i + 8], 2)) for i in range(0, len(message), 8)]
+            )
             await ctx.send(bin_ascii)
         except Exception:
             await ctx.send("That does not look like valid binary.")
@@ -204,8 +206,9 @@ class Encoding(commands.Cog):
         try:
             message = re.sub(r"[\s]+", "", message)
             ascii_bin = "".join(
-                chr(int("0x" + message[x:x + 2], 16))
-                for x in range(0, len(message), 2))
+                chr(int("0x" + message[x : x + 2], 16))
+                for x in range(0, len(message), 2)
+            )
             await ctx.send(ascii_bin)
         except Exception:
             await ctx.send("That does not look like valid hex.")
@@ -215,8 +218,7 @@ class Encoding(commands.Cog):
         """
         Encode text into base 16
         """
-        await ctx.send(
-            base64.b16encode(bytes(message, "utf-8")).decode("utf-8"))
+        await ctx.send(base64.b16encode(bytes(message, "utf-8")).decode("utf-8"))
 
     @_decode.command(name="b16", aliases=["base16"])
     async def decode_b16(self, ctx: commands.Context, *, message: str) -> None:
@@ -224,8 +226,7 @@ class Encoding(commands.Cog):
         Decode base16 text
         """
         try:
-            await ctx.send(
-                base64.b16decode(bytes(message, "utf-8")).decode("utf-8"))
+            await ctx.send(base64.b16decode(bytes(message, "utf-8")).decode("utf-8"))
         except Exception:
             await ctx.send("That does not look like valid base 16 characters.")
 
@@ -234,8 +235,7 @@ class Encoding(commands.Cog):
         """
         Encode text into base 32
         """
-        await ctx.send(
-            base64.b32encode(bytes(message, "utf-8")).decode("utf-8"))
+        await ctx.send(base64.b32encode(bytes(message, "utf-8")).decode("utf-8"))
 
     @_decode.command(name="b32", aliases=["base32"])
     async def decode_b32(self, ctx: commands.Context, *, message: str) -> None:
@@ -243,8 +243,7 @@ class Encoding(commands.Cog):
         Decode base32 text
         """
         try:
-            await ctx.send(
-                base64.b32decode(bytes(message, "utf-8")).decode("utf-8"))
+            await ctx.send(base64.b32decode(bytes(message, "utf-8")).decode("utf-8"))
         except Exception:
             await ctx.send("That does not look like valid base 32 characters.")
 
@@ -253,8 +252,7 @@ class Encoding(commands.Cog):
         """
         Encode text into base 64
         """
-        await ctx.send(
-            base64.b64encode(bytes(message, "utf-8")).decode("utf-8"))
+        await ctx.send(base64.b64encode(bytes(message, "utf-8")).decode("utf-8"))
 
     @_decode.command(name="b64", aliases=["base64"])
     async def decode_b64(self, ctx: commands.Context, *, message: str) -> None:
@@ -262,34 +260,31 @@ class Encoding(commands.Cog):
         Decode base 64 text
         """
         try:
-            await ctx.send(
-                base64.b64decode(bytes(message, "utf-8")).decode("utf-8"))
+            await ctx.send(base64.b64decode(bytes(message, "utf-8")).decode("utf-8"))
         except UnicodeDecodeError:
             await ctx.send("That does not look like valid base 64 characters.")
 
     @_encode.command(name="chr", aliases=["character"])
-    async def encode_char(self, ctx: commands.Context, *,
-                          message: str) -> None:
+    async def encode_char(self, ctx: commands.Context, *, message: str) -> None:
         """
         Encode message into character numbers
         """
         await ctx.send(" ".join(str(ord(x)) for x in message))
 
     @_decode.command(name="chr", aliases=["character"])
-    async def decode_char(self, ctx: commands.Context, *,
-                          message: str) -> None:
+    async def decode_char(self, ctx: commands.Context, *, message: str) -> None:
         """
         Decode character numbers to a message
         """
         try:
-            await ctx.send(" ".join(
-                str(chr(int(x))) for x in re.split(r"[\s]+", message)))
+            await ctx.send(
+                " ".join(str(chr(int(x))) for x in re.split(r"[\s]+", message))
+            )
         except Exception:
             await ctx.send("That does not look like valid char data.")
 
     @_encode.command(name="braille")
-    async def encode_braille(self, ctx: commands.Context, *,
-                             message: str) -> None:
+    async def encode_braille(self, ctx: commands.Context, *, message: str) -> None:
         """
         Encode text into braille unicode characters
         """
@@ -300,8 +295,7 @@ class Encoding(commands.Cog):
             if letter.isdigit():
                 message = message.replace(letter, chr(10300) + numbers[letter])
             if letter.isupper():
-                message = message.replace(letter,
-                                          chr(10272) + letters[letter.lower()])
+                message = message.replace(letter, chr(10272) + letters[letter.lower()])
             if letter in letters:
                 message = message.replace(letter, letters[letter])
             if letter in punctuation:
@@ -309,8 +303,7 @@ class Encoding(commands.Cog):
         await ctx.send(message)
 
     @_decode.command(name="braille")
-    async def decode_braille(self, ctx: commands.Context, *,
-                             message: str) -> None:
+    async def decode_braille(self, ctx: commands.Context, *, message: str) -> None:
         """
         Decide braille unicode characters to ascii
         """
@@ -326,13 +319,13 @@ class Encoding(commands.Cog):
                 replacement = "capital"
                 continue
             if replacement == "number":
-                message = message.replace(
-                    chr(10300) + letter, r_numbers[letter])
+                message = message.replace(chr(10300) + letter, r_numbers[letter])
                 replacement = ""
                 continue
             if replacement == "capital":
                 message = message.replace(
-                    chr(10272) + letter, r_letters[letter].upper())
+                    chr(10272) + letter, r_letters[letter].upper()
+                )
                 replacement = ""
                 continue
         for letter in message:
@@ -352,8 +345,9 @@ class Encoding(commands.Cog):
         return text.translate(lookup)
 
     @_encode.command(name="rot", aliases=["caeser"])
-    async def caeser_encode(self, ctx: commands.Context,
-                            rot_key: Optional[int], *, message: str) -> None:
+    async def caeser_encode(
+        self, ctx: commands.Context, rot_key: Optional[int], *, message: str
+    ) -> None:
         """
         Encode a caeser cipher message with specified key
         """
@@ -362,8 +356,9 @@ class Encoding(commands.Cog):
         await ctx.send(self.rot_encode(rot_key, message))
 
     @_decode.command(name="rot", aliases=["caeser"])
-    async def caeser_decode(self, ctx: commands.Context,
-                            rot_key: Optional[int], *, message: str) -> None:
+    async def caeser_decode(
+        self, ctx: commands.Context, rot_key: Optional[int], *, message: str
+    ) -> None:
         """
         Decode a caeser cipher message with specified key
         """
@@ -378,10 +373,10 @@ class Encoding(commands.Cog):
         """
         dna = {"00": "A", "01": "T", "10": "G", "11": "C"}
         message = message.strip(" ")
-        binary = " ".join(
-            bin(x)[2:].zfill(8)
-            for x in message.encode("utf-8")).replace(" ", "")
-        binlist = [binary[i:i + 2] for i in range(0, len(binary), 2)]
+        binary = " ".join(bin(x)[2:].zfill(8) for x in message.encode("utf-8")).replace(
+            " ", ""
+        )
+        binlist = [binary[i : i + 2] for i in range(0, len(binary), 2)]
         newmsg = ""
         count = 0
         for letter in binlist:
@@ -408,8 +403,9 @@ class Encoding(commands.Cog):
                 replacement += dna[character][i]
             try:
                 n = int("0b" + replacement, 2)
-                mapping[i] = n.to_bytes((n.bit_length() + 7) // 8,
-                                        "big").decode("utf8", "ignore")
+                mapping[i] = n.to_bytes((n.bit_length() + 7) // 8, "big").decode(
+                    "utf8", "ignore"
+                )
             except TypeError:
                 pass
             replacement = ""
@@ -422,5 +418,5 @@ class Encoding(commands.Cog):
             await ctx.send(f"```\n{page}\n```")
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(Encoding(bot))

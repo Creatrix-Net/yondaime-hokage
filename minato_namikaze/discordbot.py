@@ -22,15 +22,27 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
 
-from lib import (return_all_cogs, ChannelAndMessageId, Context, Database,
-                 LinksAndVars, PaginatedHelpCommand, ReactionPersistentView,
-                 Tokens, Webhooks, format_dt, format_relative, post_commands,
-                 token_get)
+from lib import (
+    return_all_cogs,
+    ChannelAndMessageId,
+    Context,
+    Database,
+    LinksAndVars,
+    PaginatedHelpCommand,
+    ReactionPersistentView,
+    Tokens,
+    Webhooks,
+    format_dt,
+    format_relative,
+    post_commands,
+    token_get,
+)
 
 if TYPE_CHECKING:
     from .cogs.reminder import Reminder
 
 log = logging.getLogger(__name__)
+
 
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
@@ -49,16 +61,14 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     pool: asyncpg.Pool
     user: discord.ClientUser
     pool: asyncpg.Pool
-    command_stats: Counter[str] # type: ignore
-    socket_stats: Counter[str] # type: ignore
+    command_stats: Counter[str]  # type: ignore
+    socket_stats: Counter[str]  # type: ignore
     gateway_handler: Any
     bot_app_info: discord.AppInfo
 
     def __init__(self):
         allowed_mentions = discord.AllowedMentions(
-            roles=False,
-            everyone=False,
-            users=True
+            roles=False, everyone=False, users=True
         )
         intents = discord.Intents(
             guilds=True,
@@ -84,7 +94,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.identifies = defaultdict(list)
 
         self.spam_control = commands.CooldownMapping.from_cooldown(
-            10, 12.0, commands.BucketType.user)
+            10, 12.0, commands.BucketType.user
+        )
         self._auto_spam_count = Counter()
 
         self.db = DiscordDatabase(self, ChannelAndMessageId.server_id2.value)
@@ -133,8 +144,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 "[Login Failure] The token initialsed in environment(or .env file) is invalid."
             )
         except KeyboardInterrupt:
-            log.critical(
-                "The bot is shutting down since force shutdown was initiated.")
+            log.critical("The bot is shutting down since force shutdown was initiated.")
         except Exception as e:
             log.critical("An exception occured, %s", e)
 
@@ -149,22 +159,28 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             pass
         try:
             await self.tree.sync(guild=discord.Object(id=920536143244709889))
-        except (discord.HTTPException, discord.Forbidden, discord.app_commands.MissingApplicationID):
+        except (
+            discord.HTTPException,
+            discord.Forbidden,
+            discord.app_commands.MissingApplicationID,
+        ):
             pass
 
-
         difference = int(round(time.time() - self.start_time.timestamp()))
-        stats = (self.get_channel(
-            ChannelAndMessageId.restartlog_channel1.value)
-            if not self.local else self.get_channel(
-            ChannelAndMessageId.restartlog_channel2.value))
+        stats = (
+            self.get_channel(ChannelAndMessageId.restartlog_channel1.value)
+            if not self.local
+            else self.get_channel(ChannelAndMessageId.restartlog_channel2.value)
+        )
         e = Embed(
             title="Bot Loaded!",
             description=f"Bot ready by **{format_dt(datetime.now(), 'R',True)}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
         )
         await self.change_presence(
             status=discord.Status.idle,
-            activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name="over Naruto"
+            ),
         )
         e.set_thumbnail(url=self.user.avatar.url)
 
@@ -181,23 +197,30 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         await self.change_presence(
             status=discord.Status.dnd,
-            activity=discord.Activity(type=discord.ActivityType.watching, name="over Naruto"),
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name="over Naruto"
+            ),
         )
-        developer = self.get_cog('Developer')
+        developer = self.get_cog("Developer")
         if developer is None:
-            log.warning('Developer cog is not available')
+            log.warning("Developer cog is not available")
         else:
             await developer.post()
             log.info("Status Posted")
         await post_commands(self, bool(self.local))
-        log.info('Commands Posted')
+        log.info("Commands Posted")
         await self.change_presence(
             status=discord.Status.idle,
-            activity=discord.Activity(type=discord.ActivityType.watching,name="over Naruto"),
+            activity=discord.Activity(
+                type=discord.ActivityType.watching, name="over Naruto"
+            ),
         )
-    
+
     async def add_persistant_views(self):
-        database = await self.db.new(Database.database_category_name.value, Database.reaction_roles_channel_name.value)
+        database = await self.db.new(
+            Database.database_category_name.value,
+            Database.reaction_roles_channel_name.value,
+        )
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
@@ -212,7 +235,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                         database=database,
                     ),
                     message_id=int(data_keys[0]),
-                    )
+                )
                 self.persistent_views_added = True
             except Exception as e:
                 log.error(e)
@@ -220,7 +243,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         log.info("Persistent views added")
 
     async def update_blacklist(self):
-        database = await self.db.new(Database.database_category_name.value, Database.user_blacklist_channel_name.value)
+        database = await self.db.new(
+            Database.database_category_name.value,
+            Database.user_blacklist_channel_name.value,
+        )
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
@@ -231,7 +257,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             except Exception as e:
                 log.error(e)
                 continue
-        database = await self.db.new(Database.database_category_name.value, Database.server_blacklist_channel_name.value)
+        database = await self.db.new(
+            Database.database_category_name.value,
+            Database.server_blacklist_channel_name.value,
+        )
         async for message in database._Database__channel.history(limit=None):
             cnt = message.content
             try:
@@ -242,21 +271,24 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 guild = self.get_guild(int(data_keys[0]))
                 if guild is not None:
                     channel = await self.get_welcome_channel(guild)
-                    embed = ErrorEmbed(title=f'Left {guild.name}')
-                    embed.description = f'I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer.'
-                    embed.add_field(name = 'Developer', value=f'[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})')
+                    embed = ErrorEmbed(title=f"Left {guild.name}")
+                    embed.description = f"I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer."
+                    embed.add_field(
+                        name="Developer",
+                        value=f"[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})",
+                    )
                     embed.add_field(
                         name="Support Server",
                         value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
                     )
                     await channel.send(embed=embed)
                     await guild.leave()
-                    log.info(f'Left guild {guild.id} [Marked as spam]')
+                    log.info(f"Left guild {guild.id} [Marked as spam]")
             except Exception as e:
                 log.error(e)
                 continue
         self.blacklist = list(set(self.blacklist))
-        log.info('Blacklist Data updated')
+        log.info("Blacklist Data updated")
 
     @staticmethod
     async def query_member_named(guild, argument, *, cache=False):
@@ -276,18 +308,13 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         """
         if len(argument) > 5 and argument[-5] == "#":
             username, _, discriminator = argument.rpartition("#")
-            members = await guild.query_members(username,
-                                                limit=100,
-                                                cache=cache)
-            return discord.utils.get(members,
-                                     name=username,
-                                     discriminator=discriminator)
+            members = await guild.query_members(username, limit=100, cache=cache)
+            return discord.utils.get(
+                members, name=username, discriminator=discriminator
+            )
         else:
-            members = await guild.query_members(argument,
-                                                limit=100,
-                                                cache=cache)
-            return discord.utils.find(lambda m: argument in (m.name, m.nick),
-                                      members)
+            members = await guild.query_members(argument, limit=100, cache=cache)
+            return discord.utils.find(lambda m: argument in (m.name, m.nick), members)
 
     async def get_or_fetch_member(self, guild, member_id):
         """Looks up a member in cache or fetches if not found.
@@ -316,9 +343,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             else:
                 return member
 
-        members = await guild.query_members(limit=1,
-                                            user_ids=[member_id],
-                                            cache=True)
+        members = await guild.query_members(limit=1, user_ids=[member_id], cache=True)
         if not members:
             return None
         return members[0]
@@ -359,25 +384,25 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 else:
                     yield member
             else:
-                members = await guild.query_members(limit=1,
-                                                    user_ids=needs_resolution,
-                                                    cache=True)
+                members = await guild.query_members(
+                    limit=1, user_ids=needs_resolution, cache=True
+                )
                 if members:
                     yield members[0]
         elif total_need_resolution <= 100:
             # Only a single resolution call needed here
-            resolved = await guild.query_members(limit=100,
-                                                 user_ids=needs_resolution,
-                                                 cache=True)
+            resolved = await guild.query_members(
+                limit=100, user_ids=needs_resolution, cache=True
+            )
             for member in resolved:
                 yield member
         else:
             # We need to chunk these in bits of 100...
             for index in range(0, total_need_resolution, 100):
-                to_resolve = needs_resolution[index:index + 100]
-                members = await guild.query_members(limit=100,
-                                                    user_ids=to_resolve,
-                                                    cache=True)
+                to_resolve = needs_resolution[index : index + 100]
+                members = await guild.query_members(
+                    limit=100, user_ids=to_resolve, cache=True
+                )
                 for member in members:
                     yield member
 
@@ -392,7 +417,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     @staticmethod
     async def get_bot_inviter(guild: discord.Guild):
         try:
-            async for i in guild.audit_logs(limit=10, action=discord.AuditLogAction.bot_add):
+            async for i in guild.audit_logs(
+                limit=10, action=discord.AuditLogAction.bot_add
+            ):
                 return i.user
         except (discord.Forbidden, discord.HTTPException):
             return guild.owner
@@ -432,8 +459,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(
-                tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"][
+                "downsized_large"
+            ]["url"]
         except:
             return
 
@@ -448,9 +476,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(
-                tag=str(tag_name.lower())
-            ))["data"]["images"]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
+                "images"
+            ]["downsized_large"]["url"]
         except:
             return
 
@@ -466,8 +494,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     def giphy(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(
-                tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"][
+                "downsized_large"
+            ]["url"]
         except:
             return
 
@@ -483,32 +512,44 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def giphy(tag_name: str) -> Optional[str]:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(
-                tag=str(tag_name.lower())
-            ))["data"]["images"]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
+                "images"
+            ]["downsized_large"]["url"]
         except:
             return
-    
+
     async def on_message(self, message):
         if message.author.bot:
             return
         await self.process_commands(message)
-    
+
     @staticmethod
     async def log_spammer(ctx, message, retry_after, *, autoblock=False):
-        guild_name = getattr(ctx.guild, 'name', 'No Guild (DMs)')
-        guild_id = getattr(ctx.guild, 'id', None)
-        fmt = 'User %s (ID %s) in guild %r (ID %s) spamming, retry_after: %.2fs'
-        log.warning(fmt, message.author, message.author.id, guild_name, guild_id, retry_after)
+        guild_name = getattr(ctx.guild, "name", "No Guild (DMs)")
+        guild_id = getattr(ctx.guild, "id", None)
+        fmt = "User %s (ID %s) in guild %r (ID %s) spamming, retry_after: %.2fs"
+        log.warning(
+            fmt, message.author, message.author.id, guild_name, guild_id, retry_after
+        )
         if not autoblock:
             return
 
-        embed = discord.Embed(title='Auto-blocked Member', colour=0xDDA453)
-        embed.add_field(name='Member', value=f'{message.author} (ID: {message.author.id})', inline=False)
-        embed.add_field(name='Guild Info', value=f'{guild_name} (ID: {guild_id})', inline=False)
-        embed.add_field(name='Channel Info', value=f'{message.channel} (ID: {message.channel.id}', inline=False)
+        embed = discord.Embed(title="Auto-blocked Member", colour=0xDDA453)
+        embed.add_field(
+            name="Member",
+            value=f"{message.author} (ID: {message.author.id})",
+            inline=False,
+        )
+        embed.add_field(
+            name="Guild Info", value=f"{guild_name} (ID: {guild_id})", inline=False
+        )
+        embed.add_field(
+            name="Channel Info",
+            value=f"{message.channel} (ID: {message.channel.id}",
+            inline=False,
+        )
         embed.timestamp = discord.utils.utcnow()
-        async with aiohttp.ClientSession() as session:  
+        async with aiohttp.ClientSession() as session:
             wh = discord.Webhook.from_url(Webhooks.logs.value, session=session)
             await wh.send(embed=embed)
         return
@@ -520,9 +561,12 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             return
 
         if ctx.author.id in self.blacklist:
-            embed = ErrorEmbed(title='Blacklisted User!')
-            embed.description = 'You have been `blacklisted` from using my commands. For further queries please contact my developer.'
-            embed.add_field(name = 'Developer', value=f'[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})')
+            embed = ErrorEmbed(title="Blacklisted User!")
+            embed.description = "You have been `blacklisted` from using my commands. For further queries please contact my developer."
+            embed.add_field(
+                name="Developer",
+                value=f"[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})",
+            )
             embed.add_field(
                 name="Support Server",
                 value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
@@ -553,34 +597,39 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             await self.invoke(ctx)
         except:
             pass
-    
+
     async def add_to_blacklist(self, object_id):
         self.blacklist.append(int(object_id))
 
     async def on_guild_join(self, guild: discord.Guild):
         if guild.id in self.blacklist:
             channel = await self.get_welcome_channel(guild)
-            embed = ErrorEmbed(title=f'Left {guild.name}')
-            embed.description = f'I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer.'
-            embed.add_field(name = 'Developer', value=f'[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})')
+            embed = ErrorEmbed(title=f"Left {guild.name}")
+            embed.description = f"I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer."
+            embed.add_field(
+                name="Developer",
+                value=f"[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})",
+            )
             embed.add_field(
                 name="Support Server",
                 value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
             )
             await channel.send(embed=embed)
             await guild.leave()
-            log.info(f'Left guild {guild.id} [Marked as spam]')
-    
+            log.info(f"Left guild {guild.id} [Marked as spam]")
+
     async def on_application_command_error(self, response, exception):
-        log.error(f'Error; Command: {response.command}, {str(exception)}')
-    
-    async def get_context(self, origin: Union[discord.Interaction, discord.Message], /, *, cls=Context) -> Context:
+        log.error(f"Error; Command: {response.command}, {str(exception)}")
+
+    async def get_context(
+        self, origin: Union[discord.Interaction, discord.Message], /, *, cls=Context
+    ) -> Context:
         return await super().get_context(origin, cls=cls)
-    
+
     @property
     def reminder(self) -> Optional[Reminder]:
-        return self.get_cog('Reminder')
-    
+        return self.get_cog("Reminder")
+
     def _clear_gateway_data(self) -> None:
         one_week_ago = discord.utils.utcnow() - datetime.timedelta(days=7)
         for shard_id, dates in self.identifies.items():
@@ -597,4 +646,3 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self._clear_gateway_data()
         self.identifies[shard_id].append(discord.utils.utcnow())
         await super().before_identify_hook(shard_id, initial=initial)
-

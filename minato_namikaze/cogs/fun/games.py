@@ -13,6 +13,7 @@ from lib.classes.games import *
 from DiscordUtils import ErrorEmbed
 from ... import MinatoNamikazeBot
 
+
 class Games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -24,42 +25,48 @@ class Games(commands.Cog):
 
     @commands.command(aliases=["tc"], usage="<other player.mention>")
     @commands.guild_only()
-    async def tictactoe(self, ctx, member: Optional[Union[MemberID, discord.Member]] = None):
+    async def tictactoe(
+        self, ctx, member: Optional[Union[MemberID, discord.Member]] = None
+    ):
         """
         Play Tictactoe with yourself or your friend!
         """
         member = member or ctx.me
-        if (
-            member is ctx.author
-            or member.bot
-            and member is not ctx.me
-        ):
-            await ctx.send(embed=ErrorEmbed(
-                description="*You cannot play this game yourself or with a bot*"
-            ))
+        if member is ctx.author or member.bot and member is not ctx.me:
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description="*You cannot play this game yourself or with a bot*"
+                )
+            )
             return
-        view = TicTacToe(player2=member, player1=ctx.author, auto = member is ctx.me)
-        view.message = await ctx.send(f"Tic Tac Toe: X goes first aka {ctx.author.mention}", view=view)
+        view = TicTacToe(player2=member, player1=ctx.author, auto=member is ctx.me)
+        view.message = await ctx.send(
+            f"Tic Tac Toe: X goes first aka {ctx.author.mention}", view=view
+        )
 
-    @commands.command(aliases=["connect_four", "c4", "cf"],usage="[other player.mention]")
+    @commands.command(
+        aliases=["connect_four", "c4", "cf"], usage="[other player.mention]"
+    )
     @commands.guild_only()
-    async def connectfour(self, ctx, member: Optional[Union[MemberID, discord.Member]] = None):
+    async def connectfour(
+        self, ctx, member: Optional[Union[MemberID, discord.Member]] = None
+    ):
         """
         Play Amazing Connect Four Game
         https://en.wikipedia.org/wiki/Connect_Four#firstHeading
         """
         member = member or ctx.me
-        if (
-            member is ctx.author
-            or member.bot
-            and member is not ctx.me
-        ):
-            await ctx.send(embed=ErrorEmbed(
-                description="*You cannot play this game yourself or with a bot*"
-            ))
+        if member is ctx.author or member.bot and member is not ctx.me:
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description="*You cannot play this game yourself or with a bot*"
+                )
+            )
             return
-        view = ConnectFour(red = ctx.author, blue=member, auto = member is ctx.me)
-        view.message = await ctx.send(embeds=[view.embed, view.BoardString()],view=view)
+        view = ConnectFour(red=ctx.author, blue=member, auto=member is ctx.me)
+        view.message = await ctx.send(
+            embeds=[view.embed, view.BoardString()], view=view
+        )
 
     @commands.command(aliases=["hg"])
     async def hangman(self, ctx):
@@ -80,10 +87,10 @@ class Games(commands.Cog):
         view = Akinator()
         await view.start()
         view.message = await ctx.send(embed=await view.build_embed(), view=view)
-    
-    @commands.command(aliases=['wpm', 'typingspeed'])
+
+    @commands.command(aliases=["wpm", "typingspeed"])
     async def typeracer(self, ctx):
-        '''Check your typing speed via a simple typeracer test'''
+        """Check your typing speed via a simple typeracer test"""
         await TypeRacer().start(ctx=ctx)
 
     # @commands.max_concurrency(1, per=BucketType.channel, wait=False)
@@ -137,25 +144,30 @@ class Games(commands.Cog):
             await message.edit(embed=discord.Embed(description=str(i)))
             await asyncio.sleep(1)
         await asyncio.sleep(random.randint(1, 3))
-        await message.edit(embed=discord.Embed(
-            description=f"React to the {reaction}!"))
+        await message.edit(embed=discord.Embed(description=f"React to the {reaction}!"))
         await message.add_reaction(discord.PartialEmoji(name=reaction))
         start = time.perf_counter()
         try:
             _, user = await ctx.bot.wait_for(
                 "reaction_add",
-                check=lambda _reaction, user: _reaction.message.guild == ctx.
-                guild and _reaction.message.channel == ctx.message.channel and
-                _reaction.message == message and str(_reaction.emoji) ==
-                reaction and user != ctx.bot.user and not user.bot,
+                check=lambda _reaction, user: _reaction.message.guild == ctx.guild
+                and _reaction.message.channel == ctx.message.channel
+                and _reaction.message == message
+                and str(_reaction.emoji) == reaction
+                and user != ctx.bot.user
+                and not user.bot,
                 timeout=60,
             )
         except asyncio.TimeoutError:
-            return await message.edit(embed=discord.Embed(
-                description="No one ate the cookie..."))
+            return await message.edit(
+                embed=discord.Embed(description="No one ate the cookie...")
+            )
         end = time.perf_counter()
-        await message.edit(embed=discord.Embed(
-            description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"))
+        await message.edit(
+            embed=discord.Embed(
+                description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"
+            )
+        )
         lis3 = ["1", "2"]
         choice = random.choice(lis3)
         if choice == 2:
@@ -166,5 +178,5 @@ class Games(commands.Cog):
             pass
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(Games(bot))

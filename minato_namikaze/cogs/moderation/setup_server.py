@@ -47,9 +47,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             Database.mentionspam_channel_name.value,
         )
 
-    async def add_and_check_data(
-        self, dict_to_add: dict, ctx: "Context"
-    ) -> None:
+    async def add_and_check_data(self, dict_to_add: dict, ctx: "Context") -> None:
         database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:

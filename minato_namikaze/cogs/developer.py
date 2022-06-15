@@ -331,7 +331,9 @@ class Developer(commands.Cog):
         await ctx.send(f"```md\n# Changed activity to {activity} using Game status.```")
 
     @changestat.command(invoke_without_command=True)
-    async def watching(self, ctx: "Context", *, activity="placeholder (owner to lazy lol)"):
+    async def watching(
+        self, ctx: "Context", *, activity="placeholder (owner to lazy lol)"
+    ):
         """Watching activity"""
         await self.bot.change_presence(
             activity=discord.Activity(
@@ -345,7 +347,9 @@ class Developer(commands.Cog):
         )
 
     @changestat.command(invoke_without_command=True)
-    async def listening(self, ctx: "Context", *, activity="placeholder (owner to lazy lol)"):
+    async def listening(
+        self, ctx: "Context", *, activity="placeholder (owner to lazy lol)"
+    ):
         """Listenting Activity"""
         await self.bot.change_presence(
             activity=discord.Activity(

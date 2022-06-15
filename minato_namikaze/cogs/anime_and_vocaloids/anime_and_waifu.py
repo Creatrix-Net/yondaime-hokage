@@ -6,8 +6,15 @@ from asyncdagpi import Client
 from discord.ext import commands
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
 from lib import LinksAndVars, Tokens
-from mal import (Anime, AnimeCharacterResult, AnimeSearch, AnimeStaffResult,
-                 Manga, MangaCharacterResult, MangaSearch)
+from mal import (
+    Anime,
+    AnimeCharacterResult,
+    AnimeSearch,
+    AnimeStaffResult,
+    Manga,
+    MangaCharacterResult,
+    MangaSearch,
+)
 
 if TYPE_CHECKING:
     from lib import Context

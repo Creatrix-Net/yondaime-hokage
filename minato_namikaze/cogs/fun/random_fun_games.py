@@ -57,7 +57,9 @@ class Random(commands.Cog):
             await msg.edit(content="", embed=e)
 
     @commands.command(aliases=["takeitback"], usage="<member.mention>")
-    async def insult(self, ctx: "Context", user: Optional[Union[MemberID, discord.Member]] = None):
+    async def insult(
+        self, ctx: "Context", user: Optional[Union[MemberID, discord.Member]] = None
+    ):
         """
         Insult a user
         `user` the user you would like to insult
@@ -109,7 +111,9 @@ class Random(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def qr(self, ctx: "Context", colour="255-255-255", *, url: Optional[str]=None):
+    async def qr(
+        self, ctx: "Context", colour="255-255-255", *, url: Optional[str] = None
+    ):
         """Generates easy QR Code"""
         colours = {
             "255-255-255": "255-255-255",
@@ -172,7 +176,7 @@ class Random(commands.Cog):
         os.remove("announce.mp3")
 
     @commands.command(usage="<text>")
-    async def tts(self, ctx: "Context", *, text:str):
+    async def tts(self, ctx: "Context", *, text: str):
         """Generate text to speech messages"""
         lol = gTTS(text=text)
         lol.save("tts.mp3")

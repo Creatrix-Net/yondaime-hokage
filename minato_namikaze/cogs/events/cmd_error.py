@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 
+
 class BotEventsCommands(commands.Cog):
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot

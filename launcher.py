@@ -14,8 +14,6 @@ import traceback
 try:
     import uvloop  # type: ignore
 except ImportError:
-    import sys
-
     if sys.platform.startswith("win32") or sys.platform.startswith("cygwin"):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 else:

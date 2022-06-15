@@ -9,6 +9,7 @@ discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@master
 discord-ext-owoify
 discord.py @ git+https://github.com/Rapptz/discord.py@master
 asyncpg
+fluxpoint.py
 eight-ball
 num2words
 english-words @ git+https://github.com/The-4th-Hokage/english-words-py.git@master

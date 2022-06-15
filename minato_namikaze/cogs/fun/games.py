@@ -1,22 +1,22 @@
 import asyncio
 import random
 import time
-from random import choice
-from string import ascii_letters
-from typing import Union, Optional
+from typing import Union, Optional, TYPE_CHECKING
 
 import discord
 from discord.ext import commands
-from discord.ext.commands.cooldowns import BucketType
-from lib import MemberID, Tokens
+from lib import MemberID
 from lib.classes.games import *
 from DiscordUtils import ErrorEmbed
-from ... import MinatoNamikazeBot
+
+if TYPE_CHECKING:
+    from lib import Context
+    from ... import MinatoNamikazeBot
 
 
 class Games(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.description = "Play some amazing games"
 
     @property
@@ -26,7 +26,7 @@ class Games(commands.Cog):
     @commands.command(aliases=["tc"], usage="<other player.mention>")
     @commands.guild_only()
     async def tictactoe(
-        self, ctx, member: Optional[Union[MemberID, discord.Member]] = None
+        self, ctx: "Context", member: Optional[Union[MemberID, discord.Member]] = None
     ):
         """
         Play Tictactoe with yourself or your friend!
@@ -49,7 +49,7 @@ class Games(commands.Cog):
     )
     @commands.guild_only()
     async def connectfour(
-        self, ctx, member: Optional[Union[MemberID, discord.Member]] = None
+        self, ctx: "Context", member: Optional[Union[MemberID, discord.Member]] = None
     ):
         """
         Play Amazing Connect Four Game
@@ -69,8 +69,8 @@ class Games(commands.Cog):
         )
 
     @commands.command(aliases=["hg"])
-    async def hangman(self, ctx):
-        """
+    async def hangman(self, ctx: "Context"):
+        """: "Context"
         Play Hangman!
         https://en.wikipedia.org/wiki/Hangman_(game)#Example_game
         To play reply with a letter after the hangman embed
@@ -79,7 +79,7 @@ class Games(commands.Cog):
         await game.start(ctx)
 
     @commands.command(aliases=["aki"])
-    async def akinator(self, ctx):
+    async def akinator(self, ctx: "Context"):
         """
         Play Akinator
         https://en.wikipedia.org/wiki/Akinator#Gameplay
@@ -128,7 +128,7 @@ class Games(commands.Cog):
 
     @commands.max_concurrency(1, per=commands.BucketType.channel)
     @commands.command()
-    async def reaction(self, ctx):
+    async def reaction(self, ctx: "Context"):
         """
         Yum Yum or Yuck Yuck?
         """

@@ -5,6 +5,7 @@ import discord
 from discord.ext import commands
 
 if TYPE_CHECKING:
+    from lib import Context
     from ... import MinatoNamikazeBot
 
 invitere = r"(?:https?:\/\/)?discord(?:\.gg|app\.com\/invite)?\/(?:#\/)([a-zA-Z0-9-]*)"
@@ -12,19 +13,19 @@ invitere2 = r"(http[s]?:\/\/)*discord((app\.com\/invite)|(\.gg))\/(invite\/)?(#\
 
 
 class Snipe(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.snipes = {}
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
+        self.snipes: dict = {}
         self.description = "\"Snipes\" someone's message that's been edited or deleted."
 
         @bot.listen("on_message_delete")
-        async def on_message_delete(msg):
+        async def on_message_delete(msg: discord.Message):
             if msg.author.bot:
                 return
             self.snipes[msg.channel.id] = msg
 
         @bot.listen("on_message_edit")
-        async def on_message_edit(before, after):
+        async def on_message_edit(before: discord.Message, after: discord.Message):
             if before.author.bot or after.author.bot:
                 return  # DEPARTMENT OF REDUNDANCY DEPARTMENT
             if (self.eval(before.content, after.content) >= 10) and (
@@ -37,7 +38,7 @@ class Snipe(commands.Cog):
         return discord.PartialEmoji(name="\N{DIRECT HIT}")
 
     @staticmethod
-    def sanitise(string):
+    def sanitise(string: str) -> str:
         if len(string) > 1024:
             string = string[0:1021] + "..."
         string = re.sub(invitere2, "[INVITE REDACTED]", string)
@@ -88,7 +89,7 @@ class Snipe(commands.Cog):
         return self.minDis(str1, str2, n, m, dp)
 
     @commands.command()
-    async def snipe(self, ctx):
+    async def snipe(self, ctx: "Context"):
         "\"Snipes\" someone's message that's been edited or deleted."
         try:
             snipe = self.snipes[ctx.channel.id]

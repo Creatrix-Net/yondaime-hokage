@@ -5,7 +5,7 @@ import asyncio
 import io
 import os
 from random import choice
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import discord
 import eight_ball
@@ -15,12 +15,16 @@ from discord.ext import commands, owoify
 from gtts import gTTS
 from lib import Embed, LinksAndVars, MemberID, TimeConverter
 from PIL import Image
-from ... import MinatoNamikazeBot
+
+if TYPE_CHECKING:
+    from lib import Context
+
+    from ... import MinatoNamikazeBot
 
 
 class Random(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.mystbin_client = mystbin.Client()
         self.description = "Some random fun and usefull commands."
 
@@ -30,13 +34,13 @@ class Random(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def braille(self, ctx, user: discord.Member = None):
+    async def braille(self, ctx: "Context", user: discord.Member = None):
         user = user or ctx.author
         file = await self.bot.se.braille(f"{user.avatar_url}")
         await ctx.send(file)
 
     @braille.error
-    async def braille_handler(self, ctx, error):
+    async def braille_handler(self, ctx: "Context", error):
         if isinstance(error, commands.CommandOnCooldown):
             l = self.bot.get_command("braille")
             left = l.get_cooldown_retry_after(ctx)
@@ -48,7 +52,7 @@ class Random(commands.Cog):
             await msg.edit(content="", embed=e)
 
     @commands.command(aliases=["takeitback"], usage="<member.mention>")
-    async def insult(self, ctx, user: Optional[Union[MemberID, discord.Member]] = None):
+    async def insult(self, ctx: "Context", user: Optional[Union[MemberID, discord.Member]] = None):
         """
         Insult a user
         `user` the user you would like to insult
@@ -81,14 +85,14 @@ class Random(commands.Cog):
             )
 
     @commands.command(usage="{text}")
-    async def owoify(self, ctx, text):
+    async def owoify(self, ctx: "Context", text: str):
         """Owoify the message"""
         lol = owoify.owoify(f"{text}")
         await ctx.send(lol)
 
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def magic(self, ctx, user: discord.Member = None):
+    async def magic(self, ctx: "Context", user: Optional[discord.Member] = None):
         """See magic!"""
         user = user or ctx.author
         url = str(user.avatar.with_format("png").with_size(1024).url)
@@ -100,7 +104,7 @@ class Random(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def qr(self, ctx, colour="255-255-255", *, url=None):
+    async def qr(self, ctx: "Context", colour="255-255-255", *, url: Optional[str]=None):
         """Generates easy QR Code"""
         colours = {
             "255-255-255": "255-255-255",
@@ -134,7 +138,7 @@ class Random(commands.Cog):
                 pass
 
     @commands.command(usage="<time> <reminder> (Time needs to be in seconds...)")
-    async def remind(self, ctx, time: TimeConverter, *, reminder):
+    async def remind(self, ctx: "Context", time: TimeConverter, *, reminder: str):
         """A simple reminder"""
         if int(time) < 12 * 60 * 60:
             e = Embed(
@@ -154,7 +158,7 @@ class Random(commands.Cog):
             )
 
     @commands.command(usage="<name>")
-    async def sn(self, ctx, *, name):
+    async def sn(self, ctx: "Context", *, name: str):
         """Introduce yourself to everyone"""
         tts = gTTS(text=f"Hi! {name} is really cool!", lang="en")
         tts.save("announce.mp3")
@@ -163,9 +167,9 @@ class Random(commands.Cog):
         os.remove("announce.mp3")
 
     @commands.command(usage="<text>")
-    async def tts(self, ctx, *, text):
+    async def tts(self, ctx: "Context", *, text:str):
         """Generate text to speech messages"""
-        lol = gTTS(text=f"{text}")
+        lol = gTTS(text=text)
         lol.save("tts.mp3")
         await ctx.send(file=discord.File("tts.mp3"))
         await asyncio.sleep(5)
@@ -174,7 +178,7 @@ class Random(commands.Cog):
     @commands.command(
         aliases=["color", "colour", "sc"], usage="<hexadecimal colour code>"
     )
-    async def show_color(self, ctx, *, color: discord.Colour):
+    async def show_color(self, ctx: "Context", *, color: discord.Colour):
         """Enter a color and you will see it!"""
         file = io.BytesIO()
         Image.new("RGB", (200, 90), color.to_rgb()).save(file, format="PNG")
@@ -184,7 +188,7 @@ class Random(commands.Cog):
         await ctx.send(file=discord.File(file, "color.png"), embed=em)
 
     @commands.command(aliases=["myst"], usage="<text>")
-    async def mystbin(self, ctx, *, text):
+    async def mystbin(self, ctx: "Context", *, text: str):
         """Generate an Mystbin for yourself"""
         paste = await self.mystbin_client.post(f"{text}", syntax="python")
         e = discord.Embed(
@@ -194,7 +198,7 @@ class Random(commands.Cog):
         await ctx.send(embed=e)
 
     @commands.command(aliases=["getmyst"], usage="<mystbin_id>")
-    async def getmystbin(self, ctx, id):
+    async def getmystbin(self, ctx: "Context", id: str):
         """Get your Mystbi using your id"""
         try:
             get_paste = await self.mystbin_client.get(f"https://mystb.in/{id}")
@@ -217,7 +221,7 @@ class Random(commands.Cog):
             await ctx.send(f"Hmmm.. id : {id} isn't found, try again?")
 
     @commands.command(name="8ball", usage="<question>")
-    async def _8ball(self, ctx, *, question):
+    async def _8ball(self, ctx: "Context", *, question: str):
         """Ask questions about your future"""
         ball = eight_ball.ball()
         async with ctx.channel.typing():

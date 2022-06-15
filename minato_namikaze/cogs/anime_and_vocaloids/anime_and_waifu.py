@@ -6,17 +6,12 @@ from asyncdagpi import Client
 from discord.ext import commands
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
 from lib import LinksAndVars, Tokens
-from mal import (
-    Anime,
-    AnimeCharacterResult,
-    AnimeSearch,
-    AnimeStaffResult,
-    Manga,
-    MangaCharacterResult,
-    MangaSearch,
-)
+from mal import (Anime, AnimeCharacterResult, AnimeSearch, AnimeStaffResult,
+                 Manga, MangaCharacterResult, MangaSearch)
 
 if TYPE_CHECKING:
+    from lib import Context
+
     from ... import MinatoNamikazeBot
 
 
@@ -79,8 +74,8 @@ def format_manga_characters(character: List[MangaCharacterResult]) -> str:
 
 
 class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.bot.dagpi = Client(Tokens.dagpi.value)
         self.description = "Some anime, manga and waifu related commands"
 
@@ -123,7 +118,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "searchani",
         ],
     )
-    async def animesearch(self, ctx: commands.Context, *, anime_name: str):
+    async def animesearch(self, ctx: "Context", *, anime_name: str):
         """Searches Anime from MAL and displays the first 10 search result."""
         search = AnimeSearch(str(anime_name).strip(" ").lower())
         search_results = search.results[:10]
@@ -175,7 +170,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "anime",
         ],
     )
-    async def aboutanime(self, ctx: commands.Context, mal_id: int):
+    async def aboutanime(self, ctx: "Context", mal_id: int):
         """Displays about the anime using the MAL ANIME ID. get it by using animesearch command."""
         await ctx.send(":mag: Searching...", delete_after=5)
         anime = Anime(int(mal_id))
@@ -332,7 +327,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "searchmag",
         ],
     )
-    async def mangasearch(self, ctx: commands.Context, *, manga_name: str):
+    async def mangasearch(self, ctx: "Context", *, manga_name: str):
         """Searches Manga from MAL and displays the first 10 search result."""
         search = MangaSearch(str(manga_name).strip(" ").lower())
         search_results = search.results[:10]
@@ -384,7 +379,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "manga",
         ],
     )
-    async def aboutmanga(self, ctx: commands.Context, mal_id: int):
+    async def aboutmanga(self, ctx: "Context", mal_id: int):
         """Displays about the manga using the MAL MANGA ID. get it by using mangasearch command."""
         message = await ctx.send(":mag: Searching...", delete_after=5)
         manga = Manga(int(mal_id))
@@ -474,7 +469,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     @commands.hybrid_command(aliases=["w", "wfu", "wa"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
-    async def waifu(self, ctx: commands.Context):
+    async def waifu(self, ctx: "Context"):
         """Get random waifu and marry them! UwU!"""
         async with ctx.typing():
             waifu = await self.get_waifu()
@@ -496,7 +491,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     @commands.hybrid_command(aliases=["wtp", "whatsthatpokemon"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
-    async def whosthatpokemon(self, ctx: commands.Context):
+    async def whosthatpokemon(self, ctx: "Context"):
         """Play Who\'s That Pokemon?"""
         async with ctx.typing():
             wtp = await self.bot.dagpi.wtp()

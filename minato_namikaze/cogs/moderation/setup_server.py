@@ -11,12 +11,14 @@ from DiscordUtils.embeds import *
 from lib import Database, detect_bad_domains, is_mod
 
 if typing.TYPE_CHECKING:
+    from lib import Context
+
     from ... import MinatoNamikazeBot
 
 
 class ServerSetup(commands.Cog, name="Server Setup"):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.description = "Do some necessary setup through an interactive mode."
         self.cleanup.start()
 
@@ -41,7 +43,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         )
 
     async def add_and_check_data(
-        self, dict_to_add: dict, ctx: commands.Context
+        self, dict_to_add: dict, ctx: "Context"
     ) -> None:
         database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
@@ -76,7 +78,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @commands.group()
     @commands.guild_only()
     @is_mod()
-    async def setup(self, ctx):
+    async def setup(self, ctx: "Context"):
         """
         This commands setups some logging system for system for server with some nice features
         """
@@ -87,7 +89,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @setup.command(usage="<add_type> <textchannel>")
     async def add(
         self,
-        ctx,
+        ctx: "Context",
         add_type: typing.Literal["ban", "feedback", "warns", "unban"],
         channel: commands.TextChannelConverter,
     ):
@@ -114,7 +116,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @setup.command(usage="<textchannel.mention> <support_required_role>")
     async def support(
         self,
-        ctx,
+        ctx: "Context",
         textchannel: commands.TextChannelConverter,
         support_required_role: commands.RoleConverter,
     ):
@@ -135,7 +137,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @setup.command(usage="<option> [action] [logging_channel]")
     async def badlinks(
         self,
-        ctx,
+        ctx: "Context",
         action: typing.Optional[
             typing.Literal["ban", "mute", "timeout", "kick", "log"]
         ] = None,
@@ -177,7 +179,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @setup.command(usage="<channel> [no_of_stars] [self_star] [ignore_nsfw]")
     async def starboard(
         self,
-        ctx,
+        ctx: "Context",
         channel: typing.Union[commands.TextChannelConverter, discord.TextChannel],
         no_of_stars: typing.Optional[int] = 5,
         self_star: typing.Optional[bool] = False,
@@ -206,7 +208,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         )
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if (
             message is None
             or message.content == string.whitespace
@@ -285,7 +287,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @commands.command()
     @commands.guild_only()
     @is_mod()
-    async def raw_data(self, ctx):
+    async def raw_data(self, ctx: "Context"):
         """
         It returns the raw data which is stored in the database in the form of json
         """
@@ -351,7 +353,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await paginator.start()
 
     @commands.Cog.listener()
-    async def on_guild_remove(self, guild):
+    async def on_guild_remove(self, guild: discord.Guild) -> None:
         database = await self.database_class()
         database_antiraid = await self.database_class_antiraid()
         database_mentionspam = await self.database_class_mentionspam()
@@ -367,7 +369,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @is_mod()
     async def deletedata(
         self,
-        ctx,
+        ctx: "Context",
         type_data: typing.Literal[
             "ban",
             "unban",

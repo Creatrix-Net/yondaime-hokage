@@ -3,35 +3,28 @@ import datetime
 import logging
 from collections import defaultdict
 from json.decoder import JSONDecodeError
-from typing import TYPE_CHECKING, Literal, Optional
+from typing import TYPE_CHECKING, Literal, Optional, Union
 
 import discord
 import DiscordUtils
 import num2words
 from discord.ext import commands, tasks
-from lib import (
-    AntiRaidConfig,
-    Database,
-    MentionSpamConfig,
-    RaidMode,
-    SpamChecker,
-    cache,
-    format_dt,
-    format_relative,
-    has_permissions,
-    is_mod,
-)
+from lib import (AntiRaidConfig, Database, MemberID, MentionSpamConfig,
+                 RaidMode, SpamChecker, cache, format_dt, format_relative,
+                 has_permissions, is_mod)
 from orjson import loads
 
 if TYPE_CHECKING:
+    from lib import Context
+
     from ... import MinatoNamikazeBot
 
 log = logging.getLogger(__name__)
 
 
 class AntiRaid(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.description = "Antiraid system commands to use"
         self._batch_message_lock = self._disable_lock = asyncio.Lock(loop=bot.loop)
         self.autoban_threshold = 3
@@ -97,7 +90,7 @@ class AntiRaid(commands.Cog):
     async def add_and_check_data(
         self,
         dict_to_add: dict,
-        ctx: commands.Context,
+        ctx: "Context",
         type_database: Optional[Literal["antiraid", "mentionspam"]] = "antiraid",
     ) -> None:
         if type_database.lower() == "antiraid":
@@ -136,7 +129,7 @@ class AntiRaid(commands.Cog):
     @cache()
     async def get_guild_config(
         self,
-        guild_id,
+        guild_id: int,
         type_database: Optional[Literal["antiraid", "mentionspam"]] = "antiraid",
     ):
         if type_database.lower() == "antiraid":
@@ -172,7 +165,7 @@ class AntiRaid(commands.Cog):
             )
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         author = message.author
         if author.id in (self.bot.user.id, self.bot.owner_id):
             return
@@ -233,7 +226,7 @@ class AntiRaid(commands.Cog):
             )
 
     @commands.Cog.listener()
-    async def on_member_join(self, member):
+    async def on_member_join(self, member: Union[discord.Member, MemberID, discord.User]):
         guild_id = member.guild.id
         config = await self.get_guild_config(guild_id)
         if config is None:
@@ -293,7 +286,7 @@ class AntiRaid(commands.Cog):
 
     @commands.group(aliases=["raids", "antiraid"], invoke_without_command=True)
     @is_mod()
-    async def raid(self, ctx):
+    async def raid(self, ctx: "Context"):
         """Controls raid mode on the server.
         Calling this command with no arguments will show the current raid
         mode information.
@@ -323,7 +316,7 @@ class AntiRaid(commands.Cog):
 
     @raid.command(name="on", aliases=["enable", "enabled"])
     @is_mod()
-    async def raid_on(self, ctx, *, channel: discord.TextChannel = None):
+    async def raid_on(self, ctx: "Context", *, channel: discord.TextChannel = None):
         """
         Enables basic raid mode on the server.
         When enabled, server verification level is set to table flip
@@ -362,7 +355,7 @@ class AntiRaid(commands.Cog):
 
     @raid.command(name="off", aliases=["disable", "disabled"])
     @is_mod()
-    async def raid_off(self, ctx):
+    async def raid_off(self, ctx: "Context"):
         """Disables raid mode on the server.
         When disabled, the server verification levels are set
         back to Low levels and the bot will stop broadcasting
@@ -385,7 +378,7 @@ class AntiRaid(commands.Cog):
 
     @raid.command(name="strict")
     @is_mod()
-    async def raid_strict(self, ctx, *, channel: discord.TextChannel = None):
+    async def raid_strict(self, ctx: "Context", *, channel: discord.TextChannel = None):
         """
         Enables strict raid mode on the server.
         Strict mode is similar to regular enabled raid mode, with the added
@@ -427,7 +420,7 @@ class AntiRaid(commands.Cog):
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
     @has_permissions(ban_members=True)
-    async def mentionspam(self, ctx, count: Optional[int] = None):
+    async def mentionspam(self, ctx: "Context", count: Optional[int] = None):
         """Enables auto-banning accounts that spam mentions.
         If a message contains `count` or more mentions then the
         bot will automatically attempt to auto-ban the member.
@@ -489,7 +482,7 @@ class AntiRaid(commands.Cog):
     @mentionspam.command(name="ignore", aliases=["bypass"])
     @commands.guild_only()
     @has_permissions(ban_members=True)
-    async def mentionspam_ignore(self, ctx, *channels: discord.TextChannel):
+    async def mentionspam_ignore(self, ctx: "Context", *channels: discord.TextChannel):
         """Specifies what channels ignore mentionspam auto-bans.
         If a channel is given then that channel will no longer be protected
         by auto-banning from mention spammers.
@@ -523,7 +516,7 @@ class AntiRaid(commands.Cog):
     @mentionspam.command(name="unignore", aliases=["protect"])
     @commands.guild_only()
     @has_permissions(ban_members=True)
-    async def mentionspam_unignore(self, ctx, *channels: discord.TextChannel):
+    async def mentionspam_unignore(self, ctx: "Context", *channels: discord.TextChannel):
         """Specifies what channels to take off the ignore list.
         To use this command you must have the Ban Members permission.
         """

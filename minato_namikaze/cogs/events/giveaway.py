@@ -4,28 +4,24 @@ from asyncio import TimeoutError
 from datetime import timedelta
 from json.decoder import JSONDecodeError
 from random import choice
-from typing import Union
+from typing import TYPE_CHECKING, Union
 
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import Cog, command
-from lib import (
-    FutureTime,
-    GiveawayConfig,
-    LinksAndVars,
-    cache,
-    convert,
-    Database,
-    format_relative,
-    is_mod,
-)
-from DiscordUtils import SuccessEmbed, Embed, ErrorEmbed
-from ... import MinatoNamikazeBot
+from DiscordUtils import Embed, ErrorEmbed, SuccessEmbed
+from lib import (Database, FutureTime, GiveawayConfig, LinksAndVars, cache,
+                 convert, format_relative, is_mod)
+
+if TYPE_CHECKING:
+    from lib import Context
+
+    from ... import MinatoNamikazeBot
 
 
 class Giveaway(Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.description = "Helps you to organise a simple giveaway."
         self.giveaway_image = LinksAndVars.giveaway_image.value
         self.declare_results.start()
@@ -98,7 +94,7 @@ class Giveaway(Cog):
     )
     @commands.guild_only()
     @is_mod()
-    async def create_giveaway(self, ctx: commands.Context):
+    async def create_giveaway(self, ctx: "Context"):
         """Allowes you to to create giveaway by answering some simple questions!"""
         # Ask Questions
         embed = Embed(
@@ -203,7 +199,7 @@ class Giveaway(Cog):
         )
 
     async def determine_winner(
-        self, giveaway_id: discord.Message, bot: commands.Bot
+        self, giveaway_id: discord.Message, bot: "MinatoNamikazeBot"
     ) -> Union[str, discord.Member]:
         """Determines winner
 
@@ -296,7 +292,7 @@ class Giveaway(Cog):
     @commands.guild_only()
     async def giveaway_reroll(
         self,
-        ctx: commands.Context,
+        ctx: "Context",
         giveaway_id: Union[commands.MessageConverter, discord.Message],
     ):
         """
@@ -327,7 +323,7 @@ class Giveaway(Cog):
     @commands.guild_only()
     async def giveaway_stop(
         self,
-        ctx: commands.Context,
+        ctx: "Context",
         giveaway_id: Union[commands.MessageConverter, discord.Message],
     ):
         """

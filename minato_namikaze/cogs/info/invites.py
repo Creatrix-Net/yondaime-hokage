@@ -7,6 +7,8 @@ import discord
 from discord.ext import commands, tasks
 
 if TYPE_CHECKING:
+    from lib import Context
+
     from ... import MinatoNamikazeBot
 
 # poll period in minutes for the
@@ -19,8 +21,8 @@ POLL_PERIOD = 25
 
 
 class Invites(commands.Cog):
-    def __init__(self, bot: commands.Bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self._invites_ready = asyncio.Event()
         self._dict_filled = asyncio.Event()
 
@@ -237,7 +239,7 @@ class Invites(commands.Cog):
     # to handle commands.NoPrivateMessage
     @commands.guild_only()
     @commands.command()
-    async def invitestats(self, ctx):
+    async def invitestats(self, ctx: "Context"):
         """Displays the top 10 most used invites in the guild."""
         # PEP8 + same code, more readability
         invites = self.bot.invites.get(ctx.guild.id, None)

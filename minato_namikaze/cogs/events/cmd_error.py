@@ -1,21 +1,25 @@
 import io
 import traceback
+from typing import TYPE_CHECKING
 
 import discord
 from discord.ext import commands
-from lib import ChannelAndMessageId, NoChannelProvided, IncorrectChannelError
 from DiscordUtils import Embed, ErrorEmbed
-from typing import Union
-from ... import MinatoNamikazeBot
+from lib import ChannelAndMessageId, IncorrectChannelError, NoChannelProvided
+
+if TYPE_CHECKING:
+    from lib import Context
+
+    from ... import MinatoNamikazeBot
 
 
 class BotEventsCommands(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.delete_after_time = 5
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, error):
+    async def on_command_error(self, ctx: "Context", error):
         if ctx.cog is not None and ctx.cog.qualified_name.lower() == "Music".lower():
             return
         error_channel = await self.bot.fetch_channel(

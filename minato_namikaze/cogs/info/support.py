@@ -6,6 +6,7 @@ from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
 from lib import Database, MemberID, is_mod
 
 if TYPE_CHECKING:
+    from lib import Context
     from ... import MinatoNamikazeBot
 
 
@@ -19,8 +20,8 @@ def errorembed(ctx):
 
 
 class Support(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.description = "Displays the support command for the server, this can only be used if the owner has enabled it"
 
     @property
@@ -35,7 +36,7 @@ class Support(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 120, commands.BucketType.user)
     @commands.guild_only()
-    async def support(self, ctx):
+    async def support(self, ctx: "Context"):
         """Open support ticket if enabled by the server admins"""
         if not await ctx.prompt(
             "Are you sure that you want to **raise a support query** ?",
@@ -105,7 +106,7 @@ class Support(commands.Cog):
     @commands.command(usage="<member.mention>", aliases=["resolve", "resolves"])
     @commands.guild_only()
     @is_mod()
-    async def resolved(self, ctx, member: Union[MemberID, discord.Member]):
+    async def resolved(self, ctx: "Context", member: Union[MemberID, discord.Member]):
         """
         Resolves the existing ticket!
         One needs to have manage server permission in order to run this command
@@ -159,7 +160,7 @@ class Support(commands.Cog):
     )
     @commands.guild_only()
     @is_mod()
-    async def chksupreq(self, ctx):
+    async def chksupreq(self, ctx: "Context"):
         """Checks who still requires the support."""
         data = await (await self.database_class()).get(ctx.guild.id)
         if data is None or data.get("support") is None:
@@ -204,7 +205,7 @@ class Support(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.user)
     @commands.guild_only()
-    async def feedback(self, ctx, *, feed):
+    async def feedback(self, ctx: "Context", *, feed):
         """
         Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server admin)
         ``The feedback should be less than 2000 characters``

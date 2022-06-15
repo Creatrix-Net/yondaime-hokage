@@ -6,12 +6,14 @@ import discord
 from discord.ext import commands
 from DiscordUtils import Embed, ErrorEmbed
 from lib import ChannelAndMessageId, IncorrectChannelError, NoChannelProvided
+import logging
 
 if TYPE_CHECKING:
     from lib import Context
 
     from ... import MinatoNamikazeBot
 
+log = logging.getLogger(__name__)
 
 class BotEventsCommands(commands.Cog):
     def __init__(self, bot: "MinatoNamikazeBot"):

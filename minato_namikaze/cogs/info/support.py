@@ -10,6 +10,11 @@ if TYPE_CHECKING:
     from ... import MinatoNamikazeBot
 
 
+import logging
+
+log = logging.getLogger(__name__)
+
+
 def errorembed(ctx):
     return ErrorEmbed(
         title=f"No support system setup for the {ctx.guild.name}",

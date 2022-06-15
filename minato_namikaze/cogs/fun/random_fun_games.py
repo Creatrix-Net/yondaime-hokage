@@ -16,6 +16,11 @@ from gtts import gTTS
 from lib import Embed, LinksAndVars, MemberID, TimeConverter
 from PIL import Image
 
+
+import logging
+
+log = logging.getLogger(__name__)
+
 if TYPE_CHECKING:
     from lib import Context
 

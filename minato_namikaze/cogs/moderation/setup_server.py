@@ -16,6 +16,11 @@ if typing.TYPE_CHECKING:
     from ... import MinatoNamikazeBot
 
 
+import logging
+
+log = logging.getLogger(__name__)
+
+
 class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot

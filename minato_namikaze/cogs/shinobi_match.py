@@ -21,6 +21,11 @@ if TYPE_CHECKING:
     from .. import MinatoNamikazeBot
 
 
+import logging
+
+log = logging.getLogger(__name__)
+
+
 class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot

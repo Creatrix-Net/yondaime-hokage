@@ -7,6 +7,11 @@ from discord.ext.commands.errors import BadArgument
 from lib import IMAGES, LATTICES, UNITS, EmbedPaginator
 from lib.mendeleev import element as ELEMENTS
 
+
+import logging
+
+log = logging.getLogger(__name__)
+
 if TYPE_CHECKING:
     from lib import Context
 

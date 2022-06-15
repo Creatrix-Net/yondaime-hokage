@@ -8,6 +8,11 @@ if TYPE_CHECKING:
     from lib import Context
     from ... import MinatoNamikazeBot
 
+
+import logging
+
+log = logging.getLogger(__name__)
+
 invitere = r"(?:https?:\/\/)?discord(?:\.gg|app\.com\/invite)?\/(?:#\/)([a-zA-Z0-9-]*)"
 invitere2 = r"(http[s]?:\/\/)*discord((app\.com\/invite)|(\.gg))\/(invite\/)?(#\/)?([A-Za-z0-9\-]+)(\/)?"
 

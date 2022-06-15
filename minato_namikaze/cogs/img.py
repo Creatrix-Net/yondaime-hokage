@@ -17,6 +17,11 @@ if TYPE_CHECKING:
     from .. import MinatoNamikazeBot
 
 
+import logging
+
+log = logging.getLogger(__name__)
+
+
 class ImageManipulation(commands.Cog, name="Image Manipulation"):
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot

@@ -15,6 +15,11 @@ if TYPE_CHECKING:
     from ... import MinatoNamikazeBot
 
 
+import logging
+
+log = logging.getLogger(__name__)
+
+
 def format_related_anime_manga(dict_related_anime: Dict[str, List[str]]) -> str:
     """Properly formats the related anime and manga list
 

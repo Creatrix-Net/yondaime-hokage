@@ -18,6 +18,11 @@ if TYPE_CHECKING:
     from .. import MinatoNamikazeBot
 
 
+import logging
+
+log = logging.getLogger(__name__)
+
+
 class Reminders(db.Table):
     id = db.PrimaryKeyColumn()
 

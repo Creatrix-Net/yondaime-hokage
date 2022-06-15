@@ -21,6 +21,11 @@ if TYPE_CHECKING:
     from ... import MinatoNamikazeBot
 
 
+import logging
+
+log = logging.getLogger(__name__)
+
+
 class Moderation(commands.Cog):
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot

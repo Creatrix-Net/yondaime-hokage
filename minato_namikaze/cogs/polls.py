@@ -59,7 +59,7 @@ class QuickPoll(commands.Cog):
             try:
                 await i.delete()
             except (discord.Forbidden, discord.HTTPException, discord.NotFound) as e:
-                print(e)
+                log.warning(e)
                 continue
 
     @commands.command(pass_context=True, aliases=["poll", "polls"])

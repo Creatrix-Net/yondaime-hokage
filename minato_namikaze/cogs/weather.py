@@ -14,6 +14,11 @@ if TYPE_CHECKING:
     from .. import MinatoNamikazeBot
 
 
+import logging
+
+log = logging.getLogger(__name__)
+
+
 class UnitConverter(Converter):
     async def convert(self, ctx: "Context", argument: str) -> Optional[str]:
         new_units = None

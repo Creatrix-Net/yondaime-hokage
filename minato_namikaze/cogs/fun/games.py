@@ -9,6 +9,10 @@ from lib import MemberID
 from lib.classes.games import *
 from DiscordUtils import ErrorEmbed
 
+import logging
+
+log = logging.getLogger(__name__)
+
 if TYPE_CHECKING:
     from lib import Context
     from ... import MinatoNamikazeBot

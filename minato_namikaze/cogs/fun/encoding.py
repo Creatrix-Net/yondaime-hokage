@@ -20,6 +20,10 @@ from lib.data.braille import (
     r_punctuation,
 )
 
+import logging
+
+log = logging.getLogger(__name__)
+
 if TYPE_CHECKING:
     from lib import Context
     from ... import MinatoNamikazeBot

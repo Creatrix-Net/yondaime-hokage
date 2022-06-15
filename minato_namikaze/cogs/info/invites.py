@@ -6,6 +6,11 @@ from typing import TYPE_CHECKING, Dict, Optional
 import discord
 from discord.ext import commands, tasks
 
+
+import logging
+
+log = logging.getLogger(__name__)
+
 if TYPE_CHECKING:
     from lib import Context
 

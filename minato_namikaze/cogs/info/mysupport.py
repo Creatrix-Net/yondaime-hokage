@@ -13,6 +13,11 @@ from DiscordUtils import Embed
 from lib import ChannelAndMessageId, LinksAndVars, PrivacyPolicy, VotingMenu
 from lib import time_class as time
 
+
+import logging
+
+log = logging.getLogger(__name__)
+
 if TYPE_CHECKING:
     from lib import Context
 

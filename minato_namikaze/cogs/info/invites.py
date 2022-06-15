@@ -19,7 +19,6 @@ POLL_PERIOD = 25
 
 
 class Invites(commands.Cog):
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self._invites_ready = asyncio.Event()
@@ -76,15 +75,18 @@ class Invites(commands.Cog):
     async def update_invite_expiry(self):
         # flatten all the invites in the cache into one single list
         flattened = [
-            invite for inner in self.bot.invites.values()
-            for invite in inner.values()
+            invite for inner in self.bot.invites.values() for invite in inner.values()
         ]
         # get current posix time
         current = time.time()
         self.bot.expiring_invites = {
-            inv.max_age - int(current - inv.created_at.replace(
-                tzinfo=datetime.timezone.utc).timestamp()): inv
-            for inv in flattened if inv.max_age != 0
+            inv.max_age
+            - int(
+                current
+                - inv.created_at.replace(tzinfo=datetime.timezone.utc).timestamp()
+            ): inv
+            for inv in flattened
+            if inv.max_age != 0
         }
 
         exists = True
@@ -94,7 +96,8 @@ class Invites(commands.Cog):
         # that were just created
         try:  # self.bot.shortest_invite might not exist
             self.bot.shortest_invite = self.bot.shortest_invite - int(
-                time.time() - self.bot.last_update)
+                time.time() - self.bot.last_update
+            )
         except AttributeError:
             exists = False
 
@@ -107,8 +110,11 @@ class Invites(commands.Cog):
         # is truthy otherwise this conditional will
         # raise an error because we passed an
         # empty sequence to min()
-        elif (exists and self.bot.expiring_invites and self.bot.shortest_invite
-              > min(self.bot.expiring_invites.keys())):
+        elif (
+            exists
+            and self.bot.expiring_invites
+            and self.bot.shortest_invite > min(self.bot.expiring_invites.keys())
+        ):
             # this conditional needs to run before we
             # update self._last_update
             self.delete_expired.restart()
@@ -139,8 +145,7 @@ class Invites(commands.Cog):
                 return find
         return None
 
-    def get_invites(self,
-                    guild_id: int) -> Optional[Dict[str, discord.Invite]]:
+    def get_invites(self, guild_id: int) -> Optional[Dict[str, discord.Invite]]:
         return self.bot.invites.get(guild_id, None)
 
     async def wait_for_invites(self) -> None:
@@ -149,7 +154,8 @@ class Invites(commands.Cog):
 
     @staticmethod
     async def fetch_invites(
-            guild: discord.Guild, ) -> Optional[Dict[str, discord.Invite]]:
+        guild: discord.Guild,
+    ) -> Optional[Dict[str, discord.Invite]]:
         try:
             invites = await guild.invites()
         except discord.HTTPException:
@@ -182,8 +188,7 @@ class Invites(commands.Cog):
         self.delete_invite(invite)
 
     @commands.Cog.listener()
-    async def on_guild_channel_delete(
-            self, channel: discord.abc.GuildChannel) -> None:
+    async def on_guild_channel_delete(self, channel: discord.abc.GuildChannel) -> None:
         invites = self.bot.invites.get(channel.guild.id)
 
         if invites:
@@ -215,8 +220,9 @@ class Invites(commands.Cog):
             # we sort the invites to ensure we are comparing
             # A.uses == A.uses
             invites = sorted(invites.values(), key=lambda i: i.code)
-            cached = sorted(self.bot.invites[member.guild.id].values(),
-                            key=lambda i: i.code)
+            cached = sorted(
+                self.bot.invites[member.guild.id].values(), key=lambda i: i.code
+            )
 
             # zipping is the easiest way to compare each in order, and
             # they should be the same size? if we do it properly
@@ -240,14 +246,14 @@ class Invites(commands.Cog):
         if not invites:
             # if there is no invites send this information
             # in an embed and return
-            embed = discord.Embed(colour=discord.Colour.red(),
-                                  description="No invites found...")
+            embed = discord.Embed(
+                colour=discord.Colour.red(), description="No invites found..."
+            )
             await ctx.send(embed=embed)
             return
 
         # if you got here there are invites in the cache
-        embed = discord.Embed(colour=discord.Colour.green(),
-                              title="Most used invites")
+        embed = discord.Embed(colour=discord.Colour.green(), title="Most used invites")
         # sort the invites by the amount of uses
         # by default this would make it in increasing
         # order so we pass True to the reverse kwarg
@@ -258,19 +264,19 @@ class Invites(commands.Cog):
         amount = 10 if len(invites) >= 10 else len(invites)
         # list comp on the sorted invites and then
         # join it into one string with str.join
-        description = "\n".join([
-            f"{i + 1}. {invites[i].code} - {invites[i].uses}"
-            for i in range(amount)
-        ])
+        description = "\n".join(
+            [f"{i + 1}. {invites[i].code} - {invites[i].uses}" for i in range(amount)]
+        )
         embed.description = description
         # if there are more than 10 invites
         # add a footer saying how many more
         # invites there are
         if amount > 10:
             embed.set_footer(
-                text=f"There are {len(invites) - 10} more invites in this guild.")
+                text=f"There are {len(invites) - 10} more invites in this guild."
+            )
         await ctx.send(embed=embed)
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(Invites(bot))

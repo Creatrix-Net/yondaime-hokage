@@ -17,23 +17,24 @@ from lib import Embed, LinksAndVars, MemberID, TimeConverter
 from PIL import Image
 from ... import MinatoNamikazeBot
 
+
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.mystbin_client = mystbin.Client() 
+        self.mystbin_client = mystbin.Client()
         self.description = "Some random fun and usefull commands."
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{GAME DIE}")
-    
+
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def braille(self, ctx, user: discord.Member=None):
+    async def braille(self, ctx, user: discord.Member = None):
         user = user or ctx.author
-        file = await self.bot.se.braille(f'{user.avatar_url}')
+        file = await self.bot.se.braille(f"{user.avatar_url}")
         await ctx.send(file)
-        
+
     @braille.error
     async def braille_handler(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
@@ -41,13 +42,13 @@ class Random(commands.Cog):
             left = l.get_cooldown_retry_after(ctx)
             msg = await ctx.send("Just Getting The Cooldown")
             e = discord.Embed(
-                title=f"Cooldown left - {round(left)}", color=discord.colour.Color.from_rgb(231, 84, 128))
+                title=f"Cooldown left - {round(left)}",
+                color=discord.colour.Color.from_rgb(231, 84, 128),
+            )
             await msg.edit(content="", embed=e)
 
     @commands.command(aliases=["takeitback"], usage="<member.mention>")
-    async def insult(self,
-                     ctx,
-                     user: Optional[Union[MemberID, discord.Member]] = None):
+    async def insult(self, ctx, user: Optional[Union[MemberID, discord.Member]] = None):
         """
         Insult a user
         `user` the user you would like to insult
@@ -74,8 +75,9 @@ class Random(commands.Cog):
         else:
             await ctx.send(
                 ctx.message.author.mention,
-                embed=Embed(title=":warning:",
-                            description=choice(LinksAndVars.insults.value)),
+                embed=Embed(
+                    title=":warning:", description=choice(LinksAndVars.insults.value)
+                ),
             )
 
     @commands.command(usage="{text}")
@@ -131,8 +133,7 @@ class Random(commands.Cog):
             else:
                 pass
 
-    @commands.command(
-        usage="<time> <reminder> (Time needs to be in seconds...)")
+    @commands.command(usage="<time> <reminder> (Time needs to be in seconds...)")
     async def remind(self, ctx, time: TimeConverter, *, reminder):
         """A simple reminder"""
         if int(time) < 12 * 60 * 60:
@@ -170,8 +171,9 @@ class Random(commands.Cog):
         await asyncio.sleep(5)
         os.remove("tts.mp3")
 
-    @commands.command(aliases=["color", "colour", "sc"],
-                      usage="<hexadecimal colour code>")
+    @commands.command(
+        aliases=["color", "colour", "sc"], usage="<hexadecimal colour code>"
+    )
     async def show_color(self, ctx, *, color: discord.Colour):
         """Enter a color and you will see it!"""
         file = io.BytesIO()
@@ -195,8 +197,7 @@ class Random(commands.Cog):
     async def getmystbin(self, ctx, id):
         """Get your Mystbi using your id"""
         try:
-            get_paste = await self.mystbin_client.get(
-                f"https://mystb.in/{id}")
+            get_paste = await self.mystbin_client.get(f"https://mystb.in/{id}")
             lis = ["awesome", "bad", "good"]
             content = get_paste.content
             lencontent = len(content)
@@ -255,5 +256,5 @@ class Random(commands.Cog):
     #     await ctx.send(file=file)
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(Random(bot))

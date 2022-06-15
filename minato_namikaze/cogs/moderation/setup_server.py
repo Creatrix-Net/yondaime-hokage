@@ -25,15 +25,24 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
 
     async def database_class(self):
-        return await self.bot.db.new(Database.database_category_name.value,Database.database_channel_name.value)
+        return await self.bot.db.new(
+            Database.database_category_name.value, Database.database_channel_name.value
+        )
 
     async def database_class_antiraid(self):
-        return await self.bot.db.new(Database.database_category_name.value,Database.antiraid_channel_name.value)
+        return await self.bot.db.new(
+            Database.database_category_name.value, Database.antiraid_channel_name.value
+        )
 
     async def database_class_mentionspam(self):
-        return await self.bot.db.new(Database.database_category_name.value,Database.mentionspam_channel_name.value)
+        return await self.bot.db.new(
+            Database.database_category_name.value,
+            Database.mentionspam_channel_name.value,
+        )
 
-    async def add_and_check_data(self, dict_to_add: dict,ctx: commands.Context) -> None:
+    async def add_and_check_data(
+        self, dict_to_add: dict, ctx: commands.Context
+    ) -> None:
         database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:
@@ -43,7 +52,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database.set(ctx.guild.id, guild_dict)
         await ctx.send(":ok_hand:")
         return
-    
+
     @tasks.loop(hours=1, reconnect=True)
     async def cleanup(self):
         database = await self.database_class()
@@ -54,14 +63,16 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 data.pop("type")
                 data_keys = list(map(str, list(data.keys())))
                 try:
-                    await commands.GuildConverter().convert(await self.bot.get_context(message), str(data_keys[0]))
+                    await commands.GuildConverter().convert(
+                        await self.bot.get_context(message), str(data_keys[0])
+                    )
                 except (commands.CommandError, commands.BadArgument):
                     if not self.bot.local:
                         await message.delete()
             except JSONDecodeError:
                 if not self.bot.local:
                     await message.delete()
-    
+
     @commands.group()
     @commands.guild_only()
     @is_mod()
@@ -94,7 +105,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         """
 
         if not await ctx.prompt(
-                f"Do you really want to **log {add_type}** for **{ctx.guild.name}** in {channel.mention}?"
+            f"Do you really want to **log {add_type}** for **{ctx.guild.name}** in {channel.mention}?"
         ):
             return
         dict_to_add = {str(add_type): channel.id}
@@ -115,7 +126,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             - support_required_role : A role which will be provided to the users, when a support request lodged
         """
         if not await ctx.prompt(
-                f"Do you really want to **create a suppoprt system** for **{ctx.guild.name}** in {textchannel.mention}?"
+            f"Do you really want to **create a suppoprt system** for **{ctx.guild.name}** in {textchannel.mention}?"
         ):
             return
         dict_to_add = {"support": [textchannel.id, support_required_role.id]}
@@ -125,7 +136,9 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     async def badlinks(
         self,
         ctx,
-        action: typing.Optional[typing.Literal["ban", "mute", "timeout", "kick", "log"]] = None,
+        action: typing.Optional[
+            typing.Literal["ban", "mute", "timeout", "kick", "log"]
+        ] = None,
         logging_channel: typing.Optional[commands.TextChannelConverter] = None,
         option: typing.Literal["yes", "no", "on", "off", True, False] = True,
     ):
@@ -139,26 +152,27 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
         `Note: If 'log' action is selected then, I will only delete the message and log it the current channel where the link was sent and will do nothing`
         """
-        if option is not None and option in ['no','off', False]:
+        if option is not None and option in ["no", "off", False]:
             database = await self.database_class()
             guild_dict = await database.get(ctx.guild.id)
             if guild_dict is None:
                 return
-            guild_dict.pop('badlinks')
+            guild_dict.pop("badlinks")
             await database.set(ctx.guild.id, guild_dict)
-            await ctx.send(':ok_hand:')
+            await ctx.send(":ok_hand:")
             return
         await self.add_and_check_data(
             {
                 "badlinks": {
                     "option": option,
                     "action": action,
-                    "logging_channel": logging_channel.id if logging_channel is not None else logging_channel
-            }
-        },
+                    "logging_channel": logging_channel.id
+                    if logging_channel is not None
+                    else logging_channel,
+                }
+            },
             ctx=ctx,
         )
-    
 
     @setup.command(usage="<channel> [no_of_stars] [self_star] [ignore_nsfw]")
     async def starboard(
@@ -167,10 +181,10 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         channel: typing.Union[commands.TextChannelConverter, discord.TextChannel],
         no_of_stars: typing.Optional[int] = 5,
         self_star: typing.Optional[bool] = False,
-        ignore_nsfw: typing.Optional[bool] = True
+        ignore_nsfw: typing.Optional[bool] = True,
     ):
-        '''
-        Setups the starboard in your server. 
+        """
+        Setups the starboard in your server.
         It posts the message in the specified channel whenever someone stars a message using \U00002b50 emoji
 
         Args:
@@ -178,37 +192,47 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             - no_of_stars [Optional] [int] : Minimum number of stars required before posting it to the specified channel
             - self_star [Optional] [bool] (default: False) : Whether self  starring of message should be there or not
             - ignore_nsfw [Optional] [bool] (default: True) : Whether to ignore NSFW channels or not
-        '''
+        """
         await self.add_and_check_data(
             {
                 "starboard": {
                     "channel": channel.id,
                     "no_of_stars": no_of_stars,
                     "self_star": self_star,
-                    "ignore_nsfw": ignore_nsfw
-            }
-        },
+                    "ignore_nsfw": ignore_nsfw,
+                }
+            },
             ctx=ctx,
         )
-    
+
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message is None or message.content == string.whitespace or message.content is None:
+        if (
+            message is None
+            or message.content == string.whitespace
+            or message.content is None
+        ):
             return
         ctx = await self.bot.get_context(message)
-        detected_urls = await detect_bad_domains(discord.utils.remove_markdown(message.content))
-        if len(detected_urls) <= 0:  
-            return 
-        embed = ErrorEmbed(title='SCAM/PHISHING/ADULT LINK(S) DETECTED')
-        detected_string = '\n'.join([f'- ||{i}||' for i in set(detected_urls)])
-        embed.description = f'The following scam url(s) were detected:\n{detected_string}'
-        embed.set_author(name=message.author,icon_url=message.author.display_avatar.url)
+        detected_urls = await detect_bad_domains(
+            discord.utils.remove_markdown(message.content)
+        )
+        if len(detected_urls) <= 0:
+            return
+        embed = ErrorEmbed(title="SCAM/PHISHING/ADULT LINK(S) DETECTED")
+        detected_string = "\n".join([f"- ||{i}||" for i in set(detected_urls)])
+        embed.description = (
+            f"The following scam url(s) were detected:\n{detected_string}"
+        )
+        embed.set_author(
+            name=message.author, icon_url=message.author.display_avatar.url
+        )
         message_sent = await ctx.send(embed=embed)
         try:
             await message.delete()
         except (discord.Forbidden, discord.NotFound, discord.HTTPException):
             pass
-        
+
         if message.guild is None:
             return
 
@@ -216,26 +240,29 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         guild_dict = await database.get(message.guild.id)
         if guild_dict is None:
             return
-        
-        bad_link_config: dict = guild_dict.get('badlinks')
+
+        bad_link_config: dict = guild_dict.get("badlinks")
         if bad_link_config is None:
             return
-        
-        action_config = bad_link_config.get('action')
-        action_reason_string = '[Auto Mod] Scam/Phishing/Adult Link posted'
+
+        action_config = bad_link_config.get("action")
+        action_reason_string = "[Auto Mod] Scam/Phishing/Adult Link posted"
         if action_config is None:
             return
-        
-        if action_config.lower() == 'ban':
+
+        if action_config.lower() == "ban":
             try:
                 await message.author.ban(reason=action_reason_string)
                 embed.add_field(name="Action Taken", value="Ban :hammer:")
                 await message_sent.edit(embed=embed)
             except (discord.Forbidden, discord.HTTPException):
                 pass
-        if action_config.lower() in ['mute', 'timeout']:
+        if action_config.lower() in ["mute", "timeout"]:
             try:
-                await message.author.edit(timed_out_until=discord.utils.utcnow()+timedelta(days=2),reason=action_reason_string)
+                await message.author.edit(
+                    timed_out_until=discord.utils.utcnow() + timedelta(days=2),
+                    reason=action_reason_string,
+                )
                 embed.add_field(name="Action Taken", value="Time Out :x:")
                 await message_sent.send(embed=embed)
             except (discord.Forbidden, discord.HTTPException):
@@ -247,14 +274,13 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 await message_sent.send(embed=embed)
             except (discord.Forbidden, discord.HTTPException):
                 pass
-        
-        log_config = bad_link_config.get('logging_channel')
+
+        log_config = bad_link_config.get("logging_channel")
         if log_config is None:
             return
-        
+
         log_channel = await self.bot.fetch_channel(log_config)
         await log_channel.send(embed=embed)
-
 
     @commands.command()
     @commands.guild_only()
@@ -289,7 +315,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     separators=(",", ": "),
                     ensure_ascii=False,
                     null=None,
-                ))
+                )
+            )
             embeds_list.append(embed)
         if data_antiraid is not None:
             embed = Embed()
@@ -302,7 +329,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     separators=(",", ": "),
                     ensure_ascii=False,
                     null=None,
-                ))
+                )
+            )
             embeds_list.append(embed)
         if data_mentionspam is not None:
             embed = Embed()
@@ -315,7 +343,8 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     separators=(",", ": "),
                     ensure_ascii=False,
                     null=None,
-                ))
+                )
+            )
             embeds_list.append(embed)
 
         paginator = EmbedPaginator(entries=embeds_list, ctx=ctx)
@@ -331,13 +360,26 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database_antiraid.delete(guild.id)
         await database_mentionspam.delete(guild.id)
 
-    @commands.command(alisases=["datadelete", "delete_data", "data_delete"], usage="[type_data]")
+    @commands.command(
+        alisases=["datadelete", "delete_data", "data_delete"], usage="[type_data]"
+    )
     @commands.guild_only()
     @is_mod()
     async def deletedata(
         self,
         ctx,
-        type_data: typing.Literal["ban", "unban", "support", "warns","feedback", "mentionspam", "antiraid", "starboard", "badlinks", "all", ] = "all",
+        type_data: typing.Literal[
+            "ban",
+            "unban",
+            "support",
+            "warns",
+            "feedback",
+            "mentionspam",
+            "antiraid",
+            "starboard",
+            "badlinks",
+            "all",
+        ] = "all",
     ):
         """
         This command deletes the available data:
@@ -355,11 +397,16 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
         By default the `type_data` is set to `all`, which will delete all the data present in the database.
         """
-        if not await ctx.prompt(
-                f"Do you really want to **delete {type_data}** data?"):
+        if not await ctx.prompt(f"Do you really want to **delete {type_data}** data?"):
             return
         if type_data in [
-                "ban", "unban", "support", "warns", "feedback", "badlinks", "starboard"
+            "ban",
+            "unban",
+            "support",
+            "warns",
+            "feedback",
+            "badlinks",
+            "starboard",
         ]:
             database = await self.database_class()
             data = await database.get(ctx.guild.id)
@@ -388,50 +435,48 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database_antiraid.delete(ctx.guild.id)
         await database_mentionspam.delete(ctx.guild.id)
         await ctx.send(":ok_hand:")
-    
 
     @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent) -> None:
+    async def on_raw_reaction_add(
+        self, payload: discord.RawReactionActionEvent
+    ) -> None:
         if payload.guild_id is None:
             return
         reaction = str(payload.emoji)
         if reaction != str(discord.PartialEmoji(name="\U00002b50")):
             return
-        
+
         if payload.user_id == self.bot.application_id:
             return
 
         database = await self.database_class()
-        data =  await database.get(int(payload.guild_id))
+        data = await database.get(int(payload.guild_id))
         if data is None:
             return
-        if data.get('starboard') is None:
+        if data.get("starboard") is None:
             return
-        data = data.get('starboard')
-        if int(data.get('channel')) == int(payload.channel_id):
+        data = data.get("starboard")
+        if int(data.get("channel")) == int(payload.channel_id):
             return
-        
+
         channel = self.bot.get_channel(payload.channel_id)
         if (
-            data.get('ignore_nsfw') is not None
-            and data.get('ignore_nsfw')
+            data.get("ignore_nsfw") is not None
+            and data.get("ignore_nsfw")
             and channel.is_nsfw()
         ):
             return
 
         msg = await channel.fetch_message(payload.message_id)
-        if (
-            data.get('self_star')
-            and int(payload.user_id) == msg.author.id
-        ):
+        if data.get("self_star") and int(payload.user_id) == msg.author.id:
             pass
-        elif (
-            not data.get('self_star')
-            and int(payload.user_id) == msg.author.id
-        ):
+        elif not data.get("self_star") and int(payload.user_id) == msg.author.id:
             return
-        no_of_reaction = discord.utils.find(lambda a: str(a.emoji) == str(discord.PartialEmoji(name="\U00002b50")),msg.reactions)
-        if no_of_reaction.count < int(data.get('no_of_stars')):
+        no_of_reaction = discord.utils.find(
+            lambda a: str(a.emoji) == str(discord.PartialEmoji(name="\U00002b50")),
+            msg.reactions,
+        )
+        if no_of_reaction.count < int(data.get("no_of_stars")):
             return
 
         embed = StarboardEmbed(timestamp=msg.created_at)
@@ -440,34 +485,50 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             embed_user = msg.embeds[0]
             if not isinstance(embed_user.fields, discord.embeds._EmptyEmbed):
                 for i in embed_user.fields:
-                    embed.add_field(name=i.name,value=i.value,inline=i.inline)
-            if embed_user.title is not None or not isinstance(embed_user.title, discord.embeds._EmptyEmbed):
+                    embed.add_field(name=i.name, value=i.value, inline=i.inline)
+            if embed_user.title is not None or not isinstance(
+                embed_user.title, discord.embeds._EmptyEmbed
+            ):
                 if description is not None:
-                    description = f'{description}\n\n**{embed_user.title}**\n{embed_user.description}'
+                    description = f"{description}\n\n**{embed_user.title}**\n{embed_user.description}"
                 else:
-                    description = f'**{embed_user.title}**\n{embed_user.description}'
+                    description = f"**{embed_user.title}**\n{embed_user.description}"
             else:
                 if description is not None:
-                    description = f'{description}\n\n{embed_user.description}'
+                    description = f"{description}\n\n{embed_user.description}"
                 else:
                     description = embed_user.description
             if not isinstance(embed_user.image.url, discord.embeds._EmptyEmbed):
                 embed.set_image(url=embed_user.image.url)
         if (
-            isinstance(embed.image.url,discord.embeds._EmptyEmbed)
+            isinstance(embed.image.url, discord.embeds._EmptyEmbed)
             and len(msg.attachments) > 0
         ):
             attachment = msg.attachments[0]
-            if attachment.content_type.lower() in ['image/jpeg', 'image/avif', 'image/png','image/svg+xml']:
+            if attachment.content_type.lower() in [
+                "image/jpeg",
+                "image/avif",
+                "image/png",
+                "image/svg+xml",
+            ]:
                 embed.set_image(url=attachment.url)
             else:
-                description = f'{description}\n\n**Attachment(s)**\n{attachment.url}'
-        embed.description = f'{description}\n\n**Original**\n[Jump]({msg.jump_url})'
-        embed.set_author(name=msg.author, icon_url=msg.author.display_avatar.url, url=msg.jump_url)
+                description = f"{description}\n\n**Attachment(s)**\n{attachment.url}"
+        embed.description = f"{description}\n\n**Original**\n[Jump]({msg.jump_url})"
+        embed.set_author(
+            name=msg.author, icon_url=msg.author.display_avatar.url, url=msg.jump_url
+        )
         embed.set_footer(text=str(msg.id))
 
-        starboard_channel = self.bot.get_channel(data.get('channel'))
-        await starboard_channel.send(content=f'\U00002b50 {channel.mention} by {msg.author.mention}',embed=embed, allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False, replied_user=False))
+        starboard_channel = self.bot.get_channel(data.get("channel"))
+        await starboard_channel.send(
+            content=f"\U00002b50 {channel.mention} by {msg.author.mention}",
+            embed=embed,
+            allowed_mentions=discord.AllowedMentions(
+                everyone=False, users=False, roles=False, replied_user=False
+            ),
+        )
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(ServerSetup(bot))

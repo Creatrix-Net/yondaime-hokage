@@ -14,7 +14,6 @@ time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
 
 
 class TimeConverter(commands.Converter):
-
     async def convert(self, ctx, argument):
         args = argument.lower()
         matches = re.findall(time_regex, args)
@@ -32,18 +31,19 @@ class TimeConverter(commands.Converter):
 
 
 class Arguments(argparse.ArgumentParser):
-
     def error(self, message):
         raise RuntimeError(message)
 
 
 def can_execute_action(ctx, user, target):
-    return (user.id == ctx.bot.owner_id or user == ctx.guild.owner
-            or user.top_role > target.top_role)
+    return (
+        user.id == ctx.bot.owner_id
+        or user == ctx.guild.owner
+        or user.top_role > target.top_role
+    )
 
 
 class MemberID(commands.Converter):
-
     async def convert(self, ctx, argument):
         try:
             member = await commands.MemberConverter().convert(ctx, argument)
@@ -61,10 +61,7 @@ class MemberID(commands.Converter):
                     return type(
                         "_Hackban",
                         (),
-                        {
-                            "id": argument,
-                            "__str__": lambda s: f"Member ID {s.id}"
-                        },
+                        {"id": argument, "__str__": lambda s: f"Member ID {s.id}"},
                     )()
 
         if not can_execute_action(ctx, ctx.author, member):
@@ -82,27 +79,26 @@ class BannedMember(commands.Converter):
                 return await ctx.guild.fetch_ban(discord.Object(id=member_id))
             except discord.NotFound:
                 raise commands.BadArgument(
-                    "This member has not been banned before.") from None
+                    "This member has not been banned before."
+                ) from None
 
         ban_list = await ctx.guild.bans()
-        entity = discord.utils.find(lambda u: str(u.user) == argument,
-                                    ban_list)
+        entity = discord.utils.find(lambda u: str(u.user) == argument, ban_list)
 
         if entity is None:
-            raise commands.BadArgument(
-                "This member has not been banned before.")
+            raise commands.BadArgument("This member has not been banned before.")
         return entity
 
 
 class ActionReason(commands.Converter):
-
     async def convert(self, ctx, argument):
         ret = f"{ctx.author} (ID: {ctx.author.id}): {argument}"
 
         if len(ret) > 512:
             reason_max = 512 - len(ret) + len(argument)
             raise commands.BadArgument(
-                f"Reason is too long ({len(argument)}/{reason_max})")
+                f"Reason is too long ({len(argument)}/{reason_max})"
+            )
         return ret
 
 
@@ -145,22 +141,23 @@ class MentionSpamConfig:
         self.id = record["id"]
         self.mention_count = record.get("mention_count")
         self.safe_mention_channel_ids = set(
-            record.get("safe_mention_channel_ids") or [])
+            record.get("safe_mention_channel_ids") or []
+        )
         return self
 
 
 class GiveawayConfig:
     __slots__ = (
-        "id", 
-        "host", 
+        "id",
+        "host",
         "channel",
-        "message", 
-        "embed", 
-        "role_required", 
-        "tasks", 
-        "prize", 
-        "end_time", 
-        "embed_dict"
+        "message",
+        "embed",
+        "role_required",
+        "tasks",
+        "prize",
+        "end_time",
+        "embed_dict",
     )
 
     @classmethod
@@ -169,7 +166,7 @@ class GiveawayConfig:
 
         self.id = record.id
         self.channel = record.channel
-        
+
         if len(record.embeds) == 0 or len(record.embeds) > 1:
             raise AttributeError("This is not a giveaway message")
 
@@ -178,25 +175,39 @@ class GiveawayConfig:
 
         if self.embed_dict.get("fields") is None:
             raise AttributeError("This is not a giveaway message")
-        
-        if self.embed.description == '\U0001f381 Win a Prize today':
+
+        if self.embed.description == "\U0001f381 Win a Prize today":
             raise AttributeError("This giveaway has already been ended!")
 
-        role_required = discord.utils.find(lambda a: a["name"].lower() == "Role Required".lower(), self.embed_dict["fields"])
-        self.role_required = role_required["value"] if role_required is not None else None
-        
-        tasks = discord.utils.find(lambda a: a["name"].lower() == "\U0001f3c1 Tasks".lower(), self.embed_dict["fields"])
+        role_required = discord.utils.find(
+            lambda a: a["name"].lower() == "Role Required".lower(),
+            self.embed_dict["fields"],
+        )
+        self.role_required = (
+            role_required["value"] if role_required is not None else None
+        )
+
+        tasks = discord.utils.find(
+            lambda a: a["name"].lower() == "\U0001f3c1 Tasks".lower(),
+            self.embed_dict["fields"],
+        )
         self.tasks = tasks["value"] if tasks is not None else None
-        
-        self.end_time = discord.utils.find(lambda a: a["name"].lower() == "Giveway ends in".lower(), self.embed_dict["fields"])["value"].split('|')[0].strip()
-        self.prize = self.embed.description.split('**')[1]
+
+        self.end_time = (
+            discord.utils.find(
+                lambda a: a["name"].lower() == "Giveway ends in".lower(),
+                self.embed_dict["fields"],
+            )["value"]
+            .split("|")[0]
+            .strip()
+        )
+        self.prize = self.embed.description.split("**")[1]
         self.host = self.embed.author
-        
+
         return self
 
 
 class CooldownByContent(commands.CooldownMapping):
-
     def _bucket_key(message):
         return (message.channel.id, message.content)
 
@@ -214,17 +225,21 @@ class SpamChecker:
 
     def __init__(self):
         self.by_content = CooldownByContent.from_cooldown(
-            15, 17.0, commands.BucketType.member)
+            15, 17.0, commands.BucketType.member
+        )
         self.by_user = commands.CooldownMapping.from_cooldown(
-            10, 12.0, commands.BucketType.user)
+            10, 12.0, commands.BucketType.user
+        )
         self.last_join = None
         self.new_user = commands.CooldownMapping.from_cooldown(
-            30, 35.0, commands.BucketType.channel)
+            30, 35.0, commands.BucketType.channel
+        )
 
         # user_id flag mapping (for about 30 minutes)
         self.fast_joiners = ExpiringCache(seconds=1800.0)
         self.hit_and_run = commands.CooldownMapping.from_cooldown(
-            10, 12, commands.BucketType.channel)
+            10, 12, commands.BucketType.channel
+        )
 
     @staticmethod
     def is_new(member):
@@ -272,85 +287,91 @@ class SpamChecker:
 
 
 class Characters:
-    '''The characters model class'''
+    """The characters model class"""
+
     __slots__ = [
-        'id',
-        'name', 
-        'images', 
-        'emoji',
-        'category', 
-        'kwargs', 
+        "id",
+        "name",
+        "images",
+        "emoji",
+        "category",
+        "kwargs",
     ]
+
     def __init__(self, **kwargs):
-        self.name: Optional[str]  = kwargs.get('name')
-        self.id: Optional[Union[str,int]] = ''.join(self.name.split()).upper() if self.name is not None else None
-        self.images: Optional[list] = kwargs.get('images')
-        self.category: Optional[str] = kwargs.get('category')
-        self.emoji: Optional[Union[discord.Emoji, discord.PartialEmoji]] = kwargs.get('emoji')
+        self.name: Optional[str] = kwargs.get("name")
+        self.id: Optional[Union[str, int]] = (
+            "".join(self.name.split()).upper() if self.name is not None else None
+        )
+        self.images: Optional[list] = kwargs.get("images")
+        self.category: Optional[str] = kwargs.get("category")
+        self.emoji: Optional[Union[discord.Emoji, discord.PartialEmoji]] = kwargs.get(
+            "emoji"
+        )
         self.kwargs = kwargs
-    
+
     @property
     def hitpoint(self) -> int:
         category = str(self.category)
-        if category.lower() == 'akatsuki':
+        if category.lower() == "akatsuki":
             return 7
-        if category.lower() == 'jinchuruki':
+        if category.lower() == "jinchuruki":
             return 8
-        if category.lower() in ('kage', 'special'):
+        if category.lower() in ("kage", "special"):
             return 5
-        if category.lower() == 'otsutsuki':
+        if category.lower() == "otsutsuki":
             return 10
-        if category.lower() == 'special':
+        if category.lower() == "special":
             return 6
         else:
             return 3
-    
+
     @property
     def regainpoint(self) -> int:
         category = str(self.category)
-        if category.lower() == 'akatsuki':
+        if category.lower() == "akatsuki":
             return 5
-        if category.lower() == 'jinchuruki':
+        if category.lower() == "jinchuruki":
             return 6
-        if category.lower() in ('kage', 'special'):
+        if category.lower() in ("kage", "special"):
             return 3
-        if category.lower() == 'otsutsuki':
+        if category.lower() == "otsutsuki":
             return 7
-        if category.lower() == 'special':
+        if category.lower() == "special":
             return 4
         else:
             return 1
-    
+
     @property
     def healpoint(self):
-        '''These are in percentages'''
+        """These are in percentages"""
         category = str(self.category)
-        if category.lower() == 'akatsuki':
+        if category.lower() == "akatsuki":
             return 50
-        if category.lower() == 'jinchuruki':
+        if category.lower() == "jinchuruki":
             return 60
-        if category.lower() in ('kage', 'special'):
+        if category.lower() in ("kage", "special"):
             return 30
-        if category.lower() == 'otsutsuki':
+        if category.lower() == "otsutsuki":
             return 70
-        if category.lower() == 'special':
+        if category.lower() == "special":
             return 40
         else:
             return 10
-    
+
     @property
     def specialpoint(self):
-        '''These are in percentages'''
+        """These are in percentages"""
         category = str(self.category)
-        if category.lower() == 'akatsuki':
+        if category.lower() == "akatsuki":
             return 40
-        if category.lower() == 'jinchuruki':
+        if category.lower() == "jinchuruki":
             return 50
-        if category.lower() in ('kage', 'special'):
+        if category.lower() in ("kage", "special"):
             return 20
-        if category.lower() == 'otsutsuki':
+        if category.lower() == "otsutsuki":
             return 60
-        if category.lower() == 'special':
+        if category.lower() == "special":
             return 30
         else:
             return 10
@@ -360,18 +381,24 @@ class Characters:
         self = cls()
 
         self.name = name.replace("_", " ").title()
-        self.images = record['images']
-        self.category = record['category']
-        self.id = ''.join(self.name.split()).upper() if self.name is not None else None
+        self.images = record["images"]
+        self.category = record["category"]
+        self.id = "".join(self.name.split()).upper() if self.name is not None else None
         self.kwargs = record
-        self.emoji = self.return_emoji(url=record['images'][0],category=record['category'],ctx=ctx)
+        self.emoji = self.return_emoji(
+            url=record["images"][0], category=record["category"], ctx=ctx
+        )
         return self
-    
+
     @staticmethod
-    def return_emoji(url:str, category:str, ctx: commands.Context) -> Union[discord.Emoji, discord.PartialEmoji]:
-        STRIPPED_STRING_LIST: list = url.lstrip(LinksAndVars.character_data.value.rstrip('img_data.json')+'photo_data/').split('/')
+    def return_emoji(
+        url: str, category: str, ctx: commands.Context
+    ) -> Union[discord.Emoji, discord.PartialEmoji]:
+        STRIPPED_STRING_LIST: list = url.lstrip(
+            LinksAndVars.character_data.value.rstrip("img_data.json") + "photo_data/"
+        ).split("/")
         STRIPPED_STRING_LIST.append(category)
         for i in STRIPPED_STRING_LIST:
             if i.lower() in ShinobiMatch.name_exclusion.value:
                 return ctx.get_config_emoji_by_name_or_id(i)
-        return discord.PartialEmoji(name='\U0001f5e1')
+        return discord.PartialEmoji(name="\U0001f5e1")

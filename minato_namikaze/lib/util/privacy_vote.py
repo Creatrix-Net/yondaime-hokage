@@ -7,6 +7,7 @@ from discord.ext import menus
 from .vars import LinksAndVars
 import aiohttp, orjson
 
+
 class VotingMenu(menus.Menu):
     def __init__(self, bot):
         super().__init__()
@@ -26,7 +27,8 @@ class VotingMenu(menus.Menu):
                 listing: dict = orjson.loads(await resp.text())
         listing_formatted_string = "\n".join(
             f"- **[{i}](https://{listing[i]}/{self.bot.application_id})**"
-            for i in listing)
+            for i in listing
+        )
         e1 = SuccessEmbed(
             title="Thanks!",
             description=f"Thanks {self.ctx.author.mention}! Here's the links:\n{listing_formatted_string}",

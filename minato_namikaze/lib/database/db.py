@@ -42,13 +42,13 @@ class SQLType:
     def to_dict(self) -> dict[str, Any]:
         o = self.__dict__.copy()
         cls = self.__class__
-        o['__meta__'] = cls.__module__ + '.' + cls.__qualname__
+        o["__meta__"] = cls.__module__ + "." + cls.__qualname__
         return o
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
-        meta = data.pop('__meta__')
-        given = cls.__module__ + '.' + cls.__qualname__
+        meta = data.pop("__meta__")
+        given = cls.__module__ + "." + cls.__qualname__
         if given != meta:
             cls = pydoc.locate(meta)
             if cls is None:
@@ -75,21 +75,21 @@ class Binary(SQLType):
     python = bytes
 
     def to_sql(self):
-        return 'BYTEA'
+        return "BYTEA"
 
 
 class Boolean(SQLType):
     python = bool
 
     def to_sql(self):
-        return 'BOOLEAN'
+        return "BOOLEAN"
 
 
 class Date(SQLType):
     python = datetime.date
 
     def to_sql(self):
-        return 'DATE'
+        return "DATE"
 
 
 class Datetime(SQLType):
@@ -100,22 +100,22 @@ class Datetime(SQLType):
 
     def to_sql(self):
         if self.timezone:
-            return 'TIMESTAMP WITH TIME ZONE'
-        return 'TIMESTAMP'
+            return "TIMESTAMP WITH TIME ZONE"
+        return "TIMESTAMP"
 
 
 class Double(SQLType):
     python = float
 
     def to_sql(self):
-        return 'REAL'
+        return "REAL"
 
 
 class Float(SQLType):
     python = float
 
     def to_sql(self):
-        return 'FLOAT'
+        return "FLOAT"
 
 
 class Integer(SQLType):
@@ -127,20 +127,20 @@ class Integer(SQLType):
         self.auto_increment = auto_increment
 
         if big and small:
-            raise SchemaError('Integer column type cannot be both big and small.')
+            raise SchemaError("Integer column type cannot be both big and small.")
 
     def to_sql(self):
         if self.auto_increment:
             if self.big:
-                return 'BIGSERIAL'
+                return "BIGSERIAL"
             if self.small:
-                return 'SMALLSERIAL'
-            return 'SERIAL'
+                return "SMALLSERIAL"
+            return "SERIAL"
         if self.big:
-            return 'BIGINT'
+            return "BIGINT"
         if self.small:
-            return 'SMALLINT'
-        return 'INTEGER'
+            return "SMALLINT"
+        return "INTEGER"
 
     def is_real_type(self):
         return not self.auto_increment
@@ -153,29 +153,29 @@ class Interval(SQLType):
         if field:
             field = field.upper()
             if field not in (
-                'YEAR',
-                'MONTH',
-                'DAY',
-                'HOUR',
-                'MINUTE',
-                'SECOND',
-                'YEAR TO MONTH',
-                'DAY TO HOUR',
-                'DAY TO MINUTE',
-                'DAY TO SECOND',
-                'HOUR TO MINUTE',
-                'HOUR TO SECOND',
-                'MINUTE TO SECOND',
+                "YEAR",
+                "MONTH",
+                "DAY",
+                "HOUR",
+                "MINUTE",
+                "SECOND",
+                "YEAR TO MONTH",
+                "DAY TO HOUR",
+                "DAY TO MINUTE",
+                "DAY TO SECOND",
+                "HOUR TO MINUTE",
+                "HOUR TO SECOND",
+                "MINUTE TO SECOND",
             ):
-                raise SchemaError('invalid interval specified')
+                raise SchemaError("invalid interval specified")
             self.field = field
         else:
             self.field = None
 
     def to_sql(self):
         if self.field:
-            return 'INTERVAL ' + self.field
-        return 'INTERVAL'
+            return "INTERVAL " + self.field
+        return "INTERVAL"
 
 
 class Numeric(SQLType):
@@ -184,7 +184,7 @@ class Numeric(SQLType):
     def __init__(self, *, precision=None, scale=None):
         if precision is not None:
             if precision < 0 or precision > 1000:
-                raise SchemaError('precision must be greater than 0 and below 1000')
+                raise SchemaError("precision must be greater than 0 and below 1000")
             if scale is None:
                 scale = 0
 
@@ -193,8 +193,8 @@ class Numeric(SQLType):
 
     def to_sql(self):
         if self.precision is not None:
-            return 'NUMERIC({0.precision}, {0.scale})'.format(self)
-        return 'NUMERIC'
+            return "NUMERIC({0.precision}, {0.scale})".format(self)
+        return "NUMERIC"
 
 
 class String(SQLType):
@@ -205,14 +205,14 @@ class String(SQLType):
         self.fixed = fixed
 
         if fixed and length is None:
-            raise SchemaError('Cannot have fixed string with no length')
+            raise SchemaError("Cannot have fixed string with no length")
 
     def to_sql(self):
         if self.length is None:
-            return 'TEXT'
+            return "TEXT"
         if self.fixed:
-            return 'CHAR({0.length})'.format(self)
-        return 'VARCHAR({0.length})'.format(self)
+            return "CHAR({0.length})".format(self)
+        return "VARCHAR({0.length})".format(self)
 
 
 class Time(SQLType):
@@ -223,38 +223,46 @@ class Time(SQLType):
 
     def to_sql(self):
         if self.timezone:
-            return 'TIME WITH TIME ZONE'
-        return 'TIME'
+            return "TIME WITH TIME ZONE"
+        return "TIME"
 
 
 class JSON(SQLType):
     python = None
 
     def to_sql(self):
-        return 'JSONB'
+        return "JSONB"
 
 
 class ForeignKey(SQLType):
-    def __init__(self, table, column, *, sql_type=None, on_delete='CASCADE', on_update='NO ACTION'):
+    def __init__(
+        self,
+        table,
+        column,
+        *,
+        sql_type=None,
+        on_delete="CASCADE",
+        on_update="NO ACTION",
+    ):
         if not table or not isinstance(table, str):
-            raise SchemaError('missing table to reference (must be string)')
+            raise SchemaError("missing table to reference (must be string)")
 
         valid_actions = (
-            'NO ACTION',
-            'RESTRICT',
-            'CASCADE',
-            'SET NULL',
-            'SET DEFAULT',
+            "NO ACTION",
+            "RESTRICT",
+            "CASCADE",
+            "SET NULL",
+            "SET DEFAULT",
         )
 
         on_delete = on_delete.upper()
         on_update = on_update.upper()
 
         if on_delete not in valid_actions:
-            raise TypeError('on_delete must be one of %s.' % valid_actions)
+            raise TypeError("on_delete must be one of %s." % valid_actions)
 
         if on_update not in valid_actions:
-            raise TypeError('on_update must be one of %s.' % valid_actions)
+            raise TypeError("on_update must be one of %s." % valid_actions)
 
         self.table = table
         self.column = column
@@ -268,7 +276,7 @@ class ForeignKey(SQLType):
             sql_type = sql_type()
 
         if not isinstance(sql_type, SQLType):
-            raise TypeError('Cannot have non-SQLType derived sql_type')
+            raise TypeError("Cannot have non-SQLType derived sql_type")
 
         if not sql_type.is_real_type():
             raise SchemaError('sql_type must be a "real" type')
@@ -279,7 +287,7 @@ class ForeignKey(SQLType):
         return False
 
     def to_sql(self):
-        fmt = '{0.sql_type} REFERENCES {0.table} ({0.column}) ON DELETE {0.on_delete} ON UPDATE {0.on_update}'
+        fmt = "{0.sql_type} REFERENCES {0.table} ({0.column}) ON DELETE {0.on_delete} ON UPDATE {0.on_update}"
         return fmt.format(self)
 
 
@@ -291,7 +299,7 @@ class Array(SQLType):
             sql_type = sql_type()
 
         if not isinstance(sql_type, SQLType):
-            raise TypeError('Cannot have non-SQLType derived sql_type')
+            raise TypeError("Cannot have non-SQLType derived sql_type")
 
         if not sql_type.is_real_type():
             raise SchemaError('sql_type must be a "real" type')
@@ -299,7 +307,7 @@ class Array(SQLType):
         self.sql_type = sql_type.to_sql()
 
     def to_sql(self):
-        return '{0.sql_type} ARRAY'.format(self)
+        return "{0.sql_type} ARRAY".format(self)
 
     def is_real_type(self):
         # technically, it is a real type
@@ -309,7 +317,16 @@ class Array(SQLType):
 
 
 class Column:
-    __slots__ = ('column_type', 'index', 'primary_key', 'nullable', 'default', 'unique', 'name', 'index_name')
+    __slots__ = (
+        "column_type",
+        "index",
+        "primary_key",
+        "nullable",
+        "default",
+        "unique",
+        "name",
+        "index_name",
+    )
 
     def __init__(
         self,
@@ -327,7 +344,7 @@ class Column:
             column_type = column_type()
 
         if not isinstance(column_type, SQLType):
-            raise TypeError('Cannot have a non-SQLType derived column_type')
+            raise TypeError("Cannot have a non-SQLType derived column_type")
 
         self.column_type: SQLType = column_type
         self.index: bool = index
@@ -339,12 +356,14 @@ class Column:
         self.index_name: Optional[str] = None  # to be filled later
 
         if sum(map(bool, (unique, primary_key, default is not None))) > 1:
-            raise SchemaError("'unique', 'primary_key', and 'default' are mutually exclusive.")
+            raise SchemaError(
+                "'unique', 'primary_key', and 'default' are mutually exclusive."
+            )
 
     @classmethod
     def from_dict(cls, data):
-        index_name = data.pop('index_name', None)
-        column_type = data.pop('column_type')
+        index_name = data.pop("index_name", None)
+        column_type = data.pop("column_type")
         column_type = SQLType.from_dict(column_type)
         self = cls(column_type=column_type, **data)
         self.index_name = index_name
@@ -352,15 +371,17 @@ class Column:
 
     @property
     def _comparable_id(self):
-        return '-'.join('%s:%s' % (attr, getattr(self, attr)) for attr in self.__slots__)
+        return "-".join(
+            "%s:%s" % (attr, getattr(self, attr)) for attr in self.__slots__
+        )
 
     def _to_dict(self):
         d = {attr: getattr(self, attr) for attr in self.__slots__}
-        d['column_type'] = self.column_type.to_dict()
+        d["column_type"] = self.column_type.to_dict()
         return d
 
     def _qualifiers_dict(self):
-        return {attr: getattr(self, attr) for attr in ('nullable', 'default')}
+        return {attr: getattr(self, attr) for attr in ("nullable", "default")}
 
     def _is_rename(self, other):
         if self.name == other.name:
@@ -375,7 +396,7 @@ class Column:
 
         default = self.default
         if default is not None:
-            builder.append('DEFAULT')
+            builder.append("DEFAULT")
             if isinstance(default, str) and isinstance(self.column_type, String):
                 builder.append("'%s'" % default)
             elif isinstance(default, bool):
@@ -383,11 +404,11 @@ class Column:
             else:
                 builder.append("(%s)" % default)
         elif self.unique:
-            builder.append('UNIQUE')
+            builder.append("UNIQUE")
         if not self.nullable:
-            builder.append('NOT NULL')
+            builder.append("NOT NULL")
 
-        return ' '.join(builder)
+        return " ".join(builder)
 
 
 class PrimaryKeyColumn(Column):
@@ -398,7 +419,7 @@ class PrimaryKeyColumn(Column):
 
 
 class SchemaDiff:
-    __slots__ = ('table', 'upgrade', 'downgrade')
+    __slots__ = ("table", "upgrade", "downgrade")
 
     def __init__(self, table, upgrade, downgrade):
         self.table = table
@@ -406,69 +427,73 @@ class SchemaDiff:
         self.downgrade = downgrade
 
     def to_dict(self):
-        return {'upgrade': self.upgrade, 'downgrade': self.downgrade}
+        return {"upgrade": self.upgrade, "downgrade": self.downgrade}
 
     def is_empty(self):
         return len(self.upgrade) == 0 and len(self.downgrade) == 0
 
     def to_sql(self, *, downgrade=False):
         statements = []
-        base = 'ALTER TABLE %s ' % self.table.__tablename__
+        base = "ALTER TABLE %s " % self.table.__tablename__
         path = self.upgrade if not downgrade else self.downgrade
 
-        for rename in path.get('rename_columns', []):
-            fmt = '{0}RENAME COLUMN {1[before]} TO {1[after]};'.format(base, rename)
+        for rename in path.get("rename_columns", []):
+            fmt = "{0}RENAME COLUMN {1[before]} TO {1[after]};".format(base, rename)
             statements.append(fmt)
 
         sub_statements = []
-        for dropped in path.get('remove_columns', []):
-            fmt = 'DROP COLUMN {0[name]} RESTRICT'.format(dropped)
+        for dropped in path.get("remove_columns", []):
+            fmt = "DROP COLUMN {0[name]} RESTRICT".format(dropped)
             sub_statements.append(fmt)
 
-        for changed_types in path.get('changed_column_types', []):
-            fmt = 'ALTER COLUMN {0[name]} SET DATA TYPE {0[type]}'.format(changed_types)
+        for changed_types in path.get("changed_column_types", []):
+            fmt = "ALTER COLUMN {0[name]} SET DATA TYPE {0[type]}".format(changed_types)
 
-            using = changed_types.get('using')
+            using = changed_types.get("using")
             if using is not None:
-                fmt = '%s USING %s' % (fmt, using)
+                fmt = "%s USING %s" % (fmt, using)
 
             sub_statements.append(fmt)
 
-        for constraints in path.get('changed_constraints', []):
-            before, after = constraints['before'], constraints['after']
+        for constraints in path.get("changed_constraints", []):
+            before, after = constraints["before"], constraints["after"]
 
-            before_default, after_default = before.get('default'), after.get('default')
+            before_default, after_default = before.get("default"), after.get("default")
             if before_default is None and after_default is not None:
-                fmt = 'ALTER COLUMN {0[name]} SET DEFAULT {1[default]}'.format(constraints, after)
+                fmt = "ALTER COLUMN {0[name]} SET DEFAULT {1[default]}".format(
+                    constraints, after
+                )
                 sub_statements.append(fmt)
             elif before_default is not None and after_default is None:
-                fmt = 'ALTER COLUMN {0[name]} DROP DEFAULT'.format(constraints)
+                fmt = "ALTER COLUMN {0[name]} DROP DEFAULT".format(constraints)
                 sub_statements.append(fmt)
 
-            before_nullable, after_nullable = before.get('nullable'), after.get('nullable')
+            before_nullable, after_nullable = before.get("nullable"), after.get(
+                "nullable"
+            )
             if not before_nullable and after_nullable:
-                fmt = 'ALTER COLUMN {0[name]} DROP NOT NULL'.format(constraints)
+                fmt = "ALTER COLUMN {0[name]} DROP NOT NULL".format(constraints)
                 sub_statements.append(fmt)
             elif before_nullable and not after_nullable:
-                fmt = 'ALTER COLUMN {0[name]} SET NOT NULL'.format(constraints)
+                fmt = "ALTER COLUMN {0[name]} SET NOT NULL".format(constraints)
                 sub_statements.append(fmt)
 
-        for added in path.get('add_columns', []):
+        for added in path.get("add_columns", []):
             column = Column.from_dict(added)
-            sub_statements.append('ADD COLUMN ' + column._create_table())
+            sub_statements.append("ADD COLUMN " + column._create_table())
 
         if sub_statements:
-            statements.append(base + ', '.join(sub_statements) + ';')
+            statements.append(base + ", ".join(sub_statements) + ";")
 
         # handle the index creation bits
-        for dropped in path.get('drop_index', []):
-            statements.append('DROP INDEX IF EXISTS {0[index]};'.format(dropped))
+        for dropped in path.get("drop_index", []):
+            statements.append("DROP INDEX IF EXISTS {0[index]};".format(dropped))
 
-        for added in path.get('add_index', []):
-            fmt = 'CREATE INDEX IF NOT EXISTS {0[index]} ON {1.__tablename__} ({0[name]});'
+        for added in path.get("add_index", []):
+            fmt = "CREATE INDEX IF NOT EXISTS {0[index]} ON {1.__tablename__} ({0[name]});"
             statements.append(fmt.format(added, self.table))
 
-        return '\n'.join(statements)
+        return "\n".join(statements)
 
 
 class MaybeAcquire:
@@ -498,11 +523,11 @@ class TableMeta(type):
         columns = []
 
         try:
-            table_name = kwargs['table_name']
+            table_name = kwargs["table_name"]
         except KeyError:
             table_name = name.lower()
 
-        dct['__tablename__'] = table_name
+        dct["__tablename__"] = table_name
 
         for elem, value in dct.items():
             if isinstance(value, Column):
@@ -510,11 +535,11 @@ class TableMeta(type):
                     value.name = elem
 
                 if value.index:
-                    value.index_name = '%s_%s_idx' % (table_name, value.name)
+                    value.index_name = "%s_%s_idx" % (table_name, value.name)
 
                 columns.append(value)
 
-        dct['columns'] = columns
+        dct["columns"] = columns
         return super().__new__(cls, name, parents, dct)
 
     def __init__(self, name, parents, dct, **kwargs):
@@ -549,11 +574,15 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
         def _decode_jsonb(value):
             return json.loads(value)
 
-        old_init = kwargs.pop('init', None)
+        old_init = kwargs.pop("init", None)
 
         async def init(con):
             await con.set_type_codec(
-                'jsonb', schema='pg_catalog', encoder=_encode_jsonb, decoder=_decode_jsonb, format='text'
+                "jsonb",
+                schema="pg_catalog",
+                encoder=_encode_jsonb,
+                decoder=_decode_jsonb,
+                format="text",
             )
             if old_init is not None:
                 await old_init(con)
@@ -566,7 +595,7 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
         return MaybeAcquire(connection, pool=cls._pool)
 
     @classmethod
-    def write_migration(cls, *, directory='migrations'):
+    def write_migration(cls, *, directory="migrations"):
         """Writes the migration diff into the data file.
 
         Note
@@ -586,15 +615,15 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
         """
 
         directory = Path(directory) / cls.__tablename__
-        p = directory.with_suffix('.json')
+        p = directory.with_suffix(".json")
 
         if not p.exists():
-            raise RuntimeError('Could not find migration file.')
+            raise RuntimeError("Could not find migration file.")
 
-        current = directory.with_name('current-' + p.name)
+        current = directory.with_name("current-" + p.name)
 
         if not current.exists():
-            raise RuntimeError('Could not find current data file.')
+            raise RuntimeError("Could not find current data file.")
 
         with current.open() as fp:
             current_table = cls.from_dict(json.load(fp))
@@ -606,17 +635,17 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
             return None
 
         # load the migration data
-        with p.open('r', encoding='utf-8') as fp:
+        with p.open("r", encoding="utf-8") as fp:
             data = json.load(fp)
-            migrations = data['migrations']
+            migrations = data["migrations"]
 
         # check if we should add it
         our_migrations = diff.to_dict()
         if len(migrations) == 0 or migrations[-1] != our_migrations:
             # we have a new migration, so add it
             migrations.append(our_migrations)
-            temp_file = p.with_name('%s-%s.tmp' % (uuid.uuid4(), p.name))
-            with temp_file.open('w', encoding='utf-8') as tmp:
+            temp_file = p.with_name("%s-%s.tmp" % (uuid.uuid4(), p.name))
+            with temp_file.open("w", encoding="utf-8") as tmp:
                 json.dump(data, tmp, ensure_ascii=True, indent=4)
 
             temp_file.replace(p)
@@ -624,7 +653,15 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
         return False
 
     @classmethod
-    async def migrate(cls, *, directory='migrations', index=-1, downgrade=False, verbose=False, connection=None):
+    async def migrate(
+        cls,
+        *,
+        directory="migrations",
+        index=-1,
+        downgrade=False,
+        verbose=False,
+        connection=None,
+    ):
         """Actually run the latest migration pointed by the data file.
 
         Parameters
@@ -643,20 +680,20 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
         """
 
         directory = Path(directory) / cls.__tablename__
-        p = directory.with_suffix('.json')
+        p = directory.with_suffix(".json")
         if not p.exists():
-            raise RuntimeError('Could not find migration file.')
+            raise RuntimeError("Could not find migration file.")
 
-        with p.open('r', encoding='utf-8') as fp:
+        with p.open("r", encoding="utf-8") as fp:
             data = json.load(fp)
-            migrations = data['migrations']
+            migrations = data["migrations"]
 
         try:
             migration = migrations[index]
         except IndexError:
             return False
 
-        diff = SchemaDiff(cls, migration['upgrade'], migration['downgrade'])
+        diff = SchemaDiff(cls, migration["upgrade"], migration["downgrade"])
         if diff.is_empty():
             return False
 
@@ -666,12 +703,19 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
                 print(sql)
             await con.execute(sql)
 
-        current = directory.with_name('current-' + p.name)
-        with current.open('w', encoding='utf-8') as fp:
+        current = directory.with_name("current-" + p.name)
+        with current.open("w", encoding="utf-8") as fp:
             json.dump(cls.to_dict(), fp, indent=4, ensure_ascii=True)
 
     @classmethod
-    async def create(cls, *, directory='migrations', verbose=False, connection=None, run_migrations=True):
+    async def create(
+        cls,
+        *,
+        directory="migrations",
+        verbose=False,
+        connection=None,
+        run_migrations=True,
+    ):
         """Creates the database and manages migrations, if any.
 
         Parameters
@@ -694,8 +738,8 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
             ``None`` if no migration took place.
         """
         directory = Path(directory) / cls.__tablename__
-        p = directory.with_suffix('.json')
-        current = directory.with_name('current-' + p.name)
+        p = directory.with_suffix(".json")
+        current = directory.with_name("current-" + p.name)
 
         table_data = cls.to_dict()
 
@@ -712,11 +756,11 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
                 await con.execute(sql)
 
             # since that step passed, let's go ahead and make the migration
-            with p.open('w', encoding='utf-8') as fp:
-                data = {'table': table_data, 'migrations': []}
+            with p.open("w", encoding="utf-8") as fp:
+                data = {"table": table_data, "migrations": []}
                 json.dump(data, fp, indent=4, ensure_ascii=True)
 
-            with current.open('w', encoding='utf-8') as fp:
+            with current.open("w", encoding="utf-8") as fp:
                 json.dump(table_data, fp, indent=4, ensure_ascii=True)
 
             return True
@@ -741,29 +785,29 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
             await con.execute(sql)
 
         # load the migration data
-        with p.open('r', encoding='utf-8') as fp:
+        with p.open("r", encoding="utf-8") as fp:
             data = json.load(fp)
-            migrations = data['migrations']
+            migrations = data["migrations"]
 
         # check if we should add it
         our_migrations = diff.to_dict()
         if len(migrations) == 0 or migrations[-1] != our_migrations:
             # we have a new migration, so add it
             migrations.append(our_migrations)
-            temp_file = p.with_name('%s-%s.tmp' % (uuid.uuid4(), p.name))
-            with temp_file.open('w', encoding='utf-8') as tmp:
+            temp_file = p.with_name("%s-%s.tmp" % (uuid.uuid4(), p.name))
+            with temp_file.open("w", encoding="utf-8") as tmp:
                 json.dump(data, tmp, ensure_ascii=True, indent=4)
 
             temp_file.replace(p)
 
         # update our "current" data in the filesystem
-        with current.open('w', encoding='utf-8') as fp:
+        with current.open("w", encoding="utf-8") as fp:
             json.dump(table_data, fp, indent=4, ensure_ascii=True)
 
         return False
 
     @classmethod
-    async def drop(cls, *, directory='migrations', verbose=False, connection=None):
+    async def drop(cls, *, directory="migrations", verbose=False, connection=None):
         """Drops the database and migrations, if any.
 
         Parameters
@@ -778,24 +822,24 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
         """
 
         directory = Path(directory) / cls.__tablename__
-        p = directory.with_suffix('.json')
-        current = directory.with_name('current-' + p.name)
+        p = directory.with_suffix(".json")
+        current = directory.with_name("current-" + p.name)
 
         if not p.exists() or not current.exists():
-            raise RuntimeError('Could not find the appropriate data files.')
+            raise RuntimeError("Could not find the appropriate data files.")
 
         try:
             p.unlink()
         except:
-            raise RuntimeError('Could not delete migration file')
+            raise RuntimeError("Could not delete migration file")
 
         try:
             current.unlink()
         except:
-            raise RuntimeError('Could not delete current migration file')
+            raise RuntimeError("Could not delete current migration file")
 
         async with MaybeAcquire(connection, pool=cls._pool) as con:
-            sql = 'DROP TABLE {0} CASCADE;'.format(cls.__tablename__)
+            sql = "DROP TABLE {0} CASCADE;".format(cls.__tablename__)
             if verbose:
                 print(sql)
             await con.execute(sql)
@@ -804,10 +848,10 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
     def create_table(cls, *, exists_ok=True):
         """Generates the CREATE TABLE stub."""
         statements = []
-        builder = ['CREATE TABLE']
+        builder = ["CREATE TABLE"]
 
         if exists_ok:
-            builder.append('IF NOT EXISTS')
+            builder.append("IF NOT EXISTS")
 
         builder.append(cls.__tablename__)
         column_creations = []
@@ -817,17 +861,19 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
             if col.primary_key:
                 primary_keys.append(col.name)
 
-        column_creations.append('PRIMARY KEY (%s)' % ', '.join(primary_keys))
-        builder.append('(%s)' % ', '.join(column_creations))
-        statements.append(' '.join(builder) + ';')
+        column_creations.append("PRIMARY KEY (%s)" % ", ".join(primary_keys))
+        builder.append("(%s)" % ", ".join(column_creations))
+        statements.append(" ".join(builder) + ";")
 
         # handle the index creations
         for column in cls.columns:
             if column.index:
-                fmt = 'CREATE INDEX IF NOT EXISTS {1.index_name} ON {0} ({1.name});'.format(cls.__tablename__, column)
+                fmt = "CREATE INDEX IF NOT EXISTS {1.index_name} ON {0} ({1.name});".format(
+                    cls.__tablename__, column
+                )
                 statements.append(fmt)
 
-        return '\n'.join(statements)
+        return "\n".join(statements)
 
     @classmethod
     async def insert(cls, connection=None, **kwargs):
@@ -843,15 +889,19 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
 
             check = column.column_type.python
             if value is None and not column.nullable:
-                raise TypeError('Cannot pass None to non-nullable column %s.' % column.name)
+                raise TypeError(
+                    "Cannot pass None to non-nullable column %s." % column.name
+                )
             elif not check or not isinstance(value, check):
-                fmt = 'column {0.name} expected {1.__name__}, received {2.__class__.__name__}'
+                fmt = "column {0.name} expected {1.__name__}, received {2.__class__.__name__}"
                 raise TypeError(fmt.format(column, check, value))
 
             verified[column.name] = value
 
-        sql = 'INSERT INTO {0} ({1}) VALUES ({2});'.format(
-            cls.__tablename__, ', '.join(verified), ', '.join('$' + str(i) for i, _ in enumerate(verified, 1))
+        sql = "INSERT INTO {0} ({1}) VALUES ({2});".format(
+            cls.__tablename__,
+            ", ".join(verified),
+            ", ".join("$" + str(i) for i, _ in enumerate(verified, 1)),
         )
 
         async with MaybeAcquire(connection, pool=cls._pool) as con:
@@ -860,26 +910,26 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
     @classmethod
     def to_dict(cls) -> dict[str, Any]:
         x = {}
-        x['name'] = cls.__tablename__
-        x['__meta__'] = cls.__module__ + '.' + cls.__qualname__
+        x["name"] = cls.__tablename__
+        x["__meta__"] = cls.__module__ + "." + cls.__qualname__
 
         # nb: columns is ordered due to the ordered dict usage
         #     this is used to help detect renames
-        x['columns'] = [a._to_dict() for a in cls.columns]
+        x["columns"] = [a._to_dict() for a in cls.columns]
         return x
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
-        meta = data['__meta__']
-        given = cls.__module__ + '.' + cls.__qualname__
+        meta = data["__meta__"]
+        given = cls.__module__ + "." + cls.__qualname__
         if given != meta:
             cls = pydoc.locate(meta)
             if cls is None:
                 raise RuntimeError('Could not locate "%s".' % meta)
 
         self: Self = cls()  # type: ignore
-        self.__tablename__ = data['name']
-        self.columns = [Column.from_dict(a) for a in data['columns']]
+        self.__tablename__ = data["name"]
+        self.columns = [Column.from_dict(a) for a in data["columns"]]
         return self
 
     @classmethod
@@ -938,31 +988,51 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
                 # check if we're dropping the index
                 if not a.index:
                     # we could also be renaming so make sure to use the old index name
-                    upgrade.setdefault('drop_index', []).append({'name': a.name, 'index': b.index_name})
+                    upgrade.setdefault("drop_index", []).append(
+                        {"name": a.name, "index": b.index_name}
+                    )
                     # if we want to roll back, we need to re-add the old index to the old column name
-                    downgrade.setdefault('add_index', []).append({'name': b.name, 'index': b.index_name})
+                    downgrade.setdefault("add_index", []).append(
+                        {"name": b.name, "index": b.index_name}
+                    )
                 else:
                     # we're not dropping an index, instead we're adding one
-                    upgrade.setdefault('add_index', []).append({'name': a.name, 'index': a.index_name})
-                    downgrade.setdefault('drop_index', []).append({'name': a.name, 'index': a.index_name})
+                    upgrade.setdefault("add_index", []).append(
+                        {"name": a.name, "index": a.index_name}
+                    )
+                    downgrade.setdefault("drop_index", []).append(
+                        {"name": a.name, "index": a.index_name}
+                    )
 
         def insert_column_diff(a, b):
             if a.column_type != b.column_type:
-                if a.name == b.name and a.column_type.is_real_type() and b.column_type.is_real_type():
-                    upgrade.setdefault('changed_column_types', []).append({'name': a.name, 'type': a.column_type.to_sql()})
-                    downgrade.setdefault('changed_column_types', []).append({'name': a.name, 'type': b.column_type.to_sql()})
+                if (
+                    a.name == b.name
+                    and a.column_type.is_real_type()
+                    and b.column_type.is_real_type()
+                ):
+                    upgrade.setdefault("changed_column_types", []).append(
+                        {"name": a.name, "type": a.column_type.to_sql()}
+                    )
+                    downgrade.setdefault("changed_column_types", []).append(
+                        {"name": a.name, "type": b.column_type.to_sql()}
+                    )
                 else:
                     a_dict, b_dict = a._to_dict(), b._to_dict()
-                    upgrade.setdefault('add_columns', []).append(a_dict)
-                    upgrade.setdefault('remove_columns', []).append(b_dict)
-                    downgrade.setdefault('remove_columns', []).append(a_dict)
-                    downgrade.setdefault('add_columns', []).append(b_dict)
+                    upgrade.setdefault("add_columns", []).append(a_dict)
+                    upgrade.setdefault("remove_columns", []).append(b_dict)
+                    downgrade.setdefault("remove_columns", []).append(a_dict)
+                    downgrade.setdefault("add_columns", []).append(b_dict)
                     check_index_diff(a, b)
                     return
 
             elif a._is_rename(b):
-                upgrade.setdefault('rename_columns', []).append({'before': b.name, 'after': a.name})
-                downgrade.setdefault('rename_columns', []).append({'before': a.name, 'after': b.name})
+                upgrade.setdefault("rename_columns", []).append(
+                    {"before": b.name, "after": a.name}
+                )
+                downgrade.setdefault("rename_columns", []).append(
+                    {"before": a.name, "after": b.name}
+                )
 
             # technically, adding UNIQUE or PRIMARY KEY is rather simple and straight forward
             # however, since the inverse is a little bit more complicated (you have to remove
@@ -971,10 +1041,10 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
             # So.. just drop/add the column and call it a day.
             if a.unique != b.unique or a.primary_key != b.primary_key:
                 a_dict, b_dict = a._to_dict(), b._to_dict()
-                upgrade.setdefault('add_columns', []).append(a_dict)
-                upgrade.setdefault('remove_columns', []).append(b_dict)
-                downgrade.setdefault('remove_columns', []).append(a_dict)
-                downgrade.setdefault('add_columns', []).append(b_dict)
+                upgrade.setdefault("add_columns", []).append(a_dict)
+                upgrade.setdefault("remove_columns", []).append(b_dict)
+                downgrade.setdefault("remove_columns", []).append(a_dict)
+                downgrade.setdefault("add_columns", []).append(b_dict)
                 check_index_diff(a, b)
                 return
 
@@ -982,8 +1052,12 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
 
             b_qual, a_qual = b._qualifiers_dict(), a._qualifiers_dict()
             if a_qual != b_qual:
-                upgrade.setdefault('changed_constraints', []).append({'name': a.name, 'before': b_qual, 'after': a_qual})
-                downgrade.setdefault('changed_constraints', []).append({'name': a.name, 'before': a_qual, 'after': b_qual})
+                upgrade.setdefault("changed_constraints", []).append(
+                    {"name": a.name, "before": b_qual, "after": a_qual}
+                )
+                downgrade.setdefault("changed_constraints", []).append(
+                    {"name": a.name, "before": a_qual, "after": b_qual}
+                )
 
         if len(self.columns) == len(before.columns):
             # check if we have any changes at all
@@ -1007,14 +1081,20 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
                 insert_column_diff(a, b)
 
             new_columns = self.columns[len(before.columns) :]
-            add, remove = upgrade.setdefault('add_columns', []), downgrade.setdefault('remove_columns', [])
+            add, remove = upgrade.setdefault("add_columns", []), downgrade.setdefault(
+                "remove_columns", []
+            )
             for column in new_columns:
                 as_dict = column._to_dict()
                 add.append(as_dict)
                 remove.append(as_dict)
                 if column.index:
-                    upgrade.setdefault('add_index', []).append({'name': column.name, 'index': column.index_name})
-                    downgrade.setdefault('drop_index', []).append({'name': column.name, 'index': column.index_name})
+                    upgrade.setdefault("add_index", []).append(
+                        {"name": column.name, "index": column.index_name}
+                    )
+                    downgrade.setdefault("drop_index", []).append(
+                        {"name": column.name, "index": column.index_name}
+                    )
 
         elif len(self.columns) < len(before.columns):
             # check if we have fewer columns
@@ -1032,8 +1112,8 @@ class Table(metaclass=TableMeta):  # type: ignore  # Pyright Bug I think
 
             # check which columns are 'left over' and remove them
             removed = [c._to_dict() for c in sorted_before[len(sorted_after) :]]
-            upgrade.setdefault('remove_columns', []).extend(removed)
-            downgrade.setdefault('add_columns', []).extend(removed)
+            upgrade.setdefault("remove_columns", []).extend(removed)
+            downgrade.setdefault("add_columns", []).extend(removed)
 
         return SchemaDiff(self, upgrade, downgrade)
 
@@ -1043,7 +1123,7 @@ async def _table_creator(tables, *, verbose=True):
         try:
             await table.create(verbose=verbose)
         except:
-            log.error('Failed to create table %s.', table.__tablename__)
+            log.error("Failed to create table %s.", table.__tablename__)
 
 
 def create_tables(*tables, verbose=True, loop=None):

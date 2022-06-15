@@ -12,7 +12,7 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
         # The row parameter tells the View which row to place the button under.
         # A View can only contain up to 5 rows -- each row can only have 5 buttons.
         # Since a Tic Tac Toe grid is 3x3 that means we have 3 rows and 3 columns.
-        super().__init__(style=discord.ButtonStyle.secondary,label="\u200b",row=y)
+        super().__init__(style=discord.ButtonStyle.secondary, label="\u200b", row=y)
         self.x = x
         self.y = y
         self.button_id = x
@@ -50,18 +50,20 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
 
         winner = view.check_board_winner()
         if view.auto and winner is None or winner == view.Tie:
-            await interaction.message.edit(content='Now let me think! ......', view=view)
+            await interaction.message.edit(
+                content="Now let me think! ......", view=view
+            )
             await asyncio.sleep(2)
 
-            left_board_space: List[Tuple] = [] #[(x,y)]
+            left_board_space: List[Tuple] = []  # [(x,y)]
             for count, i in enumerate(view.member_board):
                 for count_1, j in enumerate(i):
-                    if isinstance(j,int):
+                    if isinstance(j, int):
                         left_board_space.append((count_1, count))
             select_space = random.choice(left_board_space)
             x = select_space[0]
             y = select_space[-1]
-            
+
             child = discord.utils.get(view.children, button_id=x, row=y)
             child.style = discord.ButtonStyle.success
             child.label = "O"
@@ -85,7 +87,6 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
 
             view.stop()
             await interaction.message.edit(content=content, view=view)
-            
 
 
 # This is our actual board View
@@ -120,12 +121,15 @@ class TicTacToe(discord.ui.View):
         for x in range(3):
             for y in range(3):
                 self.add_item(TicTacToeButton(x, y))
-    
+
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.current_player.id:
             return True
         else:
-            await interaction.response.send_message("This TicTacToe match is not for you or wait for your turn", ephemeral=True)
+            await interaction.response.send_message(
+                "This TicTacToe match is not for you or wait for your turn",
+                ephemeral=True,
+            )
             return False
 
     # This method checks for the board winner -- it is used by the TicTacToeButton
@@ -139,8 +143,7 @@ class TicTacToe(discord.ui.View):
 
         # Check vertical
         for line in range(3):
-            value = self.board[0][line] + self.board[1][line] + self.board[2][
-                line]
+            value = self.board[0][line] + self.board[1][line] + self.board[2][line]
             if value == 3:
                 return self.player2
             elif value == -3:
@@ -164,7 +167,7 @@ class TicTacToe(discord.ui.View):
             return self.Tie
 
         return None
-    
+
     async def on_timeout(self) -> None:
         for child in self.children:
             child.disabled = True

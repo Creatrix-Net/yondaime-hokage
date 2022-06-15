@@ -6,11 +6,14 @@ from discord.ext import commands
 from DiscordUtils import Embed, ErrorEmbed
 
 if TYPE_CHECKING:
+    from lib import Context
+
     from .. import MinatoNamikazeBot
 
+
 class QuickPoll(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.reactions = [
             "\N{REGIONAL INDICATOR SYMBOL LETTER A}",
             "\N{REGIONAL INDICATOR SYMBOL LETTER B}",
@@ -39,7 +42,7 @@ class QuickPoll(commands.Cog):
             "\N{REGIONAL INDICATOR SYMBOL LETTER Y}",
             "\N{REGIONAL INDICATOR SYMBOL LETTER Z}",
         ]
-        self.description = 'Create polls'
+        self.description = "Create polls"
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
@@ -55,8 +58,9 @@ class QuickPoll(commands.Cog):
                 continue
 
     @commands.command(pass_context=True, aliases=["poll", "polls"])
-    async def polltime(self, ctx):
+    async def polltime(self, ctx: "Context"):
         """Create polls easily"""
+
         def check(m):
             return m.author == ctx.author and m.channel == ctx.channel
 
@@ -76,45 +80,59 @@ class QuickPoll(commands.Cog):
             question_message = await ctx.send(embed=embed)
             all_messages.append(question_message)
             try:
-                message = await self.bot.wait_for("message",
-                                                  timeout=60,
-                                                  check=check)
+                message = await self.bot.wait_for("message", timeout=60, check=check)
                 if i == 2:
                     all_messages.append(message)
                     try:
                         int(message.content)
                     except:
-                        await ctx.send(embed=ErrorEmbed(
-                            description=f"{message.content} you provided is **not an number**, Please **rerun the command again**!"
-                        ), delete_after=2)
+                        await ctx.send(
+                            embed=ErrorEmbed(
+                                description=f"{message.content} you provided is **not an number**, Please **rerun the command again**!"
+                            ),
+                            delete_after=2,
+                        )
                         await self.delete_message(all_messages)
                         return
                     if int(message.content) < 2:
-                        await ctx.send(embed=ErrorEmbed(
-                            description="The no. of options cannot be **less than 2**, Please **rerun the command again**!"
-                        ), delete_after=2)
+                        await ctx.send(
+                            embed=ErrorEmbed(
+                                description="The no. of options cannot be **less than 2**, Please **rerun the command again**!"
+                            ),
+                            delete_after=2,
+                        )
                         await self.delete_message(all_messages)
                         return
                     if int(message.content) > len(self.reactions):
-                        await ctx.send(embed=ErrorEmbed(
-                            description="The no. of options cannot be **greater than 10**, Please **rerun the command again**!"
-                        ), delete_after=2)
+                        await ctx.send(
+                            embed=ErrorEmbed(
+                                description="The no. of options cannot be **greater than 10**, Please **rerun the command again**!"
+                            ),
+                            delete_after=2,
+                        )
                         await self.delete_message(all_messages)
                         return
                     for i in range(int(message.content)):
                         option_question = await ctx.send(f"**Option {i+1}**")
                         all_messages.append(option_question)
                         try:
-                            options_message = await self.bot.wait_for("message", timeout=60, check=check)
+                            options_message = await self.bot.wait_for(
+                                "message", timeout=60, check=check
+                            )
                             all_messages.append(option_question)
                         except:
-                            await ctx.send("You didn't answer the questions in Time", delete_after=2)
+                            await ctx.send(
+                                "You didn't answer the questions in Time",
+                                delete_after=2,
+                            )
                             await self.delete_message(all_messages)
                             return
                         options.append(options_message.content)
 
             except:
-                await ctx.send("You didn't answer the questions in Time", delete_after=2)
+                await ctx.send(
+                    "You didn't answer the questions in Time", delete_after=2
+                )
                 await self.delete_message(all_messages)
                 return
             answers.append(message.content)
@@ -122,13 +140,17 @@ class QuickPoll(commands.Cog):
         question, description, poll_channel = (
             answers[0],
             answers[1],
-            await
-            commands.TextChannelConverter(answers[-1]).convert(ctx=ctx, argument=answers[-1]),
+            await commands.TextChannelConverter(answers[-1]).convert(
+                ctx=ctx, argument=answers[-1]
+            ),
         )
         if not isinstance(poll_channel, discord.TextChannel):
-            await ctx.send(embed=ErrorEmbed(
-                description="Wrong text channel provided! Try again and mention the channel next time! :wink:"
-            ),delete_after=2)
+            await ctx.send(
+                embed=ErrorEmbed(
+                    description="Wrong text channel provided! Try again and mention the channel next time! :wink:"
+                ),
+                delete_after=2,
+            )
             await self.delete_message(all_messages)
             return
 
@@ -142,15 +164,19 @@ class QuickPoll(commands.Cog):
             description += "\n\n {} {}".format(reactions[x], option)
         embed = Embed(title=question, description="".join(description))
         react_message = await poll_channel.send(embed=embed)
-        for reaction in reactions[:len(options)]:
+        for reaction in reactions[: len(options)]:
             await react_message.add_reaction(reaction)
         embed.set_footer(text="Poll ID: {}".format(react_message.id))
         await react_message.edit(embed=embed)
-        await ctx.send(f'Done :ok_hand: Hosted the poll in {poll_channel.mention}', delete_after=2)
+        await ctx.send(
+            f"Done :ok_hand: Hosted the poll in {poll_channel.mention}", delete_after=2
+        )
         await self.delete_message(all_messages)
 
-    @commands.command(pass_context=True,usage="<poll id>",aliases=["result", "results"])
-    async def tally(self, ctx, poll_id: commands.MessageConverter):
+    @commands.command(
+        pass_context=True, usage="<poll id>", aliases=["result", "results"]
+    )
+    async def tally(self, ctx: "Context", poll_id: commands.MessageConverter):
         """Get polls results"""
         error_message = ErrorEmbed(description=f"**{poll_id.id}** is not a poll!")
         if len(poll_id.embeds) <= 0:
@@ -164,18 +190,30 @@ class QuickPoll(commands.Cog):
         if isinstance(embed.footer.text, discord.embeds._EmptyEmbed):
             await ctx.send(embed=error_message)
             return
-        if not embed.footer.text.startswith('Poll'):
+        if not embed.footer.text.startswith("Poll"):
             await ctx.send(embed=error_message)
             return
-        
+
         if len(poll_id.reactions) < 2:
             await ctx.send(embed=error_message)
             return
-        valid_reactions = list(filter(
-                lambda x: x in list(map(lambda x: str(discord.PartialEmoji(name=x.emoji)),poll_id.reactions)), 
-                list(map(lambda x: str(discord.PartialEmoji(name=x.emoji)),poll_id.reactions)
+        valid_reactions = list(
+            filter(
+                lambda x: x
+                in list(
+                    map(
+                        lambda x: str(discord.PartialEmoji(name=x.emoji)),
+                        poll_id.reactions,
+                    )
+                ),
+                list(
+                    map(
+                        lambda x: str(discord.PartialEmoji(name=x.emoji)),
+                        poll_id.reactions,
+                    )
+                ),
             )
-        ))
+        )
         if len(list(valid_reactions)) < 2:
             await ctx.send(embed=error_message)
             return
@@ -183,35 +221,39 @@ class QuickPoll(commands.Cog):
             map(
                 lambda x: (
                     x,
-                    discord.utils.find(lambda z: str(z.emoji)==str(x), poll_id.reactions).count
+                    discord.utils.find(
+                        lambda z: str(z.emoji) == str(x), poll_id.reactions
+                    ).count,
                 ),
-                valid_reactions
+                valid_reactions,
             )
         )
         valid_reactions_list.sort(reverse=True)
-        valid_reactions_list = [('Option', 'Reacted Counts')]+valid_reactions_list
-        embed = Embed(title='Poll Results')
-        lengths = [
-            [len(str(x)) for x in row]
-            for row in valid_reactions_list
-        ]
+        valid_reactions_list = [("Option", "Reacted Counts")] + valid_reactions_list
+        embed = Embed(title="Poll Results")
+        lengths = [[len(str(x)) for x in row] for row in valid_reactions_list]
 
         max_lengths = [
             max(map(itemgetter(x), lengths))
             for x in range(0, len(valid_reactions_list[0]))
         ]
 
-        format_str = ''.join(map(lambda x: '%%-%ss | ' % x, max_lengths))
-        embed.description = '```markdown\n' + (format_str % valid_reactions_list[0]) + '\n' + '-' * (sum(max_lengths) + len(max_lengths) * 3 - 1)
+        format_str = "".join(map(lambda x: "%%-%ss | " % x, max_lengths))
+        embed.description = (
+            "```markdown\n"
+            + (format_str % valid_reactions_list[0])
+            + "\n"
+            + "-" * (sum(max_lengths) + len(max_lengths) * 3 - 1)
+        )
         for x in valid_reactions_list[1:]:
-            embed.description += f'\n{format_str % x}'
-        embed.description += '\n```'
+            embed.description += f"\n{format_str % x}"
+        embed.description += "\n```"
         embed.timestamp = poll_id.created_at
-        await ctx.send(embed=embed,reference=poll_id)
+        await ctx.send(embed=embed, reference=poll_id)
 
     @commands.command()
     @commands.guild_only()
-    async def quickpoll(self, ctx, *questions_and_choices: str):
+    async def quickpoll(self, ctx: "Context", *questions_and_choices: str):
         """
         Makes a poll quickly.
 
@@ -228,7 +270,9 @@ class QuickPoll(commands.Cog):
 
         perms = ctx.channel.permissions_for(ctx.me)
         if not (perms.read_message_history or perms.add_reactions):
-            return await ctx.send("Need Read Message History and Add Reactions permissions.")
+            return await ctx.send(
+                "Need Read Message History and Add Reactions permissions."
+            )
 
         question = questions_and_choices[0]
         choices = list(enumerate(questions_and_choices[1:]))
@@ -241,8 +285,10 @@ class QuickPoll(commands.Cog):
         body = "\n".join(f"{key}: {c}" for key, c in choices)
         poll = await ctx.send(f"{ctx.author} asks: **{question}**\n\n{body}")
         for emoji, _ in choices:
-            await poll.add_reaction(discord.PartialEmoji(name=self.reactions[int(emoji)]))
+            await poll.add_reaction(
+                discord.PartialEmoji(name=self.reactions[int(emoji)])
+            )
 
 
-async def setup(bot: MinatoNamikazeBot) -> None:
+async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(QuickPoll(bot))

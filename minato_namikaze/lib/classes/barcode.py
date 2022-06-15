@@ -64,9 +64,9 @@ def create_svg_object():
         "https://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd",
     )
     document = imp.createDocument(None, "svg", doctype)
-    _set_attributes(document.documentElement,
-                    version="1.1",
-                    xmlns="https://www.w3.org/2000/svg")
+    _set_attributes(
+        document.documentElement, version="1.1", xmlns="https://www.w3.org/2000/svg"
+    )
     return document
 
 
@@ -79,8 +79,11 @@ MIN_SIZE = 0.2
 MIN_QUIET_ZONE = 2.54
 
 # Charsets for code 39
-REF = (tuple(string.digits) + tuple(string.ascii_uppercase) +
-       ("-", ".", " ", "$", "/", "+", "%"))
+REF = (
+    tuple(string.digits)
+    + tuple(string.ascii_uppercase)
+    + ("-", ".", " ", "$", "/", "+", "%")
+)
 B = "1"
 E = "0"
 CODES = (
@@ -137,8 +140,7 @@ MAP = dict(zip(REF, enumerate(CODES)))
 
 
 class BarcodeError(Exception):
-    """Base :class:`Exception` class for the `barcode` module
-    """
+    """Base :class:`Exception` class for the `barcode` module"""
 
     def __init__(self, msg):
         self.msg = msg
@@ -188,11 +190,9 @@ class BaseWriter:
             rendered output.
     """
 
-    def __init__(self,
-                 initialize=None,
-                 paint_module=None,
-                 paint_text=None,
-                 finish=None):
+    def __init__(
+        self, initialize=None, paint_module=None, paint_text=None, finish=None
+    ):
         self._callbacks = dict(
             initialize=initialize,
             paint_module=paint_module,
@@ -300,15 +300,16 @@ class BaseWriter:
                 else:
                     color = self.foreground
                 self._callbacks["paint_module"](
-                    xpos, ypos, self.module_width * abs(mod),
-                    color)  # remove painting for background colored tiles?
+                    xpos, ypos, self.module_width * abs(mod), color
+                )  # remove painting for background colored tiles?
                 xpos += self.module_width * abs(mod)
             bxe = xpos
             # Add right quiet zone to every line, except last line, quiet zone already
             # provided with background, should it be removed complety?
             if (cc + 1) != len(code):
-                self._callbacks["paint_module"](xpos, ypos, self.quiet_zone,
-                                                self.background)
+                self._callbacks["paint_module"](
+                    xpos, ypos, self.quiet_zone, self.background
+                )
             ypos += self.module_height
         if self.text and self._callbacks["paint_text"] is not None:
             ypos += self.text_distance
@@ -322,11 +323,12 @@ class BaseWriter:
 
 
 class SVGWriter(BaseWriter):
-    """SVG Write object to write `svg` files
-    """
+    """SVG Write object to write `svg` files"""
+
     def __init__(self):
-        BaseWriter.__init__(self, self._init, self._create_module,
-                            self._create_text, self._finish)
+        BaseWriter.__init__(
+            self, self._init, self._create_module, self._create_text, self._finish
+        )
         self.compress = False
         self.dpi = 25.4
         self._document = None
@@ -338,7 +340,7 @@ class SVGWriter(BaseWriter):
 
         :param code: An Iterator
         :type code: Union[Iterable, Sequence, Iterator]
-        """              
+        """
         width, height = self.calculate_size(len(code[0]), len(code), self.dpi)
         self._document = create_svg_object()
         self._root = self._document.documentElement
@@ -351,13 +353,13 @@ class SVGWriter(BaseWriter):
         _set_attributes(group, **attributes)
         self._group = self._root.appendChild(group)
         background = self._document.createElement("rect")
-        attributes = dict(width="100%",
-                          height="100%",
-                          style="fill:{0}".format(self.background))
+        attributes = dict(
+            width="100%", height="100%", style="fill:{0}".format(self.background)
+        )
         _set_attributes(background, **attributes)
         self._group.appendChild(background)
 
-    def _create_module(self, xpos: int, ypos: int, width:int, color: Union[int, str]):
+    def _create_module(self, xpos: int, ypos: int, width: int, color: Union[int, str]):
         """Creates a module
 
         :param xpos: The x position
@@ -387,7 +389,7 @@ class SVGWriter(BaseWriter):
         :type xpos: int
         :param ypos: y position
         :type ypos: int
-        """        
+        """
         element = self._document.createElement("text")
         attributes = dict(
             x=SIZE.format(xpos),
@@ -405,17 +407,17 @@ class SVGWriter(BaseWriter):
         element.appendChild(text_element)
         self._group.appendChild(element)
 
-    def _finish(self) -> Union[str,bytes]:
+    def _finish(self) -> Union[str, bytes]:
         """Finishes the creating of svg document
 
         :return: The xml document
         :rtype: Union[str,bytes, DocumentType]
-        """        
+        """
         if self.compress:
             return self._document.toxml(encoding="UTF-8")
-        return self._document.toprettyxml(indent=4 * " ",
-                                          newl=os.linesep,
-                                          encoding="UTF-8")
+        return self._document.toprettyxml(
+            indent=4 * " ", newl=os.linesep, encoding="UTF-8"
+        )
 
     def save(self, filename: str, output: Union[str, bytes]) -> str:
         """Saves the SVG document
@@ -426,7 +428,7 @@ class SVGWriter(BaseWriter):
         :type output: Union[str, bytes]
         :return: The filename
         :rtype: str
-        """        
+        """
         if self.compress:
             _filename = "{0}.svgz".format(filename)
             f = gzip.open(_filename, "wb")
@@ -444,11 +446,12 @@ if Image is None:
 else:
 
     class ImageWriter(BaseWriter):
-        """Writer object to handle image creation
-        """        
+        """Writer object to handle image creation"""
+
         def __init__(self, COG: discord.ext.commands.Cog):
-            BaseWriter.__init__(self, self._init, self._paint_module,
-                                self._paint_text, self._finish)
+            BaseWriter.__init__(
+                self, self._init, self._paint_module, self._paint_text, self._finish
+            )
             self.format = "PNG"
             self.dpi = 300
             self._image = None
@@ -460,12 +463,14 @@ else:
 
             :param code: An Iterator
             :type code: Union[Iterable, Sequence, Iterator]
-            """    
+            """
             size = self.calculate_size(len(code[0]), len(code), self.dpi)
             self._image = Image.new("RGB", size, self.background)
             self._draw = ImageDraw.Draw(self._image)
 
-        def _paint_module(self, xpos: int, ypos: int, width: int, color: Union[int, str]):
+        def _paint_module(
+            self, xpos: int, ypos: int, width: int, color: Union[int, str]
+        ):
             """Paints in the module
 
             :param xpos: The x position
@@ -493,7 +498,7 @@ else:
             :type xpos: int
             :param ypos: y position
             :type ypos: int
-            """   
+            """
             font = ImageFont.truetype(self.FONT, self.font_size * 2)
             width, height = font.getsize(self.text)
             pos = (
@@ -502,15 +507,15 @@ else:
             )
             self._draw.text(pos, self.text, font=font, fill=self.foreground)
 
-        def _finish(self) -> Union[str,bytes]:
+        def _finish(self) -> Union[str, bytes]:
             """Finishes the creating of image
 
             :return: The image file
             :rtype: Union[str,bytes]
-            """        
+            """
             return self._image
 
-        def save(self, filename: str, output: Union[str,bytes]) -> str:
+        def save(self, filename: str, output: Union[str, bytes]) -> str:
             """Saves the image
 
             :param filename: The filename
@@ -519,7 +524,7 @@ else:
             :type output: Union[str, bytes]
             :return: The filename
             :rtype: str
-            """   
+            """
             filename = "{0}.{1}".format(filename, self.format.lower())
             output.save(filename, self.format.upper())
             return filename
@@ -559,8 +564,7 @@ class Barcode:
         return "\n".join(code)
 
     def __repr__(self):
-        return "<{0}({1!r})>".format(self.__class__.__name__,
-                                     self.get_fullcode())
+        return "<{0}({1!r})>".format(self.__class__.__name__, self.get_fullcode())
 
     def build(self):
         raise NotImplementedError
@@ -572,7 +576,7 @@ class Barcode:
         """
         raise NotImplementedError
 
-    def save(self, filename: str, options: Optional[dict]=None) -> str:
+    def save(self, filename: str, options: Optional[dict] = None) -> str:
         """Renders the barcode and saves it in `filename`.
         :parameters:
             filename : String
@@ -587,7 +591,7 @@ class Barcode:
         _filename = self.writer.save(filename, output)
         return _filename
 
-    def write(self, fp: IO, options: Optional[dict]=None):
+    def write(self, fp: IO, options: Optional[dict] = None):
         """Renders the barcode and writes it to the file like object
         `fp`.
         :parameters:
@@ -599,7 +603,7 @@ class Barcode:
         output = self.render(options)
         output.save(fp, format=self.writer.format)
 
-    def render(self, writer_options: Optional[dict]=None):
+    def render(self, writer_options: Optional[dict] = None):
         """Renders the barcode using `self.writer`.
         :parameters:
             writer_options : Optional[dict]
@@ -619,7 +623,9 @@ class Barcode:
         return raw
 
 
-def check_code(code: Union[Iterable, Sequence] , name: str, allowed: Union[Iterable, Sequence]):
+def check_code(
+    code: Union[Iterable, Sequence], name: str, allowed: Union[Iterable, Sequence]
+):
     """Checks the barcode for the illegal characters
 
     :param code: The barcode
@@ -635,9 +641,10 @@ def check_code(code: Union[Iterable, Sequence] , name: str, allowed: Union[Itera
         if char not in allowed:
             wrong.append(char)
     if wrong:
-        raise IllegalCharacterError("The following characters are not "
-                                    "valid for {name}: {wrong}".format(
-                                        name=name, wrong=", ".join(wrong)))
+        raise IllegalCharacterError(
+            "The following characters are not "
+            "valid for {name}: {wrong}".format(name=name, wrong=", ".join(wrong))
+        )
 
 
 class Code39(Barcode):
@@ -671,7 +678,7 @@ class Code39(Barcode):
 
         :return: See above
         :rtype: str
-        """        
+        """
         return self.code
 
     def calculate_checksum(self) -> Any:
@@ -710,7 +717,9 @@ class Code39(Barcode):
         return Barcode.render(self, options)
 
 
-def get_barcode(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,Any]]=None) -> Union[Code39, Any]:
+def get_barcode(
+    name: str, code: Optional[Any] = None, writer: Optional[Union[IO, Any]] = None
+) -> Union[Code39, Any]:
     """Gets the Barcode
 
     :param name: Name of the bar code
@@ -722,18 +731,25 @@ def get_barcode(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,A
     :raises BarcodeNotFoundError: When the barcode is not found
     :return: The barcode that was requested
     :rtype: Union[Code39, Any]
-    """    
+    """
     try:
         barcode = Code39
     except KeyError:
-        raise BarcodeNotFoundError("The barcode {0!r} you requested is not "
-                                   "known.".format(name))
+        raise BarcodeNotFoundError(
+            "The barcode {0!r} you requested is not " "known.".format(name)
+        )
     if code is not None:
         return barcode(code, writer)
     return barcode
 
 
-def generate(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,Any]]=None, writer_options: Optional[Dict]=None, output=None):
+def generate(
+    name: str,
+    code: Optional[Any] = None,
+    writer: Optional[Union[IO, Any]] = None,
+    writer_options: Optional[Dict] = None,
+    output=None,
+):
     """Generates the barcode
 
     :param name: Name of the barcode
@@ -744,7 +760,7 @@ def generate(name: str, code: Optional[Any]=None, writer: Optional[Union[IO,Any]
     :type writer: Optional[Union[IO,Any]], optional
     :param writer_options: The extra options to be encode with the barcode, defaults to None
     :type writer_options: Optional[Dict], optional
-    """    
+    """
     options = writer_options or {}
     barcode = get_barcode(name, code, writer)
-    barcode.write(output,options)
+    barcode.write(output, options)

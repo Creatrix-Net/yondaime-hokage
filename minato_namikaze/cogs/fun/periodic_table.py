@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import TYPE_CHECKING, List, Tuple
 
 import discord
 from discord.ext import commands
@@ -6,13 +6,17 @@ from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
 from lib import IMAGES, LATTICES, UNITS, EmbedPaginator
 from lib.mendeleev import element as ELEMENTS
-from ... import MinatoNamikazeBot
+
+if TYPE_CHECKING:
+    from lib import Context
+
+    from ... import MinatoNamikazeBot
 
 
 class ElementConverter(Converter):
     """Converts a given argument to an element object"""
 
-    async def convert(self, ctx: commands.Context, argument: str) -> ELEMENTS:
+    async def convert(self, ctx: "Context", argument: str) -> ELEMENTS:
         result = None
         if argument.isdigit():
             if int(argument) > 118 or int(argument) < 1:
@@ -55,8 +59,8 @@ class MeasurementConverter(Converter):
 
 
 class Elements(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.description = "Display information from the periodic table of elements"
 
     @property
@@ -115,7 +119,7 @@ class Elements(commands.Cog):
     @commands.bot_has_permissions(embed_links=True)
     async def element(
         self,
-        ctx: commands.Context,
+        ctx: "Context",
         element: ElementConverter,
         measurement: MeasurementConverter = None,
     ) -> None:
@@ -143,7 +147,7 @@ class Elements(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
     async def elements(
-        self, ctx: commands.Context, *elements: ElementConverter
+        self, ctx: "Context", *elements: ElementConverter
     ) -> None:
         """
         Display information about multiple elements
@@ -159,7 +163,7 @@ class Elements(commands.Cog):
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
-    async def ptable(self, ctx: commands.Context) -> None:
+    async def ptable(self, ctx: "Context") -> None:
         """Display a menu of all elements"""
         embeds = [await self.element_embed(ELEMENTS(e)) for e in range(1, 119)]
         paginator = EmbedPaginator(ctx=ctx, entries=embeds)

@@ -14,12 +14,14 @@ from lib import ChannelAndMessageId, LinksAndVars, PrivacyPolicy, VotingMenu
 from lib import time_class as time
 
 if TYPE_CHECKING:
+    from lib import Context
+
     from ... import MinatoNamikazeBot
 
 
 class MySupport(commands.Cog, name="My Support"):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.process = psutil.Process()
         self.description = "Having problems with me? Then you can get the help here."
 
@@ -28,7 +30,7 @@ class MySupport(commands.Cog, name="My Support"):
         return discord.PartialEmoji(name="\N{SQUARED SOS}")
 
     @commands.command()
-    async def vote(self, ctx):
+    async def vote(self, ctx: "Context"):
         """Get all the voting links"""
         m = VotingMenu(bot=self.bot)
         await m.start(ctx)
@@ -58,7 +60,7 @@ class MySupport(commands.Cog, name="My Support"):
         return "\n".join(self.format_commit(c) for c in commits)
 
     @commands.command(aliases=["stats"])
-    async def about(self, ctx):
+    async def about(self, ctx: "Context"):
         """Tells you information about the bot itself."""
         revision = self.get_last_commits()
         embed = discord.Embed(description="Latest Changes:\n" + revision)
@@ -134,7 +136,7 @@ class MySupport(commands.Cog, name="My Support"):
     @commands.command(
         description="Generates my invite link for your server", aliases=["invite"]
     )
-    async def inviteme(self, ctx):
+    async def inviteme(self, ctx: "Context"):
         """Generates my invite link for your server"""
         embed = discord.Embed(
             title="Invite Link",
@@ -144,20 +146,20 @@ class MySupport(commands.Cog, name="My Support"):
         await ctx.send(embed=embed)
 
     @commands.command(description="Generates my support server invite")
-    async def supportserver(self, ctx):
+    async def supportserver(self, ctx: "Context"):
         """Generates my support server invite"""
         await ctx.send(
             f"**Here you go, my support server invite**\nhttps://discord.gg/{LinksAndVars.invite_code.value}"
         )
 
     @commands.command()
-    async def privacy(self, ctx):
+    async def privacy(self, ctx: "Context"):
         """Get the Privacy Policy"""
         m = PrivacyPolicy(bot=self.bot)
         await m.start(ctx)
 
     @commands.command()
-    async def ping(self, ctx):
+    async def ping(self, ctx: "Context"):
         """Get the Latency"""
         import time
 
@@ -177,7 +179,7 @@ class MySupport(commands.Cog, name="My Support"):
             await msg.edit(content="", embed=e)
 
     @commands.command()
-    async def source(self, ctx, *, command: str = None):
+    async def source(self, ctx: "Context", *, command: str = None):
         """Displays my full source code or for a specific command.
         To display the source code of a subcommand you can separate it by
         periods, e.g. tag.create for the create subcommand of the tag command

@@ -1,6 +1,5 @@
 import ast
 import logging
-import os
 import random
 import time
 from collections import Counter, defaultdict, deque

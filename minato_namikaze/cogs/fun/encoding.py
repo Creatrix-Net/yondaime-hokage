@@ -4,7 +4,7 @@ import re
 import unicodedata
 from string import ascii_lowercase as lc
 from string import ascii_uppercase as uc
-from typing import Iterator, Optional, Sequence, Union
+from typing import Iterator, Optional, Sequence, TYPE_CHECKING
 
 import discord
 from discord.ext import commands
@@ -20,7 +20,9 @@ from lib.data.braille import (
     r_punctuation,
 )
 
-from ... import MinatoNamikazeBot
+if TYPE_CHECKING:
+    from lib import Context
+    from ... import MinatoNamikazeBot
 
 
 def escape(text: str, *, mass_mentions: bool = False, formatting: bool = False) -> str:
@@ -73,8 +75,8 @@ def pagify(
 
 
 class Encoding(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.description = "Convert messages into fun encodings"
         # A = 00
         # G = 10
@@ -104,7 +106,7 @@ class Encoding(commands.Cog):
         return False
 
     @commands.command()
-    async def charinfo(self, ctx, *, characters: str):
+    async def charinfo(self, ctx: "Context", *, characters: str):
         """Shows you information about a number of characters.
         Only up to 25 characters at a time.
         """
@@ -120,14 +122,14 @@ class Encoding(commands.Cog):
         await ctx.send(msg)
 
     @commands.group(name="hash", invoke_without_command=True)
-    async def hash_cmd(self, ctx: commands.Context) -> None:
+    async def hash_cmd(self, ctx: "Context") -> None:
         """Various hashing commands"""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
             return
 
     @hash_cmd.group(name="md5")
-    async def hash_md5(self, ctx: commands.Context, *, txt: str) -> None:
+    async def hash_md5(self, ctx: "Context", *, txt: str) -> None:
         """
         MD5 Encrypt Text
         """
@@ -135,7 +137,7 @@ class Encoding(commands.Cog):
         await ctx.send("**MD5**\n" + md5)
 
     @hash_cmd.command(name="sha1")
-    async def hash_sha1(self, ctx: commands.Context, *, txt: str) -> None:
+    async def hash_sha1(self, ctx: "Context", *, txt: str) -> None:
         """
         SHA1 Encrypt Text
         """
@@ -143,7 +145,7 @@ class Encoding(commands.Cog):
         await ctx.send("**SHA1**\n" + sha)
 
     @hash_cmd.command(name="sha256")
-    async def hash_sha256(self, ctx: commands.Context, *, txt: str) -> None:
+    async def hash_sha256(self, ctx: "Context", *, txt: str) -> None:
         """
         SHA256 Encrypt Text
         """
@@ -151,7 +153,7 @@ class Encoding(commands.Cog):
         await ctx.send("**SHA256**\n" + sha256)
 
     @hash_cmd.command(name="sha512")
-    async def hash_sha512(self, ctx: commands.Context, *, txt: str) -> None:
+    async def hash_sha512(self, ctx: "Context", *, txt: str) -> None:
         """
         SHA512 Encrypt Text
         """
@@ -159,17 +161,17 @@ class Encoding(commands.Cog):
         await ctx.send("**SHA512**\n" + sha512)
 
     @commands.group(name="encode")
-    async def _encode(self, ctx: commands.Context) -> None:
+    async def _encode(self, ctx: "Context") -> None:
         """Encode a string."""
         pass
 
     @commands.group(name="decode")
-    async def _decode(self, ctx: commands.Context) -> None:
+    async def _decode(self, ctx: "Context") -> None:
         """Decode a string."""
         pass
 
     @_encode.command(name="binary")
-    async def encode_binary(self, ctx: commands.Context, *, message: str) -> None:
+    async def encode_binary(self, ctx: "Context", *, message: str) -> None:
         """
         Encode text into binary sequences of 8
         """
@@ -177,7 +179,7 @@ class Encoding(commands.Cog):
         await ctx.send(ascii_bin)
 
     @_decode.command(name="binary")
-    async def decode_binary(self, ctx: commands.Context, *, message: str) -> None:
+    async def decode_binary(self, ctx: "Context", *, message: str) -> None:
         """
         Decode binary sequences of 8
         """
@@ -191,7 +193,7 @@ class Encoding(commands.Cog):
             await ctx.send("That does not look like valid binary.")
 
     @_encode.command(name="hex")
-    async def encode_hex(self, ctx: commands.Context, *, message: str) -> None:
+    async def encode_hex(self, ctx: "Context", *, message: str) -> None:
         """
         Encode text into hexadecimal
         """
@@ -199,7 +201,7 @@ class Encoding(commands.Cog):
         await ctx.send(ascii_bin)
 
     @_decode.command(name="hex")
-    async def decode_hex(self, ctx: commands.Context, *, message: str) -> None:
+    async def decode_hex(self, ctx: "Context", *, message: str) -> None:
         """
         Decode a hexadecimal sequence to text
         """
@@ -214,14 +216,14 @@ class Encoding(commands.Cog):
             await ctx.send("That does not look like valid hex.")
 
     @_encode.command(name="b16", aliases=["base16"])
-    async def encode_b16(self, ctx: commands.Context, *, message: str) -> None:
+    async def encode_b16(self, ctx: "Context", *, message: str) -> None:
         """
         Encode text into base 16
         """
         await ctx.send(base64.b16encode(bytes(message, "utf-8")).decode("utf-8"))
 
     @_decode.command(name="b16", aliases=["base16"])
-    async def decode_b16(self, ctx: commands.Context, *, message: str) -> None:
+    async def decode_b16(self, ctx: "Context", *, message: str) -> None:
         """
         Decode base16 text
         """
@@ -231,14 +233,14 @@ class Encoding(commands.Cog):
             await ctx.send("That does not look like valid base 16 characters.")
 
     @_encode.command(name="b32", aliases=["base32"])
-    async def encode_b32(self, ctx: commands.Context, *, message: str) -> None:
+    async def encode_b32(self, ctx: "Context", *, message: str) -> None:
         """
         Encode text into base 32
         """
         await ctx.send(base64.b32encode(bytes(message, "utf-8")).decode("utf-8"))
 
     @_decode.command(name="b32", aliases=["base32"])
-    async def decode_b32(self, ctx: commands.Context, *, message: str) -> None:
+    async def decode_b32(self, ctx: "Context", *, message: str) -> None:
         """
         Decode base32 text
         """
@@ -248,14 +250,14 @@ class Encoding(commands.Cog):
             await ctx.send("That does not look like valid base 32 characters.")
 
     @_encode.command(name="b64", aliases=["base64"])
-    async def encode_b64(self, ctx: commands.Context, *, message: str) -> None:
+    async def encode_b64(self, ctx: "Context", *, message: str) -> None:
         """
         Encode text into base 64
         """
         await ctx.send(base64.b64encode(bytes(message, "utf-8")).decode("utf-8"))
 
     @_decode.command(name="b64", aliases=["base64"])
-    async def decode_b64(self, ctx: commands.Context, *, message: str) -> None:
+    async def decode_b64(self, ctx: "Context", *, message: str) -> None:
         """
         Decode base 64 text
         """
@@ -265,14 +267,14 @@ class Encoding(commands.Cog):
             await ctx.send("That does not look like valid base 64 characters.")
 
     @_encode.command(name="chr", aliases=["character"])
-    async def encode_char(self, ctx: commands.Context, *, message: str) -> None:
+    async def encode_char(self, ctx: "Context", *, message: str) -> None:
         """
         Encode message into character numbers
         """
         await ctx.send(" ".join(str(ord(x)) for x in message))
 
     @_decode.command(name="chr", aliases=["character"])
-    async def decode_char(self, ctx: commands.Context, *, message: str) -> None:
+    async def decode_char(self, ctx: "Context", *, message: str) -> None:
         """
         Decode character numbers to a message
         """
@@ -284,7 +286,7 @@ class Encoding(commands.Cog):
             await ctx.send("That does not look like valid char data.")
 
     @_encode.command(name="braille")
-    async def encode_braille(self, ctx: commands.Context, *, message: str) -> None:
+    async def encode_braille(self, ctx: "Context", *, message: str) -> None:
         """
         Encode text into braille unicode characters
         """
@@ -303,7 +305,7 @@ class Encoding(commands.Cog):
         await ctx.send(message)
 
     @_decode.command(name="braille")
-    async def decode_braille(self, ctx: commands.Context, *, message: str) -> None:
+    async def decode_braille(self, ctx: "Context", *, message: str) -> None:
         """
         Decide braille unicode characters to ascii
         """
@@ -346,7 +348,7 @@ class Encoding(commands.Cog):
 
     @_encode.command(name="rot", aliases=["caeser"])
     async def caeser_encode(
-        self, ctx: commands.Context, rot_key: Optional[int], *, message: str
+        self, ctx: "Context", rot_key: Optional[int], *, message: str
     ) -> None:
         """
         Encode a caeser cipher message with specified key
@@ -357,7 +359,7 @@ class Encoding(commands.Cog):
 
     @_decode.command(name="rot", aliases=["caeser"])
     async def caeser_decode(
-        self, ctx: commands.Context, rot_key: Optional[int], *, message: str
+        self, ctx: "Context", rot_key: Optional[int], *, message: str
     ) -> None:
         """
         Decode a caeser cipher message with specified key
@@ -367,7 +369,7 @@ class Encoding(commands.Cog):
         await ctx.send(self.rot_encode(-rot_key, message))
 
     @_encode.command(name="dna")
-    async def dna_encode(self, ctx: commands.Context, *, message: str) -> None:
+    async def dna_encode(self, ctx: "Context", *, message: str) -> None:
         """
         Encodes a string into DNA 4 byte ACGT format
         """
@@ -388,7 +390,7 @@ class Encoding(commands.Cog):
         await ctx.send(newmsg)
 
     @_decode.command(name="dna")
-    async def dna_decode(self, ctx: commands.Context, *, message: str) -> None:
+    async def dna_decode(self, ctx: "Context", *, message: str) -> None:
         """
         Decodes a string of DNA in 4 byte ACGT format.
         """

@@ -6,15 +6,16 @@ from DiscordUtils import Embed
 from lib import serverinfo, userinfo
 
 if TYPE_CHECKING:
+    from lib import Context
+
     from ... import MinatoNamikazeBot
 
 
 class Info(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.bot.start_time = bot.start_time
         self.bot.github = bot.github
-
         self.description = "Get's the Information about the server"
 
     @property
@@ -23,7 +24,7 @@ class Info(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def avatar(self, ctx, *, user: discord.Member = None):
+    async def avatar(self, ctx: "Context", *, user: discord.Member = None):
         """Get the avatar of you or someone else"""
         user = user or ctx.author
         e = discord.Embed(title=f"Avatar for {user.name}")
@@ -32,7 +33,7 @@ class Info(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def joinedat(self, ctx, *, user: discord.Member = None):
+    async def joinedat(self, ctx: "Context", *, user: discord.Member = None):
         """Check when a user joined the current server"""
         if user is None:
             user = ctx.author
@@ -46,14 +47,14 @@ class Info(commands.Cog):
 
     @commands.group(aliases=["serverinfo"])
     @commands.guild_only()
-    async def server(self, ctx):
+    async def server(self, ctx: "Context"):
         """Check info about current server"""
         if ctx.invoked_subcommand is None:
             await ctx.send(embed=await serverinfo(ctx.guild, ctx.author, self.bot))
 
     @server.command(name="server_icon", aliases=["icon"])
     @commands.guild_only()
-    async def server_icon(self, ctx):
+    async def server_icon(self, ctx: "Context"):
         """Get the current server icon"""
         if not ctx.guild.icon:
             return await ctx.send("This server does not have a avatar...")
@@ -63,7 +64,7 @@ class Info(commands.Cog):
 
     @server.command(name="banner")
     @commands.guild_only()
-    async def server_banner(self, ctx):
+    async def server_banner(self, ctx: "Context"):
         """Get the current banner image"""
         if not ctx.guild.banner:
             return await ctx.send("This server does not have a banner...")
@@ -73,7 +74,7 @@ class Info(commands.Cog):
 
     @commands.command(aliases=["whois", "who", "userinfo"])
     @commands.guild_only()
-    async def user(self, ctx, *, user: discord.Member = None):
+    async def user(self, ctx: "Context", *, user: discord.Member = None):
         """Get user information"""
         user = user or ctx.author
         await ctx.send(embed=await userinfo(user, ctx.guild, self.bot))

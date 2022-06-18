@@ -27,8 +27,9 @@ log = logging.getLogger(__name__)
 
 Base = declarative_base()
 
+
 class Reminders(Base):
-    __tablename__ = 'reminders'
+    __tablename__ = "reminders"
 
     id = Column(Integer, index=True, primary_key=True)
     expires = Column(DateTime, index=True)
@@ -128,7 +129,9 @@ class Reminder(commands.Cog):
     async def wait_for_active_timers(
         self, *, connection: Optional[asyncpg.Connection] = None, days: int = 7
     ) -> Timer:
-        async with session.MaybeAcquire(connection=connection, pool=self.bot.pool) as con:
+        async with session.MaybeAcquire(
+            connection=connection, pool=self.bot.pool
+        ) as con:
             timer = await self.get_active_timer(connection=con, days=days)
             if timer is not None:
                 self._have_data.set()

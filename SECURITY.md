@@ -28,5 +28,5 @@ When new releases are issued for security reasons, the accompanying notice will 
 To report a vulnerability you can use one of the following method:
 - Join the [support server](https://discord.gg/vfXHwS3nmQ) and use the `)support` command.
 - Report the issue on the [GitHub issues page](https://github.com/The-4th-Hokage/yondaime-hokage/issues/new/choose) and use the `bug` template.
-- Join dm me directly in discord [HATSUNE MIKU#9955](https://discord.com/users/935242576343224352)
+- Join dm me directly in discord [HATSUNE MIKU#9955](https://discord.com/users/887549958931247137)
 - Create a bug ticket in the [support server](https://discord.gg/vfXHwS3nmQ). **Soon it would roll out**

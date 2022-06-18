@@ -7,11 +7,13 @@ import os
 import zipfile
 from pathlib import Path
 from typing import Any, List, Optional
+from sqlalchemy.orm import declarative_base
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # In minato_namikaze/ folder
 CONFIG_FILE = Path(__file__).resolve().parent.parent.parent.parent / ".ini"
 # api_image_store_dir = BASE_DIR / "images_api_store"
 DEFAULT_COMMAND_SELECT_LENGTH = 25
+Base = declarative_base()
 
 
 def token_get(tokenname: Optional[str] = None, all: bool = False) -> Any:

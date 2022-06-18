@@ -5,7 +5,7 @@ import asyncio
 import importlib
 import contextlib
 
-from minato_namikaze import MinatoNamikazeBot, Table, token_get, return_all_cogs
+from minato_namikaze import MinatoNamikazeBot, token_get, return_all_cogs, Base, Session
 
 from logging.handlers import RotatingFileHandler
 
@@ -68,20 +68,7 @@ def setup_logging():
 
 async def run_bot():
     log = logging.getLogger()
-    kwargs = {
-        "command_timeout": 60,
-        "max_size": 20,
-        "min_size": 20,
-    }
-    try:
-        pool = await Table.create_pool(token_get("DATABASE_URL"), **kwargs)
-    except Exception as e:
-        click.echo("Could not set up PostgreSQL. Exiting.", file=sys.stderr)
-        log.exception("Could not set up PostgreSQL. Exiting.")
-        return
-
     bot = MinatoNamikazeBot()
-    bot.pool = pool
     await bot.start()
 
 
@@ -104,18 +91,8 @@ def db():
 )
 @click.argument("cogs", nargs=-1, metavar="[cogs]")
 @click.option("-q", "--quiet", help="less verbose output", is_flag=True)
-def init(cogs, quiet):
+def init(cogs):
     """This manages the migrations and database creation system for you."""
-
-    run = asyncio.get_event_loop().run_until_complete
-    try:
-        run(Table.create_pool(token_get("DATABASE_URL")))
-    except Exception:
-        click.echo(
-            f"Could not create PostgreSQL connection pool.\n{traceback.format_exc()}",
-            err=True,
-        )
-        return
 
     if not cogs:
         cogs = return_all_cogs()
@@ -132,21 +109,8 @@ def init(cogs, quiet):
             click.echo(f"Could not load {ext}.\n{traceback.format_exc()}", err=True)
             return
 
-    for table in Table.all_tables():
-        try:
-            created = run(table.create(verbose=not quiet, run_migrations=False))
-        except Exception:
-            click.echo(
-                f"Could not create {table.__tablename__}.\n{traceback.format_exc()}",
-                err=True,
-            )
-        else:
-            if created:
-                click.echo(f"[{table.__module__}] Created {table.__tablename__}.")
-            else:
-                click.echo(
-                    f"[{table.__module__}] No work needed for {table.__tablename__}."
-                )
+    Base.metadata.create_all(bind=Session.get_engine())
+    click.echo("Tables created in the database.")
 
 
 @db.command(short_help="migrates the databases")

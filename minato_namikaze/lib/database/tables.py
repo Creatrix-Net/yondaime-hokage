@@ -1,11 +1,10 @@
 import logging
 
 from sqlalchemy import BigInteger, Boolean, Column, String, SmallInteger, DateTime
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import relationship
+from ..util import Base
 
 log = logging.getLogger(__name__)
-
-Base = declarative_base()
 
 
 class Premium(Base):

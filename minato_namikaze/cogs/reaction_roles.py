@@ -6,9 +6,8 @@ from typing import TYPE_CHECKING
 import discord
 from discord.ext import commands, tasks
 from DiscordUtils import Embed
-from lib import ReactionPersistentView, has_permissions, LinksAndVars
+from lib import ReactionPersistentView, has_permissions, LinksAndVars, Base
 from orjson import loads
-from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, BigInteger, String, Boolean, JSON
 
 if TYPE_CHECKING:
@@ -20,7 +19,6 @@ if TYPE_CHECKING:
 import logging
 
 log = logging.getLogger(__name__)
-Base = declarative_base()
 
 
 class ReactionRoles(Base):

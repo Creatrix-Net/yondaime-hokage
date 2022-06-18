@@ -13,7 +13,6 @@ import TenGiphPy
 from discord.ext import commands
 from discord_together import DiscordTogether
 from DiscordDatabase import DiscordDatabase
-from sqlalchemy import pool
 from DiscordUtils import Embed, ErrorEmbed
 from orjson import loads
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
@@ -57,7 +56,6 @@ def get_prefix(bot, message):
 
 
 class MinatoNamikazeBot(commands.AutoShardedBot):
-    pool: pool
     user: discord.ClientUser
     command_stats: Counter[str]  # type: ignore
     socket_stats: Counter[str]  # type: ignore

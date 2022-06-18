@@ -2,13 +2,13 @@ documentation:
   - README.md
   
 wontfix: 
-  -any: [CONTRIBUTING.md, CODE_OF_CONDUCT.md, LICENSE]
+  -any: ['CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'LICENSE']
 
 dependencies: 
-  -any: [requirements]
+  -any: ['requirements']
 
 help wanted: 
   -any: ['minato_namikaze/bot_files/*']
 
 bug: 
-  -any: [discordbot.py]
+  -any: ['discordbot.py']

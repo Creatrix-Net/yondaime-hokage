@@ -7,7 +7,6 @@ from datetime import datetime
 from typing import Any, List, Optional, Union, TYPE_CHECKING
 
 import aiohttp
-import asyncpg
 import discord
 import sentry_sdk
 import TenGiphPy

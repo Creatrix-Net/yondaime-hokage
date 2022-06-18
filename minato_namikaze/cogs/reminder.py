@@ -10,9 +10,8 @@ from typing import TYPE_CHECKING, Any, Optional, Sequence
 import asyncpg
 import discord
 from discord.ext import commands
-from lib import plural, session, time
+from lib import plural, session, time, Base
 from sqlalchemy import JSON, Column, DateTime, Integer, String
-from sqlalchemy.orm import declarative_base
 
 from typing_extensions import Annotated
 
@@ -24,8 +23,6 @@ if TYPE_CHECKING:
 import logging
 
 log = logging.getLogger(__name__)
-
-Base = declarative_base()
 
 
 class Reminders(Base):

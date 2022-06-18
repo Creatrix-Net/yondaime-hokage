@@ -7,6 +7,7 @@ log = logging.getLogger(__name__)
 
 Base = declarative_base()
 
+
 class Premium(Base):
     __tablename__ = "premium"
     id = Column(BigInteger, primary_key=True, autoincrement=True)
@@ -17,11 +18,12 @@ class Premium(Base):
     no_vote_locked = Column(Boolean, default=False, nullable=False)
     no_of_servers_applicable = Column(SmallInteger, nullable=False)
 
+
 class User(Base):
     __tablename__ = "user"
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     name = Column(String(250), nullable=False)
-    premium = relationship('Premium')
+    premium = relationship("Premium")
     premium_expiry = Column(DateTime, nullable=False)
     applicable_servers = Column(SmallInteger, nullable=False)
 
@@ -29,4 +31,4 @@ class User(Base):
 class Server(Base):
     __tablename__ = "server"
     id = Column(BigInteger, primary_key=True)
-    premium_given_by = relationship('User')
+    premium_given_by = relationship("User")

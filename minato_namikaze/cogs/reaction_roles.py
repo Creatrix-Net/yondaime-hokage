@@ -24,7 +24,7 @@ Base = declarative_base()
 
 
 class ReactionRoles(Base):
-    __tablename__ = 'reaction_roles'
+    __tablename__ = "reaction_roles"
 
     message_id = Column(BigInteger, primary_key=True, index=True, nullable=False)
     server_id = Column(BigInteger, index=True, nullable=False)
@@ -35,7 +35,7 @@ class ReactionRoles(Base):
 
     def __repr__(self) -> str:
         return f"ReactionRoles(id={self.message_id!r}, server_id={self.server_id!r}, limit_to_one={self.limit_to_one!r})"
-    
+
     def __str__(self):
         return self.__repr__()
 

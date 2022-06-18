@@ -42,15 +42,16 @@ def token_get(tokenname: Optional[str] = None, all: bool = False) -> Any:
         return config._sections
     raise RuntimeError("Could not find .ini file")
 
+
 class envConfig:
-    """A class which contains all token configuration
-    """ 
-    def __init__(self):       
+    """A class which contains all token configuration"""
+
+    def __init__(self):
         self.data: dict = token_get(all=True)
         for i in self.data:
             for j in self.data.get(i, None):
-                setattr(self, j.lower(),self.data[i].get(j))
-                setattr(self, j.upper(),self.data[i].get(j))
+                setattr(self, j.lower(), self.data[i].get(j))
+                setattr(self, j.upper(), self.data[i].get(j))
 
 
 class ShinobiMatch(list, enum.Enum):

@@ -1,6 +1,6 @@
 # Security Policy
 
-The detail security policy [Minato Namikaze](https://github.com/The-4th-Hokage/yondaime-hokage)
+The detail security policy [Minato Namikaze](https://github.com/The-4th-Hokage/yondaime-hokage).
 
 ## Supported Versions
 
@@ -10,6 +10,7 @@ currently being supported with security updates.
 | Version | Supported          |
 | ------- | ------------------ |
 | 2.0.x   | :white_check_mark: |
+| 2.0-beta.x  | :white_check_mark: |
 | <= 1.1  | :x:                |
 
 

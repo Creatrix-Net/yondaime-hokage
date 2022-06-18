@@ -4,6 +4,7 @@ traceback
 _build
 _build/*
 .ini
+alembic.ini
 
 *copy.py
 

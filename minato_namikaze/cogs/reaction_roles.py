@@ -6,8 +6,10 @@ from typing import TYPE_CHECKING
 import discord
 from discord.ext import commands, tasks
 from DiscordUtils import Embed
-from lib import ReactionPersistentView, db, has_permissions, LinksAndVars
+from lib import ReactionPersistentView, get_session, has_permissions, LinksAndVars
 from orjson import loads
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, BigInteger, String, Boolean, JSON
 
 if TYPE_CHECKING:
     from lib import Context
@@ -18,21 +20,24 @@ if TYPE_CHECKING:
 import logging
 
 log = logging.getLogger(__name__)
+Base = declarative_base()
 
 
-class ReactionRoles(db.Table):
-    id = db.PrimaryKeyColumn()
+class ReactionRoles(Base):
+    __tablename__ = 'reaction_roles'
 
-    message_id = db.Column(
-        db.Integer(big=True), primary_key=True, index=True, nullable=False
-    )
-    server_id = db.Column(
-        db.Integer(big=True), primary_key=True, index=True, nullable=False
-    )
-    reactions = db.Column(db.JSON, nullable=False)
-    limit_to_one = db.Column(db.Boolean, nullable=False)
-    custom_id = db.Column(db.String, nullable=False)
-    jump_url = db.Column(db.String, nullable=False)
+    message_id = Column(BigInteger, primary_key=True, index=True, nullable=False)
+    server_id = Column(BigInteger, index=True, nullable=False)
+    reactions = Column(JSON, nullable=False, index=True)
+    limit_to_one = Column(Boolean, nullable=False, index=True)
+    custom_id = Column(String(250), nullable=False, index=True)
+    jump_url = Column(String(500), nullable=False, index=True)
+
+    def __repr__(self) -> str:
+        return f"ReactionRoles(id={self.message_id!r}, server_id={self.server_id!r}, limit_to_one={self.limit_to_one!r})"
+    
+    def __str__(self):
+        return self.__repr__()
 
 
 class ReactionRoles(commands.Cog, name="Reaction Roles"):

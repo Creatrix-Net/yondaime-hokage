@@ -1,3 +1,4 @@
+import configparser
 import enum
 import gzip
 import io
@@ -5,18 +6,12 @@ import json
 import os
 import zipfile
 from pathlib import Path
-from typing import List, Optional, Any
-import configparser
+from typing import Any, List, Optional
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # In minato_namikaze/ folder
 CONFIG_FILE = Path(__file__).resolve().parent.parent.parent.parent / ".ini"
 # api_image_store_dir = BASE_DIR / "images_api_store"
 DEFAULT_COMMAND_SELECT_LENGTH = 25
-
-
-class envConfig:
-    def __init__(self):
-        self.token = token_get("TOKEN")
 
 
 def token_get(tokenname: Optional[str] = None, all: bool = False) -> Any:
@@ -46,6 +41,16 @@ def token_get(tokenname: Optional[str] = None, all: bool = False) -> Any:
         config.read(CONFIG_FILE)
         return config._sections
     raise RuntimeError("Could not find .ini file")
+
+class envConfig:
+    """A class which contains all token configuration
+    """ 
+    def __init__(self):       
+        self.data: dict = token_get(all=True)
+        for i in self.data:
+            for j in self.data.get(i, None):
+                setattr(self, j.lower(),self.data[i].get(j))
+                setattr(self, j.upper(),self.data[i].get(j))
 
 
 class ShinobiMatch(list, enum.Enum):

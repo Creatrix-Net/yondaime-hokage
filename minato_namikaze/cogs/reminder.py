@@ -1,35 +1,40 @@
 # from https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/reminder.py
 
 from __future__ import annotations
-from typing import TYPE_CHECKING, Any, Optional, Sequence
-from typing_extensions import Annotated
 
-from lib import db, time, plural
-from discord.ext import commands
-import discord
 import asyncio
-import asyncpg
 import datetime
 import textwrap
+from typing import TYPE_CHECKING, Any, Optional, Sequence
+
+import asyncpg
+import discord
+from discord.ext import commands
+from lib import plural, session, time
+from sqlalchemy import JSON, Column, DateTime, Integer, String
+from sqlalchemy.orm import declarative_base
+
+from typing_extensions import Annotated
 
 if TYPE_CHECKING:
     from typing_extensions import Self
     from lib import Context
     from .. import MinatoNamikazeBot
 
-
 import logging
 
 log = logging.getLogger(__name__)
 
+Base = declarative_base()
 
-class Reminders(db.Table):
-    id = db.PrimaryKeyColumn()
+class Reminders(Base):
+    __tablename__ = 'reminders'
 
-    expires = db.Column(db.Datetime, index=True)
-    created = db.Column(db.Datetime, default="now() at time zone 'utc'")
-    event = db.Column(db.String)
-    extra = db.Column(db.JSON, default="'{}'::jsonb")
+    id = Column(Integer, index=True, primary_key=True)
+    expires = Column(DateTime, index=True)
+    created = Column(DateTime, default="now() at time zone 'utc'")
+    event = Column(String)
+    extra = Column(JSON, default="'{}'::jsonb")
 
 
 class Timer:
@@ -123,7 +128,7 @@ class Reminder(commands.Cog):
     async def wait_for_active_timers(
         self, *, connection: Optional[asyncpg.Connection] = None, days: int = 7
     ) -> Timer:
-        async with db.MaybeAcquire(connection=connection, pool=self.bot.pool) as con:
+        async with session.MaybeAcquire(connection=connection, pool=self.bot.pool) as con:
             timer = await self.get_active_timer(connection=con, days=days)
             if timer is not None:
                 self._have_data.set()

@@ -122,7 +122,10 @@ def migrate(message):
     """Update the migration file with the newest schema."""
 
     click.confirm("Do you want to create migrations?", abort=True)
-    subprocess.run(['alembic', '-c', '".ini"', 'revision', '--autogenerate', '-m', message], check=False)
+    subprocess.run(
+        ["alembic", "-c", '".ini"', "revision", "--autogenerate", "-m", message],
+        check=False,
+    )
     click.echo("Created migrations.")
 
 

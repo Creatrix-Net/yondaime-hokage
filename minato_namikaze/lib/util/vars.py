@@ -11,7 +11,7 @@ from typing import Any, List
 
 from sqlalchemy.orm import declarative_base
 
-#only way to resolve the circular, yes this is the only way
+# only way to resolve the circular, yes this is the only way
 class _MissingSentinel:
     __slots__ = ()
 
@@ -33,13 +33,13 @@ class _MissingSentinel:
     def __len__(self):
         return 0
 
+
 MISSING: Any = _MissingSentinel()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # In minato_namikaze/ folder
 CONFIG_FILE = Path(__file__).resolve().parent.parent.parent.parent / ".ini"
 DEFAULT_COMMAND_SELECT_LENGTH = 25
 Base = declarative_base()
-
 
 
 def token_get(tokenname: str = MISSING, all: bool = False) -> Any:
@@ -81,7 +81,9 @@ class _envConfig:
                 setattr(self, j.lower(), self.data[i].get(j))
                 setattr(self, j.upper(), self.data[i].get(j))
 
+
 envConfig: Any = _envConfig()
+
 
 class ShinobiMatch(list, enum.Enum):
     character_side_exclude = [
@@ -167,7 +169,7 @@ class LinksAndVars(enum.Enum):
     owner_ids = [887549958931247137, 837223478934896670, 747729781369602049]
 
     with gzip.open(
-        Path(__file__).resolve().parent.parent/ os.path.join("data", "insult.txt.gz"),
+        Path(__file__).resolve().parent.parent / os.path.join("data", "insult.txt.gz"),
         "rt",
         encoding="utf-8",
     ) as f:
@@ -209,8 +211,8 @@ class Methods(enum.IntEnum):
 
 
 with gzip.open(
-    Path(__file__).resolve().parent.parent/
-    os.path.join(
+    Path(__file__).resolve().parent.parent
+    / os.path.join(
         "data",
         "periodic_table_data",
         "LATTICES.json.gz",
@@ -221,8 +223,8 @@ with gzip.open(
     LATTICES: dict = json.load(f)
 
 with gzip.open(
-    Path(__file__).resolve().parent.parent/ 
-    os.path.join(
+    Path(__file__).resolve().parent.parent
+    / os.path.join(
         "data",
         "periodic_table_data",
         "IMAGES.json.gz",
@@ -233,8 +235,8 @@ with gzip.open(
     IMAGES: dict = json.load(f)
 
 with gzip.open(
-    Path(__file__).resolve().parent.parent/
-    os.path.join(
+    Path(__file__).resolve().parent.parent
+    / os.path.join(
         "data",
         "periodic_table_data",
         "UNITS.json.gz",

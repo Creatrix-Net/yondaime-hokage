@@ -7,7 +7,7 @@ import os
 import re
 import zipfile
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, List
 
 from sqlalchemy.orm import declarative_base
 

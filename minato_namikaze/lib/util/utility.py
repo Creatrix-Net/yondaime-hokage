@@ -12,6 +12,7 @@ INVITE_URL_RE = re.compile(
     r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I
 )
 
+
 class _MissingSentinel:
     __slots__ = ()
 
@@ -33,7 +34,9 @@ class _MissingSentinel:
     def __len__(self):
         return 0
 
+
 MISSING: Any = _MissingSentinel()
+
 
 def filter_invites(to_filter: str) -> str:
     """Get a string with discord invites sanitized.
@@ -149,5 +152,5 @@ def return_all_cogs() -> List[str]:
         else:
             if filename.endswith(".py"):
                 list_to_be_given.append(filename[:-3])
-    
+
     return list_to_be_given

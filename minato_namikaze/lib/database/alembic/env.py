@@ -28,7 +28,8 @@ target_metadata = vars.Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 url = vars.envConfig.DATABASE_URL
-url = url.replace('postgresql+asyncpg', 'postgresql')
+url = url.replace("postgresql+asyncpg", "postgresql")
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -60,7 +61,9 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = create_engine(url=url, echo=True, poolclass=pool.NullPool, _coerce_config=True)
+    connectable = create_engine(
+        url=url, echo=True, poolclass=pool.NullPool, _coerce_config=True
+    )
 
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)

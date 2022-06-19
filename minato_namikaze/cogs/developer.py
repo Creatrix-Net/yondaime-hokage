@@ -40,6 +40,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
+
 class Premium(Base):
     __tablename__ = "premium"
     id = Column(BigInteger, primary_key=True, autoincrement=True)
@@ -87,7 +88,6 @@ class Server(Base):
 
     def __str__(self) -> str:
         return self.__repr__()
-
 
 
 class Developer(commands.Cog):

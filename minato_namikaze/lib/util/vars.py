@@ -23,6 +23,7 @@ INVITE_URL_RE = re.compile(
 
 MISSING: Any = _MissingSentinel()
 
+
 def token_get(tokenname: str = MISSING, all: bool = False) -> Any:
     """Helper function to get the credentials from the environment variables or from the configuration file
 

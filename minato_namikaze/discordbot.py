@@ -2,7 +2,7 @@ import ast
 import logging
 import random
 import time
-from collections import Counter, defaultdict, deque
+from collections import Counter,defaultdict, deque
 from datetime import datetime
 from typing import Any, List, Optional, Union, TYPE_CHECKING
 
@@ -20,7 +20,7 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
 
-from lib import (
+from minato_namikaze.lib import (
     return_all_cogs,
     ChannelAndMessageId,
     Context,
@@ -37,6 +37,7 @@ from lib import (
 )
 
 if TYPE_CHECKING:
+    from collections import Counter
     from .cogs.reminder import Reminder
 
 log = logging.getLogger(__name__)
@@ -57,8 +58,8 @@ def get_prefix(bot, message):
 
 class MinatoNamikazeBot(commands.AutoShardedBot):
     user: discord.ClientUser
-    command_stats: Counter[str]  # type: ignore
-    socket_stats: Counter[str]  # type: ignore
+    command_stats: 'Counter[str]'  # type: ignore
+    socket_stats: 'Counter[str]'  # type: ignore
     gateway_handler: Any
     bot_app_info: discord.AppInfo
 
@@ -75,7 +76,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             messages=True,
             reactions=True,
         ).all()
-
         self.version = str(token_get("BOT_VER"))
         self.local = ast.literal_eval(token_get("LOCAL"))
 
@@ -115,7 +115,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             owner_id=LinksAndVars.owner_ids.value[0],
         )
 
-    def start(self):
+    async def start(self):
         try:
 
             sentry_sdk.init(
@@ -130,7 +130,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             )
             log.info("Sentry Setup Done")
             log.info("Bot will now start")
-            super().run(Tokens.token.value, reconnect=True)
+            await super().start(Tokens.token.value, reconnect=True)
         except discord.PrivilegedIntentsRequired:
             log.critical(
                 "[Login Failure] You need to enable the server members intent on the Discord Developers Portal."
@@ -623,7 +623,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         return await super().get_context(origin, cls=cls)
 
     @property
-    def reminder(self) -> Optional[Reminder]:
+    def reminder(self) -> 'Optional[Reminder]':
         return self.get_cog("Reminder")
 
     def _clear_gateway_data(self) -> None:

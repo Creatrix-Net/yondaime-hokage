@@ -10,6 +10,7 @@ discord.py @ git+https://github.com/Rapptz/discord.py@master
 fluxpoint.py
 eight-ball
 num2words
+psycopg2
 english-words @ git+https://github.com/The-4th-Hokage/english-words-py.git@master
 DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@master
 ffmpeg

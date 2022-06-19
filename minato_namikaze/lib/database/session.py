@@ -2,13 +2,13 @@ import logging
 from contextlib import contextmanager
 from typing import Any
 
-from sqlalchemy.ext.asyncio import (AsyncEngine, AsyncSession,
-                                    create_async_engine)
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from ..util import envConfig
 
 log = logging.getLogger(__name__)
+
 
 class Session:
     """

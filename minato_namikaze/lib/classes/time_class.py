@@ -296,19 +296,25 @@ class FriendlyTimeResult:
     dt: datetime.datetime
     arg: str
 
-    __slots__ = ('dt', 'arg')
+    __slots__ = ("dt", "arg")
 
     def __init__(self, dt: datetime.datetime):
         self.dt = dt
-        self.arg = ''
+        self.arg = ""
 
-    async def ensure_constraints(self, ctx: 'Context', uft: UserFriendlyTime, now: datetime.datetime, remaining: str) -> None:
+    async def ensure_constraints(
+        self,
+        ctx: "Context",
+        uft: UserFriendlyTime,
+        now: datetime.datetime,
+        remaining: str,
+    ) -> None:
         if self.dt < now:
-            raise commands.BadArgument('This time is in the past.')
+            raise commands.BadArgument("This time is in the past.")
 
         if not remaining:
             if uft.default is None:
-                raise commands.BadArgument('Missing argument after the time.')
+                raise commands.BadArgument("Missing argument after the time.")
             remaining = uft.default
 
         if uft.converter is not None:

@@ -57,7 +57,7 @@ autodoc_typehints = "description"
 # napoleon_attr_annotations = False
 
 extlinks = {
-    "issue": ("https://github.com/The-4th-Hokage/fluxpoint.py/issues/%s", "GH-"),
+    "issue": ("https://github.com/The-4th-Hokage/yondaime-hokage/issues/%s", "GH-"),
 }
 
 # Links used for cross-referencing stuff in other documentation
@@ -106,13 +106,13 @@ suppress_warnings = ["autoapi"]
 
 
 html_context = {
-    "discord_invite": "https://discord.gg/fluxpoint",
+    "discord_invite": "https://discord.gg/vfXHwS3nmQ",
 }
 
 resource_links = {
-    "discord": "https://discord.gg/fluxpoint",
-    "issues": "https://github.com/The-4th-Hokage/fluxpoint.py/issues",
-    "discussions": "https://github.com/The-4th-Hokage/fluxpoint.py/discussions",
+    "discord": "https://discord.gg/vfXHwS3nmQ",
+    "issues": "https://github.com/The-4th-Hokage/yondaime-hokage/issues",
+    "discussions": "https://github.com/The-4th-Hokage/yondaime-hokage/discussions",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

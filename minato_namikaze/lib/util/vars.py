@@ -4,19 +4,26 @@ import gzip
 import io
 import json
 import os
+import re
 import zipfile
 from pathlib import Path
 from typing import Any, List, Optional
+
 from sqlalchemy.orm import declarative_base
+
+from .utility import _MissingSentinel
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # In minato_namikaze/ folder
 CONFIG_FILE = Path(__file__).resolve().parent.parent.parent.parent / ".ini"
-# api_image_store_dir = BASE_DIR / "images_api_store"
 DEFAULT_COMMAND_SELECT_LENGTH = 25
 Base = declarative_base()
+INVITE_URL_RE = re.compile(
+    r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I
+)
 
+MISSING: Any = _MissingSentinel()
 
-def token_get(tokenname: Optional[str] = None, all: bool = False) -> Any:
+def token_get(tokenname: str = MISSING, all: bool = False) -> Any:
     """Helper function to get the credentials from the environment variables or from the configuration file
 
     :param tokenname: The token name to access
@@ -51,7 +58,7 @@ class envConfig:
     def __init__(self):
         self.data: dict = token_get(all=True)
         for i in self.data:
-            for j in self.data.get(i, None):
+            for j in self.data.get(i, MISSING):
                 setattr(self, j.lower(), self.data[i].get(j))
                 setattr(self, j.upper(), self.data[i].get(j))
 

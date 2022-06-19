@@ -1,15 +1,35 @@
+import os
 import re
-from typing import List
+from typing import Any, List
 from urllib.parse import urlparse, uses_netloc
 
 import aiohttp
-import discord, os
+import discord
 
-from .vars import ChannelAndMessageId, LinksAndVars, url_regex, BASE_DIR
+from .vars import (BASE_DIR, INVITE_URL_RE, ChannelAndMessageId, LinksAndVars,
+                   url_regex)
 
-INVITE_URL_RE = re.compile(
-    r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I
-)
+
+class _MissingSentinel:
+    __slots__ = ()
+
+    def __eq__(self, other):
+        return False
+
+    def __bool__(self):
+        return False
+
+    def __hash__(self):
+        return 0
+
+    def __repr__(self):
+        return "..."
+
+    def __iter__(self):
+        return iter([])
+
+    def __len__(self):
+        return 0
 
 
 def filter_invites(to_filter: str) -> str:

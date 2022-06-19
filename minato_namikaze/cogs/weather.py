@@ -7,10 +7,10 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
-from lib import Tokens
+from minato_namikaze.lib import Tokens
 
 if TYPE_CHECKING:
-    from lib import Context
+    from minato_namikaze.lib import Context
     from .. import MinatoNamikazeBot
 
 

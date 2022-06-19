@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING, Union
 import discord
 from discord.ext import commands
 from DiscordUtils import Embed, EmbedPaginator, ErrorEmbed
-from lib import Database, MemberID, is_mod
+from minato_namikaze.lib import Database, MemberID, is_mod
 
 if TYPE_CHECKING:
-    from lib import Context
+    from minato_namikaze.lib import Context
     from ... import MinatoNamikazeBot
 
 

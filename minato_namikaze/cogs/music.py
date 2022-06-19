@@ -10,10 +10,10 @@ from DiscordUtils import (
     SuccessEmbed,
     Music,
 )
-from lib import IncorrectChannelError, NoChannelProvided
+from minato_namikaze.lib import IncorrectChannelError, NoChannelProvided
 
 if TYPE_CHECKING:
-    from lib import Context
+    from minato_namikaze.lib import Context
     from .. import MinatoNamikazeBot
 
 

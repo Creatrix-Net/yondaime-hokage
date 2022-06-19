@@ -10,8 +10,8 @@ import psutil
 import pygit2
 from discord.ext import commands
 from DiscordUtils import Embed
-from lib import ChannelAndMessageId, LinksAndVars, PrivacyPolicy, VotingMenu
-from lib import time_class as time
+from minato_namikaze.lib import ChannelAndMessageId, LinksAndVars, PrivacyPolicy, VotingMenu
+from minato_namikaze.lib import time_class as time
 
 
 import logging

@@ -10,7 +10,7 @@ import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import Cog, command
 from DiscordUtils import Embed, ErrorEmbed, SuccessEmbed
-from lib import (
+from minato_namikaze.lib import (
     Database,
     FutureTime,
     GiveawayConfig,

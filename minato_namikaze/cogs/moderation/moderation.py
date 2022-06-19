@@ -10,7 +10,7 @@ import discord
 from discord.ext import commands
 from DiscordUtils import EmbedPaginator
 from DiscordUtils.embeds import *
-from lib import (
+from minato_namikaze.lib import (
     ActionReason,
     Arguments,
     BannedMember,

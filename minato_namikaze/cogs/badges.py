@@ -9,7 +9,7 @@ import aiohttp
 import discord
 from discord.ext import commands
 from DiscordUtils import EmbedPaginator, StarboardEmbed
-from lib import BASE_DIR, Badge, Badges, ImageWriter, generate
+from minato_namikaze.lib import BASE_DIR, Badge, Badges, ImageWriter, generate
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
 
 if TYPE_CHECKING:

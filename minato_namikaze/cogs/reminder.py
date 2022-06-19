@@ -10,14 +10,14 @@ from typing import TYPE_CHECKING, Any, Optional, Sequence
 import asyncpg
 import discord
 from discord.ext import commands
-from lib import plural, session, time, Base
+from minato_namikaze.lib import plural, session, time, Base
 from sqlalchemy import JSON, Column, DateTime, Integer, String
 
 from typing_extensions import Annotated
 
 if TYPE_CHECKING:
     from typing_extensions import Self
-    from lib import Context
+    from minato_namikaze.lib import Context
     from .. import MinatoNamikazeBot
 
 import logging

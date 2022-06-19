@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Optional, Union
 import discord
 from discord.ext import commands, tasks
 from DiscordUtils import SuccessEmbed
-from lib import Arguments, BackupDatabse, ChannelAndMessageId
+from minato_namikaze.lib import Arguments, BackupDatabse, ChannelAndMessageId
 from orjson import dumps
 
 if TYPE_CHECKING:

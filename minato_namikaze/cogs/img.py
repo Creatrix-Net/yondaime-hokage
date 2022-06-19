@@ -7,12 +7,11 @@ import discord
 from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
 from DiscordUtils import Embed, ErrorEmbed
-from lib import MemberID, Tokens, among_us, among_us_friends
-from lib.util.vars import BASE_DIR
+from minato_namikaze.lib import MemberID, Tokens, among_us, among_us_friends, BASE_DIR
 from PIL import Image, ImageDraw, ImageFont
 
 if TYPE_CHECKING:
-    from lib import Context
+    from minato_namikaze.lib import Context
 
     from .. import MinatoNamikazeBot
 

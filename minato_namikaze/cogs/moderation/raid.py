@@ -9,7 +9,7 @@ import discord
 import DiscordUtils
 import num2words
 from discord.ext import commands, tasks
-from lib import (
+from minato_namikaze.lib import (
     AntiRaidConfig,
     Database,
     MemberID,

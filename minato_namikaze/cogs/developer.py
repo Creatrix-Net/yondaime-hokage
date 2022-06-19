@@ -17,11 +17,9 @@ import orjson
 import statcord
 from discord.ext import commands, tasks
 from DiscordUtils import *
-from lib import *
+from minato_namikaze.lib import *
 
 if TYPE_CHECKING:
-    from lib import Context
-
     from .. import MinatoNamikazeBot
 
 log = logging.getLogger(__name__)

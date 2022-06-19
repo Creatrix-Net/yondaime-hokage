@@ -7,7 +7,7 @@ import discord
 import orjson
 from discord.ext import commands
 from DiscordUtils import Embed, ErrorEmbed
-from lib import (
+from minato_namikaze.lib import (
     Characters,
     LinksAndVars,
     MatchHandlerView,
@@ -17,7 +17,7 @@ from lib import (
 )
 
 if TYPE_CHECKING:
-    from lib import Context
+    from minato_namikaze.lib import Context
     from .. import MinatoNamikazeBot
 
 

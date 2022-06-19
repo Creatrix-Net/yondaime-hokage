@@ -8,7 +8,7 @@ from typing import Iterator, Optional, Sequence, TYPE_CHECKING
 
 import discord
 from discord.ext import commands
-from lib.data.braille import (
+from minato_namikaze.lib.data.braille import (
     contractions,
     dna,
     letters,

@@ -6,7 +6,7 @@ from discord.ext import commands
 from DiscordUtils import Embed, ErrorEmbed
 
 if TYPE_CHECKING:
-    from lib import Context
+    from minato_namikaze.lib import Context
 
     from .. import MinatoNamikazeBot
 

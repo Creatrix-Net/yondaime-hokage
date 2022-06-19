@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING
 import discord
 from discord.ext import commands, tasks
 from DiscordUtils import Embed
-from lib import ReactionPersistentView, has_permissions, LinksAndVars, Base
+from minato_namikaze.lib import ReactionPersistentView, has_permissions, LinksAndVars, Base
 from orjson import loads
 from sqlalchemy import Column, BigInteger, String, Boolean, JSON
 
 if TYPE_CHECKING:
-    from lib import Context
+    from minato_namikaze.lib import Context
 
     from .. import MinatoNamikazeBot
 

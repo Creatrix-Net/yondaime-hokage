@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import discord
 from discord.ext import commands
-from lib.functions import meek_api
+from minato_namikaze.lib.functions import meek_api
 import logging
 
 if TYPE_CHECKING:

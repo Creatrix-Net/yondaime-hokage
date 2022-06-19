@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 import discord
 from discord.ext import commands
 from DiscordUtils import Embed
-from lib import serverinfo, userinfo
+from minato_namikaze.lib import serverinfo, userinfo
 
 if TYPE_CHECKING:
     from lib import Context

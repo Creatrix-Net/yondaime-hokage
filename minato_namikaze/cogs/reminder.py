@@ -10,7 +10,14 @@ from typing import TYPE_CHECKING, Any, Optional, Sequence
 import asyncpg
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import plural, session, time, Base, FriendlyTimeResult, UserFriendlyTime
+from minato_namikaze.lib import (
+    plural,
+    session,
+    time,
+    Base,
+    FriendlyTimeResult,
+    UserFriendlyTime,
+)
 from sqlalchemy import JSON, Column, DateTime, Integer, String
 
 from typing_extensions import Annotated

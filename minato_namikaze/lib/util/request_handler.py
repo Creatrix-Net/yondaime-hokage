@@ -3,34 +3,11 @@ import logging, random
 from typing import Dict, Optional, Union, Any
 import aiohttp
 import discord
-import sentry_sdk
 from discord.ext import commands
-from sentry_sdk.integrations.aiohttp import AioHttpIntegration
-from sentry_sdk.integrations.logging import LoggingIntegration
-from sentry_sdk.integrations.modules import ModulesIntegration
-from sentry_sdk.integrations.threading import ThreadingIntegration
 
 from .vars import Methods, Tokens, token_get, LinksAndVars
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(message)s")
-ch.setFormatter(formatter)
-log.addHandler(ch)
-
-sentry_sdk.init(
-    Tokens.sentry_link.value,
-    traces_sample_rate=1.0,
-    integrations=[
-        AioHttpIntegration(),
-        ThreadingIntegration(),
-        LoggingIntegration(),
-        ModulesIntegration(),
-    ],
-)
 
 FATESLIST_BASE_URI = "https://api.fateslist.xyz/"
 DISCORD_SERVERVICES_BASE_URI = "https://api.discordservices.net/bot/"

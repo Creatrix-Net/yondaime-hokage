@@ -6,8 +6,7 @@ from urllib.parse import urlparse, uses_netloc
 import aiohttp
 import discord
 
-from .vars import (BASE_DIR, INVITE_URL_RE, ChannelAndMessageId, LinksAndVars,
-                   url_regex)
+from .vars import BASE_DIR, INVITE_URL_RE, ChannelAndMessageId, LinksAndVars, url_regex
 
 
 class _MissingSentinel:

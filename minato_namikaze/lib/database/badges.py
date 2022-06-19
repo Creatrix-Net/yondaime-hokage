@@ -1,7 +1,10 @@
+import logging
+
 from discord.ext.commands import Context
 
 from ..util import ChannelAndMessageId
 
+log = logging.getLogger(__name__)
 
 class Badges:
     """A database handler for the Badges class"""

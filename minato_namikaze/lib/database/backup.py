@@ -1,14 +1,17 @@
 import io
-from typing import Optional, Tuple, Union
+import logging
+from typing import Optional, Union
 
 import discord
-from discord import CategoryChannel, Role, StageChannel, TextChannel, VoiceChannel
+from discord import (CategoryChannel, Role, StageChannel, TextChannel,
+                     VoiceChannel)
 from discord.ext import commands
 from discord.ext.commands import Context
 from orjson import dumps, loads
 
 from ..util.vars import ChannelAndMessageId
 
+log = logging.getLogger(__name__)
 
 class BackupDatabse:
     """The database class to handle the backup commands"""

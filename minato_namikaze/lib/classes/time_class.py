@@ -3,6 +3,7 @@ This code has been fully copied from here https://github.com/Rapptz/RoboDanny/bl
 """
 import datetime
 import re
+from typing import TYPE_CHECKING
 
 import parsedatetime as pdt
 from dateutil.relativedelta import relativedelta
@@ -10,6 +11,8 @@ from discord.ext import commands
 
 from ..functions import format_dt, human_join, plural
 
+if TYPE_CHECKING:
+    from ..util.context import Context
 # Monkey patch mins and secs into the units
 units = pdt.pdtLocales["en_US"].units
 units["minutes"].append("mins")
@@ -287,3 +290,28 @@ def human_timedelta(dt, *, source=None, accuracy=3, brief=False, suffix=True):
 
 def format_relative(dt):
     return format_dt(dt, "R")
+
+
+class FriendlyTimeResult:
+    dt: datetime.datetime
+    arg: str
+
+    __slots__ = ('dt', 'arg')
+
+    def __init__(self, dt: datetime.datetime):
+        self.dt = dt
+        self.arg = ''
+
+    async def ensure_constraints(self, ctx: 'Context', uft: UserFriendlyTime, now: datetime.datetime, remaining: str) -> None:
+        if self.dt < now:
+            raise commands.BadArgument('This time is in the past.')
+
+        if not remaining:
+            if uft.default is None:
+                raise commands.BadArgument('Missing argument after the time.')
+            remaining = uft.default
+
+        if uft.converter is not None:
+            self.arg = await uft.converter.convert(ctx, remaining)
+        else:
+            self.arg = remaining

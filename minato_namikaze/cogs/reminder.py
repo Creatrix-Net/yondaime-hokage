@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, Optional, Sequence
 import asyncpg
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import plural, session, time, Base
+from minato_namikaze.lib import plural, session, time, Base, FriendlyTimeResult, UserFriendlyTime
 from sqlalchemy import JSON, Column, DateTime, Integer, String
 
 from typing_extensions import Annotated
@@ -30,9 +30,9 @@ class Reminders(Base):
 
     id = Column(Integer, index=True, primary_key=True)
     expires = Column(DateTime, index=True)
-    created = Column(DateTime, default="now() at time zone 'utc'")
-    event = Column(String)
-    extra = Column(JSON, default="'{}'::jsonb")
+    created = Column(DateTime, default="now() at time zone 'utc'", nullable=False)
+    event = Column(String, nullable=False)
+    extra = Column(JSON, default="'{}'::jsonb", nullable=True)
 
 
 class Timer:
@@ -259,8 +259,8 @@ class Reminder(commands.Cog):
         ctx: "Context",
         *,
         when: Annotated[
-            time.FriendlyTimeResult,
-            time.UserFriendlyTime(commands.clean_content, default="…"),
+            FriendlyTimeResult,
+            UserFriendlyTime(commands.clean_content, default="…"),
         ],
     ):
         """Reminds you of something after a certain amount of time.

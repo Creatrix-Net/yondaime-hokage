@@ -1,4 +1,4 @@
-import sys
+import sys, os
 import click
 import logging
 import asyncio
@@ -6,11 +6,13 @@ import importlib
 import contextlib
 import subprocess
 
-from minato_namikaze import MinatoNamikazeBot, return_all_cogs, Base, Session
+from minato_namikaze import MinatoNamikazeBot, return_all_cogs, Base, Session, vars
 
 from logging.handlers import RotatingFileHandler
 
 import traceback
+
+os.environ['ALEMBIC_CONFIG'] = str(vars.CONFIG_FILE)
 
 try:
     import uvloop  # type: ignore
@@ -81,6 +83,12 @@ def main(ctx):
             asyncio.run(run_bot())
 
 
+async def create_tables():
+    engine = Session.get_engine()
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
 @main.group(short_help="database stuff", options_metavar="[options]")
 def db():
     pass
@@ -92,7 +100,7 @@ def db():
 @click.argument("cogs", nargs=-1, metavar="[cogs]")
 def init(cogs):
     """This manages the migrations and database creation system for you."""
-
+    run = asyncio.get_event_loop().run_until_complete
     if not cogs:
         cogs = cogs = [
             f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
@@ -110,20 +118,17 @@ def init(cogs):
         except Exception:
             click.echo(f"Could not load {ext}.\n{traceback.format_exc()}", err=True)
             return
-
-    Base.metadata.create_all(bind=Session.get_engine())
+    run(create_tables())
     click.echo("Tables created in the database.")
 
 
-@db.command(short_help="migrates the databases")
-@click.argument("message", nargs=1)
-@click.pass_context
-def migrate(message):
+@db.command(short_help="Create migrations for the databases")
+@click.option("--message", prompt=True)
+def makemigrations(message):
     """Update the migration file with the newest schema."""
-
     click.confirm("Do you want to create migrations?", abort=True)
     subprocess.run(  # skipcq: BAN-B607
-        ["alembic", "-c", '".ini"', "revision", "--autogenerate", "-m", message],
+        ["alembic", "revision", "--autogenerate", "-m", message],
         check=False,
     )
     click.echo("Created migrations.")

@@ -31,7 +31,7 @@ class ReactionRoles(Base):
 
     message_id = Column(BigInteger, primary_key=True, index=True, nullable=False)
     server_id = Column(BigInteger, index=True, nullable=False)
-    reactions = Column(JSON, nullable=False, index=True)
+    reactions = Column(JSON, nullable=False, default="'{}'::jsonb")
     limit_to_one = Column(Boolean, nullable=False, index=True)
     custom_id = Column(String(250), nullable=False, index=True)
     jump_url = Column(String(500), nullable=False, index=True)
@@ -98,7 +98,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             await ctx.send_help(ctx.command)
             return
 
-    @rr.hybrid_command(name="new", aliases=["create"])
+    @rr.command(name="new", aliases=["create"])
     async def new(self, ctx):
         """
         Create a new reaction role using some interactive setup.
@@ -329,7 +329,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 await message.delete()
         await database.set(sent_final_message.id, rl_object)
 
-    @rr.hybrid_command(aliases=["del_rr"], usage="<reaction_roles_id aka message.id")
+    @rr.command(aliases=["del_rr"], usage="<reaction_roles_id aka message.id")
     async def delete_reaction_roles(
         self, ctx: "Context", reaction_roles_id: commands.MessageConverter
     ):

@@ -3,7 +3,7 @@ import logging
 import random
 import time
 from collections import Counter, defaultdict, deque
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, List, Optional, Union, TYPE_CHECKING
 
 import aiohttp
@@ -131,6 +131,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             log.info("Sentry Setup Done")
             log.info("Bot will now start")
             await super().start(Tokens.token.value, reconnect=True)
+            log.info("Bot started")
         except discord.PrivilegedIntentsRequired:
             log.critical(
                 "[Login Failure] You need to enable the server members intent on the Discord Developers Portal."
@@ -627,7 +628,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         return self.get_cog("Reminder")
 
     def _clear_gateway_data(self) -> None:
-        one_week_ago = discord.utils.utcnow() - datetime.timedelta(days=7)
+        one_week_ago = discord.utils.utcnow() - timedelta(days=7)
         for shard_id, dates in self.identifies.items():
             to_remove = [index for index, dt in enumerate(dates) if dt < one_week_ago]
             for index in reversed(to_remove):

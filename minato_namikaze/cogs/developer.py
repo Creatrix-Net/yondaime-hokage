@@ -4,6 +4,7 @@ import io
 import logging
 import os
 import subprocess as sp
+from sys import prefix
 import textwrap
 import traceback
 from contextlib import redirect_stdout
@@ -47,6 +48,7 @@ class Premium(Base):
     reminders_amount = Column(SmallInteger, nullable=False)
     reminder_amount_per_user = Column(SmallInteger, nullable=False)
     no_vote_locked = Column(Boolean, default=False, nullable=False)
+    configurable_prefix = Column(Boolean, default=False, nullable=False)
     no_of_servers_applicable = Column(SmallInteger, nullable=False)
     users = relationship("User", backref="premium")
 
@@ -80,6 +82,7 @@ class Server(Base):
     premium_applier_user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     blacklisted = Column(Boolean, default=False, nullable=False)
     show_404_commands_error = Column(Boolean, default=True, nullable=False)
+    prefix = Column(String(5), nullable=False, default=")")
 
     def __repr__(self) -> str:
         return f"<Server(id={self.id!r}, premium_applier_user_id={self.premium_applier_user_id!r})>"

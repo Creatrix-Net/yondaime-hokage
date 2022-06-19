@@ -5,7 +5,7 @@ from typing import Union, Optional, TYPE_CHECKING
 
 import discord
 from discord.ext import commands
-from lib import MemberID
+from minato_namikaze.lib import MemberID
 from minato_namikaze.lib.classes.games import *
 from DiscordUtils import ErrorEmbed
 

@@ -2,7 +2,7 @@ import ast
 import logging
 import random
 import time
-from collections import Counter,defaultdict, deque
+from collections import Counter, defaultdict, deque
 from datetime import datetime
 from typing import Any, List, Optional, Union, TYPE_CHECKING
 
@@ -58,8 +58,8 @@ def get_prefix(bot, message):
 
 class MinatoNamikazeBot(commands.AutoShardedBot):
     user: discord.ClientUser
-    command_stats: 'Counter[str]'  # type: ignore
-    socket_stats: 'Counter[str]'  # type: ignore
+    command_stats: "Counter[str]"  # type: ignore
+    socket_stats: "Counter[str]"  # type: ignore
     gateway_handler: Any
     bot_app_info: discord.AppInfo
 
@@ -623,7 +623,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         return await super().get_context(origin, cls=cls)
 
     @property
-    def reminder(self) -> 'Optional[Reminder]':
+    def reminder(self) -> "Optional[Reminder]":
         return self.get_cog("Reminder")
 
     def _clear_gateway_data(self) -> None:

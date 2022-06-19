@@ -124,7 +124,7 @@ def migrate(message):
     click.confirm("Do you want to create migrations?", abort=True)
     subprocess.run(
         ["alembic", "-c", '".ini"', "revision", "--autogenerate", "-m", message],
-        check=False
+        check=False,
     )
     click.echo("Created migrations.")
 

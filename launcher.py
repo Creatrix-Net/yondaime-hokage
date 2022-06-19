@@ -12,7 +12,7 @@ from logging.handlers import RotatingFileHandler
 
 import traceback
 
-os.environ['ALEMBIC_CONFIG'] = str(vars.CONFIG_FILE)
+os.environ["ALEMBIC_CONFIG"] = str(vars.CONFIG_FILE)
 
 try:
     import uvloop  # type: ignore

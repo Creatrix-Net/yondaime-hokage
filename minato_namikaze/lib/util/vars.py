@@ -11,17 +11,35 @@ from typing import Any, List
 
 from sqlalchemy.orm import declarative_base
 
-from .utility import _MissingSentinel
+#only way to resolve the circular, yes this is the only way
+class _MissingSentinel:
+    __slots__ = ()
+
+    def __eq__(self, other):
+        return False
+
+    def __bool__(self):
+        return False
+
+    def __hash__(self):
+        return 0
+
+    def __repr__(self):
+        return "..."
+
+    def __iter__(self):
+        return iter([])
+
+    def __len__(self):
+        return 0
+
+MISSING: Any = _MissingSentinel()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # In minato_namikaze/ folder
 CONFIG_FILE = Path(__file__).resolve().parent.parent.parent.parent / ".ini"
 DEFAULT_COMMAND_SELECT_LENGTH = 25
 Base = declarative_base()
-INVITE_URL_RE = re.compile(
-    r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I
-)
 
-MISSING: Any = _MissingSentinel()
 
 
 def token_get(tokenname: str = MISSING, all: bool = False) -> Any:
@@ -36,24 +54,24 @@ def token_get(tokenname: str = MISSING, all: bool = False) -> Any:
     :rtype: Any
     """
     if not all:
-        if os.path.isfile(CONFIG_FILE):
+        if CONFIG_FILE.is_file():
             config = configparser.ConfigParser()
             config.read(CONFIG_FILE)
             sections = config._sections
             for i in sections:
-                for j in i:
-                    if j.lower() == tokenname:
-                        return config[i][j]
+                for j in sections[i]:
+                    if j.lower() == tokenname.lower():
+                        return sections[i][j]
             return
         return os.environ.get(tokenname, "False").strip("\n")
-    if os.path.isfile(CONFIG_FILE):
+    if CONFIG_FILE.is_file():
         config = configparser.ConfigParser()
         config.read(CONFIG_FILE)
         return config._sections
     raise RuntimeError("Could not find .ini file")
 
 
-class envConfig:
+class _envConfig:
     """A class which contains all token configuration"""
 
     def __init__(self):
@@ -63,6 +81,7 @@ class envConfig:
                 setattr(self, j.lower(), self.data[i].get(j))
                 setattr(self, j.upper(), self.data[i].get(j))
 
+envConfig: Any = _envConfig()
 
 class ShinobiMatch(list, enum.Enum):
     character_side_exclude = [
@@ -148,7 +167,7 @@ class LinksAndVars(enum.Enum):
     owner_ids = [887549958931247137, 837223478934896670, 747729781369602049]
 
     with gzip.open(
-        os.path.join(Path(__file__).resolve().parent.parent, "data", "insult.txt.gz"),
+        Path(__file__).resolve().parent.parent/ os.path.join("data", "insult.txt.gz"),
         "rt",
         encoding="utf-8",
     ) as f:
@@ -190,8 +209,8 @@ class Methods(enum.IntEnum):
 
 
 with gzip.open(
+    Path(__file__).resolve().parent.parent/
     os.path.join(
-        Path(__file__).resolve().parent.parent,
         "data",
         "periodic_table_data",
         "LATTICES.json.gz",
@@ -202,8 +221,8 @@ with gzip.open(
     LATTICES: dict = json.load(f)
 
 with gzip.open(
+    Path(__file__).resolve().parent.parent/ 
     os.path.join(
-        Path(__file__).resolve().parent.parent,
         "data",
         "periodic_table_data",
         "IMAGES.json.gz",
@@ -214,8 +233,8 @@ with gzip.open(
     IMAGES: dict = json.load(f)
 
 with gzip.open(
+    Path(__file__).resolve().parent.parent/
     os.path.join(
-        Path(__file__).resolve().parent.parent,
         "data",
         "periodic_table_data",
         "UNITS.json.gz",

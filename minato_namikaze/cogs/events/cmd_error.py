@@ -5,7 +5,11 @@ from typing import TYPE_CHECKING
 import discord
 from discord.ext import commands
 from DiscordUtils import Embed, ErrorEmbed
-from minato_namikaze.lib import ChannelAndMessageId, IncorrectChannelError, NoChannelProvided
+from minato_namikaze.lib import (
+    ChannelAndMessageId,
+    IncorrectChannelError,
+    NoChannelProvided,
+)
 import logging
 
 if TYPE_CHECKING:

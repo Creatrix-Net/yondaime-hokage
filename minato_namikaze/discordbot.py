@@ -163,7 +163,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         ):
             pass
 
-        difference = int(round(discord.utils.utcnow().timestamp() - self.start_time.timestamp()))
+        difference = int(
+            round(discord.utils.utcnow().timestamp() - self.start_time.timestamp())
+        )
         stats = (
             self.get_channel(ChannelAndMessageId.restartlog_channel1.value)
             if not self.local

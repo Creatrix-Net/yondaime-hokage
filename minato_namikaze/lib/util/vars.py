@@ -197,7 +197,6 @@ class Database(enum.Enum):
     database_channel_name = "setup vars"
     antiraid_channel_name = "antiraid"
     mentionspam_channel_name = "mentionspam"
-    reaction_roles_channel_name = "reaction roles"
     giveaway_time_channel_name = "giveaway"
     user_blacklist_channel_name = "user blacklist"
     server_blacklist_channel_name = "server blacklist"

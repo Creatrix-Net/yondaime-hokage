@@ -8,10 +8,9 @@ from DiscordUtils import (
     ErrorEmbed,
     StarboardEmbed,
     SuccessEmbed,
-    Music,
 )
 from minato_namikaze.lib import IncorrectChannelError, NoChannelProvided
-
+from DiscordUtils import Music as MusicManager
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
     from .. import MinatoNamikazeBot
@@ -25,7 +24,7 @@ log = logging.getLogger(__name__)
 class Music(commands.Cog):
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot
-        self.bot.music = Music()
+        self.bot.music = MusicManager()
         self.description = "Listen to some soothing music!"
 
     @property

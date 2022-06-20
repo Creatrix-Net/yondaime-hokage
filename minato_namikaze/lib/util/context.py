@@ -73,7 +73,6 @@ class Context(commands.Context):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.pool = self.bot.pool
         self._db: Optional[Union[Pool, Connection]] = None
 
     async def entry_to_code(self, entries):

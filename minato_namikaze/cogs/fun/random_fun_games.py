@@ -146,26 +146,6 @@ class Random(commands.Cog):
             else:
                 pass
 
-    @commands.command(usage="<time> <reminder> (Time needs to be in seconds...)")
-    async def remind(self, ctx: "Context", time: TimeConverter, *, reminder: str):
-        """A simple reminder"""
-        if int(time) < 12 * 60 * 60:
-            e = Embed(
-                title="I will remind you!",
-                descripition=f"I will you remind you in {int(time)/3600} minutes!",
-            )
-            await ctx.send(embed=e)
-            await asyncio.sleep(int(time))
-            e2 = Embed(
-                title=f"Hello {ctx.author}",
-                description=f"I have come to remind you to {reminder}!",
-            )
-            await ctx.message.reply(embed=e2)
-        else:
-            await ctx.send(
-                "Please give a reminder time less than 12 hours, I cannot remember for that long!"
-            )
-
     @commands.command(usage="<name>")
     async def sn(self, ctx: "Context", *, name: str):
         """Introduce yourself to everyone"""

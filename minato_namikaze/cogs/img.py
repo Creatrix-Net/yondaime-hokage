@@ -6,7 +6,15 @@ from typing import TYPE_CHECKING, Optional, Union
 import discord
 from asyncdagpi import Client, ImageFeatures
 from discord.ext import commands
-from minato_namikaze.lib import MemberID, Tokens, among_us, among_us_friends, BASE_DIR, Embed, ErrorEmbed
+from minato_namikaze.lib import (
+    MemberID,
+    Tokens,
+    among_us,
+    among_us_friends,
+    BASE_DIR,
+    Embed,
+    ErrorEmbed,
+)
 from PIL import Image, ImageDraw, ImageFont
 
 if TYPE_CHECKING:

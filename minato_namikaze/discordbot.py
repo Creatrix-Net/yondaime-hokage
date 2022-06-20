@@ -439,20 +439,21 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     @property
     def get_admin_invite_link(self):
         return discord.utils.oauth_url(
-            self.application_id, 
-            permissions=discord.Permissions(administrator=True), 
-            redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite", 
-            scope=("bot", "applications.commands"), 
-            state='cube12345?/Direct From Bot'
+            self.application_id,
+            permissions=discord.Permissions(administrator=True),
+            redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite",
+            scope=("bot", "applications.commands"),
+            state="cube12345?/Direct From Bot",
         )
+
     @property
     def get_required_perms_invite_link(self):
         return discord.utils.oauth_url(
-            self.application_id, 
-            permissions=discord.Permissions(value=1515049189367), 
-            redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite", 
-            scope=("bot", "applications.commands"), 
-            state='cube12345?/Direct From Bot'
+            self.application_id,
+            permissions=discord.Permissions(value=1515049189367),
+            redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite",
+            scope=("bot", "applications.commands"),
+            state="cube12345?/Direct From Bot",
         )
 
     @staticmethod

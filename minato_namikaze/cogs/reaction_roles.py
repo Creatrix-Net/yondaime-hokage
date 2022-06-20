@@ -37,7 +37,7 @@ class Reaction_Roles(Base):
     channel_id = Column(BigInteger, index=True, nullable=False)
     reactions = Column(JSON, nullable=False, default="'{}'::jsonb")
     limit_to_one = Column(Boolean, nullable=False, index=True)
-    custom_id = Column(ARRAY(String(250)), nullable=False, index=True)
+    custom_id = Column(ARRAY(String(250), zero_indexes=True, as_tuple=True), nullable=False, index=True)
 
     def __repr__(self) -> str:
         return f"ReactionRoles(id={self.message_id!r}, server_id={self.server_id!r}, limit_to_one={self.limit_to_one!r})"
@@ -51,6 +51,23 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         self.bot: "MinatoNamikazeBot" = bot
         self.description = "Setup some reaction roles"
         self.cleanup.start()
+
+    async def cog_load(self):
+        if self.bot.persistent_views_added:
+            return
+        async with session_obj() as session:
+            query = select(Reaction_Roles)
+            data = (await session.execute(query)).all()
+            for row in data:
+                row = row[0]
+                self.bot.add_view(
+                    ReactionPersistentView(
+                        data=row,
+                    ),
+                    message_id=row.message_id,
+                )
+                self.bot.persistent_views_added = True
+        log.info("Persistent views added")
 
     async def cog_unload(self):
         self.cleanup.cancel()
@@ -302,6 +319,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 message_message = await self.bot.wait_for(
                     "message", timeout=120, check=check
                 )
+                user_messages.append(message_message)
                 # I would usually end up deleting message_message in the end but users usually want to be able to access the
                 # format they once used incase they want to make any minor changes
                 msg_values = message_message.content.split(" // ")
@@ -313,8 +331,8 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 )
                 selector_embed = Embed()
                 selector_embed.set_footer(
-                    text=self.bot.user.name,
-                    icon_url=self.bot.user.display_avatar.url,
+                    text=ctx.author.name,
+                    icon_url=ctx.author.display_avatar.url,
                 )
 
                 if len(msg_values) > 1:
@@ -330,22 +348,19 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                     else None
                 )
                 if selector_msg_body or selector_embed:
-                    sent_final_message = None
                     try:
                         custom_id = [str(uuid.uuid4()) for i in reactions]
-                        sent_final_message = await target_channel.send(
+                        rl_object.custom_id = custom_id
+                        rl_object.reactions = reactions
+                        view=ReactionPersistentView(data=rl_object)
+                        sent_message_final = await target_channel.send(
                             content=selector_msg_body,
                             embed=selector_embed,
-                            # view=ReactionPersistentView(
-                            #     reactions_dict=reactions,
-                            #     custom_id=custom_id,
-                            # ),
+                            view=view
                         )
-                        rl_object.custom_id = custom_id
-                        rl_object.message_id = sent_final_message.id
-                        rl_object.channel_id = sent_final_message.channel.id
-                        rl_object.server_id = sent_final_message.guild.id
-                        rl_object.reactions = reactions
+                        rl_object.message_id = sent_message_final.id
+                        rl_object.channel_id = sent_message_final.channel.id
+                        rl_object.server_id = sent_message_final.guild.id
                         break
                     except discord.Forbidden:
                         error_messages.append(

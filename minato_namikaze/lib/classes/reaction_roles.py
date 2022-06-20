@@ -1,17 +1,19 @@
+from typing import TYPE_CHECKING, List
+
 import discord
-from typing import List
+
+if TYPE_CHECKING:
+    from minato_namikaze.cogs.reaction_roles import Reaction_Roles
 
 
 class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
     """The Reaction Roles Button"""
 
     def __init__(self, custom_id: int, emoji, role, y: int):
-        self.emoji = emoji
         self.role = role
         super().__init__(
             style=discord.ButtonStyle.primary,
             emoji=emoji,
-            role=role,
             custom_id=custom_id,
             row=y,
         )
@@ -20,21 +22,17 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
     async def callback(self, interaction: discord.Interaction):
         if self.view is None:
             raise AssertionError
-        data = await self.view.database.get(interaction.message.id)
-        if data is None:
-            return
-        unique = bool(data.get("limit_to_one"))
-        if unique:
-            roles_id_list = [data.get("reactions")[i] for i in data.get("reactions")]
+        if self.view.data.limit_to_one:
+            roles_id_list = [self.view.data.reactions[i] for i in self.view.data.reactions]
             if list(map(lambda i: i.id, interaction.user.roles)) in roles_id_list:
                 await interaction.response.send_message(
                     "You cannot have more than 1 role from this message", ephemeral=True
                 )
                 return
 
-        for i in data.get("reactions"):
+        for i in self.view.data.reactions:
             if str(self.emoji) == str(discord.PartialEmoji(name=i)):
-                role_id = data.get("reactions")[i]
+                role_id = self.view.data.reactions[i]
                 role_model = discord.utils.get(interaction.guild.roles, id=role_id)
                 if role_model in interaction.user.roles:
                     try:
@@ -76,14 +74,15 @@ class ReactionPersistentView(discord.ui.View):
 
     children: List[ReactionRolesButton]
 
-    def __init__(self, reactions_dict: dict, custom_id: list):
+    def __init__(self, data: 'Reaction_Roles'):
+        self.data=data
         super().__init__(timeout=None)
-        for count, i in enumerate(reactions_dict):
+        for count, i in enumerate(data.reactions):
             self.add_item(
                 ReactionRolesButton(
-                    custom_id=custom_id[count],
+                    custom_id=data.custom_id[count],
                     emoji=i,
-                    role=reactions_dict[i],
+                    role=data.reactions[i],
                     y=(count // 5) + 1,
                 )
             )

@@ -23,7 +23,9 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
         if self.view is None:
             raise AssertionError
         if self.view.data.limit_to_one:
-            roles_id_list = [self.view.data.reactions[i] for i in self.view.data.reactions]
+            roles_id_list = [
+                self.view.data.reactions[i] for i in self.view.data.reactions
+            ]
             if list(map(lambda i: i.id, interaction.user.roles)) in roles_id_list:
                 await interaction.response.send_message(
                     "You cannot have more than 1 role from this message", ephemeral=True
@@ -74,8 +76,8 @@ class ReactionPersistentView(discord.ui.View):
 
     children: List[ReactionRolesButton]
 
-    def __init__(self, data: 'Reaction_Roles'):
-        self.data=data
+    def __init__(self, data: "Reaction_Roles"):
+        self.data = data
         super().__init__(timeout=None)
         for count, i in enumerate(data.reactions):
             self.add_item(

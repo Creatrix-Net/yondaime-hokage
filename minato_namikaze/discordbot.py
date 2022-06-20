@@ -32,7 +32,8 @@ from minato_namikaze.lib import (
     format_relative,
     post_commands,
     token_get,
-    Embed, ErrorEmbed
+    Embed,
+    ErrorEmbed,
 )
 
 if TYPE_CHECKING:
@@ -210,7 +211,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             activity=discord.Activity(
                 type=discord.ActivityType.watching, name="over Naruto"
             ),
-        )  
+        )
 
     async def update_blacklist(self):
         database = await self.db.new(

@@ -37,7 +37,9 @@ class Reaction_Roles(Base):
     channel_id = Column(BigInteger, index=True, nullable=False)
     reactions = Column(JSON, nullable=False, default="'{}'::jsonb")
     limit_to_one = Column(Boolean, nullable=False, index=True)
-    custom_id = Column(ARRAY(String(250), zero_indexes=True, as_tuple=True), nullable=False, index=True)
+    custom_id = Column(
+        ARRAY(String(250), zero_indexes=True, as_tuple=True), nullable=False, index=True
+    )
 
     def __repr__(self) -> str:
         return f"ReactionRoles(id={self.message_id!r}, server_id={self.server_id!r}, limit_to_one={self.limit_to_one!r})"
@@ -352,11 +354,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                         custom_id = [str(uuid.uuid4()) for i in reactions]
                         rl_object.custom_id = custom_id
                         rl_object.reactions = reactions
-                        view=ReactionPersistentView(data=rl_object)
+                        view = ReactionPersistentView(data=rl_object)
                         sent_message_final = await target_channel.send(
-                            content=selector_msg_body,
-                            embed=selector_embed,
-                            view=view
+                            content=selector_msg_body, embed=selector_embed, view=view
                         )
                         rl_object.message_id = sent_message_final.id
                         rl_object.channel_id = sent_message_final.channel.id

@@ -7,7 +7,6 @@ import datetime
 import textwrap
 from typing import TYPE_CHECKING, Any, Optional, Sequence
 
-import asyncpg
 import discord
 from discord.ext import commands
 from minato_namikaze.lib import (
@@ -45,7 +44,7 @@ class Reminders(Base):
 class Timer:
     __slots__ = ("args", "kwargs", "event", "id", "created_at", "expires")
 
-    def __init__(self, *, record: asyncpg.Record):
+    def __init__(self, *, record):
         self.id: int = record["id"]
 
         extra = record["extra"]
@@ -122,7 +121,7 @@ class Reminder(commands.Cog):
             )
 
     async def get_active_timer(
-        self, *, connection: Optional[asyncpg.Connection] = None, days: int = 7
+        self, *, connection = None, days: int = 7
     ) -> Optional[Timer]:
         query = "SELECT * FROM reminders WHERE expires < (CURRENT_DATE + $1::interval) ORDER BY expires LIMIT 1;"
         con = connection or self.bot.pool
@@ -131,7 +130,7 @@ class Reminder(commands.Cog):
         return Timer(record=record) if record else None
 
     async def wait_for_active_timers(
-        self, *, connection: Optional[asyncpg.Connection] = None, days: int = 7
+        self, *, connection = None, days: int = 7
     ) -> Timer:
         async with session.MaybeAcquire(
             connection=connection, pool=self.bot.pool
@@ -173,7 +172,7 @@ class Reminder(commands.Cog):
                 await self.call_timer(timer)
         except asyncio.CancelledError:
             raise
-        except (OSError, discord.ConnectionClosed, asyncpg.PostgresConnectionError):
+        except (OSError, discord.ConnectionClosed):
             self._task.cancel()
             self._task = self.bot.loop.create_task(self.dispatch_timers())
 
@@ -371,7 +370,7 @@ class Reminder(commands.Cog):
                 """
 
         author_id = str(ctx.author.id)
-        total: asyncpg.Record = await ctx.db.fetchrow(query, author_id)
+        total = await ctx.db.fetchrow(query, author_id)
         total = total[0]
         if total == 0:
             return await ctx.send("You do not have any reminders to delete.")

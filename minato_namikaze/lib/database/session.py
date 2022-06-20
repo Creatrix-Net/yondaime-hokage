@@ -5,7 +5,7 @@ from typing import Any
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from ..util import envConfig
+from ..util import envConfig, MISSING
 
 log = logging.getLogger(__name__)
 
@@ -32,8 +32,9 @@ class Session:
             class_=AsyncSession,
             max_size=20,
             min_size=20,
+            expire_on_commit=False
         )
-        return db_session()
+        return db_session
 
     @contextmanager
     def session_manager() -> sessionmaker:
@@ -47,9 +48,9 @@ class Session:
         finally:
             session.close()
 
-    @staticmethod
-    def execute(model_query: Any) -> None:
-        """Execute the database session."""
-        with Session.session_manager() as session:
-            session.add(model_query)
-            session.commit()
+    # async def execute(model_query: Any) -> None:
+    #     """Execute the database session."""
+    #     async with Session.session_manager() as session:
+    #         async with session.begin():
+    #             session.add(model_query)
+    #             session.commit()

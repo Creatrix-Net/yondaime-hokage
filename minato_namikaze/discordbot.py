@@ -1,9 +1,8 @@
 import ast
 import logging
 import random
-import time
 from collections import Counter, defaultdict, deque
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Any, List, Optional, Union, TYPE_CHECKING
 
 import aiohttp
@@ -149,7 +148,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.togetherControl = await DiscordTogether(Tokens.token.value)
 
         for i in return_all_cogs():
-            await self.load_extension(f"cogs.{i}")
+            await self.load_extension(f"minato_namikaze.cogs.{i}")
         try:
             await self.load_extension("jishaku")
         except discord.ext.commands.ExtensionAlreadyLoaded:
@@ -183,8 +182,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         )
         e.set_thumbnail(url=self.user.avatar.url)
 
-        if not self.persistent_views_added:
-            await self.add_persistant_views()
+        # if not self.persistent_views_added:
+        #     await self.add_persistant_views()
 
         await self.update_blacklist()
         log.info("Started The Bot")
@@ -215,31 +214,31 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             ),
         )
 
-    async def add_persistant_views(self):
-        database = await self.db.new(
-            Database.database_category_name.value,
-            Database.reaction_roles_channel_name.value,
-        )
-        async for message in database._Database__channel.history(limit=None):
-            cnt = message.content
-            try:
-                data = loads(str(cnt))
-                data.pop("type")
-                data_keys = list(map(str, list(data.keys())))
-                data = data[data_keys[0]]
-                self.add_view(
-                    ReactionPersistentView(
-                        reactions_dict=data["reactions"],
-                        custom_id=data["custom_id"],
-                        database=database,
-                    ),
-                    message_id=int(data_keys[0]),
-                )
-                self.persistent_views_added = True
-            except Exception as e:
-                log.error(e)
-                continue
-        log.info("Persistent views added")
+    # async def add_persistant_views(self):
+    #     database = await self.db.new(
+    #         Database.database_category_name.value,
+    #         Database.reaction_roles_channel_name.value,
+    #     )
+    #     async for message in database._Database__channel.history(limit=None):
+    #         cnt = message.content
+    #         try:
+    #             data = loads(str(cnt))
+    #             data.pop("type")
+    #             data_keys = list(map(str, list(data.keys())))
+    #             data = data[data_keys[0]]
+    #             self.add_view(
+    #                 ReactionPersistentView(
+    #                     reactions_dict=data["reactions"],
+    #                     custom_id=data["custom_id"],
+    #                     database=database,
+    #                 ),
+    #                 message_id=int(data_keys[0]),
+    #             )
+    #             self.persistent_views_added = True
+    #         except Exception as e:
+    #             log.error(e)
+    #             continue
+    #     log.info("Persistent views added")
 
     async def update_blacklist(self):
         database = await self.db.new(
@@ -440,12 +439,22 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     @property
     def get_admin_invite_link(self):
-        # discord.utils.oauth_url(self.application_id, permissions=discord.Permissions(administrator=True), redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite", scope=("bot", "applications.commands"))
-        return f"https://discord.com/oauth2/authorize?client_id={self.application_id}&permissions=8&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot"
-
+        return discord.utils.oauth_url(
+            self.application_id, 
+            permissions=discord.Permissions(administrator=True), 
+            redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite", 
+            scope=("bot", "applications.commands"), 
+            state='cube12345?/Direct From Bot'
+        )
     @property
     def get_required_perms_invite_link(self):
-        return f"https://discord.com/oauth2/authorize?client_id={self.application_id}&permissions=1515049189367&redirect_uri=https%3A%2F%2Fminatonamikaze-invites.herokuapp.com%2Finvite&scope=applications.commands%20bot&response_type=code&state=cube12345%3F%2FDirect%20From%20Bot"
+        return discord.utils.oauth_url(
+            self.application_id, 
+            permissions=discord.Permissions(value=1515049189367), 
+            redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite", 
+            scope=("bot", "applications.commands"), 
+            state='cube12345?/Direct From Bot'
+        )
 
     @staticmethod
     def get_random_image_from_tag(tag_name: str) -> Optional[str]:

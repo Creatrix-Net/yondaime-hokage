@@ -5,9 +5,11 @@ from typing import List
 class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
     """The Reaction Roles Button"""
 
-    def __init__(self, database, custom_id: int, emoji, y: int):
+    def __init__(self, custom_id: int, emoji, role,y: int):
+        self.emoji = emoji
+        self.role=role
         super().__init__(
-            style=discord.ButtonStyle.primary, emoji=emoji, custom_id=custom_id, row=y
+            style=discord.ButtonStyle.primary, emoji=emoji, role=role,custom_id=custom_id, row=y
         )
 
     # This function is called whenever this particular button is pressed
@@ -70,15 +72,14 @@ class ReactionPersistentView(discord.ui.View):
 
     children: List[ReactionRolesButton]
 
-    def __init__(self, reactions_dict: dict, database, custom_id: list):
+    def __init__(self, reactions_dict: dict, custom_id: list):
         super().__init__(timeout=None)
-        self.database = database
         for count, i in enumerate(reactions_dict):
             self.add_item(
                 ReactionRolesButton(
-                    database=database,
                     custom_id=custom_id[count],
                     emoji=i,
+                    role=reactions_dict[i],
                     y=(count // 5) + 1,
                 )
             )

@@ -88,6 +88,11 @@ async def create_tables():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+async def drop_tables():
+    engine = Session.get_engine()
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+
 
 @main.group(short_help="database stuff", options_metavar="[options]")
 def db():
@@ -152,59 +157,38 @@ def downgrade(cog, quiet, index):
     run = asyncio.get_event_loop().run_until_complete
 
 
-async def remove_databases(pool, cog, quiet):
-    async with pool.acquire() as con:
-        tr = con.transaction()
-        await tr.start()
-        # for table in Table.all_tables():
-        #     try:
-        #         await table.drop(verbose=not quiet, connection=con)
-        #     except RuntimeError as e:
-        #         click.echo(f"Could not drop {table.__tablename__}: {e}", err=True)
-        #         await tr.rollback()
-        #         break
-        #     else:
-        #         click.echo(f"Dropped {table.__tablename__}.")
-        # else:
-        #     await tr.commit()
-        #     click.echo(f"successfully removed {cog} tables.")
-
-
 @db.command(short_help="removes a cog's table", options_metavar="[options]")
-@click.argument("cog", metavar="<cog>")
-@click.option("-q", "--quiet", help="less verbose output", is_flag=True)
-def drop(cog, quiet):
+@click.argument("cogs", metavar="<cogs>", default='all')
+def drop(cogs):
     """This removes a database and all its migrations.
 
     You must be pretty sure about this before you do it,
     as once you do it there's no coming back.
 
-    Also note that the name must be the database name, not
-    the cog name.
+    Also note that the name must be the cog name.
     """
 
     run = asyncio.get_event_loop().run_until_complete
-    click.confirm("do you really want to do this?", abort=True)
+    click.confirm("Do you really want to do this?", abort=True)
+    if cogs.lower() == 'all':
+        cogs = cogs = [
+            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
+            for e in return_all_cogs()
+        ]
+    else:
+        cogs = [
+            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
+            for e in cogs
+        ]
 
-    # try:
-    #     pool = run(Table.create_pool(token_get("DATABASE_URL")))
-    # except Exception:
-    #     click.echo(
-    #         f"Could not create PostgreSQL connection pool.\n{traceback.format_exc()}",
-    #         err=True,
-    #     )
-    #     return
-
-    # if not cog.startswith("cogs."):
-    #     cog = f"cogs.{cog}"
-
-    # try:
-    #     importlib.import_module(cog)
-    # except Exception:
-    #     click.echo(f"Could not load {cog}.\n{traceback.format_exc()}", err=True)
-    #     return
-
-    # run(remove_databases(pool, cog, quiet))
+    for ext in cogs:
+        try:
+            importlib.import_module(ext)
+        except Exception:
+            click.echo(f"Could not load {ext}.\n{traceback.format_exc()}", err=True)
+            return
+    run(drop_tables())
+    click.echo("Tables deleted from the database.")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,4 @@
 import logging
-from contextlib import contextmanager
 from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
@@ -20,7 +19,7 @@ class Session:
         """
         This function is used to get the engine for the database.
         """
-        return create_async_engine(envConfig.DATABASE_URL, echo=True)
+        return create_async_engine(envConfig.DATABASE_URL, echo=False)
 
     @staticmethod
     def get_session() -> sessionmaker:
@@ -28,25 +27,10 @@ class Session:
         db_session = sessionmaker(
             bind=Session.get_engine(),
             autoflush=True,
-            autocommit=True,
             class_=AsyncSession,
-            max_size=20,
-            min_size=20,
             expire_on_commit=False
         )
         return db_session
-
-    @contextmanager
-    def session_manager() -> sessionmaker:
-        """Provides a transactional scope around a series of operations."""
-        session = Session.get_session()
-        try:
-            yield session
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
 
     # async def execute(model_query: Any) -> None:
     #     """Execute the database session."""
@@ -54,3 +38,6 @@ class Session:
     #         async with session.begin():
     #             session.add(model_query)
     #             session.commit()
+
+
+session_obj: Any = Session.get_session()

@@ -163,7 +163,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         ):
             pass
 
-        difference = int(round(time.time() - self.start_time.timestamp()))
+        difference = int(round(discord.utils.utcnow().timestamp() - self.start_time.timestamp()))
         stats = (
             self.get_channel(ChannelAndMessageId.restartlog_channel1.value)
             if not self.local
@@ -171,7 +171,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         )
         e = Embed(
             title="Bot Loaded!",
-            description=f"Bot ready by **{format_dt(datetime.now(), 'R',True)}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
+            description=f"Bot ready by **{format_dt(discord.utils.utcnow(), 'R',True)}**, loaded all cogs perfectly! Time to load is {difference} secs :)",
         )
         await self.change_presence(
             status=discord.Status.idle,

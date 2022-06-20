@@ -21,7 +21,7 @@ The main development branch, hosted on GitHub, which will become the next major 
 Long-term support releases will receive security updates for a specified period.
 When new releases are issued for security reasons, the accompanying notice will include a list of affected versions. This list is comprised solely of supported versions of Djathe botngo: older versions may also be affected, but we do not investigate to determine that, and will not issue patches or new releases for those versions.
 
-# Following things are used to check against any typing issues and other security issues.
+## Following things are used to check against any typing issues and other security issues.
 - [Deepsource](https://deepsource.io/gh/The-4th-Hokage/yondaime-hokage)
 - [Sider](https://sider.review/gh/orgs/84311025)
 - [Codedacy](https://app.codacy.com/gh/The-4th-Hokage/yondaime-hokage/dashboard)

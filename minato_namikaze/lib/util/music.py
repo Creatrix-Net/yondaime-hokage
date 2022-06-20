@@ -177,7 +177,7 @@ async def get_video_data(
             "quiet": True,
             "no_warnings": True,
             "default_search": "auto",
-            "source_address": "0.0.0.0",
+            "source_address": "0.0.0.0", # skpcq: BAN-B104
         }
     )
     data = await loop.run_in_executor(

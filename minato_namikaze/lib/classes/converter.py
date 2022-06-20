@@ -395,7 +395,7 @@ class Characters:
         url: str, category: str, ctx: commands.Context
     ) -> Union[discord.Emoji, discord.PartialEmoji]:
         STRIPPED_STRING_LIST: list = url.lstrip(
-            LinksAndVars.character_data.value[:-len("img_data.json")] + "photo_data/"
+            LinksAndVars.character_data.value[: -len("img_data.json")] + "photo_data/"
         ).split("/")
         STRIPPED_STRING_LIST.append(category)
         for i in STRIPPED_STRING_LIST:

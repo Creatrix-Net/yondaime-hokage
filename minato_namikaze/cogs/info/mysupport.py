@@ -9,12 +9,12 @@ import pkg_resources
 import psutil
 import pygit2
 from discord.ext import commands
-from DiscordUtils import Embed
 from minato_namikaze.lib import (
     ChannelAndMessageId,
     LinksAndVars,
     PrivacyPolicy,
     VotingMenu,
+    Embed
 )
 from minato_namikaze.lib import time_class as time
 

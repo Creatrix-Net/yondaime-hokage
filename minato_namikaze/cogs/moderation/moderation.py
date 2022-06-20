@@ -8,8 +8,6 @@ from typing import TYPE_CHECKING, Optional, Union
 
 import discord
 from discord.ext import commands
-from DiscordUtils import EmbedPaginator
-from DiscordUtils.embeds import *
 from minato_namikaze.lib import (
     ActionReason,
     Arguments,
@@ -24,6 +22,9 @@ from minato_namikaze.lib import (
     has_guild_permissions,
     has_permissions,
     plural,
+    EmbedPaginator,
+    ErrorEmbed,
+    Embed, SuccessEmbed
 )
 
 if TYPE_CHECKING:

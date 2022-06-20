@@ -2,15 +2,8 @@ from typing import TYPE_CHECKING, Union
 
 import discord
 from discord.ext import commands
-from DiscordUtils import (
-    Embed,
-    EmbedPaginator,
-    ErrorEmbed,
-    StarboardEmbed,
-    SuccessEmbed,
-)
-from minato_namikaze.lib import IncorrectChannelError, NoChannelProvided
-from DiscordUtils import Music as MusicManager
+from minato_namikaze.lib import IncorrectChannelError, NoChannelProvided, Embed,EmbedPaginator,ErrorEmbed,StarboardEmbed,SuccessEmbed
+from minato_namikaze.lib import Music as MusicManager
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
     from .. import MinatoNamikazeBot

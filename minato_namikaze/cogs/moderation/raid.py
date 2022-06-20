@@ -6,7 +6,6 @@ from json.decoder import JSONDecodeError
 from typing import TYPE_CHECKING, Literal, Optional, Union
 
 import discord
-import DiscordUtils
 import num2words
 from discord.ext import commands, tasks
 from minato_namikaze.lib import (
@@ -21,6 +20,7 @@ from minato_namikaze.lib import (
     format_relative,
     has_permissions,
     is_mod,
+    InviteTracker
 )
 from orjson import loads
 
@@ -40,7 +40,7 @@ class AntiRaid(commands.Cog):
         self.autoban_threshold = 3
         self._spam_check = defaultdict(SpamChecker)
         self.message_batches = defaultdict(list)
-        self.tracker = DiscordUtils.InviteTracker(bot)
+        self.tracker = InviteTracker(bot)
         self.bulk_send_messages.start()
         self.cleanup.start()
 

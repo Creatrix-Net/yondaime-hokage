@@ -1,10 +1,10 @@
-from DiscordUtils import *
 from asyncio import sleep as sl
 
 import discord
 from discord.ext import menus
 
 from .vars import LinksAndVars
+from .embeds import SuccessEmbed, ErrorEmbed, Embed
 import aiohttp, orjson
 
 

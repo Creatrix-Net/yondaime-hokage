@@ -18,7 +18,9 @@ from minato_namikaze.lib import (
     convert,
     format_relative,
     is_mod,
-    Embed, ErrorEmbed, SuccessEmbed
+    Embed,
+    ErrorEmbed,
+    SuccessEmbed,
 )
 
 if TYPE_CHECKING:

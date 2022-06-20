@@ -12,14 +12,24 @@ class InviteTracker:
 
     :param bot:
     :type bot: Union[~discord.Client, ~discord.AutoShardedClient, ~discord.ext.commands.Bot, ~discord.ext.commands.AutoSharededBot]
-    
-    :attributes: 
+
+    :attributes:
         - bot: The default bot class.
         - _cache: :class:`dict`
             A `dict` to cache :class:`~discord.Guild` instances :class:`~discord.Invite`
-    """ 
-    __slots__ = ['bot', '_cache']
-    def __init__(self, bot: Union[discord.Client, discord.AutoShardedClient, commands.Bot, commands.AutoShardedBot]):       
+    """
+
+    __slots__ = ["bot", "_cache"]
+
+    def __init__(
+        self,
+        bot: Union[
+            discord.Client,
+            discord.AutoShardedClient,
+            commands.Bot,
+            commands.AutoShardedBot,
+        ],
+    ):
         self.bot = bot
         self._cache = {}
         self.add_listeners()
@@ -41,7 +51,7 @@ class InviteTracker:
             +-----------------------------+-----------------------------------+
             | :func:`remove_guild_cache`  | :func:`~discord.on_guild_remove`  |
             +-----------------------------+-----------------------------------+
-        """        
+        """
         self.bot.add_listener(self.cache_invites, "on_ready")
         self.bot.add_listener(self.update_invite_cache, "on_invite_create")
         self.bot.add_listener(self.remove_invite_cache, "on_invite_delete")
@@ -49,7 +59,7 @@ class InviteTracker:
         self.bot.add_listener(self.remove_guild_cache, "on_guild_remove")
 
     async def cache_invites(self) -> None:
-        '''It cache the guild invites `automatically` whenever the :func:`~discord.on_ready` event is fired'''
+        """It cache the guild invites `automatically` whenever the :func:`~discord.on_ready` event is fired"""
         for guild in self.bot.guilds:
             try:
                 self._cache[guild.id] = {}
@@ -59,24 +69,31 @@ class InviteTracker:
                 continue
 
     async def update_invite_cache(self, invite: discord.Invite) -> None:
-        '''It updates the invite cache `automatically` whenever the :func:`~discord.on_invite_create` event is fired'''
+        """It updates the invite cache `automatically` whenever the :func:`~discord.on_invite_create` event is fired"""
         if invite.guild.id not in self._cache:
             self._cache[invite.guild.id] = {}
         self._cache[invite.guild.id][invite.code] = invite
 
     async def remove_invite_cache(self, invite: discord.Invite):
-        '''It removes the invite cache of the deleted invite `automatically` whenever the :func:`~discord.on_invite_delete` event is fired'''
+        """It removes the invite cache of the deleted invite `automatically` whenever the :func:`~discord.on_invite_delete` event is fired"""
         if invite.guild.id not in self._cache:
             return
         ref_invite = self._cache[invite.guild.id][invite.code]
-        if ((ref_invite.created_at.timestamp() + ref_invite.max_age > discord.utils.utcnow().timestamp() or ref_invite.max_age == 0)
-                and ref_invite.max_uses > 0
-                and ref_invite.uses == ref_invite.max_uses - 1):
+        if (
+            (
+                ref_invite.created_at.timestamp() + ref_invite.max_age
+                > discord.utils.utcnow().timestamp()
+                or ref_invite.max_age == 0
+            )
+            and ref_invite.max_uses > 0
+            and ref_invite.uses == ref_invite.max_uses - 1
+        ):
             try:
-                async for entry in invite.guild.audit_logs(limit=1, action=AuditLogAction.invite_delete):
+                async for entry in invite.guild.audit_logs(
+                    limit=1, action=AuditLogAction.invite_delete
+                ):
                     if entry.target.code != invite.code:
-                        self._cache[invite.guild.id][
-                            ref_invite.code].revoked = True
+                        self._cache[invite.guild.id][ref_invite.code].revoked = True
                         return
                 else:
                     self._cache[invite.guild.id][ref_invite.code].revoked = True
@@ -88,7 +105,7 @@ class InviteTracker:
             self._cache[invite.guild.id].pop(invite.code)
 
     async def add_guild_cache(self, guild: discord.Guild) -> None:
-        '''It adds the guild to cache `automatically` whenever the :func:`~discord.on_guild_join` event is fired'''
+        """It adds the guild to cache `automatically` whenever the :func:`~discord.on_guild_join` event is fired"""
         self._cache[guild.id] = {}
         try:
             for invite in await guild.invites():
@@ -96,9 +113,8 @@ class InviteTracker:
         except (discord.Forbidden, discord.HTTPException):
             pass
 
-
     async def remove_guild_cache(self, guild: discord.Guild) -> None:
-        '''It removes the guild from cache `automatically` whenever the :func:`~discord.on_guild_remove` event is fired'''
+        """It removes the guild from cache `automatically` whenever the :func:`~discord.on_guild_remove` event is fired"""
         try:
             self._cache.pop(guild.id)
         except KeyError:
@@ -111,18 +127,22 @@ class InviteTracker:
         :type member: discord.Member
         :return: If the member was bot i.e. invited via integration then it would return :class:`None`
         :rtype: Optional[discord.Invite]
-        """        
+        """
         await sleep(self.bot.latency)
         try:
             for new_invite in await member.guild.invites():
                 for cached_invite in self._cache[member.guild.id].values():
-                    if (new_invite.code == cached_invite.code
-                            and new_invite.uses - cached_invite.uses == 1
-                            or cached_invite.revoked):
+                    if (
+                        new_invite.code == cached_invite.code
+                        and new_invite.uses - cached_invite.uses == 1
+                        or cached_invite.revoked
+                    ):
                         if cached_invite.revoked:
                             self._cache[member.guild.id].pop(cached_invite.code)
                         elif new_invite.inviter == cached_invite.inviter:
-                            self._cache[member.guild.id][cached_invite.code] = new_invite
+                            self._cache[member.guild.id][
+                                cached_invite.code
+                            ] = new_invite
                         else:
                             self._cache[member.guild.id][cached_invite.code].uses += 1
                         return cached_invite

@@ -12,13 +12,12 @@ import TenGiphPy
 from discord.ext import commands
 from discord_together import DiscordTogether
 from DiscordDatabase import DiscordDatabase
-from DiscordUtils import Embed, ErrorEmbed
 from orjson import loads
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
-
+from sqlalchemy import select
 from minato_namikaze.lib import (
     return_all_cogs,
     ChannelAndMessageId,
@@ -33,6 +32,7 @@ from minato_namikaze.lib import (
     format_relative,
     post_commands,
     token_get,
+    Embed, ErrorEmbed
 )
 
 if TYPE_CHECKING:
@@ -153,6 +153,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             await self.load_extension("jishaku")
         except discord.ext.commands.ExtensionAlreadyLoaded:
             pass
+        log.info("All cogs loaded")
         try:
             await self.tree.sync(guild=discord.Object(id=920536143244709889))
         except (
@@ -161,6 +162,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             discord.app_commands.MissingApplicationID,
         ):
             pass
+        log.info("All application commands queued for syncing")
 
         difference = int(
             round(discord.utils.utcnow().timestamp() - self.start_time.timestamp())
@@ -182,14 +184,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         )
         e.set_thumbnail(url=self.user.avatar.url)
 
-        # if not self.persistent_views_added:
-        #     await self.add_persistant_views()
-
         log.info("Started The Bot")
 
         try:
             await stats.send(embed=e)
-        except:
+        except (discord.HTTPException, discord.Forbidden, ValueError, TypeError):
             pass
 
         await self.change_presence(
@@ -211,33 +210,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             activity=discord.Activity(
                 type=discord.ActivityType.watching, name="over Naruto"
             ),
-        )
-
-    # async def add_persistant_views(self):
-    #     database = await self.db.new(
-    #         Database.database_category_name.value,
-    #         Database.reaction_roles_channel_name.value,
-    #     )
-    #     async for message in database._Database__channel.history(limit=None):
-    #         cnt = message.content
-    #         try:
-    #             data = loads(str(cnt))
-    #             data.pop("type")
-    #             data_keys = list(map(str, list(data.keys())))
-    #             data = data[data_keys[0]]
-    #             self.add_view(
-    #                 ReactionPersistentView(
-    #                     reactions_dict=data["reactions"],
-    #                     custom_id=data["custom_id"],
-    #                     database=database,
-    #                 ),
-    #                 message_id=int(data_keys[0]),
-    #             )
-    #             self.persistent_views_added = True
-    #         except Exception as e:
-    #             log.error(e)
-    #             continue
-    #     log.info("Persistent views added")
+        )  
 
     async def update_blacklist(self):
         database = await self.db.new(

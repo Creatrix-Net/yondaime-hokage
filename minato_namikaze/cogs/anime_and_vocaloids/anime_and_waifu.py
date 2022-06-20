@@ -4,10 +4,16 @@ from typing import TYPE_CHECKING, Dict, List, Tuple
 import discord
 from asyncdagpi import Client
 from discord.ext import commands
-from mal import (Anime, AnimeCharacterResult, AnimeSearch, AnimeStaffResult,
-                 Manga, MangaCharacterResult, MangaSearch)
-from minato_namikaze.lib import (Embed, EmbedPaginator, ErrorEmbed,
-                                 LinksAndVars, Tokens)
+from mal import (
+    Anime,
+    AnimeCharacterResult,
+    AnimeSearch,
+    AnimeStaffResult,
+    Manga,
+    MangaCharacterResult,
+    MangaSearch,
+)
+from minato_namikaze.lib import Embed, EmbedPaginator, ErrorEmbed, LinksAndVars, Tokens
 
 if TYPE_CHECKING:
     from lib import Context

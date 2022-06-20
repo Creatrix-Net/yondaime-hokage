@@ -2,7 +2,14 @@ from typing import TYPE_CHECKING, Union
 
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import Database, MemberID, is_mod, Embed, EmbedPaginator, ErrorEmbed
+from minato_namikaze.lib import (
+    Database,
+    MemberID,
+    is_mod,
+    Embed,
+    EmbedPaginator,
+    ErrorEmbed,
+)
 
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context

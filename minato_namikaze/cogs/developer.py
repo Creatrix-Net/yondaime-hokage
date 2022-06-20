@@ -82,7 +82,7 @@ class Server(Base):
     premium_applier_user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     blacklisted = Column(Boolean, default=False, nullable=False)
     show_404_commands_error = Column(Boolean, default=True, nullable=False)
-    prefix = Column(String(5), nullable=False, default=")")
+    prefix = Column(String(5), nullable=True)
 
     def __repr__(self) -> str:
         return f"<Server(id={self.id!r}, premium_applier_user_id={self.premium_applier_user_id!r})>"

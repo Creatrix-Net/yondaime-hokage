@@ -185,7 +185,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         # if not self.persistent_views_added:
         #     await self.add_persistant_views()
 
-        await self.update_blacklist()
         log.info("Started The Bot")
 
         try:

@@ -12,7 +12,7 @@ from minato_namikaze.lib import (
     has_permissions,
     LinksAndVars,
     Base,
-    Embed
+    Embed,
 )
 from sqlalchemy import Column, BigInteger, String, Boolean, JSON, ARRAY
 
@@ -30,7 +30,9 @@ log = logging.getLogger(__name__)
 class Reaction_Roles(Base):
     __tablename__ = "reaction_roles"
 
-    message_id = Column(BigInteger, primary_key=True, index=True, nullable=False, unique=True)
+    message_id = Column(
+        BigInteger, primary_key=True, index=True, nullable=False, unique=True
+    )
     server_id = Column(BigInteger, index=True, nullable=False)
     channel_id = Column(BigInteger, index=True, nullable=False)
     reactions = Column(JSON, nullable=False, default="'{}'::jsonb")
@@ -49,10 +51,10 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         self.bot: "MinatoNamikazeBot" = bot
         self.description = "Setup some reaction roles"
         self.cleanup.start()
-    
+
     async def cog_unload(self):
         self.cleanup.cancel()
-    
+
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="idle", id=922030033067995187)
@@ -60,21 +62,25 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
     @tasks.loop(hours=1)
     async def cleanup(self):
         async with session_obj() as session:
-            query= select(Reaction_Roles)
+            query = select(Reaction_Roles)
             data = (await session.execute(query)).all()
             for row in data:
-                row=row[0]
+                row = row[0]
                 channel = self.bot.get_channel(row.channel_id)
                 if channel is None:
-                    query_delete = delete(Reaction_Roles).where(Reaction_Roles.channel_id == row.channel_id)
+                    query_delete = delete(Reaction_Roles).where(
+                        Reaction_Roles.channel_id == row.channel_id
+                    )
                     await session.execute(query_delete)
                 try:
                     await channel.fetch_message(row.message_id)
                 except (discord.NotFound, discord.Forbidden, discord.HTTPException):
-                    query_delete = delete(Reaction_Roles).where(Reaction_Roles.message_id == row.message_id)
+                    query_delete = delete(Reaction_Roles).where(
+                        Reaction_Roles.message_id == row.message_id
+                    )
                     await session.execute(query_delete)
                 await session.commit()
-                
+
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload: discord.RawMessageDeleteEvent):
         if (
@@ -83,25 +89,29 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         ):
             return
         async with session_obj() as session:
-            query= select(Reaction_Roles).where(Reaction_Roles.message_id==payload.message_id)
+            query = select(Reaction_Roles).where(
+                Reaction_Roles.message_id == payload.message_id
+            )
             try:
                 data = (await session.execute(exists(query).select())).scalar_one()
                 if data:
-                    query_delete = delete(Reaction_Roles).where(Reaction_Roles.message_id == payload.message_id)
+                    query_delete = delete(Reaction_Roles).where(
+                        Reaction_Roles.message_id == payload.message_id
+                    )
                     await session.execute(query_delete)
                     await session.commit()
             except (NoResultFound, MultipleResultsFound):
                 pass
-    
+
     @staticmethod
-    async def delete_messages(list_delete: List[discord.Message]) -> Tuple[List]:     
+    async def delete_messages(list_delete: List[discord.Message]) -> Tuple[List]:
         """Delete the messages from list
 
         :param list_delete: The list of messages to be deleted.
         :type list_delete: List[discord.Message]
         :return: Empty list
         :rtype: Tuple[List]
-        """         
+        """
         for message in list_delete:
             try:
                 await message.delete()
@@ -199,17 +209,20 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         except asyncio.TimeoutError:
             await ctx.author.send(
                 "Reaction Light creation failed, you took too long to provide the requested information.",
-                delete_after=LinksAndVars.delete_message.value
+                delete_after=LinksAndVars.delete_message.value,
             )
-            await self.delete_messages(user_messages+error_messages)
+            await self.delete_messages(user_messages + error_messages)
             return
         finally:
-            user_messages,error_messages = await self.delete_messages(user_messages+error_messages)
+            user_messages, error_messages = await self.delete_messages(
+                user_messages + error_messages
+            )
 
         sent_limited_message = await ctx.send(
             "Would you like to limit users to select only have one of the roles at a given time? Please react with a \U0001f512 to limit users or with a \U0000267e to allow users to select multiple roles."
         )
         user_messages.append(sent_limited_message)
+
         def reaction_check(payload):
             return (
                 payload.member.id == ctx.message.author.id
@@ -231,18 +244,20 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         except asyncio.TimeoutError:
             await ctx.author.send(
                 "Reaction Light creation failed, you took too long to provide the requested information.",
-                delete_after=LinksAndVars.delete_message.value
+                delete_after=LinksAndVars.delete_message.value,
             )
             return
         finally:
-            user_messages,error_messages = await self.delete_messages(user_messages+error_messages)
+            user_messages, error_messages = await self.delete_messages(
+                user_messages + error_messages
+            )
 
         sent_channel_message = await ctx.send(
             "Mention the #channel where to send the auto-role message."
         )
         try:
             while True:
-                channel_message  = await self.bot.wait_for(
+                channel_message = await self.bot.wait_for(
                     "message", timeout=120, check=check
                 )
                 if channel_message.channel_mentions:
@@ -251,21 +266,19 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                     break
                 else:
                     error_messages.append(
-                        (
-                            await ctx.send(
-                                "The channel you mentioned is invalid."
-                            )
-                        )
+                        (await ctx.send("The channel you mentioned is invalid."))
                     )
         except asyncio.TimeoutError:
             await ctx.author.send(
                 "Reaction Light creation failed, you took too long to provide the requested information.",
-                delete_after=LinksAndVars.delete_message.value
+                delete_after=LinksAndVars.delete_message.value,
             )
-            await self.delete_messages(user_messages+error_messages)
+            await self.delete_messages(user_messages + error_messages)
             return
         finally:
-            user_messages, error_messages = await self.delete_messages(user_messages+error_messages)
+            user_messages, error_messages = await self.delete_messages(
+                user_messages + error_messages
+            )
 
         selector_embed = Embed(
             title="Embed_title",
@@ -346,16 +359,19 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         except asyncio.TimeoutError:
             await ctx.author.send(
                 "Reaction Light creation failed, you took too long to provide the requested information.",
-                delete_after=LinksAndVars.delete_message.value
+                delete_after=LinksAndVars.delete_message.value,
             )
-            await self.delete_messages(user_messages+error_messages)
+            await self.delete_messages(user_messages + error_messages)
             return
         finally:
-            await self.delete_messages(user_messages+error_messages)         
+            await self.delete_messages(user_messages + error_messages)
         async with session_obj() as session:
             async with session.begin():
                 session.add(rl_object)
-        await ctx.send(':ok_hand: reaction roles successfully created.', delete_after=LinksAndVars.delete_message.value)
+        await ctx.send(
+            ":ok_hand: reaction roles successfully created.",
+            delete_after=LinksAndVars.delete_message.value,
+        )
 
     @rr.command(aliases=["del_rr", "delete"], usage="<reaction_roles_id aka message.id")
     async def delete_reaction_roles(
@@ -368,20 +384,27 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
         """
         async with session_obj() as session:
-            query = select(Reaction_Roles).where(Reaction_Roles.message_id==reaction_roles_message.id)
+            query = select(Reaction_Roles).where(
+                Reaction_Roles.message_id == reaction_roles_message.id
+            )
             rl_object = (await session.execute(exists(query).select())).scalar_one()
             if not rl_object:
                 await ctx.send(
                     "That message does not have any reaction role associated with it",
-                    delete_after=LinksAndVars.delete_message.value
+                    delete_after=LinksAndVars.delete_message.value,
                 )
                 return
-            query_delete = delete(Reaction_Roles).where(Reaction_Roles.message_id == reaction_roles_message.id)
+            query_delete = delete(Reaction_Roles).where(
+                Reaction_Roles.message_id == reaction_roles_message.id
+            )
             await session.execute(query_delete)
             await session.commit()
-        
+
         await self.delete_messages([reaction_roles_message])
-        await ctx.send(":ok_hand: reaction roles was deleted", delete_after=LinksAndVars.delete_message.value)
+        await ctx.send(
+            ":ok_hand: reaction roles was deleted",
+            delete_after=LinksAndVars.delete_message.value,
+        )
 
 
 async def setup(bot: "MinatoNamikazeBot") -> None:

@@ -28,7 +28,7 @@ class Session:
             bind=Session.get_engine(),
             autoflush=True,
             class_=AsyncSession,
-            expire_on_commit=False
+            expire_on_commit=False,
         )
         return db_session
 

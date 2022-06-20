@@ -20,7 +20,7 @@ from minato_namikaze.lib import (
     format_relative,
     has_permissions,
     is_mod,
-    InviteTracker
+    InviteTracker,
 )
 from orjson import loads
 

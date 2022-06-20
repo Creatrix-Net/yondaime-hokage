@@ -14,7 +14,7 @@ from minato_namikaze.lib import (
     LinksAndVars,
     PrivacyPolicy,
     VotingMenu,
-    Embed
+    Embed,
 )
 from minato_namikaze.lib import time_class as time
 

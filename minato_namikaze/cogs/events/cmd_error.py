@@ -8,7 +8,8 @@ from minato_namikaze.lib import (
     ChannelAndMessageId,
     IncorrectChannelError,
     NoChannelProvided,
-    Embed, ErrorEmbed
+    Embed,
+    ErrorEmbed,
 )
 import logging
 

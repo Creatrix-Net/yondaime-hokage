@@ -24,7 +24,8 @@ from minato_namikaze.lib import (
     plural,
     EmbedPaginator,
     ErrorEmbed,
-    Embed, SuccessEmbed
+    Embed,
+    SuccessEmbed,
 )
 
 if TYPE_CHECKING:

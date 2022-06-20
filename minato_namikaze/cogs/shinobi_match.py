@@ -13,7 +13,8 @@ from minato_namikaze.lib import (
     MemberID,
     ShinobiMatchCharacterSelection,
     cache,
-    Embed, ErrorEmbed
+    Embed,
+    ErrorEmbed,
 )
 
 if TYPE_CHECKING:

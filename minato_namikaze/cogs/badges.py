@@ -8,7 +8,15 @@ from typing import TYPE_CHECKING, Mapping, Union
 import aiohttp
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import BASE_DIR, Badge, Badges, ImageWriter, generate, EmbedPaginator, StarboardEmbed
+from minato_namikaze.lib import (
+    BASE_DIR,
+    Badge,
+    Badges,
+    ImageWriter,
+    generate,
+    EmbedPaginator,
+    StarboardEmbed,
+)
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
 
 if TYPE_CHECKING:

@@ -88,6 +88,7 @@ async def create_tables():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+
 async def drop_tables():
     engine = Session.get_engine()
     async with engine.begin() as conn:
@@ -158,7 +159,7 @@ def downgrade(cog, quiet, index):
 
 
 @db.command(short_help="removes a cog's table", options_metavar="[options]")
-@click.argument("cogs", metavar="<cogs>", default='all')
+@click.argument("cogs", metavar="<cogs>", default="all")
 def drop(cogs):
     """This removes a database and all its migrations.
 
@@ -170,7 +171,7 @@ def drop(cogs):
 
     run = asyncio.get_event_loop().run_until_complete
     click.confirm("Do you really want to do this?", abort=True)
-    if cogs.lower() == 'all':
+    if cogs.lower() == "all":
         cogs = cogs = [
             f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
             for e in return_all_cogs()

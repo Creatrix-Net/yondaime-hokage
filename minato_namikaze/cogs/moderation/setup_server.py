@@ -6,9 +6,7 @@ from json.decoder import JSONDecodeError
 
 import discord
 from discord.ext import commands, tasks
-from DiscordUtils import EmbedPaginator
-from DiscordUtils.embeds import *
-from minato_namikaze.lib import Database, detect_bad_domains, is_mod
+from minato_namikaze.lib import Database, detect_bad_domains, is_mod, EmbedPaginator, ErrorEmbed, Embed, StarboardEmbed
 
 if typing.TYPE_CHECKING:
     from lib import Context

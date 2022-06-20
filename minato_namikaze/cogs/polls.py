@@ -3,8 +3,7 @@ from typing import TYPE_CHECKING, List
 
 import discord
 from discord.ext import commands
-from DiscordUtils import Embed, ErrorEmbed
-
+from minato_namikaze.lib import Embed, ErrorEmbed
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
 

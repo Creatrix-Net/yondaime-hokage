@@ -6,7 +6,6 @@ import aiohttp
 import discord
 import orjson
 from discord.ext import commands
-from DiscordUtils import Embed, ErrorEmbed
 from minato_namikaze.lib import (
     Characters,
     LinksAndVars,
@@ -14,6 +13,7 @@ from minato_namikaze.lib import (
     MemberID,
     ShinobiMatchCharacterSelection,
     cache,
+    Embed, ErrorEmbed
 )
 
 if TYPE_CHECKING:

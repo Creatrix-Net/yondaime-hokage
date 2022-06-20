@@ -17,7 +17,6 @@ import discordlists
 import orjson
 import statcord
 from discord.ext import commands, tasks
-from DiscordUtils import *
 from minato_namikaze.lib import *
 
 if TYPE_CHECKING:

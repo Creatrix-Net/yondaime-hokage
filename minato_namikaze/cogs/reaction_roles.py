@@ -6,13 +6,13 @@ from sqlalchemy.exc import NoResultFound, MultipleResultsFound
 
 import discord
 from discord.ext import commands, tasks
-from DiscordUtils import Embed
 from minato_namikaze.lib import (
     ReactionPersistentView,
     session_obj,
     has_permissions,
     LinksAndVars,
     Base,
+    Embed
 )
 from sqlalchemy import Column, BigInteger, String, Boolean, JSON, ARRAY
 

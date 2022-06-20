@@ -3,7 +3,7 @@ from typing import List, Optional
 import discord
 from akinator.async_aki import Akinator as _Akinator_
 
-from DiscordUtils import Embed
+from ...util import Embed
 
 YES = discord.PartialEmoji(name="\U00002705")
 NO = discord.PartialEmoji(name="\U0000274c")

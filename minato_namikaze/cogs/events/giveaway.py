@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Union
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import Cog, command
-from DiscordUtils import Embed, ErrorEmbed, SuccessEmbed
 from minato_namikaze.lib import (
     Database,
     FutureTime,
@@ -19,6 +18,7 @@ from minato_namikaze.lib import (
     convert,
     format_relative,
     is_mod,
+    Embed, ErrorEmbed, SuccessEmbed
 )
 
 if TYPE_CHECKING:

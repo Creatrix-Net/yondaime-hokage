@@ -4,7 +4,7 @@ from typing import List, Optional, Tuple, Union
 
 import discord
 from discord.ext import commands
-from DiscordUtils import Embed, StarboardEmbed
+from ...util import Embed, StarboardEmbed
 from StringProgressBar import progressBar
 
 from ..converter import Characters

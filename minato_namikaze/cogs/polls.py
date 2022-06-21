@@ -62,7 +62,7 @@ class QuickPoll(commands.Cog):
                 log.warning(e)
                 continue
 
-    @commands.hybrid_command(pass_context=True, aliases=["poll", "polls"])
+    @commands.command(pass_context=True, aliases=["poll", "polls"])
     async def polltime(self, ctx: "Context"):
         """Create polls easily"""
 
@@ -178,7 +178,7 @@ class QuickPoll(commands.Cog):
         )
         await self.delete_message(all_messages)
 
-    @commands.hybrid_command(
+    @commands.command(
         pass_context=True, usage="<poll id>", aliases=["result", "results"]
     )
     async def tally(self, ctx: "Context", poll_id: commands.MessageConverter):
@@ -256,7 +256,7 @@ class QuickPoll(commands.Cog):
         embed.timestamp = poll_id.created_at
         await ctx.send(embed=embed, reference=poll_id)
 
-    @commands.hybrid_command()
+    @commands.command()
     @commands.guild_only()
     async def quickpoll(self, ctx: "Context", *questions_and_choices: str):
         """

@@ -67,10 +67,10 @@ class BackUp(commands.Cog):
         self,
         ctx: "Context",
         channel: Optional[
-            Union[commands.TextChannelConverter, discord.TextChannel]
+            discord.TextChannel
         ] = None,
         send: Optional[
-            Union[commands.TextChannelConverter, discord.TextChannel]
+            discord.TextChannel
         ] = None,
     ):
         """
@@ -351,9 +351,7 @@ class BackUp(commands.Cog):
         channel: Optional[
             Union[
                 discord.TextChannel,
-                commands.TextChannelConverter,
                 discord.Thread,
-                commands.ThreadConverter,
             ]
         ] = None,
     ):

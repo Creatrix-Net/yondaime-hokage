@@ -84,7 +84,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 if not self.bot.local:
                     await message.delete()
 
-    @commands.hybrid_group()
+    @commands.group()
     @commands.guild_only()
     @is_mod()
     async def setup(self, ctx: "Context"):
@@ -293,7 +293,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         log_channel = await self.bot.fetch_channel(log_config)
         await log_channel.send(embed=embed)
 
-    @commands.hybrid_command()
+    @commands.command()
     @commands.guild_only()
     @is_mod()
     async def raw_data(self, ctx: "Context"):
@@ -371,7 +371,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await database_antiraid.delete(guild.id)
         await database_mentionspam.delete(guild.id)
 
-    @commands.hybrid_command(
+    @commands.command(
         alisases=["datadelete", "delete_data", "data_delete"], usage="[type_data]"
     )
     @commands.guild_only()

@@ -56,7 +56,7 @@ class Moderation(commands.Cog):
         )
 
     # set delay
-    @commands.hybrid_command(usage="<time in seconds>")
+    @commands.command(usage="<time in seconds>")
     @commands.has_permissions(manage_messages=True)
     @commands.guild_only()
     async def setdelay(self, ctx: "Context", seconds: int):
@@ -78,7 +78,7 @@ class Moderation(commands.Cog):
         await ctx.send(f"{message}")
 
     # kick
-    @commands.hybrid_command(
+    @commands.command(
         name="kick",
         description="A command which kicks a given user",
         usage="<user> [reason]",
@@ -108,7 +108,7 @@ class Moderation(commands.Cog):
         await ctx.send(embed=embed)
 
     # ban
-    @commands.hybrid_command(
+    @commands.command(
         name="ban",
         description="A command which bans a given user",
         usage="<user> [reason]",
@@ -152,7 +152,7 @@ class Moderation(commands.Cog):
         await ctx.send(embed=embed)
 
     # banlist
-    @commands.hybrid_command(
+    @commands.command(
         name="banlist",
         usage="[member.id ,member.mention or member.name.with.tag]",
     )
@@ -226,7 +226,7 @@ class Moderation(commands.Cog):
             )
 
     # Soft Ban
-    @commands.hybrid_command()
+    @commands.command()
     @commands.guild_only()
     @has_permissions(kick_members=True)
     async def softban(
@@ -261,7 +261,7 @@ class Moderation(commands.Cog):
         await ctx.send("\N{OK HAND SIGN}", delete_after=4)
 
     # Unban
-    @commands.hybrid_command()
+    @commands.command()
     @commands.guild_only()
     @has_permissions(ban_members=True)
     async def unban(
@@ -362,7 +362,7 @@ class Moderation(commands.Cog):
         e.description += "\n**DM-Members**: " + "\U00002611" if dmed else "\U0000274c"
 
     # Add Roles
-    @commands.hybrid_command(
+    @commands.command(
         pass_context=True, usage="<member.mention> <role>", alias=["add_roles"]
     )
     @commands.guild_only()
@@ -396,7 +396,7 @@ class Moderation(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-    @commands.hybrid_command()
+    @commands.command()
     @commands.guild_only()
     @has_permissions(ban_members=True)
     async def multiban(
@@ -440,7 +440,7 @@ class Moderation(commands.Cog):
 
         await ctx.send(f"Banned {total_members - failed}/{total_members} members.")
 
-    @commands.hybrid_command()
+    @commands.command()
     @commands.guild_only()
     @has_permissions(ban_members=True)
     async def massban(self, ctx: "Context", *, args):
@@ -663,7 +663,7 @@ class Moderation(commands.Cog):
         await ctx.send(f"Banned {count}/{len(members)}")
 
     # Warn
-    @commands.hybrid_command(pass_context=True, usage="<member.mention> [optional: reason]")
+    @commands.command(pass_context=True, usage="<member.mention> [optional: reason]")
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
     async def warn(
@@ -707,7 +707,7 @@ class Moderation(commands.Cog):
             delete_after=10,
         )
 
-    @commands.hybrid_command(pass_context=True, usage="[member.mention]")
+    @commands.command(pass_context=True, usage="[member.mention]")
     @commands.guild_only()
     async def warnlist(
         self,
@@ -738,7 +738,7 @@ class Moderation(commands.Cog):
         message = f"mentions: {member}  in: {warning_channel}"
         await ctx.send(message)
 
-    @commands.hybrid_command(aliases=["newmembers"], usage="[count]")
+    @commands.command(aliases=["newmembers"], usage="[count]")
     @commands.guild_only()
     async def newusers(self, ctx: "Context", *, count: Optional[int] = 5):
         """
@@ -799,7 +799,7 @@ class Moderation(commands.Cog):
         deleted = await ctx.channel.purge(limit=search, check=check, before=ctx.message)
         return Counter(m.author.display_name for m in deleted)
 
-    @commands.hybrid_command()
+    @commands.command()
     async def cleanup(self, ctx: "Context", search=100):
         """Cleans up the bot's messages from the channel.
 
@@ -843,7 +843,7 @@ class Moderation(commands.Cog):
 
         await ctx.send("\n".join(messages), delete_after=10)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="simeplepurge",
         description="A command which purges the channel it is called in",
         usage="[amount]",
@@ -865,7 +865,7 @@ class Moderation(commands.Cog):
         )
         await ctx.send(embed=embed, delete_after=4)
 
-    @commands.hybrid_group(aliases=["purge"])
+    @commands.group(aliases=["purge"])
     @commands.guild_only()
     @has_permissions(manage_messages=True)
     async def remove(self, ctx: "Context"):
@@ -1131,7 +1131,7 @@ class Moderation(commands.Cog):
             ctx, args.search, predicate, before=args.before, after=args.after
         )
 
-    @commands.hybrid_command(aliases=["mute"])
+    @commands.command(aliases=["mute"])
     @commands.guild_only()
     @commands.has_guild_permissions(moderate_members=True)
     @has_permissions(moderate_members=True)
@@ -1158,7 +1158,7 @@ class Moderation(commands.Cog):
             )
         )
 
-    @commands.hybrid_command(aliases=["unmute"])
+    @commands.command(aliases=["unmute"])
     @commands.guild_only()
     @commands.has_guild_permissions(moderate_members=True)
     @has_permissions(moderate_members=True)
@@ -1182,7 +1182,7 @@ class Moderation(commands.Cog):
             embed=SuccessEmbed(description=f"**Removed timed out** from {member}")
         )
 
-    @commands.hybrid_command(aliases=["vcmute"])
+    @commands.command(aliases=["vcmute"])
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
     @has_permissions(mute_members=True)
@@ -1209,7 +1209,7 @@ class Moderation(commands.Cog):
             )
         )
 
-    @commands.hybrid_command(aliases=["vcunmute"])
+    @commands.command(aliases=["vcunmute"])
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
     @has_permissions(mute_members=True)
@@ -1236,7 +1236,7 @@ class Moderation(commands.Cog):
             )
         )
 
-    @commands.hybrid_command(aliases=["serverdeaf"])
+    @commands.command(aliases=["serverdeaf"])
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
     @has_permissions(deafen_members=True)
@@ -1259,7 +1259,7 @@ class Moderation(commands.Cog):
         await member.edit(deafen=True, reason=reason)
         await ctx.send(embed=ErrorEmbed(description=f"**Deafend** {member}"))
 
-    @commands.hybrid_command(aliases=["serverundeaf"])
+    @commands.command(aliases=["serverundeaf"])
     @commands.guild_only()
     @commands.has_guild_permissions(deafen_members=True)
     @has_permissions(deafen_members=True)
@@ -1282,7 +1282,7 @@ class Moderation(commands.Cog):
         await member.edit(deafen=False, reason=reason)
         await ctx.send(embed=SuccessEmbed(description=f"**Un-Deafend** {member}"))
 
-    @commands.hybrid_command(aliases=["stagesuppress", "stagemute"])
+    @commands.command(aliases=["stagesuppress", "stagemute"])
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
     @has_permissions(mute_members=True)
@@ -1309,7 +1309,7 @@ class Moderation(commands.Cog):
             )
         )
 
-    @commands.hybrid_command(aliases=["stageunsuppress", "stageunmute"])
+    @commands.command(aliases=["stageunsuppress", "stageunmute"])
     @commands.guild_only()
     @commands.has_guild_permissions(mute_members=True)
     @has_permissions(mute_members=True)
@@ -1336,7 +1336,7 @@ class Moderation(commands.Cog):
             )
         )
 
-    @commands.hybrid_group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True)
     @commands.guild_only()
     async def lock(self, ctx: "Context"):
         """Locking Commands"""
@@ -1378,7 +1378,7 @@ class Moderation(commands.Cog):
             )
         await ctx.send(f'{" ,".join(list(map(lambda a: a.mention, channels)))} locked.')
 
-    @commands.hybrid_group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True)
     @commands.guild_only()
     async def unlock(self, ctx: "Context"):
         """Unlocking Commands"""
@@ -1419,7 +1419,7 @@ class Moderation(commands.Cog):
             f'{" ,".join(list(map(lambda a: a.mention, channels)))} unlocked.'
         )
 
-    @commands.hybrid_command(aliases=["threadjoin"])
+    @commands.command(aliases=["threadjoin"])
     @commands.guild_only()
     async def jointhread(self, ctx: "Context", channel: discord.Thread):
         """Joins the specified thread"""

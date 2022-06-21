@@ -61,7 +61,7 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
         embed.set_author(name=author.display_name, icon_url=author.display_avatar.url)
         return embed
 
-    @commands.hybrid_command(
+    @commands.command(
         usage="<opponent.mention>",
         aliases=["shinobi_match", "matchwith", "shinobimatch", "match_with"],
     )

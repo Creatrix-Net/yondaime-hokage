@@ -38,7 +38,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{FRAME WITH PICTURE}")
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def wni(
         self, ctx: "Context", *, member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -59,7 +59,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         embed.set_image(url="attachment://wni.png")
         await ctx.send(file=file, embed=embed)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def wi(
         self, ctx: "Context", *, member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -86,7 +86,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await sleep(3)
         os.remove("wi.png")
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def triggered(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -100,7 +100,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://triggered.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.hybrid_command(
+    @commands.command(
         cooldown_after_parsing=True,
         usage="[discord.member.mention.to.send | member.id] <your.message>",
     )
@@ -121,7 +121,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://message.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.hybrid_command(
+    @commands.command(
         cooldown_after_parsing=True, usage="<member.mention, captcha.text>"
     )
     async def captcha(
@@ -148,7 +148,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             e.set_image(url=f"attachment://captcha.{img.format}")
             await ctx.send(file=e2file, embed=e)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def pixel(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -162,7 +162,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://pixel.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def jail(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -176,7 +176,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://jail.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def wanted(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -190,7 +190,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://wanted.{img.format}")
         await ctx.send(file=e2file, embed=e)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def rainbow(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -204,7 +204,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://rainbow.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def gay(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -218,7 +218,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://gay.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def trash(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -232,7 +232,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://trash.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(
+    @commands.command(
         aliases=["delete_trash", "dt"], usage="[member.mention | member.id]"
     )
     async def delete(
@@ -248,7 +248,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://delete.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def angel(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -262,7 +262,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://angel.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def satan(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -275,7 +275,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://satan.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(
+    @commands.command(
         aliases=["chp", "chpaint", "charcoal_paint", "charcoalp"],
         usage="[member.mention | member.id]",
     )
@@ -292,7 +292,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://charcoal.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def hitler(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -306,7 +306,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://hitler.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def wasted(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -320,7 +320,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://wasted.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def bomb(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -334,7 +334,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         e.set_image(url=f"attachment://bomb.{img.format}")
         await ctx.send(embed=e, file=e2file)
 
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def pat(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -349,7 +349,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(file=e2file, embed=e)
 
     # spank
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def spank(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -371,7 +371,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=embed)
 
     # slap
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def slap(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -400,7 +400,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=e, file=e2file)
 
     # hug
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def hug(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -422,7 +422,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=embed)
 
     # poke
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def poke(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -446,7 +446,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=embed)
 
     # high5
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def high5(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):
@@ -464,7 +464,7 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         await ctx.send(embed=embed)
 
     # party
-    @commands.hybrid_command(usage="[member.mention | member.id]")
+    @commands.command(usage="[member.mention | member.id]")
     async def party(
         self, ctx: "Context", member: Optional[Union[discord.Member, MemberID]]
     ):

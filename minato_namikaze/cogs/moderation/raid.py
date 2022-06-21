@@ -296,7 +296,7 @@ class AntiRaid(commands.Cog):
                 async with self._disable_lock:
                     await self.disable_raid_mode(guild_id)
 
-    @commands.group(aliases=["raids", "antiraid"], invoke_without_command=True)
+    @commands.hybrid_group(aliases=["raids", "antiraid"], invoke_without_command=True)
     @is_mod()
     async def raid(self, ctx: "Context"):
         """Controls raid mode on the server.
@@ -429,7 +429,7 @@ class AntiRaid(commands.Cog):
             f"Raid mode enabled strictly. Broadcasting join messages to {channel.mention}."
         )
 
-    @commands.group(invoke_without_command=True)
+    @commands.hybrid_group(invoke_without_command=True)
     @commands.guild_only()
     @has_permissions(ban_members=True)
     async def mentionspam(self, ctx: "Context", count: Optional[int] = None):

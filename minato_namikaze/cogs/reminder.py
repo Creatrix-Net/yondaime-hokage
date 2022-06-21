@@ -94,7 +94,7 @@ class Timer:
 
     def __repr__(self) -> str:
         return f"<Timer created={self.created_at} expires={self.expires} event={self.event}>"
-    
+
     def __str__(self) -> str:
         return self.__repr__()
 

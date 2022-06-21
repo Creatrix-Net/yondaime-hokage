@@ -24,8 +24,6 @@ if TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 
-import logging
-
 from sqlalchemy import (
     BigInteger,
     Boolean,

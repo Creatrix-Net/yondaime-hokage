@@ -4,7 +4,6 @@ from sqlalchemy import pool, create_engine
 
 from alembic import context
 from alembic.config import Config
-from alembic import context
 
 
 from minato_namikaze import vars

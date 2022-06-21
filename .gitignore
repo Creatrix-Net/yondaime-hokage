@@ -5,6 +5,7 @@ _build
 _build/*
 .ini
 alembic.ini
+logs/*
 
 *copy.py
 

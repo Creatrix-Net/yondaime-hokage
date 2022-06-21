@@ -122,10 +122,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 integrations=[
                     AioHttpIntegration(),
                     ThreadingIntegration(propagate_hub=True),
-                    LoggingIntegration(
-                        level=logging.INFO,
-                        event_level=logging.WARNING 
-                    ),
+                    LoggingIntegration(level=logging.INFO, event_level=logging.WARNING),
                     ModulesIntegration(),
                 ],
             )

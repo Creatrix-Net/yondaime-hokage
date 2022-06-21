@@ -50,7 +50,7 @@ class Weather(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{SUN BEHIND CLOUD}")
 
-    @commands.group(name="weather", aliases=["we"], invoke_without_command=True)
+    @commands.hybrid_group(name="weather", aliases=["we"], invoke_without_command=True)
     @commands.bot_has_permissions(embed_links=True)
     async def weather(self, ctx: "Context", *, location: str) -> None:
         """

@@ -262,7 +262,7 @@ class BadgesCog(commands.Cog, name="Badges"):
                 to_return = await Badge.from_json(badge)
         return to_return
 
-    @commands.command(aliases=["badge"])
+    @commands.hybrid_command(aliases=["badge"])
     async def badges(self, ctx: "Context", *, badge: str) -> None:
         """
         Creates a fun fake badge based on your discord profile
@@ -288,7 +288,7 @@ class BadgesCog(commands.Cog, name="Badges"):
             badge_img.close()
             await ctx.send(files=[image])
 
-    @commands.command(aliases=["gbadge"])
+    @commands.hybrid_command(aliases=["gbadge"])
     async def gbadges(self, ctx: "Context", *, badge: str) -> None:
         """
         Creates a fun fake gif badge based on your discord profile
@@ -313,7 +313,7 @@ class BadgesCog(commands.Cog, name="Badges"):
             badge_img.close()
             await ctx.send(file=image)
 
-    @commands.command()
+    @commands.hybrid_command()
     async def listbadges(self, ctx: "Context") -> None:
         """
         List the available badges that can be created

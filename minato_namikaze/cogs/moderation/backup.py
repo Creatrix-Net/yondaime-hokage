@@ -50,7 +50,7 @@ class BackUp(commands.Cog):
                     await message.delete()
                 continue
 
-    @commands.group(invoke_without_command=True)
+    @commands.hybrid_group(invoke_without_command=True)
     @commands.guild_only()
     @commands.has_permissions(
         manage_guild=True, manage_channels=True, manage_roles=True

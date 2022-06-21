@@ -11,8 +11,14 @@ from logging.handlers import TimedRotatingFileHandler
 import click
 from colorama import Back, Fore, Style, init
 
-from minato_namikaze import (BASE_DIR, Base, MinatoNamikazeBot, Session,
-                             return_all_cogs, vars)
+from minato_namikaze import (
+    BASE_DIR,
+    Base,
+    MinatoNamikazeBot,
+    Session,
+    return_all_cogs,
+    vars,
+)
 
 init(autoreset=True)
 
@@ -37,6 +43,7 @@ class RemoveNoise(logging.Filter):
             return False
         return True
 
+
 class ColorFormatter(logging.Formatter):
     # Change this dictionary to suit your coloring needs!
     COLORS = {
@@ -44,7 +51,7 @@ class ColorFormatter(logging.Formatter):
         "ERROR": Fore.RED,
         "DEBUG": Fore.CYAN,
         "INFO": Fore.GREEN,
-        "CRITICAL": Fore.RED + Back.WHITE + Style.DIM
+        "CRITICAL": Fore.RED + Back.WHITE + Style.DIM,
     }
 
     def format(self, record):
@@ -68,9 +75,15 @@ def setup_logging(log_file):
         logging.getLogger("discord.state").addFilter(RemoveNoise())
 
         log.setLevel(logging.INFO)
-        log_dir = BASE_DIR.parent / 'logs'
+        log_dir = BASE_DIR.parent / "logs"
         handler = logging.StreamHandler()
-        handler.setFormatter(ColorFormatter("[{asctime}] [{levelname}] {name}: {message}", style="{", datefmt="%Y-%m-%d %H:%M:%S"))
+        handler.setFormatter(
+            ColorFormatter(
+                "[{asctime}] [{levelname}] {name}: {message}",
+                style="{",
+                datefmt="%Y-%m-%d %H:%M:%S",
+            )
+        )
         if file_or_not:
             log_dir.mkdir(exist_ok=True)
             handler = TimedRotatingFileHandler(
@@ -79,9 +92,15 @@ def setup_logging(log_file):
                 # mode="w",
                 # maxBytes=max_bytes,
                 backupCount=7,
-                when='midnight'
+                when="midnight",
             )
-            handler.setFormatter(logging.Formatter("[{asctime}] [{levelname}] {name}: {message}", style="{", datefmt="%Y-%m-%d %H:%M:%S"))
+            handler.setFormatter(
+                logging.Formatter(
+                    "[{asctime}] [{levelname}] {name}: {message}",
+                    style="{",
+                    datefmt="%Y-%m-%d %H:%M:%S",
+                )
+            )
         log.addHandler(handler)
         yield
     finally:
@@ -99,8 +118,8 @@ async def run_bot():
 
 @click.group(invoke_without_command=True, options_metavar="[options]")
 @click.pass_context
-@click.option('--log-file/--no-log-file', default=False)
-def main(ctx,log_file):
+@click.option("--log-file/--no-log-file", default=False)
+def main(ctx, log_file):
     """Launches the bot."""
     if ctx.invoked_subcommand is None:
         with setup_logging(log_file):

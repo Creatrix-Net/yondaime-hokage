@@ -17,7 +17,7 @@ os.environ["ALEMBIC_CONFIG"] = str(vars.CONFIG_FILE)
 try:
     import uvloop  # type: ignore
 except ImportError:
-    if sys.platform.startswith("win32") or sys.platform.startswith("cygwin"):
+    if sys.platform.startswith(("win32", "cygwin")):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 else:
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())

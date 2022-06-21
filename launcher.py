@@ -1,16 +1,20 @@
-import sys, os
-import click
-import logging
 import asyncio
-import importlib
 import contextlib
+import importlib
+import logging
+import os
 import subprocess
-
-from minato_namikaze import MinatoNamikazeBot, return_all_cogs, Base, Session, vars
-
-from logging.handlers import RotatingFileHandler
-
+import sys
 import traceback
+from logging.handlers import TimedRotatingFileHandler
+
+import click
+from colorama import Back, Fore, Style, init
+
+from minato_namikaze import (BASE_DIR, Base, MinatoNamikazeBot, Session,
+                             return_all_cogs, vars)
+
+init(autoreset=True)
 
 os.environ["ALEMBIC_CONFIG"] = str(vars.CONFIG_FILE)
 
@@ -33,33 +37,52 @@ class RemoveNoise(logging.Filter):
             return False
         return True
 
+class ColorFormatter(logging.Formatter):
+    # Change this dictionary to suit your coloring needs!
+    COLORS = {
+        "WARNING": Fore.YELLOW,
+        "ERROR": Fore.RED,
+        "DEBUG": Fore.CYAN,
+        "INFO": Fore.GREEN,
+        "CRITICAL": Fore.RED + Back.WHITE + Style.DIM
+    }
+
+    def format(self, record):
+        color = self.COLORS.get(record.levelname, "")
+        record.name = Fore.CYAN + str(record.name)
+        if color:
+            record.levelname = color + str(record.levelname)
+            record.msg = color + str(record.msg)
+        return logging.Formatter.format(self, record)
+
 
 @contextlib.contextmanager
-def setup_logging():
+def setup_logging(log_file):
     log = logging.getLogger()
-
+    file_or_not = (not vars.envConfig.LOCAL) or log_file
     try:
         # __enter__
-        max_bytes = 32 * 1024 * 1024  # 32 MiB
+        # max_bytes = 32 * 1024 * 1024  # 32 MiB
         logging.getLogger("discord").setLevel(logging.INFO)
         logging.getLogger("discord.http").setLevel(logging.WARNING)
         logging.getLogger("discord.state").addFilter(RemoveNoise())
 
         log.setLevel(logging.INFO)
-        handler = RotatingFileHandler(
-            filename="minato_namikaze.log",
-            encoding="utf-8",
-            mode="w",
-            maxBytes=max_bytes,
-            backupCount=5,
-        )
-        dt_fmt = "%Y-%m-%d %H:%M:%S"
-        fmt = logging.Formatter(
-            "[{asctime}] [{levelname:<7}] {name}: {message}", dt_fmt, style="{"
-        )
-        handler.setFormatter(fmt)
+        log_dir = BASE_DIR.parent / 'logs'
+        handler = logging.StreamHandler()
+        handler.setFormatter(ColorFormatter("[{asctime}] [{levelname}] {name}: {message}", style="{", datefmt="%Y-%m-%d %H:%M:%S"))
+        if file_or_not:
+            log_dir.mkdir(exist_ok=True)
+            handler = TimedRotatingFileHandler(
+                filename="logs/minato_namikaze.log",
+                encoding="utf-8",
+                # mode="w",
+                # maxBytes=max_bytes,
+                backupCount=7,
+                when='midnight'
+            )
+            handler.setFormatter(logging.Formatter("[{asctime}] [{levelname}] {name}: {message}", style="{", datefmt="%Y-%m-%d %H:%M:%S"))
         log.addHandler(handler)
-
         yield
     finally:
         # __exit__
@@ -76,10 +99,11 @@ async def run_bot():
 
 @click.group(invoke_without_command=True, options_metavar="[options]")
 @click.pass_context
-def main(ctx):
+@click.option('--log-file/--no-log-file', default=False)
+def main(ctx,log_file):
     """Launches the bot."""
     if ctx.invoked_subcommand is None:
-        with setup_logging():
+        with setup_logging(log_file):
             asyncio.run(run_bot())
 
 

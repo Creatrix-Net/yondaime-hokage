@@ -1,6 +1,7 @@
 ﻿aiohttp[speedups]
 akinator.py
 async-timeout
+colorama
 discord-together
 asyncdagpi
 betterstatcord.py

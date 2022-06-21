@@ -25,7 +25,6 @@ from minato_namikaze.lib import (
     Database,
     LinksAndVars,
     PaginatedHelpCommand,
-    ReactionPersistentView,
     Tokens,
     Webhooks,
     format_dt,
@@ -123,8 +122,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 traces_sample_rate=1.0,
                 integrations=[
                     AioHttpIntegration(),
-                    ThreadingIntegration(),
-                    LoggingIntegration(),
+                    ThreadingIntegration(propagate_hub=True),
+                    LoggingIntegration(
+                        level=logging.INFO,
+                        event_level=logging.WARNING 
+                    ),
                     ModulesIntegration(),
                 ],
             )

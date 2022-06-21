@@ -37,7 +37,6 @@ from minato_namikaze.lib import (
 )
 
 if TYPE_CHECKING:
-    from collections import Counter
     from .cogs.reminder import Reminder
 
 log = logging.getLogger(__name__)

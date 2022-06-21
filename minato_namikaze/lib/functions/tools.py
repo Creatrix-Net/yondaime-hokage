@@ -116,7 +116,7 @@ def secure_delete(path: Union[AnyStr, pathlib.Path], passes: int = 3) -> None:
     Answer was copied from stackoverflow with some type hinting changes :)
     https://stackoverflow.com/questions/17455300/python-securely-remove-file
     """
-    with open(path, "ba+", buffering=0) as delfile:
+    with open(path, "ba+", buffering=0) as delfile: # skipcq: PTC-W6004
         length: int = delfile.tell()
     delfile.close()
     with open(path, "br+", buffering=0) as delfile:

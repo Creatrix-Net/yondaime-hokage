@@ -66,12 +66,8 @@ class BackUp(commands.Cog):
     async def channellogs(
         self,
         ctx: "Context",
-        channel: Optional[
-            discord.TextChannel
-        ] = None,
-        send: Optional[
-            discord.TextChannel
-        ] = None,
+        channel: Optional[discord.TextChannel] = None,
+        send: Optional[discord.TextChannel] = None,
     ):
         """
         Creat a backup of all channel data as json files This might take a long time

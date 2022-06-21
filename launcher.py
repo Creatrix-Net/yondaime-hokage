@@ -85,6 +85,7 @@ def setup_logging(log_file):
         )
         if file_or_not:
             from logging.handlers import TimedRotatingFileHandler
+
             log_dir.mkdir(exist_ok=True)
             handler = TimedRotatingFileHandler(
                 filename="logs/minato_namikaze.log",

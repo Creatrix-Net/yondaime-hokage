@@ -289,9 +289,8 @@ class BotEventsCommands(commands.Cog):
                 await error_channel.send(
                     embed=e,
                     file=discord.File(
-                        io.BytesIO(
-                            str(traceback.format_exc()).encode()
-                        ),filename="traceback.txt"
+                        io.BytesIO(str(traceback.format_exc()).encode()),
+                        filename="traceback.txt",
                     ),
                 )
 

@@ -290,9 +290,8 @@ class BotEventsCommands(commands.Cog):
                     embed=e,
                     file=discord.File(
                         io.BytesIO(
-                            str(traceback.format_exc()).encode(),
-                            filename="traceback.txt",
-                        )
+                            str(traceback.format_exc()).encode()
+                        ),filename="traceback.txt"
                     ),
                 )
 

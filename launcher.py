@@ -186,7 +186,9 @@ def makemigrations(message):
 
 @db.command(short_help="Migrates from an migration revision")
 @click.option("--upgrade/--downgrade", default=True)
-@click.argument("revision", nargs=1, metavar="[revision]", required=False, default='head')
+@click.argument(
+    "revision", nargs=1, metavar="[revision]", required=False, default="head"
+)
 def migrate(upgrade, revision):
     """Runs an upgrade from a migration"""
     if upgrade:
@@ -196,7 +198,11 @@ def migrate(upgrade, revision):
         )
     else:
         subprocess.run(  # skipcq: BAN-B607
-            ["alembic", "downgrade", 'base' if revision.lower() == "head" else revision],
+            [
+                "alembic",
+                "downgrade",
+                "base" if revision.lower() == "head" else revision,
+            ],
             check=False,
         )
 

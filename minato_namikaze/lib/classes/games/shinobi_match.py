@@ -7,7 +7,7 @@ from discord.ext import commands
 from ...util import Embed, StarboardEmbed
 from StringProgressBar import progressBar
 
-from ..converter import Characters
+from ..converter_cache_class import Characters
 
 
 class CharacterSelect(discord.ui.Select["ShinobiMatchCharacterSelection"]):

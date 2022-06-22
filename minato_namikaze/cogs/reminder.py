@@ -5,24 +5,28 @@ from __future__ import annotations
 import asyncio
 import datetime
 import textwrap
-from typing import TYPE_CHECKING, Any, Optional, Sequence
+from typing import TYPE_CHECKING, Any, Optional
 
 import discord
 from discord.ext import commands
 from minato_namikaze.lib import (
     plural,
     session,
-    time,
+    human_timedelta,
+    format_relative,
     Base,
     FriendlyTimeResult,
     UserFriendlyTime,
+    Timer,
+    session_obj
 )
-from sqlalchemy import JSON, Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, select, delete, insert, and_
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.exc import MultipleResultsFound, NoResultFound
 
 from typing_extensions import Annotated
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
     from minato_namikaze.lib import Context
     from .. import MinatoNamikazeBot
 
@@ -38,65 +42,7 @@ class Reminders(Base):
     expires = Column(DateTime, index=True)
     created = Column(DateTime, default="now() at time zone 'utc'", nullable=False)
     event = Column(String, nullable=False)
-    extra = Column(JSON, default="'{}'::jsonb", nullable=True)
-
-
-class Timer:
-    __slots__ = ("args", "kwargs", "event", "id", "created_at", "expires")
-
-    def __init__(self, *, record):
-        self.id: int = record["id"]
-
-        extra = record["extra"]
-        self.args: Sequence[Any] = extra.get("args", [])
-        self.kwargs: dict[str, Any] = extra.get("kwargs", {})
-        self.event: str = record["event"]
-        self.created_at: datetime.datetime = record["created"]
-        self.expires: datetime.datetime = record["expires"]
-
-    @classmethod
-    def temporary(
-        cls,
-        *,
-        expires: datetime.datetime,
-        created: datetime.datetime,
-        event: str,
-        args: Sequence[Any],
-        kwargs: dict[str, Any],
-    ) -> Self:
-        pseudo = {
-            "id": None,
-            "extra": {"args": args, "kwargs": kwargs},
-            "event": event,
-            "created": created,
-            "expires": expires,
-        }
-        return cls(record=pseudo)
-
-    def __eq__(self, other: object) -> bool:
-        try:
-            return self.id == other.id  # type: ignore
-        except AttributeError:
-            return False
-
-    def __hash__(self) -> int:
-        return hash(self.id)
-
-    @property
-    def human_delta(self) -> str:
-        return time.format_relative(self.created_at)
-
-    @property
-    def author_id(self) -> Optional[int]:
-        if self.args:
-            return int(self.args[0])
-        return None
-
-    def __repr__(self) -> str:
-        return f"<Timer created={self.created_at} expires={self.expires} event={self.event}>"
-
-    def __str__(self) -> str:
-        return self.__repr__()
+    extra = Column(JSONB, nullable=True)
 
 
 class Reminder(commands.Cog):
@@ -124,34 +70,35 @@ class Reminder(commands.Cog):
             )
 
     async def get_active_timer(
-        self, *, connection=None, days: int = 7
+        self, *, days: int = 7
     ) -> Optional[Timer]:
-        query = "SELECT * FROM reminders WHERE expires < (CURRENT_DATE + $1::interval) ORDER BY expires LIMIT 1;"
-        con = connection or self.bot.pool
-
-        record = await con.fetchrow(query, datetime.timedelta(days=days))
+        query = select(Reminders).where(Reminders.expires<datetime.timedelta(days=days))
+        async with session_obj() as session:
+            try:
+                record = (await session.execute(query)).one()
+            except (NoResultFound, MultipleResultsFound):
+                record = False
         return Timer(record=record) if record else None
 
-    async def wait_for_active_timers(self, *, connection=None, days: int = 7) -> Timer:
-        async with session.MaybeAcquire(
-            connection=connection, pool=self.bot.pool
-        ) as con:
-            timer = await self.get_active_timer(connection=con, days=days)
-            if timer is not None:
-                self._have_data.set()
-                return timer
+    async def wait_for_active_timers(self, *, days: int = 7) -> Timer:
+        timer = await self.get_active_timer(days=days)
+        if timer is not None:
+            self._have_data.set()
+            return timer
 
-            self._have_data.clear()
-            self._current_timer = None
-            await self._have_data.wait()
+        self._have_data.clear()
+        self._current_timer = None
+        await self._have_data.wait()
 
-            # At this point we always have data
-            return await self.get_active_timer(connection=con, days=days)  # type: ignore
+        # At this point we always have data
+        return await self.get_active_timer(days=days)  # type: ignore
 
     async def call_timer(self, timer: Timer) -> None:
         # delete the timer
-        query = "DELETE FROM reminders WHERE id=$1;"
-        await self.bot.pool.execute(query, timer.id)
+        async with session_obj() as session:
+            query = delete(Reminders).where(Reminders.id == timer.id)
+            await session.execute(query)
+            await session.commit()
 
         # dispatch the event
         event_name = f"{timer.event}_timer_complete"
@@ -196,9 +143,6 @@ class Reminder(commands.Cog):
             Arguments to pass to the event
         \*\*kwargs
             Keyword arguments to pass to the event
-        connection: asyncpg.Connection
-            Special keyword-only argument to use a specific connection
-            for the DB request.
         created: datetime.datetime
             Special keyword-only argument to use as the creation time.
             Should make the timedeltas a bit more consistent.
@@ -212,11 +156,6 @@ class Reminder(commands.Cog):
         :class:`Timer`
         """
         when, event, *args = args  # type: ignore
-
-        try:
-            connection = kwargs.pop("connection")
-        except KeyError:
-            connection = self.bot.pool
 
         try:
             now = kwargs.pop("created")
@@ -236,15 +175,13 @@ class Reminder(commands.Cog):
             self.bot.loop.create_task(self.short_timer_optimisation(delta, timer))
             return timer
 
-        query = """INSERT INTO reminders (event, extra, expires, created)
-                   VALUES ($1, $2::jsonb, $3, $4)
-                   RETURNING id;
-                """
+        async with session_obj() as session:
+            query = insert(Reminders).values(event=event, extra={"args": args, "kwargs": kwargs}, expires=when, created=now).returning(Reminders.id)
+            result = await session.execute(query)
+            row=result.fetchone()
+            await session.commit()
 
-        row = await connection.fetchrow(
-            query, event, {"args": args, "kwargs": kwargs}, when, now
-        )
-        timer.id = row[0]
+        timer.id = row.id
 
         # only set the data check if it can be waited on
         if delta <= (86400 * 40):  # 40 days
@@ -289,25 +226,32 @@ class Reminder(commands.Cog):
             ctx.author.id,
             ctx.channel.id,
             when.arg,
-            connection=ctx.db,
             created=ctx.message.created_at,
             message_id=ctx.message.id,
         )
-        delta = time.human_timedelta(when.dt, source=timer.created_at)
+        delta = human_timedelta(when.dt, source=timer.created_at)
         await ctx.send(f"Alright {ctx.author.mention}, in {delta}: {when.arg}")
 
     @reminder.command(name="list", ignore_extra=False)
     async def reminder_list(self, ctx: "Context"):
         """Shows the 10 latest currently running reminders."""
-        query = """SELECT id, expires, extra #>> '{args,2}'
-                   FROM reminders
-                   WHERE event = 'reminder'
-                   AND extra #>> '{args,0}' = $1
-                   ORDER BY expires
-                   LIMIT 10;
-                """
+        # query = """SELECT id, expires, extra #>> '{args,2}'
+        #            FROM reminders
+        #            WHERE event = 'reminder'
+        #            AND extra #>> '{args,0}' = $1
+        #            ORDER BY expires
+        #            LIMIT 10;
+        #         """
+        query = select(
+            Reminders.id, 
+            Reminders.expires, 
+            Reminders.extra['args'].as_string()
+        ).where(and_(Reminders.event == "reminder", Reminders.extra['args'].as_string() == str('ctx.author.id'))).order_by(Reminders.expires).limit(10)
 
-        records = await ctx.db.fetch(query, str(ctx.author.id))
+        async with session_obj() as session:
+            result = await session.execute(query)
+            records=result.all()
+            await session.commit()
 
         if len(records) == 0:
             return await ctx.send("No currently running reminders.")
@@ -321,10 +265,10 @@ class Reminder(commands.Cog):
                 text=f'{len(records)} reminder{"s" if len(records) > 1 else ""}'
             )
 
-        for _id, expires, message in records:
-            shorten = textwrap.shorten(message, width=512)
+        for i in records:
+            shorten = textwrap.shorten(i.extra, width=512)
             e.add_field(
-                name=f"{_id}: {time.format_relative(expires)}",
+                name=f"{i.id}: {format_relative(i.expires)}",
                 value=shorten,
                 inline=False,
             )
@@ -340,11 +284,22 @@ class Reminder(commands.Cog):
         You must own the reminder to delete it, obviously.
         """
 
-        query = """DELETE FROM reminders
-                   WHERE id=$1
-                   AND event = 'reminder'
-                   AND extra #>> '{args,0}' = $2;
-                """
+        # query = """DELETE FROM reminders
+        #            WHERE id=$1
+        #            AND event = 'reminder'
+        #            AND extra #>> '{args,0}' = $2;
+        #         """
+
+        query = select(
+            Reminders.id, 
+            Reminders.expires, 
+            Reminders.extra['args'].as_string()
+        ).where(and_(Reminders.event == "reminder", Reminders.extra['args'].as_string() == str('ctx.author.id'))).order_by(Reminders.expires).limit(10)
+
+        async with session_obj() as session:
+            result = await session.execute(query)
+            records=result.all()
+            await session.commit()
 
         status = await ctx.db.execute(query, id, str(ctx.author.id))
         if status == "DELETE 0":

@@ -12,7 +12,6 @@ fluxpoint.py
 eight-ball
 num2words
 asyncpg
-psycopg2
 english-words @ git+https://github.com/The-4th-Hokage/english-words-py.git@master
 ffmpeg
 cachetools

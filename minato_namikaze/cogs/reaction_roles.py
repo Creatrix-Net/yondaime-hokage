@@ -29,7 +29,7 @@ log = logging.getLogger(__name__)
 
 class Reaction_Roles(Base):
     __tablename__ = "reaction_roles"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
 
     message_id = Column(
         BigInteger, primary_key=True, index=True, nullable=False, unique=True

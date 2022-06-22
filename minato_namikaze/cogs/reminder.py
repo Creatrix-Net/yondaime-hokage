@@ -9,11 +9,28 @@ from typing import TYPE_CHECKING, Any, Optional
 
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import (Base, FriendlyTimeResult, LinksAndVars, Timer,
-                                 UserFriendlyTime, format_relative,
-                                 human_timedelta, plural, session_obj)
-from sqlalchemy import (Column, DateTime, Integer, String, and_, delete, func,
-                        insert, select)
+from minato_namikaze.lib import (
+    Base,
+    FriendlyTimeResult,
+    LinksAndVars,
+    Timer,
+    UserFriendlyTime,
+    format_relative,
+    human_timedelta,
+    plural,
+    session_obj,
+)
+from sqlalchemy import (
+    Column,
+    DateTime,
+    Integer,
+    String,
+    and_,
+    delete,
+    func,
+    insert,
+    select,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.util._collections import immutabledict
@@ -30,7 +47,7 @@ log = logging.getLogger(__name__)
 
 class Reminders(Base):
     __tablename__ = "reminders"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
 
     id = Column(Integer, index=True, primary_key=True)
     expires = Column(DateTime, index=True)
@@ -55,10 +72,10 @@ class Reminder(commands.Cog):
     def cog_unload(self) -> None:
         self._task.cancel()
 
-    async def get_active_timer(
-        self, *, days: int = 7
-    ) -> Optional[Timer]:
-        query = select(Reminders).where(Reminders.expires<datetime.timedelta(days=days))
+    async def get_active_timer(self, *, days: int = 7) -> Optional[Timer]:
+        query = select(Reminders).where(
+            Reminders.expires < datetime.timedelta(days=days)
+        )
         async with session_obj() as session:
             try:
                 record = (await session.execute(query)).one()
@@ -162,9 +179,18 @@ class Reminder(commands.Cog):
             return timer
 
         async with session_obj() as session:
-            query = insert(Reminders).values(event=event, extra={"args": args, "kwargs": kwargs}, expires=when, created=now).returning(Reminders.id)
+            query = (
+                insert(Reminders)
+                .values(
+                    event=event,
+                    extra={"args": args, "kwargs": kwargs},
+                    expires=when,
+                    created=now,
+                )
+                .returning(Reminders.id)
+            )
             result = await session.execute(query)
-            row=result.fetchone()
+            row = result.fetchone()
             await session.commit()
 
         timer.id = row.id
@@ -216,19 +242,30 @@ class Reminder(commands.Cog):
             message_id=ctx.message.id,
         )
         delta = human_timedelta(when.dt, source=timer.created_at)
-        await ctx.send(f"Alright {ctx.author.mention}, in {delta}: {when.arg}", delete_after=LinksAndVars.delete_message.value)
+        await ctx.send(
+            f"Alright {ctx.author.mention}, in {delta}: {when.arg}",
+            delete_after=LinksAndVars.delete_message.value,
+        )
 
     @reminder.command(name="list", ignore_extra=False)
     async def reminder_list(self, ctx: "Context"):
         """Shows the 10 latest currently running reminders."""
-        query = select(
-            Reminders.id, 
-            Reminders.expires, 
-            Reminders.extra['args'][0].as_string()
-        ).where(and_(Reminders.event == "reminder", Reminders.extra['args'][0].as_string() == str(ctx.author.id))).order_by(Reminders.expires).limit(10)
+        query = (
+            select(
+                Reminders.id, Reminders.expires, Reminders.extra["args"][0].as_string()
+            )
+            .where(
+                and_(
+                    Reminders.event == "reminder",
+                    Reminders.extra["args"][0].as_string() == str(ctx.author.id),
+                )
+            )
+            .order_by(Reminders.expires)
+            .limit(10)
+        )
         async with session_obj() as session:
             result = await session.execute(query)
-            records=result.all()
+            records = result.all()
             await session.commit()
         if len(records) == 0:
             return await ctx.send("No currently running reminders.")
@@ -244,7 +281,9 @@ class Reminder(commands.Cog):
 
         for _id, expires, message in records:
             shorten = textwrap.shorten(message, width=512)
-            e.add_field(name=f'{_id}: {format_relative(expires)}', value=shorten, inline=False)
+            e.add_field(
+                name=f"{_id}: {format_relative(expires)}", value=shorten, inline=False
+            )
 
         await ctx.send(embed=e)
 
@@ -256,13 +295,24 @@ class Reminder(commands.Cog):
 
         You must own the reminder to delete it, obviously.
         """
-        
-        query = delete(Reminders).where(and_(Reminders.id==id, Reminders.event == "reminder", Reminders.extra['args'][0].as_string() == str(ctx.author.id)))
+
+        query = delete(Reminders).where(
+            and_(
+                Reminders.id == id,
+                Reminders.event == "reminder",
+                Reminders.extra["args"][0].as_string() == str(ctx.author.id),
+            )
+        )
         async with session_obj() as session:
-            result = await session.execute(query, execution_options=immutabledict({"synchronize_session": 'fetch'}))
+            result = await session.execute(
+                query, execution_options=immutabledict({"synchronize_session": "fetch"})
+            )
             await session.commit()
         if len(result.scalars().all()) == 0:
-            return await ctx.send("Could not delete any reminders with that ID.", delete_after=LinksAndVars.delete_message.value)
+            return await ctx.send(
+                "Could not delete any reminders with that ID.",
+                delete_after=LinksAndVars.delete_message.value,
+            )
 
         # if the current timer is being deleted
         if self._current_timer and self._current_timer.id == id:
@@ -270,7 +320,10 @@ class Reminder(commands.Cog):
             self._task.cancel()
             self._task = self.bot.loop.create_task(self.dispatch_timers())
 
-        await ctx.send("Successfully deleted reminder.", delete_after=LinksAndVars.delete_message.value)
+        await ctx.send(
+            "Successfully deleted reminder.",
+            delete_after=LinksAndVars.delete_message.value,
+        )
 
     @reminder.command(name="clear", ignore_extra=False)
     async def reminder_clear(self, ctx: "Context"):
@@ -278,22 +331,43 @@ class Reminder(commands.Cog):
 
         # For UX purposes this has to be two queries.
 
-        query = select(func.count()).select_from(Reminders).where(and_(Reminders.event == "reminder", Reminders.extra['args'][0].as_string() == str(ctx.author.id)))
+        query = (
+            select(func.count())
+            .select_from(Reminders)
+            .where(
+                and_(
+                    Reminders.event == "reminder",
+                    Reminders.extra["args"][0].as_string() == str(ctx.author.id),
+                )
+            )
+        )
         async with session_obj() as session:
             total = await session.execute(query)
             total = (total).first()[0]
         if total == 0:
-            return await ctx.send("You do not have any reminders to delete.", delete_after=LinksAndVars.delete_message.value)
+            return await ctx.send(
+                "You do not have any reminders to delete.",
+                delete_after=LinksAndVars.delete_message.value,
+            )
 
         confirm = await ctx.prompt(
             f"Are you sure you want to delete {plural(total):reminder}?"
         )
         if not confirm:
-            return await ctx.send("Aborting", delete_after=LinksAndVars.delete_message.value)
+            return await ctx.send(
+                "Aborting", delete_after=LinksAndVars.delete_message.value
+            )
 
-        query = delete(Reminders).where(and_(Reminders.event == "reminder", Reminders.extra['args'][0].as_string() == str(ctx.author.id)))
+        query = delete(Reminders).where(
+            and_(
+                Reminders.event == "reminder",
+                Reminders.extra["args"][0].as_string() == str(ctx.author.id),
+            )
+        )
         async with session_obj() as session:
-            await session.execute(query, execution_options=immutabledict({"synchronize_session": 'fetch'}))
+            await session.execute(
+                query, execution_options=immutabledict({"synchronize_session": "fetch"})
+            )
             await session.commit()
 
         # Check if the current timer is the one being cleared and cancel it if so
@@ -301,7 +375,10 @@ class Reminder(commands.Cog):
             self._task.cancel()
             self._task = self.bot.loop.create_task(self.dispatch_timers())
 
-        await ctx.send(f"Successfully deleted {plural(total):reminder}.", delete_after=LinksAndVars.delete_message.value)
+        await ctx.send(
+            f"Successfully deleted {plural(total):reminder}.",
+            delete_after=LinksAndVars.delete_message.value,
+        )
 
     @commands.Cog.listener()
     async def on_reminder_timer_complete(self, timer: Timer):

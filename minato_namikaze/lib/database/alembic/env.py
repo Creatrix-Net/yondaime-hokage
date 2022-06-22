@@ -16,13 +16,16 @@ run = asyncio.get_event_loop().run_until_complete
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option('sqlalchemy.url',vars.envConfig.DATABASE_URL)
+config.set_main_option("sqlalchemy.url", vars.envConfig.DATABASE_URL)
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in return_all_cogs()]
+cogs = [
+    f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
+    for e in return_all_cogs()
+]
 for ext in cogs:
     try:
         importlib.import_module(ext)

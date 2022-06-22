@@ -569,6 +569,10 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 await self.log_spammer(ctx, message, retry_after, autoblock=True)
             else:
                 self.log_spammer(ctx, message, retry_after)
+                try:
+                    await message.delete()
+                except (discord.Forbidden, discord.NotFound, discord.HTTPException):
+                    pass
             return
         else:
             self._auto_spam_count.pop(author_id, None)
@@ -577,6 +581,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             await self.invoke(ctx)
         except:
             pass
+        finally:
+            try:
+                await message.delete()
+            except (discord.Forbidden, discord.NotFound, discord.HTTPException):
+                pass
 
     async def add_to_blacklist(self, object_id):
         self.blacklist.append(int(object_id))

@@ -4,7 +4,6 @@ import io
 import logging
 import os
 import subprocess as sp
-from sys import prefix
 import textwrap
 import traceback
 from contextlib import redirect_stdout
@@ -39,6 +38,8 @@ from sqlalchemy.orm import relationship
 
 class Premium(Base):
     __tablename__ = "premium"
+    __table_args__ = {'extend_existing': True}
+
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     name = Column(String(250), nullable=False)
     reaction_roles_amount = Column(SmallInteger, nullable=False)
@@ -58,6 +59,8 @@ class Premium(Base):
 
 class User(Base):
     __tablename__ = "user"
+    __table_args__ = {'extend_existing': True}
+
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     premium_id = Column(Integer, ForeignKey("premium.id"), nullable=True)
     premium_expiry = Column(DateTime, nullable=True)
@@ -75,6 +78,8 @@ class User(Base):
 
 class Server(Base):
     __tablename__ = "server"
+    __table_args__ = {'extend_existing': True}
+    
     id = Column(BigInteger, primary_key=True)
     premium_applier_user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     blacklisted = Column(Boolean, default=False, nullable=False)

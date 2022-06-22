@@ -11,7 +11,6 @@ from ..util.vars import LinksAndVars, ShinobiMatch
 from .time_class import format_relative
 
 if TYPE_CHECKING:
-    from minato_namikaze.cogs.reminder import Reminders
     from typing_extensions import Self
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
@@ -413,14 +412,14 @@ class Characters:
 class Timer:
     __slots__ = ("args", "kwargs", "event", "id", "created_at", "expires")
 
-    def __init__(self, *, record: 'Reminders'):
-        self.id: int = record.id
-        extra = record.extra
+    def __init__(self, *, record: dict):
+        self.id: int = record['id']
+        extra = record['extra']
         self.args: Sequence[Any] = extra.get("args", [])
         self.kwargs: dict[str, Any] = extra.get("kwargs", {})
-        self.event: str = record.event
-        self.created_at: datetime.datetime = record.created
-        self.expires: datetime.datetime = record.expires
+        self.event: str = record['event']
+        self.created_at: datetime.datetime = record['created']
+        self.expires: datetime.datetime = record['expires']
 
     @classmethod
     def temporary(

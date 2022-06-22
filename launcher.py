@@ -184,22 +184,21 @@ def makemigrations(message):
     click.echo("Created migrations.")
 
 
-@db.command(short_help="upgrades from a migration")
-@click.argument("cog", nargs=1, metavar="[cog]")
-@click.option("-q", "--quiet", help="less verbose output", is_flag=True)
-@click.option("--index", help="the index to use", default=-1)
-def upgrade(cog, quiet, index):
+@db.command(short_help="Migrates from an migration revision")
+@click.option("--upgrade/--downgrade", default=True)
+@click.argument("revision", nargs=1, metavar="[revision]", required=False, default='head')
+def migrate(upgrade, revision):
     """Runs an upgrade from a migration"""
-    run = asyncio.get_event_loop().run_until_complete
-
-
-@db.command(short_help="downgrades from a migration")
-@click.argument("cog", nargs=1, metavar="[cog]")
-@click.option("-q", "--quiet", help="less verbose output", is_flag=True)
-@click.option("--index", help="the index to use", default=-1)
-def downgrade(cog, quiet, index):
-    """Runs an downgrade from a migration"""
-    run = asyncio.get_event_loop().run_until_complete
+    if upgrade:
+        subprocess.run(  # skipcq: BAN-B607
+            ["alembic", "upgrade", revision],
+            check=False,
+        )
+    else:
+        subprocess.run(  # skipcq: BAN-B607
+            ["alembic", "downgrade", 'base' if revision.lower() == "head" else revision],
+            check=False,
+        )
 
 
 @db.command(short_help="removes a cog's table", options_metavar="[options]")

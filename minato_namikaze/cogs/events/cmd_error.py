@@ -37,6 +37,15 @@ class BotEventsCommands(commands.Cog):
             e1 = ErrorEmbed(title="Command Error!", description=f"`{error}`")
             e1.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e1, delete_after=self.delete_after_time)
+        
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send(
+                embed=ErrorEmbed(description=str(error)), delete_after=self.delete_after_time
+            )
+        elif isinstance(error, commands.TooManyArguments):
+            await ctx.send(
+                embed=ErrorEmbed(description=f"You called the {ctx.command.name} command with too many arguments."), delete_after=self.delete_after_time
+            )
 
         elif isinstance(error, (NoChannelProvided, IncorrectChannelError)):
             return
@@ -208,7 +217,7 @@ class BotEventsCommands(commands.Cog):
         elif isinstance(error, commands.CommandOnCooldown):
             l = self.bot.get_command(ctx.command.name)
             left = l.get_cooldown_retry_after(ctx)
-            e = ErrorEmbed(title=f"Cooldown left - {round(left)}")
+            e = ErrorEmbed(description=f"Cooldown left - {round(left)}")
             await ctx.send(embed=e, delete_after=self.delete_after_time)
 
         elif isinstance(error, commands.CommandInvokeError):

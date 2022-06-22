@@ -147,10 +147,12 @@ def return_all_cogs() -> List[str]:
     for filename in list(set(os.listdir(cog_dir))):
         if os.path.isdir(cog_dir / filename):
             for i in os.listdir(cog_dir / filename):
-                if i.endswith(".py"):
+                if i.endswith(".py") and not i.startswith("__init__") and not i.endswith(".pyc"):
                     list_to_be_given.append(f'{filename.strip(" ")}.{i[:-3]}')
         else:
-            if filename.endswith(".py"):
+            if filename.endswith(".py") and not filename.startswith("__init__") and not filename.endswith(".pyc"):
                 list_to_be_given.append(filename[:-3])
 
     return list_to_be_given
+
+

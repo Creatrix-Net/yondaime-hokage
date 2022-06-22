@@ -1,14 +1,17 @@
 import asyncio
+import importlib
+import logging
+import traceback
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from minato_namikaze import return_all_cogs, vars
+from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
-from minato_namikaze import vars
-from minato_namikaze.cogs import *
 
 from alembic import context
+
+run = asyncio.get_event_loop().run_until_complete
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -18,6 +21,13 @@ config.set_main_option('sqlalchemy.url',vars.envConfig.DATABASE_URL)
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+
+cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in return_all_cogs()]
+for ext in cogs:
+    try:
+        importlib.import_module(ext)
+    except Exception:
+        logging.warning(f"Could not load {ext}.\n{traceback.format_exc()}", err=True)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
@@ -87,4 +97,4 @@ async def run_migrations_online() -> None:
 if context.is_offline_mode():
     run_migrations_offline()
 else:
-    asyncio.run(run_migrations_online())
+    run(run_migrations_online())

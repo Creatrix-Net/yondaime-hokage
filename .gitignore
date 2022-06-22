@@ -7,7 +7,7 @@ _build/*
 alembic.ini
 logs/*
 
-*copy.py
+# *copy.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

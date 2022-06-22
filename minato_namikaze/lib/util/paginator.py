@@ -136,7 +136,7 @@ class RoboPages(discord.ui.View):
             await self.message.edit(view=None)
 
     async def on_error(
-        self, interaction: discord.Interaction, error: Exception, item: discord.ui.Item #skipcq: PYL-W0613 
+        self, interaction: discord.Interaction, __: Exception, _: discord.ui.Item 
     ) -> None:
         if interaction.response.is_done():
             await interaction.followup.send(
@@ -165,7 +165,7 @@ class RoboPages(discord.ui.View):
 
     @discord.ui.button(label="≪", style=discord.ButtonStyle.grey)
     async def go_to_first_page(
-        self, interaction: discord.Interaction, button: discord.ui.Button #skipcq: PYL-W0613 
+        self, interaction: discord.Interaction, _: discord.ui.Button 
     ):
         """go to the first page"""
         await self.show_page(interaction, 0)
@@ -179,20 +179,20 @@ class RoboPages(discord.ui.View):
 
     @discord.ui.button(label="Current", style=discord.ButtonStyle.grey, disabled=True)
     async def go_to_current_page(
-        self, interaction: discord.Interaction, button: discord.ui.Button
+        self, _: discord.Interaction, __: discord.ui.Button
     ):
         pass
 
     @discord.ui.button(label="Next", style=discord.ButtonStyle.blurple)
     async def go_to_next_page(
-        self, interaction: discord.Interaction, button: discord.ui.Button #skipcq: PYL-W0613 
+        self, interaction: discord.Interaction, _: discord.ui.Button 
     ):
         """go to the next page"""
         await self.show_checked_page(interaction, self.current_page + 1)
 
     @discord.ui.button(label="≫", style=discord.ButtonStyle.grey)
     async def go_to_last_page(
-        self, interaction: discord.Interaction, button: discord.ui.Button #skipcq: PYL-W0613 
+        self, interaction: discord.Interaction, _: discord.ui.Button 
     ):
         """go to the last page"""
         # The call here is safe because it's guarded by skip_if
@@ -200,7 +200,7 @@ class RoboPages(discord.ui.View):
 
     @discord.ui.button(label="Skip to page...", style=discord.ButtonStyle.grey)
     async def numbered_page(
-        self, interaction: discord.Interaction, button: discord.ui.Button #skipcq: PYL-W0613 
+        self, interaction: discord.Interaction, _: discord.ui.Button 
     ):
         """lets you type a page number to go to"""
         if self.input_lock.locked():
@@ -240,7 +240,7 @@ class RoboPages(discord.ui.View):
 
     @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
     async def stop_pages(
-        self, interaction: discord.Interaction, button: discord.ui.Button #skipcq: PYL-W0613 
+        self, interaction: discord.Interaction, _: discord.ui.Button 
     ):
         """stops the pagination session."""
         await interaction.response.defer()

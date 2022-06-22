@@ -413,13 +413,13 @@ class Timer:
     __slots__ = ("args", "kwargs", "event", "id", "created_at", "expires")
 
     def __init__(self, *, record: dict):
-        self.id: int = record['id']
-        extra = record['extra']
+        self.id: int = record["id"]
+        extra = record["extra"]
         self.args: Sequence[Any] = extra.get("args", [])
         self.kwargs: dict[str, Any] = extra.get("kwargs", {})
-        self.event: str = record['event']
-        self.created_at: datetime.datetime = record['created']
-        self.expires: datetime.datetime = record['expires']
+        self.event: str = record["event"]
+        self.created_at: datetime.datetime = record["created"]
+        self.expires: datetime.datetime = record["expires"]
 
     @classmethod
     def temporary(
@@ -429,8 +429,8 @@ class Timer:
         created: datetime.datetime,
         event: str,
         args: Sequence[Any],
-        kwargs: 'dict[str, Any]',
-    ) -> 'Self':
+        kwargs: "dict[str, Any]",
+    ) -> "Self":
         pseudo = {
             "id": None,
             "extra": {"args": args, "kwargs": kwargs},

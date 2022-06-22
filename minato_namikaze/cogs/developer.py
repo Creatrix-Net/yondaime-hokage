@@ -38,7 +38,7 @@ from sqlalchemy.orm import relationship
 
 class Premium(Base):
     __tablename__ = "premium"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     name = Column(String(250), nullable=False)
@@ -59,7 +59,7 @@ class Premium(Base):
 
 class User(Base):
     __tablename__ = "user"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     premium_id = Column(Integer, ForeignKey("premium.id"), nullable=True)
@@ -78,8 +78,8 @@ class User(Base):
 
 class Server(Base):
     __tablename__ = "server"
-    __table_args__ = {'extend_existing': True}
-    
+    __table_args__ = {"extend_existing": True}
+
     id = Column(BigInteger, primary_key=True)
     premium_applier_user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     blacklisted = Column(Boolean, default=False, nullable=False)

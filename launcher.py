@@ -152,7 +152,7 @@ def init(cogs):
     """This manages the migrations and database creation system for you."""
     run = asyncio.get_event_loop().run_until_complete
     if not cogs:
-        cogs = cogs = [
+        cogs = [
             f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
             for e in return_all_cogs()
         ]
@@ -216,7 +216,7 @@ def drop(cogs):
     run = asyncio.get_event_loop().run_until_complete
     click.confirm("Do you really want to do this?", abort=True)
     if cogs.lower() == "all":
-        cogs = cogs = [
+        cogs = [
             f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
             for e in return_all_cogs()
         ]

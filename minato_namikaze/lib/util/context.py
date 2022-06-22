@@ -9,7 +9,7 @@ import discord
 import TenGiphPy
 from discord.ext import commands
 
-from ..classes.converter import MemberID
+from ..classes.converter_cache_class import MemberID
 from .vars import ChannelAndMessageId, Tokens
 
 T = TypeVar("T")

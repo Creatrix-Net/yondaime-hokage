@@ -1,12 +1,18 @@
 import argparse
 import datetime
 import re
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Sequence, Union
+
 import discord
 from discord.ext import commands
 
 from ..functions import ExpiringCache
 from ..util.vars import LinksAndVars, ShinobiMatch
+from .time_class import format_relative
+
+if TYPE_CHECKING:
+    from minato_namikaze.cogs.reminder import Reminders
+    from typing_extensions import Self
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 
@@ -402,3 +408,60 @@ class Characters:
             if i.lower() in ShinobiMatch.name_exclusion.value:
                 return ctx.get_config_emoji_by_name_or_id(i)
         return discord.PartialEmoji(name="\U0001f5e1")
+
+
+class Timer:
+    __slots__ = ("args", "kwargs", "event", "id", "created_at", "expires")
+
+    def __init__(self, *, record: 'Reminders'):
+        self.id: int = record.id
+        extra = record.extra
+        self.args: Sequence[Any] = extra.get("args", [])
+        self.kwargs: dict[str, Any] = extra.get("kwargs", {})
+        self.event: str = record.event
+        self.created_at: datetime.datetime = record.created
+        self.expires: datetime.datetime = record.expires
+
+    @classmethod
+    def temporary(
+        cls,
+        *,
+        expires: datetime.datetime,
+        created: datetime.datetime,
+        event: str,
+        args: Sequence[Any],
+        kwargs: 'dict[str, Any]',
+    ) -> 'Self':
+        pseudo = {
+            "id": None,
+            "extra": {"args": args, "kwargs": kwargs},
+            "event": event,
+            "created": created,
+            "expires": expires,
+        }
+        return cls(record=pseudo)
+
+    def __eq__(self, other: object) -> bool:
+        try:
+            return self.id == other.id  # type: ignore
+        except AttributeError:
+            return False
+
+    def __hash__(self) -> int:
+        return hash(self.id)
+
+    @property
+    def human_delta(self) -> str:
+        return format_relative(self.created_at)
+
+    @property
+    def author_id(self) -> Optional[int]:
+        if self.args:
+            return int(self.args[0])
+        return None
+
+    def __repr__(self) -> str:
+        return f"<Timer created={self.created_at} expires={self.expires} event={self.event}>"
+
+    def __str__(self) -> str:
+        return self.__repr__()

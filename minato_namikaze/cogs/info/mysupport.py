@@ -227,7 +227,7 @@ class MySupport(commands.Cog, name="My Support"):
                 repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), 1
             )
         )
-        final_url = f"<{source_url}/tree/{commits[0].hex}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
+        final_url = f"<{source_url}/blob/{commits[0].hex}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
         await ctx.send(final_url)
 
 

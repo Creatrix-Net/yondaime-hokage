@@ -7,6 +7,7 @@ from typing import Any, List, Optional, Union, TYPE_CHECKING
 
 import aiohttp
 import discord
+from discord.ext import commands
 import sentry_sdk
 import TenGiphPy
 from discord.ext import commands
@@ -147,10 +148,13 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.togetherControl = await DiscordTogether(Tokens.token.value)
 
         for i in return_all_cogs():
-            await self.load_extension(f"minato_namikaze.cogs.{i}")
+            try:
+                await self.load_extension(f"minato_namikaze.cogs.{i}")
+            except commands.ExtensionAlreadyLoaded:
+                pass
         try:
             await self.load_extension("jishaku")
-        except discord.ext.commands.ExtensionAlreadyLoaded:
+        except commands.ExtensionAlreadyLoaded:
             pass
         log.info("All cogs loaded")
         try:

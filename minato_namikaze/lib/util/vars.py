@@ -147,7 +147,6 @@ class LinksAndVars(enum.Enum):
     website = "https://minato-namikaze.readthedocs.io/en/latest"
 
     github = "https://github.com/The-4th-Hokage/yondaime-hokage"
-    github_branch = "master"
 
     bad_links = "https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt"
     listing = (

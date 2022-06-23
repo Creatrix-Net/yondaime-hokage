@@ -196,7 +196,6 @@ class MySupport(commands.Cog, name="My Support"):
         or by spaces.
         """
         source_url = LinksAndVars.github.value
-        branch = LinksAndVars.github_branch.value
         if command is None:
             return await ctx.send(source_url)
 
@@ -221,10 +220,14 @@ class MySupport(commands.Cog, name="My Support"):
             location = os.path.relpath(filename).replace("\\", "/")
         else:
             location = module.replace(".", "/") + ".py"
-            source_url = "https://github.com/Rapptz/discord.py"
-            branch = "master"
-
-        final_url = f"<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
+            source_url = LinksAndVars.github.value
+        repo = pygit2.Repository(".git")
+        commits = list(
+            itertools.islice(
+                repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), 1
+            )
+        )
+        final_url = f"<{source_url}/tree/{commits[0].hex}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
         await ctx.send(final_url)
 
 

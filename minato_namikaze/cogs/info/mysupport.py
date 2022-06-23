@@ -171,22 +171,18 @@ class MySupport(commands.Cog, name="My Support"):
     @commands.command()
     async def ping(self, ctx: "Context"):
         """Get the Latency"""
-        import time
-
-        starttime = time.time()
         msg = await ctx.send(":ping_pong: Ping... :ping_pong:")
         async with ctx.channel.typing():
             e = Embed(
                 title=":ping_pong: Pong! :ping_pong:",
                 description=f"Heartbeat : {round(self.bot.latency * 1000, 2)} ms",
             )
-            endtime = time.time()
-            difference = float(int(starttime - endtime))
             e.add_field(
-                name=":inbox_tray: Script Speed :outbox_tray:", value=f"{difference}ms"
+                name=":inbox_tray: Script Speed :outbox_tray:", value=f"{round(self.bot.latency,5)}ms"
             )
             e.set_image(url=await self.bot.get_random_image_from_tag("ping pong anime"))
             await msg.edit(content="", embed=e)
+        return
 
     @commands.command()
     async def source(self, ctx: "Context", *, command: str = None):

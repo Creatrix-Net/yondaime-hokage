@@ -196,8 +196,6 @@ class Database(enum.Enum):
     antiraid_channel_name = "antiraid"
     mentionspam_channel_name = "mentionspam"
     giveaway_time_channel_name = "giveaway"
-    user_blacklist_channel_name = "user blacklist"
-    server_blacklist_channel_name = "server blacklist"
 
 
 @enum.unique

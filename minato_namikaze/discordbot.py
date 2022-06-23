@@ -23,7 +23,6 @@ from minato_namikaze.lib import (
     return_all_cogs,
     ChannelAndMessageId,
     Context,
-    Database,
     LinksAndVars,
     PaginatedHelpCommand,
     Tokens,
@@ -34,6 +33,7 @@ from minato_namikaze.lib import (
     token_get,
     Embed,
     ErrorEmbed,
+    UniqueList
 )
 
 if TYPE_CHECKING:
@@ -98,7 +98,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         self.uptime = format_relative(self.start_time)
         self.persistent_views_added = False
         self.session = aiohttp.ClientSession()
-        self.blacklist: List[Optional[discord.abc.Snowflake]] = []
+        self.blacklist: UniqueList = UniqueList()
 
         super().__init__(
             command_prefix=get_prefix,
@@ -143,10 +143,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             log.critical("The bot is shutting down since force shutdown was initiated.")
         except Exception as e:
             log.critical("An exception occured, %s", e)
-
-    async def on_ready(self):
+    
+    async def setup_hook(self) -> None:
+        self.bot_app_info = await self.application_info()
+        self.owner_id = self.bot_app_info.owner.id
         self.togetherControl = await DiscordTogether(Tokens.token.value)
-
         for i in return_all_cogs():
             try:
                 await self.load_extension(f"minato_namikaze.cogs.{i}")
@@ -167,6 +168,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             pass
         log.info("All application commands queued for syncing")
 
+    async def on_ready(self):
         difference = int(
             round(discord.utils.utcnow().timestamp() - self.start_time.timestamp())
         )
@@ -214,54 +216,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 type=discord.ActivityType.watching, name="over Naruto"
             ),
         )
-
-    async def update_blacklist(self):
-        database = await self.db.new(
-            Database.database_category_name.value,
-            Database.user_blacklist_channel_name.value,
-        )
-        async for message in database._Database__channel.history(limit=None):
-            cnt = message.content
-            try:
-                data = loads(str(cnt))
-                data.pop("type")
-                data_keys = list(map(str, list(data.keys())))
-                self.blacklist.append(int(data_keys[0]))
-            except Exception as e:
-                log.error(e)
-                continue
-        database = await self.db.new(
-            Database.database_category_name.value,
-            Database.server_blacklist_channel_name.value,
-        )
-        async for message in database._Database__channel.history(limit=None):
-            cnt = message.content
-            try:
-                data = loads(str(cnt))
-                data.pop("type")
-                data_keys = list(map(str, list(data.keys())))
-                self.blacklist.append(int(data_keys[0]))
-                guild = self.get_guild(int(data_keys[0]))
-                if guild is not None:
-                    channel = await self.get_welcome_channel(guild)
-                    embed = ErrorEmbed(title=f"Left {guild.name}")
-                    embed.description = f"I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer."
-                    embed.add_field(
-                        name="Developer",
-                        value=f"[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})",
-                    )
-                    embed.add_field(
-                        name="Support Server",
-                        value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
-                    )
-                    await channel.send(embed=embed)
-                    await guild.leave()
-                    log.info(f"Left guild {guild.id} [Marked as spam]")
-            except Exception as e:
-                log.error(e)
-                continue
-        self.blacklist = list(set(self.blacklist))
-        log.info("Blacklist Data updated")
 
     @staticmethod
     async def query_member_named(guild, argument, *, cache=False):

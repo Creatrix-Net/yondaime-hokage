@@ -32,6 +32,7 @@ from sqlalchemy import (
     Integer,
     SmallInteger,
     String,
+    select
 )
 from sqlalchemy.orm import relationship
 
@@ -100,19 +101,49 @@ class Developer(commands.Cog):
         self.key = Tokens.statcord.value
         self.statcord_client = statcord.StatcordClient(self.bot, self.key)
         self.api = discordlists.Client(self.bot)
-        self.description = "These set of commands are only locked to the developer"
-        self.update_blacklist_task.start()
+        self.description = "These set of commands are only locked to the developer"  
+    
+    async def cog_load(self):
+        self.update_blacklist_data.start()
 
-    def cog_unload(self):
-        self.statcord_client.close()
+    async def cog_unload(self):
+        self.update_blacklist_data.cancel()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{GEAR}\ufe0f")
 
     @tasks.loop(minutes=30)
-    async def update_blacklist_task(self):
-        await self.bot.update_blacklist()
+    async def update_blacklist_data(self):
+        # query = select(User.id).where(User.blacklisted == True)
+        # async for message in database._Database__channel.history(limit=None):
+        #     cnt = message.content
+        #     try:
+        #         data = loads(str(cnt))
+        #         data.pop("type")
+        #         data_keys = list(map(str, list(data.keys())))
+        #         self.blacklist.append(int(data_keys[0]))
+        #         guild = self.get_guild(int(data_keys[0]))
+        #         if guild is not None:
+        #             channel = await self.get_welcome_channel(guild)
+        #             embed = ErrorEmbed(title=f"Left {guild.name}")
+        #             embed.description = f"I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer."
+        #             embed.add_field(
+        #                 name="Developer",
+        #                 value=f"[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})",
+        #             )
+        #             embed.add_field(
+        #                 name="Support Server",
+        #                 value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
+        #             )
+        #             await channel.send(embed=embed)
+        #             await guild.leave()
+        #             log.info(f"Left guild {guild.id} [Marked as spam]")
+        #     except Exception as e:
+        #         log.error(e)
+        #         continue
+        # self.blacklist = list(set(self.blacklist))
+        log.info("Blacklist Data updated")
 
     def owners(ctx):
         return ctx.bot.is_owner(ctx.author)

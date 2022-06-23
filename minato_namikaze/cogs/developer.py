@@ -486,9 +486,6 @@ class Developer(commands.Cog):
             guild, inviter_or_guild_owner
         )
         try:
-            img = random.choice(minato_gif)
-            file = discord.File(img[-1], filename=img[0])
-
             f = open(
                 BASE_DIR / join("lib", "data", "welcome_message.txt"),
                 "r",
@@ -509,8 +506,8 @@ class Developer(commands.Cog):
             )
             e.set_author(name=self.bot.user, icon_url=self.bot.user.avatar.url)
             e.set_thumbnail(url=self.bot.user.avatar.url)
-            e.set_image(url=f"attachment://{img[0]}")
-            await welcome_channel.send(file=file, embed=e)
+            e.set_image(url=await self.bot.get_random_image_from_tag("minato namikaze"))
+            await welcome_channel.send(embed=e)
         except:
             pass
 

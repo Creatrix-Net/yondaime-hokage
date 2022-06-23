@@ -244,12 +244,6 @@ with gzip.open(
 ) as f:
     UNITS: dict = json.load(f)
 
-minato_gif = []
-with zipfile.ZipFile(BASE_DIR / os.path.join("lib", "data", "minato.zip")) as myzip:
-    for i in myzip.namelist():
-        with myzip.open(i) as f:
-            minato_gif.append((i, io.BytesIO(f.read())))
-
 with zipfile.ZipFile(BASE_DIR / os.path.join("lib", "data", "among_us.zip")) as myzip:
     with myzip.open("amongus.png") as f:
         among_us = io.BytesIO(f.read())

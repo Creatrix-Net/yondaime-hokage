@@ -32,7 +32,7 @@ from sqlalchemy import (
     Integer,
     SmallInteger,
     String,
-    select
+    select,
 )
 from sqlalchemy.orm import relationship
 
@@ -101,8 +101,8 @@ class Developer(commands.Cog):
         self.key = Tokens.statcord.value
         self.statcord_client = statcord.StatcordClient(self.bot, self.key)
         self.api = discordlists.Client(self.bot)
-        self.description = "These set of commands are only locked to the developer"  
-    
+        self.description = "These set of commands are only locked to the developer"
+
     async def cog_load(self):
         self.update_blacklist_data.start()
 

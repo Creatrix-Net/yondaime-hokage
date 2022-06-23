@@ -33,7 +33,7 @@ from minato_namikaze.lib import (
     token_get,
     Embed,
     ErrorEmbed,
-    UniqueList
+    UniqueList,
 )
 
 if TYPE_CHECKING:
@@ -143,7 +143,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             log.critical("The bot is shutting down since force shutdown was initiated.")
         except Exception as e:
             log.critical("An exception occured, %s", e)
-    
+
     async def setup_hook(self) -> None:
         self.bot_app_info = await self.application_info()
         self.owner_id = self.bot_app_info.owner.id

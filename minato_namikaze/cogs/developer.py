@@ -589,17 +589,6 @@ class Developer(commands.Cog):
                 log.info(result)
         except Exception as e:
             log.warning(e)
-        members = len(set(self.bot.get_all_members()))
-
-        # Discord Botlist
-        await post_handler(
-            Methods.POST,
-            f"https://discordbotlist.com/api/v1/bots{self.bot.application_id}/stats",
-            header={"Authorization": token_get("DISCORDBOTLIST")},
-            data={"users": members},
-            log_data=print_logs,
-            return_data=False,
-        )
         await self.bot.change_presence(
             status=discord.Status.idle,
             activity=discord.Activity(

@@ -108,8 +108,6 @@ class Weather(commands.Cog):
         lat: Optional[float] = None,
         lon: Optional[float] = None,
     ) -> None:
-        guild = ctx.message.guild
-        author = ctx.message.author
         units = "metric"
         params = {"appid": Tokens.weather.value, "units": units}
         if units == "kelvin":

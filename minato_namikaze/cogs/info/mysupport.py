@@ -178,7 +178,8 @@ class MySupport(commands.Cog, name="My Support"):
                 description=f"Heartbeat : {round(self.bot.latency * 1000, 2)} ms",
             )
             e.add_field(
-                name=":inbox_tray: Script Speed :outbox_tray:", value=f"{round(self.bot.latency,5)}ms"
+                name=":inbox_tray: Script Speed :outbox_tray:",
+                value=f"{round(self.bot.latency,5)}ms",
             )
             e.set_image(url=await self.bot.get_random_image_from_tag("ping pong anime"))
             await msg.edit(content="", embed=e)

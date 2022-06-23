@@ -115,34 +115,33 @@ class Developer(commands.Cog):
 
     @tasks.loop(minutes=30)
     async def update_blacklist_data(self):
-        # query = select(User.id).where(User.blacklisted == True)
-        # async for message in database._Database__channel.history(limit=None):
-        #     cnt = message.content
-        #     try:
-        #         data = loads(str(cnt))
-        #         data.pop("type")
-        #         data_keys = list(map(str, list(data.keys())))
-        #         self.blacklist.append(int(data_keys[0]))
-        #         guild = self.get_guild(int(data_keys[0]))
-        #         if guild is not None:
-        #             channel = await self.get_welcome_channel(guild)
-        #             embed = ErrorEmbed(title=f"Left {guild.name}")
-        #             embed.description = f"I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer."
-        #             embed.add_field(
-        #                 name="Developer",
-        #                 value=f"[{self.get_user(self.owner_id)}](https://discord.com/users/{self.owner_id})",
-        #             )
-        #             embed.add_field(
-        #                 name="Support Server",
-        #                 value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
-        #             )
-        #             await channel.send(embed=embed)
-        #             await guild.leave()
-        #             log.info(f"Left guild {guild.id} [Marked as spam]")
-        #     except Exception as e:
-        #         log.error(e)
-        #         continue
-        # self.blacklist = list(set(self.blacklist))
+        query = select(User.id).where(User.blacklisted == True)
+        async with session_obj() as session:
+            data = (await session.execute(query)).all()
+            for i in data:
+                self.bot.blacklist.append(i[0])
+
+        query = select(Server.id).where(Server.blacklisted == True)
+        async with session_obj() as session:
+            data = (await session.execute(query)).all()
+            for i in data:
+                self.bot.blacklist.append(i[0])
+                guild = self.bot.get_guild(i[0])
+                if guild is not None:
+                    channel = await self.bot.get_welcome_channel(guild)
+                    embed = ErrorEmbed(title=f"Left {guild.name}")
+                    embed.description = f"I have to leave the `{guild.name}` because it was marked as a `blacklist guild` by my developer. For further queries please contact my developer."
+                    embed.add_field(
+                        name="Developer",
+                        value=f"[{self.bot.get_user(self.bot.owner_id)}](https://discord.com/users/{self.bot.owner_id})",
+                    )
+                    embed.add_field(
+                        name="Support Server",
+                        value=f"https://discord.gg/{LinksAndVars.invite_code.value}",
+                    )
+                    await channel.send(embed=embed)
+                    await guild.leave()
+                    log.info(f"Left guild {guild.id} [Marked as spam]")
         log.info("Blacklist Data updated")
 
     def owners(ctx):

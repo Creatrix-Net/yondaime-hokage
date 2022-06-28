@@ -22,10 +22,11 @@ from minato_namikaze.lib import (
     session_obj,
     ChannelAndMessageId,
     envConfig,
-    Tokens
+    Tokens,
 )
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
 from sqlalchemy import Column, Integer, String, Boolean, BigInteger
+
 if TYPE_CHECKING:
     from lib import Context
 
@@ -36,6 +37,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 class Badges(Base):
     __tablename__ = "badges"
     __table_args__ = {"extend_existing": True}
@@ -44,7 +46,9 @@ class Badges(Base):
     badge_name = Column(String(250), nullable=False, index=True, unique=True)
     code = Column(String(20), nullable=False, index=True, unique=True)
     file_name = Column(String(500), nullable=False, index=True, unique=True)
-    is_inverted = Column(Boolean, default=False, nullable=False, index=True, unique=True)
+    is_inverted = Column(
+        Boolean, default=False, nullable=False, index=True, unique=True
+    )
 
 
 def check_if_it_is_me(interaction: discord.Interaction) -> bool:
@@ -52,8 +56,9 @@ def check_if_it_is_me(interaction: discord.Interaction) -> bool:
 
     :return: True or False depending on the result
     :rtype: bool
-    """    
+    """
     return interaction.user.id == interaction.client.owner_id
+
 
 def get_badge_code(badge_name: str) -> str:
     """Returns the badge code from its name
@@ -67,29 +72,45 @@ def get_badge_code(badge_name: str) -> str:
 
 
 @app_commands.command()
-@app_commands.describe(name='The name of the badge')
-@app_commands.describe(file='The raw badge image containing the badge')
+@app_commands.describe(name="The name of the badge")
+@app_commands.describe(file="The raw badge image containing the badge")
 @app_commands.check(check_if_it_is_me)
 async def add_new_badge(
-    interaction: discord.Interaction, 
+    interaction: discord.Interaction,
     name: str,
     file: discord.Attachment,
 ):
     """Adds a new badge to database"""
-    if not file.content_type.startswith('image'):
-        await interaction.response.send_message(f'{file.filename} is not a valid image', ephemeral=True)
+    if not file.content_type.startswith("image"):
+        await interaction.response.send_message(
+            f"{file.filename} is not a valid image", ephemeral=True
+        )
         return
     embed = StarboardEmbed(title=name.title())
-    embed.set_image(url=f'attachment://{file.filename}')
+    embed.set_image(url=f"attachment://{file.filename}")
     async with aiohttp.ClientSession() as session:
-        wh = discord.Webhook.from_url(Webhooks.badges.value, session=session, bot_token=Tokens.token.value)
-        sent_message: discord.WebhookMessage = await wh.send(wait=True,embed=embed, file=await file.to_file(use_cached=True, description=f'{file.filename.title()} raw badge data.'))
-    badge_object = Badges(id=sent_message.id,badge_name=name.title(), file_name=sent_message.embeds[0].image.url, code=get_badge_code(name))
+        wh = discord.Webhook.from_url(
+            Webhooks.badges.value, session=session, bot_token=Tokens.token.value
+        )
+        sent_message: discord.WebhookMessage = await wh.send(
+            wait=True,
+            embed=embed,
+            file=await file.to_file(
+                use_cached=True, description=f"{file.filename.title()} raw badge data."
+            ),
+        )
+    badge_object = Badges(
+        id=sent_message.id,
+        badge_name=name.title(),
+        file_name=sent_message.embeds[0].image.url,
+        code=get_badge_code(name),
+    )
     async with session_obj() as session:
         async with session.begin():
             session.add(badge_object)
-    await interaction.response.send_message(f'Added, {sent_message.jump_url}', ephemeral=True)
-
+    await interaction.response.send_message(
+        f"Added, {sent_message.jump_url}", ephemeral=True
+    )
 
 
 class BadgesPageEntry:
@@ -112,7 +133,7 @@ class BadgesCog(commands.Cog, name="Badges"):
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot
         self.description = "Create fun fake badges based on your discord profile"
-    
+
     async def cog_load(self):
         self.bot.tree.add_command(add_new_badge)
 

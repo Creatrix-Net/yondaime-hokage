@@ -41,14 +41,14 @@ class Premium(Base):
     __tablename__ = "premium"
     __table_args__ = {"extend_existing": True}
 
-    id = Column(BigInteger, primary_key=True, autoincrement=True)
-    name = Column(String(250), nullable=False)
-    reaction_roles_amount = Column(SmallInteger, nullable=False)
-    reminders_amount = Column(SmallInteger, nullable=False)
-    reminder_amount_per_user = Column(SmallInteger, nullable=False)
-    no_vote_locked = Column(Boolean, default=False, nullable=False)
-    configurable_prefix = Column(Boolean, default=False, nullable=False)
-    no_of_servers_applicable = Column(SmallInteger, nullable=False)
+    id = Column(BigInteger, primary_key=True, autoincrement=True, index=True)
+    name = Column(String(250), nullable=False, index=True)
+    reaction_roles_amount = Column(SmallInteger, nullable=False, index=True)
+    reminders_amount = Column(SmallInteger, nullable=False, index=True)
+    reminder_amount_per_user = Column(SmallInteger, nullable=False, index=True)
+    no_vote_locked = Column(Boolean, default=False, nullable=False, index=True)
+    configurable_prefix = Column(Boolean, default=False, nullable=False, index=True)
+    no_of_servers_applicable = Column(SmallInteger, nullable=False, index=True)
     users = relationship("User", backref="premium")
 
     def __repr__(self) -> str:
@@ -62,13 +62,13 @@ class User(Base):
     __tablename__ = "user"
     __table_args__ = {"extend_existing": True}
 
-    id = Column(BigInteger, primary_key=True, autoincrement=True)
-    premium_id = Column(Integer, ForeignKey("premium.id"), nullable=True)
-    premium_expiry = Column(DateTime, nullable=True)
+    id = Column(BigInteger, primary_key=True, autoincrement=True, index=True)
+    premium_id = Column(Integer, ForeignKey("premium.id"), nullable=True, index=True)
+    premium_expiry = Column(DateTime, nullable=True, index=True)
     applicable_servers_for_premium = relationship(
         "Server", backref="premium_given_by_user"
     )
-    blacklisted = Column(Boolean, default=False, nullable=False)
+    blacklisted = Column(Boolean, default=False, nullable=False, index=True)
 
     def __repr__(self) -> str:
         return f"<User(id={self.id!r}, premium_id={self.premium_id!r}, premium_expiry={self.premium_expiry!r})>"
@@ -81,11 +81,11 @@ class Server(Base):
     __tablename__ = "server"
     __table_args__ = {"extend_existing": True}
 
-    id = Column(BigInteger, primary_key=True)
-    premium_applier_user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
-    blacklisted = Column(Boolean, default=False, nullable=False)
-    show_404_commands_error = Column(Boolean, default=True, nullable=False)
-    prefix = Column(String(5), nullable=True)
+    id = Column(BigInteger, primary_key=True, index=True)
+    premium_applier_user_id = Column(Integer, ForeignKey("user.id"), nullable=True, index=True)
+    blacklisted = Column(Boolean, default=False, nullable=False, index=True)
+    show_404_commands_error = Column(Boolean, default=True, nullable=False, index=True)
+    prefix = Column(String(5), nullable=True, index=True)
 
     def __repr__(self) -> str:
         return f"<Server(id={self.id!r}, premium_applier_user_id={self.premium_applier_user_id!r})>"

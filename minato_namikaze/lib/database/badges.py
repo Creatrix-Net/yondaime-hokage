@@ -23,6 +23,8 @@ class Badges:
         :return: List of all badges data
         :rtype: list
         """
+        # async for i in self.channel.history(limit=None):
+        #     set_dict.add({'filename': ''})
         return [
             dict(
                 badge_name=i.content,
@@ -42,4 +44,4 @@ class Badges:
         :return: Badge Code
         :rtype: str
         """
-        return "".join(list(badge_name.split(" ")))
+        return "".join(list(i[0].upper() for i in badge_name.split(" ")))

@@ -188,6 +188,8 @@ class RaidMode(enum.Enum):
 class Webhooks(enum.Enum):
     logs = token_get("LOGS")
     feedback = token_get("FEEDBACK")
+    badges = token_get("BADGES")
+    sentry = token_get("SENTRY")
 
 
 class Database(enum.Enum):

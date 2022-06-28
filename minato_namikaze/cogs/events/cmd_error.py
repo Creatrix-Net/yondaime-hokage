@@ -252,18 +252,6 @@ class BotEventsCommands(commands.Cog):
                 "**Error report was successfully sent**",
                 delete_after=self.delete_after_time,
             )
-            try:
-                raise error
-            except Exception:
-
-                await error_channel.send(
-                    embeds=[e7, e],
-                    file=discord.File(
-                        io.BytesIO(str(traceback.format_exc()).encode()),
-                        filename="traceback.txt",
-                    ),
-                )
-
         else:
             haaha = ctx.author.avatar.url
             e9 = ErrorEmbed(

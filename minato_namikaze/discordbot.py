@@ -159,7 +159,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             pass
         log.info("All cogs loaded")
         try:
-            await self.tree.sync(guild=discord.Object(id=920536143244709889))
+            await self.tree.sync()
         except (
             discord.HTTPException,
             discord.Forbidden,

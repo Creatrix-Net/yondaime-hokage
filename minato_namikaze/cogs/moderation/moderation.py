@@ -5,6 +5,7 @@ import shlex
 from collections import Counter
 from os.path import join
 from typing import TYPE_CHECKING, Optional, Union
+from typing_extensions import Annotated
 
 import discord
 from discord.ext import commands
@@ -26,6 +27,9 @@ from minato_namikaze.lib import (
     ErrorEmbed,
     Embed,
     SuccessEmbed,
+    Timer,
+    GuildContext, 
+    format_dt
 )
 
 if TYPE_CHECKING:
@@ -439,6 +443,83 @@ class Moderation(commands.Cog):
                 failed += 1
 
         await ctx.send(f"Banned {total_members - failed}/{total_members} members.")
+    
+    @staticmethod
+    def safe_reason_append(base: str, to_append: str) -> str:
+        appended = base + f'({to_append})'
+        if len(appended) > 512:
+            return base
+        return appended
+    
+    @commands.command()
+    @commands.guild_only()
+    @has_permissions(ban_members=True)
+    async def tempban(
+        self,
+        ctx: GuildContext,
+        duration: FutureTime,
+        member: Annotated[discord.abc.Snowflake, MemberID],
+        *,
+        reason: Annotated[Optional[str], ActionReason] = None,
+    ):
+        """Temporarily bans a member for the specified duration.
+        The duration can be a a short time form, e.g. 30d or a more human
+        duration such as "until thursday at 3PM" or a more concrete time
+        such as "2024-12-31".
+        Note that times are in UTC.
+        You can also ban from ID to ban regardless whether they're
+        in the server or not.
+        In order for this to work, the bot must have Ban Member permissions.
+        To use this command you must have Ban Members permission.
+        """
+
+        if reason is None:
+            reason = f'Action done by {ctx.author} (ID: {ctx.author.id})'
+
+        reminder = self.bot.reminder
+        if reminder is None:
+            return await ctx.send('Sorry, this functionality is currently unavailable. Try again later?')
+
+        until = f'until {format_dt(duration.dt, "F")}'
+        heads_up_message = f'You have been banned from {ctx.guild.name} {until}. Reason: {reason}'
+
+        try:
+            await member.send(heads_up_message)  # type: ignore  # Guarded by AttributeError
+        except (AttributeError, discord.HTTPException):
+            # best attempt, oh well.
+            pass
+
+        reason = self.safe_reason_append(reason, until)
+        await ctx.guild.ban(member, reason=reason)
+        timer = await reminder.create_timer(
+            duration.dt, 'tempban', ctx.guild.id, ctx.author.id, member.id, created=ctx.message.created_at
+        )
+        await ctx.send(f'Banned {member} for {format_relative(duration.dt)}.')
+
+    @commands.Cog.listener()
+    async def on_tempban_timer_complete(self, timer: Timer):
+        guild_id, mod_id, member_id = timer.args
+        await self.bot.wait_until_ready()
+
+        guild = self.bot.get_guild(guild_id)
+        if guild is None:
+            # RIP
+            return
+
+        moderator = await self.bot.get_or_fetch_member(guild, mod_id)
+        if moderator is None:
+            try:
+                moderator = await self.bot.fetch_user(mod_id)
+            except:
+                # request failed somehow
+                moderator = f'Mod ID {mod_id}'
+            else:
+                moderator = f'{moderator} (ID: {mod_id})'
+        else:
+            moderator = f'{moderator} (ID: {mod_id})'
+
+        reason = f'Automatic unban from timer made on {timer.created_at} by {moderator}.'
+        await guild.unban(discord.Object(id=member_id), reason=reason)
 
     @commands.command()
     @commands.guild_only()
@@ -1177,7 +1258,7 @@ class Moderation(commands.Cog):
             return
         if reason is None:
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
-        await member.edit(timed_out_until=discord.utils.utcnow(), reason=reason)
+        await member.edit(timed_out_until=None, reason=reason)
         await ctx.send(
             embed=SuccessEmbed(description=f"**Removed timed out** from {member}")
         )

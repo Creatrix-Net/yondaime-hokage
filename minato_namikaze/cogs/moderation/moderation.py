@@ -28,8 +28,8 @@ from minato_namikaze.lib import (
     Embed,
     SuccessEmbed,
     Timer,
-    GuildContext, 
-    format_dt
+    GuildContext,
+    format_dt,
 )
 
 if TYPE_CHECKING:
@@ -443,14 +443,14 @@ class Moderation(commands.Cog):
                 failed += 1
 
         await ctx.send(f"Banned {total_members - failed}/{total_members} members.")
-    
+
     @staticmethod
     def safe_reason_append(base: str, to_append: str) -> str:
-        appended = base + f'({to_append})'
+        appended = base + f"({to_append})"
         if len(appended) > 512:
             return base
         return appended
-    
+
     @commands.command()
     @commands.guild_only()
     @has_permissions(ban_members=True)
@@ -474,14 +474,18 @@ class Moderation(commands.Cog):
         """
 
         if reason is None:
-            reason = f'Action done by {ctx.author} (ID: {ctx.author.id})'
+            reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
         reminder = self.bot.reminder
         if reminder is None:
-            return await ctx.send('Sorry, this functionality is currently unavailable. Try again later?')
+            return await ctx.send(
+                "Sorry, this functionality is currently unavailable. Try again later?"
+            )
 
         until = f'until {format_dt(duration.dt, "F")}'
-        heads_up_message = f'You have been banned from {ctx.guild.name} {until}. Reason: {reason}'
+        heads_up_message = (
+            f"You have been banned from {ctx.guild.name} {until}. Reason: {reason}"
+        )
 
         try:
             await member.send(heads_up_message)  # type: ignore  # Guarded by AttributeError
@@ -492,9 +496,14 @@ class Moderation(commands.Cog):
         reason = self.safe_reason_append(reason, until)
         await ctx.guild.ban(member, reason=reason)
         timer = await reminder.create_timer(
-            duration.dt, 'tempban', ctx.guild.id, ctx.author.id, member.id, created=ctx.message.created_at
+            duration.dt,
+            "tempban",
+            ctx.guild.id,
+            ctx.author.id,
+            member.id,
+            created=ctx.message.created_at,
         )
-        await ctx.send(f'Banned {member} for {format_relative(duration.dt)}.')
+        await ctx.send(f"Banned {member} for {format_relative(duration.dt)}.")
 
     @commands.Cog.listener()
     async def on_tempban_timer_complete(self, timer: Timer):
@@ -512,13 +521,15 @@ class Moderation(commands.Cog):
                 moderator = await self.bot.fetch_user(mod_id)
             except:
                 # request failed somehow
-                moderator = f'Mod ID {mod_id}'
+                moderator = f"Mod ID {mod_id}"
             else:
-                moderator = f'{moderator} (ID: {mod_id})'
+                moderator = f"{moderator} (ID: {mod_id})"
         else:
-            moderator = f'{moderator} (ID: {mod_id})'
+            moderator = f"{moderator} (ID: {mod_id})"
 
-        reason = f'Automatic unban from timer made on {timer.created_at} by {moderator}.'
+        reason = (
+            f"Automatic unban from timer made on {timer.created_at} by {moderator}."
+        )
         await guild.unban(discord.Object(id=member_id), reason=reason)
 
     @commands.command()

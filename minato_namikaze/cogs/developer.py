@@ -82,7 +82,9 @@ class Server(Base):
     __table_args__ = {"extend_existing": True}
 
     id = Column(BigInteger, primary_key=True, index=True)
-    premium_applier_user_id = Column(Integer, ForeignKey("user.id"), nullable=True, index=True)
+    premium_applier_user_id = Column(
+        Integer, ForeignKey("user.id"), nullable=True, index=True
+    )
     blacklisted = Column(Boolean, default=False, nullable=False, index=True)
     show_404_commands_error = Column(Boolean, default=True, nullable=False, index=True)
     prefix = Column(String(5), nullable=True, index=True)

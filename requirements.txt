@@ -58,7 +58,7 @@ parsedatetime==2.6
 Pillow==9.1.1
 platformdirs==2.5.2
 psutil==5.9.1
-pycares==4.2.0
+pycares==4.2.1
 pycparser==2.21
 pygit2==1.9.2
 Pygments==2.12.0

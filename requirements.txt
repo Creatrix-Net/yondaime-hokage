@@ -32,7 +32,7 @@ DiscordDatabase @ git+https://github.com/The-4th-Hokage/DiscordDatabase.git@f26e
 discordlists.py==1.1.1
 DiscordUtils @ git+https://github.com/The-4th-Hokage/DiscordUtils.git@09d0641a098524d4a5b5fb7823d7b2b97d059eba
 docopt==0.6.2
-docutils==0.17.1
+docutils==0.19
 eight-ball==3.0.3
 english-words @ git+https://github.com/The-4th-Hokage/english-words-py.git@571021953746e20fbb642438b58aa7c7dc5b15b7
 ffmpeg==1.4

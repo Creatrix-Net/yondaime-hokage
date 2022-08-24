@@ -121,8 +121,6 @@ class Reminder(commands.Cog):
                     await asyncio.sleep(to_sleep)
 
                 await self.call_timer(timer)
-        except asyncio.CancelledError:
-            raise
         except (OSError, discord.ConnectionClosed):
             self._task.cancel()
             self._task = self.bot.loop.create_task(self.dispatch_timers())

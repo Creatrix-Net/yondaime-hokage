@@ -5,7 +5,7 @@ import aiohttp
 import discord
 from discord.ext import commands
 
-from .vars import Methods, Tokens, token_get, LinksAndVars
+from .vars import Methods, token_get, LinksAndVars
 
 log = logging.getLogger(__name__)
 

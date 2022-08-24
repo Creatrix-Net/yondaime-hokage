@@ -2,7 +2,6 @@ import typing
 import discord
 
 from discord.abc import GuildChannel
-from discord import app_commands
 from discord import application_command_option, VoiceChannel
 from lib.functions import meek_api
 

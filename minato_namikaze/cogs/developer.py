@@ -30,7 +30,6 @@ from sqlalchemy import (
     String,
     select,
 )
-from sqlalchemy.orm import relationship
 
 
 class User(Base):

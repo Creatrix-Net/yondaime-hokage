@@ -10,7 +10,6 @@ import discord
 from discord.ext import commands
 import sentry_sdk
 import TenGiphPy
-from discord.ext import commands
 from discord_together import DiscordTogether
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration

@@ -4,7 +4,7 @@ import asyncio
 from typing import Any, Dict, Optional, TYPE_CHECKING
 
 import discord
-from discord.ext import commands, menus
+from discord.ext import menus
 from discord.ext.commands import Paginator as CommandPaginator
 
 if TYPE_CHECKING:

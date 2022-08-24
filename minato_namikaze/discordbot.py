@@ -12,12 +12,10 @@ import sentry_sdk
 import TenGiphPy
 from discord.ext import commands
 from discord_together import DiscordTogether
-from orjson import loads
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
 from sentry_sdk.integrations.threading import ThreadingIntegration
-from sqlalchemy import select
 from minato_namikaze.lib import (
     return_all_cogs,
     ChannelAndMessageId,

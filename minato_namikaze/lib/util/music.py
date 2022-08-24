@@ -44,9 +44,8 @@ class NotPlaying(Exception):
 async def ytbettersearch(query) -> str:
     """Formats the search string for the YouTube music search"""
     url = f"https://www.youtube.com/results?search_query={query}"
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            html = await resp.text()
+    async with aiohttp.ClientSession() as session, session.get(url) as resp:
+        html = await resp.text()
     index = html.find("watch?v")
     url = ""
     while True:

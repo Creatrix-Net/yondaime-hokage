@@ -39,9 +39,8 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
     @staticmethod
     @cache()
     async def characters_data(ctx: "Context") -> List[Characters]:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(LinksAndVars.character_data.value) as resp:
-                character_data: dict = orjson.loads(await resp.text())
+        async with aiohttp.ClientSession() as session, session.get(LinksAndVars.character_data.value) as resp:
+            character_data: dict = orjson.loads(await resp.text())
         return [
             Characters.from_record(character_data[i], ctx, i) for i in character_data
         ]

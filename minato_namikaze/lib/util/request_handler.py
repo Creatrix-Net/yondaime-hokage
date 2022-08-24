@@ -40,11 +40,10 @@ async def post_handler(
     }
     header_post.update(header)
     header_post.update(headers)
-    async with aiohttp.ClientSession() as session:
-        async with session.request(
-            method.name, url, headers=header_post, json=data or json
-        ) as response:
-            data = await response.text()
+    async with aiohttp.ClientSession() as session, session.request(
+        method.name, url, headers=header_post, json=data or json
+    ) as response:
+        data = await response.text()
     if log_data:
         log.info(data)
     if return_data:

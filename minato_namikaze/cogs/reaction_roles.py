@@ -381,9 +381,8 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             return
         finally:
             await self.delete_messages(user_messages + error_messages)
-        async with session_obj() as session:
-            async with session.begin():
-                session.add(rl_object)
+        async with session_obj() as session, session.begin():
+            session.add(rl_object)
         await ctx.send(
             ":ok_hand: reaction roles successfully created.",
             delete_after=LinksAndVars.delete_message.value,

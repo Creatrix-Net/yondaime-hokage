@@ -197,9 +197,8 @@ async def detect_bad_domains(message_content: str) -> list:
         if len(url) == 0:
             return []
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(LinksAndVars.bad_links.value) as resp:
-                list_of_bad_domains = (await resp.text()).split("\n")
+        async with aiohttp.ClientSession() as session, session.get(LinksAndVars.bad_links.value) as resp:
+            list_of_bad_domains = (await resp.text()).split("\n")
 
         detected_urls = []
         for i in url:

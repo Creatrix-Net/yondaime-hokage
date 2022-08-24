@@ -22,9 +22,10 @@ class VotingMenu(menus.Menu):
 
     @menus.button("\N{WHITE HEAVY CHECK MARK}")
     async def on_check_mark(self, payload):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(LinksAndVars.listing.value) as resp:
-                listing: dict = orjson.loads(await resp.text())
+        async with aiohttp.ClientSession() as session, session.get(
+            LinksAndVars.listing.value
+        ) as resp:
+            listing: dict = orjson.loads(await resp.text())
         listing_formatted_string = "\n".join(
             f"- **[{i}](https://{listing[i]}/{self.bot.application_id})**"
             for i in listing

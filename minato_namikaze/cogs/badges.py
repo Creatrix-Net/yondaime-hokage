@@ -103,9 +103,8 @@ async def add_new_badge(
         file_name=sent_message.embeds[0].image.url,
         code=get_badge_code(name),
     )
-    async with session_obj() as session:
-        async with session.begin():
-            session.add(badge_object)
+    async with session_obj() as session, session.begin():
+        session.add(badge_object)
     await interaction.response.send_message(
         f"Added, {sent_message.jump_url}", ephemeral=True
     )

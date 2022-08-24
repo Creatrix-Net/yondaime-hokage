@@ -1,0 +1,49 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+akinator = {extras = ["async"], version = "*"}
+aiohttp = {extras = ["speedups"], version = "*"}
+async-timeout = "*"
+colorama = "*"
+discord-together = "*"
+asyncdagpi = "*"
+"betterstatcord.py" = "*"
+discord-ext-owoify = "*"
+"fluxpoint.py" = "*"
+eight-ball = "*"
+num2words = "*"
+asyncpg = "*"
+ffmpeg = "*"
+cachetools = "*"
+gtts = "*"
+mal-api = "*"
+"mystbin.py" = "*"
+orjson = "*"
+parsedatetime = "*"
+pillow = "*"
+platformdirs = "*"
+psutil = "*"
+pygit2 = "*"
+pynacl = "*"
+python-dateutil = "*"
+pytz = "*"
+sentry-sdk = "*"
+spotify = "*"
+typing-extensions = "*"
+sqlalchemy = {extras = ["asyncio"], version = "*"}
+tengiphpy = "*"
+youtube-dl = "*"
+youtube-search = "*"
+stringprogressbar = "*"
+jishaku = {git = "https://github.com/Gorialis/jishaku.git"}
+english-words = {git = "https://github.com/The-4th-Hokage/english-words-py.git"}
+"discord.py" = {git = "https://github.com/Rapptz/discord.py"}
+discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus"}
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

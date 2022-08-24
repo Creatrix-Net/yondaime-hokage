@@ -12,7 +12,6 @@ import sentry_sdk
 import TenGiphPy
 from discord.ext import commands
 from discord_together import DiscordTogether
-from DiscordDatabase import DiscordDatabase
 from orjson import loads
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -92,8 +91,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             10, 12.0, commands.BucketType.user
         )
         self._auto_spam_count = Counter()
-
-        self.db = DiscordDatabase(self, ChannelAndMessageId.server_id2.value)
 
         self.uptime = format_relative(self.start_time)
         self.persistent_views_added = False

@@ -22,7 +22,9 @@ class Badurls(discord.SlashCommand, name="badurls"):
     async def content_autocomplete(
         self, response: discord.AutocompleteResponse
     ) -> typing.AsyncIterator[str]:
-        async with aiohttp.ClientSession() as session, session.get(LinksAndVars.bad_links.value) as resp:
+        async with aiohttp.ClientSession() as session, session.get(
+            LinksAndVars.bad_links.value
+        ) as resp:
             list_of_bad_domains = (await resp.text()).split("\n")
 
         end = random.randint(25, len(list_of_bad_domains))

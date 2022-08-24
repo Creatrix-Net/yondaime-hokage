@@ -540,7 +540,9 @@ class Developer(commands.Cog):
         """
         Manually posts guild count using discordlists.py (BotBlock)
         """
-        async with aiohttp.ClientSession() as session, session.get(LinksAndVars.listing.value) as resp:
+        async with aiohttp.ClientSession() as session, session.get(
+            LinksAndVars.listing.value
+        ) as resp:
             listing: dict = orjson.loads(await resp.text())
         for i in listing:
             self.api.set_auth(listing[i].split("/")[0], token_get("".join(i.split())))

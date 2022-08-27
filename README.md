@@ -27,7 +27,7 @@ Konichiwa 👋, myself Minato Namikaze, Konohagakure Yondaime Hokage. I do every
 
 ***
 
-![Namikaze Family](https://minato-namikaze.readthedocs.io/en/latest/assets/banner.jpg)
+![Namikaze Family](https://minatonamikaze.dhruvashaw.me/en/latest/assets/banner.jpg)
 
 
 ## Contributors ✨

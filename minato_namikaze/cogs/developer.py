@@ -83,13 +83,13 @@ class Developer(commands.Cog):
 
     @tasks.loop(minutes=30)
     async def update_blacklist_data(self):
-        query = select(User.id).where(User.blacklisted == True)
+        query = select(User.id).where(User.blacklisted is True)
         async with session_obj() as session:
             data = (await session.execute(query)).all()
             for i in data:
                 self.bot.blacklist.append(i[0])
 
-        query = select(Server.id).where(Server.blacklisted == True)
+        query = select(Server.id).where(Server.blacklisted is True)
         async with session_obj() as session:
             data = (await session.execute(query)).all()
             for i in data:

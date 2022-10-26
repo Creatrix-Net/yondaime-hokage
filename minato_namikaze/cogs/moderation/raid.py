@@ -36,7 +36,7 @@ class AntiRaid(commands.Cog):
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot
         self.description = "Antiraid system commands to use"
-        self._batch_message_lock = self._disable_lock = asyncio.Lock(loop=bot.loop)
+        self._batch_message_lock = self._disable_lock = asyncio.Lock()
         self.autoban_threshold = 3
         self._spam_check = defaultdict(SpamChecker)
         self.message_batches = defaultdict(list)

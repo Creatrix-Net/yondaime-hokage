@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 import traceback
+# from watchfiles import run_process, DefaultFilter
 
 import click
 from colorama import Back, Fore, Style, init
@@ -112,9 +113,9 @@ def setup_logging(log_file):
             log.removeHandler(hdlr)
 
 
-async def run_bot():
+def run_bot():
     bot = MinatoNamikazeBot()
-    await bot.start()
+    asyncio.run(bot.start())
 
 
 @click.group(invoke_without_command=True, options_metavar="[options]")
@@ -124,7 +125,8 @@ def main(ctx, log_file):
     """Launches the bot."""
     if ctx.invoked_subcommand is None:
         with setup_logging(log_file):
-            asyncio.run(run_bot())
+            # run_process(BASE_DIR.parent / "minato_namikaze",target=run_bot, watch_filter=DefaultFilter(ignore_dirs=("__pycache__",)))
+            run_bot()
 
 
 async def create_tables():

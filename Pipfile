@@ -44,6 +44,7 @@ english-words = {git = "https://github.com/The-4th-Hokage/english-words-py.git"}
 discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus"}
 
 [dev-packages]
+watchfiles = "*"
 
 [requires]
 python_version = "3.10"

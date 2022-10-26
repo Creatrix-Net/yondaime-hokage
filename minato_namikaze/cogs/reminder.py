@@ -61,7 +61,7 @@ class Reminder(commands.Cog):
 
     def __init__(self, bot: "MinatoNamikazeBot"):
         self.bot: "MinatoNamikazeBot" = bot
-        self._have_data = asyncio.Event(loop=bot.loop)
+        self._have_data = asyncio.Event()
         self._current_timer: Optional[Timer] = None
         self._task = bot.loop.create_task(self.dispatch_timers())
 
@@ -121,9 +121,7 @@ class Reminder(commands.Cog):
                     await asyncio.sleep(to_sleep)
 
                 await self.call_timer(timer)
-        except asyncio.CancelledError:
-            raise
-        except (OSError, discord.ConnectionClosed):
+        except (OSError, discord.ConnectionClosed, asyncio.CancelledError):
             self._task.cancel()
             self._task = self.bot.loop.create_task(self.dispatch_timers())
 

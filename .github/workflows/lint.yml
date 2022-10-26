@@ -28,6 +28,11 @@ jobs:
         id: install-deps
         run: |
           python -m pip install --upgrade pip setuptools wheel black requests pipenv
+      
+      - name: Install dependencies from pipenv
+        id: install-pipenv
+        uses: VaultVulp/action-pipenv@v2.0.1
+        run: |
           pipenv install
 
       - name: Setup node.js

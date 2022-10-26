@@ -185,7 +185,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         await ctx.send(":mag: Searching...", delete_after=5)
         try:
             anime = Anime(int(mal_id))
-        except:
+        except ValueError:
             return await ctx.send(f"Anime having MAL ID: {mal_id} not found")
         
         embeds = []

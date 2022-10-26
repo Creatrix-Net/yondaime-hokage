@@ -187,7 +187,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             anime = Anime(int(mal_id))
         except ValueError:
             return await ctx.send(f"Anime having MAL ID: {mal_id} not found")
-        
+
         embeds = []
         e = Embed(
             title=anime.title,

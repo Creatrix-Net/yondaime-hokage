@@ -183,7 +183,11 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     async def aboutanime(self, ctx: "Context", mal_id: int):
         """Displays about the anime using the MAL ANIME ID. get it by using animesearch command."""
         await ctx.send(":mag: Searching...", delete_after=5)
-        anime = Anime(int(mal_id))
+        try:
+            anime = Anime(int(mal_id))
+        except ValueError:
+            return await ctx.send(f"Anime having MAL ID: {mal_id} not found")
+
         embeds = []
         e = Embed(
             title=anime.title,

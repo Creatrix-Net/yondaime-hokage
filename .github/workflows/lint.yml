@@ -33,7 +33,7 @@ jobs:
         id: install-pipenv
         uses: VaultVulp/action-pipenv@v2.0.1
         with:
-        command: install -d # Install all dependencies, including development ones
+          command: install -d # Install all dependencies, including development ones
 
       - name: Setup node.js
         uses: actions/setup-node@v2

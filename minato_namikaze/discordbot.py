@@ -3,7 +3,7 @@ import logging
 import random
 from collections import Counter, defaultdict, deque
 from datetime import timedelta
-from typing import Any, List, Optional, Union, TYPE_CHECKING
+from typing import Any, Optional, Union, TYPE_CHECKING
 
 import aiohttp
 import discord

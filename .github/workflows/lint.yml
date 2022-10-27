@@ -28,7 +28,7 @@ jobs:
         id: install-deps
         run: |
           python -m pip install --upgrade pip setuptools wheel black requests pipenv
-          python -m pip install -U -r  "".github/requirements/requirements.txt"
+          python -m pip install -U -r  ".github/requirements/requirements.txt"
 
       - name: Setup node.js
         uses: actions/setup-node@v2

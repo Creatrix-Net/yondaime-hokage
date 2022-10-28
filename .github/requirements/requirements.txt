@@ -8,14 +8,6 @@ aiosignal==1.2.0; python_version >= '3.6'
 
 akinator[async]==1.0.3
 
-astunparse==1.6.3
-
-async-timeout==4.0.2
-
-asyncdagpi==4.1.5
-
-asyncpg==0.27.0
-
 attrs==22.1.0; python_version >= '3.5'
 
 backoff==1.11.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
@@ -45,6 +37,8 @@ git+https://github.com/Rapptz/discord-ext-menus@8686b5d1bbc1d3c862292eb436ab630d
 discord-ext-owoify==0.0.7.9a0
 
 git+https://github.com/Rapptz/discord.py@4c8ba635dbcaaa783a35b88498b137c8f9b5140a#egg=discord-py
+
+git+https://github.com/Rapptz/discord.py#egg=discord.py
 
 docopt==0.6.2
 

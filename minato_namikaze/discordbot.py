@@ -10,7 +10,6 @@ import discord
 from discord.ext import commands
 import sentry_sdk
 import TenGiphPy
-from discord_together import DiscordTogether
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.modules import ModulesIntegration
@@ -141,7 +140,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def setup_hook(self) -> None:
         self.bot_app_info = await self.application_info()
         self.owner_id = self.bot_app_info.owner.id
-        self.togetherControl = await DiscordTogether(Tokens.token.value)
         for i in return_all_cogs():
             try:
                 await self.load_extension(f"minato_namikaze.cogs.{i}")

@@ -8,7 +8,6 @@ akinator = {extras = ["async"], version = "*"}
 aiohttp = {extras = ["speedups"], version = "*"}
 async-timeout = "*"
 colorama = "*"
-discord-together = "*"
 asyncdagpi = "*"
 "betterstatcord.py" = "*"
 discord-ext-owoify = "*"
@@ -40,7 +39,7 @@ youtube-search = "*"
 stringprogressbar = "*"
 jishaku = {git = "https://github.com/Gorialis/jishaku.git"}
 english-words = {git = "https://github.com/The-4th-Hokage/english-words-py.git"}
-"discord.py" = {git = "https://github.com/Rapptz/discord.py"}
+"discord.py" = {git = "https://github.com/Rapptz/discord.py", branch = "master"}
 discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus"}
 
 [dev-packages]

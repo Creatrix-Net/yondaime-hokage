@@ -18,13 +18,12 @@ repos:
     -   id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
     -   id: requirements-txt-fixer
+        args: [filenames=".github/requirements/*.txt"]
 
 -   repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
     -   id: black
-        language_version: python3.10
-        args: [minato_namikaze launcher.py, --line-length=88, --target-version=py310]
 
 -   repo: https://github.com/asottile/add-trailing-comma
     rev: v2.3.0

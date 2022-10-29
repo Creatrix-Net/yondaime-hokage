@@ -43,7 +43,7 @@ repos:
         args: [--py310-plus]
 
 -   repo: https://github.com/The-4th-Hokage/pipenv-requirements-generator
-    rev: master
+    rev: 6e198e97542952e21a5e488a693efffb9100c7fd
     hooks:
     -   id: pipenv-requirements-generator
         args: ['--path', '.github/requirements']

@@ -1,5 +1,5 @@
-# See https://pre-commit.com for more information       
-# See https://pre-commit.com/hooks.html for more hooks  
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
@@ -15,3 +15,5 @@ repos:
     -   id: check-json
     -   id: check-ast
     -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]

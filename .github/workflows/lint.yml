@@ -28,6 +28,7 @@ jobs:
         id: install-deps
         run: |
           python -m pip install --upgrade pip setuptools wheel black requests
+          python .github/requirements/requirements-generator.py
           python -m pip install -U -r  ".github/requirements/requirements.txt"
 
       - name: Setup node.js

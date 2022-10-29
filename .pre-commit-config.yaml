@@ -46,4 +46,4 @@ repos:
     rev: master
     hooks:
     -   id: pipenv-requirements-generator
-        args: ['--path', '.github/requirements', '--filename', 'requirements.txt']
+        args: ['--path', '.github/requirements']

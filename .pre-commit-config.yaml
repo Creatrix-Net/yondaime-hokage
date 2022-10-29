@@ -41,3 +41,9 @@ repos:
     hooks:
     -   id: pyupgrade
         args: [--py310-plus]
+
+-   repo: https://github.com/The-4th-Hokage/pipenv-requirements-generator
+    rev: master
+    hooks:
+    -   id: pipenv-requirements-generator
+        args: ['--path', '.github/requirements', '--filename', 'requirements.txt']

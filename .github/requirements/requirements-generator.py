@@ -17,7 +17,10 @@ if (BASE_DIR / "Pipfile").exists():
             formatted_value = config_dict[i].strip("{").strip("}").split(",")
             for i in formatted_value:
                 if i.startswith("extras"):
-                    name = name.strip() + i.split("=")[1].strip().strip('"')
+                    name = name.strip() + i.split("=")[1].strip().strip('"').replace(
+                        '["',
+                        "[",
+                    ).replace('"]', "]")
                 if i.startswith("version"):
                     version = name.strip() + "==" + i.split("=")[1].strip().strip('"')
                 if i.startswith("git"):

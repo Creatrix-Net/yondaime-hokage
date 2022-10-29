@@ -1,5 +1,5 @@
-aiohttp["speedups"]
-akinator["async"]
+aiohttp[speedups]
+akinator[async]
 async-timeout
 asyncdagpi
 asyncpg
@@ -31,7 +31,7 @@ python-dateutil
 pytz
 sentry-sdk
 spotify
-sqlalchemy["asyncio"]
+sqlalchemy[asyncio]
 stringprogressbar
 tengiphpy
 typing-extensions

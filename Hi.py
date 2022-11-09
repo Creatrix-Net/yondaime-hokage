@@ -1,8 +1,9 @@
 class A:
     def __init__(self, int: a):
-        self.oodu=a
+        self.oodu = a
+
 
 class B(A):
-    def __init__(self,b):
+    def __init__(self, b):
         super(A).__init__(b)
-        self.launda=b
+        self.launda = b

@@ -1,2 +1,5 @@
 - name: Sentry Release
   uses: getsentry/action-release@v1.1.5
+
+- name: Lock Threads
+  uses: dessant/lock-threads@v4.0.0

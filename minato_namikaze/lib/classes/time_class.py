@@ -1,6 +1,7 @@
 """
 This code has been fully copied from here https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/paginator.py
 """
+
 import datetime
 import re
 from typing import TYPE_CHECKING

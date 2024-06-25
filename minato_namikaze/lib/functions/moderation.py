@@ -194,9 +194,11 @@ async def serverinfo(
     )
     embed.add_field(
         name=":bell: Notifications",
-        value="All Messages "
-        if guild.default_notifications == discord.NotificationLevel.all_messages
-        else "Disabled",
+        value=(
+            "All Messages "
+            if guild.default_notifications == discord.NotificationLevel.all_messages
+            else "Disabled"
+        ),
     )
     embed.add_field(name="Categories", value=len(guild.categories))
     embed.add_field(

@@ -10,6 +10,7 @@ from typing import Any, List
 
 from sqlalchemy.orm import declarative_base
 
+
 # only way to resolve the circular, yes this is the only way
 class _MissingSentinel:
     __slots__ = ()

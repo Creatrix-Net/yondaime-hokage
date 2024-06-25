@@ -306,10 +306,10 @@ class Setup(discord.SlashCommand):
 class Add(discord.SlashCommand, parent=Setup):
     """This adds logging of the some things in the specified text channel"""
 
-    add_type: typing.Literal[
-        "ban", "feedback", "warns", "unban"
-    ] = discord.application_command_option(
-        description="which to log", name="type", default=None
+    add_type: typing.Literal["ban", "feedback", "warns", "unban"] = (
+        discord.application_command_option(
+            description="which to log", name="type", default=None
+        )
     )
     channel: GuildChannel = discord.application_command_option(
         channel_types=[discord.TextChannel], description="The logging channel"
@@ -389,10 +389,10 @@ class BadLinks(discord.SlashCommand, parent=Setup):
     option: bool = discord.application_command_option(
         description="Enable or Disable", default=True
     )
-    action: typing.Optional[
-        typing.Literal["ban", "mute", "timeout", "kick", "log"]
-    ] = discord.application_command_option(
-        description="What kind of action to take", default=None
+    action: typing.Optional[typing.Literal["ban", "mute", "timeout", "kick", "log"]] = (
+        discord.application_command_option(
+            description="What kind of action to take", default=None
+        )
     )
     channel: typing.Optional[GuildChannel] = discord.application_command_option(
         channel_types=[discord.TextChannel], description="Log channel", default=None
@@ -413,9 +413,11 @@ class BadLinks(discord.SlashCommand, parent=Setup):
                 "badlinks": {
                     "option": response.options.option,
                     "action": response.options.action,
-                    "logging_channel": response.options.channel.id
-                    if response.options.channel is not None
-                    else response.options.channel,
+                    "logging_channel": (
+                        response.options.channel.id
+                        if response.options.channel is not None
+                        else response.options.channel
+                    ),
                 }
             },
             response.interaction.guild,

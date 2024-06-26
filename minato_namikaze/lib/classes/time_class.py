@@ -1,6 +1,7 @@
 """
 This code has been fully copied from here https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/paginator.py
 """
+
 from __future__ import annotations
 
 import datetime

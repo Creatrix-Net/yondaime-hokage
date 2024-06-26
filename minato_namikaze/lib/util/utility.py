@@ -219,9 +219,11 @@ async def detect_bad_domains(message_content: str) -> list:
             if len(i.split("//")) != 0:
                 try:
                     parsed_url = urlparse(
-                        i.lower().strip("/")
-                        if i.split("://")[0].lower() in uses_netloc
-                        else f'//{i.strip("/")}',
+                        (
+                            i.lower().strip("/")
+                            if i.split("://")[0].lower() in uses_netloc
+                            else f'//{i.strip("/")}'
+                        ),
                     )
                     if parsed_url.hostname in list_of_bad_domains:
                         detected_urls.append(parsed_url.hostname)

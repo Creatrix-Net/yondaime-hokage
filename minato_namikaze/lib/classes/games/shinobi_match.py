@@ -119,15 +119,19 @@ class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
             await self.reduce_health(amount=random.randint(1, 5))
         elif self.label.lower() == "Ninjutsu Attack".lower():
             await self.reduce_health(
-                amount=abs(view.character1.hitpoint - view.character2.regainpoint)
-                if view.turn == view.player1
-                else abs(view.character2.hitpoint - view.character1.regainpoint),
+                amount=(
+                    abs(view.character1.hitpoint - view.character2.regainpoint)
+                    if view.turn == view.player1
+                    else abs(view.character2.hitpoint - view.character1.regainpoint)
+                ),
             )
         elif self.label.lower() == "Special Power Attack".lower():
             await self.reduce_health(
-                amount=(view.character1.specialpoint / 100) * view.overall_health
-                if view.turn == view.player1
-                else (view.character2.specialpoint / 100) * view.overall_health,
+                amount=(
+                    (view.character1.specialpoint / 100) * view.overall_health
+                    if view.turn == view.player1
+                    else (view.character2.specialpoint / 100) * view.overall_health
+                ),
             )
             if view.turn == view.player1:
                 view.special_moves1 -= 1

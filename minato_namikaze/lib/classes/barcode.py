@@ -2,6 +2,7 @@
 All the code below was hacked together from https://github.com/mvictor212/pyBarcode
 Which is itself a port of python-barcode which is no longer available
 """
+
 from __future__ import annotations
 
 import gzip

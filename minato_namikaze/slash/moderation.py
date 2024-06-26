@@ -428,11 +428,11 @@ class BadLinks(discord.SlashCommand, parent=Setup):
         description="Enable or Disable",
         default=True,
     )
-    action: None | (
-        typing.Literal["ban", "mute", "timeout", "kick", "log"]
-    ) = discord.application_command_option(
-        description="What kind of action to take",
-        default=None,
+    action: None | (typing.Literal["ban", "mute", "timeout", "kick", "log"]) = (
+        discord.application_command_option(
+            description="What kind of action to take",
+            default=None,
+        )
     )
     channel: GuildChannel | None = discord.application_command_option(
         channel_types=[discord.TextChannel],
@@ -455,9 +455,11 @@ class BadLinks(discord.SlashCommand, parent=Setup):
                 "badlinks": {
                     "option": response.options.option,
                     "action": response.options.action,
-                    "logging_channel": response.options.channel.id
-                    if response.options.channel is not None
-                    else response.options.channel,
+                    "logging_channel": (
+                        response.options.channel.id
+                        if response.options.channel is not None
+                        else response.options.channel
+                    ),
                 },
             },
             response.interaction.guild,

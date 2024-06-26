@@ -162,9 +162,11 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 "badlinks": {
                     "option": option,
                     "action": action,
-                    "logging_channel": logging_channel.id
-                    if logging_channel is not None
-                    else logging_channel,
+                    "logging_channel": (
+                        logging_channel.id
+                        if logging_channel is not None
+                        else logging_channel
+                    ),
                 },
             },
             ctx=ctx,

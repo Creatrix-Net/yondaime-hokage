@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 import string
 from typing import Union
@@ -56,7 +58,7 @@ stages = [
             _________\t
             |/      |\t
             |      \U0001f626\t
-            |        
+            |
             |
             |
          ___|___
@@ -64,7 +66,7 @@ stages = [
     """
             _________\t
             |/      |\t
-            |      
+            |
             |
             |
             |
@@ -72,8 +74,8 @@ stages = [
             """,
     """
             _________\t
-            |/     
-            |      
+            |/
+            |
             |
             |
             |
@@ -81,8 +83,8 @@ stages = [
             """,
     """
             ___      \t
-            |/      
-            |      
+            |/
+            |
             |
             |
             |
@@ -123,10 +125,15 @@ class Hangman:
             self._counter -= 1
             self.wrong_letters.append(guess)
             self._embed.set_field_at(
-                1, name="Wrong letters", value=f"{', '.join(self.wrong_letters)}"
+                1,
+                name="Wrong letters",
+                value=f"{', '.join(self.wrong_letters)}",
             )
             self._embed.set_field_at(
-                2, name="Lives left", value=self.lives(), inline=False
+                2,
+                name="Lives left",
+                value=self.lives(),
+                inline=False,
             )
             self._embed.description = f"```\n{stages[self._counter]}\n```"
             await self._message.edit(embed=self._embed)
@@ -152,7 +159,7 @@ class Hangman:
         ctx: commands.Context,
         *,
         delete_after_guess: bool = False,
-        color: Union[discord.Color, int] = 0x2F3136,
+        color: discord.Color | int = 0x2F3136,
         **kwargs,
     ):
 

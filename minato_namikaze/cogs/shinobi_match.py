@@ -1,21 +1,24 @@
+from __future__ import annotations
+
 import asyncio
 import random
-from typing import TYPE_CHECKING, List, Union
+from typing import List
+from typing import TYPE_CHECKING
+from typing import Union
 
 import aiohttp
 import discord
 import orjson
 from discord.ext import commands
-from minato_namikaze.lib import (
-    Characters,
-    LinksAndVars,
-    MatchHandlerView,
-    MemberID,
-    ShinobiMatchCharacterSelection,
-    cache,
-    Embed,
-    ErrorEmbed,
-)
+
+from minato_namikaze.lib import cache
+from minato_namikaze.lib import Characters
+from minato_namikaze.lib import Embed
+from minato_namikaze.lib import ErrorEmbed
+from minato_namikaze.lib import LinksAndVars
+from minato_namikaze.lib import MatchHandlerView
+from minato_namikaze.lib import MemberID
+from minato_namikaze.lib import ShinobiMatchCharacterSelection
 
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
@@ -28,8 +31,8 @@ log = logging.getLogger(__name__)
 
 
 class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "An amazing shinobi match with your friends"
 
     @property
@@ -38,9 +41,9 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
 
     @staticmethod
     @cache()
-    async def characters_data(ctx: "Context") -> List[Characters]:
+    async def characters_data(ctx: "Context") -> list[Characters]:
         async with aiohttp.ClientSession() as session, session.get(
-            LinksAndVars.character_data.value
+            LinksAndVars.character_data.value,
         ) as resp:
             character_data: dict = orjson.loads(await resp.text())
         return [
@@ -48,7 +51,7 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
         ]
 
     @classmethod
-    async def return_random_characters(self, ctx: "Context") -> List[Characters]:
+    async def return_random_characters(self, ctx: "Context") -> list[Characters]:
         characters_data = await self.characters_data(ctx)
         random.shuffle(characters_data)
         return random.sample(characters_data, 25)
@@ -66,7 +69,7 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
         usage="<opponent.mention>",
         aliases=["shinobi_match", "matchwith", "shinobimatch", "match_with"],
     )
-    async def match(self, ctx: "Context", opponent: Union[discord.Member, MemberID]):
+    async def match(self, ctx: "Context", opponent: discord.Member | MemberID):
         """
         Play shinobi match with your friends using the characters from `Naruto Verse`
 
@@ -85,8 +88,8 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
         if opponent is ctx.author or opponent.bot:
             await ctx.send(
                 embed=ErrorEmbed(
-                    description="*You cannot play this game yourself or with a bot*"
-                )
+                    description="*You cannot play this game yourself or with a bot*",
+                ),
             )
             return
 
@@ -96,7 +99,8 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
             ctx=ctx,
         )
         select_msg1: discord.Message = await ctx.send(
-            embed=self.return_select_help_embed(ctx.author), view=view1
+            embed=self.return_select_help_embed(ctx.author),
+            view=view1,
         )
 
         view2 = ShinobiMatchCharacterSelection(
@@ -105,7 +109,8 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
             ctx=ctx,
         )
         select_msg2: discord.Message = await ctx.send(
-            embed=self.return_select_help_embed(opponent), view=view2
+            embed=self.return_select_help_embed(opponent),
+            view=view2,
         )
 
         await view1.wait()
@@ -114,8 +119,8 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
         if view1.character is None or view2.character is None:
             return await ctx.send(
                 embed=ErrorEmbed(
-                    title="One of the shinobi didn't choose his character on time."
-                )
+                    title="One of the shinobi didn't choose his character on time.",
+                ),
             )
 
         await select_msg1.delete()
@@ -128,7 +133,8 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
         await timer.delete()
 
         view = MatchHandlerView(
-            player1=(ctx.author, view1.character), player2=(opponent, view2.character)
+            player1=(ctx.author, view1.character),
+            player2=(opponent, view2.character),
         )
         view.message = await ctx.send(
             content=f"{ctx.author.mention} now your turn",

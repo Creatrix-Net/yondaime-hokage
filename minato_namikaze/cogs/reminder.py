@@ -1,40 +1,39 @@
 # from https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/reminder.py
-
 from __future__ import annotations
 
 import asyncio
 import datetime
 import textwrap
-from typing import TYPE_CHECKING, Any, Optional
+from typing import Annotated
+from typing import Any
+from typing import Optional
+from typing import TYPE_CHECKING
 
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import (
-    Base,
-    FriendlyTimeResult,
-    LinksAndVars,
-    Timer,
-    UserFriendlyTime,
-    format_relative,
-    human_timedelta,
-    plural,
-    session_obj,
-)
-from sqlalchemy import (
-    Column,
-    DateTime,
-    Integer,
-    String,
-    and_,
-    delete,
-    func,
-    insert,
-    select,
-)
+from sqlalchemy import and_
+from sqlalchemy import Column
+from sqlalchemy import DateTime
+from sqlalchemy import delete
+from sqlalchemy import func
+from sqlalchemy import insert
+from sqlalchemy import Integer
+from sqlalchemy import select
+from sqlalchemy import String
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.exc import MultipleResultsFound
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.util._collections import immutabledict
-from typing_extensions import Annotated
+
+from minato_namikaze.lib import Base
+from minato_namikaze.lib import format_relative
+from minato_namikaze.lib import FriendlyTimeResult
+from minato_namikaze.lib import human_timedelta
+from minato_namikaze.lib import LinksAndVars
+from minato_namikaze.lib import plural
+from minato_namikaze.lib import session_obj
+from minato_namikaze.lib import Timer
+from minato_namikaze.lib import UserFriendlyTime
 
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
@@ -59,10 +58,10 @@ class Reminders(Base):
 class Reminder(commands.Cog):
     """Reminders to do something."""
 
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self._have_data = asyncio.Event()
-        self._current_timer: Optional[Timer] = None
+        self._current_timer: Timer | None = None
         self._task = bot.loop.create_task(self.dispatch_timers())
 
     @property
@@ -72,9 +71,9 @@ class Reminder(commands.Cog):
     def cog_unload(self) -> None:
         self._task.cancel()
 
-    async def get_active_timer(self, *, days: int = 7) -> Optional[Timer]:
+    async def get_active_timer(self, *, days: int = 7) -> Timer | None:
         query = select(Reminders).where(
-            Reminders.expires < datetime.timedelta(days=days)
+            Reminders.expires < datetime.timedelta(days=days),
         )
         async with session_obj() as session:
             try:
@@ -168,7 +167,11 @@ class Reminder(commands.Cog):
         now = now.astimezone(datetime.timezone.utc).replace(tzinfo=None)
 
         timer = Timer.temporary(
-            event=event, args=args, kwargs=kwargs, expires=when, created=now
+            event=event,
+            args=args,
+            kwargs=kwargs,
+            expires=when,
+            created=now,
         )
         delta = (when - now).total_seconds()
         if delta <= 60:
@@ -206,7 +209,9 @@ class Reminder(commands.Cog):
         return timer
 
     @commands.group(
-        aliases=["timer", "remind"], usage="<when>", invoke_without_command=True
+        aliases=["timer", "remind"],
+        usage="<when>",
+        invoke_without_command=True,
     )
     async def reminder(
         self,
@@ -250,13 +255,15 @@ class Reminder(commands.Cog):
         """Shows the 10 latest currently running reminders."""
         query = (
             select(
-                Reminders.id, Reminders.expires, Reminders.extra["args"][0].as_string()
+                Reminders.id,
+                Reminders.expires,
+                Reminders.extra["args"][0].as_string(),
             )
             .where(
                 and_(
                     Reminders.event == "reminder",
                     Reminders.extra["args"][0].as_string() == str(ctx.author.id),
-                )
+                ),
             )
             .order_by(Reminders.expires)
             .limit(10)
@@ -274,13 +281,15 @@ class Reminder(commands.Cog):
             e.set_footer(text="Only showing up to 10 reminders.")
         else:
             e.set_footer(
-                text=f'{len(records)} reminder{"s" if len(records) > 1 else ""}'
+                text=f'{len(records)} reminder{"s" if len(records) > 1 else ""}',
             )
 
         for _id, expires, message in records:
             shorten = textwrap.shorten(message, width=512)
             e.add_field(
-                name=f"{_id}: {format_relative(expires)}", value=shorten, inline=False
+                name=f"{_id}: {format_relative(expires)}",
+                value=shorten,
+                inline=False,
             )
 
         await ctx.send(embed=e)
@@ -299,11 +308,12 @@ class Reminder(commands.Cog):
                 Reminders.id == id,
                 Reminders.event == "reminder",
                 Reminders.extra["args"][0].as_string() == str(ctx.author.id),
-            )
+            ),
         )
         async with session_obj() as session:
             result = await session.execute(
-                query, execution_options=immutabledict({"synchronize_session": "fetch"})
+                query,
+                execution_options=immutabledict({"synchronize_session": "fetch"}),
             )
             await session.commit()
         if len(result.scalars().all()) == 0:
@@ -336,7 +346,7 @@ class Reminder(commands.Cog):
                 and_(
                     Reminders.event == "reminder",
                     Reminders.extra["args"][0].as_string() == str(ctx.author.id),
-                )
+                ),
             )
         )
         async with session_obj() as session:
@@ -349,22 +359,24 @@ class Reminder(commands.Cog):
             )
 
         confirm = await ctx.prompt(
-            f"Are you sure you want to delete {plural(total):reminder}?"
+            f"Are you sure you want to delete {plural(total):reminder}?",
         )
         if not confirm:
             return await ctx.send(
-                "Aborting", delete_after=LinksAndVars.delete_message.value
+                "Aborting",
+                delete_after=LinksAndVars.delete_message.value,
             )
 
         query = delete(Reminders).where(
             and_(
                 Reminders.event == "reminder",
                 Reminders.extra["args"][0].as_string() == str(ctx.author.id),
-            )
+            ),
         )
         async with session_obj() as session:
             await session.execute(
-                query, execution_options=immutabledict({"synchronize_session": "fetch"})
+                query,
+                execution_options=immutabledict({"synchronize_session": "fetch"}),
             )
             await session.commit()
 

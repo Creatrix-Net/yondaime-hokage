@@ -1,20 +1,32 @@
+from __future__ import annotations
+
 import asyncio
 import uuid
-from sqlalchemy import delete, exists, select
-from typing import TYPE_CHECKING, List, Tuple
-from sqlalchemy.exc import NoResultFound, MultipleResultsFound
+from typing import List
+from typing import Tuple
+from typing import TYPE_CHECKING
 
 import discord
-from discord.ext import commands, tasks
-from minato_namikaze.lib import (
-    ReactionPersistentView,
-    session_obj,
-    has_permissions,
-    LinksAndVars,
-    Base,
-    Embed,
-)
-from sqlalchemy import Column, BigInteger, String, Boolean, JSON, ARRAY
+from discord.ext import commands
+from discord.ext import tasks
+from sqlalchemy import ARRAY
+from sqlalchemy import BigInteger
+from sqlalchemy import Boolean
+from sqlalchemy import Column
+from sqlalchemy import delete
+from sqlalchemy import exists
+from sqlalchemy import JSON
+from sqlalchemy import select
+from sqlalchemy import String
+from sqlalchemy.exc import MultipleResultsFound
+from sqlalchemy.exc import NoResultFound
+
+from minato_namikaze.lib import Base
+from minato_namikaze.lib import Embed
+from minato_namikaze.lib import has_permissions
+from minato_namikaze.lib import LinksAndVars
+from minato_namikaze.lib import ReactionPersistentView
+from minato_namikaze.lib import session_obj
 
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
@@ -32,14 +44,20 @@ class Reaction_Roles(Base):
     __table_args__ = {"extend_existing": True}
 
     message_id = Column(
-        BigInteger, primary_key=True, index=True, nullable=False, unique=True
+        BigInteger,
+        primary_key=True,
+        index=True,
+        nullable=False,
+        unique=True,
     )
     server_id = Column(BigInteger, index=True, nullable=False)
     channel_id = Column(BigInteger, index=True, nullable=False)
     reactions = Column(JSON, nullable=False, default="'{}'::jsonb")
     limit_to_one = Column(Boolean, nullable=False, index=True)
     custom_id = Column(
-        ARRAY(String(250), zero_indexes=True, as_tuple=True), nullable=False, index=True
+        ARRAY(String(250), zero_indexes=True, as_tuple=True),
+        nullable=False,
+        index=True,
     )
 
     def __repr__(self) -> str:
@@ -50,8 +68,8 @@ class Reaction_Roles(Base):
 
 
 class ReactionRoles(commands.Cog, name="Reaction Roles"):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Setup some reaction roles"
         self.cleanup.start()
 
@@ -89,14 +107,14 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 channel = self.bot.get_channel(row.channel_id)
                 if channel is None:
                     query_delete = delete(Reaction_Roles).where(
-                        Reaction_Roles.channel_id == row.channel_id
+                        Reaction_Roles.channel_id == row.channel_id,
                     )
                     await session.execute(query_delete)
                 try:
                     await channel.fetch_message(row.message_id)
                 except (discord.NotFound, discord.Forbidden, discord.HTTPException):
                     query_delete = delete(Reaction_Roles).where(
-                        Reaction_Roles.message_id == row.message_id
+                        Reaction_Roles.message_id == row.message_id,
                     )
                     await session.execute(query_delete)
                 await session.commit()
@@ -110,13 +128,13 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             return
         async with session_obj() as session:
             query = select(Reaction_Roles).where(
-                Reaction_Roles.message_id == payload.message_id
+                Reaction_Roles.message_id == payload.message_id,
             )
             try:
                 data = (await session.execute(exists(query).select())).scalar_one()
                 if data:
                     query_delete = delete(Reaction_Roles).where(
-                        Reaction_Roles.message_id == payload.message_id
+                        Reaction_Roles.message_id == payload.message_id,
                     )
                     await session.execute(query_delete)
                     await session.commit()
@@ -124,7 +142,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 pass
 
     @staticmethod
-    async def delete_messages(list_delete: List[discord.Message]) -> Tuple[List]:
+    async def delete_messages(list_delete: list[discord.Message]) -> tuple[list]:
         """Delete the messages from list
 
         :param list_delete: The list of messages to be deleted.
@@ -168,7 +186,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         sent_reactions_message = await ctx.send(
             "Attach roles and emojis separated by one space (one combination"
             " per message). When you are done type `done`. Example:\n:smile:"
-            " `@Role`"
+            " `@Role`",
         )
         user_messages.append(sent_reactions_message)
         reactions = {}
@@ -182,7 +200,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 if n > 15:
                     break
                 reactions_message = await self.bot.wait_for(
-                    "message", timeout=120, check=check
+                    "message",
+                    timeout=120,
+                    check=check,
                 )
                 user_messages.append(reactions_message)
                 if reactions_message.content.lower() != "done":
@@ -194,9 +214,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                             (
                                 await ctx.send(
                                     "Mention a role after the reaction. Example:\n:smile:"
-                                    " `@Role`"
+                                    " `@Role`",
                                 )
-                            )
+                            ),
                         )
                         continue
 
@@ -204,9 +224,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                         error_messages.append(
                             (
                                 await ctx.send(
-                                    "You have already used that reaction for another role. Please choose another reaction"
+                                    "You have already used that reaction for another role. Please choose another reaction",
                                 )
-                            )
+                            ),
                         )
                         continue
                     else:
@@ -219,9 +239,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                                 (
                                     await ctx.send(
                                         "You can only use reactions uploaded to servers the bot has"
-                                        " access to or standard emojis."
+                                        " access to or standard emojis.",
                                     )
-                                )
+                                ),
                             )
                             continue
                 else:
@@ -235,11 +255,11 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             return
         finally:
             user_messages, error_messages = await self.delete_messages(
-                user_messages + error_messages
+                user_messages + error_messages,
             )
 
         sent_limited_message = await ctx.send(
-            "Would you like to limit users to select only have one of the roles at a given time? Please react with a \U0001f512 to limit users or with a \U0000267e to allow users to select multiple roles."
+            "Would you like to limit users to select only have one of the roles at a given time? Please react with a \U0001f512 to limit users or with a \U0000267e to allow users to select multiple roles.",
         )
         user_messages.append(sent_limited_message)
 
@@ -254,7 +274,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             await sent_limited_message.add_reaction("\U0001f512")
             await sent_limited_message.add_reaction("\U0000267e")
             limited_message_response_payload = await self.bot.wait_for(
-                "raw_reaction_add", timeout=120, check=reaction_check
+                "raw_reaction_add",
+                timeout=120,
+                check=reaction_check,
             )
 
             if str(limited_message_response_payload.emoji) == "\U0001f512":
@@ -269,16 +291,18 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             return
         finally:
             user_messages, error_messages = await self.delete_messages(
-                user_messages + error_messages
+                user_messages + error_messages,
             )
 
         sent_channel_message = await ctx.send(
-            "Mention the #channel where to send the auto-role message."
+            "Mention the #channel where to send the auto-role message.",
         )
         try:
             while True:
                 channel_message = await self.bot.wait_for(
-                    "message", timeout=120, check=check
+                    "message",
+                    timeout=120,
+                    check=check,
                 )
                 if channel_message.channel_mentions:
                     target_channel = channel_message.channel_mentions[0]
@@ -286,7 +310,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                     break
                 else:
                     error_messages.append(
-                        (await ctx.send("The channel you mentioned is invalid."))
+                        (await ctx.send("The channel you mentioned is invalid.")),
                     )
         except asyncio.TimeoutError:
             await ctx.author.send(
@@ -297,7 +321,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             return
         finally:
             user_messages, error_messages = await self.delete_messages(
-                user_messages + error_messages
+                user_messages + error_messages,
             )
 
         selector_embed = Embed(
@@ -305,7 +329,8 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
             description="Embed_content",
         )
         selector_embed.set_footer(
-            text=f"{self.bot.user.name}", icon_url=self.bot.user.display_avatar.url
+            text=f"{self.bot.user.name}",
+            icon_url=self.bot.user.display_avatar.url,
         )
 
         sent_message_message = await ctx.send(
@@ -320,7 +345,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         try:
             while True:
                 message_message = await self.bot.wait_for(
-                    "message", timeout=120, check=check
+                    "message",
+                    timeout=120,
+                    check=check,
                 )
                 user_messages.append(message_message)
                 # I would usually end up deleting message_message in the end but users usually want to be able to access the
@@ -357,7 +384,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                         rl_object.reactions = reactions
                         view = ReactionPersistentView(data=rl_object)
                         sent_message_final = await target_channel.send(
-                            content=selector_msg_body, embed=selector_embed, view=view
+                            content=selector_msg_body,
+                            embed=selector_embed,
+                            view=view,
                         )
                         rl_object.message_id = sent_message_final.id
                         rl_object.channel_id = sent_message_final.channel.id
@@ -368,9 +397,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                             (
                                 await ctx.send(
                                     "I don't have permission to send messages to"
-                                    f" the channel {target_channel.mention}. Please check my permissions and try again."
+                                    f" the channel {target_channel.mention}. Please check my permissions and try again.",
                                 )
-                            )
+                            ),
                         )
         except asyncio.TimeoutError:
             await ctx.author.send(
@@ -390,7 +419,9 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
 
     @rr.command(aliases=["del_rr", "delete"], usage="<reaction_roles_id aka message.id")
     async def delete_reaction_roles(
-        self, ctx: "Context", reaction_roles_message: commands.MessageConverter
+        self,
+        ctx: "Context",
+        reaction_roles_message: commands.MessageConverter,
     ):
         """
         It deletes the reaction roles
@@ -400,7 +431,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
         """
         async with session_obj() as session:
             query = select(Reaction_Roles).where(
-                Reaction_Roles.message_id == reaction_roles_message.id
+                Reaction_Roles.message_id == reaction_roles_message.id,
             )
             rl_object = (await session.execute(exists(query).select())).scalar_one()
             if not rl_object:
@@ -410,7 +441,7 @@ class ReactionRoles(commands.Cog, name="Reaction Roles"):
                 )
                 return
             query_delete = delete(Reaction_Roles).where(
-                Reaction_Roles.message_id == reaction_roles_message.id
+                Reaction_Roles.message_id == reaction_roles_message.id,
             )
             await session.execute(query_delete)
             await session.commit()

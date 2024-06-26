@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 import ast
 import copy
 import datetime
 import os
 import pathlib
-from typing import AnyStr, Literal, Optional, Union
+from typing import AnyStr
+from typing import Literal
+from typing import Optional
+from typing import Union
 
 import discord
 from discord.ext import commands
@@ -45,7 +50,8 @@ def check_if_user_joined_a_voice(ctx):
     """Checks is a user joined a voice channel"""
     voice_state_author = ctx.author.voice
     if voice_state_author is None or isinstance(
-        voice_state_author.channel, discord.VoiceChannel
+        voice_state_author.channel,
+        discord.VoiceChannel,
     ):
         return False
     return True
@@ -55,14 +61,17 @@ def check_if_user_joined_a_stage(ctx):
     """Checks is a user joined a stage channel"""
     voice_state_author = ctx.author.voice
     if voice_state_author is None or isinstance(
-        voice_state_author.channel, discord.StageChannel
+        voice_state_author.channel,
+        discord.StageChannel,
     ):
         return False
     return True
 
 
 async def get_welcome_channel(
-    guild: discord.Guild, bot: discord.Client, inviter_or_guild_owner: discord.User
+    guild: discord.Guild,
+    bot: discord.Client,
+    inviter_or_guild_owner: discord.User,
 ):
     try:
         return guild.system_channel
@@ -105,7 +114,7 @@ def human_join(seq, delim=", ", final="or"):
     return delim.join(seq[:-1]) + f" {final} {seq[-1]}"
 
 
-def secure_delete(path: Union[AnyStr, pathlib.Path], passes: int = 3) -> None:
+def secure_delete(path: AnyStr | pathlib.Path, passes: int = 3) -> None:
     """
     At first it write the file with some random data , even repeatedly, then delete it
     Meaning the entire contents of the file were still intact and every pass just added to the overall size of the file. So it ended up being [Original Contents][Random Data of that Size][Random Data of that Size][Random Data of that Size] which is not the desired effect obviously
@@ -131,7 +140,9 @@ def secure_delete(path: Union[AnyStr, pathlib.Path], passes: int = 3) -> None:
 
 # R.Danny Code
 def format_dt(
-    dt, style: Optional[str] = None, ist: Optional[Union[bool, Literal[False]]] = False
+    dt,
+    style: str | None = None,
+    ist: bool | Literal[False] | None = False,
 ):
     if dt.tzinfo is None and not ist:
         dt = dt.replace(tzinfo=datetime.timezone.utc)

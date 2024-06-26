@@ -3,6 +3,7 @@
 """
 Electronegativity scale formulas
 """
+from __future__ import annotations
 
 import math
 from typing import List
@@ -63,7 +64,7 @@ def li_xue(ionization_energy: float, radius: float, valence_pqn: int) -> float:
     )
 
 
-def martynov_batsanov(ionization_energies: List[float]) -> float:
+def martynov_batsanov(ionization_energies: list[float]) -> float:
     r"""
     Calculates the electronegativity value according to Martynov and
     Batsanov as the average of the ionization energies of the valence

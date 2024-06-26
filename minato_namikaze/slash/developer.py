@@ -1,11 +1,20 @@
+from __future__ import annotations
+
+import json
+import logging
+import os
+import typing
 from typing import List
 
-import aiohttp, os, json
+import aiohttp
 import discord
-from DiscordUtils import StarboardEmbed, ErrorEmbed, SuccessEmbed
-from lib import Webhooks, Database, LinksAndVars, BASE_DIR
-import typing
-import logging
+from DiscordUtils import ErrorEmbed
+from DiscordUtils import StarboardEmbed
+from DiscordUtils import SuccessEmbed
+from lib import BASE_DIR
+from lib import Database
+from lib import LinksAndVars
+from lib import Webhooks
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -18,10 +27,10 @@ log.addHandler(ch)
 
 
 class FeedbackModal(discord.ui.Modal):
-    children: List[discord.ui.InputText]
+    children: list[discord.ui.InputText]
 
     def __init__(self):
-        children: List[discord.ui.Item] = [
+        children: list[discord.ui.Item] = [
             discord.ui.InputText(
                 label="Your suggestion(s)/feedback or report",
                 style=discord.InputTextStyle.paragraph,
@@ -35,7 +44,8 @@ class FeedbackModal(discord.ui.Modal):
 
     async def callback(self, interaction: discord.Interaction) -> None:
         embed = StarboardEmbed(
-            title="Feedback / Suggestions / Report", description=self.children[0].value
+            title="Feedback / Suggestions / Report",
+            description=self.children[0].value,
         )
         embed.set_author(
             name=interaction.user.display_name,
@@ -47,7 +57,8 @@ class FeedbackModal(discord.ui.Modal):
             wh = discord.Webhook.from_url(Webhooks.feedback.value, session=session)
             await wh.send(embed=embed)
         await interaction.response.send_message(
-            "Your message was successfully sent to my developer", ephemeral=True
+            "Your message was successfully sent to my developer",
+            ephemeral=True,
         )
 
 
@@ -72,7 +83,8 @@ class Blacklist(discord.SlashCommand):
             return True
         else:
             await response.send_message(
-                "Sorry! but only developer can use this", ephemeral=True
+                "Sorry! but only developer can use this",
+                ephemeral=True,
             )
             return False
 
@@ -81,10 +93,12 @@ class User(discord.SlashCommand, parent=Blacklist):
     """Adds user to the blacklist"""
 
     id: str = discord.application_command_option(
-        description="The user to add to the blacklist", default=None
+        description="The user to add to the blacklist",
+        default=None,
     )
-    reason: typing.Optional[str] = discord.application_command_option(
-        description="Reason", default=None
+    reason: str | None = discord.application_command_option(
+        description="Reason",
+        default=None,
     )
 
     async def callback(self, response: discord.SlashCommandResponse) -> None:
@@ -105,10 +119,12 @@ class Server(discord.SlashCommand, parent=Blacklist):
     """Adds guild to the blacklist"""
 
     id: str = discord.application_command_option(
-        description="The server which is to be added", default=None
+        description="The server which is to be added",
+        default=None,
     )
-    reason: typing.Optional[str] = discord.application_command_option(
-        description="Reason", default=None
+    reason: str | None = discord.application_command_option(
+        description="Reason",
+        default=None,
     )
 
     async def callback(self, response: discord.SlashCommandResponse) -> None:
@@ -144,7 +160,8 @@ class Fetch(discord.SlashCommand, parent=Blacklist):
     """Fetches data from the blacklist list of users and server"""
 
     id: str = discord.application_command_option(
-        description="The server/user data which is to be fetched", default=None
+        description="The server/user data which is to be fetched",
+        default=None,
     )
 
     async def callback(self, response: discord.SlashCommandResponse) -> None:
@@ -154,13 +171,14 @@ class Fetch(discord.SlashCommand, parent=Blacklist):
         server_check = await database_server.get(response.options.id)
         if user_check is None and server_check is None:
             return await response.send_message(
-                embed=ErrorEmbed(title="No data found"), ephemeral=True
+                embed=ErrorEmbed(title="No data found"),
+                ephemeral=True,
             )
         return await response.send_message(
             embed=SuccessEmbed(
                 title=response.options.id,
                 description=f"Found in {database_user._Database__channel.mention if user_check is not None else database_server._Database__channel.mention}\n\n **Reason**\n```\n{user_check or server_check}\n```",
-            )
+            ),
         )
 
 
@@ -168,13 +186,15 @@ class Delete(discord.SlashCommand, parent=Blacklist):
     """Delete the data if found blacklist list"""
 
     id: str = discord.application_command_option(
-        description="The server/user data which is to be fetched", default=None
+        description="The server/user data which is to be fetched",
+        default=None,
     )
 
     async def callback(self, response: discord.SlashCommandResponse) -> None:
         if not str(response.options.id).isdigit():
             return await response.send_message(
-                "Not a valid serverid/userid", ephemeral=True
+                "Not a valid serverid/userid",
+                ephemeral=True,
             )
         await response.send_message(
             "If data is available then will be removed from the blacklist",
@@ -208,7 +228,8 @@ class Commands(
             return True
         else:
             await response.send_message(
-                "Sorry! but only developer can use this", ephemeral=True
+                "Sorry! but only developer can use this",
+                ephemeral=True,
             )
             return False
 
@@ -241,8 +262,8 @@ class Commands(
                         str(cog_name): {
                             "cog_commands_list": cog_commands_list,
                             "description": cog.description,
-                        }
-                    }
+                        },
+                    },
                 )
         application_commands = []
         for i in self.cog.bot.application_commands:
@@ -255,7 +276,7 @@ class Commands(
                         "description": j.description,
                         "required": j.required,
                         "type": j.type.name,
-                    }
+                    },
                 )
             app_command_dict.update({"options": options})
             application_commands.append(app_command_dict)

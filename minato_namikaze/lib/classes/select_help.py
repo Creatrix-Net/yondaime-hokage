@@ -6,12 +6,18 @@ from __future__ import annotations
 import inspect
 import itertools
 from itertools import islice
-from typing import List, Union, Dict, Any, Optional
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Union
 
 import discord
-from discord.ext import commands, menus
+from discord.ext import commands
+from discord.ext import menus
 
-from ..util import DEFAULT_COMMAND_SELECT_LENGTH, LinksAndVars
+from ..util import DEFAULT_COMMAND_SELECT_LENGTH
+from ..util import LinksAndVars
 from ..util.paginator import *
 from .time_class import *
 
@@ -25,8 +31,8 @@ def chunks(data, SIZE: int = DEFAULT_COMMAND_SELECT_LENGTH):
 class GroupHelpPageSource(menus.ListPageSource):
     def __init__(
         self,
-        group: Union[commands.Group, commands.Cog],
-        commands: List[commands.Command],
+        group: commands.Group | commands.Cog,
+        commands: list[commands.Command],
         *,
         prefix: str,
     ):
@@ -54,11 +60,11 @@ class GroupHelpPageSource(menus.ListPageSource):
         maximum = self.get_max_pages()
         if maximum > 1:
             embed.set_author(
-                name=f"Page {menu.current_page + 1}/{maximum} ({len(self.entries)} commands)"
+                name=f"Page {menu.current_page + 1}/{maximum} ({len(self.entries)} commands)",
             )
 
         embed.set_footer(
-            text=f'Use "{self.prefix}help command" for more info on a command.'
+            text=f'Use "{self.prefix}help command" for more info on a command.',
         )
         return embed
 
@@ -66,7 +72,7 @@ class GroupHelpPageSource(menus.ListPageSource):
 class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
     def __init__(
         self,
-        commands: Dict[commands.Cog, List[commands.Command]],
+        commands: dict[commands.Cog, list[commands.Command]],
         bot: commands.AutoShardedBot,
     ):
         super().__init__(
@@ -108,19 +114,23 @@ class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
             cog = self.bot.get_cog(value)
             if cog is None:
                 await interaction.response.send_message(
-                    "Somehow this category does not exist?", ephemeral=True
+                    "Somehow this category does not exist?",
+                    ephemeral=True,
                 )
                 return
 
             commands = self.commands[cog]
             if not commands:
                 await interaction.response.send_message(
-                    "This category has no commands for you", ephemeral=True
+                    "This category has no commands for you",
+                    ephemeral=True,
                 )
                 return
 
             source = GroupHelpPageSource(
-                cog, commands, prefix=self.view.ctx.clean_prefix
+                cog,
+                commands,
+                prefix=self.view.ctx.clean_prefix,
             )
             await self.view.rebind(source, interaction)
 
@@ -130,7 +140,7 @@ class FrontPageSource(menus.PageSource):
         # This forces the buttons to appear even in the front page
         return True
 
-    def get_max_pages(self) -> Optional[int]:
+    def get_max_pages(self) -> int | None:
         # There's only one actual page in the front page
         # However we need at least 2 to show all the buttons
         return 2
@@ -148,7 +158,7 @@ class FrontPageSource(menus.PageSource):
             Use "{menu.ctx.clean_prefix}help command" for more info on a command.
             Use "{menu.ctx.clean_prefix}help category" for more info on a category.
             Use the dropdown menu below to select a category.
-        """
+        """,
         )
 
         embed.add_field(
@@ -198,14 +208,17 @@ class HelpMenu(RoboPages):
         super().__init__(source, ctx=ctx, compact=True)
 
     def add_categories(
-        self, commands: Dict[commands.Cog, List[commands.Command]]
+        self,
+        commands: dict[commands.Cog, list[commands.Command]],
     ) -> None:
         self.clear_items()
         self.add_item(HelpSelectMenu(commands, self.ctx.bot))
         self.fill_items()
 
     async def rebind(
-        self, source: menus.PageSource, interaction: discord.Interaction
+        self,
+        source: menus.PageSource,
+        interaction: discord.Interaction,
     ) -> None:
         self.source = source
         self.current_page = 0
@@ -222,10 +235,12 @@ class PaginatedHelpCommand(commands.HelpCommand):
         super().__init__(
             command_attrs={
                 "cooldown": commands.CooldownMapping.from_cooldown(
-                    1, 3.0, commands.BucketType.member
+                    1,
+                    3.0,
+                    commands.BucketType.member,
                 ),
                 "help": "Shows help about the bot, a command, or a category",
-            }
+            },
         )
 
     def get_command_signature(self, command):
@@ -247,11 +262,13 @@ class PaginatedHelpCommand(commands.HelpCommand):
             cog = command.cog
             return cog.qualified_name if cog else "\U0010ffff"
 
-        entries: List[commands.Command] = await self.filter_commands(
-            bot.commands, sort=True, key=key
+        entries: list[commands.Command] = await self.filter_commands(
+            bot.commands,
+            sort=True,
+            key=key,
         )
 
-        all_commands: Dict[commands.Cog, List[commands.Command]] = {}
+        all_commands: dict[commands.Cog, list[commands.Command]] = {}
         for name, children in itertools.groupby(entries, key=key):
             if name == "\U0010ffff":
                 continue
@@ -260,7 +277,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
             all_commands[cog] = sorted(children, key=lambda c: c.qualified_name)
 
         for i, command_sliced in enumerate(
-            chunks(all_commands, DEFAULT_COMMAND_SELECT_LENGTH - 1)
+            chunks(all_commands, DEFAULT_COMMAND_SELECT_LENGTH - 1),
         ):
             if i <= 0:
                 menu = HelpMenu(FrontPageSource(), ctx=self.context)
@@ -268,7 +285,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
             else:
                 menu = HelpMenu(
                     TextPageSource(
-                        "We have more that 25 commands category, Use the dropdown above and below to view it."
+                        "We have more that 25 commands category, Use the dropdown above and below to view it.",
                     ),
                     ctx=self.context,
                 )

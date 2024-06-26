@@ -1,15 +1,19 @@
+from __future__ import annotations
+
 import asyncio
 import importlib
 import logging
 import traceback
 from logging.config import fileConfig
 
-from minato_namikaze import return_all_cogs, vars
-from sqlalchemy import engine_from_config, pool
+from alembic import context
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from alembic import context
+from minato_namikaze import return_all_cogs
+from minato_namikaze import vars
 
 run = asyncio.get_event_loop().run_until_complete
 
@@ -88,7 +92,7 @@ async def run_migrations_online() -> None:
             prefix="sqlalchemy.",
             poolclass=pool.NullPool,
             future=True,
-        )
+        ),
     )
 
     async with connectable.connect() as connection:

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
 from typing import Union
 
@@ -13,7 +13,7 @@ __all__ = [
 ]
 
 
-def element(ids: Union[int, str]) -> Element:
+def element(ids: int | str) -> Element:
     """
     Based on the type of the `ids` identifier return either an
     :py:class:`Element <mendeleev.models.Element>` object from the
@@ -48,10 +48,10 @@ def element(ids: Union[int, str]) -> Element:
 
     if isinstance(ids, (list, tuple)):
         return [_get_element(i) for i in ids]
-    if isinstance(ids, (six.string_types, int)):
+    if isinstance(ids, ((str,), int)):
         return _get_element(ids)
     raise ValueError(
-        "Expected a <list>, <tuple>, <str> or <int>, got: {0:s}".format(type(ids))
+        f"Expected a <list>, <tuple>, <str> or <int>, got: {type(ids):s}",
     )
 
 
@@ -63,13 +63,13 @@ def _get_element(ids):
 
     session = get_session()
 
-    if isinstance(ids, six.string_types):
+    if isinstance(ids, str):
         if len(ids) <= 3 and ids.lower() != "tin":
             return session.query(Element).filter(Element.symbol == str(ids)).one()
         return session.query(Element).filter(Element.name == str(ids)).one()
     if isinstance(ids, int):
         return session.query(Element).filter(Element.atomic_number == ids).one()
-    raise ValueError("Expecting a <str> or <int>, got: {0:s}".format(type(ids)))
+    raise ValueError(f"Expecting a <str> or <int>, got: {type(ids):s}")
 
 
 def get_all_elements():
@@ -118,9 +118,9 @@ def deltaN(id1, id2, charge1=0, charge2=0, missingIsZero=True):
     session = get_session()
     atns = ids_to_attr([id1, id2], attr="atomic_number")
 
-    e1, e2 = [
+    e1, e2 = (
         session.query(Element).filter(Element.atomic_number == a).one() for a in atns
-    ]
+    )
 
     chi = [
         x.en_mulliken(charge=c, missingIsZero=missingIsZero)

@@ -1,9 +1,12 @@
+from __future__ import annotations
+
+import logging
 from typing import TYPE_CHECKING
 
 import discord
 from discord.ext import commands
+
 from minato_namikaze.lib.functions import meek_api
-import logging
 
 if TYPE_CHECKING:
     from lib import Context
@@ -13,8 +16,8 @@ log = logging.getLogger(__name__)
 
 
 class Vocaloid(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Get some kawai pictures of the vocaloids."
 
     @property

@@ -1,5 +1,6 @@
 # Contains dictionaries that map English letters to braille.
 # https://github.com/LazoCoder/Braille-Translator/blob/master/mapAlphaToBraille.py
+from __future__ import annotations
 
 letters = {
     "a": chr(10241),

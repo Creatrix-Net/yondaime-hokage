@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
+from typing import TYPE_CHECKING
 from urllib.parse import urlencode
 
 import aiohttp
@@ -7,6 +10,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
+
 from minato_namikaze.lib import Tokens
 
 if TYPE_CHECKING:
@@ -20,7 +24,7 @@ log = logging.getLogger(__name__)
 
 
 class UnitConverter(Converter):
-    async def convert(self, ctx: "Context", argument: str) -> Optional[str]:
+    async def convert(self, ctx: "Context", argument: str) -> str | None:
         new_units = None
         if argument.lower() in ["f", "imperial", "mph"]:
             new_units = "imperial"
@@ -36,8 +40,8 @@ class UnitConverter(Converter):
 
 
 class Weather(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         default = {"units": None}
         self.unit = {
             "imperial": {"code": ["i", "f"], "speed": "mph", "temp": " °F"},
@@ -87,7 +91,10 @@ class Weather(commands.Cog):
     @weather.command(name="co", aliases=["coords", "coordinates"])
     @commands.bot_has_permissions(embed_links=True)
     async def weather_by_coordinates(
-        self, ctx: "Context", lat: float, lon: float
+        self,
+        ctx: "Context",
+        lat: float,
+        lon: float,
     ) -> None:
         """
         Display weather in a given location
@@ -102,11 +109,11 @@ class Weather(commands.Cog):
         self,
         ctx: "Context",
         *,
-        location: Optional[str] = None,
-        zipcode: Optional[str] = None,
-        cityid: Optional[int] = None,
-        lat: Optional[float] = None,
-        lon: Optional[float] = None,
+        location: str | None = None,
+        zipcode: str | None = None,
+        cityid: int | None = None,
+        lat: float | None = None,
+        lon: float | None = None,
     ) -> None:
         units = "metric"
         params = {"appid": Tokens.weather.value, "units": units}
@@ -121,8 +128,8 @@ class Weather(commands.Cog):
             params["lon"] = str(lon)
         else:
             params["q"] = str(location)
-        url = "https://api.openweathermap.org/data/2.5/weather?{0}".format(
-            urlencode(params)
+        url = "https://api.openweathermap.org/data/2.5/weather?{}".format(
+            urlencode(params),
         )
         async with aiohttp.ClientSession() as session, session.get(url) as resp:
             data = await resp.json()
@@ -148,39 +155,46 @@ class Weather(commands.Cog):
             mintemp = abs(maxtemp - 273.15)
             maxtemp = abs(maxtemp - 273.15)
         sunrise = datetime.datetime.utcfromtimestamp(
-            data["sys"]["sunrise"] + data["timezone"]
+            data["sys"]["sunrise"] + data["timezone"],
         ).strftime("%H:%M")
         sunset = datetime.datetime.utcfromtimestamp(
-            data["sys"]["sunset"] + data["timezone"]
+            data["sys"]["sunset"] + data["timezone"],
         ).strftime("%H:%M")
         embed = discord.Embed(colour=discord.Colour.blue())
         if city and country:
             embed.add_field(
                 name=":earth_africa: **Location**",
-                value="{0}, {1}".format(city, country),
+                value=f"{city}, {country}",
             )
         else:
             embed.add_field(
-                name="\N{EARTH GLOBE AMERICAS} **Location**", value="*Unavailable*"
+                name="\N{EARTH GLOBE AMERICAS} **Location**",
+                value="*Unavailable*",
             )
         embed.add_field(
-            name="\N{STRAIGHT RULER} **Lat,Long**", value="{0}, {1}".format(lat, lon)
+            name="\N{STRAIGHT RULER} **Lat,Long**",
+            value=f"{lat}, {lon}",
         )
         embed.add_field(name="\N{CLOUD} **Condition**", value=condition)
         embed.add_field(
-            name="\N{FACE WITH COLD SWEAT} **Humidity**", value=data["main"]["humidity"]
+            name="\N{FACE WITH COLD SWEAT} **Humidity**",
+            value=data["main"]["humidity"],
         )
         embed.add_field(
-            name="\N{DASH SYMBOL} **Wind Speed**", value="{0}".format(windspeed)
+            name="\N{DASH SYMBOL} **Wind Speed**",
+            value=f"{windspeed}",
         )
         embed.add_field(
             name="\N{THERMOMETER} **Temperature**",
-            value="{0:.2f}{1}".format(currenttemp, self.unit[units]["temp"]),
+            value="{:.2f}{}".format(currenttemp, self.unit[units]["temp"]),
         )
         embed.add_field(
             name="\N{HIGH BRIGHTNESS SYMBOL} **Min - Max**",
-            value="{0:.2f}{1} to {2:.2f}{3}".format(
-                mintemp, self.unit[units]["temp"], maxtemp, self.unit[units]["temp"]
+            value="{:.2f}{} to {:.2f}{}".format(
+                mintemp,
+                self.unit[units]["temp"],
+                maxtemp,
+                self.unit[units]["temp"],
             ),
         )
         embed.add_field(name="\N{SUNRISE OVER MOUNTAINS} **Sunrise**", value=sunrise)

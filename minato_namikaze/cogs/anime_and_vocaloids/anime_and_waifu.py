@@ -1,19 +1,28 @@
+from __future__ import annotations
+
 import asyncio
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import Dict
+from typing import List
+from typing import Tuple
+from typing import TYPE_CHECKING
 
 import discord
-from asyncdagpi import Client
 from discord.ext import commands
-from mal import (
-    Anime,
-    AnimeCharacterResult,
-    AnimeSearch,
-    AnimeStaffResult,
-    Manga,
-    MangaCharacterResult,
-    MangaSearch,
-)
-from minato_namikaze.lib import Embed, EmbedPaginator, ErrorEmbed, LinksAndVars, Tokens
+from mal import Anime
+from mal import AnimeCharacterResult
+from mal import AnimeSearch
+from mal import AnimeStaffResult
+from mal import Manga
+from mal import MangaCharacterResult
+from mal import MangaSearch
+
+from minato_namikaze.lib import Embed
+from minato_namikaze.lib import EmbedPaginator
+from minato_namikaze.lib import ErrorEmbed
+from minato_namikaze.lib import LinksAndVars
+from minato_namikaze.lib import Tokens
+
+# from asyncdagpi import Client
 
 if TYPE_CHECKING:
     from lib import Context
@@ -25,7 +34,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def format_related_anime_manga(dict_related_anime: Dict[str, List[str]]) -> str:
+def format_related_anime_manga(dict_related_anime: dict[str, list[str]]) -> str:
     """Properly formats the related anime and manga list
 
     :param dict_related_anime: The list you got it from the module
@@ -41,7 +50,7 @@ def format_related_anime_manga(dict_related_anime: Dict[str, List[str]]) -> str:
     return formatted_string
 
 
-def format_staff(staff: List[AnimeStaffResult]) -> str:
+def format_staff(staff: list[AnimeStaffResult]) -> str:
     """Properly formats the staff list
 
     :param staff: The list you got it from the module
@@ -55,7 +64,7 @@ def format_staff(staff: List[AnimeStaffResult]) -> str:
     return staff_string
 
 
-def format_characters(character: List[AnimeCharacterResult]) -> str:
+def format_characters(character: list[AnimeCharacterResult]) -> str:
     """Properly formats the characters list
 
     :param character: The list you got it from the module
@@ -69,7 +78,7 @@ def format_characters(character: List[AnimeCharacterResult]) -> str:
     return character_string
 
 
-def format_manga_characters(character: List[MangaCharacterResult]) -> str:
+def format_manga_characters(character: list[MangaCharacterResult]) -> str:
     """Properly formats the manga characters list
 
     :param character: The list you got it from the module
@@ -84,16 +93,16 @@ def format_manga_characters(character: List[MangaCharacterResult]) -> str:
 
 
 class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
-        self.bot.dagpi = Client(Tokens.dagpi.value)
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
+        # self.bot.dagpi = Client(Tokens.dagpi.value)
         self.description = "Some anime, manga and waifu related commands"
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="uzumaki", id=940993645593632808)
 
-    async def get_waifu(self) -> Tuple[Embed, str]:
+    async def get_waifu(self) -> tuple[Embed, str]:
         """Returns a random waifu from the api
 
         :return: tuple of (Embed, name)
@@ -147,7 +156,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         embeds = [e1]
         for i in search_results:
             e = Embed(
-                title=i.title, description=i.synopsis, timestamp=ctx.message.created_at
+                title=i.title,
+                description=i.synopsis,
+                timestamp=ctx.message.created_at,
             )
             if i.score:
                 e.add_field(name="**Score**", value=f"{i.score} :star:")
@@ -160,7 +171,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             # if i.image_url:
             #     e.set_image(url=i.image_url) #later it the comment will be removed
             e.set_footer(
-                text=f"{i.title} | {i.mal_id} | {i.score} stars", icon_url=i.image_url
+                text=f"{i.title} | {i.mal_id} | {i.score} stars",
+                icon_url=i.image_url,
             )
             embeds.append(e)
 
@@ -201,7 +213,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             )
         if anime.title_synonyms:
             e.add_field(
-                name="**Title Synonyms**", value=" ,".join(anime.title_synonyms)
+                name="**Title Synonyms**",
+                value=" ,".join(anime.title_synonyms),
             )
         if anime.score:
             e.add_field(name=":star: **Score**", value=f"{anime.score} :star:")
@@ -233,7 +246,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             e.add_field(name="**Licensors**", value=" ,".join(anime.licensors))
         if anime.studios:
             e.add_field(
-                name=":microphone2: **Studios**", value=" ,".join(anime.studios)
+                name=":microphone2: **Studios**",
+                value=" ,".join(anime.studios),
             )
         if anime.source:
             e.add_field(name=":information_source: **Source**", value=anime.source)
@@ -307,7 +321,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 embeds.append(e1)
         if anime.characters and len(format_characters(anime.characters)) <= 600:
             e.add_field(
-                name="**Characters**", value=format_characters(anime.characters)
+                name="**Characters**",
+                value=format_characters(anime.characters),
             )
         else:
             if anime.characters:
@@ -360,7 +375,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         embeds = [e1]
         for i in search_results:
             e = Embed(
-                title=i.title, description=i.synopsis, timestamp=ctx.message.created_at
+                title=i.title,
+                description=i.synopsis,
+                timestamp=ctx.message.created_at,
             )
             if i.score:
                 e.add_field(name="**Score**", value=f"{i.score} :star:")
@@ -373,7 +390,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             if i.image_url:
                 e.set_image(url=i.image_url)
             e.set_footer(
-                text=f"{i.title} | {i.mal_id} | {i.score} stars", icon_url=i.image_url
+                text=f"{i.title} | {i.mal_id} | {i.score} stars",
+                icon_url=i.image_url,
             )
             embeds.append(e)
 
@@ -410,7 +428,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             )
         if manga.title_synonyms:
             e.add_field(
-                name="**Title Synonyms**", value=" ,".join(manga.title_synonyms)
+                name="**Title Synonyms**",
+                value=" ,".join(manga.title_synonyms),
             )
         if manga.score:
             e.add_field(name=":star: **Score**", value=f"{manga.score} :star:")
@@ -434,13 +453,15 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             e.add_field(name=":books: **Volumes**", value=manga.volumes)
         if manga.authors:
             e.add_field(
-                name=":pen_fountain: **Author(s)**", value="\n・".join(manga.authors)
+                name=":pen_fountain: **Author(s)**",
+                value="\n・".join(manga.authors),
             )
         if manga.published:
             e.add_field(name=":map: **Published**", value=manga.published)
         if manga.characters and len(format_manga_characters(manga.characters)) <= 600:
             e.add_field(
-                name="**Characters**", value=format_manga_characters(manga.characters)
+                name="**Characters**",
+                value=format_manga_characters(manga.characters),
             )
         else:
             if manga.characters:
@@ -495,10 +516,12 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
         try:
             reaction, user = await self.bot.wait_for(
-                "reaction_add", timeout=30.0, check=check
+                "reaction_add",
+                timeout=30.0,
+                check=check,
             )
             await ctx.send(
-                f":sparkling_heart: **{user.mention}** has *married* **{waifu[-1]}**! UwU :ring:"
+                f":sparkling_heart: **{user.mention}** has *married* **{waifu[-1]}**! UwU :ring:",
             )
         except asyncio.TimeoutError:
             pass
@@ -520,7 +543,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             e.set_image(url=question)
 
             question_message = await ctx.send(
-                "You have 3 chances, **Chance: 1/3**", embed=e
+                "You have 3 chances, **Chance: 1/3**",
+                embed=e,
             )
 
         answerembed = discord.Embed(
@@ -534,7 +558,9 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         answerembed.set_image(url=wtp.answer)
         answerembed.set_footer(text=wtp.name.capitalize(), icon_url=wtp.answer)
         answerembed.set_author(
-            name=wtp.name.capitalize(), url=wtp.link, icon_url=wtp.answer
+            name=wtp.name.capitalize(),
+            url=wtp.link,
+            icon_url=wtp.answer,
         )
         for i in range(3):
             try:
@@ -550,8 +576,8 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                     pass
                 await ctx.send(
                     embed=ErrorEmbed(
-                        description="Well you didn't atleast once.\n Thus I won't be telling you the answer! :rofl:. **Baka**"
-                    )
+                        description="Well you didn't atleast once.\n Thus I won't be telling you the answer! :rofl:. **Baka**",
+                    ),
                 )
                 return
             await asyncio.sleep(0.8)

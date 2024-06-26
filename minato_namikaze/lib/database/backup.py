@@ -1,12 +1,20 @@
+from __future__ import annotations
+
 import io
 import logging
-from typing import Optional, Union
+from typing import Optional
+from typing import Union
 
 import discord
-from discord import CategoryChannel, Role, StageChannel, TextChannel, VoiceChannel
+from discord import CategoryChannel
+from discord import Role
+from discord import StageChannel
+from discord import TextChannel
+from discord import VoiceChannel
 from discord.ext import commands
 from discord.ext.commands import Context
-from orjson import dumps, loads
+from orjson import dumps
+from orjson import loads
 
 from ..util.vars import ChannelAndMessageId
 
@@ -19,7 +27,7 @@ class BackupDatabse:
     def __init__(self, ctx: Context):
         self.ctx: commands.Context = ctx
         self.backup_channel: TextChannel = ctx.get_config_channel_by_name_or_id(
-            ChannelAndMessageId.backup_channel.value
+            ChannelAndMessageId.backup_channel.value,
         )
 
     async def create_backup(self) -> int:
@@ -41,8 +49,8 @@ class BackupDatabse:
                             "position": i.position,
                             "mentionable": i.mentionable,
                             "permission": i.permissions.value,
-                        }
-                    }
+                        },
+                    },
                 )
 
         text_channel = {}
@@ -66,11 +74,11 @@ class BackupDatabse:
                                     j.name: {
                                         "allow": value.pair()[0].value,
                                         "deny": value.pair()[-1].value,
-                                    }
-                                }
+                                    },
+                                },
                             )
                     category_channel_update_dict.update(
-                        {"role_overwrites": role_overwrites}
+                        {"role_overwrites": role_overwrites},
                     )
                 category_channel.update({i.name: category_channel_update_dict})
 
@@ -93,11 +101,11 @@ class BackupDatabse:
                                     key.name: {
                                         "allow": value.pair()[0].value,
                                         "deny": value.pair()[-1].value,
-                                    }
-                                }
+                                    },
+                                },
                             )
                     voice_channel_update_dict.update(
-                        {"role_overwrites": role_overwrites}
+                        {"role_overwrites": role_overwrites},
                     )
                 voice_channel.update({i.name: voice_channel_update_dict})
 
@@ -121,11 +129,11 @@ class BackupDatabse:
                                     key.name: {
                                         "allow": value.pair()[0].value,
                                         "deny": value.pair()[-1].value,
-                                    }
-                                }
+                                    },
+                                },
                             )
                     text_channel_update_dict.update(
-                        {"role_overwrites": role_overwrites}
+                        {"role_overwrites": role_overwrites},
                     )
                 text_channel.update({i.name: text_channel_update_dict})
 
@@ -149,11 +157,11 @@ class BackupDatabse:
                                     key.name: {
                                         "allow": value.pair()[0].value,
                                         "deny": value.pair()[-1].value,
-                                    }
-                                }
+                                    },
+                                },
                             )
                     stage_channel_update_dict.update(
-                        {"role_overwrites": role_overwrites}
+                        {"role_overwrites": role_overwrites},
                     )
                 stage_channel.update({i.name: stage_channel_update_dict})
         json_bytes = dumps(
@@ -163,17 +171,18 @@ class BackupDatabse:
                 "text_channels": text_channel,
                 "voice_channel": voice_channel,
                 "stage_channel": stage_channel,
-            }
+            },
         )
         message_reference = await self.backup_channel.send(
             content=self.ctx.guild.id,
             file=discord.File(
-                io.BytesIO(json_bytes), filename=f"{self.ctx.guild.id}.json"
+                io.BytesIO(json_bytes),
+                filename=f"{self.ctx.guild.id}.json",
             ),
         )
         return message_reference.id
 
-    async def get_backup_data(self, code: int) -> Optional[discord.Attachment]:
+    async def get_backup_data(self, code: int) -> discord.Attachment | None:
         """|coro|
         It returns the backup of the specified server
 
@@ -223,7 +232,7 @@ class BackupDatabse:
         await code.delete()
         return
 
-    async def apply_backup(self, code: int) -> Optional[Union[str, bool]]:
+    async def apply_backup(self, code: int) -> str | bool | None:
         """|coro|
         It applied backup with the backup code specified
 
@@ -232,7 +241,7 @@ class BackupDatabse:
         :return: :class:`str` is returned when there is a error otherwise a :class:`bool` with True value
         :rtype: Optional[Union[str, bool]]
         """
-        backup: Optional[discord.Attachment] = await self.get_backup_data(code)
+        backup: discord.Attachment | None = await self.get_backup_data(code)
         if backup is None:
             return "No backup with that id exists"
         try:
@@ -293,14 +302,15 @@ class BackupDatabse:
         for i in category_data:
             try:
                 category_channel = await commands.CategoryChannelConverter().convert(
-                    self.ctx, i
+                    self.ctx,
+                    i,
                 )
 
                 await category_channel.edit(
                     position=category_data[i]["position"],
                     reason=self.reason(code, self.ctx.author),
                     overwrites=await self.return_role_overwrites(
-                        category_data[i]["role_overwrites"]
+                        category_data[i]["role_overwrites"],
                     ),
                     nsfw=category_data[i]["nsfw"],
                 )
@@ -313,7 +323,7 @@ class BackupDatabse:
                     reason=self.reason(code, self.ctx.author),
                     position=category_data[i]["position"],
                     overwrites=await self.return_role_overwrites(
-                        category_data[i]["role_overwrites"]
+                        category_data[i]["role_overwrites"],
                     ),
                     name=i,
                 )
@@ -333,14 +343,15 @@ class BackupDatabse:
         for i in text_data:
             try:
                 text_channel = await commands.TextChannelConverter().convert(
-                    self.ctx, i
+                    self.ctx,
+                    i,
                 )
                 await text_channel.edit(
                     position=text_data[i]["position"],
                     nsfw=text_data[i]["nsfw"],
                     reason=self.reason(code, self.ctx.author),
                     overwrites=await self.return_role_overwrites(
-                        text_data[i]["role_overwrites"]
+                        text_data[i]["role_overwrites"],
                     ),
                     slowmode_delay=text_data[i]["slowmode_delay"],
                     default_auto_archive_duration=text_data[i][
@@ -349,7 +360,7 @@ class BackupDatabse:
                     topic=text_data[i]["topic"],
                     permissions_synced=text_data[i]["permissions_synced"],
                     category=await self.return_category_channel(
-                        text_data[i]["category"]
+                        text_data[i]["category"],
                     ),
                 )
             except (
@@ -362,12 +373,12 @@ class BackupDatabse:
                     nsfw=text_data[i]["nsfw"],
                     position=text_data[i]["position"],
                     overwrites=await self.return_role_overwrites(
-                        text_data[i]["role_overwrites"]
+                        text_data[i]["role_overwrites"],
                     ),
                     slowmode_delay=text_data[i]["slowmode_delay"],
                     topic=text_data[i]["topic"],
                     category=await self.return_category_channel(
-                        text_data[i]["category"]
+                        text_data[i]["category"],
                     ),
                     name=i,
                 )
@@ -390,13 +401,14 @@ class BackupDatabse:
         for i in voice_data:
             try:
                 voice_channel = await commands.VoiceChannelConverter().convert(
-                    self.ctx, i
+                    self.ctx,
+                    i,
                 )
                 await voice_channel.edit(
                     position=voice_data[i]["position"],
                     reason=self.reason(code, self.ctx.author),
                     overwrites=await self.return_role_overwrites(
-                        voice_data[i]["role_overwrites"]
+                        voice_data[i]["role_overwrites"],
                     ),
                     bitrate=voice_data[i]["bitrate"],
                     permissions_synced=voice_data[i]["permissions_synced"],
@@ -405,7 +417,7 @@ class BackupDatabse:
                     ],
                     user_limit=voice_data[i]["user_limit"],
                     category=await self.return_category_channel(
-                        voice_data[i]["category"]
+                        voice_data[i]["category"],
                     ),
                 )
             except (
@@ -417,7 +429,7 @@ class BackupDatabse:
                     position=voice_data[i]["position"],
                     reason=self.reason(code, self.ctx.author),
                     overwrites=await self.return_role_overwrites(
-                        voice_data[i]["role_overwrites"]
+                        voice_data[i]["role_overwrites"],
                     ),
                     bitrate=voice_data[i]["bitrate"],
                     video_quality_mode=discord.VideoQualityMode[
@@ -425,7 +437,7 @@ class BackupDatabse:
                     ],
                     user_limit=voice_data[i]["user_limit"],
                     category=await self.return_category_channel(
-                        voice_data[i]["category"]
+                        voice_data[i]["category"],
                     ),
                     name=i,
                 )
@@ -445,13 +457,14 @@ class BackupDatabse:
         for i in stage_data:
             try:
                 voice_channel = await commands.StageChannelConverter().convert(
-                    self.ctx, i
+                    self.ctx,
+                    i,
                 )
                 await voice_channel.edit(
                     position=stage_data[i]["position"],
                     reason=self.reason(code, self.ctx.author),
                     overwrites=await self.return_role_overwrites(
-                        stage_data[i]["role_overwrites"]
+                        stage_data[i]["role_overwrites"],
                     ),
                     bitrate=stage_data[i]["bitrate"],
                     permissions_synced=stage_data[i]["permissions_synced"],
@@ -461,7 +474,7 @@ class BackupDatabse:
                     user_limit=stage_data[i]["user_limit"],
                     topic=stage_data[i]["topic"],
                     category=await self.return_category_channel(
-                        stage_data[i]["category"]
+                        stage_data[i]["category"],
                     ),
                 )
             except (
@@ -473,11 +486,11 @@ class BackupDatabse:
                     position=stage_data[i]["position"],
                     reason=self.reason(code, self.ctx.author),
                     overwrites=await self.return_role_overwrites(
-                        stage_data[i]["role_overwrites"]
+                        stage_data[i]["role_overwrites"],
                     ),
                     topic=stage_data[i]["topic"],
                     category=await self.return_category_channel(
-                        stage_data[i]["category"]
+                        stage_data[i]["category"],
                     ),
                     name=i,
                 )
@@ -499,8 +512,9 @@ class BackupDatabse:
                     pass
 
     async def return_category_channel(
-        self, name: str
-    ) -> Optional[discord.CategoryChannel]:
+        self,
+        name: str,
+    ) -> discord.CategoryChannel | None:
         """It returns the category channel from the category name
 
         :param name: Category channel name
@@ -527,7 +541,8 @@ class BackupDatabse:
                 object_role_or_member = None
                 try:
                     object_role_or_member = await commands.RoleConverter().convert(
-                        self.ctx, k
+                        self.ctx,
+                        k,
                     )
                 except (
                     commands.RoleNotFound,
@@ -548,15 +563,17 @@ class BackupDatabse:
                     role_overwrites.update(
                         {
                             object_role_or_member: discord.PermissionOverwrite(
-                                allow=j[k]["allow"], deny=j[k]["deny"]
-                            )
-                        }
+                                allow=j[k]["allow"],
+                                deny=j[k]["deny"],
+                            ),
+                        },
                     )
         return role_overwrites
 
     @staticmethod
     def reason(
-        code: int, author: Optional[Union[discord.Member, discord.User]] = None
+        code: int,
+        author: discord.Member | discord.User | None = None,
     ) -> str:
         """It generates the mod reason
 

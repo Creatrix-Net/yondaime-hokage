@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 akinator = {extras = ["async"], version = "*"}
 aiohttp = "*"
-pre-commit = "*"
 async-timeout = "*"
 colorama = "*"
 asyncdagpi = "*"
@@ -46,6 +45,7 @@ discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus"}
 [dev-packages]
 watchfiles = "*"
 pytest = "*"
+pre-commit = "*"
 
 [requires]
 python_version = "3.11"

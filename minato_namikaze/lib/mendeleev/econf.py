@@ -3,6 +3,7 @@
 """
 Class abstracting the elctronic configuration
 """
+from __future__ import annotations
 
 import math
 import re
@@ -20,8 +21,8 @@ def get_l(subshell):
     if subshell.lower() in ORBITALS:
         return ORBITALS.index(subshell.lower())
     raise ValueError(
-        'wrong subshell label: "{}",'.format(subshell)
-        + " should be one of: {}".format(", ".join(ORBITALS))
+        f'wrong subshell label: "{subshell}",'
+        + " should be one of: {}".format(", ".join(ORBITALS)),
     )
 
 
@@ -49,8 +50,8 @@ def shell_capactity(shell):
     if shell.upper() in SHELLS:
         return 2 * (SHELLS.index(shell.upper()) + 1) ** 2
     raise ValueError(
-        'wrong shell label: "{}",'.format(shell)
-        + " should be one of: {}".format(", ".join(SHELLS))
+        f'wrong shell label: "{shell}",'
+        + " should be one of: {}".format(", ".join(SHELLS)),
     )
 
 
@@ -65,7 +66,7 @@ class ElectronicConfiguration:
             ("Kr", "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6"),
             ("Xe", "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6"),
             ("Rn", "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6"),
-        ]
+        ],
     )
 
     def __init__(self, conf=None, atomre=None, shellre=None):
@@ -83,15 +84,18 @@ class ElectronicConfiguration:
     def conf(self, value):
         "Setter method for initializing the configuration"
 
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             self.confstr = value
             self.parse(str(value))
         elif isinstance(value, dict):
             self._conf = OrderedDict(
-                sorted(value.items(), key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0]))
+                sorted(
+                    value.items(),
+                    key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0]),
+                ),
             )
         else:
-            raise ValueError("<conf> should be str or dict, got {}".format(type(value)))
+            raise ValueError(f"<conf> should be str or dict, got {type(value)}")
 
     @property
     def atomre(self):
@@ -137,7 +141,7 @@ class ElectronicConfiguration:
                 if self.shellre.match(o)
             ]
             core = OrderedDict(
-                [((int(n), o), (int(e) if e is not None else 1)) for (n, o, e) in core]
+                [((int(n), o), (int(e) if e is not None else 1)) for (n, o, e) in core],
             )
 
         valence = [
@@ -146,7 +150,7 @@ class ElectronicConfiguration:
             if self.shellre.match(o)
         ]
         valence = OrderedDict(
-            [((int(n), o), (int(e) if e is not None else 1)) for (n, o, e) in valence]
+            [((int(n), o), (int(e) if e is not None else 1)) for (n, o, e) in valence],
         )
 
         self._conf = OrderedDict(list(core.items()) + list(valence.items()))
@@ -186,14 +190,16 @@ class ElectronicConfiguration:
         if inplace:
             self.conf = OrderedDict(
                 sorted(
-                    self.conf.items(), key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])
-                )
+                    self.conf.items(),
+                    key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0]),
+                ),
             )
         else:
             return OrderedDict(
                 sorted(
-                    self.conf.items(), key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])
-                )
+                    self.conf.items(),
+                    key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0]),
+                ),
             )
 
     def electrons_per_shell(self):
@@ -231,9 +237,10 @@ class ElectronicConfiguration:
             return list(self.conf.items())[-1]
         if wrt.lower() == "aufbau":
             return sorted(
-                self.conf.items(), key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0])
+                self.conf.items(),
+                key=lambda x: (x[0][0] + get_l(x[0][1]), x[0][0]),
             )[-1]
-        raise ValueError("wrong <wrt>: {}".format(wrt))
+        raise ValueError(f"wrong <wrt>: {wrt}")
 
     def nvalence(self, block, method=None):
         "Return the number of valence electrons"
@@ -246,7 +253,7 @@ class ElectronicConfiguration:
             return self.conf[(self.max_n(), "s")] + self.conf[(self.max_n() - 1, "d")]
         if block == "f":
             return 2
-        raise ValueError("wrong block: {}".format(block))
+        raise ValueError(f"wrong block: {block}")
 
     def ne(self):
         "Return the number of electrons"
@@ -343,7 +350,7 @@ class ElectronicConfiguration:
             # get the number of valence electrons - 1
             vale = float(
                 sum(v for k, v in self.conf.items() if k[0] == n and k[1] in ["s", "p"])
-                - ne
+                - ne,
             )
             n1 = sum(v * 0.85 for k, v in self.conf.items() if k[0] == n - 1)
             n2 = sum(float(v) for k, v in self.conf.items() if k[0] in range(1, n - 1))
@@ -351,7 +358,7 @@ class ElectronicConfiguration:
         elif o in ["d", "f"]:
             # get the number of valence electrons - 1
             vale = float(
-                sum(v for k, v in self.conf.items() if k[0] == n and k[1] == o) - ne
+                sum(v for k, v in self.conf.items() if k[0] == n and k[1] == o) - ne,
             )
 
             n1 = sum(float(v) for k, v in self.conf.items() if k[0] == n and k[1] != o)
@@ -365,13 +372,11 @@ class ElectronicConfiguration:
     def to_str(self):
         "Return a string with the configuration"
 
-        return " ".join(
-            "{n:d}{s:s}{e:d}".format(n=k[0], s=k[1], e=v) for k, v in self.conf.items()
-        )
+        return " ".join(f"{k[0]:d}{k[1]:s}{v:d}" for k, v in self.conf.items())
 
     def __repr__(self):
 
-        return '<ElectronicConfiguration(conf="{}")>'.format(self.to_str())
+        return f'<ElectronicConfiguration(conf="{self.to_str()}")>'
 
     def __str__(self):
 
@@ -418,17 +423,15 @@ def print_spin_occupations(sodict, average=True):
 
         else:
             a = ", ".join(
-                "{0:3.1f}".format(x)
-                for x in [1] * occ["alpha"] + [0] * (nss - occ["alpha"])
+                f"{x:3.1f}" for x in [1] * occ["alpha"] + [0] * (nss - occ["alpha"])
             )
 
             b = ", ".join(
-                "{0:3.1f}".format(x)
-                for x in [1] * occ["beta"] + [0] * (nss - occ["beta"])
+                f"{x:3.1f}" for x in [1] * occ["beta"] + [0] * (nss - occ["beta"])
             )
 
         alphas.append(a)
         betas.append(b)
-        print("{} alpha: ".format(orb), a)
-        print("{} beta : ".format(orb), b)
+        print(f"{orb} alpha: ", a)
+        print(f"{orb} beta : ", b)
     return alphas, betas

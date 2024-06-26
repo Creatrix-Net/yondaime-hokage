@@ -1,7 +1,12 @@
-from typing import List, Optional, Tuple
+from __future__ import annotations
+
 import asyncio
-import discord
 import random
+from typing import List
+from typing import Optional
+from typing import Tuple
+
+import discord
 
 # Defines a custom button that contains the logic of the game.
 # The ['TicTacToe'] bit is for type hinting purposes to tell your IDE or linter
@@ -51,11 +56,12 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
         winner = view.check_board_winner()
         if view.auto and winner is None or winner == view.Tie:
             await interaction.message.edit(
-                content="Now let me think! ......", view=view
+                content="Now let me think! ......",
+                view=view,
             )
             await asyncio.sleep(2)
 
-            left_board_space: List[Tuple] = []  # [(x,y)]
+            left_board_space: list[tuple] = []  # [(x,y)]
             for count, i in enumerate(view.member_board):
                 for count_1, j in enumerate(i):
                     if isinstance(j, int):
@@ -91,7 +97,7 @@ class TicTacToeButton(discord.ui.Button["TicTacToe"]):
 
 # This is our actual board View
 class TicTacToe(discord.ui.View):
-    children: List[TicTacToeButton]
+    children: list[TicTacToeButton]
     Tie = 2
     X = -1
     O = 1
@@ -99,7 +105,7 @@ class TicTacToe(discord.ui.View):
     def __init__(self, player1, player2, auto: bool = False):
         super().__init__()
         # X is player 1 and O is player2
-        self.current_player: Optional[discord.Member] = player1
+        self.current_player: discord.Member | None = player1
         self.board = [
             [0, 0, 0],
             [0, 0, 0],
@@ -113,7 +119,7 @@ class TicTacToe(discord.ui.View):
         self.player1: discord.Member = player1
         self.player2: discord.Member = player2
         self.auto = auto
-        self.message: Optional[discord.Message] = None
+        self.message: discord.Message | None = None
 
         # Our board is made up of 3 by 3 TicTacToeButtons
         # The TicTacToeButton maintains the callbacks and helps steer

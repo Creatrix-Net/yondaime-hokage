@@ -1,13 +1,20 @@
+from __future__ import annotations
+
 import argparse
 import datetime
 import re
-from typing import TYPE_CHECKING, Any, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import Any
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import Union
 
 import discord
 from discord.ext import commands
 
 from ..functions import ExpiringCache
-from ..util.vars import LinksAndVars, ShinobiMatch
+from ..util.vars import LinksAndVars
+from ..util.vars import ShinobiMatch
 from .time_class import format_relative
 
 if TYPE_CHECKING:
@@ -28,7 +35,7 @@ class TimeConverter(commands.Converter):
                 time += time_dict[value] * float(key)
             except KeyError:
                 raise commands.BadArgument(
-                    f"{value} is an invalid time key! h|m|s|d are valid arguments"
+                    f"{value} is an invalid time key! h|m|s|d are valid arguments",
                 )
             except ValueError:
                 raise commands.BadArgument(f"{key} is not a number!")
@@ -57,7 +64,7 @@ class MemberID(commands.Converter):
                 argument = int(argument, base=10)
             except ValueError:
                 raise commands.BadArgument(
-                    f"{argument} is not a valid member or member ID."
+                    f"{argument} is not a valid member or member ID.",
                 ) from None
             else:
                 member = await ctx.bot.get_or_fetch_member(ctx.guild, argument)
@@ -71,7 +78,7 @@ class MemberID(commands.Converter):
 
         if not can_execute_action(ctx, ctx.author, member):
             raise commands.BadArgument(
-                "You cannot do this action on this user due to role hierarchy."
+                "You cannot do this action on this user due to role hierarchy.",
             )
         return member
 
@@ -84,7 +91,7 @@ class BannedMember(commands.Converter):
                 return await ctx.guild.fetch_ban(discord.Object(id=member_id))
             except discord.NotFound:
                 raise commands.BadArgument(
-                    "This member has not been banned before."
+                    "This member has not been banned before.",
                 ) from None
 
         ban_list = await ctx.guild.bans()
@@ -102,7 +109,7 @@ class ActionReason(commands.Converter):
         if len(ret) > 512:
             reason_max = 512 - len(ret) + len(argument)
             raise commands.BadArgument(
-                f"Reason is too long ({len(argument)}/{reason_max})"
+                f"Reason is too long ({len(argument)}/{reason_max})",
             )
         return ret
 
@@ -146,7 +153,7 @@ class MentionSpamConfig:
         self.id = record["id"]
         self.mention_count = record.get("mention_count")
         self.safe_mention_channel_ids = set(
-            record.get("safe_mention_channel_ids") or []
+            record.get("safe_mention_channel_ids") or [],
         )
         return self
 
@@ -230,20 +237,28 @@ class SpamChecker:
 
     def __init__(self):
         self.by_content = CooldownByContent.from_cooldown(
-            15, 17.0, commands.BucketType.member
+            15,
+            17.0,
+            commands.BucketType.member,
         )
         self.by_user = commands.CooldownMapping.from_cooldown(
-            10, 12.0, commands.BucketType.user
+            10,
+            12.0,
+            commands.BucketType.user,
         )
         self.last_join = None
         self.new_user = commands.CooldownMapping.from_cooldown(
-            30, 35.0, commands.BucketType.channel
+            30,
+            35.0,
+            commands.BucketType.channel,
         )
 
         # user_id flag mapping (for about 30 minutes)
         self.fast_joiners = ExpiringCache(seconds=1800.0)
         self.hit_and_run = commands.CooldownMapping.from_cooldown(
-            10, 12, commands.BucketType.channel
+            10,
+            12,
+            commands.BucketType.channel,
         )
 
     @staticmethod
@@ -304,14 +319,14 @@ class Characters:
     ]
 
     def __init__(self, **kwargs):
-        self.name: Optional[str] = kwargs.get("name")
-        self.id: Optional[Union[str, int]] = (
+        self.name: str | None = kwargs.get("name")
+        self.id: str | int | None = (
             "".join(self.name.split()).upper() if self.name is not None else None
         )
-        self.images: Optional[list] = kwargs.get("images")
-        self.category: Optional[str] = kwargs.get("category")
-        self.emoji: Optional[Union[discord.Emoji, discord.PartialEmoji]] = kwargs.get(
-            "emoji"
+        self.images: list | None = kwargs.get("images")
+        self.category: str | None = kwargs.get("category")
+        self.emoji: discord.Emoji | discord.PartialEmoji | None = kwargs.get(
+            "emoji",
         )
         self.kwargs = kwargs
 
@@ -391,16 +406,20 @@ class Characters:
         self.id = "".join(self.name.split()).upper() if self.name is not None else None
         self.kwargs = record
         self.emoji = self.return_emoji(
-            url=record["images"][0], category=record["category"], ctx=ctx
+            url=record["images"][0],
+            category=record["category"],
+            ctx=ctx,
         )
         return self
 
     @staticmethod
     def return_emoji(
-        url: str, category: str, ctx: commands.Context
-    ) -> Union[discord.Emoji, discord.PartialEmoji]:
+        url: str,
+        category: str,
+        ctx: commands.Context,
+    ) -> discord.Emoji | discord.PartialEmoji:
         STRIPPED_STRING_LIST: list = url.lstrip(
-            LinksAndVars.character_data.value[: -len("img_data.json")] + "photo_data/"
+            LinksAndVars.character_data.value[: -len("img_data.json")] + "photo_data/",
         ).split("/")
         STRIPPED_STRING_LIST.append(category)
         for i in STRIPPED_STRING_LIST:
@@ -429,8 +448,8 @@ class Timer:
         created: datetime.datetime,
         event: str,
         args: Sequence[Any],
-        kwargs: "dict[str, Any]",
-    ) -> "Self":
+        kwargs: dict[str, Any],
+    ) -> Self:
         pseudo = {
             "id": None,
             "extra": {"args": args, "kwargs": kwargs},
@@ -454,7 +473,7 @@ class Timer:
         return format_relative(self.created_at)
 
     @property
-    def author_id(self) -> Optional[int]:
+    def author_id(self) -> int | None:
         if self.args:
             return int(self.args[0])
         return None

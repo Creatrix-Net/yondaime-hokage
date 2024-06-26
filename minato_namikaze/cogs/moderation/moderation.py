@@ -1,36 +1,39 @@
+from __future__ import annotations
+
 import datetime
 import io
 import re
 import shlex
 from collections import Counter
 from os.path import join
-from typing import TYPE_CHECKING, Optional, Union
-from typing_extensions import Annotated
+from typing import Annotated
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import Union
 
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import (
-    ActionReason,
-    Arguments,
-    BannedMember,
-    Database,
-    FutureTime,
-    MemberID,
-    can_execute_action,
-    check_if_user_joined_a_stage,
-    check_if_user_joined_a_voice,
-    format_relative,
-    has_guild_permissions,
-    has_permissions,
-    plural,
-    EmbedPaginator,
-    ErrorEmbed,
-    Embed,
-    SuccessEmbed,
-    Timer,
-    GuildContext,
-    format_dt,
-)
+
+from minato_namikaze.lib import ActionReason
+from minato_namikaze.lib import Arguments
+from minato_namikaze.lib import BannedMember
+from minato_namikaze.lib import can_execute_action
+from minato_namikaze.lib import check_if_user_joined_a_stage
+from minato_namikaze.lib import check_if_user_joined_a_voice
+from minato_namikaze.lib import Database
+from minato_namikaze.lib import Embed
+from minato_namikaze.lib import EmbedPaginator
+from minato_namikaze.lib import ErrorEmbed
+from minato_namikaze.lib import format_dt
+from minato_namikaze.lib import format_relative
+from minato_namikaze.lib import FutureTime
+from minato_namikaze.lib import GuildContext
+from minato_namikaze.lib import has_guild_permissions
+from minato_namikaze.lib import has_permissions
+from minato_namikaze.lib import MemberID
+from minato_namikaze.lib import plural
+from minato_namikaze.lib import SuccessEmbed
+from minato_namikaze.lib import Timer
 
 if TYPE_CHECKING:
     from lib import Context
@@ -44,19 +47,21 @@ log = logging.getLogger(__name__)
 
 
 class Moderation(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Some simple moderation commands"
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(
-            name="discord_certified_moderator", id=922030031146995733
+            name="discord_certified_moderator",
+            id=922030031146995733,
         )
 
     async def database_class(self):
         return await self.bot.db.new(
-            Database.database_category_name.value, Database.database_channel_name.value
+            Database.database_category_name.value,
+            Database.database_channel_name.value,
         )
 
     # set delay
@@ -73,7 +78,7 @@ class Moderation(commands.Cog):
         current_slow = ctx.channel.slowmode_delay
         if current_slow == seconds:
             return await ctx.send(
-                f"Sorry, But this channel already has {seconds} set as the delay! (I don't want to waste my api calls lmao)"
+                f"Sorry, But this channel already has {seconds} set as the delay! (I don't want to waste my api calls lmao)",
             )
         message = f"Set the slowmode delay in this channel to {seconds} seconds!"
         if seconds == 0:
@@ -93,7 +98,7 @@ class Moderation(commands.Cog):
     async def kick(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason=None,
     ):
@@ -107,7 +112,8 @@ class Moderation(commands.Cog):
         await ctx.guild.kick(user=member, reason=reason)
 
         embed = discord.Embed(
-            title=f"{ctx.author.name} kicked: {member.name}", description=reason
+            title=f"{ctx.author.name} kicked: {member.name}",
+            description=reason,
         )
         await ctx.send(embed=embed)
 
@@ -123,7 +129,7 @@ class Moderation(commands.Cog):
     async def ban(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -142,7 +148,7 @@ class Moderation(commands.Cog):
         except:
             await ctx.send(
                 embed=ErrorEmbed(
-                    description="Can't ban the member. Please make sure **my role is at the top**!"
+                    description="Can't ban the member. Please make sure **my role is at the top**!",
                 ),
                 delete_after=4,
             )
@@ -151,7 +157,8 @@ class Moderation(commands.Cog):
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
 
         embed = ErrorEmbed(
-            title=f"{ctx.author.name} banned: {member.name}", description=reason
+            title=f"{ctx.author.name} banned: {member.name}",
+            description=reason,
         )
         await ctx.send(embed=embed)
 
@@ -164,7 +171,7 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
     async def banlist(
-        self, ctx: "Context", *, member: Union[commands.MemberConverter, MemberID]
+        self, ctx: "Context", *, member: commands.MemberConverter | MemberID
     ):
         """Shows list of users who have been banned! Or position of a specified user who was banned!"""
         banned_users = list(await ctx.guild.bans())
@@ -172,8 +179,8 @@ class Moderation(commands.Cog):
             if len(banned_users) == 0:
                 await ctx.send(
                     embed=discord.Embed(
-                        description="There is **no-one banned**! :zero: people are **banned**"
-                    )
+                        description="There is **no-one banned**! :zero: people are **banned**",
+                    ),
                 )
                 return
             l_no = 0
@@ -189,7 +196,8 @@ class Moderation(commands.Cog):
                             pass
 
                     embed = ErrorEmbed(
-                        title="Those who were banned are:", description=description
+                        title="Those who were banned are:",
+                        description=description,
                     )
                     pages.append(embed)
 
@@ -200,7 +208,8 @@ class Moderation(commands.Cog):
                 for k, i in enumerate(banned_users):
                     description += f"\n{k+1}. - **{i.user}** : ID [ **{banned_users[k].user.id}** ] "
                 embed = ErrorEmbed(
-                    title="Those who were banned are:", description=description
+                    title="Those who were banned are:",
+                    description=description,
                 )
                 pages.append(embed)
                 await ctx.send(embed=embed)
@@ -212,7 +221,9 @@ class Moderation(commands.Cog):
                 if user is member:
                     if ban_entry.reason:
                         embed.add_field(
-                            name="**Reason**", value=ban_entry.reason, inline=True
+                            name="**Reason**",
+                            value=ban_entry.reason,
+                            inline=True,
                         )
                     embed.add_field(name="**Position**", value=i + 1, inline=True)
                     embed.add_field(
@@ -225,8 +236,8 @@ class Moderation(commands.Cog):
                     return
             await ctx.send(
                 embed=ErrorEmbed(
-                    description=f"The **{member}** isn't there in the **ban list**"
-                )
+                    description=f"The **{member}** isn't there in the **ban list**",
+                ),
             )
 
     # Soft Ban
@@ -236,7 +247,7 @@ class Moderation(commands.Cog):
     async def softban(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -292,7 +303,7 @@ class Moderation(commands.Cog):
         await ctx.guild.unban(member.user, reason=reason)
         if member.reason:
             await ctx.send(
-                f"Unbanned {member.user} (ID: {member.user.id}), previously banned for {member.reason}."
+                f"Unbanned {member.user} (ID: {member.user.id}), previously banned for {member.reason}.",
             )
         else:
             await ctx.send(f"Unbanned {member.user} (ID: {member.user.id}).")
@@ -300,7 +311,9 @@ class Moderation(commands.Cog):
     # ban
     @commands.Cog.listener()
     async def on_member_ban(
-        self, guild: discord.Guild, user: Union[discord.User, discord.Member]
+        self,
+        guild: discord.Guild,
+        user: discord.User | discord.Member,
     ):
         database = await self.database_class()
         if (
@@ -330,7 +343,9 @@ class Moderation(commands.Cog):
     # unban
     @commands.Cog.listener()
     async def on_member_unban(
-        self, guild: discord.Guild, user: Union[discord.User, discord.Member]
+        self,
+        guild: discord.Guild,
+        user: discord.User | discord.Member,
     ):
         database = await self.database_class()
         if (
@@ -342,7 +357,7 @@ class Moderation(commands.Cog):
         unban = self.bot.get_channel((await database.get(guild.id)).get("unban"))
         try:
             event = await guild.audit_logs().find(
-                lambda x: x.action is discord.AuditLogAction.unban
+                lambda x: x.action is discord.AuditLogAction.unban,
             )
         except:
             event = False
@@ -358,7 +373,8 @@ class Moderation(commands.Cog):
         await unban.send(embed=e)
         try:
             await user.send(
-                f"You were **unbanned** from **{guild.name}** ! :tada:", embed=e
+                f"You were **unbanned** from **{guild.name}** ! :tada:",
+                embed=e,
             )
             dmed = True
         except:
@@ -367,14 +383,16 @@ class Moderation(commands.Cog):
 
     # Add Roles
     @commands.command(
-        pass_context=True, usage="<member.mention> <role>", alias=["add_roles"]
+        pass_context=True,
+        usage="<member.mention> <role>",
+        alias=["add_roles"],
     )
     @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
     async def ar(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         role: commands.RoleConverter,
         *,
         reason: ActionReason = None,
@@ -406,7 +424,7 @@ class Moderation(commands.Cog):
     async def multiban(
         self,
         ctx: "Context",
-        members: Union[commands.MemberConverter, MemberID],
+        members: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -460,7 +478,7 @@ class Moderation(commands.Cog):
         duration: FutureTime,
         member: Annotated[discord.abc.Snowflake, MemberID],
         *,
-        reason: Annotated[Optional[str], ActionReason] = None,
+        reason: Annotated[str | None, ActionReason] = None,
     ):
         """Temporarily bans a member for the specified duration.
         The duration can be a a short time form, e.g. 30d or a more human
@@ -479,7 +497,7 @@ class Moderation(commands.Cog):
         reminder = self.bot.reminder
         if reminder is None:
             return await ctx.send(
-                "Sorry, this functionality is currently unavailable. Try again later?"
+                "Sorry, this functionality is currently unavailable. Try again later?",
             )
 
         until = f'until {format_dt(duration.dt, "F")}'
@@ -564,7 +582,8 @@ class Moderation(commands.Cog):
         """
 
         if not await ctx.prompt(
-            "Are you sure that you want to **massban**?", author_id=ctx.author.id
+            "Are you sure that you want to **massban**?",
+            author_id=ctx.author.id,
         ):
             return
 
@@ -577,7 +596,7 @@ class Moderation(commands.Cog):
                 author = await ctx.guild.fetch_member(ctx.author.id)
             except discord.HTTPException:
                 return await ctx.send(
-                    "Somehow, Discord does not seem to think you are in this server."
+                    "Somehow, Discord does not seem to think you are in this server.",
                 )
         else:
             author = ctx.author
@@ -599,10 +618,14 @@ class Moderation(commands.Cog):
         parser.add_argument("--match")
         parser.add_argument("--show", action="store_true")
         parser.add_argument(
-            "--embeds", action="store_const", const=lambda m: len(m.embeds)
+            "--embeds",
+            action="store_const",
+            const=lambda m: len(m.embeds),
         )
         parser.add_argument(
-            "--files", action="store_const", const=lambda m: len(m.attachments)
+            "--files",
+            action="store_const",
+            const=lambda m: len(m.attachments),
         )
         parser.add_argument("--after", type=int)
         parser.add_argument("--before", type=int)
@@ -638,7 +661,9 @@ class Moderation(commands.Cog):
                 predicates.append(args.files)
 
             async for message in channel.history(
-                limit=min(max(1, args.search), 2000), before=before, after=after
+                limit=min(max(1, args.search), 2000),
+                before=before,
+                after=after,
             ):
                 if all(p(message) for p in predicates):
                     members.append(message.author)
@@ -704,7 +729,8 @@ class Moderation(commands.Cog):
             predicates.append(joined_after)
         if args.joined_before:
             _joined_before_member = await converter.convert(
-                ctx, str(args.joined_before)
+                ctx,
+                str(args.joined_before),
             )
 
             def joined_before(member, *, _other=_joined_before_member):
@@ -728,7 +754,8 @@ class Moderation(commands.Cog):
             )
             content = f"Current Time: {discord.utils.utcnow()}\nTotal members: {len(members)}\n{fmt}"
             file = discord.File(
-                io.BytesIO(content.encode("utf-8")), filename="members.txt"
+                io.BytesIO(content.encode("utf-8")),
+                filename="members.txt",
             )
             return await ctx.send(file=file)
 
@@ -738,7 +765,7 @@ class Moderation(commands.Cog):
             reason = await ActionReason().convert(ctx, args.reason)
 
         confirm = await ctx.prompt(
-            f"This will ban **{plural(len(members)):member}**. Are you sure?"
+            f"This will ban **{plural(len(members)):member}**. Are you sure?",
         )
         if not confirm:
             return await ctx.send("Aborting.")
@@ -761,9 +788,9 @@ class Moderation(commands.Cog):
     async def warn(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
-        reason: Optional[str] = None,
+        reason: str | None = None,
     ):
         """Warn a user"""
         data = await (await self.database_class()).get(ctx.guild.id)
@@ -771,14 +798,15 @@ class Moderation(commands.Cog):
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
                 description="You can always setup the **warning system** by running `{}setup add warns #warns`".format(
-                    ctx.prefix
+                    ctx.prefix,
                 ),
             )
             await ctx.send(embed=e, delete_after=10)
             return
 
         if not await ctx.prompt(
-            f"Are you sure that you want to **warn** {member}?", author_id=ctx.author.id
+            f"Are you sure that you want to **warn** {member}?",
+            author_id=ctx.author.id,
         ):
             return
 
@@ -804,7 +832,7 @@ class Moderation(commands.Cog):
     async def warnlist(
         self,
         ctx: "Context",
-        member: Optional[Union[commands.MemberConverter, MemberID]] = None,
+        member: commands.MemberConverter | MemberID | None = None,
     ):
         """Get the no. of warns for a specified user"""
         data = await (await self.database_class()).get(ctx.guild.id)
@@ -812,7 +840,7 @@ class Moderation(commands.Cog):
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
                 description="You can always setup the **warning system** by running `{}setup add warns #warns` command".format(
-                    ctx.prefix
+                    ctx.prefix,
                 ),
             )
             await ctx.send(embed=e, delete_after=10)
@@ -821,7 +849,8 @@ class Moderation(commands.Cog):
         member = member or ctx.message.author
         embed = discord.Embed(title="Type the below message in the search bar")
         search_image = discord.File(
-            join(self.bot.minato_dir, "discord", "search.png"), filename="search.png"
+            join(self.bot.minato_dir, "discord", "search.png"),
+            filename="search.png",
         )
         embed.set_image(url="attachment://search.png")
         await ctx.send(file=search_image, embed=embed)
@@ -832,7 +861,7 @@ class Moderation(commands.Cog):
 
     @commands.command(aliases=["newmembers"], usage="[count]")
     @commands.guild_only()
-    async def newusers(self, ctx: "Context", *, count: Optional[int] = 5):
+    async def newusers(self, ctx: "Context", *, count: int | None = 5):
         """
         Tells you the newest members of the server.
 
@@ -857,7 +886,9 @@ class Moderation(commands.Cog):
             created = member.created_at.strftime("%a, %d %B %Y %I:%M:%S %fms %Z")
             body = f"Joined: {joined}\nCreated: {created}"
             embed.add_field(
-                name=f"{member} (ID: {member.id})", value=body, inline=False
+                name=f"{member} (ID: {member.id})",
+                value=body,
+                inline=False,
             )
 
         await ctx.send(embed=embed)
@@ -996,7 +1027,10 @@ class Moderation(commands.Cog):
 
         try:
             deleted = await ctx.channel.purge(
-                limit=limit, before=before, after=after, check=predicate
+                limit=limit,
+                before=before,
+                after=after,
+                check=predicate,
             )
         except discord.Forbidden as e:
             return await ctx.send("I do not have permissions to delete messages.")
@@ -1032,7 +1066,9 @@ class Moderation(commands.Cog):
     async def images(self, ctx: "Context", search=100):
         """Removes messages that have embeds or attachments."""
         await self.do_removal(
-            ctx, search, lambda e: len(e.embeds) or len(e.attachments)
+            ctx,
+            search,
+            lambda e: len(e.embeds) or len(e.attachments),
         )
 
     @remove.command(name="all")
@@ -1145,13 +1181,19 @@ class Moderation(commands.Cog):
         parser.add_argument("--emoji", action="store_true")
         parser.add_argument("--bot", action="store_const", const=lambda m: m.author.bot)
         parser.add_argument(
-            "--embeds", action="store_const", const=lambda m: len(m.embeds)
+            "--embeds",
+            action="store_const",
+            const=lambda m: len(m.embeds),
         )
         parser.add_argument(
-            "--files", action="store_const", const=lambda m: len(m.attachments)
+            "--files",
+            action="store_const",
+            const=lambda m: len(m.attachments),
         )
         parser.add_argument(
-            "--reactions", action="store_const", const=lambda m: len(m.reactions)
+            "--reactions",
+            action="store_const",
+            const=lambda m: len(m.reactions),
         )
         parser.add_argument("--search", type=int)
         parser.add_argument("--after", type=int)
@@ -1198,7 +1240,7 @@ class Moderation(commands.Cog):
 
         if args.starts:
             predicates.append(
-                lambda m: any(m.content.startswith(s) for s in args.starts)
+                lambda m: any(m.content.startswith(s) for s in args.starts),
             )
 
         if args.ends:
@@ -1220,7 +1262,11 @@ class Moderation(commands.Cog):
 
         args.search = max(0, min(2000, args.search))  # clamp from 0-2000
         await self.do_removal(
-            ctx, args.search, predicate, before=args.before, after=args.after
+            ctx,
+            args.search,
+            predicate,
+            before=args.before,
+            after=args.after,
         )
 
     @commands.command(aliases=["mute"])
@@ -1231,7 +1277,7 @@ class Moderation(commands.Cog):
         self,
         ctx: "Context",
         duration: FutureTime,
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -1246,8 +1292,8 @@ class Moderation(commands.Cog):
         await member.edit(timed_out_until=duration.dt, reason=reason)
         await ctx.send(
             embed=ErrorEmbed(
-                description=f"**Timed out** {member} until {format_relative(duration.dt)}"
-            )
+                description=f"**Timed out** {member} until {format_relative(duration.dt)}",
+            ),
         )
 
     @commands.command(aliases=["unmute"])
@@ -1257,7 +1303,7 @@ class Moderation(commands.Cog):
     async def untimeout(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -1271,7 +1317,7 @@ class Moderation(commands.Cog):
             reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
         await member.edit(timed_out_until=None, reason=reason)
         await ctx.send(
-            embed=SuccessEmbed(description=f"**Removed timed out** from {member}")
+            embed=SuccessEmbed(description=f"**Removed timed out** from {member}"),
         )
 
     @commands.command(aliases=["vcmute"])
@@ -1282,7 +1328,7 @@ class Moderation(commands.Cog):
     async def voicemute(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -1297,8 +1343,8 @@ class Moderation(commands.Cog):
         await member.edit(mute=True, reason=reason)
         await ctx.send(
             embed=ErrorEmbed(
-                description=f"**Muted** {member} from `all voice channels`"
-            )
+                description=f"**Muted** {member} from `all voice channels`",
+            ),
         )
 
     @commands.command(aliases=["vcunmute"])
@@ -1309,7 +1355,7 @@ class Moderation(commands.Cog):
     async def voiceunmute(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -1324,8 +1370,8 @@ class Moderation(commands.Cog):
         await member.edit(mute=False, reason=reason)
         await ctx.send(
             embed=SuccessEmbed(
-                description=f"**Unmuted** {member} from `all voice channels`"
-            )
+                description=f"**Unmuted** {member} from `all voice channels`",
+            ),
         )
 
     @commands.command(aliases=["serverdeaf"])
@@ -1336,7 +1382,7 @@ class Moderation(commands.Cog):
     async def serverdeafen(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -1359,7 +1405,7 @@ class Moderation(commands.Cog):
     async def serverundeafen(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -1382,7 +1428,7 @@ class Moderation(commands.Cog):
     async def suppress(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -1397,8 +1443,8 @@ class Moderation(commands.Cog):
         await member.edit(suppress=True, reason=reason)
         await ctx.send(
             embed=ErrorEmbed(
-                description=f"**Suppressed** {member} from `all stage channels`"
-            )
+                description=f"**Suppressed** {member} from `all stage channels`",
+            ),
         )
 
     @commands.command(aliases=["stageunsuppress", "stageunmute"])
@@ -1409,7 +1455,7 @@ class Moderation(commands.Cog):
     async def unsuppress(
         self,
         ctx: "Context",
-        member: Union[commands.MemberConverter, MemberID],
+        member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
     ):
@@ -1424,8 +1470,8 @@ class Moderation(commands.Cog):
         await member.edit(suppress=False, reason=reason)
         await ctx.send(
             embed=SuccessEmbed(
-                description=f"**Un-Suppressed** {member} from `all stage channels`"
-            )
+                description=f"**Un-Suppressed** {member} from `all stage channels`",
+            ),
         )
 
     @commands.group(invoke_without_command=True)
@@ -1439,13 +1485,14 @@ class Moderation(commands.Cog):
     @lock.command(aliases=["thread"], usage="[thread.channel]")
     @commands.has_guild_permissions(manage_threads=True)
     async def threadchannel(
-        ctx: "Context", channels: commands.Greedy[discord.Thread] = None
+        ctx: "Context",
+        channels: commands.Greedy[discord.Thread] = None,
     ):
         """Locks the specified thread channel(s), both member and bot required `Manage Thread` perms to operate"""
         if channels is None:
             if not isinstance(ctx.channel, discord.Thread):
                 await ctx.send(
-                    embed=ErrorEmbed(description="The channel is not a `Thread`")
+                    embed=ErrorEmbed(description="The channel is not a `Thread`"),
                 )
                 return
             channels = [ctx.channel]
@@ -1456,7 +1503,8 @@ class Moderation(commands.Cog):
     @lock.command(aliases=["text"], usage="[text.channel]")
     @has_guild_permissions(manage_channels=True)
     async def textchannel(
-        ctx: "Context", channels: commands.Greedy[discord.TextChannel] = None
+        ctx: "Context",
+        channels: commands.Greedy[discord.TextChannel] = None,
     ):
         """Locks the specified text channel(s), both member and bot required `Manage Channel` perms to operate"""
         if channels is None:
@@ -1484,7 +1532,7 @@ class Moderation(commands.Cog):
         """Unlocks the  thread channel in which the command was rrun, both member and bot required `Manage Thread` perms to operate"""
         if not isinstance(ctx.channel, discord.Thread):
             await ctx.send(
-                embed=ErrorEmbed(description="The channel is not a `Thread`")
+                embed=ErrorEmbed(description="The channel is not a `Thread`"),
             )
             return
         await ctx.channel.edit(locked=False, archived=False)
@@ -1508,7 +1556,7 @@ class Moderation(commands.Cog):
                 reason=f"Action initiated by {ctx.author} (ID: {ctx.author.id})",
             )
         await ctx.send(
-            f'{" ,".join(list(map(lambda a: a.mention, channels)))} unlocked.'
+            f'{" ,".join(list(map(lambda a: a.mention, channels)))} unlocked.',
         )
 
     @commands.command(aliases=["threadjoin"])
@@ -1517,13 +1565,13 @@ class Moderation(commands.Cog):
         """Joins the specified thread"""
         if not isinstance(channel, discord.Thread):
             await ctx.send(
-                embed=ErrorEmbed(description="The channel is not a `Thread`")
+                embed=ErrorEmbed(description="The channel is not a `Thread`"),
             )
             return
         await channel.send("Hey!")
         try:
             await ctx.message.delete(
-                reason="Just to indicate that the command was successfully completed"
+                reason="Just to indicate that the command was successfully completed",
             )
         except (discord.Forbidden, discord.NotFound, discord.HTTPException):
             pass

@@ -1,8 +1,8 @@
-Hello ** {}**! I am **{}**!!! 
+Hello ** {}**! I am **{}**!!!
 
 > **Help cmd** <a:megaphone:852872039223918622>:
 > ~ **`)help`**
-> or 
+> or
 > ~ **{} `help`**
 
 

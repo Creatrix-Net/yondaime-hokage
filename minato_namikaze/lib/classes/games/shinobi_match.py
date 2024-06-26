@@ -1,19 +1,25 @@
+from __future__ import annotations
+
 import asyncio
 import random
-from typing import List, Optional, Tuple, Union
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 import discord
 from discord.ext import commands
-from ...util import Embed, StarboardEmbed
 from StringProgressBar import progressBar
 
+from ...util import Embed
+from ...util import StarboardEmbed
 from ..converter_cache_class import Characters
 
 
 class CharacterSelect(discord.ui.Select["ShinobiMatchCharacterSelection"]):
     def __init__(
         self,
-        characters: List[Characters],
+        characters: list[Characters],
     ):
         super().__init__(
             placeholder="Select your character...",
@@ -45,14 +51,14 @@ class CharacterSelect(discord.ui.Select["ShinobiMatchCharacterSelection"]):
 
 
 class ShinobiMatchCharacterSelection(discord.ui.View):
-    children: List[Union[CharacterSelect, discord.Button, discord.ui.Button]]
+    children: list[CharacterSelect | discord.Button | discord.ui.Button]
 
     def __init__(
         self,
-        characters_data: List[Characters],
+        characters_data: list[Characters],
         ctx: commands.Context,
         player: discord.Member,
-        message: Optional[discord.Message] = None,
+        message: discord.Message | None = None,
     ):
         super().__init__()
         self.character = None
@@ -62,14 +68,15 @@ class ShinobiMatchCharacterSelection(discord.ui.View):
         self.message = message
         self.add_item(CharacterSelect(characters=characters_data))
 
-    def get_character_config(self, character_id: Union[str, int]) -> Characters:
+    def get_character_config(self, character_id: str | int) -> Characters:
         return discord.utils.get(self.characters_data, id=character_id)
 
     @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green, row=2)
     async def select(self, button: discord.ui.Button, interaction: discord.Interaction):
         if self.character is None:
             return await interaction.response.send_message(
-                "Please select a character before clicking this button", ephemeral=True
+                "Please select a character before clicking this button",
+                ephemeral=True,
             )
         await interaction.response.defer()
         for i in self.children:
@@ -88,7 +95,8 @@ class ShinobiMatchCharacterSelection(discord.ui.View):
     async def interaction_check(self, interaction: discord.Interaction):
         if interaction.user != self.player:
             await interaction.response.send_message(
-                "This `Shinobi match` is not for you", ephemeral=True
+                "This `Shinobi match` is not for you",
+                ephemeral=True,
             )
             return False
         return True
@@ -113,13 +121,13 @@ class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
             await self.reduce_health(
                 amount=abs(view.character1.hitpoint - view.character2.regainpoint)
                 if view.turn == view.player1
-                else abs(view.character2.hitpoint - view.character1.regainpoint)
+                else abs(view.character2.hitpoint - view.character1.regainpoint),
             )
         elif self.label.lower() == "Special Power Attack".lower():
             await self.reduce_health(
                 amount=(view.character1.specialpoint / 100) * view.overall_health
                 if view.turn == view.player1
-                else (view.character2.specialpoint / 100) * view.overall_health
+                else (view.character2.specialpoint / 100) * view.overall_health,
             )
             if view.turn == view.player1:
                 view.special_moves1 -= 1
@@ -234,13 +242,13 @@ class MatchHandlerViewButton(discord.ui.Button["MatchHandlerView"]):
 
 
 class MatchHandlerView(discord.ui.View):
-    children: List[MatchHandlerViewButton]
+    children: list[MatchHandlerViewButton]
 
     def __init__(
         self,
-        player1: Tuple[discord.Member, Characters],
-        player2: Tuple[discord.Member, Characters],
-        message: Optional[discord.Message] = None,
+        player1: tuple[discord.Member, Characters],
+        player2: tuple[discord.Member, Characters],
+        message: discord.Message | None = None,
     ):
         super().__init__()
         self.message = message
@@ -262,8 +270,8 @@ class MatchHandlerView(discord.ui.View):
         self.heal_moves1: int = 2
         self.heal_moves2: int = 2
 
-        self.previous_move1: Optional[str] = None
-        self.previous_move2: Optional[str] = None
+        self.previous_move1: str | None = None
+        self.previous_move2: str | None = None
 
         self.special_moves_energy_usage: int = 10  # this is in percentage
         self.button_names: list = [
@@ -282,9 +290,9 @@ class MatchHandlerView(discord.ui.View):
 
     def make_embed(
         self,
-        character: Optional[Characters] = None,
-        author: Optional[discord.Member] = None,
-        color: Optional[discord.Color] = None,
+        character: Characters | None = None,
+        author: discord.Member | None = None,
+        color: discord.Color | None = None,
     ) -> Embed:
         character = character or (
             self.character1 if self.turn == self.player1 else self.character2
@@ -296,10 +304,10 @@ class MatchHandlerView(discord.ui.View):
         embed.title = character.name
         embed.set_image(url=random.choice(character.images))
         embed.set_footer(
-            text=f"{self.special_moves1 if character == self.character1 else self.special_moves2} special moves left | {self.heal_moves1 if character == self.character1 else self.heal_moves2} heal operations left"
+            text=f"{self.special_moves1 if character == self.character1 else self.special_moves2} special moves left | {self.heal_moves1 if character == self.character1 else self.heal_moves2} heal operations left",
         )
         embed.description = self.percentage_and_progess_bar(
-            self.health1 if character == self.character1 else self.health2
+            self.health1 if character == self.character1 else self.health2,
         )
         embed.set_author(name=author.display_name, icon_url=author.display_avatar.url)
         if color is not None:
@@ -312,7 +320,8 @@ class MatchHandlerView(discord.ui.View):
             self.player2,
         ):
             await interaction.response.send_message(
-                "Please wait for your `turn`", ephemeral=True
+                "Please wait for your `turn`",
+                ephemeral=True,
             )
             return False
         if interaction.user != self.turn:
@@ -329,13 +338,16 @@ class MatchHandlerView(discord.ui.View):
         for i in self.children:
             i.disabled = True
         await self.message.edit(
-            content=None, embeds=await self.determine_winer(force=True), view=self
+            content=None,
+            embeds=await self.determine_winer(force=True),
+            view=self,
         )
         return self.stop()
 
     async def determine_winer(
-        self, force: bool = False
-    ) -> Optional[List[discord.Embed]]:
+        self,
+        force: bool = False,
+    ) -> list[discord.Embed] | None:
         if not force and self.health1 > 0 and self.health2 > 0:
             return
 
@@ -369,9 +381,13 @@ class MatchHandlerView(discord.ui.View):
         return [
             embed,
             self.make_embed(
-                character=winner_character, author=winner, color=discord.Color.green()
+                character=winner_character,
+                author=winner,
+                color=discord.Color.green(),
             ),
             self.make_embed(
-                character=looser_character, author=looser, color=discord.Color.red()
+                character=looser_character,
+                author=looser,
+                color=discord.Color.red(),
             ),
         ]

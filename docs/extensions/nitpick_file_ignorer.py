@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 from sphinx.application import Sphinx

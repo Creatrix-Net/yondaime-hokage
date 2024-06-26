@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.environment.adapters.indexentries import IndexEntries
 from sphinx.writers.html5 import HTML5Translator
@@ -30,7 +32,7 @@ class DPYStandaloneHTMLBuilder(StandaloneHTMLBuilder):
         indexcounts = []
         for _k, entries in genindex:
             indexcounts.append(
-                sum(1 + len(subitems) for _, (_, subitems, _) in entries)
+                sum(1 + len(subitems) for _, (_, subitems, _) in entries),
             )
 
         genindexcontext = {

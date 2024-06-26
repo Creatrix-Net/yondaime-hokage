@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import configparser
 import enum
 import gzip
@@ -6,7 +8,8 @@ import json
 import os
 import zipfile
 from pathlib import Path
-from typing import Any, List
+from typing import Any
+from typing import List
 
 from sqlalchemy.orm import declarative_base
 
@@ -171,11 +174,11 @@ class LinksAndVars(enum.Enum):
         "rt",
         encoding="utf-8",
     ) as f:
-        insults: List[str] = list(
+        insults: list[str] = list(
             map(
                 lambda a: a.strip(" ").strip("\n").strip("'").strip('"').strip("\\"),
                 f.read().split(","),
-            )
+            ),
         )
 
 

@@ -1,18 +1,22 @@
+from __future__ import annotations
+
 import datetime
 import io
 import shlex
 import time
-from typing import TYPE_CHECKING, Optional, Union
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import Union
 
 import discord
-from discord.ext import commands, tasks
-from minato_namikaze.lib import (
-    Arguments,
-    BackupDatabse,
-    ChannelAndMessageId,
-    SuccessEmbed,
-)
+from discord.ext import commands
+from discord.ext import tasks
 from orjson import dumps
+
+from minato_namikaze.lib import Arguments
+from minato_namikaze.lib import BackupDatabse
+from minato_namikaze.lib import ChannelAndMessageId
+from minato_namikaze.lib import SuccessEmbed
 
 if TYPE_CHECKING:
     from lib import Context
@@ -26,8 +30,8 @@ log = logging.getLogger(__name__)
 
 
 class BackUp(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Create a backup for your server"
         self.cleanup.start()
 
@@ -43,7 +47,8 @@ class BackUp(commands.Cog):
         ).history(limit=None):
             try:
                 await commands.GuildConverter().convert(
-                    await self.bot.get_context(message), message.content.strip()
+                    await self.bot.get_context(message),
+                    message.content.strip(),
                 )
             except (commands.CommandError, commands.BadArgument):
                 if not self.bot.local:
@@ -53,7 +58,9 @@ class BackUp(commands.Cog):
     @commands.hybrid_group(invoke_without_command=True)
     @commands.guild_only()
     @commands.has_permissions(
-        manage_guild=True, manage_channels=True, manage_roles=True
+        manage_guild=True,
+        manage_channels=True,
+        manage_roles=True,
     )
     @commands.cooldown(2, 60, commands.BucketType.guild)
     async def backup(self, ctx: "Context", command=None):
@@ -66,8 +73,8 @@ class BackUp(commands.Cog):
     async def channellogs(
         self,
         ctx: "Context",
-        channel: Optional[discord.TextChannel] = None,
-        send: Optional[discord.TextChannel] = None,
+        channel: discord.TextChannel | None = None,
+        send: discord.TextChannel | None = None,
     ):
         """
         Creat a backup of all channel data as json files This might take a long time
@@ -133,10 +140,13 @@ class BackUp(commands.Cog):
             total_msgs += len(message_dict)
             await send.send(
                 content="{} messages saved from `{}` \nTime taken is {} sec".format(
-                    total_msgs, channel.name, round(time.time() - start)
+                    total_msgs,
+                    channel.name,
+                    round(time.time() - start),
                 ),
                 file=discord.File(
-                    io.BytesIO(dumps(message_dict)), filename=f"{guild.id}-{today}.json"
+                    io.BytesIO(dumps(message_dict)),
+                    filename=f"{guild.id}-{today}.json",
                 ),
             )
         except discord.Forbidden:
@@ -212,28 +222,34 @@ class BackUp(commands.Cog):
                     continue
                 await channel.send(
                     "{} messages saved from `{}` \nTime taken is {} sec".format(
-                        len(message_list), chn.name, round(time.time() - start_channel)
-                    )
+                        len(message_list),
+                        chn.name,
+                        round(time.time() - start_channel),
+                    ),
                 )
             except discord.errors.Forbidden:
-                await channel.send("0 messages saved from `{}`".format(chn.name))
+                await channel.send(f"0 messages saved from `{chn.name}`")
                 pass
             except AttributeError:
-                await channel.send("0 messages saved from `{}`".format(chn.name))
+                await channel.send(f"0 messages saved from `{chn.name}`")
                 pass
             whole_data_dict.update({str(chn.id): message_list})
         await channel.send(
             content="{} messages saved from `{}` \nTime taken is {} sec".format(
-                total_msgs, guild.name, round(time.time() - start)
+                total_msgs,
+                guild.name,
+                round(time.time() - start),
             ),
             file=discord.File(
-                io.BytesIO(dumps(whole_data_dict)), filename=f"{guild.id}-{today}.json"
+                io.BytesIO(dumps(whole_data_dict)),
+                filename=f"{guild.id}-{today}.json",
             ),
         )
         await first_message.delete()
 
     @backup.command(
-        description="Creates a template backup of the server", aliases=["templates"]
+        description="Creates a template backup of the server",
+        aliases=["templates"],
     )
     async def template(self, ctx: "Context"):
         """
@@ -247,7 +263,7 @@ class BackUp(commands.Cog):
             return
         backup_code = await BackupDatabse(ctx).create_backup()
         backup_code_reference = await ctx.author.send(
-            f":arrow_right:  **BACKUP CODE** : ``{backup_code}``"
+            f":arrow_right:  **BACKUP CODE** : ``{backup_code}``",
         )
         await ctx.send(
             content=f"{ctx.author.mention} check your dm(s) :white_check_mark:",
@@ -263,11 +279,11 @@ class BackUp(commands.Cog):
         backup_code_data_url = await BackupDatabse(ctx).get_backup_data(code)
         if backup_code_data_url is not None:
             await ctx.send(
-                content=f"The data for the ``{code}``\n{backup_code_data_url}"
+                content=f"The data for the ``{code}``\n{backup_code_data_url}",
             )
             return
         await ctx.send(
-            f"Hey {ctx.author.mention}, \n there is no data associated with **{code}** backup code!"
+            f"Hey {ctx.author.mention}, \n there is no data associated with **{code}** backup code!",
         )
 
     @backup.command(usage="<args>")
@@ -296,14 +312,14 @@ class BackUp(commands.Cog):
                 await ctx.send("No Backup Id's provided")
                 return
             await ctx.send(
-                "If any backup(s) with those id exists then it will deleted."
+                "If any backup(s) with those id exists then it will deleted.",
             )
             for i in args.id:
                 await BackupDatabse(ctx).delete_backup_data(int(i))
             return
         if args.all:
             await ctx.send(
-                "If any backup(s) of the guild exists then it will be deleted."
+                "If any backup(s) of the guild exists then it will be deleted.",
             )
             async for message in (
                 await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)
@@ -329,7 +345,7 @@ class BackUp(commands.Cog):
         ):
             return
         first = await ctx.send(
-            "Backup will be applied, if backup with that id exists! and this message will be deleted!"
+            "Backup will be applied, if backup with that id exists! and this message will be deleted!",
         )
         start = time.time()
         backup_return_value = await BackupDatabse(ctx).apply_backup(int(code))
@@ -344,12 +360,7 @@ class BackUp(commands.Cog):
     async def attachments(
         self,
         ctx: "Context",
-        channel: Optional[
-            Union[
-                discord.TextChannel,
-                discord.Thread,
-            ]
-        ] = None,
+        channel: None | (discord.TextChannel | discord.Thread) = None,
     ):
         """Backups the attachement(s) of the specified channel or channel in which command was run"""
         if channel is None:

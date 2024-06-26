@@ -1,8 +1,11 @@
-import typing
-import discord
+from __future__ import annotations
 
+import typing
+
+import discord
+from discord import application_command_option
+from discord import VoiceChannel
 from discord.abc import GuildChannel
-from discord import application_command_option, VoiceChannel
 from lib.functions import meek_api
 
 
@@ -37,7 +40,8 @@ class Activities(discord.SlashCommand):
 
     async def callback(self, response: discord.SlashCommandResponse):
         link = await self.cog.bot.togetherControl.create_link(
-            response.options.channel.id, str(response.options.activities)
+            response.options.channel.id,
+            str(response.options.activities),
         )
         await response.send_message(f"Click the blue link!\n{link}")
 
@@ -45,7 +49,7 @@ class Activities(discord.SlashCommand):
 class Vocaloids(discord.SlashCommand):
     """Get kawaii pictures of different vocaloids"""
 
-    vocaloid: typing.Optional[
+    vocaloid: None | (
         typing.Literal[
             "rin",
             "una",
@@ -66,7 +70,7 @@ class Vocaloids(discord.SlashCommand):
             "zola",
             "diva",
         ]
-    ] = discord.application_command_option(
+    ) = discord.application_command_option(
         description="Select you favourite vocaloid",
         default="miku",
     )

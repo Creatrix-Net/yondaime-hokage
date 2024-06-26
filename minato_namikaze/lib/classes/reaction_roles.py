@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, List
+from __future__ import annotations
+
+from typing import List
+from typing import TYPE_CHECKING
 
 import discord
 
@@ -28,7 +31,8 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
             ]
             if list(map(lambda i: i.id, interaction.user.roles)) in roles_id_list:
                 await interaction.response.send_message(
-                    "You cannot have more than 1 role from this message", ephemeral=True
+                    "You cannot have more than 1 role from this message",
+                    ephemeral=True,
                 )
                 return
 
@@ -39,10 +43,13 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
                 if role_model in interaction.user.roles:
                     try:
                         await interaction.user.remove_roles(
-                            role_model, reason="Reaction Roles", atomic=True
+                            role_model,
+                            reason="Reaction Roles",
+                            atomic=True,
                         )
                         await interaction.response.send_message(
-                            f"Removed {role_model.mention} role", ephemeral=True
+                            f"Removed {role_model.mention} role",
+                            ephemeral=True,
                         )
                         return
                     except discord.Forbidden:
@@ -52,31 +59,37 @@ class ReactionRolesButton(discord.ui.Button["ReactionPersistentView"]):
                         )
                     except discord.HTTPException:
                         await interaction.response.send_message(
-                            "Removing roles failed", ephemeral=True
+                            "Removing roles failed",
+                            ephemeral=True,
                         )
                 try:
                     await interaction.user.add_roles(
-                        role_model, reason="Reaction Roles", atomic=True
+                        role_model,
+                        reason="Reaction Roles",
+                        atomic=True,
                     )
                     await interaction.response.send_message(
-                        f"Added {role_model.mention} role", ephemeral=True
+                        f"Added {role_model.mention} role",
+                        ephemeral=True,
                     )
                 except discord.Forbidden:
                     await interaction.response.send_message(
-                        "I don't have the `Manage Roles` permissions", ephemeral=True
+                        "I don't have the `Manage Roles` permissions",
+                        ephemeral=True,
                     )
                 except discord.HTTPException:
                     await interaction.response.send_message(
-                        "Adding roles failed", ephemeral=True
+                        "Adding roles failed",
+                        ephemeral=True,
                     )
 
 
 class ReactionPersistentView(discord.ui.View):
     """Persistant view for the Reaction Role using buton"""
 
-    children: List[ReactionRolesButton]
+    children: list[ReactionRolesButton]
 
-    def __init__(self, data: "Reaction_Roles"):
+    def __init__(self, data: Reaction_Roles):
         self.data = data
         super().__init__(timeout=None)
         for count, i in enumerate(data.reactions):
@@ -86,5 +99,5 @@ class ReactionPersistentView(discord.ui.View):
                     emoji=i,
                     role=data.reactions[i],
                     y=(count // 5) + 1,
-                )
+                ),
             )

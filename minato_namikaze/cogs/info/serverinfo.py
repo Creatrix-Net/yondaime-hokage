@@ -1,8 +1,13 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import serverinfo, userinfo, Embed
+
+from minato_namikaze.lib import Embed
+from minato_namikaze.lib import serverinfo
+from minato_namikaze.lib import userinfo
 
 if TYPE_CHECKING:
     from lib import Context
@@ -16,8 +21,8 @@ log = logging.getLogger(__name__)
 
 
 class Info(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.bot.start_time = bot.start_time
         self.bot.github = bot.github
         self.description = "Get's the Information about the server"
@@ -63,7 +68,7 @@ class Info(commands.Cog):
         if not ctx.guild.icon:
             return await ctx.send("This server does not have a avatar...")
         await ctx.send(
-            f"Avatar of **{ctx.guild.name}**\n{ctx.guild.icon.with_size(1024).url}"
+            f"Avatar of **{ctx.guild.name}**\n{ctx.guild.icon.with_size(1024).url}",
         )
 
     @server.command(name="banner")

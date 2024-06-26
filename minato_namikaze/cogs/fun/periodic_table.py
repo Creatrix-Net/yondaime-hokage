@@ -1,14 +1,20 @@
-from typing import TYPE_CHECKING, List, Tuple
+from __future__ import annotations
+
+import logging
+from typing import List
+from typing import Tuple
+from typing import TYPE_CHECKING
 
 import discord
 from discord.ext import commands
 from discord.ext.commands.converter import Converter
 from discord.ext.commands.errors import BadArgument
-from minato_namikaze.lib import IMAGES, LATTICES, UNITS, EmbedPaginator
+
+from minato_namikaze.lib import EmbedPaginator
+from minato_namikaze.lib import IMAGES
+from minato_namikaze.lib import LATTICES
+from minato_namikaze.lib import UNITS
 from minato_namikaze.lib.mendeleev import element as ELEMENTS
-
-
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -25,15 +31,15 @@ class ElementConverter(Converter):
         result = None
         if argument.isdigit():
             if int(argument) > 118 or int(argument) < 1:
-                raise BadArgument("`{}` is not a valid element!".format(argument))
+                raise BadArgument(f"`{argument}` is not a valid element!")
             result = ELEMENTS(int(argument))
         else:
             try:
                 result = ELEMENTS(argument.title())
             except Exception:
-                raise BadArgument("`{}` is not a valid element!".format(argument))
+                raise BadArgument(f"`{argument}` is not a valid element!")
         if not result:
-            raise BadArgument("`{}` is not a valid element!".format(argument))
+            raise BadArgument(f"`{argument}` is not a valid element!")
         return result
 
 
@@ -41,8 +47,10 @@ class MeasurementConverter(Converter):
     """Converts a given measurement type into usable strings"""
 
     async def convert(
-        self, ctx: commands.Context, argument: str
-    ) -> List[Tuple[str, str, str]]:
+        self,
+        ctx: commands.Context,
+        argument: str,
+    ) -> list[tuple[str, str, str]]:
         result = []
         if argument.lower() in UNITS:
             result.append(
@@ -50,7 +58,7 @@ class MeasurementConverter(Converter):
                     argument.lower(),
                     UNITS[argument.lower()]["name"],
                     UNITS[argument.lower()]["units"],
-                )
+                ),
             )
         else:
             for k, v in UNITS.items():
@@ -59,13 +67,13 @@ class MeasurementConverter(Converter):
                 elif argument.lower() in k:
                     result.append((k, v["name"], v["units"]))
         if not result:
-            raise BadArgument("`{}` is not a valid measurement!".format(argument))
+            raise BadArgument(f"`{argument}` is not a valid measurement!")
         return result
 
 
 class Elements(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Display information from the periodic table of elements"
 
     @property
@@ -76,7 +84,7 @@ class Elements(commands.Cog):
     def get_lattice_string(element: ELEMENTS) -> str:
         if element.lattice_structure:
             name, link = LATTICES[element.lattice_structure]
-            return "[{}]({})".format(name, link)
+            return f"[{name}]({link})"
         return ""
 
     @staticmethod
@@ -114,10 +122,10 @@ class Elements(commands.Cog):
         except Exception:
             lb = ""
 
-        data = "Kα {:.2}".format(ka) if ka else ""
-        extra_1 = "Kβ {:.2}".format(kb) if kb else ""
-        extra_2 = "Lα {:.2}".format(la) if la else ""
-        extra_3 = "Lβ {:.2}".format(lb) if lb else ""
+        data = f"Kα {ka:.2}" if ka else ""
+        extra_1 = f"Kβ {kb:.2}" if kb else ""
+        extra_2 = f"Lα {la:.2}" if la else ""
+        extra_3 = f"Lβ {lb:.2}" if lb else ""
         return ", ".join(x for x in [data, extra_1, extra_2, extra_3] if x)
 
     @commands.command()
@@ -160,7 +168,8 @@ class Elements(commands.Cog):
         if not elements:
             elements = [ELEMENTS(e) for e in range(1, 119)]
         paginator = EmbedPaginator(
-            ctx=ctx, entries=[await self.element_embed(e) for e in elements]
+            ctx=ctx,
+            entries=[await self.element_embed(e) for e in elements],
         )
         await paginator.start()
 
@@ -203,7 +212,8 @@ class Elements(commands.Cog):
             if x:
                 embed.add_field(name=name[0], value=f"{x} {name[1]}")
         embed.add_field(
-            name="X-ray Fluorescence", value=self.get_xray_wavelength(element)
+            name="X-ray Fluorescence",
+            value=self.get_xray_wavelength(element),
         )
         discovery = f"{element.discoverers} ({element.discovery_year}) in {element.discovery_location}"
         embed.add_field(name="Discovery", value=discovery)

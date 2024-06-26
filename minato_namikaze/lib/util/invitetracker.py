@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from asyncio import sleep
-from typing import Optional, Union
+from typing import Optional
+from typing import Union
 
 import discord
 from discord import AuditLogAction
@@ -23,12 +26,12 @@ class InviteTracker:
 
     def __init__(
         self,
-        bot: Union[
-            discord.Client,
-            discord.AutoShardedClient,
-            commands.Bot,
-            commands.AutoShardedBot,
-        ],
+        bot: (
+            discord.Client
+            | discord.AutoShardedClient
+            | commands.Bot
+            | commands.AutoShardedBot
+        ),
     ):
         self.bot = bot
         self._cache = {}
@@ -90,7 +93,8 @@ class InviteTracker:
         ):
             try:
                 async for entry in invite.guild.audit_logs(
-                    limit=1, action=AuditLogAction.invite_delete
+                    limit=1,
+                    action=AuditLogAction.invite_delete,
                 ):
                     if entry.target.code != invite.code:
                         self._cache[invite.guild.id][ref_invite.code].revoked = True
@@ -120,7 +124,7 @@ class InviteTracker:
         except KeyError:
             return
 
-    async def fetch_inviter(self, member: discord.Member) -> Optional[discord.Invite]:
+    async def fetch_inviter(self, member: discord.Member) -> discord.Invite | None:
         """This utility function returns the :class:`~discord.Invite` class which was used when the member joined the guild.
 
         :param member: The member which joined the guild. (The :class:`~discord.Member` recieved during :func:`~discord.on_member_join` event)

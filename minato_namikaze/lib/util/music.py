@@ -1,5 +1,11 @@
+from __future__ import annotations
+
 import asyncio
-from typing import Callable, Iterable, Optional, Tuple, Union
+from collections.abc import Callable
+from collections.abc import Iterable
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 import aiohttp
 from discord.ext import commands
@@ -25,7 +31,7 @@ if has_voice:
             "quiet": True,
             "no_warnings": True,
             "source_address": "0.0.0.0",
-        }
+        },
     )
 
 
@@ -83,7 +89,7 @@ class Song:
         title: str,
         description: str,
         views: int,
-        duration: Union[str, int],
+        duration: str | int,
         thumbnail: str,
         channel: str,
         channel_url: str,
@@ -103,7 +109,10 @@ class Song:
 
 
 async def get_video_data(
-    url, search: bool, bettersearch: bool, loop: Optional[asyncio.AbstractEventLoop]
+    url,
+    search: bool,
+    bettersearch: bool,
+    loop: asyncio.AbstractEventLoop | None,
 ) -> Song:
     """It returns required video data after searching `YouTube`
 
@@ -116,7 +125,8 @@ async def get_video_data(
 
     if not search and not bettersearch:
         data = await loop.run_in_executor(
-            None, lambda: ydl.extract_info(url, download=False)
+            None,
+            lambda: ydl.extract_info(url, download=False),
         )
         source = data.get("url")
         url = "https://www.youtube.com/watch?v=" + data.get("id")
@@ -142,7 +152,8 @@ async def get_video_data(
     if bettersearch:
         url = await ytbettersearch(url)
         data = await loop.run_in_executor(
-            None, lambda: ydl.extract_info(url, download=False)
+            None,
+            lambda: ydl.extract_info(url, download=False),
         )
         source = data.get("url")
         url = "https://www.youtube.com/watch?v=" + data.get("id")
@@ -177,10 +188,11 @@ async def get_video_data(
             "no_warnings": True,
             "default_search": "auto",
             "source_address": "0.0.0.0",  # skpcq: BAN-B104
-        }
+        },
     )
     data = await loop.run_in_executor(
-        None, lambda: ytdl.extract_info(url, download=False)
+        None,
+        lambda: ytdl.extract_info(url, download=False),
     )
     try:
         data = data["entries"][0]
@@ -212,10 +224,10 @@ async def get_video_data(
 def check_queue(
     ctx: commands.Context,
     opts: dict,
-    music: "Music",
+    music: Music,
     after: Callable,
     on_play: Callable,
-    loop: Optional[asyncio.AbstractEventLoop],
+    loop: asyncio.AbstractEventLoop | None,
 ) -> None:
     """It checks the music queue
 
@@ -247,7 +259,7 @@ def check_queue(
             return
         if len(music.queue[ctx.guild.id]) > 0:
             source = discord.PCMVolumeTransformer(
-                discord.FFmpegPCMAudio(music.queue[ctx.guild.id][0].source, **opts)
+                discord.FFmpegPCMAudio(music.queue[ctx.guild.id][0].source, **opts),
             )
             ctx.voice_client.play(
                 source,
@@ -258,10 +270,11 @@ def check_queue(
                 loop.create_task(on_play(ctx, song))
     else:
         source = discord.PCMVolumeTransformer(
-            discord.FFmpegPCMAudio(music.queue[ctx.guild.id][0].source, **opts)
+            discord.FFmpegPCMAudio(music.queue[ctx.guild.id][0].source, **opts),
         )
         ctx.voice_client.play(
-            source, after=lambda error: after(ctx, opts, music, after, on_play, loop)
+            source,
+            after=lambda error: after(ctx, opts, music, after, on_play, loop),
         )
         song = music.queue[ctx.guild.id][0]
         if on_play:
@@ -294,32 +307,33 @@ class MusicPlayer:
         "ffmpeg_opts",
     ]
 
-    def __init__(self, ctx: commands.Context, music: "Music", **kwargs):
+    def __init__(self, ctx: commands.Context, music: Music, **kwargs):
         if not has_voice:
             raise RuntimeError(
-                "DiscordUtils[voice] install needed in order to use voice"
+                "DiscordUtils[voice] install needed in order to use voice",
             )
 
         self.ctx = ctx
-        self.voice: Optional[discord.VoiceProtocol] = ctx.voice_client
-        self.loop: Optional[asyncio.AbstractEventLoop] = ctx.bot.loop
+        self.voice: discord.VoiceProtocol | None = ctx.voice_client
+        self.loop: asyncio.AbstractEventLoop | None = ctx.bot.loop
         self.music = music
         if self.ctx.guild.id not in self.music.queue:
             self.music.queue[self.ctx.guild.id] = []
 
         self.after_func: Callable = check_queue
-        self.on_play_func: Optional[Callable] = None
-        self.on_queue_func: Optional[Callable] = None
-        self.on_skip_func: Optional[Callable] = None
-        self.on_stop_func: Optional[Callable] = None
-        self.on_pause_func: Optional[Callable] = None
-        self.on_resume_func: Optional[Callable] = None
-        self.on_loop_toggle_func: Optional[Callable] = None
-        self.on_volume_change_func: Optional[Callable] = None
-        self.on_remove_from_queue_func: Optional[Callable] = None
+        self.on_play_func: Callable | None = None
+        self.on_queue_func: Callable | None = None
+        self.on_skip_func: Callable | None = None
+        self.on_stop_func: Callable | None = None
+        self.on_pause_func: Callable | None = None
+        self.on_resume_func: Callable | None = None
+        self.on_loop_toggle_func: Callable | None = None
+        self.on_volume_change_func: Callable | None = None
+        self.on_remove_from_queue_func: Callable | None = None
 
         ffmpeg_error = kwargs.get(
-            "ffmpeg_error_betterfix", kwargs.get("ffmpeg_error_fix")
+            "ffmpeg_error_betterfix",
+            kwargs.get("ffmpeg_error_fix"),
         )
 
         if ffmpeg_error and "ffmpeg_error_betterfix" in kwargs:
@@ -412,7 +426,10 @@ class MusicPlayer:
         self.on_remove_from_queue_func = func
 
     async def queue(
-        self, url: str, search: bool = False, bettersearch: bool = False
+        self,
+        url: str,
+        search: bool = False,
+        bettersearch: bool = False,
     ) -> Song:
         """The song to queue
 
@@ -440,7 +457,7 @@ class MusicPlayer:
         source = discord.PCMVolumeTransformer(
             discord.FFmpegPCMAudio(
                 self.music.queue[self.ctx.guild.id][0].source, **self.ffmpeg_opts
-            )
+            ),
         )
         self.voice.play(
             source,
@@ -458,7 +475,7 @@ class MusicPlayer:
             await self.on_play_func(self.ctx, song)
         return song
 
-    async def skip(self, force: bool = False) -> Union[Tuple[Song, Song], Song]:
+    async def skip(self, force: bool = False) -> tuple[Song, Song] | Song:
         """Skips the current song which is being played
 
         :param force: Force skip or not, defaults to False
@@ -531,7 +548,7 @@ class MusicPlayer:
             await self.on_resume_func(self.ctx, song)
         return song
 
-    def current_queue(self) -> Union[Iterable, Song]:
+    def current_queue(self) -> Iterable | Song:
         """Gives the current queue of songs which is there in the player
 
         :raises EmptyQueue: When the song queue is empty
@@ -543,7 +560,7 @@ class MusicPlayer:
         except KeyError:
             raise EmptyQueue("Queue is empty")
 
-    def now_playing(self) -> Optional[Union[Iterable, Song]]:
+    def now_playing(self) -> Iterable | Song | None:
         """Returns the :class:`Song` which is currently being played
 
         :return: See above
@@ -554,7 +571,7 @@ class MusicPlayer:
         except:
             return None
 
-    async def toggle_song_loop(self) -> Optional[Union[Iterable, Song]]:
+    async def toggle_song_loop(self) -> Iterable | Song | None:
         """It toggles on/off the looping
 
         :raises NotPlaying: When no song is being played
@@ -573,7 +590,7 @@ class MusicPlayer:
             await self.on_loop_toggle_func(self.ctx, song)
         return song
 
-    async def change_volume(self, vol: Union[int, float]) -> Tuple[Song, int]:
+    async def change_volume(self, vol: int | float) -> tuple[Song, int]:
         """Change the song volume of the currently played song
 
         :param vol: The amount by the volume needs to increased or decreased
@@ -630,7 +647,7 @@ class Music:
     def __init__(self):
         if not has_voice:
             raise RuntimeError(
-                "DiscordUtils[voice] install needed in order to use voice"
+                "DiscordUtils[voice] install needed in order to use voice",
             )
 
         self.queue: dict = {}
@@ -647,13 +664,13 @@ class Music:
         """
         if not ctx.voice_client:
             raise NotConnectedToVoice(
-                "Cannot create the player because bot is not connected to voice"
+                "Cannot create the player because bot is not connected to voice",
             )
         player = MusicPlayer(ctx, self, **kwargs)
         self.players.append(player)
         return player
 
-    def get_player(self, **kwargs) -> Optional[MusicPlayer]:
+    def get_player(self, **kwargs) -> MusicPlayer | None:
         """Its gets the `MusicPlayer` of the specified `guild` or `voice channel`
 
         :return: See above

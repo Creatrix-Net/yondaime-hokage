@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import discord
-from lib import serverinfo, userinfo
 from DiscordUtils import Embed
+from lib import serverinfo
+from lib import userinfo
 
 
 class Server(discord.SlashCommand):
@@ -19,7 +22,7 @@ class Info(discord.SlashCommand, parent=Server):
                 response.interaction.guild,
                 response.interaction.user,
                 self.parent.cog.bot,
-            )
+            ),
         )
 
 
@@ -29,7 +32,8 @@ class Banner(discord.SlashCommand, parent=Server):
     async def callback(self, response: discord.SlashCommandResponse):
         if not response.interaction.guild.banner:
             return await response.send_message(
-                "This server does not have a banner...", ephemeral=True
+                "This server does not have a banner...",
+                ephemeral=True,
             )
         e = Embed(title=f":information_source: Banner for {response.interaction.guild}")
         e.set_image(url=response.interaction.guild.banner.with_format("png").url)
@@ -42,7 +46,8 @@ class Icon(discord.SlashCommand, parent=Server):
     async def callback(self, response: discord.SlashCommandResponse):
         if not response.interaction.guild.icon:
             return await response.send_message(
-                "This server does not have a avatar...", ephemeral=True
+                "This server does not have a avatar...",
+                ephemeral=True,
             )
         e = Embed(title=f":information_source: Icon for {response.interaction.guild}")
         e.set_image(url=response.interaction.guild.icon.with_format("png").url)
@@ -57,7 +62,7 @@ class UserInfo(discord.UserCommand, name="Info"):
 
     async def callback(self, response: discord.UserCommandResponse):
         await response.send_message(
-            embed=await userinfo(response.target, response.target.guild, self.cog.bot)
+            embed=await userinfo(response.target, response.target.guild, self.cog.bot),
         )
 
 
@@ -72,8 +77,10 @@ class UserInfoSlash(discord.SlashCommand, name="user"):
     async def callback(self, response: discord.SlashCommandResponse):
         await response.send_message(
             embed=await userinfo(
-                response.options.user, response.interaction.guild, self.cog.bot
-            )
+                response.options.user,
+                response.interaction.guild,
+                self.cog.bot,
+            ),
         )
 
 
@@ -87,8 +94,10 @@ class UserInfoContextMenu(discord.MessageCommand, name="Message Author Info"):
         message = response.target
         await response.send_message(
             embed=await userinfo(
-                message.author, response.interaction.guild, self.cog.bot
-            )
+                message.author,
+                response.interaction.guild,
+                self.cog.bot,
+            ),
         )
 
 

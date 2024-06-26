@@ -1,12 +1,14 @@
+from __future__ import annotations
+
 import ast
 import copy
+from datetime import timezone
 
 import discord
 from discord.ext import commands
-from datetime import timezone
+from psutil._common import bytes2human
 
 from ..util.utility import return_matching_emoji
-from psutil._common import bytes2human
 
 
 def insert_returns(body):
@@ -130,7 +132,9 @@ def is_in_guilds(*guild_ids):
 
 
 async def serverinfo(
-    guild: discord.Guild, author: discord.Member, bot
+    guild: discord.Guild,
+    author: discord.Member,
+    bot,
 ) -> discord.Embed:
     levels = {
         "None - No criteria set.": discord.VerificationLevel.none,
@@ -187,10 +191,12 @@ async def serverinfo(
         value=f"<t:{round(guild.created_at.timestamp())}:D>",
     )
     embed.add_field(
-        name=":level_slider: NSFW Level", value=nsfw_level[guild.nsfw_level]
+        name=":level_slider: NSFW Level",
+        value=nsfw_level[guild.nsfw_level],
     )
     embed.add_field(
-        name=":key: 2FA", value="Enabled" if bool(guild.mfa_level.value) else "Disabled"
+        name=":key: 2FA",
+        value="Enabled" if bool(guild.mfa_level.value) else "Disabled",
     )
     embed.add_field(
         name=":bell: Notifications",
@@ -228,14 +234,14 @@ async def userinfo(user: discord.Member, guild: discord.Guild, bot) -> discord.E
     user_c_converter = int(unix_ts_utc1)
     user_j_converter = int(unix_ts_utc)
 
-    since_created = "<t:{}:R>".format(user_c_converter)
+    since_created = f"<t:{user_c_converter}:R>"
     if user.joined_at is not None:
-        since_joined = "<t:{}:R>".format(user_j_converter)
-        user_joined = "<t:{}:D>".format(user_j_converter)
+        since_joined = f"<t:{user_j_converter}:R>"
+        user_joined = f"<t:{user_j_converter}:D>"
     else:
         since_joined = "?"
         user_joined = "Unknown"
-    user_created = "<t:{}:D>".format(user_c_converter)
+    user_created = f"<t:{user_c_converter}:D>"
     created_on = ("{} - ({})").format(since_created, user_created)
     joined_on = ("{} - ({})\n").format(since_joined, user_joined)
 
@@ -257,7 +263,7 @@ async def userinfo(user: discord.Member, guild: discord.Guild, bot) -> discord.E
                 f"<@&{x.id}>"
                 for x in sorted(user.roles, key=lambda x: x.position, reverse=True)
                 if x.id != guild.default_role.id
-            ]
+            ],
         )
         if len(user.roles) > 1
         else "None"
@@ -273,7 +279,9 @@ async def userinfo(user: discord.Member, guild: discord.Guild, bot) -> discord.E
     embed.add_field(name=":small_blue_diamond: User", value=user, inline=True)
     if user.nick:
         embed.add_field(
-            name=":small_blue_diamond: Nickname", value=user.nick, inline=True
+            name=":small_blue_diamond: Nickname",
+            value=user.nick,
+            inline=True,
         )
     embed.add_field(
         name="**__User info__**",

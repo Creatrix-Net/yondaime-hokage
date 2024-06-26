@@ -1,17 +1,19 @@
-from typing import TYPE_CHECKING, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+from typing import Union
 
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import (
-    IncorrectChannelError,
-    NoChannelProvided,
-    Embed,
-    EmbedPaginator,
-    ErrorEmbed,
-    StarboardEmbed,
-    SuccessEmbed,
-)
+
+from minato_namikaze.lib import Embed
+from minato_namikaze.lib import EmbedPaginator
+from minato_namikaze.lib import ErrorEmbed
+from minato_namikaze.lib import IncorrectChannelError
 from minato_namikaze.lib import Music as MusicManager
+from minato_namikaze.lib import NoChannelProvided
+from minato_namikaze.lib import StarboardEmbed
+from minato_namikaze.lib import SuccessEmbed
 
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
@@ -24,8 +26,8 @@ log = logging.getLogger(__name__)
 
 
 class Music(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.bot.music = MusicManager()
         self.description = "Listen to some soothing music!"
 
@@ -62,8 +64,8 @@ class Music(commands.Cog):
         if isinstance(error, NoChannelProvided):
             return await ctx.send(
                 embed=ErrorEmbed(
-                    description="You must be in a voice channel or provide one to connect to."
-                )
+                    description="You must be in a voice channel or provide one to connect to.",
+                ),
             )
 
     async def cog_check(self, ctx: "Context"):
@@ -71,8 +73,8 @@ class Music(commands.Cog):
         if not ctx.guild:
             await ctx.send(
                 embed=ErrorEmbed(
-                    description="Music commands are not available in Private Messages."
-                )
+                    description="Music commands are not available in Private Messages.",
+                ),
             )
             return False
 
@@ -81,7 +83,8 @@ class Music(commands.Cog):
     @staticmethod
     def songembed(song, queued: bool = False):
         e = Embed(
-            title=song.title if not queued else f"Queued - {song.title}", url=song.url
+            title=song.title if not queued else f"Queued - {song.title}",
+            url=song.url,
         )
         e.set_image(url=song.thumbnail)
         e.description = f"- {song.channel} : {song.channel_url}"
@@ -166,11 +169,11 @@ class Music(commands.Cog):
         song = await player.toggle_song_loop()
         if song.is_looping:
             await ctx.send(
-                embed=SuccessEmbed(description=f"```Enabled loop for {song.name}```")
+                embed=SuccessEmbed(description=f"```Enabled loop for {song.name}```"),
             )
         else:
             await ctx.send(
-                embed=ErrorEmbed(description=f"```Disabled loop for {song.name}```")
+                embed=ErrorEmbed(description=f"```Disabled loop for {song.name}```"),
             )
 
     @commands.command()
@@ -178,7 +181,8 @@ class Music(commands.Cog):
         """Displays the songs queue"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         paginator = EmbedPaginator(
-            ctx=ctx, entries=[self.songembed(song) for song in player.current_queue()]
+            ctx=ctx,
+            entries=[self.songembed(song) for song in player.current_queue()],
         )
         await paginator.start()
 
@@ -197,16 +201,16 @@ class Music(commands.Cog):
         if len(data) == 2:
             await ctx.send(
                 embed=SuccessEmbed(
-                    description=f"```Skipped from {data[0].name} to {data[1].name}```"
-                )
+                    description=f"```Skipped from {data[0].name} to {data[1].name}```",
+                ),
             )
         else:
             await ctx.send(
-                embed=SuccessEmbed(description=f"```Skipped {data[0].name}```")
+                embed=SuccessEmbed(description=f"```Skipped {data[0].name}```"),
             )
 
     @commands.command(usage="<value between 1-100>", aliases=["vol"])
-    async def volume(self, ctx: "Context", vol: Union[int, float]):
+    async def volume(self, ctx: "Context", vol: int | float):
         """
         Changes the volume for the current song
         `Note: Negative volume numbers will be converted to 0`
@@ -216,14 +220,14 @@ class Music(commands.Cog):
         vol = max(vol, 0)
         if vol > 100:
             return await ctx.send(
-                embed=ErrorEmbed(description="The volume should be between 0 and 100")
+                embed=ErrorEmbed(description="The volume should be between 0 and 100"),
             )
         # volume should be a float between 0 to 1
         song, volume = await player.change_volume(float(vol / 100))
         await ctx.send(
             embed=SuccessEmbed(
-                description=f"Changed volume for **{song.name}** to {volume:.2}%"
-            )
+                description=f"Changed volume for **{song.name}** to {volume:.2}%",
+            ),
         )
 
     @commands.command(usage="<song.index.value>")
@@ -244,7 +248,8 @@ class Music(commands.Cog):
     @loop.error
     async def error_handler(self, ctx: "Context", error, *args, **kwargs):
         await ctx.send(
-            embed=ErrorEmbed(description="No song in the queue"), delete_after=5
+            embed=ErrorEmbed(description="No song in the queue"),
+            delete_after=5,
         )
 
 

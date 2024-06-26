@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 class Badge:
     """A class to handle all the badge commands"""
 

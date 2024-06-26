@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import asyncio
 import contextlib
 import importlib
@@ -7,21 +9,22 @@ import subprocess
 import sys
 import traceback
 
+import click
+from colorama import Back
+from colorama import Fore
+from colorama import init  # type: ignore
+from colorama import Style
+
+from minato_namikaze import Base
+from minato_namikaze import BASE_DIR
+from minato_namikaze import MinatoNamikazeBot
+from minato_namikaze import return_all_cogs
+from minato_namikaze import Session
+from minato_namikaze import vars
+
 # from watchfiles import run_process, DefaultFilter
 
-import click
-from colorama import Back, Fore, Style, init
-
-from minato_namikaze import (
-    BASE_DIR,
-    Base,
-    MinatoNamikazeBot,
-    Session,
-    return_all_cogs,
-    vars,
-)
-
-init(autoreset=True)
+init(autoreset=True)  # type: ignore
 
 os.environ["ALEMBIC_CONFIG"] = str(vars.CONFIG_FILE)
 
@@ -83,7 +86,7 @@ def setup_logging(log_file):
                 "[{asctime}] [{levelname}] {name}: {message}",
                 style="{",
                 datefmt="%Y-%m-%d %H:%M:%S",
-            )
+            ),
         )
         if file_or_not:
             from logging.handlers import TimedRotatingFileHandler
@@ -102,7 +105,7 @@ def setup_logging(log_file):
                     "[{asctime}] [{levelname}] {name}: {message}",
                     style="{",
                     datefmt="%Y-%m-%d %H:%M:%S",
-                )
+                ),
             )
         log.addHandler(handler)
         yield
@@ -148,7 +151,8 @@ def db():
 
 
 @db.command(
-    short_help="initialises the databases for the bot", options_metavar="[options]"
+    short_help="initialises the databases for the bot",
+    options_metavar="[options]",
 )
 @click.argument("cogs", nargs=-1, metavar="[cogs]")
 def init(cogs):
@@ -190,7 +194,11 @@ def makemigrations(message):
 @db.command(short_help="Migrates from an migration revision")
 @click.option("--upgrade/--downgrade", default=True)
 @click.argument(
-    "revision", nargs=1, metavar="[revision]", required=False, default="head"
+    "revision",
+    nargs=1,
+    metavar="[revision]",
+    required=False,
+    default="head",
 )
 def migrate(upgrade, revision):
     """Runs an upgrade from a migration"""

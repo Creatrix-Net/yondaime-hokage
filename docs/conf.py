@@ -3,13 +3,13 @@
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
-
 # -- Path setup --------------------------------------------------------------
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+from __future__ import annotations
+
 import os
 import sys
 
@@ -129,7 +129,7 @@ html_favicon = "./_static/logo.png"
 html_js_files = ["custom.js", "settings.js", "copy.js", "sidebar.js"]
 
 man_pages = [
-    ("index", "fluxpoint.py", "fluxpoint.py Documentation", ["Dhruva Shaw"], 1)
+    ("index", "fluxpoint.py", "fluxpoint.py Documentation", ["Dhruva Shaw"], 1),
 ]
 
 # If true, show URL addresses after external links.

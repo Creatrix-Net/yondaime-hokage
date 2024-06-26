@@ -1,11 +1,13 @@
 # Code written here is not mine.
 # Its taken from https://github.com/lmmentel/mendeleev
+from __future__ import annotations
 
 import math
-from typing import Tuple, Union
+from typing import Tuple
+from typing import Union
 
 
-def coeffs(a: int, b: int = 2) -> Tuple[int]:
+def coeffs(a: int, b: int = 2) -> tuple[int]:
     """
     Return stoichometric coefficients from oxidation states
     Args:
@@ -16,7 +18,7 @@ def coeffs(a: int, b: int = 2) -> Tuple[int]:
     return lcm // a, lcm // b
 
 
-def n_effective(n: int, source: str = "slater") -> Union[float, None]:
+def n_effective(n: int, source: str = "slater") -> float | None:
     """
     Effective principal quantum number
     Args:
@@ -37,7 +39,7 @@ def n_effective(n: int, source: str = "slater") -> Union[float, None]:
 
     if source not in numbers:
         raise ValueError(
-            f"source '{source}' not found, available sources are: {', '.join(numbers.keys())}"
+            f"source '{source}' not found, available sources are: {', '.join(numbers.keys())}",
         )
 
     return numbers.get(source).get(n, None)

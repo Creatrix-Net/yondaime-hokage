@@ -1,6 +1,8 @@
 """
 This code has been fully copied from here https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/paginator.py
 """
+from __future__ import annotations
+
 import datetime
 import re
 from typing import TYPE_CHECKING
@@ -9,7 +11,9 @@ import parsedatetime as pdt
 from dateutil.relativedelta import relativedelta
 from discord.ext import commands
 
-from ..functions import format_dt, human_join, plural
+from ..functions import format_dt
+from ..functions import human_join
+from ..functions import plural
 
 if TYPE_CHECKING:
     from ..util.context import Context
@@ -54,7 +58,7 @@ class HumanTime:
         dt, status = self.calendar.parseDT(argument, sourceTime=now)
         if not status.hasDateOrTime:
             raise commands.BadArgument(
-                'invalid time provided, try e.g. "tomorrow" or "3 days"'
+                'invalid time provided, try e.g. "tomorrow" or "3 days"',
             )
 
         if not status.hasTime:
@@ -157,7 +161,7 @@ class UserFriendlyTime(commands.Converter):
             elements = calendar.nlp(argument, sourceTime=now)
             if elements is None or len(elements) == 0:
                 raise commands.BadArgument(
-                    'Invalid time provided, try e.g. "tomorrow" or "3 days".'
+                    'Invalid time provided, try e.g. "tomorrow" or "3 days".',
                 )
 
             # handle the following cases:
@@ -170,14 +174,14 @@ class UserFriendlyTime(commands.Converter):
 
             if not status.hasDateOrTime:
                 raise commands.BadArgument(
-                    'Invalid time provided, try e.g. "tomorrow" or "3 days".'
+                    'Invalid time provided, try e.g. "tomorrow" or "3 days".',
                 )
 
             if begin not in (0, 1) and end != len(argument):
                 raise commands.BadArgument(
                     "Time is either in an inappropriate location, which "
                     "must be either at the end or beginning of your input, "
-                    "or I just flat out did not understand what you meant. Sorry."
+                    "or I just flat out did not understand what you meant. Sorry.",
                 )
 
             if not status.hasTime:
@@ -200,12 +204,12 @@ class UserFriendlyTime(commands.Converter):
                     # check if it's quoted:
                     if argument[0] != '"':
                         raise commands.BadArgument(
-                            "Expected quote before time input..."
+                            "Expected quote before time input...",
                         )
 
                     if not (end < len(argument) and argument[end] == '"'):
                         raise commands.BadArgument(
-                            "If the time is quoted, you must unquote it."
+                            "If the time is quoted, you must unquote it.",
                         )
 
                     remaining = argument[end + 1 :].lstrip(" ,.!")

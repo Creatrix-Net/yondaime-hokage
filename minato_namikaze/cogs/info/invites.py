@@ -1,13 +1,16 @@
+from __future__ import annotations
+
 import asyncio
 import datetime
+import logging
 import time
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import Dict
+from typing import Optional
+from typing import TYPE_CHECKING
 
 import discord
-from discord.ext import commands, tasks
-
-
-import logging
+from discord.ext import commands
+from discord.ext import tasks
 
 log = logging.getLogger(__name__)
 
@@ -26,8 +29,8 @@ POLL_PERIOD = 25
 
 
 class Invites(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self._invites_ready = asyncio.Event()
         self._dict_filled = asyncio.Event()
 
@@ -90,7 +93,7 @@ class Invites(commands.Cog):
             inv.max_age
             - int(
                 current
-                - inv.created_at.replace(tzinfo=datetime.timezone.utc).timestamp()
+                - inv.created_at.replace(tzinfo=datetime.timezone.utc).timestamp(),
             ): inv
             for inv in flattened
             if inv.max_age != 0
@@ -103,7 +106,7 @@ class Invites(commands.Cog):
         # that were just created
         try:  # self.bot.shortest_invite might not exist
             self.bot.shortest_invite = self.bot.shortest_invite - int(
-                time.time() - self.bot.last_update
+                time.time() - self.bot.last_update,
             )
         except AttributeError:
             exists = False
@@ -144,7 +147,7 @@ class Invites(commands.Cog):
         entry_found = self.get_invites(invite.guild.id)
         entry_found.pop(invite.code, None)
 
-    def get_invite(self, code: str) -> Optional[discord.Invite]:
+    def get_invite(self, code: str) -> discord.Invite | None:
         for invites in self.bot.invites.values():
             find = invites.get(code)
 
@@ -152,7 +155,7 @@ class Invites(commands.Cog):
                 return find
         return None
 
-    def get_invites(self, guild_id: int) -> Optional[Dict[str, discord.Invite]]:
+    def get_invites(self, guild_id: int) -> dict[str, discord.Invite] | None:
         return self.bot.invites.get(guild_id, None)
 
     async def wait_for_invites(self) -> None:
@@ -162,7 +165,7 @@ class Invites(commands.Cog):
     @staticmethod
     async def fetch_invites(
         guild: discord.Guild,
-    ) -> Optional[Dict[str, discord.Invite]]:
+    ) -> dict[str, discord.Invite] | None:
         try:
             invites = await guild.invites()
         except discord.HTTPException:
@@ -228,7 +231,8 @@ class Invites(commands.Cog):
             # A.uses == A.uses
             invites = sorted(invites.values(), key=lambda i: i.code)
             cached = sorted(
-                self.bot.invites[member.guild.id].values(), key=lambda i: i.code
+                self.bot.invites[member.guild.id].values(),
+                key=lambda i: i.code,
             )
 
             # zipping is the easiest way to compare each in order, and
@@ -254,7 +258,8 @@ class Invites(commands.Cog):
             # if there is no invites send this information
             # in an embed and return
             embed = discord.Embed(
-                colour=discord.Colour.red(), description="No invites found..."
+                colour=discord.Colour.red(),
+                description="No invites found...",
             )
             await ctx.send(embed=embed)
             return
@@ -272,7 +277,7 @@ class Invites(commands.Cog):
         # list comp on the sorted invites and then
         # join it into one string with str.join
         description = "\n".join(
-            [f"{i + 1}. {invites[i].code} - {invites[i].uses}" for i in range(amount)]
+            [f"{i + 1}. {invites[i].code} - {invites[i].uses}" for i in range(amount)],
         )
         embed.description = description
         # if there are more than 10 invites
@@ -280,7 +285,7 @@ class Invites(commands.Cog):
         # invites there are
         if amount > 10:
             embed.set_footer(
-                text=f"There are {len(invites) - 10} more invites in this guild."
+                text=f"There are {len(invites) - 10} more invites in this guild.",
             )
         await ctx.send(embed=embed)
 

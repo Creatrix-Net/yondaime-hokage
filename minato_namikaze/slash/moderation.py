@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 import typing
 from datetime import timedelta
@@ -5,8 +7,12 @@ from datetime import timedelta
 import aiohttp
 import discord
 from discord.abc import GuildChannel
-from lib import LinksAndVars, RaidMode, Database, detect_bad_domains
-from DiscordUtils import SuccessEmbed, ErrorEmbed
+from DiscordUtils import ErrorEmbed
+from DiscordUtils import SuccessEmbed
+from lib import Database
+from lib import detect_bad_domains
+from lib import LinksAndVars
+from lib import RaidMode
 
 
 class Badurls(discord.SlashCommand, name="badurls"):
@@ -15,15 +21,17 @@ class Badurls(discord.SlashCommand, name="badurls"):
     name = "bad urls"
 
     content = discord.application_command_option(
-        description="The text, url or a list of urls to check", type=str
+        description="The text, url or a list of urls to check",
+        type=str,
     )
 
     @content.autocomplete
     async def content_autocomplete(
-        self, response: discord.AutocompleteResponse
+        self,
+        response: discord.AutocompleteResponse,
     ) -> typing.AsyncIterator[str]:
         async with aiohttp.ClientSession() as session, session.get(
-            LinksAndVars.bad_links.value
+            LinksAndVars.bad_links.value,
         ) as resp:
             list_of_bad_domains = (await resp.text()).split("\n")
 
@@ -86,7 +94,8 @@ class AntiRaid(discord.SlashCommand):
     """Enable or disable Antiraid system for the server"""
 
     switch: typing.Literal["on", "strict", "off"] = discord.application_command_option(
-        description="Antiraid different modes", default="on"
+        description="Antiraid different modes",
+        default="on",
     )
     channel: GuildChannel = discord.application_command_option(
         channel_types=[discord.TextChannel],
@@ -101,20 +110,22 @@ class AntiRaid(discord.SlashCommand):
             return True
         else:
             await response.send_message(
-                "You don't have the `Manage Guild` permission", ephemeral=True
+                "You don't have the `Manage Guild` permission",
+                ephemeral=True,
             )
             return False
 
     async def callback(self, response: discord.SlashCommandResponse):
         database = await self.cog.bot.db.new(
-            Database.database_category_name.value, Database.antiraid_channel_name.value
+            Database.database_category_name.value,
+            Database.antiraid_channel_name.value,
         )
         switch = response.options.switch
         if switch.lower() == "off":
             await database.delete(response.interaction.guild_id)
             try:
                 await response.interaction.guild.edit(
-                    verification_level=discord.VerificationLevel.low
+                    verification_level=discord.VerificationLevel.low,
                 )
                 await response.send_message(
                     "Raid mode disabled. No longer broadcasting join messages.",
@@ -122,20 +133,23 @@ class AntiRaid(discord.SlashCommand):
                 )
             except discord.HTTPException:
                 await response.send_message(
-                    "\N{WARNING SIGN} Could not set verification level.", ephemeral=True
+                    "\N{WARNING SIGN} Could not set verification level.",
+                    ephemeral=True,
                 )
             return
         if switch.lower() == "strict":
             try:
                 await response.interaction.guild.edit(
-                    verification_level=discord.VerificationLevel.high
+                    verification_level=discord.VerificationLevel.high,
                 )
                 update_dict = {
                     "raid_mode": RaidMode.strict.value,
                     "broadcast_channel": response.options.channel.id,
                 }
                 await self.cog.add_and_check_data(
-                    update_dict, response.interaction.guild, "antiraid"
+                    update_dict,
+                    response.interaction.guild,
+                    "antiraid",
                 )
                 await response.send_message(
                     f"Raid mode enabled. Broadcasting join messages to {response.options.channel.mention}.",
@@ -143,19 +157,22 @@ class AntiRaid(discord.SlashCommand):
                 )
             except discord.HTTPException:
                 await response.send_message(
-                    "\N{WARNING SIGN} Could not set verification level.", ephemeral=True
+                    "\N{WARNING SIGN} Could not set verification level.",
+                    ephemeral=True,
                 )
             return
         try:
             await response.interaction.guild.edit(
-                verification_level=discord.VerificationLevel.medium
+                verification_level=discord.VerificationLevel.medium,
             )
             update_dict = {
                 "raid_mode": RaidMode.on.value,
                 "broadcast_channel": response.options.channel.id,
             }
             await self.cog.add_and_check_data(
-                update_dict, response.interaction.guild, "antiraid"
+                update_dict,
+                response.interaction.guild,
+                "antiraid",
             )
             await response.send_message(
                 f"Raid mode enabled. Broadcasting join messages to {response.options.channel.mention}.",
@@ -163,7 +180,8 @@ class AntiRaid(discord.SlashCommand):
             )
         except discord.HTTPException:
             await response.send_message(
-                "\N{WARNING SIGN} Could not set verification level.", ephemeral=True
+                "\N{WARNING SIGN} Could not set verification level.",
+                ephemeral=True,
             )
 
 
@@ -178,7 +196,8 @@ class Kick(discord.UserCommand):
             return True
         else:
             await response.send_message(
-                "You don't have the `Kick Members` permission", ephemeral=True
+                "You don't have the `Kick Members` permission",
+                ephemeral=True,
             )
             return False
 
@@ -186,7 +205,7 @@ class Kick(discord.UserCommand):
         user = response.target
         try:
             await user.kick(
-                reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})"
+                reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})",
             )
             await response.send_message(f"{user} kicked :foot:", ephemeral=True)
         except (discord.Forbidden, discord.HTTPException):
@@ -207,7 +226,8 @@ class Ban(discord.UserCommand):
             return True
         else:
             await response.send_message(
-                "You don't have the `Ban Members` permission", ephemeral=True
+                "You don't have the `Ban Members` permission",
+                ephemeral=True,
             )
             return False
 
@@ -215,7 +235,7 @@ class Ban(discord.UserCommand):
         user = response.target
         try:
             await user.ban(
-                reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})"
+                reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})",
             )
             await response.send_message(f"{user} banned :hammer:", ephemeral=True)
         except (discord.Forbidden, discord.HTTPException):
@@ -236,7 +256,8 @@ class Mute(discord.UserCommand):
             return True
         else:
             await response.send_message(
-                "You don't have the `Timeout Members` permission", ephemeral=True
+                "You don't have the `Timeout Members` permission",
+                ephemeral=True,
             )
             return False
 
@@ -266,7 +287,8 @@ class Unmute(discord.UserCommand):
             return True
         else:
             await response.send_message(
-                "You don't have the `Timeout Members` permission", ephemeral=True
+                "You don't have the `Timeout Members` permission",
+                ephemeral=True,
             )
             return False
 
@@ -278,7 +300,8 @@ class Unmute(discord.UserCommand):
                 reason=f"[Context Menu Interaction] {response.interaction.user} (ID: {response.interaction.user.id})",
             )
             await response.send_message(
-                f"{user} unmuted :white_check_mark:", ephemeral=True
+                f"{user} unmuted :white_check_mark:",
+                ephemeral=True,
             )
         except (discord.Forbidden, discord.HTTPException):
             await response.send_message(
@@ -298,7 +321,8 @@ class Setup(discord.SlashCommand):
             return True
         else:
             await response.send_message(
-                "You don't have the `Manage Guild` permission", ephemeral=True
+                "You don't have the `Manage Guild` permission",
+                ephemeral=True,
             )
             return False
 
@@ -307,21 +331,29 @@ class Add(discord.SlashCommand, parent=Setup):
     """This adds logging of the some things in the specified text channel"""
 
     add_type: typing.Literal[
-        "ban", "feedback", "warns", "unban"
+        "ban",
+        "feedback",
+        "warns",
+        "unban",
     ] = discord.application_command_option(
-        description="which to log", name="type", default=None
+        description="which to log",
+        name="type",
+        default=None,
     )
     channel: GuildChannel = discord.application_command_option(
-        channel_types=[discord.TextChannel], description="The logging channel"
+        channel_types=[discord.TextChannel],
+        description="The logging channel",
     )
 
     async def callback(self, response: discord.SlashCommandResponse):
         dict_to_add = {str(response.options.type): response.options.channel.id}
         await self.parent.cog.add_and_check_data(
-            dict_to_add, response.interaction.guild, "setupvar"
+            dict_to_add,
+            response.interaction.guild,
+            "setupvar",
         )
         await response.send_message(
-            f"Done! `Added {response.options.type} logging` to {response.options.channel.mention}"
+            f"Done! `Added {response.options.type} logging` to {response.options.channel.mention}",
         )
 
 
@@ -329,21 +361,24 @@ class Support(discord.SlashCommand, parent=Setup):
     """This adds support system to your server"""
 
     channel: GuildChannel = discord.application_command_option(
-        channel_types=[discord.TextChannel], description="The support logging channel"
+        channel_types=[discord.TextChannel],
+        description="The support logging channel",
     )
     role: discord.Role = discord.application_command_option(
-        description="The role using which memebrs can access that support channel"
+        description="The role using which memebrs can access that support channel",
     )
 
     async def callback(self, response: discord.SlashCommandResponse):
         dict_to_add = {
-            "support": [response.options.channel.id, response.options.role.id]
+            "support": [response.options.channel.id, response.options.role.id],
         }
         await self.parent.cog.add_and_check_data(
-            dict_to_add, response.interaction.guild, "setupvar"
+            dict_to_add,
+            response.interaction.guild,
+            "setupvar",
         )
         await response.send_message(
-            f"Done! Added `support logging` to {response.options.channel.mention} with {response.options.role.mention} `role`"
+            f"Done! Added `support logging` to {response.options.channel.mention} with {response.options.role.mention} `role`",
         )
 
 
@@ -354,16 +389,17 @@ class Starboard(discord.SlashCommand, parent=Setup):
         channel_types=[discord.TextChannel],
         description="The channel where the starred message will go",
     )
-    stars: typing.Optional[int] = discord.application_command_option(
+    stars: int | None = discord.application_command_option(
         description="Minimum number of stars required before posting it to the specified channel",
         default=5,
     )
-    self_star: typing.Optional[bool] = discord.application_command_option(
+    self_star: bool | None = discord.application_command_option(
         description="Whether self  starring of message should be there or not",
         default=False,
     )
-    ignore_nsfw: typing.Optional[bool] = discord.application_command_option(
-        description="Whether to ignore NSFW channels or not", default=True
+    ignore_nsfw: bool | None = discord.application_command_option(
+        description="Whether to ignore NSFW channels or not",
+        default=True,
     )
 
     async def callback(self, response: discord.SlashCommandResponse):
@@ -373,13 +409,15 @@ class Starboard(discord.SlashCommand, parent=Setup):
                 "no_of_stars": response.options.stars,
                 "self_star": response.options.self_star,
                 "ignore_nsfw": response.options.ignore_nsfw,
-            }
+            },
         }
         await self.parent.cog.add_and_check_data(
-            dict_to_add, response.interaction.guild, "setupvar"
+            dict_to_add,
+            response.interaction.guild,
+            "setupvar",
         )
         await response.send_message(
-            f"Done! Added `starboard channel` as {response.options.channel.mention} with minimum `{response.options.stars} stars` requirement"
+            f"Done! Added `starboard channel` as {response.options.channel.mention} with minimum `{response.options.stars} stars` requirement",
         )
 
 
@@ -387,15 +425,19 @@ class BadLinks(discord.SlashCommand, parent=Setup):
     """Checks against the scam links and take necessary action if stated"""
 
     option: bool = discord.application_command_option(
-        description="Enable or Disable", default=True
+        description="Enable or Disable",
+        default=True,
     )
-    action: typing.Optional[
+    action: None | (
         typing.Literal["ban", "mute", "timeout", "kick", "log"]
-    ] = discord.application_command_option(
-        description="What kind of action to take", default=None
+    ) = discord.application_command_option(
+        description="What kind of action to take",
+        default=None,
     )
-    channel: typing.Optional[GuildChannel] = discord.application_command_option(
-        channel_types=[discord.TextChannel], description="Log channel", default=None
+    channel: GuildChannel | None = discord.application_command_option(
+        channel_types=[discord.TextChannel],
+        description="Log channel",
+        default=None,
     )
 
     async def callback(self, response: discord.SlashCommandResponse):
@@ -416,13 +458,13 @@ class BadLinks(discord.SlashCommand, parent=Setup):
                     "logging_channel": response.options.channel.id
                     if response.options.channel is not None
                     else response.options.channel,
-                }
+                },
             },
             response.interaction.guild,
             "setupvar",
         )
         await response.send_message(
-            f"Done! If I detect any scam link then I `delete` that and will do a `{response.options.action}` action"
+            f"Done! If I detect any scam link then I `delete` that and will do a `{response.options.action}` action",
         )
 
 
@@ -440,12 +482,14 @@ class ModerationCog(discord.Cog):
 
     async def database_class(self):
         return await self.bot.db.new(
-            Database.database_category_name.value, Database.database_channel_name.value
+            Database.database_category_name.value,
+            Database.database_channel_name.value,
         )
 
     async def database_class_antiraid(self):
         return await self.bot.db.new(
-            Database.database_category_name.value, Database.antiraid_channel_name.value
+            Database.database_category_name.value,
+            Database.antiraid_channel_name.value,
         )
 
     async def database_class_mentionspam(self):

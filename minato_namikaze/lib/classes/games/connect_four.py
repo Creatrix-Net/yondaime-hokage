@@ -1,8 +1,10 @@
-import discord
-import asyncio
+from __future__ import annotations
 
-from typing import List
+import asyncio
 import random
+from typing import List
+
+import discord
 
 RED = "\U0001f534"
 BLUE = "\U0001f535"
@@ -20,14 +22,16 @@ class ConnectFourButton(discord.ui.Button["ConnectFour"]):
         self.view.PlacePiece(self.emoji, interaction.user)
         embed = self.view.make_embed()
         await interaction.message.edit(
-            embeds=[embed, self.view.BoardString()], view=self.view
+            embeds=[embed, self.view.BoardString()],
+            view=self.view,
         )
         if self.view.GameOver():
             embed = self.view.make_embed()
             for child in self.view.children:
                 child.disabled = True
             await interaction.message.edit(
-                embeds=[embed, self.view.BoardString()], view=self.view
+                embeds=[embed, self.view.BoardString()],
+                view=self.view,
             )
             self.view.stop()
             return
@@ -50,14 +54,17 @@ class ConnectFourButton(discord.ui.Button["ConnectFour"]):
         self.view.PlacePiece(random.choice(self.view._controls), self.view.turn)
         embed = self.view.make_embed()
         await interaction.message.edit(
-            content=None, embeds=[embed, self.view.BoardString()], view=self.view
+            content=None,
+            embeds=[embed, self.view.BoardString()],
+            view=self.view,
         )
         if self.view.GameOver():
             embed = self.view.make_embed()
             for child in self.view.children:
                 child.disabled = True
             await interaction.message.edit(
-                embeds=[embed, self.view.BoardString()], view=self
+                embeds=[embed, self.view.BoardString()],
+                view=self,
             )
             self.view.stop()
 
@@ -76,7 +83,7 @@ class Quit(discord.ui.Button["ConnectFour"]):
 
 
 class ConnectFour(discord.ui.View):
-    children: List[ConnectFourButton]
+    children: list[ConnectFourButton]
 
     def __init__(
         self, *, red: discord.Member, blue: discord.Member, auto: bool = False
@@ -117,7 +124,7 @@ class ConnectFour(discord.ui.View):
         for i in range(7):
             row = i // 2 if i > 1 else 1
             self.add_item(
-                ConnectFourButton(y=row if row <= 2 else 2, emoji=self._controls[i])
+                ConnectFourButton(y=row if row <= 2 else 2, emoji=self._controls[i]),
             )
         self.add_item(Quit())
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 from typing import TYPE_CHECKING
 
@@ -18,8 +20,8 @@ invitere2 = r"(http[s]?:\/\/)*discord((app\.com\/invite)|(\.gg))\/(invite\/)?(#\
 
 
 class Snipe(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.snipes: dict = {}
         self.description = "\"Snipes\" someone's message that's been edited or deleted."
 
@@ -105,14 +107,19 @@ class Snipe(commands.Cog):
         emb = discord.Embed()
         if type(snipe) is list:  # edit snipe
             emb.set_author(
-                name=str(snipe[0].author), icon_url=snipe[0].author.avatar.url
+                name=str(snipe[0].author),
+                icon_url=snipe[0].author.avatar.url,
             )
             emb.colour = snipe[0].author.colour
             emb.add_field(
-                name="Before", value=self.sanitise(snipe[0].content), inline=False
+                name="Before",
+                value=self.sanitise(snipe[0].content),
+                inline=False,
             )
             emb.add_field(
-                name="After", value=self.sanitise(snipe[1].content), inline=False
+                name="After",
+                value=self.sanitise(snipe[1].content),
+                inline=False,
             )
             emb.timestamp = snipe[0].created_at
         else:  # delete snipe
@@ -121,7 +128,8 @@ class Snipe(commands.Cog):
             emb.colour = snipe.author.colour
             emb.timestamp = snipe.created_at
         emb.set_footer(
-            text=f"Message sniped by {str(ctx.author)}", icon_url=ctx.author.avatar.url
+            text=f"Message sniped by {str(ctx.author)}",
+            icon_url=ctx.author.avatar.url,
         )
         await ctx.send(embed=emb)
         self.snipes[ctx.channel.id] = None

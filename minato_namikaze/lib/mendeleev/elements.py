@@ -1,7 +1,7 @@
 # Code written here is not mine.
 # Its taken from https://github.com/lmmentel/mendeleev
-
 # -*- coding: utf-8 -*-
+from __future__ import annotations
 
 from .mendeleev import get_all_elements
 

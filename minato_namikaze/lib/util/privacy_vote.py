@@ -1,11 +1,16 @@
+from __future__ import annotations
+
 from asyncio import sleep as sl
 
+import aiohttp
 import discord
+import orjson
 from discord.ext import menus
 
+from .embeds import Embed
+from .embeds import ErrorEmbed
+from .embeds import SuccessEmbed
 from .vars import LinksAndVars
-from .embeds import SuccessEmbed, ErrorEmbed, Embed
-import aiohttp, orjson
 
 
 class VotingMenu(menus.Menu):
@@ -23,7 +28,7 @@ class VotingMenu(menus.Menu):
     @menus.button("\N{WHITE HEAVY CHECK MARK}")
     async def on_check_mark(self, payload):
         async with aiohttp.ClientSession() as session, session.get(
-            LinksAndVars.listing.value
+            LinksAndVars.listing.value,
         ) as resp:
             listing: dict = orjson.loads(await resp.text())
         listing_formatted_string = "\n".join(

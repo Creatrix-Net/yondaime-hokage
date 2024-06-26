@@ -1,26 +1,29 @@
+from __future__ import annotations
+
 import base64
 import hashlib
+import logging
 import re
 import unicodedata
+from collections.abc import Iterator
+from collections.abc import Sequence
 from string import ascii_lowercase as lc
 from string import ascii_uppercase as uc
-from typing import Iterator, Optional, Sequence, TYPE_CHECKING
+from typing import Optional
+from typing import TYPE_CHECKING
 
 import discord
 from discord.ext import commands
-from minato_namikaze.lib.data.braille import (
-    contractions,
-    dna,
-    letters,
-    numbers,
-    punctuation,
-    r_contractions,
-    r_letters,
-    r_numbers,
-    r_punctuation,
-)
 
-import logging
+from minato_namikaze.lib.data.braille import contractions
+from minato_namikaze.lib.data.braille import dna
+from minato_namikaze.lib.data.braille import letters
+from minato_namikaze.lib.data.braille import numbers
+from minato_namikaze.lib.data.braille import punctuation
+from minato_namikaze.lib.data.braille import r_contractions
+from minato_namikaze.lib.data.braille import r_letters
+from minato_namikaze.lib.data.braille import r_numbers
+from minato_namikaze.lib.data.braille import r_punctuation
 
 log = logging.getLogger(__name__)
 
@@ -55,7 +58,9 @@ def pagify(
         this_page_len = page_length
         if escape_mass_mentions:
             this_page_len -= in_text.count("@here", 0, page_length) + in_text.count(
-                "@everyone", 0, page_length
+                "@everyone",
+                0,
+                page_length,
             )
         closest_delim = (in_text.rfind(d, 1, this_page_len) for d in delims)
         if priority:
@@ -79,8 +84,8 @@ def pagify(
 
 
 class Encoding(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Convert messages into fun encodings"
         # A = 00
         # G = 10
@@ -190,7 +195,7 @@ class Encoding(commands.Cog):
         try:
             message = re.sub(r"[\s]+", "", message)
             bin_ascii = "".join(
-                [chr(int(message[i : i + 8], 2)) for i in range(0, len(message), 8)]
+                [chr(int(message[i : i + 8], 2)) for i in range(0, len(message), 8)],
             )
             await ctx.send(bin_ascii)
         except Exception:
@@ -284,7 +289,7 @@ class Encoding(commands.Cog):
         """
         try:
             await ctx.send(
-                " ".join(str(chr(int(x))) for x in re.split(r"[\s]+", message))
+                " ".join(str(chr(int(x))) for x in re.split(r"[\s]+", message)),
             )
         except Exception:
             await ctx.send("That does not look like valid char data.")
@@ -330,7 +335,8 @@ class Encoding(commands.Cog):
                 continue
             if replacement == "capital":
                 message = message.replace(
-                    chr(10272) + letter, r_letters[letter].upper()
+                    chr(10272) + letter,
+                    r_letters[letter].upper(),
                 )
                 replacement = ""
                 continue
@@ -352,7 +358,7 @@ class Encoding(commands.Cog):
 
     @_encode.command(name="rot", aliases=["caeser"])
     async def caeser_encode(
-        self, ctx: "Context", rot_key: Optional[int], *, message: str
+        self, ctx: "Context", rot_key: int | None, *, message: str
     ) -> None:
         """
         Encode a caeser cipher message with specified key
@@ -363,7 +369,7 @@ class Encoding(commands.Cog):
 
     @_decode.command(name="rot", aliases=["caeser"])
     async def caeser_decode(
-        self, ctx: "Context", rot_key: Optional[int], *, message: str
+        self, ctx: "Context", rot_key: int | None, *, message: str
     ) -> None:
         """
         Decode a caeser cipher message with specified key
@@ -380,7 +386,8 @@ class Encoding(commands.Cog):
         dna = {"00": "A", "01": "T", "10": "G", "11": "C"}
         message = message.strip(" ")
         binary = " ".join(bin(x)[2:].zfill(8) for x in message.encode("utf-8")).replace(
-            " ", ""
+            " ",
+            "",
         )
         binlist = [binary[i : i + 2] for i in range(0, len(binary), 2)]
         newmsg = ""
@@ -410,7 +417,8 @@ class Encoding(commands.Cog):
             try:
                 n = int("0b" + replacement, 2)
                 mapping[i] = n.to_bytes((n.bit_length() + 7) // 8, "big").decode(
-                    "utf8", "ignore"
+                    "utf8",
+                    "ignore",
                 )
             except TypeError:
                 pass

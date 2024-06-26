@@ -1,15 +1,27 @@
+from __future__ import annotations
+
 import os
 import re
-from typing import Any, List
-from urllib.parse import urlparse, uses_netloc
+from collections.abc import Iterator
 from collections.abc import MutableSequence
+from typing import Any
+from typing import Generic
+from typing import List
+from typing import TypeVar
+from urllib.parse import urlparse
+from urllib.parse import uses_netloc
+
 import aiohttp
 import discord
-from typing import Generic, TypeVar, Iterator
-from .vars import BASE_DIR, ChannelAndMessageId, LinksAndVars, url_regex
+
+from .vars import BASE_DIR
+from .vars import ChannelAndMessageId
+from .vars import LinksAndVars
+from .vars import url_regex
 
 INVITE_URL_RE = re.compile(
-    r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)", re.I
+    r"(discord\.(?:gg|io|me|li)|discord(?:app)?\.com\/invite)\/(\S+)",
+    re.I,
 )
 
 _T = TypeVar("_T")
@@ -198,7 +210,7 @@ async def detect_bad_domains(message_content: str) -> list:
             return []
 
         async with aiohttp.ClientSession() as session, session.get(
-            LinksAndVars.bad_links.value
+            LinksAndVars.bad_links.value,
         ) as resp:
             list_of_bad_domains = (await resp.text()).split("\n")
 
@@ -209,7 +221,7 @@ async def detect_bad_domains(message_content: str) -> list:
                     parsed_url = urlparse(
                         i.lower().strip("/")
                         if i.split("://")[0].lower() in uses_netloc
-                        else f'//{i.strip("/")}'
+                        else f'//{i.strip("/")}',
                     )
                     if parsed_url.hostname in list_of_bad_domains:
                         detected_urls.append(parsed_url.hostname)
@@ -220,7 +232,7 @@ async def detect_bad_domains(message_content: str) -> list:
     return detected_urls
 
 
-def return_all_cogs() -> List[str]:
+def return_all_cogs() -> list[str]:
     """A Helper function to return all the cogs except the jishkaku
 
     :return: List of all cogs present as a file

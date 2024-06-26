@@ -1,5 +1,6 @@
 # Code written here is not mine.
 # Its taken from https://github.com/lmmentel/mendeleev
+from __future__ import annotations
 
 import os
 
@@ -18,7 +19,7 @@ def get_engine(dbpath=None):
     """Return the db engine"""
     if not dbpath:
         dbpath = get_package_dbpath()
-    return create_engine("sqlite:///{path:s}".format(path=dbpath), echo=False)
+    return create_engine(f"sqlite:///{dbpath:s}", echo=False)
 
 
 def get_session(dbpath=None):

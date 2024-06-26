@@ -1,30 +1,40 @@
 # Code written here is not mine.
 # Its taken from https://github.com/lmmentel/mendeleev
-
 # -*- coding: utf-8 -*-
 """module specifying the database models"""
+from __future__ import annotations
 
 import math
 from operator import attrgetter
-from typing import Any, Dict, List, Tuple
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Tuple
 
-from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String
+from sqlalchemy import Boolean
+from sqlalchemy import Column
+from sqlalchemy import Float
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
+from sqlalchemy import String
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
-from sqlalchemy.orm import reconstructor, relationship
+from sqlalchemy.ext.hybrid import hybrid_method
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import reconstructor
+from sqlalchemy.orm import relationship
 
 from .db import get_session
-from .econf import ORBITALS, ElectronicConfiguration, get_l
-from .electronegativity import (
-    allred_rochow,
-    cottrell_sutton,
-    gordy,
-    li_xue,
-    martynov_batsanov,
-    mulliken,
-    nagle,
-)
+from .econf import ElectronicConfiguration
+from .econf import get_l
+from .econf import ORBITALS
+from .electronegativity import allred_rochow
+from .electronegativity import cottrell_sutton
+from .electronegativity import gordy
+from .electronegativity import li_xue
+from .electronegativity import martynov_batsanov
+from .electronegativity import mulliken
+from .electronegativity import nagle
 from .utils import coeffs
 
 __all__ = [
@@ -223,7 +233,7 @@ class Element(Base):
         self.ec = ElectronicConfiguration(self.econf)
 
     @hybrid_property
-    def ionenergies(self) -> Dict[int, float]:
+    def ionenergies(self) -> dict[int, float]:
         """
         Return a dict with ionization degree as keys and ionization energies
         in eV as values.
@@ -232,13 +242,13 @@ class Element(Base):
         return {ie.degree: ie.energy for ie in self._ionization_energies}
 
     @hybrid_property
-    def oxistates(self) -> List[int]:
+    def oxistates(self) -> list[int]:
         """Return the oxidation states as a list of ints"""
 
         return [os.oxidation_state for os in self._oxidation_states]
 
     @hybrid_property
-    def sconst(self) -> Dict[Tuple[int], float]:
+    def sconst(self) -> dict[tuple[int], float]:
         """
         Return a dict with screening constants with tuples (n, s) as keys and
         screening constants as values"""
@@ -293,8 +303,8 @@ class Element(Base):
 
         if self.atomic_weight_uncertainty is None:
             if self.is_radioactive:
-                return "[{aw:.0f}]".format(aw=self.atomic_weight)
-            return "{aw:.3f}".format(aw=self.atomic_weight)
+                return f"[{self.atomic_weight:.0f}]"
+            return f"{self.atomic_weight:.3f}"
         dec = int(abs(math.floor(math.log10(abs(self.atomic_weight_uncertainty)))))
         dec = min(dec, 5)
         if self.is_radioactive:
@@ -338,7 +348,7 @@ class Element(Base):
             return None
         if charge < 0:
             raise ValueError(
-                "Charge has to be a non-negative integer, got: {}".format(charge)
+                f"Charge has to be a non-negative integer, got: {charge}",
             )
 
     @hybrid_method
@@ -360,7 +370,11 @@ class Element(Base):
         return 1.0 / (2.0 * eta)
 
     def zeff(
-        self, n: int = None, o: str = None, method: str = "slater", alle: bool = False
+        self,
+        n: int = None,
+        o: str = None,
+        method: str = "slater",
+        alle: bool = False,
     ) -> float:
         """
         Return the effective nuclear charge for ``(n, s)``
@@ -388,7 +402,7 @@ class Element(Base):
         if n is None:
             n = self.ec.max_n()
         elif not isinstance(n, int):
-            raise ValueError("<n> should be an integer, got: {}".format(type(n)))
+            raise ValueError(f"<n> should be an integer, got: {type(n)}")
 
         if o is None:
             # take the shell with max `l` for a given `n`
@@ -419,7 +433,7 @@ class Element(Base):
             return (ip + ea) ** 2 / (8.0 * (ip - ea))
         return None
 
-    def electronegativity_scales(self, name: str = None) -> List[str]:
+    def electronegativity_scales(self, name: str = None) -> list[str]:
         "Available electronegativity scales"
 
         scales = {
@@ -440,7 +454,7 @@ class Element(Base):
             if name in scales:
                 return scales[name]
             raise ValueError(
-                f"scale: '{name}' not found, available scales are: {', '.join(scales.keys())}"
+                f"scale: '{name}' not found, available scales are: {', '.join(scales.keys())}",
             )
 
         return list(sorted(scales.keys()))
@@ -464,7 +478,8 @@ class Element(Base):
         return allred_rochow(self.zeff(), getattr(self, radius))
 
     def electronegativity_cottrell_sutton(
-        self, radius="covalent_radius_pyykko"
+        self,
+        radius="covalent_radius_pyykko",
     ) -> float:
         "Cottrell-Sutton's electronegativity"
         return cottrell_sutton(self.zeff(), getattr(self, radius))
@@ -478,7 +493,9 @@ class Element(Base):
         return self.en_ghosh
 
     def electronegativity_li_xue(
-        self, charge: int = 1, radius: str = "crystal_radius"
+        self,
+        charge: int = 1,
+        radius: str = "crystal_radius",
     ) -> float:
         """
         Calculate the electronegativity of an atom according to the definition
@@ -495,12 +512,12 @@ class Element(Base):
 
         if (not isinstance(charge, int)) or (charge == 0):
             raise ValueError(
-                "charge should be a nonzero initeger, got: {}".format(charge)
+                f"charge should be a nonzero initeger, got: {charge}",
             )
 
         if radius not in ["ionic_radius", "crystal_radius"]:
             raise ValueError(
-                f"radius: '{radius}' not found, available values are: 'ionic_radius', 'crystal_radius'"
+                f"radius: '{radius}' not found, available values are: 'ionic_radius', 'crystal_radius'",
             )
 
         ie = self.ionenergies.get(charge, None)
@@ -563,10 +580,13 @@ class Element(Base):
             ea = self.ionenergies.get(charge, None)
         else:
             raise ValueError(
-                "Charge has to be a non-negative integer, got: {}".format(charge)
+                f"Charge has to be a non-negative integer, got: {charge}",
             )
         return mulliken(
-            ip, ea, missing_is_zero=missing_is_zero, allow_negative_ea=allow_negative_ea
+            ip,
+            ea,
+            missing_is_zero=missing_is_zero,
+            allow_negative_ea=allow_negative_ea,
         )
 
     def electronegativity_nagle(self) -> float:
@@ -586,7 +606,7 @@ class Element(Base):
 
         return self.ec.nvalence(self.block, method=method)
 
-    def oxides(self) -> List[str]:
+    def oxides(self) -> list[str]:
         """
         Return a lsit of possible oxides based on the oxidation number
         """
@@ -597,20 +617,20 @@ class Element(Base):
         return [f"{self.symbol}{cme}O{co}" for cme, co in normal_coeffs]
 
     def __str__(self):
-        return "{0} {1} {2}".format(self.atomic_number, self.symbol, self.name)
+        return f"{self.atomic_number} {self.symbol} {self.name}"
 
     def __repr__(self):
-        return "%s(\n%s)" % (
+        return "{}(\n{})".format(
             self.__class__.__name__,
             " ".join(
-                "\t%s=%r,\n" % (key, getattr(self, key))
+                f"\t{key}={getattr(self, key)!r},\n"
                 for key in sorted(self.__dict__.keys())
                 if not key.startswith("_")
             ),
         )
 
 
-def fetch_attrs_for_group(attrs: List[str], group: int = 18) -> Tuple[List[Any]]:
+def fetch_attrs_for_group(attrs: list[str], group: int = 18) -> tuple[list[Any]]:
     """
     A convenience function for getting a specified attribute for all
     the memebers of a given group.
@@ -672,10 +692,10 @@ class IonicRadius(Base):
         return ", ".join(o.format(k, getattr(self, k)) for o, k in zip(out, keys))
 
     def __repr__(self):
-        return "%s(\n%s)" % (
+        return "{}(\n{})".format(
             self.__class__.__name__,
             " ".join(
-                "\t%s=%r,\n" % (key, getattr(self, key))
+                f"\t{key}={getattr(self, key)!r},\n"
                 for key in sorted(self.__dict__.keys())
                 if not key.startswith("_")
             ),
@@ -701,12 +721,14 @@ class IonizationEnergy(Base):
 
     def __str__(self):
 
-        return "{0:5d} {1:10.5f}".format(self.degree, self.energy)
+        return f"{self.degree:5d} {self.energy:10.5f}"
 
     def __repr__(self):
 
         return "<IonizationEnergy(atomic_number={a:5d}, degree={d:3d}, energy={e:10.5f})>".format(
-            a=self.atomic_number, d=self.degree, e=self.energy
+            a=self.atomic_number,
+            d=self.degree,
+            e=self.energy,
         )
 
 
@@ -727,7 +749,8 @@ class OxidationState(Base):
     def __repr__(self):
 
         return "<OxidationState(atomic_number={a:5d}, oxidation_state={o:5d})>".format(
-            a=self.atomic_number, o=self.oxidation_state
+            a=self.atomic_number,
+            o=self.oxidation_state,
         )
 
 
@@ -748,7 +771,7 @@ class Group(Base):
 
     def __repr__(self):
 
-        return "<Group(symbol={s:s}, name={n:s})>".format(s=self.symbol, n=self.name)
+        return f"<Group(symbol={self.symbol:s}, name={self.name:s})>"
 
 
 class Series(Base):
@@ -769,7 +792,7 @@ class Series(Base):
 
     def __repr__(self):
 
-        return "<Series(name={n:s}, color={c:s})>".format(n=self.name, c=self.color)
+        return f"<Series(name={self.name:s}, color={self.color:s})>"
 
 
 class Isotope(Base):
@@ -824,7 +847,10 @@ class Isotope(Base):
     def __repr__(self):
 
         return "<Isotope(Z={}, A={}, mass={}, abundance={})>".format(
-            self.atomic_number, self.mass_number, self.mass, self.abundance
+            self.atomic_number,
+            self.mass_number,
+            self.mass,
+            self.abundance,
         )
 
 
@@ -854,12 +880,20 @@ class ScreeningConstant(Base):
 
     def __str__(self):
 
-        return "{0:4d} {1:3d} {2:s} {3:10.4f}".format(
-            self.atomic_number, self.n, self.s, self.screening
+        return "{:4d} {:3d} {:s} {:10.4f}".format(
+            self.atomic_number,
+            self.n,
+            self.s,
+            self.screening,
         )
 
     def __repr__(self):
 
-        return "<ScreeningConstant(Z={0:4d}, n={1:3d}, s={2:s}, screening={3:10.4f})>".format(
-            self.atomic_number, self.n, self.s, self.screening
+        return (
+            "<ScreeningConstant(Z={:4d}, n={:3d}, s={:s}, screening={:10.4f})>".format(
+                self.atomic_number,
+                self.n,
+                self.s,
+                self.screening,
+            )
         )

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 from discord.ext.commands import Context
@@ -13,7 +15,7 @@ class Badges:
     def __init__(self, ctx: Context):
         self.ctx = ctx
         self.channel = ctx.get_config_channel_by_name_or_id(
-            ChannelAndMessageId.badges_channel.value
+            ChannelAndMessageId.badges_channel.value,
         )
 
     async def get_all_badges(self) -> list:

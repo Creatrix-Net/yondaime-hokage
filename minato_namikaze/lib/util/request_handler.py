@@ -1,11 +1,20 @@
+from __future__ import annotations
+
 import asyncio
-import logging, random
-from typing import Dict, Optional, Union, Any
+import logging
+import random
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Union
+
 import aiohttp
 import discord
 from discord.ext import commands
 
-from .vars import Methods, token_get, LinksAndVars
+from .vars import LinksAndVars
+from .vars import Methods
+from .vars import token_get
 
 log = logging.getLogger(__name__)
 
@@ -16,14 +25,14 @@ DISCORD_SERVERVICES_BASE_URI = "https://api.discordservices.net/bot/"
 async def post_handler(
     method: Methods,
     url: str,
-    header: Optional[Dict] = None,
-    headers: Optional[Dict] = None,
-    data: Optional[Dict] = None,
-    json: Optional[Dict] = None,
-    log_data: Optional[bool] = False,
-    return_data: Optional[bool] = True,
-    return_json: Optional[bool] = False,
-    getrequestobj: Optional[bool] = False,
+    header: dict | None = None,
+    headers: dict | None = None,
+    data: dict | None = None,
+    json: dict | None = None,
+    log_data: bool | None = False,
+    return_data: bool | None = True,
+    return_json: bool | None = False,
+    getrequestobj: bool | None = False,
 ) -> Any:
     if header is None:
         header = {}
@@ -41,7 +50,10 @@ async def post_handler(
     header_post.update(header)
     header_post.update(headers)
     async with aiohttp.ClientSession() as session, session.request(
-        method.name, url, headers=header_post, json=data or json
+        method.name,
+        url,
+        headers=header_post,
+        json=data or json,
     ) as response:
         data = await response.text()
     if log_data:
@@ -58,9 +70,9 @@ async def ratelimit_handler(
     req,
     url: str,
     method: Methods,
-    headers: Dict,
-    data: Dict,
-    print_logs: Optional[bool] = False,
+    headers: dict,
+    data: dict,
+    print_logs: bool | None = False,
 ) -> None:
     if req.status == 408:
         log.info("The site is down thus can't post the commands now")
@@ -84,8 +96,8 @@ async def ratelimit_handler(
 
 
 async def post_commands(
-    bot: Union[commands.AutoShardedBot, commands.Bot, discord.Client],
-    print_logs: Optional[bool] = False,
+    bot: commands.AutoShardedBot | commands.Bot | discord.Client,
+    print_logs: bool | None = False,
 ) -> None:
     # Fateslist
     list_to_be_given = []
@@ -111,11 +123,11 @@ async def post_commands(
                     command_dict.update({"args": list(command.clean_params)})
                 if command.full_parent_name is not None:
                     command_dict.update(
-                        {"groups": [command.full_parent_name, cog_name]}
+                        {"groups": [command.full_parent_name, cog_name]},
                     )
                 else:
                     command_dict.update(
-                        {"groups": [command.full_parent_name, cog_name]}
+                        {"groups": [command.full_parent_name, cog_name]},
                     )
                 list_to_be_given.append(command_dict)
     # for i in bot.application_commands:

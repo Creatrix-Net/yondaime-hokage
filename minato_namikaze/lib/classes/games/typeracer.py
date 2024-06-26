@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import asyncio
 import random
 import textwrap
@@ -5,12 +7,15 @@ import time
 from datetime import datetime as dt
 from io import BytesIO
 from math import ceil
-from typing import SupportsFloat, Union
+from typing import SupportsFloat
+from typing import Union
 
 import aiohttp
 import discord
 from discord.ext import commands
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 
 
 class TypeRacer:
@@ -317,7 +322,8 @@ class TypeRacer:
 
         await message.add_reaction("\U00002705")
         await message.reply(
-            embed=embed, allowed_mentions=discord.AllowedMentions.none()
+            embed=embed,
+            allowed_mentions=discord.AllowedMentions.none(),
         )
         return True
 
@@ -326,7 +332,7 @@ class TypeRacer:
         ctx: commands.Context,
         *,
         embed_title: str = "Type the following sentence in the chat now!",
-        embed_color: Union[discord.Color, int] = discord.Color.greyple(),
+        embed_color: discord.Color | int = discord.Color.greyple(),
         path_to_text_font: str = "arial.ttf",
         timeout: SupportsFloat = None,
         mode: str = "sentence",
@@ -334,7 +340,7 @@ class TypeRacer:
 
         if mode == "sentence":
             async with aiohttp.ClientSession() as session, session.get(
-                self.SENTENCE_URL
+                self.SENTENCE_URL,
             ) as r:
                 if r.status in range(200, 299):
                     text = await r.json()
@@ -343,17 +349,22 @@ class TypeRacer:
                     return await ctx.send("Oops an error occured")
         elif mode == "random":
             text = " ".join(
-                [random.choice(self.GRAMMAR_WORDS).lower() for _ in range(15)]
+                [random.choice(self.GRAMMAR_WORDS).lower() for _ in range(15)],
             )
         else:
             raise TypeError("Invalid game mode , must be either 'random' or 'sentence'")
 
         buffer = await ctx.bot.loop.run_in_executor(
-            None, self._tr_img, text, path_to_text_font
+            None,
+            self._tr_img,
+            text,
+            path_to_text_font,
         )
 
         embed = discord.Embed(
-            title=embed_title, color=embed_color, timestamp=dt.utcnow()
+            title=embed_title,
+            color=embed_color,
+            timestamp=dt.utcnow(),
         )
         embed.set_image(url="attachment://tr.png")
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)

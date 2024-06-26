@@ -1,14 +1,19 @@
+from __future__ import annotations
+
 import asyncio
+import logging
 import random
 import time
-from typing import Union, Optional, TYPE_CHECKING
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import Union
 
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import MemberID, ErrorEmbed
-from minato_namikaze.lib.classes.games import *
 
-import logging
+from minato_namikaze.lib import ErrorEmbed
+from minato_namikaze.lib import MemberID
+from minato_namikaze.lib.classes.games import *
 
 log = logging.getLogger(__name__)
 
@@ -18,8 +23,8 @@ if TYPE_CHECKING:
 
 
 class Games(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Play some amazing games"
 
     @property
@@ -29,7 +34,9 @@ class Games(commands.Cog):
     @commands.command(aliases=["tc"], usage="<other player.mention>")
     @commands.guild_only()
     async def tictactoe(
-        self, ctx: "Context", member: Optional[Union[MemberID, discord.Member]] = None
+        self,
+        ctx: "Context",
+        member: MemberID | discord.Member | None = None,
     ):
         """
         Play Tictactoe with yourself or your friend!
@@ -38,21 +45,25 @@ class Games(commands.Cog):
         if member is ctx.author or member.bot and member is not ctx.me:
             await ctx.send(
                 embed=ErrorEmbed(
-                    description="*You cannot play this game yourself or with a bot*"
-                )
+                    description="*You cannot play this game yourself or with a bot*",
+                ),
             )
             return
         view = TicTacToe(player2=member, player1=ctx.author, auto=member is ctx.me)
         view.message = await ctx.send(
-            f"Tic Tac Toe: X goes first aka {ctx.author.mention}", view=view
+            f"Tic Tac Toe: X goes first aka {ctx.author.mention}",
+            view=view,
         )
 
     @commands.command(
-        aliases=["connect_four", "c4", "cf"], usage="[other player.mention]"
+        aliases=["connect_four", "c4", "cf"],
+        usage="[other player.mention]",
     )
     @commands.guild_only()
     async def connectfour(
-        self, ctx: "Context", member: Optional[Union[MemberID, discord.Member]] = None
+        self,
+        ctx: "Context",
+        member: MemberID | discord.Member | None = None,
     ):
         """
         Play Amazing Connect Four Game
@@ -62,13 +73,14 @@ class Games(commands.Cog):
         if member is ctx.author or member.bot and member is not ctx.me:
             await ctx.send(
                 embed=ErrorEmbed(
-                    description="*You cannot play this game yourself or with a bot*"
-                )
+                    description="*You cannot play this game yourself or with a bot*",
+                ),
             )
             return
         view = ConnectFour(red=ctx.author, blue=member, auto=member is ctx.me)
         view.message = await ctx.send(
-            embeds=[view.embed, view.BoardString()], view=view
+            embeds=[view.embed, view.BoardString()],
+            view=view,
         )
 
     @commands.command(aliases=["hg"])
@@ -139,7 +151,7 @@ class Games(commands.Cog):
         lis = ["this mighty", "this weak", "this amazing"]
         reaction = random.choices(cookies, weights=[0.9, 0.1], k=1)[0]
         embed = discord.Embed(
-            description=f"So, {random.choice(lis)} fighter has challenged people to a game of....Cookie? Okay then get ready!"
+            description=f"So, {random.choice(lis)} fighter has challenged people to a game of....Cookie? Okay then get ready!",
         )
         message = await ctx.send(embed=embed)
         await asyncio.sleep(4)
@@ -163,19 +175,19 @@ class Games(commands.Cog):
             )
         except asyncio.TimeoutError:
             return await message.edit(
-                embed=discord.Embed(description="No one ate the cookie...")
+                embed=discord.Embed(description="No one ate the cookie..."),
             )
         end = time.perf_counter()
         await message.edit(
             embed=discord.Embed(
-                description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!"
-            )
+                description=f"**{user}**  ate the cookie in ```{end - start:.3f}``` seconds!",
+            ),
         )
         lis3 = ["1", "2"]
         choice = random.choice(lis3)
         if choice == 2:
             await user.send(
-                f"Firstly, Random chose 2 so you get this DM, Secondly, Well Done! You completed it in ```{end - start:.3f}``` seconds."
+                f"Firstly, Random chose 2 so you get this DM, Secondly, Well Done! You completed it in ```{end - start:.3f}``` seconds.",
             )
         else:
             pass

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import gzip
 from os.path import join
 from pathlib import Path
@@ -5,7 +7,8 @@ from random import choice
 
 import aiohttp
 
-from ..util.embeds import Embed, ErrorEmbed
+from ..util.embeds import Embed
+from ..util.embeds import ErrorEmbed
 
 with gzip.open(
     join(
@@ -31,7 +34,7 @@ async def meek_api(name: str):
     try:
         if name == "miku" and l:
             data = await session.get(
-                l + name if l == "https://api.meek.moe/" else "https://api.meek.moe/"
+                l + name if l == "https://api.meek.moe/" else "https://api.meek.moe/",
             )
             url = await data.json()
         else:

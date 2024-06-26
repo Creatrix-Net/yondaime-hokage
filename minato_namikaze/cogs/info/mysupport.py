@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import datetime
 import inspect
 import itertools
+import logging
 import os
 from typing import TYPE_CHECKING
 
@@ -9,17 +12,13 @@ import pkg_resources
 import psutil
 import pygit2
 from discord.ext import commands
-from minato_namikaze.lib import (
-    ChannelAndMessageId,
-    LinksAndVars,
-    PrivacyPolicy,
-    VotingMenu,
-    Embed,
-)
+
+from minato_namikaze.lib import ChannelAndMessageId
+from minato_namikaze.lib import Embed
+from minato_namikaze.lib import LinksAndVars
+from minato_namikaze.lib import PrivacyPolicy
 from minato_namikaze.lib import time_class as time
-
-
-import logging
+from minato_namikaze.lib import VotingMenu
 
 log = logging.getLogger(__name__)
 
@@ -30,8 +29,8 @@ if TYPE_CHECKING:
 
 
 class MySupport(commands.Cog, name="My Support"):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.process = psutil.Process()
         self.description = "Having problems with me? Then you can get the help here."
 
@@ -50,10 +49,10 @@ class MySupport(commands.Cog, name="My Support"):
         short, _, _ = commit.message.partition("\n")
         short_sha2 = commit.hex[0:6]
         commit_tz = datetime.timezone(
-            datetime.timedelta(minutes=commit.commit_time_offset)
+            datetime.timedelta(minutes=commit.commit_time_offset),
         )
         commit_time = datetime.datetime.fromtimestamp(commit.commit_time).astimezone(
-            commit_tz
+            commit_tz,
         )
 
         # [`hash`](url) message (offset)
@@ -64,8 +63,9 @@ class MySupport(commands.Cog, name="My Support"):
         repo = pygit2.Repository(".git")
         commits = list(
             itertools.islice(
-                repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count
-            )
+                repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL),
+                count,
+            ),
         )
         return "\n".join(self.format_commit(c) for c in commits)
 
@@ -81,7 +81,8 @@ class MySupport(commands.Cog, name="My Support"):
         # To properly cache myself, I need to use the bot support server.
         support_guild = self.bot.get_guild(ChannelAndMessageId.server_id2.value)
         owner = await self.bot.get_or_fetch_member(
-            support_guild, self.bot.application_id
+            support_guild,
+            self.bot.application_id,
         )
         embed.set_author(name=str(owner), icon_url=owner.display_avatar.url)
 
@@ -105,16 +106,19 @@ class MySupport(commands.Cog, name="My Support"):
                     voice += 1
 
         embed.add_field(
-            name="Members", value=f"{total_members} total\n{total_unique} unique"
+            name="Members",
+            value=f"{total_members} total\n{total_unique} unique",
         )
         embed.add_field(
-            name="Channels", value=f"{text + voice} total\n{text} text\n{voice} voice"
+            name="Channels",
+            value=f"{text + voice} total\n{text} text\n{voice} voice",
         )
 
         memory_usage = self.process.memory_full_info().uss / 1024**2
         cpu_usage = self.process.cpu_percent() / psutil.cpu_count()
         embed.add_field(
-            name="Process", value=f"{memory_usage:.2f} MiB\n{cpu_usage:.2f}% CPU"
+            name="Process",
+            value=f"{memory_usage:.2f} MiB\n{cpu_usage:.2f}% CPU",
         )
 
         version = pkg_resources.get_distribution("discord.py").version
@@ -144,7 +148,8 @@ class MySupport(commands.Cog, name="My Support"):
         await ctx.send(embed=embed)
 
     @commands.command(
-        description="Generates my invite link for your server", aliases=["invite"]
+        description="Generates my invite link for your server",
+        aliases=["invite"],
     )
     async def inviteme(self, ctx: "Context"):
         """Generates my invite link for your server"""
@@ -159,7 +164,7 @@ class MySupport(commands.Cog, name="My Support"):
     async def supportserver(self, ctx: "Context"):
         """Generates my support server invite"""
         await ctx.send(
-            f"**Here you go, my support server invite**\nhttps://discord.gg/{LinksAndVars.invite_code.value}"
+            f"**Here you go, my support server invite**\nhttps://discord.gg/{LinksAndVars.invite_code.value}",
         )
 
     @commands.command()
@@ -221,8 +226,9 @@ class MySupport(commands.Cog, name="My Support"):
         repo = pygit2.Repository(".git")
         commits = list(
             itertools.islice(
-                repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), 1
-            )
+                repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL),
+                1,
+            ),
         )
         final_url = f"<{source_url}/blob/{commits[0].hex}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
         await ctx.send(final_url)

@@ -1,15 +1,17 @@
-from typing import TYPE_CHECKING, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+from typing import Union
 
 import discord
 from discord.ext import commands
-from minato_namikaze.lib import (
-    Database,
-    MemberID,
-    is_mod,
-    Embed,
-    EmbedPaginator,
-    ErrorEmbed,
-)
+
+from minato_namikaze.lib import Database
+from minato_namikaze.lib import Embed
+from minato_namikaze.lib import EmbedPaginator
+from minato_namikaze.lib import ErrorEmbed
+from minato_namikaze.lib import is_mod
+from minato_namikaze.lib import MemberID
 
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
@@ -25,14 +27,14 @@ def errorembed(ctx):
     return ErrorEmbed(
         title=f"No support system setup for the {ctx.guild.name}",
         description="An admin can always setup the **support system** using `{}setup support #support @support_required` command".format(
-            ctx.prefix
+            ctx.prefix,
         ),
     )
 
 
 class Support(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Displays the support command for the server, this can only be used if the owner has enabled it"
 
     @property
@@ -41,7 +43,8 @@ class Support(commands.Cog):
 
     async def database_class(self):
         return await self.bot.db.new(
-            Database.database_category_name.value, Database.database_channel_name.value
+            Database.database_category_name.value,
+            Database.database_channel_name.value,
         )
 
     @commands.command()
@@ -63,14 +66,14 @@ class Support(commands.Cog):
 
         if ctx.message.author == ctx.guild.owner:
             await ctx.send(
-                f"{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:"
+                f"{ctx.message.author.mention} really you need support ??! **LOL !** :rofl:",
             )
             return
 
         if channel == ctx.message.channel:
             await ctx.send(
                 embed=ErrorEmbed(
-                    description=f"{ctx.message.author.mention} This command can't be run inside the {ctx.message.channel.mention}"
+                    description=f"{ctx.message.author.mention} This command can't be run inside the {ctx.message.channel.mention}",
                 ),
                 delete_after=4,
             )
@@ -81,13 +84,13 @@ class Support(commands.Cog):
         ):
             await ctx.send(
                 embed=ErrorEmbed(
-                    description=f"{ctx.message.author.mention} you already applied for the support , please check the {channel.mention} channel."
-                )
+                    description=f"{ctx.message.author.mention} you already applied for the support , please check the {channel.mention} channel.",
+                ),
             )
             return
         try:
             await ctx.message.author.add_roles(
-                discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
+                discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]),
             )
         except Exception as error:
             await ctx.send(embed=ErrorEmbed(description=error))
@@ -103,7 +106,9 @@ class Support(commands.Cog):
                 "@here",
                 embed=e,
                 allowed_mentions=discord.AllowedMentions(
-                    everyone=True, users=True, roles=True
+                    everyone=True,
+                    users=True,
+                    roles=True,
                 ),
             )
             await ctx.send("**Help Desk** has been has been notifed!")
@@ -117,7 +122,7 @@ class Support(commands.Cog):
     @commands.command(usage="<member.mention>", aliases=["resolve", "resolves"])
     @commands.guild_only()
     @is_mod()
-    async def resolved(self, ctx: "Context", member: Union[MemberID, discord.Member]):
+    async def resolved(self, ctx: "Context", member: MemberID | discord.Member):
         """
         Resolves the existing ticket!
         One needs to have manage server permission in order to run this command
@@ -134,7 +139,7 @@ class Support(commands.Cog):
             return
         if member.bot:
             await ctx.send(
-                embed=ErrorEmbed(description=f"{member.mention} is a bot! :robot:")
+                embed=ErrorEmbed(description=f"{member.mention} is a bot! :robot:"),
             )
             return
         if (
@@ -149,13 +154,13 @@ class Support(commands.Cog):
             return
 
         await member.send(
-            f"Hope your issue has been resolved in {ctx.guild.name}, {member.mention}"
+            f"Hope your issue has been resolved in {ctx.guild.name}, {member.mention}",
         )
         await ctx.send(
-            f"The issue/query for {member.mention} has been set to resolved!"
+            f"The issue/query for {member.mention} has been set to resolved!",
         )
         await member.remove_roles(
-            discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
+            discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]),
         )
 
     @commands.command(
@@ -198,7 +203,8 @@ class Support(commands.Cog):
                         pass
 
                 e = Embed(
-                    title="Those who still require support:", description=description
+                    title="Those who still require support:",
+                    description=description,
                 )
                 embed.append(e)
 
@@ -229,7 +235,7 @@ class Support(commands.Cog):
 
         if len(feed) > 2000:
             await ctx.send(
-                "\N{WARNING SIGN} The feedback should be less than 2000 characters"
+                "\N{WARNING SIGN} The feedback should be less than 2000 characters",
             )
             return
         data = await (await self.database_class()).get(ctx.guild.id)
@@ -237,7 +243,7 @@ class Support(commands.Cog):
             e = ErrorEmbed(
                 title="No Feedback system setup for this server!",
                 description="An admin can always setup the **feedback system** using `{}setup add feedback #channelname` command".format(
-                    ctx.prefix
+                    ctx.prefix,
                 ),
             )
             await ctx.send(embed=e, delete_after=10)
@@ -259,10 +265,12 @@ class Support(commands.Cog):
             or discord.Color.random(),
         )
         e2.set_author(
-            name=ctx.author.display_name, icon_url=ctx.author.display_avatar.url
+            name=ctx.author.display_name,
+            icon_url=ctx.author.display_avatar.url,
         )
         e.set_author(
-            name=ctx.author.display_name, icon_url=ctx.author.display_avatar.url
+            name=ctx.author.display_name,
+            icon_url=ctx.author.display_avatar.url,
         )
         await channel.send(embed=e2)
 

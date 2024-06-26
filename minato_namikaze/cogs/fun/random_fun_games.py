@@ -3,21 +3,23 @@ from __future__ import annotations
 
 import asyncio
 import io
+import logging
 import os
 from random import choice
-from typing import TYPE_CHECKING, Optional, Union
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import Union
 
 import discord
-import eight_ball
 import mystbin
-from asyncdagpi import ImageFeatures
-from discord.ext import commands, owoify
+from discord.ext import commands
+from discord.ext import owoify
 from gtts import gTTS
-from minato_namikaze.lib import Embed, LinksAndVars, MemberID
 from PIL import Image
 
-
-import logging
+from minato_namikaze.lib import Embed
+from minato_namikaze.lib import LinksAndVars
+from minato_namikaze.lib import MemberID
 
 log = logging.getLogger(__name__)
 
@@ -28,8 +30,8 @@ if TYPE_CHECKING:
 
 
 class Random(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.mystbin_client = mystbin.Client()
         self.description = "Some random fun and usefull commands."
 
@@ -58,7 +60,9 @@ class Random(commands.Cog):
 
     @commands.command(aliases=["takeitback"], usage="<member.mention>")
     async def insult(
-        self, ctx: "Context", user: Optional[Union[MemberID, discord.Member]] = None
+        self,
+        ctx: "Context",
+        user: MemberID | discord.Member | None = None,
     ):
         """
         Insult a user
@@ -87,7 +91,8 @@ class Random(commands.Cog):
             await ctx.send(
                 ctx.message.author.mention,
                 embed=Embed(
-                    title=":warning:", description=choice(LinksAndVars.insults.value)
+                    title=":warning:",
+                    description=choice(LinksAndVars.insults.value),
                 ),
             )
 
@@ -97,23 +102,21 @@ class Random(commands.Cog):
         lol = owoify.owoify(f"{text}")
         await ctx.send(lol)
 
-    @commands.command()
-    @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def magic(self, ctx: "Context", user: Optional[discord.Member] = None):
-        """See magic!"""
-        user = user or ctx.author
-        url = str(user.avatar.with_format("png").with_size(1024).url)
-        img = await self.bot.dagpi.image_process(ImageFeatures.magik(), url)
-        e2file = discord.File(fp=img.image, filename=f"magik.{img.format}")
-        e = Embed(title="Magik!")
-        e.set_image(url=f"attachment://magik.{img.format}")
-        await ctx.send(embed=e, file=e2file)
+    # @commands.command()
+    # @commands.cooldown(1, 40, commands.BucketType.guild)
+    # async def magic(self, ctx: "Context", user: Optional[discord.Member] = None):
+    #     """See magic!"""
+    #     user = user or ctx.author
+    #     url = str(user.avatar.with_format("png").with_size(1024).url)
+    #     img = await self.bot.dagpi.image_process(ImageFeatures.magik(), url)
+    #     e2file = discord.File(fp=img.image, filename=f"magik.{img.format}")
+    #     e = Embed(title="Magik!")
+    #     e.set_image(url=f"attachment://magik.{img.format}")
+    #     await ctx.send(embed=e, file=e2file)
 
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def qr(
-        self, ctx: "Context", colour="255-255-255", *, url: Optional[str] = None
-    ):
+    async def qr(self, ctx: "Context", colour="255-255-255", *, url: str | None = None):
         """Generates easy QR Code"""
         colours = {
             "255-255-255": "255-255-255",
@@ -165,7 +168,8 @@ class Random(commands.Cog):
         os.remove("tts.mp3")
 
     @commands.command(
-        aliases=["color", "colour", "sc"], usage="<hexadecimal colour code>"
+        aliases=["color", "colour", "sc"],
+        usage="<hexadecimal colour code>",
     )
     async def show_color(self, ctx: "Context", *, color: discord.Colour):
         """Enter a color and you will see it!"""
@@ -209,12 +213,12 @@ class Random(commands.Cog):
         except mystbin.BadPasteID:
             await ctx.send(f"Hmmm.. id : {id} isn't found, try again?")
 
-    @commands.command(name="8ball", usage="<question>")
-    async def _8ball(self, ctx: "Context", *, question: str):
-        """Ask questions about your future"""
-        ball = eight_ball.ball()
-        async with ctx.channel.typing():
-            await ctx.send(ball.response(question))
+    # @commands.command(name="8ball", usage="<question>")
+    # async def _8ball(self, ctx: "Context", *, question: str):
+    #     """Ask questions about your future"""
+    #     ball = eight_ball.ball()
+    #     async with ctx.channel.typing():
+    #         await ctx.send(ball.response(question))
 
     # @commands.bot_has_permissions(attach_files=True)
     # @commands.command(aliases=["ss"])

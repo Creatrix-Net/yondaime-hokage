@@ -1,5 +1,7 @@
-from docutils.parsers.rst import Directive
+from __future__ import annotations
+
 from docutils import nodes
+from docutils.parsers.rst import Directive
 
 
 class exception_hierarchy(nodes.General, nodes.Element):

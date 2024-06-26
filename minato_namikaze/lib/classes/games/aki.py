@@ -1,4 +1,7 @@
-from typing import List, Optional
+from __future__ import annotations
+
+from typing import List
+from typing import Optional
 
 import discord
 from akinator.async_aki import Akinator as _Akinator_
@@ -44,7 +47,7 @@ class AkinatorButtons(discord.ui.Button["Akinator"]):
 
 
 class Akinator(discord.ui.View):
-    children: List[AkinatorButtons]
+    children: list[AkinatorButtons]
 
     def __init__(self):
         super().__init__()
@@ -52,7 +55,7 @@ class Akinator(discord.ui.View):
         self.bar_emojis: tuple = ("  ", "\U00002588")
         self.guess = None
         self.bar = ""
-        self.message: Optional[discord.Message] = None
+        self.message: discord.Message | None = None
         self.questions = 0
         self.mapping: dict = {YES: "y", NO: "n", IDK: "i", P: "p", PN: "pn"}
 

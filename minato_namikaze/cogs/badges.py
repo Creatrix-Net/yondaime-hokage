@@ -1,29 +1,38 @@
+from __future__ import annotations
+
 import asyncio
 import functools
 import os
 import sys
+from collections.abc import Mapping
 from io import BytesIO
-from typing import TYPE_CHECKING, Mapping, Union
+from typing import TYPE_CHECKING
+from typing import Union
 
 import aiohttp
 import discord
 from discord import app_commands
 from discord.ext import commands
-from minato_namikaze.lib import (
-    BASE_DIR,
-    Badge,
-    Badges,
-    ImageWriter,
-    generate,
-    EmbedPaginator,
-    StarboardEmbed,
-    Base,
-    Webhooks,
-    session_obj,
-    Tokens,
-)
-from PIL import Image, ImageDraw, ImageFont, ImageSequence
-from sqlalchemy import Column, String, Boolean, BigInteger
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+from PIL import ImageSequence
+from sqlalchemy import BigInteger
+from sqlalchemy import Boolean
+from sqlalchemy import Column
+from sqlalchemy import String
+
+from minato_namikaze.lib import Badge
+from minato_namikaze.lib import Badges
+from minato_namikaze.lib import Base
+from minato_namikaze.lib import BASE_DIR
+from minato_namikaze.lib import EmbedPaginator
+from minato_namikaze.lib import generate
+from minato_namikaze.lib import ImageWriter
+from minato_namikaze.lib import session_obj
+from minato_namikaze.lib import StarboardEmbed
+from minato_namikaze.lib import Tokens
+from minato_namikaze.lib import Webhooks
 
 if TYPE_CHECKING:
     from lib import Context
@@ -45,7 +54,11 @@ class Badges(Base):
     code = Column(String(20), nullable=False, index=True, unique=True)
     file_name = Column(String(500), nullable=False, index=True, unique=True)
     is_inverted = Column(
-        Boolean, default=False, nullable=False, index=True, unique=True
+        Boolean,
+        default=False,
+        nullable=False,
+        index=True,
+        unique=True,
     )
 
 
@@ -81,20 +94,24 @@ async def add_new_badge(
     """Adds a new badge to database"""
     if not file.content_type.startswith("image"):
         await interaction.response.send_message(
-            f"{file.filename} is not a valid image", ephemeral=True
+            f"{file.filename} is not a valid image",
+            ephemeral=True,
         )
         return
     embed = StarboardEmbed(title=name.title())
     embed.set_image(url=f"attachment://{file.filename}")
     async with aiohttp.ClientSession() as session:
         wh = discord.Webhook.from_url(
-            Webhooks.badges.value, session=session, bot_token=Tokens.token.value
+            Webhooks.badges.value,
+            session=session,
+            bot_token=Tokens.token.value,
         )
         sent_message: discord.WebhookMessage = await wh.send(
             wait=True,
             embed=embed,
             file=await file.to_file(
-                use_cached=True, description=f"{file.filename.title()} raw badge data."
+                use_cached=True,
+                description=f"{file.filename.title()} raw badge data.",
             ),
         )
     badge_object = Badges(
@@ -106,7 +123,8 @@ async def add_new_badge(
     async with session_obj() as session, session.begin():
         session.add(badge_object)
     await interaction.response.send_message(
-        f"Added, {sent_message.jump_url}", ephemeral=True
+        f"Added, {sent_message.jump_url}",
+        ephemeral=True,
     )
 
 
@@ -118,7 +136,8 @@ class BadgesPageEntry:
         self.name = entry["badge_name"]
         self.file: discord.Attachment = entry["file_name"]
         self.embed = StarboardEmbed(
-            title=self.name, description=f"BADGE CODE: `{self.code}`"
+            title=self.name,
+            description=f"BADGE CODE: `{self.code}`",
         )
         self.embed.set_image(url=entry["file_name"].url)
 
@@ -127,8 +146,8 @@ class BadgesPageEntry:
 
 
 class BadgesCog(commands.Cog, name="Badges"):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Create fun fake badges based on your discord profile"
 
     async def cog_load(self):
@@ -178,7 +197,10 @@ class BadgesCog(commands.Cog, name="Badges"):
             return BytesIO(test)
 
     def make_template(
-        self, user: Union[discord.User, discord.Member], badge: Badge, template: Image
+        self,
+        user: discord.User | discord.Member,
+        badge: Badge,
+        template: Image,
     ) -> Image:
         """Build the base template before determining animated or not"""
         if hasattr(user, "roles"):
@@ -301,7 +323,10 @@ class BadgesCog(commands.Cog, name="Badges"):
         """Async create badges handler"""
         template_img = await self.dl_image(badge.file_name)
         task = functools.partial(
-            self.make_template, user=user, badge=badge, template=template_img
+            self.make_template,
+            user=user,
+            badge=badge,
+            template=template_img,
         )
         task = self.bot.loop.run_in_executor(None, task)
         try:
@@ -312,7 +337,9 @@ class BadgesCog(commands.Cog, name="Badges"):
             url = user.display_avatar.with_format("gif")
             avatar = Image.open(await self.dl_image(url))
             task = functools.partial(
-                self.make_animated_gif, template=template, avatar=avatar
+                self.make_animated_gif,
+                template=template,
+                avatar=avatar,
             )
             task = self.bot.loop.run_in_executor(None, task)
             try:
@@ -358,7 +385,7 @@ class BadgesCog(commands.Cog, name="Badges"):
             return
         badge_obj = await self.get_badge(badge, ctx)
         if not badge_obj:
-            await ctx.send("`{}` is not an available badge.".format(badge))
+            await ctx.send(f"`{badge}` is not an available badge.")
             return
         async with ctx.channel.typing():
             badge_img = await self.create_badge(user, badge_obj, False)
@@ -385,7 +412,7 @@ class BadgesCog(commands.Cog, name="Badges"):
             return
         badge_obj = await self.get_badge(badge, ctx)
         if not badge_obj:
-            await ctx.send("`{}` is not an available badge.".format(badge))
+            await ctx.send(f"`{badge}` is not an available badge.")
             return
         async with ctx.channel.typing():
             badge_img = await self.create_badge(user, badge_obj, True)
@@ -403,7 +430,8 @@ class BadgesCog(commands.Cog, name="Badges"):
         """
         global_badges = await Badges(ctx).get_all_badges()
         embed_paginator = EmbedPaginator(
-            entries=[BadgesPageEntry(i).embed for i in global_badges], ctx=ctx
+            entries=[BadgesPageEntry(i).embed for i in global_badges],
+            ctx=ctx,
         )
         await embed_paginator.start()
 

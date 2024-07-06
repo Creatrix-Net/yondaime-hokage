@@ -8,9 +8,7 @@ from collections import defaultdict
 from collections import deque
 from datetime import timedelta
 from typing import Any
-from typing import Optional
 from typing import TYPE_CHECKING
-from typing import Union
 
 import aiohttp
 import discord
@@ -190,12 +188,13 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 name="over Naruto",
             ),
         )
-        e.set_thumbnail(url=self.user.avatar.url)
+        if self.user is not None:
+            e.set_thumbnail(url=self.user.avatar.url) # type: ignore
 
         log.info("Started The Bot")
 
         try:
-            await stats.send(embed=e)
+            await stats.send(embed=e) # type: ignore
         except (discord.HTTPException, discord.Forbidden, ValueError, TypeError):
             pass
 

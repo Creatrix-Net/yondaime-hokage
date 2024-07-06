@@ -189,12 +189,12 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             ),
         )
         if self.user is not None:
-            e.set_thumbnail(url=self.user.avatar.url) # type: ignore
+            e.set_thumbnail(url=self.user.avatar.url)  # type: ignore
 
         log.info("Started The Bot")
 
         try:
-            await stats.send(embed=e) # type: ignore
+            await stats.send(embed=e)  # type: ignore
         except (discord.HTTPException, discord.Forbidden, ValueError, TypeError):
             pass
 

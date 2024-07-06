@@ -24,6 +24,7 @@ DISCORD_SERVERVICES_BASE_URI = "https://api.discordservices.net/bot/"
 
 from typing import Literal
 
+
 async def post_handler(
     method,
     url: str,
@@ -57,12 +58,12 @@ async def post_handler(
         headers=header_post,
         json=data or json,
     ) as response:
-        data = await response.text() # type: ignore
+        data = await response.text()  # type: ignore
     if log_data:
         log.info(data)
     if return_data:
         if return_json:
-            return data.json() # type: ignore
+            return data.json()  # type: ignore
         return data
     if getrequestobj:
         return response

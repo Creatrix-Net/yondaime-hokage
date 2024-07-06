@@ -5,7 +5,6 @@ Revises: d80905354d9d
 Create Date: 2022-06-28 15:17:41.117219
 
 """
-
 # revision identifiers, used by Alembic.
 from __future__ import annotations
 

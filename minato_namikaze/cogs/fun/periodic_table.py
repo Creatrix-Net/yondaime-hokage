@@ -91,13 +91,17 @@ class Elements(commands.Cog):
     def get_xray_wavelength(element: ELEMENTS) -> str:
         try:
             ka = 1239.84 / (
-                13.6057 * ((element.atomic_number - 1) ** 2) * ((1 / 1**2) - (1 / 2**2))
+                13.6057
+                * ((element.atomic_number - 1) ** 2)
+                * ((1 / 1**2) - (1 / 2**2))
             )
         except Exception:
             ka = ""
         try:
             kb = 1239.84 / (
-                13.6057 * ((element.atomic_number - 1) ** 2) * ((1 / 1**2) - (1 / 3**2))
+                13.6057
+                * ((element.atomic_number - 1) ** 2)
+                * ((1 / 1**2) - (1 / 3**2))
             )
         except Exception:
             kb = ""

@@ -17,10 +17,10 @@ from colorama import Style
 
 from minato_namikaze import Base
 from minato_namikaze import BASE_DIR
-from minato_namikaze import MinatoNamikazeBot
 from minato_namikaze import return_all_cogs
 from minato_namikaze import Session
 from minato_namikaze import vars
+from minato_namikaze.discordbot import MinatoNamikazeBot
 
 # from watchfiles import run_process, DefaultFilter
 
@@ -159,15 +159,9 @@ def init(cogs):
     """This manages the migrations and database creation system for you."""
     run = asyncio.get_event_loop().run_until_complete
     if not cogs:
-        cogs = [
-            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
-            for e in return_all_cogs()
-        ]
+        cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in return_all_cogs()]
     else:
-        cogs = [
-            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
-            for e in cogs
-        ]
+        cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in cogs]
 
     for ext in cogs:
         try:
@@ -202,20 +196,23 @@ def makemigrations(message):
 )
 def migrate(upgrade, revision):
     """Runs an upgrade from a migration"""
-    if upgrade:
-        subprocess.run(  # skipcq: BAN-B607
-            ["alembic", "upgrade", revision],
-            check=False,
-        )
-    else:
-        subprocess.run(  # skipcq: BAN-B607
-            [
-                "alembic",
-                "downgrade",
-                "base" if revision.lower() == "head" else revision,
-            ],
-            check=False,
-        )
+    try:
+        if upgrade:
+            subprocess.run(  # skipcq: BAN-B607
+                ["alembic", "upgrade", revision],
+                check=False,
+            )
+        else:
+            subprocess.run(  # skipcq: BAN-B607
+                [
+                    "alembic",
+                    "downgrade",
+                    "base" if revision.lower() == "head" else revision,
+                ],
+                check=False,
+            )
+    except Exception as e:
+        return
 
 
 @db.command(short_help="removes a cog's table", options_metavar="[options]")
@@ -232,15 +229,9 @@ def drop(cogs):
     run = asyncio.get_event_loop().run_until_complete
     click.confirm("Do you really want to do this?", abort=True)
     if cogs.lower() == "all":
-        cogs = [
-            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
-            for e in return_all_cogs()
-        ]
+        cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in return_all_cogs()]
     else:
-        cogs = [
-            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
-            for e in cogs
-        ]
+        cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in cogs]
 
     for ext in cogs:
         try:

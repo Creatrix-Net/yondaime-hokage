@@ -10,10 +10,10 @@ from datetime import timedelta
 from typing import Any
 from typing import TYPE_CHECKING
 
-import aiohttp
 import discord
 import sentry_sdk
 import TenGiphPy
+from aiohttp import ClientSession
 from discord.ext import commands
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -98,7 +98,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         self.uptime = format_relative(self.start_time)
         self.persistent_views_added = False
-        self.session = aiohttp.ClientSession()
+        self.session = ClientSession()
         self.blacklist: UniqueList = UniqueList()
 
         super().__init__(
@@ -410,9 +410,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"][
-                "downsized_large"
-            ]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -427,9 +425,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
-                "images"
-            ]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -445,9 +441,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     def giphy(tag_name: str) -> str | None:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"][
-                "downsized_large"
-            ]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -463,9 +457,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def giphy(tag_name: str) -> str | None:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
-                "images"
-            ]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -493,21 +485,21 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         embed = discord.Embed(title="Auto-blocked Member", colour=0xDDA453)
         embed.add_field(
             name="Member",
-            value=f"{message.author} (ID: {message.author.id})",
+            value=f"""{message.author} (ID: {message.author.id})""",
             inline=False,
         )
         embed.add_field(
             name="Guild Info",
-            value=f"{guild_name} (ID: {guild_id})",
+            value=f"""{guild_name} (ID: {guild_id})""",
             inline=False,
         )
         embed.add_field(
             name="Channel Info",
-            value=f"{message.channel} (ID: {message.channel.id}",
+            value=f"""{message.channel} (ID: {message.channel.id})""",
             inline=False,
         )
         embed.timestamp = discord.utils.utcnow()
-        async with aiohttp.ClientSession() as session:
+        async with ClientSession() as session:
             wh = discord.Webhook.from_url(Webhooks.logs.value, session=session)
             await wh.send(embed=embed)
         return
@@ -589,7 +581,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         log.error(f"Error; Command: {response.command}, {str(exception)}")
 
     async def get_context(
-        self, origin: discord.Interaction | discord.Message, /, *, cls=Context
+        self,
+        origin: discord.Interaction | discord.Message,
+        /,
+        *,
+        cls=Context,
     ) -> Context:
         return await super().get_context(origin, cls=cls)
 

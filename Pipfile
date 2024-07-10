@@ -41,11 +41,14 @@ jishaku = {git = "https://github.com/Gorialis/jishaku.git"}
 english-words = {git = "https://github.com/The-4th-Hokage/english-words-py.git"}
 discord-py = {git = "https://github.com/Rapptz/discord.py.git"}
 discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus"}
+setuptools = "*"
+alembic = "*"
 
 [dev-packages]
 watchfiles = "*"
 pytest = "*"
 pre-commit = "*"
+black = "*"
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"

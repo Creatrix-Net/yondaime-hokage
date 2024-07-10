@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.6.0
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
@@ -20,23 +20,24 @@ repos:
     -   id: requirements-txt-fixer
 
 -   repo: https://github.com/asottile/add-trailing-comma
-    rev: v2.3.0
+    rev: v3.1.0
     hooks:
     -   id: add-trailing-comma
 
--   repo: https://github.com/asottile/reorder_python_imports
-    rev: v3.8.5
-    hooks:
-    -   id: reorder-python-imports
-        args: [--py37-plus, --add-import, 'from __future__ import annotations']
+# -   repo: https://github.com/asottile/reorder_python_imports
+#     rev: v3.8.5
+#     hooks:
+#     -   id: reorder-python-imports
+#         args: [--py37-plus, --add-import, 'from __future__ import annotations']
 
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.1.0
+    rev: v3.16.0
     hooks:
     -   id: pyupgrade
         args: [--py310-plus]
 
--   repo: https://github.com/psf/black
-    rev: 22.10.0
-    hooks:
-    -   id: black
+# -   repo: https://github.com/psf/black
+#     rev: 24.4.2
+#     hooks:
+#     -   id: black
+#         args: [--line-length=150]

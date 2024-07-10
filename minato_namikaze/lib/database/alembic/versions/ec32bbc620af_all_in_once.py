@@ -1,16 +1,20 @@
-"""update
+"""all in once
 
-Revision ID: ed7c318c1ec3
-Revises: d80905354d9d
-Create Date: 2022-06-28 15:17:41.117219
+Revision ID: ec32bbc620af
+Revises:
+Create Date: 2024-07-10 20:36:28.516902
 
 """
 
-# revision identifiers, used by Alembic.
 from __future__ import annotations
 
-revision = "ed7c318c1ec3"
-down_revision = "d80905354d9d"
+import sqlalchemy as sa
+from alembic import op
+
+
+# revision identifiers, used by Alembic.
+revision = "ec32bbc620af"
+down_revision = None
 branch_labels = None
 depends_on = None
 

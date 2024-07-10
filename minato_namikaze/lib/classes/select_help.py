@@ -137,11 +137,13 @@ class HelpSelectMenu(discord.ui.Select["HelpMenu"]):
 
 
 class FrontPageSource(menus.PageSource):
-    def is_paginating(self) -> bool:
+    @staticmethod
+    def is_paginating() -> bool:
         # This forces the buttons to appear even in the front page
         return True
 
-    def get_max_pages(self) -> int | None:
+    @staticmethod
+    def get_max_pages() -> int | None:
         # There's only one actual page in the front page
         # However we need at least 2 to show all the buttons
         return 2

@@ -585,7 +585,8 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             await guild.leave()
             log.info(f"Left guild {guild.id} [Marked as spam]")
 
-    async def on_application_command_error(self, response, exception):
+    @staticmethod
+    async def on_application_command_error(response, exception):
         log.error(f"Error; Command: {response.command}, {str(exception)}")
 
     async def get_context(

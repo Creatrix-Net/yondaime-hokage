@@ -18,7 +18,8 @@ class VotingMenu(menus.Menu):
         super().__init__()
         self.bot = bot
 
-    async def send_initial_message(self, ctx, channel):
+    @staticmethod
+    async def send_initial_message(ctx, channel):
         e = discord.Embed(
             title="I see you want vote!",
             description=f"{ctx.author.mention}, maybe react with your choice :)",

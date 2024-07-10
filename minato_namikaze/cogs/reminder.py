@@ -71,7 +71,8 @@ class Reminder(commands.Cog):
     def cog_unload(self) -> None:
         self._task.cancel()
 
-    async def get_active_timer(self, *, days: int = 7) -> Timer | None:
+    @staticmethod
+    async def get_active_timer(*, days: int = 7) -> Timer | None:
         query = select(Reminders).where(
             Reminders.expires < datetime.timedelta(days=days),
         )

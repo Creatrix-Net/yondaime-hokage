@@ -9,8 +9,6 @@ import math
 import re
 from collections import OrderedDict
 
-import six
-
 ORBITALS = ("s", "p", "d", "f", "g", "h", "i", "j", "k")
 SHELLS = ("K", "L", "M", "N", "O", "P", "Q")
 

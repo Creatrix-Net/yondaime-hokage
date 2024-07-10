@@ -11,10 +11,7 @@ import traceback
 from contextlib import redirect_stdout
 from pathlib import Path
 from typing import TYPE_CHECKING
-
-import aiohttp
 import discord
-import orjson
 from discord.ext import commands
 from discord.ext import tasks
 

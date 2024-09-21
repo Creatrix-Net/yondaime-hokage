@@ -7,17 +7,22 @@ from datetime import timedelta
 from json.decoder import JSONDecodeError
 from random import choice
 from typing import TYPE_CHECKING
-from typing import Union
 
 import discord
 from discord.ext import commands
 from discord.ext import tasks
 from discord.ext.commands import Cog
 from discord.ext.commands import command
+from sqlalchemy import BigInteger
+from sqlalchemy import Boolean
+from sqlalchemy import Column
+from sqlalchemy import DateTime
+from sqlalchemy import Integer
+from sqlalchemy_utils import URLType
 
+from minato_namikaze.lib import Base
 from minato_namikaze.lib import cache
 from minato_namikaze.lib import convert
-from minato_namikaze.lib import Database
 from minato_namikaze.lib import Embed
 from minato_namikaze.lib import ErrorEmbed
 from minato_namikaze.lib import format_relative
@@ -37,6 +42,18 @@ import logging
 log = logging.getLogger(__name__)
 
 
+class Giveaways(Base):
+    __tablename__ = "giveaways"
+    __table_args__ = {"extend_existing": True}
+
+    id = Column(Integer, index=True, primary_key=True)
+    expires = Column(DateTime, index=True, nullable=False)
+    server_id = Column(BigInteger, index=True, nullable=False)
+    jump_url = Column(URLType, nullable=False, index=True)
+    image_url = Column(URLType, default=LinksAndVars.giveaway_image.value, nullable=False)
+    giveaway_deleted = Column(Boolean, default=True, nullable=False)
+
+
 class Giveaway(Cog):
     def __init__(self, bot: MinatoNamikazeBot):
         self.bot: MinatoNamikazeBot = bot
@@ -54,13 +71,6 @@ class Giveaway(Cog):
     @property
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{PARTY POPPER}")
-
-    async def database_class(self):
-        """The database classs"""
-        return await self.bot.db.new(
-            Database.database_category_name.value,
-            Database.giveaway_time_channel_name.value,
-        )
 
     async def create_timer_for_giveaway(
         self,
@@ -115,7 +125,7 @@ class Giveaway(Cog):
     )
     @commands.guild_only()
     @is_mod()
-    async def create_giveaway(self, ctx: "Context"):
+    async def create_giveaway(self, ctx: Context):
         """Allowes you to to create giveaway by answering some simple questions!"""
         # Ask Questions
         embed = Embed(
@@ -223,7 +233,7 @@ class Giveaway(Cog):
     async def determine_winner(
         self,
         giveaway_id: discord.Message,
-        bot: "MinatoNamikazeBot",
+        bot: MinatoNamikazeBot,
     ) -> str | discord.Member:
         """Determines winner
 
@@ -258,9 +268,7 @@ class Giveaway(Cog):
                     lambda a: discord.utils.get(
                         a.roles,
                         id=int(
-                            giveaway_config.role_required.lstrip("<@&")
-                            .lstrip("<&")
-                            .rstrip(">"),
+                            giveaway_config.role_required.lstrip("<@&").lstrip("<&").rstrip(">"),
                         ),
                     )
                     is not None,
@@ -318,7 +326,7 @@ class Giveaway(Cog):
     @commands.guild_only()
     async def giveaway_reroll(
         self,
-        ctx: "Context",
+        ctx: Context,
         giveaway_id: commands.MessageConverter | discord.Message,
     ):
         """
@@ -349,7 +357,7 @@ class Giveaway(Cog):
     @commands.guild_only()
     async def giveaway_stop(
         self,
-        ctx: "Context",
+        ctx: Context,
         giveaway_id: commands.MessageConverter | discord.Message,
     ):
         """
@@ -360,10 +368,7 @@ class Giveaway(Cog):
             f"Do you really want to **stop/delete** the giveaway with id **{giveaway_id.id}** hosted in {giveaway_id.channel.mention}?\n`Note: This action is irreversible!`",
         ):
             return
-        try:
-            await self.get_giveaway_config(giveaway_id.id)
-        except AttributeError as e:
-            return await ctx.send(ErrorEmbed(title=str(e)))
+        z
         database = await self.database_class()
         await database.delete(giveaway_id.id)
         await giveaway_id.delete()
@@ -422,5 +427,5 @@ class Giveaway(Cog):
                 pass
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Giveaway(bot))

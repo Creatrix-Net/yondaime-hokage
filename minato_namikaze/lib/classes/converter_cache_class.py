@@ -48,11 +48,7 @@ class Arguments(argparse.ArgumentParser):
 
 
 def can_execute_action(ctx, user, target):
-    return (
-        user.id == ctx.bot.owner_id
-        or user == ctx.guild.owner
-        or user.top_role > target.top_role
-    )
+    return user.id == ctx.bot.owner_id or user == ctx.guild.owner or user.top_role > target.top_role
 
 
 class MemberID(commands.Converter):
@@ -195,9 +191,7 @@ class GiveawayConfig:
             lambda a: a["name"].lower() == "Role Required".lower(),
             self.embed_dict["fields"],
         )
-        self.role_required = (
-            role_required["value"] if role_required is not None else None
-        )
+        self.role_required = role_required["value"] if role_required is not None else None
 
         tasks = discord.utils.find(
             lambda a: a["name"].lower() == "\U0001f3c1 Tasks".lower(),
@@ -217,6 +211,49 @@ class GiveawayConfig:
         self.host = self.embed.author
 
         return self
+
+    @classmethod
+    def temporary(
+        cls,
+        *,
+        expires: datetime.datetime,
+        server_id: int,
+        jump_url: str,
+        image_url: str,
+    ) -> Self:
+        pseudo = {
+            "id": None,
+            "extra": {"args": args, "kwargs": kwargs},
+            "event": event,
+            "created": created,
+            "expires": expires,
+        }
+        return cls(record=pseudo)
+
+    def __eq__(self, other: object) -> bool:
+        try:
+            return self.id == other.id  # type: ignore
+        except AttributeError:
+            return False
+
+    def __hash__(self) -> int:
+        return hash(self.id)
+
+    @property
+    def human_delta(self) -> str:
+        return format_relative(self.created_at)
+
+    @property
+    def author_id(self) -> int | None:
+        if self.args:
+            return int(self.args[0])
+        return None
+
+    def __repr__(self) -> str:
+        return f"<Timer created={self.created_at} expires={self.expires} event={self.event}>"
+
+    def __str__(self) -> str:
+        return self.__repr__()
 
 
 class CooldownByContent(commands.CooldownMapping):
@@ -320,9 +357,7 @@ class Characters:
 
     def __init__(self, **kwargs):
         self.name: str | None = kwargs.get("name")
-        self.id: str | int | None = (
-            "".join(self.name.split()).upper() if self.name is not None else None
-        )
+        self.id: str | int | None = "".join(self.name.split()).upper() if self.name is not None else None
         self.images: list | None = kwargs.get("images")
         self.category: str | None = kwargs.get("category")
         self.emoji: discord.Emoji | discord.PartialEmoji | None = kwargs.get(

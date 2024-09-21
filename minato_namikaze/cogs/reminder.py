@@ -6,7 +6,6 @@ import datetime
 import textwrap
 from typing import Annotated
 from typing import Any
-from typing import Optional
 from typing import TYPE_CHECKING
 
 import discord
@@ -215,7 +214,7 @@ class Reminder(commands.Cog):
     )
     async def reminder(
         self,
-        ctx: "Context",
+        ctx: Context,
         *,
         when: Annotated[
             FriendlyTimeResult,
@@ -251,7 +250,7 @@ class Reminder(commands.Cog):
         )
 
     @reminder.command(name="list", ignore_extra=False)
-    async def reminder_list(self, ctx: "Context"):
+    async def reminder_list(self, ctx: Context):
         """Shows the 10 latest currently running reminders."""
         query = (
             select(
@@ -295,7 +294,7 @@ class Reminder(commands.Cog):
         await ctx.send(embed=e)
 
     @reminder.command(name="delete", aliases=["remove", "cancel"], ignore_extra=False)
-    async def reminder_delete(self, ctx: "Context", *, id: int):
+    async def reminder_delete(self, ctx: Context, *, id: int):
         """Deletes a reminder by its ID.
 
         To get a reminder ID, use the reminder list command.
@@ -334,7 +333,7 @@ class Reminder(commands.Cog):
         )
 
     @reminder.command(name="clear", ignore_extra=False)
-    async def reminder_clear(self, ctx: "Context"):
+    async def reminder_clear(self, ctx: Context):
         """Clears all reminders you have set."""
 
         # For UX purposes this has to be two queries.
@@ -395,17 +394,11 @@ class Reminder(commands.Cog):
         author_id, channel_id, message = timer.args
 
         try:
-            channel = self.bot.get_channel(channel_id) or (
-                await self.bot.fetch_channel(channel_id)
-            )
+            channel = self.bot.get_channel(channel_id) or (await self.bot.fetch_channel(channel_id))
         except discord.HTTPException:
             return
 
-        guild_id = (
-            channel.guild.id
-            if isinstance(channel, (discord.TextChannel, discord.Thread))
-            else "@me"
-        )
+        guild_id = channel.guild.id if isinstance(channel, (discord.TextChannel, discord.Thread)) else "@me"
         message_id = timer.kwargs.get("message_id")
         msg = f"<@{author_id}>, {timer.human_delta}: {message}"
         view = discord.utils.MISSING
@@ -421,5 +414,5 @@ class Reminder(commands.Cog):
             return
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Reminder(bot))

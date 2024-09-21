@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import Union
 
-import six
-
 from .db import get_session
 from .models import Element
 

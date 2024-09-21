@@ -11,10 +11,7 @@ from typing import Union
 import aiohttp
 import discord
 from discord.ext import commands
-
-from .vars import LinksAndVars
 from .vars import Methods
-from .vars import token_get
 
 log = logging.getLogger(__name__)
 

@@ -9,8 +9,6 @@ from json.decoder import JSONDecodeError
 import discord
 from discord.ext import commands
 from discord.ext import tasks
-
-from minato_namikaze.lib import Database
 from minato_namikaze.lib import detect_bad_domains
 from minato_namikaze.lib import Embed
 from minato_namikaze.lib import EmbedPaginator

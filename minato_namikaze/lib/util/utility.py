@@ -180,7 +180,10 @@ def humanize_attachments(attachments: list) -> list:
 
 
 def format_character_name(character_name: str) -> str:
-    if character_name.split("(")[-1].strip(" ").strip(")").lower() in ChannelAndMessageId.character_side_exclude.name:
+    if (
+        character_name.split("(")[-1].strip(" ").strip(")").lower()
+        in ChannelAndMessageId.character_side_exclude.name
+    ):
         return character_name.split("(")[0].strip(" ").title()
     return character_name.strip(" ").title()
 
@@ -216,7 +219,11 @@ async def detect_bad_domains(message_content: str) -> list:
             if len(i.split("//")) != 0:
                 try:
                     parsed_url = urlparse(
-                        (i.lower().strip("/") if i.split("://")[0].lower() in uses_netloc else f'//{i.strip("/")}'),
+                        (
+                            i.lower().strip("/")
+                            if i.split("://")[0].lower() in uses_netloc
+                            else f'//{i.strip("/")}'
+                        ),
                     )
                     if parsed_url.hostname in list_of_bad_domains:
                         detected_urls.append(parsed_url.hostname)
@@ -238,10 +245,18 @@ def return_all_cogs() -> list[str]:
     for filename in list(set(os.listdir(cog_dir))):
         if os.path.isdir(cog_dir / filename):
             for i in os.listdir(cog_dir / filename):
-                if i.endswith(".py") and not i.startswith("__init__") and not i.endswith(".pyc"):
+                if (
+                    i.endswith(".py")
+                    and not i.startswith("__init__")
+                    and not i.endswith(".pyc")
+                ):
                     list_to_be_given.append(f'{filename.strip(" ")}.{i[:-3]}')
         else:
-            if filename.endswith(".py") and not filename.startswith("__init__") and not filename.endswith(".pyc"):
+            if (
+                filename.endswith(".py")
+                and not filename.startswith("__init__")
+                and not filename.endswith(".pyc")
+            ):
                 list_to_be_given.append(filename[:-3])
 
     return list_to_be_given

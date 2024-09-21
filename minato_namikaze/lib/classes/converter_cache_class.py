@@ -48,7 +48,11 @@ class Arguments(argparse.ArgumentParser):
 
 
 def can_execute_action(ctx, user, target):
-    return user.id == ctx.bot.owner_id or user == ctx.guild.owner or user.top_role > target.top_role
+    return (
+        user.id == ctx.bot.owner_id
+        or user == ctx.guild.owner
+        or user.top_role > target.top_role
+    )
 
 
 class MemberID(commands.Converter):
@@ -191,7 +195,9 @@ class GiveawayConfig:
             lambda a: a["name"].lower() == "Role Required".lower(),
             self.embed_dict["fields"],
         )
-        self.role_required = role_required["value"] if role_required is not None else None
+        self.role_required = (
+            role_required["value"] if role_required is not None else None
+        )
 
         tasks = discord.utils.find(
             lambda a: a["name"].lower() == "\U0001f3c1 Tasks".lower(),
@@ -357,7 +363,9 @@ class Characters:
 
     def __init__(self, **kwargs):
         self.name: str | None = kwargs.get("name")
-        self.id: str | int | None = "".join(self.name.split()).upper() if self.name is not None else None
+        self.id: str | int | None = (
+            "".join(self.name.split()).upper() if self.name is not None else None
+        )
         self.images: list | None = kwargs.get("images")
         self.category: str | None = kwargs.get("category")
         self.emoji: discord.Emoji | discord.PartialEmoji | None = kwargs.get(

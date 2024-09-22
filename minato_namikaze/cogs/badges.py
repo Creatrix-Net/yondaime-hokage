@@ -204,7 +204,11 @@ class BadgesCog(commands.Cog, name="Badges"):
     ) -> Image:
         """Build the base template before determining animated or not"""
         if hasattr(user, "roles"):
-            department = "GENERAL SUPPORT" if user.top_role.name == "@everyone" else user.top_role.name.upper()
+            department = (
+                "GENERAL SUPPORT"
+                if user.top_role.name == "@everyone"
+                else user.top_role.name.upper()
+            )
             status = user.status
             level = str(len(user.roles))
         else:
@@ -361,7 +365,10 @@ class BadgesCog(commands.Cog, name="Badges"):
         all_badges = await BadgesDBHandler(ctx).get_all_badges()
         to_return = None
         for badge in all_badges:
-            if badge_name.lower() in badge["badge_name"].lower() or badge_name.lower() in badge["code"].lower():
+            if (
+                badge_name.lower() in badge["badge_name"].lower()
+                or badge_name.lower() in badge["code"].lower()
+            ):
                 to_return = await Badge.from_json(badge)
         return to_return
 

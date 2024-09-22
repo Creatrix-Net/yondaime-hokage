@@ -35,7 +35,10 @@ class Forward(commands.Cog):
     def _append_attachements(message: discord.Message, embeds: list):
         attachments_urls = []
         for attachment in message.attachments:
-            if any(attachment.filename.endswith(imageext) for imageext in ["jpg", "png", "gif"]):
+            if any(
+                attachment.filename.endswith(imageext)
+                for imageext in ["jpg", "png", "gif"]
+            ):
                 if embeds[0].image:
                     embed = discord.Embed()
                     embed.set_image(url=attachment.url)
@@ -72,7 +75,10 @@ class Forward(commands.Cog):
                 msg += f"\n**Message Content**: {message.content}"
                 embeds = [
                     discord.Embed.from_dict(
-                        {**message.embeds[0].to_dict(), "timestamp": str(message.created_at)},
+                        {
+                            **message.embeds[0].to_dict(),
+                            "timestamp": str(message.created_at),
+                        },
                     ),
                 ]
             else:
@@ -124,7 +130,10 @@ class Forward(commands.Cog):
         data = (
             {"msg": "Notifications will be sent in your DMs.", "config": None}
             if channel is None
-            else {"msg": f"Notifications will be sent in {channel.mention}.", "config": channel.id}
+            else {
+                "msg": f"Notifications will be sent in {channel.mention}.",
+                "config": channel.id,
+            }
         )
         await self.config.destination.set(data["config"])
         await ctx.send(data["msg"])

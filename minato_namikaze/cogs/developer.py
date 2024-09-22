@@ -166,7 +166,10 @@ class Developer(commands.Cog):
         user: Union[discord.Member, MemberID],
     ):
         """Get a list of servers the bot shares with the user."""
-        guilds = [f"{guild.name} `{guild.id}` ({guild.member_count} members)" for guild in list(user.mutual_guilds)]
+        guilds = [
+            f"{guild.name} `{guild.id}` ({guild.member_count} members)"
+            for guild in list(user.mutual_guilds)
+        ]
 
         await self._send_guilds(ctx, guilds, "Shared Servers")
 
@@ -328,7 +331,8 @@ class Developer(commands.Cog):
                 [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection],
             )
             return await ctx.send(
-                f"Attempted to reload all extensions, was able to reload, " f"however the following failed...\n\n{err}",
+                f"Attempted to reload all extensions, was able to reload, "
+                f"however the following failed...\n\n{err}",
             )
 
         await msg.edit(embed=embed)
@@ -445,7 +449,8 @@ class Developer(commands.Cog):
         if (
             self.bot.user.mentioned_in(message)
             and message.mention_everyone is False
-            and message.content.lower() in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
+            and message.content.lower()
+            in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
             or message.content.lower()
             in (
                 f"<@!{self.bot.application_id}> prefix",

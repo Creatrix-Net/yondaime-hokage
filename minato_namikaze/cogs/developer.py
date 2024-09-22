@@ -11,6 +11,7 @@ import traceback
 from contextlib import redirect_stdout
 from pathlib import Path
 from typing import TYPE_CHECKING
+
 import discord
 from discord.ext import commands
 from discord.ext import tasks
@@ -159,13 +160,13 @@ class Developer(commands.Cog):
 
     @dev.command(name="sharedservers", usage="<user>")
     async def sharedservers(
-        self, ctx: Context, *, user: Union[discord.Member, MemberID]
+        self,
+        ctx: Context,
+        *,
+        user: Union[discord.Member, MemberID],
     ):
         """Get a list of servers the bot shares with the user."""
-        guilds = [
-            f"{guild.name} `{guild.id}` ({guild.member_count} members)"
-            for guild in list(user.mutual_guilds)
-        ]
+        guilds = [f"{guild.name} `{guild.id}` ({guild.member_count} members)" for guild in list(user.mutual_guilds)]
 
         await self._send_guilds(ctx, guilds, "Shared Servers")
 
@@ -327,8 +328,7 @@ class Developer(commands.Cog):
                 [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection],
             )
             return await ctx.send(
-                f"Attempted to reload all extensions, was able to reload, "
-                f"however the following failed...\n\n{err}",
+                f"Attempted to reload all extensions, was able to reload, " f"however the following failed...\n\n{err}",
             )
 
         await msg.edit(embed=embed)
@@ -403,7 +403,10 @@ class Developer(commands.Cog):
 
     @changestat.command(invoke_without_command=True)
     async def watching(
-        self, ctx: Context, *, activity="placeholder (owner to lazy lol)"
+        self,
+        ctx: Context,
+        *,
+        activity="placeholder (owner to lazy lol)",
     ):
         """Watching activity"""
         await self.bot.change_presence(
@@ -419,7 +422,10 @@ class Developer(commands.Cog):
 
     @changestat.command(invoke_without_command=True)
     async def listening(
-        self, ctx: Context, *, activity="placeholder (owner to lazy lol)"
+        self,
+        ctx: Context,
+        *,
+        activity="placeholder (owner to lazy lol)",
     ):
         """Listenting Activity"""
         await self.bot.change_presence(
@@ -439,8 +445,7 @@ class Developer(commands.Cog):
         if (
             self.bot.user.mentioned_in(message)
             and message.mention_everyone is False
-            and message.content.lower()
-            in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
+            and message.content.lower() in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
             or message.content.lower()
             in (
                 f"<@!{self.bot.application_id}> prefix",
@@ -547,54 +552,54 @@ class Developer(commands.Cog):
             pass
         await self.post()
 
-    async def post(self, print_logs=False):
-        """
-        Manually posts guild count using discordlists.py (BotBlock)
-        """
-        # async with aiohttp.ClientSession() as session, session.get(
-        #     LinksAndVars.listing.value,
-        # ) as resp:
-        #     listing: dict = orjson.loads(await resp.text())
-        # for i in listing:
-        #     self.api.set_auth(listing[i].split("/")[0], token_get("".join(i.split())))
-        # await self.bot.change_presence(
-        #     status=discord.Status.dnd,
-        #     activity=discord.Activity(
-        #         type=discord.ActivityType.watching,
-        #         name="over Naruto",
-        #     ),
-        # )
-        # try:
-        #     result = await self.api.post_count()
-        #     if print_logs:
-        #         log.info(result)
-        # except Exception as e:
-        #     log.warning(e)
-        # await self.bot.change_presence(
-        #     status=discord.Status.idle,
-        #     activity=discord.Activity(
-        #         type=discord.ActivityType.watching,
-        #         name="over Naruto",
-        #     ),
-        # )
+    # async def post(self, print_logs=False):
+    #     """
+    #     Manually posts guild count using discordlists.py (BotBlock)
+    #     """
+    #     # async with aiohttp.ClientSession() as session, session.get(
+    #     #     LinksAndVars.listing.value,
+    #     # ) as resp:
+    #     #     listing: dict = orjson.loads(await resp.text())
+    #     # for i in listing:
+    #     #     self.api.set_auth(listing[i].split("/")[0], token_get("".join(i.split())))
+    #     # await self.bot.change_presence(
+    #     #     status=discord.Status.dnd,
+    #     #     activity=discord.Activity(
+    #     #         type=discord.ActivityType.watching,
+    #     #         name="over Naruto",
+    #     #     ),
+    #     # )
+    #     # try:
+    #     #     result = await self.api.post_count()
+    #     #     if print_logs:
+    #     #         log.info(result)
+    #     # except Exception as e:
+    #     #     log.warning(e)
+    #     # await self.bot.change_presence(
+    #     #     status=discord.Status.idle,
+    #     #     activity=discord.Activity(
+    #     #         type=discord.ActivityType.watching,
+    #     #         name="over Naruto",
+    #     #     ),
+    #     # )
 
-    @dev.command(usage="[print_logs]")
-    async def post_stats(self, ctx: Context, print_logs: bool = False):
-        """Posts stats to different botlist"""
-        await self.post(print_logs=print_logs)
-        try:
-            await ctx.message.delete()
-        except (discord.Forbidden, discord.HTTPException):
-            pass
+    # @dev.command(usage="[print_logs]")
+    # async def post_stats(self, ctx: Context, print_logs: bool = False):
+    #     """Posts stats to different botlist"""
+    #     await self.post(print_logs=print_logs)
+    #     try:
+    #         await ctx.message.delete()
+    #     except (discord.Forbidden, discord.HTTPException):
+    #         pass
 
-    @dev.command(usage="[print_logs]", aliases=["post_command"])
-    async def post_commands(self, ctx: Context, print_logs: bool = False):
-        """Posts commands to different botlist"""
-        await post_commands(self.bot, print_logs=print_logs)
-        try:
-            await ctx.message.delete()
-        except (discord.Forbidden, discord.HTTPException):
-            pass
+    # @dev.command(usage="[print_logs]", aliases=["post_command"])
+    # async def post_commands(self, ctx: Context, print_logs: bool = False):
+    #     """Posts commands to different botlist"""
+    #     await post_commands(self.bot, print_logs=print_logs)
+    #     try:
+    #         await ctx.message.delete()
+    #     except (discord.Forbidden, discord.HTTPException):
+    #         pass
 
 
 async def setup(bot: MinatoNamikazeBot) -> None:

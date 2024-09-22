@@ -23,7 +23,7 @@ from sqlalchemy import Column
 from sqlalchemy import String
 
 from minato_namikaze.lib import Badge
-from minato_namikaze.lib import Badges
+from minato_namikaze.lib import Badges as BadgesDBHandler
 from minato_namikaze.lib import Base
 from minato_namikaze.lib import BASE_DIR
 from minato_namikaze.lib import EmbedPaginator
@@ -204,11 +204,7 @@ class BadgesCog(commands.Cog, name="Badges"):
     ) -> Image:
         """Build the base template before determining animated or not"""
         if hasattr(user, "roles"):
-            department = (
-                "GENERAL SUPPORT"
-                if user.top_role.name == "@everyone"
-                else user.top_role.name.upper()
-            )
+            department = "GENERAL SUPPORT" if user.top_role.name == "@everyone" else user.top_role.name.upper()
             status = user.status
             level = str(len(user.roles))
         else:
@@ -361,19 +357,16 @@ class BadgesCog(commands.Cog, name="Badges"):
         return temp
 
     @staticmethod
-    async def get_badge(badge_name: str, ctx: "Context") -> Badge:
-        all_badges = await Badges(ctx).get_all_badges()
+    async def get_badge(badge_name: str, ctx: Context) -> Badge:
+        all_badges = await BadgesDBHandler(ctx).get_all_badges()
         to_return = None
         for badge in all_badges:
-            if (
-                badge_name.lower() in badge["badge_name"].lower()
-                or badge_name.lower() in badge["code"].lower()
-            ):
+            if badge_name.lower() in badge["badge_name"].lower() or badge_name.lower() in badge["code"].lower():
                 to_return = await Badge.from_json(badge)
         return to_return
 
     @commands.hybrid_command(aliases=["badge"])
-    async def badges(self, ctx: "Context", *, badge: str) -> None:
+    async def badges(self, ctx: Context, *, badge: str) -> None:
         """
         Creates a fun fake badge based on your discord profile
         `badge` is the name of the badges
@@ -399,7 +392,7 @@ class BadgesCog(commands.Cog, name="Badges"):
             await ctx.send(files=[image])
 
     @commands.hybrid_command(aliases=["gbadge", "gifbadge"])
-    async def gbadges(self, ctx: "Context", *, badge: str) -> None:
+    async def gbadges(self, ctx: Context, *, badge: str) -> None:
         """
         Creates a fun fake gif badge based on your discord profile
         this only works if you have a gif avatar
@@ -424,11 +417,12 @@ class BadgesCog(commands.Cog, name="Badges"):
             await ctx.send(file=image)
 
     @commands.hybrid_command()
-    async def listbadges(self, ctx: "Context") -> None:
+    async def listbadges(self, ctx: Context) -> None:
         """
         List the available badges that can be created
         """
-        global_badges = await Badges(ctx).get_all_badges()
+        global_badges = await BadgesDBHandler(ctx).get_all_badges()
+        print(global_badges)
         embed_paginator = EmbedPaginator(
             entries=[BadgesPageEntry(i).embed for i in global_badges],
             ctx=ctx,
@@ -436,5 +430,5 @@ class BadgesCog(commands.Cog, name="Badges"):
         await embed_paginator.start()
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(BadgesCog(bot))

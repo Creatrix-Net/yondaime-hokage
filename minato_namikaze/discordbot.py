@@ -98,7 +98,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         self.uptime = format_relative(self.start_time)
         self.persistent_views_added = False
-        self.session = ClientSession()
+        # self.session = ClientSession(raise_for_status=True)
         self.blacklist: UniqueList = UniqueList()
 
         super().__init__(
@@ -351,7 +351,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     async def close(self) -> None:
         await super().close()
-        await self.session.close()
+        # await self.session.close()
 
     @staticmethod
     async def get_bot_inviter(guild: discord.Guild):
@@ -384,9 +384,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         return discord.utils.oauth_url(
             self.application_id,
             permissions=discord.Permissions(administrator=True),
-            redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite",
+            redirect_uri=LinksAndVars.invite_redirect_uri.value,
             scope=("bot", "applications.commands"),
-            state="cube12345?/Direct From Bot",
+            state=LinksAndVars.state_invite_uri.value,
         )
 
     @property
@@ -394,7 +394,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         return discord.utils.oauth_url(
             self.application_id,
             permissions=discord.Permissions(value=1515049189367),
-            redirect_uri="https://minatonamikaze-invites.herokuapp.com/invite",
+            redirect_uri=LinksAndVars.invite_redirect_uri.value,
             scope=("bot", "applications.commands"),
             state="cube12345?/Direct From Bot",
         )
@@ -410,9 +410,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"][
-                "downsized_large"
-            ]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -427,9 +425,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
-                "images"
-            ]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -445,9 +441,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     def giphy(tag_name: str) -> str | None:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"][
-                "downsized_large"
-            ]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -463,9 +457,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def giphy(tag_name: str) -> str | None:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
-                "images"
-            ]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 

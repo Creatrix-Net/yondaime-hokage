@@ -50,7 +50,9 @@ class Giveaways(Base):
     expires = Column(DateTime, index=True, nullable=False)
     server_id = Column(BigInteger, index=True, nullable=False)
     jump_url = Column(URLType, nullable=False, index=True)
-    image_url = Column(URLType, default=LinksAndVars.giveaway_image.value, nullable=False)
+    image_url = Column(
+        URLType, default=LinksAndVars.giveaway_image.value, nullable=False
+    )
     giveaway_deleted = Column(Boolean, default=True, nullable=False)
 
 
@@ -268,7 +270,9 @@ class Giveaway(Cog):
                     lambda a: discord.utils.get(
                         a.roles,
                         id=int(
-                            giveaway_config.role_required.lstrip("<@&").lstrip("<&").rstrip(">"),
+                            giveaway_config.role_required.lstrip("<@&")
+                            .lstrip("<&")
+                            .rstrip(">"),
                         ),
                     )
                     is not None,

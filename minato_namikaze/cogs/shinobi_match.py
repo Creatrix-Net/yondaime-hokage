@@ -41,17 +41,15 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
 
     @staticmethod
     @cache()
-    async def characters_data(ctx: "Context") -> list[Characters]:
+    async def characters_data(ctx: Context) -> list[Characters]:
         async with aiohttp.ClientSession() as session, session.get(
             LinksAndVars.character_data.value,
         ) as resp:
             character_data: dict = orjson.loads(await resp.text())
-        return [
-            Characters.from_record(character_data[i], ctx, i) for i in character_data
-        ]
+        return [Characters.from_record(character_data[i], ctx, i) for i in character_data]
 
     @classmethod
-    async def return_random_characters(self, ctx: "Context") -> list[Characters]:
+    async def return_random_characters(self, ctx: Context) -> list[Characters]:
         characters_data = await self.characters_data(ctx)
         random.shuffle(characters_data)
         return random.sample(characters_data, 25)
@@ -67,9 +65,9 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
 
     @commands.command(
         usage="<opponent.mention>",
-        aliases=["shinobi_match", "matchwith", "shinobimatch", "match_with"],
+        aliases=["shinobi_match", "matchwith", "shinobimatch", "match_with", "match"],
     )
-    async def match(self, ctx: "Context", opponent: discord.Member | MemberID):
+    async def match(self, ctx: Context, opponent: discord.Member | MemberID):
         """
         Play shinobi match with your friends using the characters from `Naruto Verse`
 
@@ -143,5 +141,5 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
         )
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(ShinobiMatchCog(bot))

@@ -7,7 +7,6 @@ import sys
 from collections.abc import Mapping
 from io import BytesIO
 from typing import TYPE_CHECKING
-from typing import Union
 
 import aiohttp
 import discord
@@ -230,7 +229,7 @@ class BadgesCog(commands.Cog, name="Badges"):
         template = Image.open(template)
         template = template.convert("RGBA")
         barcode = barcode.convert("RGBA")
-        barcode = barcode.resize((555, 125), Image.ANTIALIAS)
+        barcode = barcode.resize((555, 125), Image.LANCZOS)
         template.paste(barcode, (400, 520), barcode)
         # font for user information
         font_loc = str(BASE_DIR / os.path.join("lib", "data", "arial.ttf"))
@@ -283,7 +282,7 @@ class BadgesCog(commands.Cog, name="Badges"):
             id_image = frame.resize((165, 165))
             temp2.paste(watermark, (845, 45, 945, 145), watermark)
             temp2.paste(id_image, (60, 95, 225, 260))
-            temp2.thumbnail((500, 339), Image.ANTIALIAS)
+            temp2.thumbnail((500, 339), Image.LANCZOS)
             img_list.append(temp2)
             num += 1
             temp = BytesIO()

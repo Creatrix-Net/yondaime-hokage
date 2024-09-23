@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import discord
-from redbot.core import checks
-from redbot.core import commands
-from redbot.core import Config
+from discord.ext import commands
 
 from minato_namikaze.lib.util.chat_formatting import humanize_list
 
@@ -13,14 +11,6 @@ class Forward(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-    async def red_get_data_for_user(self, *, user_id: int):
-        # this cog does not story any data
-        return {}
-
-    async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
-        # this cog does not story any data
-        pass
 
     async def _destination(self, msg: str = None, embed: discord.Embed = None):
         await self.bot.wait_until_ready()

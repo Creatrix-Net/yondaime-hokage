@@ -93,11 +93,7 @@ MIN_SIZE = 0.2
 MIN_QUIET_ZONE = 2.54
 
 # Charsets for code 39
-REF = (
-    tuple(string.digits)
-    + tuple(string.ascii_uppercase)
-    + ("-", ".", " ", "$", "/", "+", "%")
-)
+REF = tuple(string.digits) + tuple(string.ascii_uppercase) + ("-", ".", " ", "$", "/", "+", "%")
 B = "1"
 E = "0"
 CODES = (
@@ -424,8 +420,7 @@ class SVGWriter(BaseWriter):
         attributes = dict(
             x=SIZE.format(xpos),
             y=SIZE.format(ypos),
-            style="fill:{};font-size:{}pt;text-anchor:"
-            "middle;".format(self.foreground, self.font_size),
+            style="fill:{};font-size:{}pt;text-anchor:" "middle;".format(self.foreground, self.font_size),
         )
         _set_attributes(element, **attributes)
         # check option to override self.text with self.human (barcode as human readable data, can be used to print own formats)
@@ -540,7 +535,8 @@ else:
             :type ypos: int
             """
             font = ImageFont.truetype(self.FONT, self.font_size * 2)
-            width, height = font.getsize(self.text)
+            top, left, bottom, right = font.getbbox(text=self.text)
+            width, height = (bottom - top, right - left)
             pos = (
                 mm2px(xpos, self.dpi) - width // 2,
                 mm2px(ypos, self.dpi) - height // 4,
@@ -684,8 +680,7 @@ def check_code(
             wrong.append(char)
     if wrong:
         raise IllegalCharacterError(
-            "The following characters are not "
-            "valid for {name}: {wrong}".format(name=name, wrong=", ".join(wrong)),
+            "The following characters are not " "valid for {name}: {wrong}".format(name=name, wrong=", ".join(wrong)),
         )
 
 

@@ -28,12 +28,13 @@ from minato_namikaze.lib import format_dt
 from minato_namikaze.lib import format_relative
 from minato_namikaze.lib import LinksAndVars
 from minato_namikaze.lib import PaginatedHelpCommand
-from minato_namikaze.lib import post_commands
 from minato_namikaze.lib import return_all_cogs
 from minato_namikaze.lib import token_get
 from minato_namikaze.lib import Tokens
 from minato_namikaze.lib import UniqueList
 from minato_namikaze.lib import Webhooks
+
+# from minato_namikaze.lib import post_commands
 
 if TYPE_CHECKING:
     from .cogs.reminder import Reminder
@@ -211,7 +212,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         else:
             await developer.post()
             log.info("Status Posted")
-        await post_commands(self, bool(self.local))
+        # await post_commands(self, bool(o=self.local))
         log.info("Commands Posted")
         await self.change_presence(
             status=discord.Status.idle,

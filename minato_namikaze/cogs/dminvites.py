@@ -26,12 +26,19 @@ class DmInvite(commands.Cog):
             name="Tracking Invites",
             value="Yes" if await self.config.toggle() else "No",
         )
-        embed.add_field(name="Embeds", value="Yes" if await self.config.embed() else "No")
+        embed.add_field(
+            name="Embeds", value="Yes" if await self.config.embed() else "No"
+        )
         msg = await self.config.message()
         embed.add_field(name="Message", value=msg)
-        embed.add_field(name="Permissions Value", value=await self.bot._config.invite_perm())
+        embed.add_field(
+            name="Permissions Value", value=await self.bot._config.invite_perm()
+        )
         if "{link}" in msg:
-            embed.add_field(name="Link", value=f"[Click Here]({self.bot.get_required_perms_invite_link})")
+            embed.add_field(
+                name="Link",
+                value=f"[Click Here]({self.bot.get_required_perms_invite_link})",
+            )
         await ctx.send(embed=embed)
 
     # @dminvite.command()

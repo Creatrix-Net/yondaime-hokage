@@ -12,7 +12,7 @@ beautifulsoup4==4.12.3; python_full_version >= '3.6.0'
 betterstatcord.py==3.5.0; python_version >= '3.7' and python_version < '4.0'
 braceexpand==0.1.7
 cachetools==5.5.0; python_version >= '3.7'
-certifi==2024.7.4; python_version >= '3.6'
+certifi==2024.8.30; python_version >= '3.6'
 cffi==1.17.1; python_version >= '3.8'
 charset-normalizer==3.3.2; python_full_version >= '3.7.0'
 click==8.1.7; python_version >= '3.7'

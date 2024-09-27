@@ -409,7 +409,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"][
+                "downsized_large"
+            ]["url"]
         except:
             return
 
@@ -424,7 +426,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
+                "images"
+            ]["downsized_large"]["url"]
         except:
             return
 
@@ -440,7 +444,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def giphy(tag_name: str) -> str | None:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
+                "images"
+            ]["downsized_large"]["url"]
         except:
             return
 

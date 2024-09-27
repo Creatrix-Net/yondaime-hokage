@@ -68,7 +68,10 @@ class Forward(commands.Cog):
                 msg += f"\n**Message Content**: {message.content}"
                 embeds = [
                     discord.Embed.from_dict(
-                        {**message.embeds[0].to_dict(), "timestamp": str(message.created_at)},
+                        {
+                            **message.embeds[0].to_dict(),
+                            "timestamp": str(message.created_at),
+                        },
                     ),
                 ]
             else:

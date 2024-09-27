@@ -395,11 +395,17 @@ class Reminder(commands.Cog):
         author_id, channel_id, message = timer.args
 
         try:
-            channel = self.bot.get_channel(channel_id) or (await self.bot.fetch_channel(channel_id))
+            channel = self.bot.get_channel(channel_id) or (
+                await self.bot.fetch_channel(channel_id)
+            )
         except discord.HTTPException:
             return
 
-        guild_id = channel.guild.id if isinstance(channel, (discord.TextChannel, discord.Thread)) else "@me"
+        guild_id = (
+            channel.guild.id
+            if isinstance(channel, (discord.TextChannel, discord.Thread))
+            else "@me"
+        )
         message_id = timer.kwargs.get("message_id")
         msg = f"<@{author_id}>, {timer.human_delta}: {message}"
         view = discord.utils.MISSING

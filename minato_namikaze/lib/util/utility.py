@@ -249,3 +249,7 @@ def return_all_cogs() -> list[str]:
                 list_to_be_given.append(filename[:-3])
 
     return list_to_be_given
+
+
+def owners(ctx):
+    return ctx.bot.is_owner(ctx.author)

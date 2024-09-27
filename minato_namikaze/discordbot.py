@@ -34,8 +34,6 @@ from minato_namikaze.lib import Tokens
 from minato_namikaze.lib import UniqueList
 from minato_namikaze.lib import Webhooks
 
-# from minato_namikaze.lib import post_commands
-
 if TYPE_CHECKING:
     from .cogs.reminder import Reminder
 
@@ -435,22 +433,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
         try:
             return api_model.random(str(tag_name.lower()))
-        except:
-            return
-
-    @staticmethod
-    def giphy(tag_name: str) -> str | None:
-        api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
-        try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
-        except:
-            return
-
-    @staticmethod
-    async def tenor(tag_name: str) -> str | None:
-        api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
-        try:
-            return await api_model.arandom(str(tag_name.lower()))
         except:
             return
 

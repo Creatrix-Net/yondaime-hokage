@@ -7,9 +7,7 @@ import shlex
 from collections import Counter
 from os.path import join
 from typing import Annotated
-from typing import Optional
 from typing import TYPE_CHECKING
-from typing import Union
 
 import discord
 from discord.ext import commands
@@ -58,17 +56,11 @@ class Moderation(commands.Cog):
             id=922030031146995733,
         )
 
-    async def database_class(self):
-        return await self.bot.db.new(
-            Database.database_category_name.value,
-            Database.database_channel_name.value,
-        )
-
     # set delay
     @commands.command(usage="<time in seconds>")
     @commands.has_permissions(manage_messages=True)
     @commands.guild_only()
-    async def setdelay(self, ctx: "Context", seconds: int):
+    async def setdelay(self, ctx: Context, seconds: int):
         """Sets Slowmode Of A Channel"""
         if not await ctx.prompt(
             f"Are you sure that you want to **add delay** of {seconds} seconds to this channel?",
@@ -97,7 +89,7 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(kick_members=True)
     async def kick(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason=None,
@@ -128,7 +120,7 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(ban_members=True)
     async def ban(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -171,7 +163,10 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
     async def banlist(
-        self, ctx: "Context", *, member: commands.MemberConverter | MemberID
+        self,
+        ctx: Context,
+        *,
+        member: commands.MemberConverter | MemberID,
     ):
         """Shows list of users who have been banned! Or position of a specified user who was banned!"""
         banned_users = list(await ctx.guild.bans())
@@ -246,7 +241,7 @@ class Moderation(commands.Cog):
     @has_permissions(kick_members=True)
     async def softban(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -280,7 +275,11 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @has_permissions(ban_members=True)
     async def unban(
-        self, ctx: "Context", member: BannedMember, *, reason: ActionReason = None
+        self,
+        ctx: Context,
+        member: BannedMember,
+        *,
+        reason: ActionReason = None,
     ):
         """Unbans a member from the server.
 
@@ -315,12 +314,6 @@ class Moderation(commands.Cog):
         guild: discord.Guild,
         user: discord.User | discord.Member,
     ):
-        database = await self.database_class()
-        if (
-            await database.get(guild.id) is None
-            or (await database.get(guild.id)).get("ban") is None
-        ):
-            return
 
         ban = self.bot.get_channel((await database.get(guild.id)).get("ban"))
         ban_entry = await guild.fetch_ban(discord.Object(id=user.id))
@@ -347,12 +340,6 @@ class Moderation(commands.Cog):
         guild: discord.Guild,
         user: discord.User | discord.Member,
     ):
-        database = await self.database_class()
-        if (
-            await database.get(guild.id) is None
-            or (await database.get(guild.id)).get("unban") is None
-        ):
-            return
 
         unban = self.bot.get_channel((await database.get(guild.id)).get("unban"))
         try:
@@ -391,7 +378,7 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(manage_roles=True)
     async def ar(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         role: commands.RoleConverter,
         *,
@@ -423,7 +410,7 @@ class Moderation(commands.Cog):
     @has_permissions(ban_members=True)
     async def multiban(
         self,
-        ctx: "Context",
+        ctx: Context,
         members: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -501,9 +488,7 @@ class Moderation(commands.Cog):
             )
 
         until = f'until {format_dt(duration.dt, "F")}'
-        heads_up_message = (
-            f"You have been banned from {ctx.guild.name} {until}. Reason: {reason}"
-        )
+        heads_up_message = f"You have been banned from {ctx.guild.name} {until}. Reason: {reason}"
 
         try:
             await member.send(heads_up_message)  # type: ignore  # Guarded by AttributeError
@@ -545,15 +530,13 @@ class Moderation(commands.Cog):
         else:
             moderator = f"{moderator} (ID: {mod_id})"
 
-        reason = (
-            f"Automatic unban from timer made on {timer.created_at} by {moderator}."
-        )
+        reason = f"Automatic unban from timer made on {timer.created_at} by {moderator}."
         await guild.unban(discord.Object(id=member_id), reason=reason)
 
     @commands.command()
     @commands.guild_only()
     @has_permissions(ban_members=True)
-    async def massban(self, ctx: "Context", *, args):
+    async def massban(self, ctx: Context, *, args):
         """Mass bans multiple members from the server.
         This command has a powerful "command line" syntax. To use this command
         you and the bot must both have Ban Members permission. **Every option is optional.**
@@ -677,8 +660,7 @@ class Moderation(commands.Cog):
 
         # member filters
         predicates = [
-            lambda m: isinstance(m, discord.Member)
-            and can_execute_action(ctx, author, m),  # Only if applicable
+            lambda m: isinstance(m, discord.Member) and can_execute_action(ctx, author, m),  # Only if applicable
             lambda m: not m.bot,  # No bots
             lambda m: m.discriminator != "0000",  # No deleted users
         ]
@@ -702,7 +684,9 @@ class Moderation(commands.Cog):
         if args.created:
 
             def created(
-                member, *, offset=now - datetime.timedelta(minutes=args.created)
+                member,
+                *,
+                offset=now - datetime.timedelta(minutes=args.created),
             ):
                 return member.created_at > offset
 
@@ -720,11 +704,7 @@ class Moderation(commands.Cog):
             _joined_after_member = await converter.convert(ctx, str(args.joined_after))
 
             def joined_after(member, *, _other=_joined_after_member):
-                return (
-                    member.joined_at
-                    and _other.joined_at
-                    and member.joined_at > _other.joined_at
-                )
+                return member.joined_at and _other.joined_at and member.joined_at > _other.joined_at
 
             predicates.append(joined_after)
         if args.joined_before:
@@ -734,11 +714,7 @@ class Moderation(commands.Cog):
             )
 
             def joined_before(member, *, _other=_joined_before_member):
-                return (
-                    member.joined_at
-                    and _other.joined_at
-                    and member.joined_at < _other.joined_at
-                )
+                return member.joined_at and _other.joined_at and member.joined_at < _other.joined_at
 
             predicates.append(joined_before)
 
@@ -748,10 +724,7 @@ class Moderation(commands.Cog):
 
         if args.show:
             members = sorted(members, key=lambda m: m.joined_at or now)
-            fmt = "\n".join(
-                f"{m.id}\tJoined: {m.joined_at}\tCreated: {m.created_at}\t{m}"
-                for m in members
-            )
+            fmt = "\n".join(f"{m.id}\tJoined: {m.joined_at}\tCreated: {m.created_at}\t{m}" for m in members)
             content = f"Current Time: {discord.utils.utcnow()}\nTotal members: {len(members)}\n{fmt}"
             file = discord.File(
                 io.BytesIO(content.encode("utf-8")),
@@ -787,13 +760,13 @@ class Moderation(commands.Cog):
     @commands.has_guild_permissions(kick_members=True)
     async def warn(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: str | None = None,
     ):
         """Warn a user"""
-        data = await (await self.database_class()).get(ctx.guild.id)
+        # data = await (await self.database_class()).get(ctx.guild.id)
         if data is None or data.get("warns") is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
@@ -831,11 +804,11 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     async def warnlist(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID | None = None,
     ):
         """Get the no. of warns for a specified user"""
-        data = await (await self.database_class()).get(ctx.guild.id)
+        # data = await (await self.database_class()).get(ctx.guild.id)
         if data is None or data.get("warns") is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
@@ -861,7 +834,7 @@ class Moderation(commands.Cog):
 
     @commands.command(aliases=["newmembers"], usage="[count]")
     @commands.guild_only()
-    async def newusers(self, ctx: "Context", *, count: int | None = 5):
+    async def newusers(self, ctx: Context, *, count: int | None = 5):
         """
         Tells you the newest members of the server.
 
@@ -875,9 +848,7 @@ class Moderation(commands.Cog):
         if not ctx.guild.chunked:
             members = await ctx.guild.chunk(cache=True)
 
-        members = sorted(ctx.guild.members, key=lambda m: m.joined_at, reverse=True)[
-            :count
-        ]
+        members = sorted(ctx.guild.members, key=lambda m: m.joined_at, reverse=True)[:count]
 
         embed = discord.Embed(title="New Members", colour=discord.Colour.green())
 
@@ -894,7 +865,7 @@ class Moderation(commands.Cog):
         await ctx.send(embed=embed)
 
     @staticmethod
-    async def _basic_cleanup_strategy(ctx: "Context", search):
+    async def _basic_cleanup_strategy(ctx: Context, search):
         count = 0
         async for msg in ctx.history(limit=search, before=ctx.message):
             if msg.author == ctx.me and not (msg.mentions or msg.role_mentions):
@@ -902,7 +873,7 @@ class Moderation(commands.Cog):
                 count += 1
         return {"Bot": count}
 
-    async def _complex_cleanup_strategy(self, ctx: "Context", search):
+    async def _complex_cleanup_strategy(self, ctx: Context, search):
         prefixes = tuple(self.bot.get_guild_prefixes(ctx.guild))  # thanks startswith
 
         def check(m):
@@ -911,19 +882,17 @@ class Moderation(commands.Cog):
         deleted = await ctx.channel.purge(limit=search, check=check, before=ctx.message)
         return Counter(m.author.display_name for m in deleted)
 
-    async def _regular_user_cleanup_strategy(self, ctx: "Context", search):
+    async def _regular_user_cleanup_strategy(self, ctx: Context, search):
         prefixes = tuple(self.bot.get_guild_prefixes(ctx.guild))
 
         def check(m):
-            return (m.author == ctx.me or m.content.startswith(prefixes)) and not (
-                m.mentions or m.role_mentions
-            )
+            return (m.author == ctx.me or m.content.startswith(prefixes)) and not (m.mentions or m.role_mentions)
 
         deleted = await ctx.channel.purge(limit=search, check=check, before=ctx.message)
         return Counter(m.author.display_name for m in deleted)
 
     @commands.command()
-    async def cleanup(self, ctx: "Context", search=100):
+    async def cleanup(self, ctx: Context, search=100):
         """Cleans up the bot's messages from the channel.
 
         If a search number is specified, it searches that many messages to delete.
@@ -973,7 +942,7 @@ class Moderation(commands.Cog):
     )
     @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
-    async def purge(self, ctx: "Context", amount=5):
+    async def purge(self, ctx: Context, amount=5):
         """A command which purges the channel it is called in"""
         if not await ctx.prompt(
             f"Are you sure that you want to **purge** {amount} **messages**?",
@@ -991,7 +960,7 @@ class Moderation(commands.Cog):
     @commands.group(aliases=["purge"])
     @commands.guild_only()
     @has_permissions(manage_messages=True)
-    async def remove(self, ctx: "Context"):
+    async def remove(self, ctx: Context):
         """
         Removes messages that meet a criteria.
 
@@ -1008,7 +977,7 @@ class Moderation(commands.Cog):
             return
 
     @staticmethod
-    async def do_removal(ctx: "Context", limit, predicate, *, before=None, after=None):
+    async def do_removal(ctx: Context, limit, predicate, *, before=None, after=None):
         if not await ctx.prompt(
             "Are you sure that you want to **remove the messages**?",
             author_id=ctx.author.id,
@@ -1053,17 +1022,17 @@ class Moderation(commands.Cog):
             await ctx.send(to_send, delete_after=10)
 
     @remove.command()
-    async def embeds(self, ctx: "Context", search=100):
+    async def embeds(self, ctx: Context, search=100):
         """Removes messages that have embeds in them."""
         await self.do_removal(ctx, search, lambda e: len(e.embeds))
 
     @remove.command()
-    async def files(self, ctx: "Context", search=100):
+    async def files(self, ctx: Context, search=100):
         """Removes messages that have attachments in them."""
         await self.do_removal(ctx, search, lambda e: len(e.attachments))
 
     @remove.command()
-    async def images(self, ctx: "Context", search=100):
+    async def images(self, ctx: Context, search=100):
         """Removes messages that have embeds or attachments."""
         await self.do_removal(
             ctx,
@@ -1072,17 +1041,17 @@ class Moderation(commands.Cog):
         )
 
     @remove.command(name="all")
-    async def _remove_all(self, ctx: "Context", search=100):
+    async def _remove_all(self, ctx: Context, search=100):
         """Removes all messages."""
         await self.do_removal(ctx, search, lambda e: True)
 
     @remove.command()
-    async def user(self, ctx: "Context", member: discord.Member, search=100):
+    async def user(self, ctx: Context, member: discord.Member, search=100):
         """Removes all messages by the member."""
         await self.do_removal(ctx, search, lambda e: e.author == member)
 
     @remove.command()
-    async def contains(self, ctx: "Context", *, substr: str):
+    async def contains(self, ctx: Context, *, substr: str):
         """Removes all messages containing a substring.
 
         The substring must be at least 3 characters long.
@@ -1093,18 +1062,16 @@ class Moderation(commands.Cog):
             await self.do_removal(ctx, 100, lambda e: substr in e.content)
 
     @remove.command(name="bot", aliases=["bots"])
-    async def _bot(self, ctx: "Context", prefix=None, search=100):
+    async def _bot(self, ctx: Context, prefix=None, search=100):
         """Removes a bot user's messages and messages with their optional prefix."""
 
         def predicate(m):
-            return (m.webhook_id is None and m.author.bot) or (
-                prefix and m.content.startswith(prefix)
-            )
+            return (m.webhook_id is None and m.author.bot) or (prefix and m.content.startswith(prefix))
 
         await self.do_removal(ctx, search, predicate)
 
     @remove.command(name="emoji", aliases=["emojis"])
-    async def _emoji(self, ctx: "Context", search=100):
+    async def _emoji(self, ctx: Context, search=100):
         """Removes all messages containing custom emoji."""
         custom_emoji = re.compile(r"<a?:[a-zA-Z0-9\_]+:([0-9]+)>")
 
@@ -1114,7 +1081,7 @@ class Moderation(commands.Cog):
         await self.do_removal(ctx, search, predicate)
 
     @remove.command(name="reactions")
-    async def _reactions(self, ctx: "Context", search=100):
+    async def _reactions(self, ctx: Context, search=100):
         """Removes all reactions from messages that have them."""
         if not await ctx.prompt(
             "Are you sure that you want to **remove the reactions**?",
@@ -1134,7 +1101,7 @@ class Moderation(commands.Cog):
         await ctx.send(f"Successfully removed {total_reactions} reactions.")
 
     @remove.command()
-    async def custom(self, ctx: "Context", *, args: str):
+    async def custom(self, ctx: Context, *, args: str):
         """
         A more advanced purge command.
 
@@ -1275,7 +1242,7 @@ class Moderation(commands.Cog):
     @has_permissions(moderate_members=True)
     async def timeout(
         self,
-        ctx: "Context",
+        ctx: Context,
         duration: FutureTime,
         member: commands.MemberConverter | MemberID,
         *,
@@ -1302,7 +1269,7 @@ class Moderation(commands.Cog):
     @has_permissions(moderate_members=True)
     async def untimeout(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -1327,7 +1294,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_user_joined_a_voice)
     async def voicemute(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -1354,7 +1321,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_user_joined_a_voice)
     async def voiceunmute(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -1381,7 +1348,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_user_joined_a_voice)
     async def serverdeafen(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -1404,7 +1371,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_user_joined_a_voice)
     async def serverundeafen(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -1427,7 +1394,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_user_joined_a_stage)
     async def suppress(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -1454,7 +1421,7 @@ class Moderation(commands.Cog):
     @commands.check(check_if_user_joined_a_stage)
     async def unsuppress(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: commands.MemberConverter | MemberID,
         *,
         reason: ActionReason = None,
@@ -1476,7 +1443,7 @@ class Moderation(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
-    async def lock(self, ctx: "Context"):
+    async def lock(self, ctx: Context):
         """Locking Commands"""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
@@ -1485,7 +1452,7 @@ class Moderation(commands.Cog):
     @lock.command(aliases=["thread"], usage="[thread.channel]")
     @commands.has_guild_permissions(manage_threads=True)
     async def threadchannel(
-        ctx: "Context",
+        ctx: Context,
         channels: commands.Greedy[discord.Thread] = None,
     ):
         """Locks the specified thread channel(s), both member and bot required `Manage Thread` perms to operate"""
@@ -1503,7 +1470,7 @@ class Moderation(commands.Cog):
     @lock.command(aliases=["text"], usage="[text.channel]")
     @has_guild_permissions(manage_channels=True)
     async def textchannel(
-        ctx: "Context",
+        ctx: Context,
         channels: commands.Greedy[discord.TextChannel] = None,
     ):
         """Locks the specified text channel(s), both member and bot required `Manage Channel` perms to operate"""
@@ -1520,7 +1487,7 @@ class Moderation(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
-    async def unlock(self, ctx: "Context"):
+    async def unlock(self, ctx: Context):
         """Unlocking Commands"""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
@@ -1528,7 +1495,7 @@ class Moderation(commands.Cog):
 
     @unlock.command(aliases=["thread"], usage="[thread.channel]")
     @has_guild_permissions(manage_threads=True)
-    async def threadchannel(self, ctx: "Context"):
+    async def threadchannel(self, ctx: Context):
         """Unlocks the  thread channel in which the command was rrun, both member and bot required `Manage Thread` perms to operate"""
         if not isinstance(ctx.channel, discord.Thread):
             await ctx.send(
@@ -1542,7 +1509,7 @@ class Moderation(commands.Cog):
     @has_guild_permissions(manage_channels=True)
     async def textchannel(
         self,
-        ctx: "Context",
+        ctx: Context,
         channels: commands.Greedy[discord.TextChannel] = None,
     ):
         """Unlocks the specified text channel(s), both member and bot required `Manage Channel` perms to operate"""
@@ -1561,7 +1528,7 @@ class Moderation(commands.Cog):
 
     @commands.command(aliases=["threadjoin"])
     @commands.guild_only()
-    async def jointhread(self, ctx: "Context", channel: discord.Thread):
+    async def jointhread(self, ctx: Context, channel: discord.Thread):
         """Joins the specified thread"""
         if not isinstance(channel, discord.Thread):
             await ctx.send(
@@ -1577,5 +1544,5 @@ class Moderation(commands.Cog):
             pass
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Moderation(bot))

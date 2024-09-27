@@ -134,6 +134,8 @@ class ChannelAndMessageId(enum.IntEnum):
     serverlog_channel1 = 920190310942908509
     serverlog_channel2 = 920536143458598927
 
+    forward_dm_messages_channel_id = 920536143966138374
+
 
 class Tokens(enum.Enum):
     statcord = token_get("STATCORD")

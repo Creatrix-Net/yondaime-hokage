@@ -18,11 +18,8 @@ from discord.ext import tasks
 
 from minato_namikaze.lib import *
 
-# import discordlists
-# import statcord
-
 if TYPE_CHECKING:
-    from .. import MinatoNamikazeBot
+    from ... import MinatoNamikazeBot
 
 log = logging.getLogger(__name__)
 
@@ -70,8 +67,6 @@ class Developer(commands.Cog):
         self.bot: MinatoNamikazeBot = bot
         self.minato_gif = []
         self.key = Tokens.statcord.value
-        # self.statcord_client = statcord.StatcordClient(self.bot, self.key)
-        # self.api = discordlists.Client(self.bot)
         self.description = "These set of commands are only locked to the developer"
 
     async def cog_load(self):
@@ -116,9 +111,6 @@ class Developer(commands.Cog):
                     await guild.leave()
                     log.info(f"Left guild {guild.id} [Marked as spam]")
         log.info("Blacklist Data updated")
-
-    def owners(ctx):
-        return ctx.bot.is_owner(ctx.author)
 
     @staticmethod
     async def _send_guilds(ctx: Context, guilds, title):
@@ -443,15 +435,19 @@ class Developer(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if (
-            self.bot.user.mentioned_in(message)
-            and message.mention_everyone is False
-            and message.content.lower() in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
-            or message.content.lower()
-            in (
-                f"<@!{self.bot.application_id}> prefix",
-                f"<@{self.bot.application_id}> prefix",
+            (
+                self.bot.user.mentioned_in(message)
+                and message.mention_everyone is False
+                and message.content.lower() in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
+                or message.content.lower()
+                in (
+                    f"<@!{self.bot.application_id}> prefix",
+                    f"<@{self.bot.application_id}> prefix",
+                )
             )
-        ) and not message.author.bot:
+            and not message.author.bot
+            and message.guild
+        ):
             await message.channel.send(
                 "The prefix is **)** ,A full list of all commands is available by typing ```)help```",
             )
@@ -461,6 +457,14 @@ class Developer(commands.Cog):
                 await message.publish()
             except:
                 pass
+
+        if link_res := INVITE_URL_RE.findall(message.content) and not message.author.bot and not message.guild:
+            msg = "Thank you for showing interest in me. If you want to add me to your server, please ask the server owner to add me to the server. If you are the server owner, please click on the link below to add me to your server.\n\n{link}"
+            if "{link}" in msg:
+                msg = msg.format(link=await self.bot.get_required_perms_invite_link)
+            embed = discord.Embed(color=discord.Color.red(), description=msg)
+            await message.author.send(embed=embed)
+            return
 
     # when bot leaves the server
     @commands.Cog.listener()
@@ -551,55 +555,6 @@ class Developer(commands.Cog):
         except:
             pass
         await self.post()
-
-    # async def post(self, print_logs=False):
-    #     """
-    #     Manually posts guild count using discordlists.py (BotBlock)
-    #     """
-    #     # async with aiohttp.ClientSession() as session, session.get(
-    #     #     LinksAndVars.listing.value,
-    #     # ) as resp:
-    #     #     listing: dict = orjson.loads(await resp.text())
-    #     # for i in listing:
-    #     #     self.api.set_auth(listing[i].split("/")[0], token_get("".join(i.split())))
-    #     # await self.bot.change_presence(
-    #     #     status=discord.Status.dnd,
-    #     #     activity=discord.Activity(
-    #     #         type=discord.ActivityType.watching,
-    #     #         name="over Naruto",
-    #     #     ),
-    #     # )
-    #     # try:
-    #     #     result = await self.api.post_count()
-    #     #     if print_logs:
-    #     #         log.info(result)
-    #     # except Exception as e:
-    #     #     log.warning(e)
-    #     # await self.bot.change_presence(
-    #     #     status=discord.Status.idle,
-    #     #     activity=discord.Activity(
-    #     #         type=discord.ActivityType.watching,
-    #     #         name="over Naruto",
-    #     #     ),
-    #     # )
-
-    # @dev.command(usage="[print_logs]")
-    # async def post_stats(self, ctx: Context, print_logs: bool = False):
-    #     """Posts stats to different botlist"""
-    #     await self.post(print_logs=print_logs)
-    #     try:
-    #         await ctx.message.delete()
-    #     except (discord.Forbidden, discord.HTTPException):
-    #         pass
-
-    # @dev.command(usage="[print_logs]", aliases=["post_command"])
-    # async def post_commands(self, ctx: Context, print_logs: bool = False):
-    #     """Posts commands to different botlist"""
-    #     await post_commands(self.bot, print_logs=print_logs)
-    #     try:
-    #         await ctx.message.delete()
-    #     except (discord.Forbidden, discord.HTTPException):
-    #         pass
 
 
 async def setup(bot: MinatoNamikazeBot) -> None:

@@ -155,11 +155,15 @@ class LinksAndVars(enum.Enum):
     github = "https://github.com/The-4th-Hokage/yondaime-hokage"
 
     bad_links = "https://raw.githubusercontent.com/The-4th-Hokage/bad-domains-list/master/bad-domains.txt"
-    listing = "https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json"
+    listing = (
+        "https://raw.githubusercontent.com/The-4th-Hokage/listing/master/listing.json"
+    )
     character_data = "https://raw.githubusercontent.com/The-4th-Hokage/naruto-card-game-images/master/img_data.json"
 
     statuspage_link = "https://minatonamikaze.statuspage.io"
-    mal_logo = "https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png"
+    mal_logo = (
+        "https://cdn.myanimelist.net/images/event/15th_anniversary/top_page/item7.png"
+    )
     giveaway_image = "https://i.imgur.com/efLKnlh.png"
 
     invite_redirect_uri = "https://minatonamikaze-invites.herokuapp.com/invite"

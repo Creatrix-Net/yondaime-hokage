@@ -46,6 +46,7 @@ alembic = "*"
 lxml = "*"
 sqlalchemy-utils = "*"
 babel = "*"
+black = "*"
 
 [dev-packages]
 watchfiles = "*"

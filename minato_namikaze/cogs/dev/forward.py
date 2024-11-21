@@ -24,7 +24,9 @@ class Forward(commands.Cog):
 
     async def _destination(self, msg: str = None, embed: discord.Embed = None):
         await self.bot.wait_until_ready()
-        channel = self.bot.get_channel(ChannelAndMessageId.forward_dm_messages_channel_id.value)
+        channel = self.bot.get_channel(
+            ChannelAndMessageId.forward_dm_messages_channel_id.value
+        )
         if channel is None:
             await (await self.bot.fetch_user(self.bot.owner_id)).send(msg, embed=embed)
         else:
@@ -34,7 +36,10 @@ class Forward(commands.Cog):
     def _append_attachements(message: discord.Message, embeds: list):
         attachments_urls = []
         for attachment in message.attachments:
-            if any(attachment.filename.endswith(imageext) for imageext in ["jpg", "png", "gif"]):
+            if any(
+                attachment.filename.endswith(imageext)
+                for imageext in ["jpg", "png", "gif"]
+            ):
                 if embeds[0].image:
                     embed = discord.Embed()
                     embed.set_image(url=attachment.url)

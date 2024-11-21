@@ -48,7 +48,9 @@ class Badurls(discord.SlashCommand, name="badurls"):
         if len(detected_urls) != 0:
             embed = ErrorEmbed(title="SCAM/PHISHING/ADULT LINK(S) DETECTED")
             detected_string = "\n".join([f"- ||{i}||" for i in set(detected_urls)])
-            embed.description = f"The following scam url(s) were detected:\n{detected_string}"
+            embed.description = (
+                f"The following scam url(s) were detected:\n{detected_string}"
+            )
             embed.set_author(
                 name=response.interaction.user.display_name,
                 icon_url=response.interaction.user.display_avatar.url,
@@ -73,7 +75,9 @@ class BadurlsMessageCommand(discord.MessageCommand, name="Flagged Urls"):
         if len(detected_urls) != 0:
             embed = ErrorEmbed(title="SCAM/PHISHING/ADULT LINK(S) DETECTED")
             detected_string = "\n".join([f"- ||{i}||" for i in set(detected_urls)])
-            embed.description = f"The following scam url(s) were detected:\n{detected_string}"
+            embed.description = (
+                f"The following scam url(s) were detected:\n{detected_string}"
+            )
             embed.set_author(
                 name=response.target.author.display_name,
                 icon_url=response.target.author.display_avatar.url,
@@ -424,9 +428,11 @@ class BadLinks(discord.SlashCommand, parent=Setup):
         description="Enable or Disable",
         default=True,
     )
-    action: None | (typing.Literal["ban", "mute", "timeout", "kick", "log"]) = discord.application_command_option(
-        description="What kind of action to take",
-        default=None,
+    action: None | (typing.Literal["ban", "mute", "timeout", "kick", "log"]) = (
+        discord.application_command_option(
+            description="What kind of action to take",
+            default=None,
+        )
     )
     channel: GuildChannel | None = discord.application_command_option(
         channel_types=[discord.TextChannel],
@@ -449,7 +455,11 @@ class BadLinks(discord.SlashCommand, parent=Setup):
                 "badlinks": {
                     "option": response.options.option,
                     "action": response.options.action,
-                    "logging_channel": (response.options.channel.id if response.options.channel is not None else response.options.channel),
+                    "logging_channel": (
+                        response.options.channel.id
+                        if response.options.channel is not None
+                        else response.options.channel
+                    ),
                 },
             },
             response.interaction.guild,

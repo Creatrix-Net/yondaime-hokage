@@ -40,7 +40,9 @@ class BackUp(commands.Cog):
     @tasks.loop(hours=1, reconnect=True)
     async def cleanup(self):
         """Cleans the redunadant and useless backups"""
-        async for message in (await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)).history(limit=None):
+        async for message in (
+            await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)
+        ).history(limit=None):
             try:
                 await commands.GuildConverter().convert(
                     await self.bot.get_context(message),
@@ -117,8 +119,14 @@ class BackUp(commands.Cog):
                         }
                         for user in message.mentions
                     ],
-                    "channel_mentions": [{"name": channel.name, "id": channel.id} for channel in message.channel_mentions],
-                    "role_mentions": [{"name": role.name, "id": role.id} for role in message.role_mentions],
+                    "channel_mentions": [
+                        {"name": channel.name, "id": channel.id}
+                        for channel in message.channel_mentions
+                    ],
+                    "role_mentions": [
+                        {"name": role.name, "id": role.id}
+                        for role in message.role_mentions
+                    ],
                     "id": message.id,
                     "pinned": message.pinned,
                 }
@@ -192,8 +200,14 @@ class BackUp(commands.Cog):
                             }
                             for user in message.mentions
                         ],
-                        "channel_mentions": [{"name": channel.name, "id": channel.id} for channel in message.channel_mentions],
-                        "role_mentions": [{"name": role.name, "id": role.id} for role in message.role_mentions],
+                        "channel_mentions": [
+                            {"name": channel.name, "id": channel.id}
+                            for channel in message.channel_mentions
+                        ],
+                        "role_mentions": [
+                            {"name": role.name, "id": role.id}
+                            for role in message.role_mentions
+                        ],
                         "id": message.id,
                         "pinned": message.pinned,
                     }
@@ -305,7 +319,9 @@ class BackUp(commands.Cog):
             await ctx.send(
                 "If any backup(s) of the guild exists then it will be deleted.",
             )
-            async for message in (await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)).history(limit=None):
+            async for message in (
+                await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)
+            ).history(limit=None):
                 if int(message.content.strip()) == ctx.guild.id:
                     await message.delete()
             return

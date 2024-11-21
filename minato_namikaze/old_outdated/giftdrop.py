@@ -72,9 +72,10 @@ class Cashdrop(commands.Cog):
             self.cache[message.guild.id]["timestamp"] = datetime.datetime.now(
                 tz=datetime.timezone.utc,
             )
-        if (datetime.datetime.now(tz=datetime.timezone.utc) - self.cache[message.guild.id]["timestamp"]).total_seconds() < self.cache[
-            message.guild.id
-        ]["interval"]:
+        if (
+            datetime.datetime.now(tz=datetime.timezone.utc)
+            - self.cache[message.guild.id]["timestamp"]
+        ).total_seconds() < self.cache[message.guild.id]["interval"]:
             return
         self.cache[message.guild.id]["timestamp"] = datetime.datetime.now(
             tz=datetime.timezone.utc,

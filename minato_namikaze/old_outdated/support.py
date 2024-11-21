@@ -71,7 +71,10 @@ class Support(commands.Cog):
                 delete_after=4,
             )
             return
-        if discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]) in ctx.message.author.roles:
+        if (
+            discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
+            in ctx.message.author.roles
+        ):
             await ctx.send(
                 embed=ErrorEmbed(
                     description=f"{ctx.message.author.mention} you already applied for the support , please check the {channel.mention} channel.",
@@ -132,7 +135,10 @@ class Support(commands.Cog):
                 embed=ErrorEmbed(description=f"{member.mention} is a bot! :robot:"),
             )
             return
-        if not discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]) in member.roles:
+        if (
+            not discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
+            in member.roles
+        ):
             e = ErrorEmbed(
                 title="Sorry !",
                 description=f"{member.mention} has not requested any **support** !",
@@ -247,7 +253,9 @@ class Support(commands.Cog):
         e2 = discord.Embed(
             title="New Feedback!",
             description=feed,
-            colour=ctx.author.color or ctx.author.top_role.colour.value or discord.Color.random(),
+            colour=ctx.author.color
+            or ctx.author.top_role.colour.value
+            or discord.Color.random(),
         )
         e2.set_author(
             name=ctx.author.display_name,

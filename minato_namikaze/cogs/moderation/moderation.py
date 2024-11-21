@@ -487,7 +487,9 @@ class Moderation(commands.Cog):
             )
 
         until = f'until {format_dt(duration.dt, "F")}'
-        heads_up_message = f"You have been banned from {ctx.guild.name} {until}. Reason: {reason}"
+        heads_up_message = (
+            f"You have been banned from {ctx.guild.name} {until}. Reason: {reason}"
+        )
 
         try:
             await member.send(heads_up_message)  # type: ignore  # Guarded by AttributeError
@@ -529,7 +531,9 @@ class Moderation(commands.Cog):
         else:
             moderator = f"{moderator} (ID: {mod_id})"
 
-        reason = f"Automatic unban from timer made on {timer.created_at} by {moderator}."
+        reason = (
+            f"Automatic unban from timer made on {timer.created_at} by {moderator}."
+        )
         await guild.unban(discord.Object(id=member_id), reason=reason)
 
     @commands.command()
@@ -659,7 +663,8 @@ class Moderation(commands.Cog):
 
         # member filters
         predicates = [
-            lambda m: isinstance(m, discord.Member) and can_execute_action(ctx, author, m),  # Only if applicable
+            lambda m: isinstance(m, discord.Member)
+            and can_execute_action(ctx, author, m),  # Only if applicable
             lambda m: not m.bot,  # No bots
             lambda m: m.discriminator != "0000",  # No deleted users
         ]
@@ -703,7 +708,11 @@ class Moderation(commands.Cog):
             _joined_after_member = await converter.convert(ctx, str(args.joined_after))
 
             def joined_after(member, *, _other=_joined_after_member):
-                return member.joined_at and _other.joined_at and member.joined_at > _other.joined_at
+                return (
+                    member.joined_at
+                    and _other.joined_at
+                    and member.joined_at > _other.joined_at
+                )
 
             predicates.append(joined_after)
         if args.joined_before:
@@ -713,7 +722,11 @@ class Moderation(commands.Cog):
             )
 
             def joined_before(member, *, _other=_joined_before_member):
-                return member.joined_at and _other.joined_at and member.joined_at < _other.joined_at
+                return (
+                    member.joined_at
+                    and _other.joined_at
+                    and member.joined_at < _other.joined_at
+                )
 
             predicates.append(joined_before)
 
@@ -723,7 +736,10 @@ class Moderation(commands.Cog):
 
         if args.show:
             members = sorted(members, key=lambda m: m.joined_at or now)
-            fmt = "\n".join(f"{m.id}\tJoined: {m.joined_at}\tCreated: {m.created_at}\t{m}" for m in members)
+            fmt = "\n".join(
+                f"{m.id}\tJoined: {m.joined_at}\tCreated: {m.created_at}\t{m}"
+                for m in members
+            )
             content = f"Current Time: {discord.utils.utcnow()}\nTotal members: {len(members)}\n{fmt}"
             file = discord.File(
                 io.BytesIO(content.encode("utf-8")),
@@ -847,7 +863,9 @@ class Moderation(commands.Cog):
         if not ctx.guild.chunked:
             members = await ctx.guild.chunk(cache=True)
 
-        members = sorted(ctx.guild.members, key=lambda m: m.joined_at, reverse=True)[:count]
+        members = sorted(ctx.guild.members, key=lambda m: m.joined_at, reverse=True)[
+            :count
+        ]
 
         embed = discord.Embed(title="New Members", colour=discord.Colour.green())
 
@@ -885,7 +903,9 @@ class Moderation(commands.Cog):
         prefixes = tuple(self.bot.get_guild_prefixes(ctx.guild))
 
         def check(m):
-            return (m.author == ctx.me or m.content.startswith(prefixes)) and not (m.mentions or m.role_mentions)
+            return (m.author == ctx.me or m.content.startswith(prefixes)) and not (
+                m.mentions or m.role_mentions
+            )
 
         deleted = await ctx.channel.purge(limit=search, check=check, before=ctx.message)
         return Counter(m.author.display_name for m in deleted)
@@ -1065,7 +1085,9 @@ class Moderation(commands.Cog):
         """Removes a bot user's messages and messages with their optional prefix."""
 
         def predicate(m):
-            return (m.webhook_id is None and m.author.bot) or (prefix and m.content.startswith(prefix))
+            return (m.webhook_id is None and m.author.bot) or (
+                prefix and m.content.startswith(prefix)
+            )
 
         await self.do_removal(ctx, search, predicate)
 

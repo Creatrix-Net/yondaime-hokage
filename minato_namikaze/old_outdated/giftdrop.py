@@ -72,13 +72,12 @@ class Cashdrop(commands.Cog):
             self.cache[message.guild.id]["timestamp"] = datetime.datetime.now(
                 tz=datetime.timezone.utc,
             )
-        if (
-            datetime.datetime.now(tz=datetime.timezone.utc)
-            - self.cache[message.guild.id]["timestamp"]
-        ).total_seconds() < self.cache[message.guild.id]["interval"]:
+        if (datetime.datetime.now(tz=datetime.timezone.utc) - self.cache[message.guild.id]["timestamp"]).total_seconds() < self.cache[
+            message.guild.id
+        ]["interval"]:
             return
         self.cache[message.guild.id]["timestamp"] = datetime.datetime.now(
-            tz=datetime.timezone.utc
+            tz=datetime.timezone.utc,
         )
         if self.cache[message.guild.id]["channel"] is not None:
             channel = message.guild.get_channel(self.cache[message.guild.id]["channel"])
@@ -91,7 +90,9 @@ class Cashdrop(commands.Cog):
             msg = await channel.send(string)
             try:
                 pred = MessagePredicate.equal_to(
-                    str(answer), channel=channel, user=None
+                    str(answer),
+                    channel=channel,
+                    user=None,
                 )
                 answer_msg: discord.Message = await self.bot.wait_for(
                     "message",

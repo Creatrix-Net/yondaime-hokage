@@ -51,7 +51,9 @@ class Giveaways(Base):
     server_id = Column(BigInteger, index=True, nullable=False)
     jump_url = Column(URLType, nullable=False, index=True)
     image_url = Column(
-        URLType, default=LinksAndVars.giveaway_image.value, nullable=False
+        URLType,
+        default=LinksAndVars.giveaway_image.value,
+        nullable=False,
     )
     giveaway_deleted = Column(Boolean, default=True, nullable=False)
 
@@ -77,7 +79,7 @@ class Giveaway(Cog):
     async def create_timer_for_giveaway(
         self,
         giveaway_id: discord.Message,
-        time_ends: int | FutureTime,
+        time_ends: int | FutureTime | float,
     ) -> None:
         """Creates the timer for the giveaway
 
@@ -270,9 +272,7 @@ class Giveaway(Cog):
                     lambda a: discord.utils.get(
                         a.roles,
                         id=int(
-                            giveaway_config.role_required.lstrip("<@&")
-                            .lstrip("<&")
-                            .rstrip(">"),
+                            giveaway_config.role_required.lstrip("<@&").lstrip("<&").rstrip(">"),
                         ),
                     )
                     is not None,

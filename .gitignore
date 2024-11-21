@@ -1,3 +1,4 @@
+*.pem
 .vscode
 images_api_store
 traceback

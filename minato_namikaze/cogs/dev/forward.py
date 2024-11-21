@@ -26,7 +26,7 @@ class Forward(commands.Cog):
         await self.bot.wait_until_ready()
         channel = self.bot.get_channel(ChannelAndMessageId.forward_dm_messages_channel_id.value)
         if channel is None:
-            await self.bot.send_to_owners(msg, embed=embed)
+            await (await self.bot.fetch_user(self.bot.owner_id)).send(msg, embed=embed)
         else:
             await channel.send(msg, embed=embed)
 

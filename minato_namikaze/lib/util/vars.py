@@ -88,35 +88,35 @@ class _envConfig:
 envConfig: Any = _envConfig()
 
 
-class ShinobiMatch(list, enum.Enum):
-    character_side_exclude = [
-        "anbu",
-        "iwagakure",
-        "kumogakure",
-        "kirigakure",
-        "otogakure",
-        "sunagakure",
-        "akatsuki",
-        "konohagakure",
-    ]
+# class ShinobiMatch(list, enum.Enum):
+#     character_side_exclude = [
+#         "anbu",
+#         "iwagakure",
+#         "kumogakure",
+#         "kirigakure",
+#         "otogakure",
+#         "sunagakure",
+#         "akatsuki",
+#         "konohagakure",
+#     ]
 
-    name_exclusion = character_side_exclude + [
-        "naruto",
-        "sasuke" "jiraya",
-        "namikaze",
-        "sarutobi",
-        "yamanaka",
-        "akimichi",
-        "aburame",
-        "uzumaki",
-        "hyuga",
-        "otsutsuki",
-        "nara",
-        "senju",
-        "uchiha",
-        "kakashi",
-        "sakura",
-    ]
+#     name_exclusion = character_side_exclude + [
+#         "naruto",
+#         "sasuke" "jiraya",
+#         "namikaze",
+#         "sarutobi",
+#         "yamanaka",
+#         "akimichi",
+#         "aburame",
+#         "uzumaki",
+#         "hyuga",
+#         "otsutsuki",
+#         "nara",
+#         "senju",
+#         "uchiha",
+#         "kakashi",
+#         "sakura",
+#     ]
 
 
 @enum.unique
@@ -197,12 +197,12 @@ class Webhooks(enum.Enum):
     sentry = token_get("SENTRY")
 
 
-class Database(enum.Enum):
-    database_category_name = "DATABASE"
-    database_channel_name = "setup vars"
-    antiraid_channel_name = "antiraid"
-    mentionspam_channel_name = "mentionspam"
-    giveaway_time_channel_name = "giveaway"
+# class Database(enum.Enum):
+#     database_category_name = "DATABASE"
+#     database_channel_name = "setup vars"
+#     antiraid_channel_name = "antiraid"
+#     mentionspam_channel_name = "mentionspam"
+#     giveaway_time_channel_name = "giveaway"
 
 
 @enum.unique

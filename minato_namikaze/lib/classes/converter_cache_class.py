@@ -14,8 +14,9 @@ from discord.ext import commands
 
 from ..functions import ExpiringCache
 from ..util.vars import LinksAndVars
-from ..util.vars import ShinobiMatch
 from .time_class import format_relative
+
+# from ..util.vars import ShinobiMatch
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -48,11 +49,7 @@ class Arguments(argparse.ArgumentParser):
 
 
 def can_execute_action(ctx, user, target):
-    return (
-        user.id == ctx.bot.owner_id
-        or user == ctx.guild.owner
-        or user.top_role > target.top_role
-    )
+    return user.id == ctx.bot.owner_id or user == ctx.guild.owner or user.top_role > target.top_role
 
 
 class MemberID(commands.Converter):
@@ -158,108 +155,108 @@ class MentionSpamConfig:
         return self
 
 
-class GiveawayConfig:
-    __slots__ = (
-        "id",
-        "host",
-        "channel",
-        "message",
-        "embed",
-        "role_required",
-        "tasks",
-        "prize",
-        "end_time",
-        "embed_dict",
-    )
+# class GiveawayConfig:
+#     __slots__ = (
+#         "id",
+#         "host",
+#         "channel",
+#         "message",
+#         "embed",
+#         "role_required",
+#         "tasks",
+#         "prize",
+#         "end_time",
+#         "embed_dict",
+#     )
 
-    @classmethod
-    async def from_record(cls, record: discord.Message, bot: commands.Bot):
-        self = cls()
+#     @classmethod
+#     async def from_record(cls, record: discord.Message, bot: commands.Bot):
+#         self = cls()
 
-        self.id = record.id
-        self.channel = record.channel
+#         self.id = record.id
+#         self.channel = record.channel
 
-        if len(record.embeds) == 0 or len(record.embeds) > 1:
-            raise AttributeError("This is not a giveaway message")
+#         if len(record.embeds) == 0 or len(record.embeds) > 1:
+#             raise AttributeError("This is not a giveaway message")
 
-        self.embed = record.embeds[0]
-        self.embed_dict = self.embed.to_dict()
+#         self.embed = record.embeds[0]
+#         self.embed_dict = self.embed.to_dict()
 
-        if self.embed_dict.get("fields") is None:
-            raise AttributeError("This is not a giveaway message")
+#         if self.embed_dict.get("fields") is None:
+#             raise AttributeError("This is not a giveaway message")
 
-        if self.embed.description == "\U0001f381 Win a Prize today":
-            raise AttributeError("This giveaway has already been ended!")
+#         if self.embed.description == "\U0001f381 Win a Prize today":
+#             raise AttributeError("This giveaway has already been ended!")
 
-        role_required = discord.utils.find(
-            lambda a: a["name"].lower() == "Role Required".lower(),
-            self.embed_dict["fields"],
-        )
-        self.role_required = (
-            role_required["value"] if role_required is not None else None
-        )
+#         role_required = discord.utils.find(
+#             lambda a: a["name"].lower() == "Role Required".lower(),
+#             self.embed_dict["fields"],
+#         )
+#         self.role_required = (
+#             role_required["value"] if role_required is not None else None
+#         )
 
-        tasks = discord.utils.find(
-            lambda a: a["name"].lower() == "\U0001f3c1 Tasks".lower(),
-            self.embed_dict["fields"],
-        )
-        self.tasks = tasks["value"] if tasks is not None else None
+#         tasks = discord.utils.find(
+#             lambda a: a["name"].lower() == "\U0001f3c1 Tasks".lower(),
+#             self.embed_dict["fields"],
+#         )
+#         self.tasks = tasks["value"] if tasks is not None else None
 
-        self.end_time = (
-            discord.utils.find(
-                lambda a: a["name"].lower() == "Giveway ends in".lower(),
-                self.embed_dict["fields"],
-            )["value"]
-            .split("|")[0]
-            .strip()
-        )
-        self.prize = self.embed.description.split("**")[1]
-        self.host = self.embed.author
+#         self.end_time = (
+#             discord.utils.find(
+#                 lambda a: a["name"].lower() == "Giveway ends in".lower(),
+#                 self.embed_dict["fields"],
+#             )["value"]
+#             .split("|")[0]
+#             .strip()
+#         )
+#         self.prize = self.embed.description.split("**")[1]
+#         self.host = self.embed.author
 
-        return self
+#         return self
 
-    @classmethod
-    def temporary(
-        cls,
-        *,
-        expires: datetime.datetime,
-        server_id: int,
-        jump_url: str,
-        image_url: str,
-    ) -> Self:
-        pseudo = {
-            "id": None,
-            "extra": {"args": args, "kwargs": kwargs},
-            "event": event,
-            "created": created,
-            "expires": expires,
-        }
-        return cls(record=pseudo)
+#     @classmethod
+#     def temporary(
+#         cls,
+#         *,
+#         expires: datetime.datetime,
+#         server_id: int,
+#         jump_url: str,
+#         image_url: str,
+#     ) -> Self:
+#         pseudo = {
+#             "id": None,
+#             "extra": {"args": args, "kwargs": kwargs},
+#             "event": event,
+#             "created": created,
+#             "expires": expires,
+#         }
+#         return cls(record=pseudo)
 
-    def __eq__(self, other: object) -> bool:
-        try:
-            return self.id == other.id  # type: ignore
-        except AttributeError:
-            return False
+#     def __eq__(self, other: object) -> bool:
+#         try:
+#             return self.id == other.id  # type: ignore
+#         except AttributeError:
+#             return False
 
-    def __hash__(self) -> int:
-        return hash(self.id)
+#     def __hash__(self) -> int:
+#         return hash(self.id)
 
-    @property
-    def human_delta(self) -> str:
-        return format_relative(self.created_at)
+#     @property
+#     def human_delta(self) -> str:
+#         return format_relative(self.created_at)
 
-    @property
-    def author_id(self) -> int | None:
-        if self.args:
-            return int(self.args[0])
-        return None
+#     @property
+#     def author_id(self) -> int | None:
+#         if self.args:
+#             return int(self.args[0])
+#         return None
 
-    def __repr__(self) -> str:
-        return f"<Timer created={self.created_at} expires={self.expires} event={self.event}>"
+#     def __repr__(self) -> str:
+#         return f"<Timer created={self.created_at} expires={self.expires} event={self.event}>"
 
-    def __str__(self) -> str:
-        return self.__repr__()
+#     def __str__(self) -> str:
+#         return self.__repr__()
 
 
 class CooldownByContent(commands.CooldownMapping):
@@ -349,126 +346,127 @@ class SpamChecker:
         return is_fast
 
 
-class Characters:
-    """The characters model class"""
-
-    __slots__ = [
-        "id",
-        "name",
-        "images",
-        "emoji",
-        "category",
-        "kwargs",
-    ]
-
-    def __init__(self, **kwargs):
-        self.name: str | None = kwargs.get("name")
-        self.id: str | int | None = (
-            "".join(self.name.split()).upper() if self.name is not None else None
-        )
-        self.images: list | None = kwargs.get("images")
-        self.category: str | None = kwargs.get("category")
-        self.emoji: discord.Emoji | discord.PartialEmoji | None = kwargs.get(
-            "emoji",
-        )
-        self.kwargs = kwargs
-
-    @property
-    def hitpoint(self) -> int:
-        category = str(self.category)
-        if category.lower() == "akatsuki":
-            return 7
-        if category.lower() == "jinchuruki":
-            return 8
-        if category.lower() in ("kage", "special"):
-            return 5
-        if category.lower() == "otsutsuki":
-            return 10
-        if category.lower() == "special":
-            return 6
-        else:
-            return 3
-
-    @property
-    def regainpoint(self) -> int:
-        category = str(self.category)
-        if category.lower() == "akatsuki":
-            return 5
-        if category.lower() == "jinchuruki":
-            return 6
-        if category.lower() in ("kage", "special"):
-            return 3
-        if category.lower() == "otsutsuki":
-            return 7
-        if category.lower() == "special":
-            return 4
-        else:
-            return 1
-
-    @property
-    def healpoint(self):
-        """These are in percentages"""
-        category = str(self.category)
-        if category.lower() == "akatsuki":
-            return 50
-        if category.lower() == "jinchuruki":
-            return 60
-        if category.lower() in ("kage", "special"):
-            return 30
-        if category.lower() == "otsutsuki":
-            return 70
-        if category.lower() == "special":
-            return 40
-        else:
-            return 10
-
-    @property
-    def specialpoint(self):
-        """These are in percentages"""
-        category = str(self.category)
-        if category.lower() == "akatsuki":
-            return 40
-        if category.lower() == "jinchuruki":
-            return 50
-        if category.lower() in ("kage", "special"):
-            return 20
-        if category.lower() == "otsutsuki":
-            return 60
-        if category.lower() == "special":
-            return 30
-        else:
-            return 10
-
-    @classmethod
-    def from_record(cls, record: dict, ctx: commands.Context, name: str):
-        self = cls()
-
-        self.name = name.replace("_", " ").title()
-        self.images = record["images"]
-        self.category = record["category"]
-        self.id = "".join(self.name.split()).upper() if self.name is not None else None
-        self.kwargs = record
-        self.emoji = self.return_emoji(
-            url=record["images"][0],
-            category=record["category"],
-            ctx=ctx,
-        )
-        return self
-
-    @staticmethod
-    def return_emoji(
-        url: str,
-        category: str,
-        ctx: commands.Context,
-    ) -> discord.Emoji | discord.PartialEmoji:
-        STRIPPED_STRING_LIST: list = url.lstrip(
-            LinksAndVars.character_data.value[: -len("img_data.json")] + "photo_data/",
-        ).split("/")
-        STRIPPED_STRING_LIST.append(category)
-        for i in STRIPPED_STRING_LIST:
-            if i.lower() in ShinobiMatch.name_exclusion.value:
-                return ctx.get_config_emoji_by_name_or_id(i)
-        return discord.PartialEmoji(name="\U0001f5e1")
+#
+# class Characters:
+#     """The characters model class"""
+#
+#     __slots__ = [
+#         "id",
+#         "name",
+#         "images",
+#         "emoji",
+#         "category",
+#         "kwargs",
+#     ]
+#
+#     def __init__(self, **kwargs):
+#         self.name: str | None = kwargs.get("name")
+#         self.id: str | int | None = (
+#             "".join(self.name.split()).upper() if self.name is not None else None
+#         )
+#         self.images: list | None = kwargs.get("images")
+#         self.category: str | None = kwargs.get("category")
+#         self.emoji: discord.Emoji | discord.PartialEmoji | None = kwargs.get(
+#             "emoji",
+#         )
+#         self.kwargs = kwargs
+#
+#     @property
+#     def hitpoint(self) -> int:
+#         category = str(self.category)
+#         if category.lower() == "akatsuki":
+#             return 7
+#         if category.lower() == "jinchuruki":
+#             return 8
+#         if category.lower() in ("kage", "special"):
+#             return 5
+#         if category.lower() == "otsutsuki":
+#             return 10
+#         if category.lower() == "special":
+#             return 6
+#         else:
+#             return 3
+#
+#     @property
+#     def regainpoint(self) -> int:
+#         category = str(self.category)
+#         if category.lower() == "akatsuki":
+#             return 5
+#         if category.lower() == "jinchuruki":
+#             return 6
+#         if category.lower() in ("kage", "special"):
+#             return 3
+#         if category.lower() == "otsutsuki":
+#             return 7
+#         if category.lower() == "special":
+#             return 4
+#         else:
+#             return 1
+#
+#     @property
+#     def healpoint(self):
+#         """These are in percentages"""
+#         category = str(self.category)
+#         if category.lower() == "akatsuki":
+#             return 50
+#         if category.lower() == "jinchuruki":
+#             return 60
+#         if category.lower() in ("kage", "special"):
+#             return 30
+#         if category.lower() == "otsutsuki":
+#             return 70
+#         if category.lower() == "special":
+#             return 40
+#         else:
+#             return 10
+#
+#     @property
+#     def specialpoint(self):
+#         """These are in percentages"""
+#         category = str(self.category)
+#         if category.lower() == "akatsuki":
+#             return 40
+#         if category.lower() == "jinchuruki":
+#             return 50
+#         if category.lower() in ("kage", "special"):
+#             return 20
+#         if category.lower() == "otsutsuki":
+#             return 60
+#         if category.lower() == "special":
+#             return 30
+#         else:
+#             return 10
+#
+#     @classmethod
+#     def from_record(cls, record: dict, ctx: commands.Context, name: str):
+#         self = cls()
+#
+#         self.name = name.replace("_", " ").title()
+#         self.images = record["images"]
+#         self.category = record["category"]
+#         self.id = "".join(self.name.split()).upper() if self.name is not None else None
+#         self.kwargs = record
+#         self.emoji = self.return_emoji(
+#             url=record["images"][0],
+#             category=record["category"],
+#             ctx=ctx,
+#         )
+#         return self
+#
+#     @staticmethod
+#     def return_emoji(
+#         url: str,
+#         category: str,
+#         ctx: commands.Context,
+#     ) -> discord.Emoji | discord.PartialEmoji:
+#         STRIPPED_STRING_LIST: list = url.lstrip(
+#             LinksAndVars.character_data.value[: -len("img_data.json")] + "photo_data/",
+#         ).split("/")
+#         STRIPPED_STRING_LIST.append(category)
+#         for i in STRIPPED_STRING_LIST:
+#             if i.lower() in ShinobiMatch.name_exclusion.value:
+#                 return ctx.get_config_emoji_by_name_or_id(i)
+#         return discord.PartialEmoji(name="\U0001f5e1")
 
 
 class Timer:

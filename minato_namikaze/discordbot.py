@@ -208,7 +208,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         if developer is None:
             log.warning("Developer cog is not available")
         else:
-            await developer.post()
+            # await developer.post()
             log.info("Status Posted")
         # await post_commands(self, bool(o=self.local))
         log.info("Commands Posted")

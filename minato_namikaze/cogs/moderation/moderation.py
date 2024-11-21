@@ -18,7 +18,6 @@ from minato_namikaze.lib import BannedMember
 from minato_namikaze.lib import can_execute_action
 from minato_namikaze.lib import check_if_user_joined_a_stage
 from minato_namikaze.lib import check_if_user_joined_a_voice
-from minato_namikaze.lib import Database
 from minato_namikaze.lib import Embed
 from minato_namikaze.lib import EmbedPaginator
 from minato_namikaze.lib import ErrorEmbed

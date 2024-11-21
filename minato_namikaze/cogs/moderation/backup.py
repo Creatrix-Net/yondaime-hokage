@@ -4,9 +4,7 @@ import datetime
 import io
 import shlex
 import time
-from typing import Optional
 from typing import TYPE_CHECKING
-from typing import Union
 
 import discord
 from discord.ext import commands
@@ -42,9 +40,7 @@ class BackUp(commands.Cog):
     @tasks.loop(hours=1, reconnect=True)
     async def cleanup(self):
         """Cleans the redunadant and useless backups"""
-        async for message in (
-            await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)
-        ).history(limit=None):
+        async for message in (await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)).history(limit=None):
             try:
                 await commands.GuildConverter().convert(
                     await self.bot.get_context(message),
@@ -63,7 +59,7 @@ class BackUp(commands.Cog):
         manage_roles=True,
     )
     @commands.cooldown(2, 60, commands.BucketType.guild)
-    async def backup(self, ctx: "Context", command=None):
+    async def backup(self, ctx: Context, command=None):
         """Backup releated commands"""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
@@ -72,7 +68,7 @@ class BackUp(commands.Cog):
     @backup.command(aliases=["channelbackup"], usage="[channel.mention | channel.id]")
     async def channellogs(
         self,
-        ctx: "Context",
+        ctx: Context,
         channel: discord.TextChannel | None = None,
         send: discord.TextChannel | None = None,
     ):
@@ -121,14 +117,8 @@ class BackUp(commands.Cog):
                         }
                         for user in message.mentions
                     ],
-                    "channel_mentions": [
-                        {"name": channel.name, "id": channel.id}
-                        for channel in message.channel_mentions
-                    ],
-                    "role_mentions": [
-                        {"name": role.name, "id": role.id}
-                        for role in message.role_mentions
-                    ],
+                    "channel_mentions": [{"name": channel.name, "id": channel.id} for channel in message.channel_mentions],
+                    "role_mentions": [{"name": role.name, "id": role.id} for role in message.role_mentions],
                     "id": message.id,
                     "pinned": message.pinned,
                 }
@@ -154,7 +144,7 @@ class BackUp(commands.Cog):
         await first_message.delete()
 
     @backup.command(aliases=["serverbackup"])
-    async def serverlogs(self, ctx: "Context"):
+    async def serverlogs(self, ctx: Context):
         """
         Creat a backup of all server data as json files This might take a long time
         """
@@ -202,14 +192,8 @@ class BackUp(commands.Cog):
                             }
                             for user in message.mentions
                         ],
-                        "channel_mentions": [
-                            {"name": channel.name, "id": channel.id}
-                            for channel in message.channel_mentions
-                        ],
-                        "role_mentions": [
-                            {"name": role.name, "id": role.id}
-                            for role in message.role_mentions
-                        ],
+                        "channel_mentions": [{"name": channel.name, "id": channel.id} for channel in message.channel_mentions],
+                        "role_mentions": [{"name": role.name, "id": role.id} for role in message.role_mentions],
                         "id": message.id,
                         "pinned": message.pinned,
                     }
@@ -251,7 +235,7 @@ class BackUp(commands.Cog):
         description="Creates a template backup of the server",
         aliases=["templates"],
     )
-    async def template(self, ctx: "Context"):
+    async def template(self, ctx: Context):
         """
         Create a backup of this guild, (it backups only those channels which is visible to the bot)
         And then dm you the backup code, (Phew keep it safe)
@@ -274,7 +258,7 @@ class BackUp(commands.Cog):
         )
 
     @backup.command(usage="<code>")
-    async def get(self, ctx: "Context", code: int):
+    async def get(self, ctx: Context, code: int):
         """Gets the json file which is stored as a backup"""
         backup_code_data_url = await BackupDatabse(ctx).get_backup_data(code)
         if backup_code_data_url is not None:
@@ -287,7 +271,7 @@ class BackUp(commands.Cog):
         )
 
     @backup.command(usage="<args>")
-    async def delete(self, ctx: "Context", *, args):
+    async def delete(self, ctx: Context, *, args):
         """Deletes the backup data if it is there in the database.
         This command has a powerful "command line" syntax. To use this command
         you and the bot must both have Manage Server permission. **-all option is optional.**
@@ -321,9 +305,7 @@ class BackUp(commands.Cog):
             await ctx.send(
                 "If any backup(s) of the guild exists then it will be deleted.",
             )
-            async for message in (
-                await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)
-            ).history(limit=None):
+            async for message in (await self.bot.fetch_channel(ChannelAndMessageId.backup_channel.value)).history(limit=None):
                 if int(message.content.strip()) == ctx.guild.id:
                     await message.delete()
             return
@@ -331,7 +313,7 @@ class BackUp(commands.Cog):
         await ctx.send("No arguments were provided")
 
     @backup.command(usage="<code>")
-    async def apply(self, ctx: "Context", code: int):
+    async def apply(self, ctx: Context, code: int):
         """Applies backup template to the server. This may take a lot of time.
 
         ```
@@ -359,7 +341,7 @@ class BackUp(commands.Cog):
     @backup.command(usage="[channel.mention]")
     async def attachments(
         self,
-        ctx: "Context",
+        ctx: Context,
         channel: None | (discord.TextChannel | discord.Thread) = None,
     ):
         """Backups the attachement(s) of the specified channel or channel in which command was run"""
@@ -396,5 +378,5 @@ class BackUp(commands.Cog):
         )
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(BackUp(bot))

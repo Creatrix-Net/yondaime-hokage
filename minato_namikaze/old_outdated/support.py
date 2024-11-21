@@ -6,7 +6,6 @@ from typing import Union
 import discord
 from discord.ext import commands
 
-from minato_namikaze.lib import Database
 from minato_namikaze.lib import Embed
 from minato_namikaze.lib import EmbedPaginator
 from minato_namikaze.lib import ErrorEmbed
@@ -15,7 +14,7 @@ from minato_namikaze.lib import MemberID
 
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
-    from ... import MinatoNamikazeBot
+    from minato_namikaze import MinatoNamikazeBot
 
 
 import logging
@@ -41,16 +40,10 @@ class Support(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="support", id=922030091800829954)
 
-    async def database_class(self):
-        return await self.bot.db.new(
-            Database.database_category_name.value,
-            Database.database_channel_name.value,
-        )
-
     @commands.command()
     @commands.cooldown(1, 120, commands.BucketType.user)
     @commands.guild_only()
-    async def support(self, ctx: "Context"):
+    async def support(self, ctx: Context):
         """Open support ticket if enabled by the server admins"""
         if not await ctx.prompt(
             "Are you sure that you want to **raise a support query** ?",
@@ -78,10 +71,7 @@ class Support(commands.Cog):
                 delete_after=4,
             )
             return
-        if (
-            discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
-            in ctx.message.author.roles
-        ):
+        if discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]) in ctx.message.author.roles:
             await ctx.send(
                 embed=ErrorEmbed(
                     description=f"{ctx.message.author.mention} you already applied for the support , please check the {channel.mention} channel.",
@@ -122,7 +112,7 @@ class Support(commands.Cog):
     @commands.command(usage="<member.mention>", aliases=["resolve", "resolves"])
     @commands.guild_only()
     @is_mod()
-    async def resolved(self, ctx: "Context", member: MemberID | discord.Member):
+    async def resolved(self, ctx: Context, member: MemberID | discord.Member):
         """
         Resolves the existing ticket!
         One needs to have manage server permission in order to run this command
@@ -142,10 +132,7 @@ class Support(commands.Cog):
                 embed=ErrorEmbed(description=f"{member.mention} is a bot! :robot:"),
             )
             return
-        if (
-            not discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
-            in member.roles
-        ):
+        if not discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]) in member.roles:
             e = ErrorEmbed(
                 title="Sorry !",
                 description=f"{member.mention} has not requested any **support** !",
@@ -176,7 +163,7 @@ class Support(commands.Cog):
     )
     @commands.guild_only()
     @is_mod()
-    async def chksupreq(self, ctx: "Context"):
+    async def chksupreq(self, ctx: Context):
         """Checks who still requires the support."""
         data = await (await self.database_class()).get(ctx.guild.id)
         if data is None or data.get("support") is None:
@@ -222,7 +209,7 @@ class Support(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.user)
     @commands.guild_only()
-    async def feedback(self, ctx: "Context", *, feed):
+    async def feedback(self, ctx: Context, *, feed):
         """
         Sends your feedback about the server to the server owner. (This can only be done if it is enabled by the server admin)
         ``The feedback should be less than 2000 characters``
@@ -260,9 +247,7 @@ class Support(commands.Cog):
         e2 = discord.Embed(
             title="New Feedback!",
             description=feed,
-            colour=ctx.author.color
-            or ctx.author.top_role.colour.value
-            or discord.Color.random(),
+            colour=ctx.author.color or ctx.author.top_role.colour.value or discord.Color.random(),
         )
         e2.set_author(
             name=ctx.author.display_name,
@@ -275,5 +260,5 @@ class Support(commands.Cog):
         await channel.send(embed=e2)
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Support(bot))

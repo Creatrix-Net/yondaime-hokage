@@ -342,8 +342,16 @@ class AntiRaid(commands.Cog):
         if guild_dict is None:
             fmt = "Raid Mode: off\nBroadcast Channel: None"
         else:
-            ch = f"<#{guild_dict['broadcast_channel']}>" if guild_dict["broadcast_channel"] else None
-            mode = RaidMode(guild_dict["raid_mode"]) if guild_dict["raid_mode"] is not None else RaidMode.off
+            ch = (
+                f"<#{guild_dict['broadcast_channel']}>"
+                if guild_dict["broadcast_channel"]
+                else None
+            )
+            mode = (
+                RaidMode(guild_dict["raid_mode"])
+                if guild_dict["raid_mode"] is not None
+                else RaidMode.off
+            )
             fmt = f"Raid Mode: {mode.name.capitalize()}\nBroadcast Channel: {ch}"
 
         await ctx.send(fmt)
@@ -473,7 +481,12 @@ class AntiRaid(commands.Cog):
                     "This server has not set up mention spam banning.",
                 )
 
-            ignores = ", ".join(f"<#{e}>" for e in guild_dict.get("safe_mention_channel_ids", [])) or "None"
+            ignores = (
+                ", ".join(
+                    f"<#{e}>" for e in guild_dict.get("safe_mention_channel_ids", [])
+                )
+                or "None"
+            )
             return await ctx.send(
                 f'- Threshold: {guild_dict["mention_count"]} mentions\n- Ignored Channels: {ignores}',
             )

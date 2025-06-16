@@ -22,7 +22,6 @@ from minato_namikaze import Session
 from minato_namikaze import vars
 from minato_namikaze.discordbot import MinatoNamikazeBot
 
-# from watchfiles import run_process, DefaultFilter
 
 init(autoreset=True)  # type: ignore
 
@@ -72,8 +71,6 @@ def setup_logging(log_file):
     log = logging.getLogger()
     file_or_not = (not vars.envConfig.LOCAL) or log_file
     try:
-        # __enter__
-        # max_bytes = 32 * 1024 * 1024  # 32 MiB
         logging.getLogger("discord").setLevel(logging.INFO)
         logging.getLogger("discord.http").setLevel(logging.WARNING)
         logging.getLogger("discord.state").addFilter(RemoveNoise())
@@ -95,8 +92,6 @@ def setup_logging(log_file):
             handler = TimedRotatingFileHandler(
                 filename="logs/minato_namikaze.log",
                 encoding="utf-8",
-                # mode="w",
-                # maxBytes=max_bytes,
                 backupCount=7,
                 when="midnight",
             )
@@ -129,7 +124,6 @@ def main(ctx, log_file):
     """Launches the bot."""
     if ctx.invoked_subcommand is None:
         with setup_logging(log_file):
-            # run_process(BASE_DIR.parent / "minato_namikaze",target=run_bot, watch_filter=DefaultFilter(ignore_dirs=("__pycache__",)))
             run_bot()
 
 

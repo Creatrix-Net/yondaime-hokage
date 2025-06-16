@@ -36,12 +36,6 @@ class Session:
         )
         return db_session
 
-    # async def execute(model_query: Any) -> None:
-    #     """Execute the database session."""
-    #     async with Session.session_manager() as session:
-    #         async with session.begin():
-    #             session.add(model_query)
-    #             session.commit()
 
 
 session_obj: Any = Session.get_session()

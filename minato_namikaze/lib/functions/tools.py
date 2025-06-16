@@ -3,8 +3,6 @@ from __future__ import annotations
 import ast
 import copy
 import datetime
-import os
-import pathlib
 from typing import AnyStr
 from typing import Literal
 from typing import Optional
@@ -72,21 +70,6 @@ def check_if_user_joined_a_stage(ctx):
     return True
 
 
-# async def get_welcome_channel(
-#     guild: discord.Guild,
-#     bot: discord.Client,
-#     inviter_or_guild_owner: discord.User,
-# ):
-#     try:
-#         return guild.system_channel
-#     except:
-#         try:
-#             text_channels_list = guild.text_channels
-#             for i in text_channels_list:
-#                 if i.permissions_for(bot.user).send_messages:
-#                     return i
-#         except:
-#             return inviter_or_guild_owner
 
 
 # R.Danny Code

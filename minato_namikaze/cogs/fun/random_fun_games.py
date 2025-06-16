@@ -1,4 +1,3 @@
-# Future Imports
 from __future__ import annotations
 
 import asyncio
@@ -102,18 +101,6 @@ class Random(commands.Cog):
         lol = owoify.owoify(f"{text}")
         await ctx.send(lol)
 
-    # @commands.command()
-    # @commands.cooldown(1, 40, commands.BucketType.guild)
-    # async def magic(self, ctx: "Context", user: Optional[discord.Member] = None):
-    #     """See magic!"""
-    #     user = user or ctx.author
-    #     url = str(user.avatar.with_format("png").with_size(1024).url)
-    #     img = await self.bot.dagpi.image_process(ImageFeatures.magik(), url)
-    #     e2file = discord.File(fp=img.image, filename=f"magik.{img.format}")
-    #     e = Embed(title="Magik!")
-    #     e.set_image(url=f"attachment://magik.{img.format}")
-    #     await ctx.send(embed=e, file=e2file)
-
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx: Context, colour="255-255-255", *, url: str | None = None):
@@ -212,21 +199,6 @@ class Random(commands.Cog):
                 await ctx.send(embed=e2)
         except mystbin.BadPasteID:
             await ctx.send(f"Hmmm.. id : {id} isn't found, try again?")
-
-    # @commands.command(name="8ball", usage="<question>")
-    # async def _8ball(self, ctx: "Context", *, question: str):
-    #     """Ask questions about your future"""
-    #     ball = eight_ball.ball()
-    #     async with ctx.channel.typing():
-    #         await ctx.send(ball.response(question))
-
-    # @commands.bot_has_permissions(attach_files=True)
-    # @commands.command(aliases=["ss"])
-    # async def screenshot(self, ctx, link: str, wait: int = 3):
-    #     """
-    #     Screenshots a given link.
-    #     If no time is given, it will wait 3 seconds to screenshot
-    #     """
 
     #     await ctx.trigger_typing()
     #     browser = await launch()

@@ -25,8 +25,6 @@ class Badges:
         :return: List of all badges data
         :rtype: list
         """
-        # async for i in self.channel.history(limit=None):
-        #     set_dict.add({'filename': ''})
         return [
             dict(
                 badge_name=i.content,

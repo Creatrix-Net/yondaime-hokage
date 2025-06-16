@@ -271,7 +271,9 @@ class Giveaway(Cog):
                     lambda a: discord.utils.get(
                         a.roles,
                         id=int(
-                            giveaway_config.role_required.lstrip("<@&").lstrip("<&").rstrip(">"),
+                            giveaway_config.role_required.lstrip("<@&")
+                            .lstrip("<&")
+                            .rstrip(">"),
                         ),
                     )
                     is not None,
@@ -371,7 +373,6 @@ class Giveaway(Cog):
             f"Do you really want to **stop/delete** the giveaway with id **{giveaway_id.id}** hosted in {giveaway_id.channel.mention}?\n`Note: This action is irreversible!`",
         ):
             return
-        z
         database = await self.database_class()
         await database.delete(giveaway_id.id)
         await giveaway_id.delete()

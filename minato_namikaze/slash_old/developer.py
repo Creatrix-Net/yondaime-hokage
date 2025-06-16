@@ -219,8 +219,6 @@ class Commands(
 
     def __init__(self, cog):
         self.cog = cog
-        # if not cog.bot.local:
-        #     self.disabled = True
 
     async def command_check(self, response: discord.SlashCommandResponse):
         if await self.cog.bot.is_owner(response.user):

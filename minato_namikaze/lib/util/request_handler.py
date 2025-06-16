@@ -9,8 +9,6 @@ from typing import Optional
 from typing import Union
 
 import aiohttp
-import discord
-from discord.ext import commands
 
 from .vars import Methods
 
@@ -96,80 +94,6 @@ async def ratelimit_handler(
         await asyncio.sleep(random.randrange(60, 120))
 
 
-# async def post_commands(
-#     bot: commands.AutoShardedBot | commands.Bot | discord.Client,
-#     print_logs: bool | None = False,
-# ) -> None:
-#     # Fateslist
-#     # list_to_be_given = []
-#     # for cog_name in bot.cogs:
-#     #     cog = bot.cogs[cog_name]
-#     #     for command in cog.walk_commands():
-#     #         if not command.hidden:
-#     #             command_dict = {
-#     #                 "name": command.name,
-#     #                 "description": command.description or command.short_doc,
-#     #                 "cmd_type": 0,
-#     #                 "vote_locked": False,
-#     #                 "premium_only": False,
-#     #                 "notes": ["Message Command", "Prefix Required"],
-#     #                 "nsfw": False,
-#     #                 "examples": [],
-#     #                 "doc_link": LinksAndVars.website.value
-#     #                 + f"/commands/message_commands/#--{command.name}",
-#     #             }
-#     #             if command.usage:
-#     #                 command_dict.update({"usage": command.usage})
-#     #             if command.clean_params or len(command.params) != 0:
-#     #                 command_dict.update({"args": list(command.clean_params)})
-#     #             if command.full_parent_name is not None:
-#     #                 command_dict.update(
-#     #                     {"groups": [command.full_parent_name, cog_name]},
-#     #                 )
-#     #             else:
-#     #                 command_dict.update(
-#     #                     {"groups": [command.full_parent_name, cog_name]},
-#     #                 )
-#     #             list_to_be_given.append(command_dict)
-#     # # for i in bot.application_commands:
-#     # #     app_command_dict = {
-#     # #         'name': i.name,
-#     # #         'description': i.description,
-#     # #         "cmd_type": 1,
-#     # #         "vote_locked": False,
-#     # #         "premium_only": False,
-#     # #         "notes": ['Slash Command'],
-#     # #         "nsfw": False,
-#     # #         "examples": [],
-#     # #         "doc_link": LinksAndVars.website.value+f"/commands/application_commands/#{i.name}",
-#     # #         "groups": [],
-#     # #         "args": [j.name for j in i.options if i.options],
-#     # #         "usage": f'/{i.name}'
-#     # #     }
-#     # #     list_to_be_given.append(app_command_dict)
-#     # final_list = discord.utils.as_chunks(list_to_be_given, 10)
-#     # for to_be_post_list in final_list:
-#     #     req = await post_handler(
-#     #         Methods.POST,
-#     #         FATESLIST_BASE_URI + f"bots/{bot.application_id}/commands",
-#     #         headers={
-#     #             "Authorization": token_get("FATESLIST"),
-#     #         },
-#     #         json={"commands": to_be_post_list},
-#     #         return_data=False,
-#     #         getrequestobj=True,
-#     #         log_data=print_logs,
-#     #     )
-#     #     await ratelimit_handler(
-#     #         req,
-#     #         FATESLIST_BASE_URI + f"bots/{bot.application_id}/commands",
-#     #         Methods.POST,
-#     #         data={"commands": to_be_post_list},
-#     #         headers={
-#     #             "Authorization": token_get("FATESLIST"),
-#     #         },
-#     #         print_logs=print_logs,
-#     #     )
 
 #     # # Discord Services
 #     # list_to_be_given = []
@@ -212,4 +136,3 @@ async def ratelimit_handler(
 #     #         },
 #     #         print_logs=print_logs,
 #     #     )
-#     return

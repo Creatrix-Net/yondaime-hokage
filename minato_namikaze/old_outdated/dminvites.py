@@ -43,32 +43,11 @@ class DmInvite(commands.Cog):
             )
         await ctx.send(embed=embed)
 
-    # @dminvite.command()
-    # @commands.is_owner()
-    # async def toggle(self, ctx, toggle: bool = None):
-    #     """Turn DM responding on/off."""
-    #     toggle = toggle or await self.config.toggle()
-    #     if toggle:
-    #         await self.config.toggle.set(False)
-    #         await ctx.send(f"{ctx.me.name} will no longer auto-respond to invites sent in DMs.")
 
     #     else:
     #         await self.config.toggle.set(True)
     #         await ctx.send(f"{ctx.me.name} will auto-respond to invites sent in DMs.")
 
-    # @dminvite.command()
-    # @commands.is_owner()
-    # async def embeds(self, ctx, toggle: bool = None):
-    #     """Toggle whether the message is an embed or not."""
-    #     toggle = toggle or await self.config.embed()
-    #     if toggle:
-    #         await self.config.embed.set(False)
-    #         await ctx.send("Responses will no longer be sent as an embed.")
-    #     else:
-    #         await self.config.embed.set(True)
-    #         await ctx.send(
-    #             "Responses will now be sent as an embed. You can now use other markdown such as link masking etc.",
-    #         )
 
     @dminvite.command()
     @commands.is_owner()

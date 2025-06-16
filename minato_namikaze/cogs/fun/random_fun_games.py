@@ -101,7 +101,6 @@ class Random(commands.Cog):
         lol = owoify.owoify(f"{text}")
         await ctx.send(lol)
 
-
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def qr(self, ctx: "Context", colour="255-255-255", *, url: str | None = None):
@@ -200,8 +199,6 @@ class Random(commands.Cog):
                 await ctx.send(embed=e2)
         except mystbin.BadPasteID:
             await ctx.send(f"Hmmm.. id : {id} isn't found, try again?")
-
-
 
     #     await ctx.trigger_typing()
     #     browser = await launch()

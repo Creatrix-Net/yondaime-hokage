@@ -88,9 +88,6 @@ class _envConfig:
 envConfig: Any = _envConfig()
 
 
-
-
-
 @enum.unique
 class ChannelAndMessageId(enum.IntEnum):
     badges_channel = 920536143458598930
@@ -171,8 +168,6 @@ class Webhooks(enum.Enum):
     feedback = token_get("FEEDBACK")
     badges = token_get("BADGES")
     sentry = token_get("SENTRY")
-
-
 
 
 @enum.unique

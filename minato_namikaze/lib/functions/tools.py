@@ -70,8 +70,6 @@ def check_if_user_joined_a_stage(ctx):
     return True
 
 
-
-
 # R.Danny Code
 class plural:
     def __init__(self, value):

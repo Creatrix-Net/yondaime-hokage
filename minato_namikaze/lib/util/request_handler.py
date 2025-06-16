@@ -94,7 +94,6 @@ async def ratelimit_handler(
         await asyncio.sleep(random.randrange(60, 120))
 
 
-
 #     # # Discord Services
 #     # list_to_be_given = []
 #     # for cog_name in bot.cogs:

@@ -108,7 +108,6 @@ class Games(commands.Cog):
         """Check your typing speed via a simple typeracer test"""
         await TypeRacer().start(ctx=ctx)
 
-
     @commands.max_concurrency(1, per=commands.BucketType.channel)
     @commands.command()
     async def reaction(self, ctx: "Context"):

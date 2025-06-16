@@ -9,8 +9,6 @@ from typing import Optional
 from typing import Union
 
 import aiohttp
-import discord
-from discord.ext import commands
 
 from .vars import Methods
 

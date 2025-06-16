@@ -13,7 +13,6 @@ import discord
 from discord.ext import commands
 
 from ..functions import ExpiringCache
-from ..util.vars import LinksAndVars
 from .time_class import format_relative
 
 # from ..util.vars import ShinobiMatch

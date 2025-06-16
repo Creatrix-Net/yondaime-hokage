@@ -103,10 +103,15 @@ class AntiSpam:
         self.__event_timestamps = []
         _itvs = intervals or self.default_intervals
         self.__intervals = [_AntiSpamInterval(*x) for x in _itvs]
-        self.__discard_after = max([x.period for x in self.__intervals])
+        self.__discard_after = max(x.period for x in self.__intervals)
 
     def __interval_check(self, interval: _AntiSpamInterval):
-        return len([t for t in self.__event_timestamps if (t + interval.period) > datetime.utcnow()]) >= interval.frequency
+        return (
+            len(
+                [t for t in self.__event_timestamps if (t + interval.period) > datetime.utcnow()],
+            )
+            >= interval.frequency
+        )
 
     @property
     def spammy(self):

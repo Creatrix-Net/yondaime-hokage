@@ -41,13 +41,13 @@ class Random(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def braille(self, ctx: "Context", user: discord.Member = None):
+    async def braille(self, ctx: Context, user: discord.Member = None):
         user = user or ctx.author
         file = await self.bot.se.braille(f"{user.avatar_url}")
         await ctx.send(file)
 
     @braille.error
-    async def braille_handler(self, ctx: "Context", error):
+    async def braille_handler(self, ctx: Context, error):
         if isinstance(error, commands.CommandOnCooldown):
             l = self.bot.get_command("braille")
             left = l.get_cooldown_retry_after(ctx)
@@ -61,7 +61,7 @@ class Random(commands.Cog):
     @commands.command(aliases=["takeitback"], usage="<member.mention>")
     async def insult(
         self,
-        ctx: "Context",
+        ctx: Context,
         user: MemberID | discord.Member | None = None,
     ):
         """
@@ -97,7 +97,7 @@ class Random(commands.Cog):
             )
 
     @commands.command(usage="{text}")
-    async def owoify(self, ctx: "Context", text: str):
+    async def owoify(self, ctx: Context, text: str):
         """Owoify the message"""
         lol = owoify.owoify(f"{text}")
         await ctx.send(lol)
@@ -116,7 +116,7 @@ class Random(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 40, commands.BucketType.guild)
-    async def qr(self, ctx: "Context", colour="255-255-255", *, url: str | None = None):
+    async def qr(self, ctx: Context, colour="255-255-255", *, url: str | None = None):
         """Generates easy QR Code"""
         colours = {
             "255-255-255": "255-255-255",
@@ -138,7 +138,7 @@ class Random(commands.Cog):
             await msg.edit(content="", embed=e)
 
         else:
-            if not colour in col:
+            if colour not in col:
                 if url is None:
                     url = ""
                 colour = f"{colour} {url}"
@@ -150,7 +150,7 @@ class Random(commands.Cog):
                 pass
 
     @commands.command(usage="<name>")
-    async def sn(self, ctx: "Context", *, name: str):
+    async def sn(self, ctx: Context, *, name: str):
         """Introduce yourself to everyone"""
         tts = gTTS(text=f"Hi! {name} is really cool!", lang="en")
         tts.save("announce.mp3")
@@ -159,7 +159,7 @@ class Random(commands.Cog):
         os.remove("announce.mp3")
 
     @commands.command(usage="<text>")
-    async def tts(self, ctx: "Context", *, text: str):
+    async def tts(self, ctx: Context, *, text: str):
         """Generate text to speech messages"""
         lol = gTTS(text=text)
         lol.save("tts.mp3")
@@ -171,7 +171,7 @@ class Random(commands.Cog):
         aliases=["color", "colour", "sc"],
         usage="<hexadecimal colour code>",
     )
-    async def show_color(self, ctx: "Context", *, color: discord.Colour):
+    async def show_color(self, ctx: Context, *, color: discord.Colour):
         """Enter a color and you will see it!"""
         file = io.BytesIO()
         Image.new("RGB", (200, 90), color.to_rgb()).save(file, format="PNG")
@@ -181,7 +181,7 @@ class Random(commands.Cog):
         await ctx.send(file=discord.File(file, "color.png"), embed=em)
 
     @commands.command(aliases=["myst"], usage="<text>")
-    async def mystbin(self, ctx: "Context", *, text: str):
+    async def mystbin(self, ctx: Context, *, text: str):
         """Generate an Mystbin for yourself"""
         paste = await self.mystbin_client.post(f"{text}", syntax="python")
         e = discord.Embed(
@@ -191,7 +191,7 @@ class Random(commands.Cog):
         await ctx.send(embed=e)
 
     @commands.command(aliases=["getmyst"], usage="<mystbin_id>")
-    async def getmystbin(self, ctx: "Context", id: str):
+    async def getmystbin(self, ctx: Context, id: str):
         """Get your Mystbi using your id"""
         try:
             get_paste = await self.mystbin_client.get(f"https://mystb.in/{id}")
@@ -253,5 +253,5 @@ class Random(commands.Cog):
     #     await ctx.send(file=file)
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Random(bot))

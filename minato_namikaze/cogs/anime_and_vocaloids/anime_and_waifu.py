@@ -1,9 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Dict
-from typing import List
-from typing import Tuple
 from typing import TYPE_CHECKING
 
 import discord
@@ -43,9 +40,7 @@ def format_related_anime_manga(dict_related_anime: dict[str, list[str]]) -> str:
     """
     formatted_string = "\n"
     for i in dict_related_anime:
-        formatted_string += (
-            f'・**{i.capitalize()}**: {" ,".join(dict_related_anime[i])} ;\n'
-        )
+        formatted_string += f'・**{i.capitalize()}**: {" ,".join(dict_related_anime[i])} ;\n'
     return formatted_string
 
 
@@ -136,7 +131,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "searchani",
         ],
     )
-    async def animesearch(self, ctx: "Context", *, anime_name: str):
+    async def animesearch(self, ctx: Context, *, anime_name: str):
         """Searches Anime from MAL and displays the first 10 search result."""
         search = AnimeSearch(str(anime_name).strip(" ").lower())
         search_results = search.results[:10]
@@ -191,7 +186,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "anime",
         ],
     )
-    async def aboutanime(self, ctx: "Context", mal_id: int):
+    async def aboutanime(self, ctx: Context, mal_id: int):
         """Displays about the anime using the MAL ANIME ID. get it by using animesearch command."""
         await ctx.send(":mag: Searching...", delete_after=5)
         try:
@@ -254,10 +249,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             e.add_field(name=":stopwatch: **Duration**", value=anime.duration)
         if anime.rating:
             e.add_field(name="**Rating**", value=anime.rating)
-        if (
-            anime.related_anime
-            and len(format_related_anime_manga(anime.related_anime)) < 1024
-        ):
+        if anime.related_anime and len(format_related_anime_manga(anime.related_anime)) < 1024:
             e.add_field(
                 name="**Related Anime**",
                 value=format_related_anime_manga(anime.related_anime),
@@ -355,7 +347,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "searchmag",
         ],
     )
-    async def mangasearch(self, ctx: "Context", *, manga_name: str):
+    async def mangasearch(self, ctx: Context, *, manga_name: str):
         """Searches Manga from MAL and displays the first 10 search result."""
         search = MangaSearch(str(manga_name).strip(" ").lower())
         search_results = search.results[:10]
@@ -410,7 +402,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             "manga",
         ],
     )
-    async def aboutmanga(self, ctx: "Context", mal_id: int):
+    async def aboutmanga(self, ctx: Context, mal_id: int):
         """Displays about the manga using the MAL MANGA ID. get it by using mangasearch command."""
         message = await ctx.send(":mag: Searching...", delete_after=5)
         manga = Manga(int(mal_id))
@@ -473,10 +465,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                     icon_url=manga.image_url,
                 )
                 embeds.append(e1)
-        if (
-            manga.related_manga
-            and len(format_related_anime_manga(manga.related_manga)) < 1024
-        ):
+        if manga.related_manga and len(format_related_anime_manga(manga.related_manga)) < 1024:
             e.add_field(
                 name="**Related Manga**",
                 value=format_related_anime_manga(manga.related_manga),
@@ -503,7 +492,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     @commands.hybrid_command(aliases=["w", "wfu", "wa"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
-    async def waifu(self, ctx: "Context"):
+    async def waifu(self, ctx: Context):
         """Get random waifu and marry them! UwU!"""
         async with ctx.typing():
             waifu = await self.get_waifu()
@@ -527,7 +516,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
 
     @commands.hybrid_command(aliases=["wtp", "whatsthatpokemon"])
     @commands.cooldown(1, 2, commands.BucketType.guild)
-    async def whosthatpokemon(self, ctx: "Context"):
+    async def whosthatpokemon(self, ctx: Context):
         """Play Who\'s That Pokemon?"""
         async with ctx.typing():
             wtp = await self.bot.dagpi.wtp()
@@ -628,5 +617,5 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
         )
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(AnimeaMangaandWaifu(bot))

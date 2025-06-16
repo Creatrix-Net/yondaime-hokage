@@ -24,7 +24,6 @@ from minato_namikaze.lib import Base
 from minato_namikaze.lib import cache
 from minato_namikaze.lib import convert
 from minato_namikaze.lib import Embed
-from minato_namikaze.lib import ErrorEmbed
 from minato_namikaze.lib import format_relative
 from minato_namikaze.lib import FutureTime
 from minato_namikaze.lib import GiveawayConfig
@@ -272,9 +271,7 @@ class Giveaway(Cog):
                     lambda a: discord.utils.get(
                         a.roles,
                         id=int(
-                            giveaway_config.role_required.lstrip("<@&")
-                            .lstrip("<&")
-                            .rstrip(">"),
+                            giveaway_config.role_required.lstrip("<@&").lstrip("<&").rstrip(">"),
                         ),
                     )
                     is not None,

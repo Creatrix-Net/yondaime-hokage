@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datetime
-from typing import Optional
 from typing import TYPE_CHECKING
 from urllib.parse import urlencode
 
@@ -24,7 +23,7 @@ log = logging.getLogger(__name__)
 
 
 class UnitConverter(Converter):
-    async def convert(self, ctx: "Context", argument: str) -> str | None:
+    async def convert(self, ctx: Context, argument: str) -> str | None:
         new_units = None
         if argument.lower() in ["f", "imperial", "mph"]:
             new_units = "imperial"
@@ -56,7 +55,7 @@ class Weather(commands.Cog):
 
     @commands.hybrid_group(name="weather", aliases=["we"], invoke_without_command=True)
     @commands.bot_has_permissions(embed_links=True)
-    async def weather(self, ctx: "Context", *, location: str) -> None:
+    async def weather(self, ctx: Context, *, location: str) -> None:
         """
         Display weather in a given location
         `location` must take the form of `city, Country Code`
@@ -67,7 +66,7 @@ class Weather(commands.Cog):
 
     @weather.command(name="zip")
     @commands.bot_has_permissions(embed_links=True)
-    async def weather_by_zip(self, ctx: "Context", *, zipcode: str) -> None:
+    async def weather_by_zip(self, ctx: Context, *, zipcode: str) -> None:
         """
         Display weather in a given location
         `zipcode` must be a valid ZIP code or `ZIP code, Country Code` (assumes US otherwise)
@@ -78,7 +77,7 @@ class Weather(commands.Cog):
 
     @weather.command(name="cityid")
     @commands.bot_has_permissions(embed_links=True)
-    async def weather_by_cityid(self, ctx: "Context", *, cityid: int) -> None:
+    async def weather_by_cityid(self, ctx: Context, *, cityid: int) -> None:
         """
         Display weather in a given location
         `cityid` must be a valid openweathermap city ID
@@ -92,7 +91,7 @@ class Weather(commands.Cog):
     @commands.bot_has_permissions(embed_links=True)
     async def weather_by_coordinates(
         self,
-        ctx: "Context",
+        ctx: Context,
         lat: float,
         lon: float,
     ) -> None:
@@ -107,7 +106,7 @@ class Weather(commands.Cog):
 
     async def get_weather(
         self,
-        ctx: "Context",
+        ctx: Context,
         *,
         location: str | None = None,
         zipcode: str | None = None,
@@ -203,5 +202,5 @@ class Weather(commands.Cog):
         await ctx.send(embed=embed)
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Weather(bot))

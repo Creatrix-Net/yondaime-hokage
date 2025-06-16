@@ -271,7 +271,9 @@ class Giveaway(Cog):
                     lambda a: discord.utils.get(
                         a.roles,
                         id=int(
-                            giveaway_config.role_required.lstrip("<@&").lstrip("<&").rstrip(">"),
+                            giveaway_config.role_required.lstrip("<@&")
+                            .lstrip("<&")
+                            .rstrip(">"),
                         ),
                     )
                     is not None,

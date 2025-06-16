@@ -525,9 +525,13 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
         """Party with someone"""
         member = member or ctx.author
         if member in ["@everyone", "@here"]:
-            desc = f"**@everyone {ctx.author.mention} is partying!! come join them !! **"
+            desc = (
+                f"**@everyone {ctx.author.mention} is partying!! come join them !! **"
+            )
         else:
-            desc = f"**{ctx.author.mention} parties with {member.mention} !!! Yaay !!! **"
+            desc = (
+                f"**{ctx.author.mention} parties with {member.mention} !!! Yaay !!! **"
+            )
         if member == ctx.author:
             desc = f"**{ctx.author.mention} is partying !!!**"
 

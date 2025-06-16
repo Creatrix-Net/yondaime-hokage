@@ -40,7 +40,9 @@ def format_related_anime_manga(dict_related_anime: dict[str, list[str]]) -> str:
     """
     formatted_string = "\n"
     for i in dict_related_anime:
-        formatted_string += f'・**{i.capitalize()}**: {" ,".join(dict_related_anime[i])} ;\n'
+        formatted_string += (
+            f'・**{i.capitalize()}**: {" ,".join(dict_related_anime[i])} ;\n'
+        )
     return formatted_string
 
 
@@ -249,7 +251,10 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             e.add_field(name=":stopwatch: **Duration**", value=anime.duration)
         if anime.rating:
             e.add_field(name="**Rating**", value=anime.rating)
-        if anime.related_anime and len(format_related_anime_manga(anime.related_anime)) < 1024:
+        if (
+            anime.related_anime
+            and len(format_related_anime_manga(anime.related_anime)) < 1024
+        ):
             e.add_field(
                 name="**Related Anime**",
                 value=format_related_anime_manga(anime.related_anime),
@@ -465,7 +470,10 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                     icon_url=manga.image_url,
                 )
                 embeds.append(e1)
-        if manga.related_manga and len(format_related_anime_manga(manga.related_manga)) < 1024:
+        if (
+            manga.related_manga
+            and len(format_related_anime_manga(manga.related_manga)) < 1024
+        ):
             e.add_field(
                 name="**Related Manga**",
                 value=format_related_anime_manga(manga.related_manga),

@@ -18,7 +18,6 @@ from minato_namikaze.lib import EmbedPaginator
 from minato_namikaze.lib import ErrorEmbed
 from minato_namikaze.lib import LinksAndVars
 
-# from asyncdagpi import Client
 
 if TYPE_CHECKING:
     from lib import Context
@@ -91,7 +90,6 @@ def format_manga_characters(character: list[MangaCharacterResult]) -> str:
 class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
     def __init__(self, bot: MinatoNamikazeBot):
         self.bot: MinatoNamikazeBot = bot
-        # self.bot.dagpi = Client(Tokens.dagpi.value)
         self.description = "Some anime, manga and waifu related commands"
 
     @property
@@ -164,8 +162,6 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
                 e.add_field(name="**MAL Url**", value=f"[CLICK HERE]({i.url})")
             if i.mal_id:
                 e.add_field(name="**MAL ID**", value=i.mal_id)
-            # if i.image_url:
-            #     e.set_image(url=i.image_url) #later it the comment will be removed
             e.set_footer(
                 text=f"{i.title} | {i.mal_id} | {i.score} stars",
                 icon_url=i.image_url,

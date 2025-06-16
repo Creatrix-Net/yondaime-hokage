@@ -97,7 +97,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
         self.uptime = format_relative(self.start_time)
         self.persistent_views_added = False
-        # self.session = ClientSession(raise_for_status=True)
         self.blacklist: UniqueList = UniqueList()
 
         super().__init__(

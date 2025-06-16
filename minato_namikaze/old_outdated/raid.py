@@ -74,17 +74,7 @@ class AntiRaid(commands.Cog):
             id=922030031146995733,
         )
 
-    # async def database_class_antiraid(self):
-    #     return await self.bot.db.new(
-    #         Database.database_category_name.value,
-    #         Database.antiraid_channel_name.value,
-    #     )
 
-    # async def database_class_mentionspam(self):
-    #     return await self.bot.db.new(
-    #         Database.database_category_name.value,
-    #         Database.mentionspam_channel_name.value,
-    #     )
 
     @tasks.loop(hours=1, reconnect=True)
     async def cleanup(self):

@@ -12,7 +12,7 @@ import traceback
 import click
 from colorama import Back
 from colorama import Fore
-from colorama import init  # type: ignore
+from colorama import init as initcoloroma  # type: ignore
 from colorama import Style
 
 from minato_namikaze import Base
@@ -23,7 +23,7 @@ from minato_namikaze import vars
 from minato_namikaze.discordbot import MinatoNamikazeBot
 
 
-init(autoreset=True)  # type: ignore
+initcoloroma(autoreset=True)  # type: ignore
 
 os.environ["ALEMBIC_CONFIG"] = str(vars.CONFIG_FILE)
 
@@ -153,15 +153,9 @@ def init(cogs):
     """This manages the migrations and database creation system for you."""
     run = asyncio.get_event_loop().run_until_complete
     if not cogs:
-        cogs = [
-            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
-            for e in return_all_cogs()
-        ]
+        cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in return_all_cogs()]
     else:
-        cogs = [
-            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
-            for e in cogs
-        ]
+        cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in cogs]
 
     for ext in cogs:
         try:
@@ -229,15 +223,9 @@ def drop(cogs):
     run = asyncio.get_event_loop().run_until_complete
     click.confirm("Do you really want to do this?", abort=True)
     if cogs.lower() == "all":
-        cogs = [
-            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
-            for e in return_all_cogs()
-        ]
+        cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in return_all_cogs()]
     else:
-        cogs = [
-            f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e
-            for e in cogs
-        ]
+        cogs = [f"minato_namikaze.cogs.{e}" if not e.startswith("cogs.") else e for e in cogs]
 
     for ext in cogs:
         try:

@@ -344,7 +344,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                     yield member
 
     async def on_shard_resumed(self, shard_id):
-        log.info(f"Shard ID {shard_id} has resumed...")
+        log.info("Shard ID %s has resumed...", shard_id)
         self.resumes[shard_id].append(discord.utils.utcnow())
 
     async def close(self) -> None:
@@ -408,9 +408,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"][
-                "downsized_large"
-            ]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -425,9 +423,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
-                "images"
-            ]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -443,9 +439,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
     async def giphy(tag_name: str) -> str | None:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
-                "images"
-            ]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
         except:
             return
 
@@ -563,11 +557,11 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             )
             await channel.send(embed=embed)
             await guild.leave()
-            log.info(f"Left guild {guild.id} [Marked as spam]")
+            log.info("Left guild %s [Marked as spam]", guild.id)
 
     @staticmethod
     async def on_application_command_error(response, exception):
-        log.error(f"Error; Command: {response.command}, {str(exception)}")
+        log.error("Error; Command: %s, %s", response.command, str(exception))
 
     async def get_context(
         self,

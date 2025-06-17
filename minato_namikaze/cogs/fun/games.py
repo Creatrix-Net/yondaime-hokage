@@ -4,9 +4,7 @@ import asyncio
 import logging
 import random
 import time
-from typing import Optional
 from typing import TYPE_CHECKING
-from typing import Union
 
 import discord
 from discord.ext import commands
@@ -35,7 +33,7 @@ class Games(commands.Cog):
     @commands.guild_only()
     async def tictactoe(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: MemberID | discord.Member | None = None,
     ):
         """
@@ -62,7 +60,7 @@ class Games(commands.Cog):
     @commands.guild_only()
     async def connectfour(
         self,
-        ctx: "Context",
+        ctx: Context,
         member: MemberID | discord.Member | None = None,
     ):
         """
@@ -84,7 +82,7 @@ class Games(commands.Cog):
         )
 
     @commands.command(aliases=["hg"])
-    async def hangman(self, ctx: "Context"):
+    async def hangman(self, ctx: Context):
         """: "Context"
         Play Hangman!
         https://en.wikipedia.org/wiki/Hangman_(game)#Example_game
@@ -94,7 +92,7 @@ class Games(commands.Cog):
         await game.start(ctx)
 
     @commands.command(aliases=["aki"])
-    async def akinator(self, ctx: "Context"):
+    async def akinator(self, ctx: Context):
         """
         Play Akinator
         https://en.wikipedia.org/wiki/Akinator#Gameplay
@@ -108,10 +106,9 @@ class Games(commands.Cog):
         """Check your typing speed via a simple typeracer test"""
         await TypeRacer().start(ctx=ctx)
 
-
     @commands.max_concurrency(1, per=commands.BucketType.channel)
     @commands.command()
-    async def reaction(self, ctx: "Context"):
+    async def reaction(self, ctx: Context):
         """
         Yum Yum or Yuck Yuck?
         """
@@ -161,5 +158,5 @@ class Games(commands.Cog):
             pass
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Games(bot))

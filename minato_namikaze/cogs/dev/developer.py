@@ -109,7 +109,7 @@ class Developer(commands.Cog):
                     )
                     await channel.send(embed=embed)
                     await guild.leave()
-                    log.info(f"Left guild {guild.id} [Marked as spam]")
+                    log.info("Left guild %s [Marked as spam]", guild.id)
         log.info("Blacklist Data updated")
 
     @staticmethod
@@ -158,10 +158,7 @@ class Developer(commands.Cog):
         user: Union[discord.Member, MemberID],
     ):
         """Get a list of servers the bot shares with the user."""
-        guilds = [
-            f"{guild.name} `{guild.id}` ({guild.member_count} members)"
-            for guild in list(user.mutual_guilds)
-        ]
+        guilds = [f"{guild.name} `{guild.id}` ({guild.member_count} members)" for guild in list(user.mutual_guilds)]
 
         await self._send_guilds(ctx, guilds, "Shared Servers")
 
@@ -323,8 +320,7 @@ class Developer(commands.Cog):
                 [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection],
             )
             return await ctx.send(
-                f"Attempted to reload all extensions, was able to reload, "
-                f"however the following failed...\n\n{err}",
+                f"Attempted to reload all extensions, was able to reload, " f"however the following failed...\n\n{err}",
             )
 
         await msg.edit(embed=embed)
@@ -442,8 +438,7 @@ class Developer(commands.Cog):
             (
                 self.bot.user.mentioned_in(message)
                 and message.mention_everyone is False
-                and message.content.lower()
-                in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
+                and message.content.lower() in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
                 or message.content.lower()
                 in (
                     f"<@!{self.bot.application_id}> prefix",
@@ -463,11 +458,7 @@ class Developer(commands.Cog):
             except:
                 pass
 
-        if (
-            link_res := INVITE_URL_RE.findall(message.content)
-            and not message.author.bot
-            and not message.guild
-        ):
+        if link_res := INVITE_URL_RE.findall(message.content) and not message.author.bot and not message.guild:
             msg = "Thank you for showing interest in me. If you want to add me to your server, please ask the server owner to add me to the server. If you are the server owner, please click on the link below to add me to your server.\n\n{link}"
             if "{link}" in msg:
                 msg = msg.format(link=await self.bot.get_required_perms_invite_link)

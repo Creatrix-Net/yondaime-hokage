@@ -1106,11 +1106,11 @@
         },
         "num2words": {
             "hashes": [
-                "sha256:39e662c663f0a7e15415431ea68eb3dc711b49e3b776d93403e1da0a219ca4ee",
-                "sha256:a3064716fbbf90d75c449450cebfbc73a6a13e63b2531d09bdecc3ab1a2209cf"
+                "sha256:1c8e5b00142fc2966fd8d685001e36c4a9911e070d1b120e1beb721fa1edb33d",
+                "sha256:b066ec18e56b6616a3b38086b5747daafbaa8868b226a36127e0451c0cf379c6"
             ],
             "index": "pypi",
-            "version": "==0.5.13"
+            "version": "==0.5.14"
         },
         "orjson": {
             "hashes": [

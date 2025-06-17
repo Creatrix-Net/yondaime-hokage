@@ -43,11 +43,9 @@ class DmInvite(commands.Cog):
             )
         await ctx.send(embed=embed)
 
-
     #     else:
     #         await self.config.toggle.set(True)
     #         await ctx.send(f"{ctx.me.name} will auto-respond to invites sent in DMs.")
-
 
     @dminvite.command()
     @commands.is_owner()

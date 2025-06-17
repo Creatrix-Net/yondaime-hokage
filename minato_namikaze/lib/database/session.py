@@ -37,5 +37,4 @@ class Session:
         return db_session
 
 
-
 session_obj: Any = Session.get_session()

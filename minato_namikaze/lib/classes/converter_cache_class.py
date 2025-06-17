@@ -157,25 +157,6 @@ class MentionSpamConfig:
         return self
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class CooldownByContent(commands.CooldownMapping):
     def _bucket_key(message):
         return (message.channel.id, message.content)
@@ -261,8 +242,6 @@ class SpamChecker:
         if is_fast:
             self.fast_joiners[member.id] = True
         return is_fast
-
-
 
 
 class Timer:

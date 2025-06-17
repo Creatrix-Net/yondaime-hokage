@@ -74,8 +74,6 @@ class AntiRaid(commands.Cog):
             id=922030031146995733,
         )
 
-
-
     @tasks.loop(hours=1, reconnect=True)
     async def cleanup(self):
         database = await self.database_class_antiraid()

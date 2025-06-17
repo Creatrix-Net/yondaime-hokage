@@ -108,7 +108,11 @@ class AntiSpam:
     def __interval_check(self, interval: _AntiSpamInterval):
         return (
             len(
-                [t for t in self.__event_timestamps if (t + interval.period) > datetime.utcnow()],
+                [
+                    t
+                    for t in self.__event_timestamps
+                    if (t + interval.period) > datetime.utcnow()
+                ],
             )
             >= interval.frequency
         )
@@ -130,4 +134,8 @@ class AntiSpam:
         has expired (set when this AntiSpam object was initiated).
         """
         self.__event_timestamps.append(datetime.utcnow())
-        self.__event_timestamps = [t for t in self.__event_timestamps if t + self.__discard_after > datetime.utcnow()]
+        self.__event_timestamps = [
+            t
+            for t in self.__event_timestamps
+            if t + self.__discard_after > datetime.utcnow()
+        ]

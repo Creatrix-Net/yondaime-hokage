@@ -1,0 +1,17 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Community Support
+    url: https://github.com/orgs/Creatrix-Net/discussions
+    about: Please ask and answer questions here.
+  - name: Project Website
+    url: https://thecreativenet.in/products/minato_namikaze
+    about: Visit our project website for more details.
+  - name: The Main Website
+    url: https://thecreativenet.in
+    about: Visit our main website for more information.
+  - name: Twitter
+    url: https://twitter.com/creatrix_net
+    about: Follow us on Twitter for updates.
+  - name: LinkedIn
+    url: https://www.linkedin.com/company/creatrix-net
+    about: Connect with us on LinkedIn.

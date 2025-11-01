@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from operator import itemgetter
-from typing import List
 from typing import TYPE_CHECKING
 
 import discord
@@ -12,12 +11,10 @@ from minato_namikaze.lib import ErrorEmbed
 
 if TYPE_CHECKING:
     from minato_namikaze.lib import Context
-
     from .. import MinatoNamikazeBot
 
 
 import logging
-
 log = logging.getLogger(__name__)
 
 
@@ -308,5 +305,5 @@ class QuickPoll(commands.Cog):
             )
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(QuickPoll(bot))

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import Union
 
 import discord
 from discord.ext import commands
@@ -32,8 +31,8 @@ def errorembed(ctx):
 
 
 class Support(commands.Cog):
-    def __init__(self, bot: MinatoNamikazeBot):
-        self.bot: MinatoNamikazeBot = bot
+    def __init__(self, bot: "MinatoNamikazeBot"):
+        self.bot: "MinatoNamikazeBot" = bot
         self.description = "Displays the support command for the server, this can only be used if the owner has enabled it"
 
     @property

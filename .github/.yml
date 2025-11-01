@@ -3,3 +3,6 @@
 
 - name: Lock Threads
   uses: dessant/lock-threads@v4.0.0
+
+- name: Attest Build Provenance
+  uses: actions/attest-build-provenance@v3.0.0

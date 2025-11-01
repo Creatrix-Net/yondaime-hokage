@@ -18,7 +18,9 @@ if TYPE_CHECKING:
 
 
 import logging
+
 log = logging.getLogger(__name__)
+
 
 class Payment(Base):
     __tablename__ = "payments"
@@ -27,7 +29,6 @@ class Payment(Base):
     payment_channel = Column(BigInteger, nullable=True)
     payment_role = Column(BigInteger, nullable=True)
     payment_url = Column(URLType, nullable=True)
-    
 
 
 class Payments(commands.Cog):
@@ -37,8 +38,8 @@ class Payments(commands.Cog):
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
-        return discord.PartialEmoji(name="\U0001F4B0")  # Money bag emoji
-    
-    
+        return discord.PartialEmoji(name="\U0001f4b0")  # Money bag emoji
+
+
 async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Payments(bot))

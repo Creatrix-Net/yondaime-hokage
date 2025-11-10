@@ -2319,7 +2319,6 @@
                 "sha256:70ddccdd7c99fc5942e9fc25636a8b34d04c24b335100223152c2803e4063312",
                 "sha256:e578a81bb873cbb89a41fcc904c7ef523cc18284b7e3b3ccf06aca1403b7ebd3"
             ],
-            "index": "pypi",
             "markers": "python_version >= '3.10'",
             "version": "==4.5.0"
         },
@@ -2333,12 +2332,12 @@
         },
         "pre-commit": {
             "hashes": [
-                "sha256:2b0747ad7e6e967169136edffee14c16e148a778a54e4f967921aa1ebf2308d8",
-                "sha256:499fe450cc9d42e9d58e606262795ecb64dd05438943c62b66f6a8673da30b16"
+                "sha256:b35ea52957cbf83dcc5d8ee636cbead8624e3a15fbfa61a370e42158ac8a5813",
+                "sha256:f0233ebab440e9f17cabbb558706eb173d19ace965c68cdce2c081042b4fab15"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.9'",
-            "version": "==4.3.0"
+            "markers": "python_version >= '3.10'",
+            "version": "==4.4.0"
         },
         "pygments": {
             "hashes": [

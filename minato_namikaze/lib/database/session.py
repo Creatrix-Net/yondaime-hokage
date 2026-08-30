@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import logging
 from typing import Any
@@ -6,7 +6,7 @@ from typing import Any
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from ..util import envConfig
 
@@ -26,9 +26,9 @@ class Session:
         return create_async_engine(envConfig.DATABASE_URL, echo=False)
 
     @staticmethod
-    def get_session() -> sessionmaker:
+    def get_session() -> async_sessionmaker[AsyncSession]:
         """Return the database session connection."""
-        db_session = sessionmaker(
+        db_session = async_sessionmaker(
             bind=Session.get_engine(),
             autoflush=True,
             class_=AsyncSession,
@@ -37,4 +37,4 @@ class Session:
         return db_session
 
 
-session_obj: Any = Session.get_session()
+session_obj: async_sessionmaker[AsyncSession] = Session.get_session()

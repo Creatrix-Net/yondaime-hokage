@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 
 from minato_namikaze import return_all_cogs
 from minato_namikaze import vars
+import minato_namikaze.lib.database
 
 run = asyncio.get_event_loop().run_until_complete
 

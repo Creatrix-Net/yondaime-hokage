@@ -251,7 +251,7 @@ class BadgesCog(commands.Cog, name="Badges"):
         # adds ID Class
         draw.text(
             (225, 400),
-            badge.code + "-" + str(user).split("#")[1],
+            badge.code + "-" + str(user.id)[-4:],
             fill=fill,
             font=font1,
         )

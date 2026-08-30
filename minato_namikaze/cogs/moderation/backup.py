@@ -102,7 +102,6 @@ class BackUp(commands.Cog):
                     "author": {
                         "name": message.author.name,
                         "display_name": message.author.display_name,
-                        "discriminator": message.author.discriminator,
                         "id": message.author.id,
                         "bot": message.author.bot,
                     },
@@ -113,7 +112,6 @@ class BackUp(commands.Cog):
                         {
                             "name": user.name,
                             "display_name": user.display_name,
-                            "discriminator": user.discriminator,
                             "id": user.id,
                             "bot": user.bot,
                         }
@@ -180,7 +178,6 @@ class BackUp(commands.Cog):
                         "author": {
                             "name": message.author.name,
                             "display_name": message.author.display_name,
-                            "discriminator": message.author.discriminator,
                             "id": message.author.id,
                             "bot": message.author.bot,
                         },
@@ -194,7 +191,6 @@ class BackUp(commands.Cog):
                             {
                                 "name": user.name,
                                 "display_name": user.display_name,
-                                "discriminator": user.discriminator,
                                 "id": user.id,
                                 "bot": user.bot,
                             }
@@ -373,7 +369,6 @@ class BackUp(commands.Cog):
                     "author": {
                         "name": message.author.name,
                         "display_name": message.author.display_name,
-                        "discriminator": message.author.discriminator,
                         "id": message.author.id,
                         "bot": message.author.bot,
                     },

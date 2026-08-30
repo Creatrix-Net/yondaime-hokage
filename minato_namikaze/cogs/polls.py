@@ -65,7 +65,7 @@ class QuickPoll(commands.Cog):
                 log.warning(e)
                 continue
 
-    @commands.command(pass_context=True, aliases=["poll", "polls"])
+    @commands.command(aliases=["poll", "polls"])
     async def polltime(self, ctx: "Context"):
         """Create polls easily"""
 
@@ -285,7 +285,7 @@ class QuickPoll(commands.Cog):
             return await ctx.send("You can only have up to 20 choices.")
 
         perms = ctx.channel.permissions_for(ctx.me)
-        if not (perms.read_message_history or perms.add_reactions):
+        if not (perms.read_message_history and perms.add_reactions):
             return await ctx.send(
                 "Need Read Message History and Add Reactions permissions.",
             )

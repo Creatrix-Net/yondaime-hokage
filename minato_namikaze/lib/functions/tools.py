@@ -51,23 +51,23 @@ async def copy_context_with(
 def check_if_user_joined_a_voice(ctx):
     """Checks is a user joined a voice channel"""
     voice_state_author = ctx.author.voice
-    if voice_state_author is None or isinstance(
+    if voice_state_author and isinstance(
         voice_state_author.channel,
         discord.VoiceChannel,
     ):
-        return False
-    return True
+        return True
+    return False
 
 
 def check_if_user_joined_a_stage(ctx):
     """Checks is a user joined a stage channel"""
     voice_state_author = ctx.author.voice
-    if voice_state_author is None or isinstance(
+    if voice_state_author and isinstance(
         voice_state_author.channel,
         discord.StageChannel,
     ):
-        return False
-    return True
+        return True
+    return False
 
 
 # R.Danny Code

@@ -511,8 +511,15 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         try:
             await self.invoke(ctx)
         except:
+            # TODO(Phase 1 - Security pass): Replace bare except with narrow
+            # exception handling and logging. Silent broad excepts hide bugs.
             pass
         finally:
+            # Intentional: delete the command-invoking message after processing
+            # to keep channels clean. This is unconditional — the message is
+            # deleted whether the command succeeds or fails.
+            # TODO(Phase 2): Make this behavior per-guild configurable via the
+            # Config abstraction rather than hardcoded for all guilds.
             try:
                 await message.delete()
             except (discord.Forbidden, discord.NotFound, discord.HTTPException):

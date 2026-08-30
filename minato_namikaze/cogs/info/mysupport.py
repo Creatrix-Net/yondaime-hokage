@@ -157,7 +157,7 @@ class MySupport(commands.Cog, name="My Support"):
             title="Invite Link",
             description=f":point_right: [Required Perms Invite]({self.bot.get_required_perms_invite_link}) \n :point_right: [Admin Perms Invite]({self.bot.get_admin_invite_link})",
         )
-        embed.set_thumbnail(url=ctx.bot.user.avatar.url)
+        embed.set_thumbnail(url=ctx.bot.user.display_avatar.url)
         await ctx.send(embed=embed)
 
     @commands.command(description="Generates my support server invite")

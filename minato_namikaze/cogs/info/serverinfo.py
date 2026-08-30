@@ -37,7 +37,7 @@ class Info(commands.Cog):
         """Get the avatar of you or someone else"""
         user = user or ctx.author
         e = discord.Embed(title=f"Avatar for {user.name}")
-        e.set_image(url=user.avatar.url)
+        e.set_image(url=user.display_avatar.url)
         await ctx.send(embed=e)
 
     @commands.command()
@@ -51,7 +51,7 @@ class Info(commands.Cog):
             title=f"**{user}**",
             description=f"{user} joined **{ctx.guild.name}** at \n{user.joined_at}",
         )
-        embed.set_image(url=user.avatar.url)
+        embed.set_image(url=user.display_avatar.url)
         await ctx.send(embed=embed)
 
     @commands.group(aliases=["serverinfo"])

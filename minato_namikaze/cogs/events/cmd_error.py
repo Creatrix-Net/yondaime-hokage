@@ -263,7 +263,7 @@ class BotEventsCommands(commands.Cog):
                 delete_after=self.delete_after_time,
             )
         else:
-            haaha = ctx.author.avatar.url
+            haaha = ctx.author.display_avatar.url
             e9 = ErrorEmbed(
                 title="Oh no there was some error",
                 description=f"`{error}`"[:2000],

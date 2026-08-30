@@ -187,7 +187,7 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             ),
         )
         if self.user is not None:
-            e.set_thumbnail(url=self.user.avatar.url)  # type: ignore
+            e.set_thumbnail(url=self.user.display_avatar.url)  # type: ignore
 
         log.info("Started The Bot")
 

@@ -225,7 +225,7 @@ class Moderation(commands.Cog):
                         value=ban_entry.user,
                         inline=True,
                     )
-                    embed.set_thumbnail(url=ban_entry.user.avatar.url)
+                    embed.set_thumbnail(url=ban_entry.user.display_avatar.url)
                     await ctx.channel.send(embed=embed)
                     return
             await ctx.send(
@@ -352,8 +352,8 @@ class Moderation(commands.Cog):
             title="Unban :tada:",
             description=f"**{user}** was unbanned! :tada:",
         )
-        if user.avatar.url:
-            e.set_thumbnail(url=user.avatar.url)
+        if user.display_avatar.url:
+            e.set_thumbnail(url=user.display_avatar.url)
         if event and event.reason:
             e.add_field(name="**Reason** :", value=event.reason)
         await unban.send(embed=e)

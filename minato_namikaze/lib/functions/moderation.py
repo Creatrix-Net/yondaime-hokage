@@ -276,7 +276,7 @@ async def userinfo(user: discord.Member, guild: discord.Guild, bot) -> discord.E
         colour=user.top_role.colour.value,
         description=f":id: User ID: `{user.id}`",
     )
-    embed.set_thumbnail(url=user.avatar.url)
+    embed.set_thumbnail(url=user.display_avatar.url)
 
     embed.add_field(name=":small_blue_diamond: User", value=user, inline=True)
     if user.nick:

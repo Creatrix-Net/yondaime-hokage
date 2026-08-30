@@ -530,7 +530,7 @@ class AnimeaMangaandWaifu(commands.Cog, name="Anime, Manga and Waifu"):
             e = Embed(title="Who's That Pokemon?", timestamp=ctx.message.created_at)
             e.set_footer(
                 text=f"{ctx.message.author} reply within 30secs to answer.",
-                icon_url=ctx.message.author.avatar.url,
+                icon_url=ctx.message.author.display_avatar.url,
             )
             e.set_image(url=question)
 

@@ -124,7 +124,7 @@ class Developer(commands.Cog):
             page = Embed(title=title)
 
             for guild in chunk:
-                if page.description == discord.Embed.Empty:
+                if page.description == None:
                     page.description = guild
                 else:
                     page.description += f"\n{guild}"
@@ -134,7 +134,7 @@ class Developer(commands.Cog):
 
         if len(all_pages) == 1:
             embed = all_pages[0]
-            embed.set_footer(text=discord.Embed.Empty)
+            embed.set_footer(text=None)
             await ctx.send(embed=embed)
             return
 
@@ -528,8 +528,8 @@ class Developer(commands.Cog):
                 description=description,
                 timestamp=discord.utils.utcnow(),
             )
-            e.set_author(name=self.bot.user, icon_url=self.bot.user.avatar.url)
-            e.set_thumbnail(url=self.bot.user.avatar.url)
+            e.set_author(name=self.bot.user, icon_url=self.bot.user.display_avatar.url)
+            e.set_thumbnail(url=self.bot.user.display_avatar.url)
             e.set_image(url=await self.bot.get_random_image_from_tag("minato namikaze"))
             await welcome_channel.send(embed=e)
         except:

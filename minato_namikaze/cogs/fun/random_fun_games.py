@@ -42,7 +42,7 @@ class Random(commands.Cog):
     @commands.cooldown(1, 40, commands.BucketType.guild)
     async def braille(self, ctx: Context, user: discord.Member = None):
         user = user or ctx.author
-        file = await self.bot.se.braille(f"{user.avatar_url}")
+        file = await self.bot.se.braille(f"{user.display_avatar.url}")
         await ctx.send(file)
 
     @braille.error

@@ -98,3 +98,6 @@ venv.bak/
 
 # Extensions
 .history/
+
+# Agent context (local reasoning trail, not tracked)
+.agent-context/

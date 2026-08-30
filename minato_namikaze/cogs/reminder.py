@@ -76,9 +76,8 @@ class Reminder(commands.Cog):
             Reminders.expires < datetime.timedelta(days=days),
         )
         async with session_obj() as session:
-            try:
-                record = (await session.execute(query)).one()
-            except (NoResultFound, MultipleResultsFound):
+            record = (await session.execute(query)).scalars().first()
+            if record is None:
                 record = False
         return Timer(record=record) if record else None
 
@@ -120,7 +119,9 @@ class Reminder(commands.Cog):
                     await asyncio.sleep(to_sleep)
 
                 await self.call_timer(timer)
-        except (OSError, discord.ConnectionClosed, asyncio.CancelledError):
+        except asyncio.CancelledError:
+            raise
+        except (OSError, discord.ConnectionClosed):
             self._task.cancel()
             self._task = self.bot.loop.create_task(self.dispatch_timers())
 

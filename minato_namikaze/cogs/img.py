@@ -1,3 +1,4 @@
+import io
 from __future__ import annotations
 
 import os
@@ -81,11 +82,11 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
             60,
         )
         draw.text((250, 300), text, font=font, fill="red", align="right")
-        img.save("wi.png")
+        img_bytes = io.BytesIO()
+        img.save(img_bytes, format="PNG")
+        img_bytes.seek(0)
         embed.set_image(url="attachment://wi.png")
-        await ctx.send(file=discord.File("wi.png", description=text), embed=embed)
-        await sleep(3)
-        os.remove("wi.png")
+        await ctx.send(file=discord.File(img_bytes, filename="wi.png", description=text), embed=embed)
 
     @commands.command(usage="[member.mention | member.id]")
     async def triggered(

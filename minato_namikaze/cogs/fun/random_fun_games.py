@@ -140,19 +140,19 @@ class Random(commands.Cog):
     async def sn(self, ctx: Context, *, name: str):
         """Introduce yourself to everyone"""
         tts = gTTS(text=f"Hi! {name} is really cool!", lang="en")
-        tts.save("announce.mp3")
-        await ctx.send(file=discord.File("announce.mp3"))
-        await asyncio.sleep(5)
-        os.remove("announce.mp3")
+        fp = io.BytesIO()
+        tts.write_to_fp(fp)
+        fp.seek(0)
+        await ctx.send(file=discord.File(fp, filename="announce.mp3"))
 
     @commands.command(usage="<text>")
     async def tts(self, ctx: Context, *, text: str):
         """Generate text to speech messages"""
         lol = gTTS(text=text)
-        lol.save("tts.mp3")
-        await ctx.send(file=discord.File("tts.mp3"))
-        await asyncio.sleep(5)
-        os.remove("tts.mp3")
+        fp = io.BytesIO()
+        lol.write_to_fp(fp)
+        fp.seek(0)
+        await ctx.send(file=discord.File(fp, filename="tts.mp3"))
 
     @commands.command(
         aliases=["color", "colour", "sc"],

@@ -219,31 +219,24 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     @staticmethod
     async def query_member_named(guild, argument, *, cache=False):
-        """Queries a member by their name, name + discrim, or nickname.
+        """Queries a member by their name or nickname.
+
         Parameters
         ------------
         guild: Guild
             The guild to query the member in.
         argument: str
-            The name, nickname, or name + discrim combo to check.
+            The name or nickname to search for.
         cache: bool
             Whether to cache the results of the query.
+
         Returns
         ---------
         Optional[Member]
             The member matching the query or None if not found.
         """
-        if len(argument) > 5 and argument[-5] == "#":
-            username, _, discriminator = argument.rpartition("#")
-            members = await guild.query_members(username, limit=100, cache=cache)
-            return discord.utils.get(
-                members,
-                name=username,
-                discriminator=discriminator,
-            )
-        else:
-            members = await guild.query_members(argument, limit=100, cache=cache)
-            return discord.utils.find(lambda m: argument in (m.name, m.nick), members)
+        members = await guild.query_members(argument, limit=100, cache=cache)
+        return discord.utils.find(lambda m: argument in (m.name, m.nick), members)
 
     async def get_or_fetch_member(self, guild, member_id):
         """Looks up a member in cache or fetches if not found.

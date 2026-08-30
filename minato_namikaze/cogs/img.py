@@ -1,3 +1,4 @@
+import asyncio
 import io
 from __future__ import annotations
 
@@ -75,16 +76,20 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
 
         embed = ErrorEmbed(description=desc, timestamp=discord.utils.utcnow())
 
-        img = Image.open(among_us_friends)
-        draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(
-            FileIO(BASE_DIR / os.path.join("lib", "data", "arial.ttf")),
-            60,
-        )
-        draw.text((250, 300), text, font=font, fill="red", align="right")
-        img_bytes = io.BytesIO()
-        img.save(img_bytes, format="PNG")
-        img_bytes.seek(0)
+        def make_image():
+            img = Image.open(among_us_friends)
+            draw = ImageDraw.Draw(img)
+            font = ImageFont.truetype(
+                FileIO(BASE_DIR / os.path.join("lib", "data", "arial.ttf")),
+                60,
+            )
+            draw.text((250, 300), text, font=font, fill="red", align="right")
+            img_bytes = io.BytesIO()
+            img.save(img_bytes, format="PNG")
+            img_bytes.seek(0)
+            return img_bytes
+
+        img_bytes = await asyncio.to_thread(make_image)
         embed.set_image(url="attachment://wi.png")
         await ctx.send(file=discord.File(img_bytes, filename="wi.png", description=text), embed=embed)
 

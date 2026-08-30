@@ -155,7 +155,7 @@ class Context(commands.Context):
                 index = int(message.content)
                 try:
                     return matches[index - 1]
-                except:
+                except (IndexError, ValueError):
                     await self.send(
                         f"Please give me a valid number. {2 - i} tries remaining...",
                     )
@@ -241,7 +241,7 @@ class Context(commands.Context):
                 user = self.bot.get_or_fetch_member(user, self.guild)
             else:
                 user = self.bot.get_or_fetch_member(user.id, self.guild)
-        except:
+        except (discord.NotFound, discord.HTTPException):
             if isinstance(user, (int, MemberID)):
                 user = self.bot.get_user(user)
         return user.dm_channel if user.dm_channel else await user.create_dm()
@@ -290,15 +290,15 @@ class Context(commands.Context):
             api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
             try:
                 return api_model.random(str(tag_name.lower()))
-            except:
+            except Exception:
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
             return api_model.random(str(tag_name.lower()))["data"]["images"][
                 "downsized_large"
             ]["url"]
-        except:
-            return
+        except Exception:
+                return
 
     @staticmethod
     async def get_random_image_from_tag(tag_name: str) -> str | None:
@@ -307,23 +307,23 @@ class Context(commands.Context):
             api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
             try:
                 return await api_model.arandom(str(tag_name.lower()))
-            except:
+            except Exception:
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
             return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
                 "images"
             ]["downsized_large"]["url"]
-        except:
-            return
+        except Exception:
+                return
 
     @staticmethod
     def tenor(tag_name: str) -> str | None:
         api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
         try:
             return api_model.random(str(tag_name.lower()))
-        except:
-            return
+        except Exception:
+                return
 
     @staticmethod
     def giphy(tag_name: str) -> str | None:
@@ -332,16 +332,16 @@ class Context(commands.Context):
             return api_model.random(str(tag_name.lower()))["data"]["images"][
                 "downsized_large"
             ]["url"]
-        except:
-            return
+        except Exception:
+                return
 
     @staticmethod
     async def tenor(tag_name: str) -> str | None:
         api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
         try:
             return await api_model.arandom(str(tag_name.lower()))
-        except:
-            return
+        except Exception:
+                return
 
     @staticmethod
     async def giphy(tag_name: str) -> str | None:
@@ -350,8 +350,8 @@ class Context(commands.Context):
             return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
                 "images"
             ]["downsized_large"]["url"]
-        except:
-            return
+        except Exception:
+                return
 
 
 class GuildContext(Context):

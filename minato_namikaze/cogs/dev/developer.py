@@ -171,10 +171,10 @@ class Developer(commands.Cog):
         try:
             try:
                 invite = (await guild.invites())[0]
-            except:
+            except (discord.Forbidden, IndexError):
                 try:
                     invite = (await guild.text_channels())[0].create_invite(max_age=120)
-                except:
+                except (discord.Forbidden, IndexError):
                     await ctx.send(
                         embed=ErrorEmbed(
                             description="No permissions to create an invite link.",
@@ -460,7 +460,7 @@ class Developer(commands.Cog):
         if message.channel.id in (ChannelAndMessageId.error_logs_channel.value,):
             try:
                 await message.publish()
-            except:
+            except discord.HTTPException:
                 pass
 
         if (
@@ -499,8 +499,8 @@ class Developer(commands.Cog):
                 content=f"We are now currently at **{len(self.bot.guilds)} servers**",
                 embed=e34,
             )
-        except:
-            pass
+        except discord.HTTPException:
+                pass
         await self.post()
 
     @commands.Cog.listener()
@@ -532,8 +532,8 @@ class Developer(commands.Cog):
             e.set_thumbnail(url=self.bot.user.display_avatar.url)
             e.set_image(url=await self.bot.get_random_image_from_tag("minato namikaze"))
             await welcome_channel.send(embed=e)
-        except:
-            pass
+        except discord.HTTPException:
+                pass
 
         # Send it to server count channel the support server
         try:
@@ -561,8 +561,8 @@ class Developer(commands.Cog):
                 content=f"We are now currently at **{len(self.bot.guilds)} servers**",
                 embed=e34,
             )
-        except:
-            pass
+        except discord.HTTPException:
+                pass
         await self.post()
 
 

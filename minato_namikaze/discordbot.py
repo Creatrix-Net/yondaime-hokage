@@ -151,6 +151,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 await self.load_extension(f"minato_namikaze.cogs.{i}")
             except commands.ExtensionAlreadyLoaded:
                 pass
+        os.environ["JISHAKU_HIDE"] = "False" if self.local else "True"
+        os.environ["JISHAKU_RETAIN"] = "True"
+        os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
         try:
             await self.load_extension("jishaku")
         except commands.ExtensionAlreadyLoaded:

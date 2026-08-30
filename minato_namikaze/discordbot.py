@@ -156,6 +156,46 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                 raise commands.CheckFailure(f"The '{ctx.command.cog_name}' feature is disabled in this server.")
             return True
 
+
+        @self.check
+        async def globally_enforce_permissions(ctx):
+            if ctx.guild is None or ctx.command is None:
+                return True
+            
+            # Skip checks for server owners or bot owners
+            if ctx.author.id == ctx.guild.owner_id or await self.is_owner(ctx.author):
+                return True
+                
+            from minato_namikaze.lib.database.config_api import Config
+            conf = Config("Core", "core")
+            overrides = await conf.guild(ctx.guild).get_attr("perm_overrides", {})
+            
+            cmd_name = ctx.command.qualified_name
+            if cmd_name in overrides:
+                rule = overrides[cmd_name]
+                
+                # If rule specifies users, roles, or channels, it acts as an ALLOW list.
+                # If the user matches ANY condition, they are allowed.
+                allowed = False
+                
+                # Condition 1: Check users
+                if ctx.author.id in rule.get("users", []):
+                    allowed = True
+                    
+                # Condition 2: Check roles
+                if not allowed and "roles" in rule:
+                    author_role_ids = [r.id for r in ctx.author.roles]
+                    if any(r_id in rule["roles"] for r_id in author_role_ids):
+                        allowed = True
+                        
+                # Condition 3: Check channels
+                if not allowed and ctx.channel.id in rule.get("channels", []):
+                    allowed = True
+                    
+                if not allowed:
+                    raise commands.CheckFailure(f"You do not have permission to use {cmd_name} in this server.")
+            return True
+
         self.owner_id = self.bot_app_info.owner.id
         for i in return_all_cogs():
             try:

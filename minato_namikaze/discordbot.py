@@ -68,13 +68,15 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         )
         intents = discord.Intents(
             guilds=True,
-            members=True,
-            bans=True,
-            emojis=True,
-            voice_states=True,
-            messages=True,
-            reactions=True,
-        ).all()
+            members=True,  # Privileged: on_member_join, query_members, role checks
+            message_content=True,  # Privileged: prefix commands, snipe, backup, games
+            presences=True,  # Privileged: user.status in badges & serverinfo
+            voice_states=True,  # music cog
+            emojis_and_stickers=True,  # emoji access in context/moderation
+            messages=True,  # on_message, snipe, backup, DM forwarding
+            reactions=True,  # reaction roles, polls, games
+            invites=True,  # invite tracker (on_invite_create/delete)
+        )
         self.version = str(token_get("BOT_VER"))
         self.local = ast.literal_eval(token_get("LOCAL"))
 

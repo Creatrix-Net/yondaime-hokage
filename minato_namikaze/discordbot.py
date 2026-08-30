@@ -396,23 +396,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
         )
 
     @staticmethod
-    def get_random_image_from_tag(tag_name: str) -> str | None:
-        tenor_giphy = ["tenor", "giphy"]
-        if random.choice(tenor_giphy) == "tenor":
-            api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
-            try:
-                return api_model.random(str(tag_name.lower()))
-            except:
-                return
-        api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
-        try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"][
-                "downsized_large"
-            ]["url"]
-        except:
-            return
-
-    @staticmethod
     async def get_random_image_from_tag(tag_name: str) -> str | None:
         tenor_giphy = ["tenor", "giphy"]
         if random.choice(tenor_giphy) == "tenor":
@@ -426,14 +409,6 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
                 "images"
             ]["downsized_large"]["url"]
-        except:
-            return
-
-    @staticmethod
-    def tenor(tag_name: str) -> str | None:
-        api_model = TenGiphPy.Tenor(token=Tokens.tenor.value)
-        try:
-            return api_model.random(str(tag_name.lower()))
         except:
             return
 

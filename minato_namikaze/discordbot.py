@@ -145,6 +145,17 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
 
     async def setup_hook(self) -> None:
         self.bot_app_info = await self.application_info()
+        @self.check
+        async def globally_block_disabled_cogs(ctx):
+            if ctx.guild is None or ctx.command is None or ctx.command.cog_name is None:
+                return True
+            from minato_namikaze.lib.database.config_api import Config
+            conf = Config("Core", "core")
+            disabled = await conf.guild(ctx.guild).get_attr("disabled_cogs", [])
+            if ctx.command.cog_name in disabled:
+                raise commands.CheckFailure(f"The '{ctx.command.cog_name}' feature is disabled in this server.")
+            return True
+
         self.owner_id = self.bot_app_info.owner.id
         for i in return_all_cogs():
             try:

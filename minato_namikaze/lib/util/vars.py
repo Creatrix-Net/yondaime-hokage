@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 from typing import List
 
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 
 
 # only way to resolve the circular, yes this is the only way
@@ -42,7 +42,11 @@ MISSING: Any = _MissingSentinel()
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # In minato_namikaze/ folder
 CONFIG_FILE = Path(__file__).resolve().parent.parent.parent.parent / ".ini"
 DEFAULT_COMMAND_SELECT_LENGTH = 25
-Base = declarative_base()
+
+
+class Base(DeclarativeBase):
+    """SQLAlchemy 2.0 declarative base class for all ORM models."""
+    pass
 
 
 def token_get(tokenname: str = MISSING, all: bool = False) -> Any:

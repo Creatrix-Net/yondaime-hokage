@@ -4,7 +4,7 @@ from typing import List
 from typing import Optional
 
 import discord
-from akinator.async_aki import Akinator as _Akinator_
+from akinator import AsyncAkinator as _Akinator_
 
 from ...util import Embed
 

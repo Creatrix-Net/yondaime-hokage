@@ -5,12 +5,14 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from ..util.vars import Base
 
+
 class GlobalConfig(Base):
     __tablename__ = "global_config"
 
     cog_name: Mapped[str] = mapped_column(String(255), primary_key=True)
     key: Mapped[str] = mapped_column(String(255), primary_key=True)
     value: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+
 
 class GuildConfig(Base):
     __tablename__ = "guild_config"
@@ -20,6 +22,7 @@ class GuildConfig(Base):
     key: Mapped[str] = mapped_column(String(255), primary_key=True)
     value: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
 
+
 class UserConfig(Base):
     __tablename__ = "user_config"
 
@@ -28,6 +31,7 @@ class UserConfig(Base):
     key: Mapped[str] = mapped_column(String(255), primary_key=True)
     value: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
 
+
 class ChannelConfig(Base):
     __tablename__ = "channel_config"
 
@@ -35,6 +39,7 @@ class ChannelConfig(Base):
     cog_name: Mapped[str] = mapped_column(String(255), primary_key=True)
     key: Mapped[str] = mapped_column(String(255), primary_key=True)
     value: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+
 
 class RoleConfig(Base):
     __tablename__ = "role_config"

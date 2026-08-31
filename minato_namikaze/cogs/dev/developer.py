@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING
 
 import discord
 from discord.ext import commands
+from minato_namikaze.lib.database.config_api import Config
 from discord.ext import tasks
 
 from minato_namikaze.lib import *
@@ -65,6 +66,7 @@ class Server(Base):
 class Developer(commands.Cog):
     def __init__(self, bot: MinatoNamikazeBot):
         self.bot: MinatoNamikazeBot = bot
+        self.config = Config("Developer", "dminvites")
         self.minato_gif = []
         self.key = Tokens.statcord.value
         self.description = "These set of commands are only locked to the developer"
@@ -436,6 +438,46 @@ class Developer(commands.Cog):
         )
 
     # on message event
+
+    @commands.group(invoke_without_command=True)
+    @commands.is_owner()
+    async def dminvite(self, ctx):
+        """Group Commands for DM Invites."""
+        await ctx.send_help(ctx.command)
+
+    @dminvite.command()
+    @commands.is_owner()
+    async def settings(self, ctx):
+        """DM Invite Settings."""
+        import discord
+        embed = discord.Embed(title="DM Invite Settings", color=discord.Color.red())
+        track = await self.config.global_().get_attr("tracking", True)
+        use_embed = await self.config.global_().get_attr("embed", True)
+        msg = await self.config.global_().get_attr("message", "Thank you for showing interest in me. If you want to add me to your server, please ask the server owner to add me to the server. If you are the server owner, please click on the link below to add me to your server.\n\n{link}")
+        
+        embed.add_field(name="Tracking Invites", value="Yes" if track else "No")
+        embed.add_field(name="Embeds", value="Yes" if use_embed else "No")
+        embed.add_field(name="Message", value=msg)
+        
+        if "{link}" in msg:
+            embed.add_field(name="Link", value=f"[Click Here]({await self.bot.get_required_perms_invite_link})")
+        await ctx.send(embed=embed)
+
+    @dminvite.command(name="toggle")
+    @commands.is_owner()
+    async def dminvite_toggle(self, ctx):
+        """Toggle whether the bot auto-responds to invites sent in DMs."""
+        track = await self.config.global_().get_attr("tracking", True)
+        await self.config.global_().set_attr("tracking", not track)
+        await ctx.send(f"DM Invite tracking is now **{'enabled' if not track else 'disabled'}**.")
+        
+    @dminvite.command(name="message")
+    @commands.is_owner()
+    async def dminvite_message(self, ctx, *, message: str):
+        """Set the message that the bot will respond with. Use {link} for the bot's invite link."""
+        await self.config.global_().set_attr("message", message)
+        await ctx.send("DM Invite response message updated.")
+
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if (
@@ -464,15 +506,26 @@ class Developer(commands.Cog):
                 pass
 
         if (
-            link_res := INVITE_URL_RE.findall(message.content)
-            and not message.author.bot
+            not message.author.bot
             and not message.guild
+            and INVITE_URL_RE.findall(message.content)
         ):
-            msg = "Thank you for showing interest in me. If you want to add me to your server, please ask the server owner to add me to the server. If you are the server owner, please click on the link below to add me to your server.\n\n{link}"
+            if not await self.config.global_().get_attr("tracking", True):
+                return
+            
+            msg = await self.config.global_().get_attr(
+                "message", 
+                "Thank you for showing interest in me. If you want to add me to your server, please ask the server owner to add me to the server. If you are the server owner, please click on the link below to add me to your server.\n\n{link}"
+            )
+            
             if "{link}" in msg:
                 msg = msg.format(link=await self.bot.get_required_perms_invite_link)
-            embed = discord.Embed(color=discord.Color.red(), description=msg)
-            await message.author.send(embed=embed)
+                
+            if await self.config.global_().get_attr("embed", True):
+                embed = discord.Embed(color=discord.Color.red(), description=msg)
+                await message.author.send(embed=embed)
+            else:
+                await message.author.send(msg)
             return
 
     # when bot leaves the server

@@ -1,0 +1,15 @@
+﻿# Ignore Python
+*.py
+
+# Generated / lock files
+Pipfile.lock
+package-lock.json
+yarn.lock
+
+# Virtual environments / folders
+.venv/
+venv/
+node_modules/
+dist/
+build/
+.agent-context/

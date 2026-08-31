@@ -1,0 +1,32 @@
+﻿name: Security Audit
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+
+jobs:
+  bandit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install Bandit
+        run: pip install bandit
+      - name: Run Bandit
+        # Run bandit, skipping B101 (assert used) since we might use asserts
+        run: bandit -r minato_namikaze/ --skip B101
+
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

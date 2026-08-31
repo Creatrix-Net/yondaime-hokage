@@ -1,8 +1,7 @@
 from __future__ import annotations
 import asyncio
-import uuid
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 from minato_namikaze.lib.database.config_api import Config
 from minato_namikaze.lib import Embed, has_permissions, LinksAndVars
 

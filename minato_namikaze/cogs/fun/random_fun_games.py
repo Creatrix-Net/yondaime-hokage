@@ -1,9 +1,6 @@
 from __future__ import annotations
-
-import asyncio
 import io
 import logging
-import os
 from random import choice
 from typing import Optional
 from typing import TYPE_CHECKING

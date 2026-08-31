@@ -4,7 +4,6 @@ import asyncio
 import datetime
 import logging
 from collections import defaultdict
-from json.decoder import JSONDecodeError
 from typing import Literal
 from typing import TYPE_CHECKING
 
@@ -12,7 +11,6 @@ import discord
 import num2words
 from discord.ext import commands
 from discord.ext import tasks
-from orjson import loads
 from sqlalchemy import BigInteger
 from sqlalchemy import Column
 from sqlalchemy import DateTime

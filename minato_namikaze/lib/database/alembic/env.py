@@ -11,8 +11,6 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
-
-import minato_namikaze.lib.database
 from minato_namikaze import return_all_cogs
 from minato_namikaze import vars
 

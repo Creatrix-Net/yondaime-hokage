@@ -9,16 +9,11 @@ from typing import Optional
 import discord
 from discord.ext import commands
 from discord.ext import tasks
-from sqlalchemy import delete
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
-
-from minato_namikaze.lib import Embed
 from minato_namikaze.lib import has_permissions
 from minato_namikaze.lib.database.models_giveaways import Giveaway
 from minato_namikaze.lib.database.models_giveaways import GiveawayEntry
 from minato_namikaze.lib.database.session import session_obj
-from minato_namikaze.lib.util.time import convert as time_convert # we might need to parse time
 
 
 log = logging.getLogger(__name__)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import discord
 from typing import Optional, List, Tuple, Union
-from sqlalchemy import select, update, desc
+from sqlalchemy import select, desc
 
 from .session import session_obj
 from .models_bank import BankAccount

@@ -781,7 +781,7 @@ class Moderation(commands.Cog):
         reason: str | None = None,
     ):
         """Warn a user"""
-        # data = await (await self.database_class()).get(ctx.guild.id)
+        data = await (await self.database_class()).get(ctx.guild.id)
         if data is None or data.get("warns") is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
@@ -823,7 +823,7 @@ class Moderation(commands.Cog):
         member: commands.MemberConverter | MemberID | None = None,
     ):
         """Get the no. of warns for a specified user"""
-        # data = await (await self.database_class()).get(ctx.guild.id)
+        data = await (await self.database_class()).get(ctx.guild.id)
         if data is None or data.get("warns") is None:
             e = ErrorEmbed(
                 title=f"No warning system setup for the {ctx.guild.name}",
@@ -1564,6 +1564,18 @@ class Moderation(commands.Cog):
         except (discord.Forbidden, discord.NotFound, discord.HTTPException):
             pass
 
+
+    async def database_class(self):
+        from minato_namikaze.lib.database.config_api import DatabaseShim
+        return DatabaseShim(self.__class__.__name__, "main")
+        
+    async def database_class_antiraid(self):
+        from minato_namikaze.lib.database.config_api import DatabaseShim
+        return DatabaseShim(self.__class__.__name__, "antiraid")
+        
+    async def database_class_mentionspam(self):
+        from minato_namikaze.lib.database.config_api import DatabaseShim
+        return DatabaseShim(self.__class__.__name__, "mentionspam")
 
 async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Moderation(bot))

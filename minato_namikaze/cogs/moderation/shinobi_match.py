@@ -143,5 +143,17 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
         )
 
 
+    async def database_class(self):
+        from minato_namikaze.lib.database.config_api import DatabaseShim
+        return DatabaseShim(self.__class__.__name__, "main")
+        
+    async def database_class_antiraid(self):
+        from minato_namikaze.lib.database.config_api import DatabaseShim
+        return DatabaseShim(self.__class__.__name__, "antiraid")
+        
+    async def database_class_mentionspam(self):
+        from minato_namikaze.lib.database.config_api import DatabaseShim
+        return DatabaseShim(self.__class__.__name__, "mentionspam")
+
 async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(ShinobiMatchCog(bot))

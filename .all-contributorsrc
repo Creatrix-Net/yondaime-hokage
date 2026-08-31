@@ -1,7 +1,5 @@
 {
-  "files": [
-    "README.md"
-  ],
+  "files": ["README.md"],
   "imageSize": 100,
   "commit": false,
   "contributors": [
@@ -10,75 +8,56 @@
       "name": "DeepSource Bot",
       "avatar_url": "https://avatars.githubusercontent.com/u/60907429?v=4",
       "profile": "https://deepsource.io",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "EitoZX",
       "name": "Eito",
       "avatar_url": "https://avatars.githubusercontent.com/u/72309146?v=4",
       "profile": "http://eitozx.github.io",
-      "contributions": [
-        "infra",
-        "design",
-        "security"
-      ]
+      "contributions": ["infra", "design", "security"]
     },
     {
       "login": "QuartzAl",
       "name": "QuartzAl",
       "avatar_url": "https://avatars.githubusercontent.com/u/55610038?v=4",
       "profile": "https://github.com/QuartzAl",
-      "contributions": [
-        "maintenance"
-      ]
+      "contributions": ["maintenance"]
     },
     {
       "login": "ooliver1",
       "name": "Oliver Wilkes",
       "avatar_url": "https://avatars.githubusercontent.com/u/34910574?v=4",
       "profile": "https://github.com/ooliver1",
-      "contributions": [
-        "maintenance"
-      ]
+      "contributions": ["maintenance"]
     },
     {
       "login": "Onii-Chan-Discord",
       "name": "Onii-chan",
       "avatar_url": "https://avatars.githubusercontent.com/u/69662328?v=4",
       "profile": "https://dsc.gg/izumi",
-      "contributions": [
-        "design"
-      ]
+      "contributions": ["design"]
     },
     {
       "login": "Pagasis",
       "name": "Pagasis",
       "avatar_url": "https://avatars.githubusercontent.com/u/74396469?v=4",
       "profile": "https://github.com/Pagasis",
-      "contributions": [
-        "maintenance"
-      ]
+      "contributions": ["maintenance"]
     },
     {
       "login": "dependabot",
       "name": "Dependabot",
       "avatar_url": "https://avatars.githubusercontent.com/u/27347476?v=4",
       "profile": "https://github.com/features/security",
-      "contributions": [
-        "maintenance"
-      ]
+      "contributions": ["maintenance"]
     },
     {
       "login": "wrac4242",
       "name": "wrac4242",
       "avatar_url": "https://avatars.githubusercontent.com/u/42539664?v=4",
       "profile": "https://github.com/wrac4242",
-      "contributions": [
-        "code",
-        "ideas"
-      ]
+      "contributions": ["code", "ideas"]
     }
   ],
   "contributorsPerLine": 7,

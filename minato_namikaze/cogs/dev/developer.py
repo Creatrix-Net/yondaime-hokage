@@ -160,7 +160,10 @@ class Developer(commands.Cog):
         user: Union[discord.Member, MemberID],
     ):
         """Get a list of servers the bot shares with the user."""
-        guilds = [f"{guild.name} `{guild.id}` ({guild.member_count} members)" for guild in list(user.mutual_guilds)]
+        guilds = [
+            f"{guild.name} `{guild.id}` ({guild.member_count} members)"
+            for guild in list(user.mutual_guilds)
+        ]
 
         await self._send_guilds(ctx, guilds, "Shared Servers")
 
@@ -322,7 +325,8 @@ class Developer(commands.Cog):
                 [f"**{g[0]}** ```diff\n- {g[1]}```" for g in error_collection],
             )
             return await ctx.send(
-                f"Attempted to reload all extensions, was able to reload, " f"however the following failed...\n\n{err}",
+                f"Attempted to reload all extensions, was able to reload, "
+                f"however the following failed...\n\n{err}",
             )
 
         await msg.edit(embed=embed)
@@ -445,7 +449,6 @@ class Developer(commands.Cog):
     @commands.is_owner()
     async def settings(self, ctx):
         """DM Invite Settings."""
-        import discord
 
         embed = discord.Embed(title="DM Invite Settings", color=discord.Color.red())
         track = await self.config.global_().get_attr("tracking", True)
@@ -460,7 +463,10 @@ class Developer(commands.Cog):
         embed.add_field(name="Message", value=msg)
 
         if "{link}" in msg:
-            embed.add_field(name="Link", value=f"[Click Here]({await self.bot.get_required_perms_invite_link})")
+            embed.add_field(
+                name="Link",
+                value=f"[Click Here]({await self.bot.get_required_perms_invite_link})",
+            )
         await ctx.send(embed=embed)
 
     @dminvite.command(name="toggle")
@@ -469,7 +475,9 @@ class Developer(commands.Cog):
         """Toggle whether the bot auto-responds to invites sent in DMs."""
         track = await self.config.global_().get_attr("tracking", True)
         await self.config.global_().set_attr("tracking", not track)
-        await ctx.send(f"DM Invite tracking is now **{'enabled' if not track else 'disabled'}**.")
+        await ctx.send(
+            f"DM Invite tracking is now **{'enabled' if not track else 'disabled'}**."
+        )
 
     @dminvite.command(name="message")
     @commands.is_owner()
@@ -484,7 +492,8 @@ class Developer(commands.Cog):
             (
                 self.bot.user.mentioned_in(message)
                 and message.mention_everyone is False
-                and message.content.lower() in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
+                and message.content.lower()
+                in (f"<@!{self.bot.application_id}>", f"<@{self.bot.application_id}>")
                 or message.content.lower()
                 in (
                     f"<@!{self.bot.application_id}> prefix",
@@ -504,7 +513,11 @@ class Developer(commands.Cog):
             except discord.HTTPException:
                 pass
 
-        if not message.author.bot and not message.guild and INVITE_URL_RE.findall(message.content):
+        if (
+            not message.author.bot
+            and not message.guild
+            and INVITE_URL_RE.findall(message.content)
+        ):
             if not await self.config.global_().get_attr("tracking", True):
                 return
 

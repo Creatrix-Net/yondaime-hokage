@@ -445,7 +445,6 @@ class Developer(commands.Cog):
     @commands.is_owner()
     async def settings(self, ctx):
         """DM Invite Settings."""
-        import discord
 
         embed = discord.Embed(title="DM Invite Settings", color=discord.Color.red())
         track = await self.config.global_().get_attr("tracking", True)

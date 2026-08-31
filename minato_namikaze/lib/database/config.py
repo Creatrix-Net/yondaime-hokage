@@ -1,5 +1,4 @@
 from __future__ import annotations
-from __future__ import annotations
 
 from sqlalchemy import BigInteger, String, JSON
 from sqlalchemy.orm import Mapped, mapped_column

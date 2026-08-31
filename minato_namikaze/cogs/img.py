@@ -1,6 +1,6 @@
+from __future__ import annotations
 import asyncio
 import io
-from __future__ import annotations
 
 import os
 from asyncio import sleep

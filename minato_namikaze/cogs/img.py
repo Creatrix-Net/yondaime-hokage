@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 import io
 import os
-from asyncio import sleep
 from io import FileIO
 from typing import TYPE_CHECKING
 
@@ -91,7 +90,10 @@ class ImageManipulation(commands.Cog, name="Image Manipulation"):
 
         img_bytes = await asyncio.to_thread(make_image)
         embed.set_image(url="attachment://wi.png")
-        await ctx.send(file=discord.File(img_bytes, filename="wi.png", description=text), embed=embed)
+        await ctx.send(
+            file=discord.File(img_bytes, filename="wi.png", description=text),
+            embed=embed,
+        )
 
     @commands.command(usage="[member.mention | member.id]")
     async def triggered(

@@ -20,8 +20,6 @@ from sqlalchemy import Integer
 from sqlalchemy import select
 from sqlalchemy import String
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.exc import MultipleResultsFound
-from sqlalchemy.exc import NoResultFound
 from sqlalchemy.util._collections import immutabledict
 
 from minato_namikaze.lib import Base
@@ -119,8 +117,6 @@ class Reminder(commands.Cog):
                     await asyncio.sleep(to_sleep)
 
                 await self.call_timer(timer)
-        except asyncio.CancelledError:
-            raise
         except (OSError, discord.ConnectionClosed):
             self._task.cancel()
             self._task = self.bot.loop.create_task(self.dispatch_timers())

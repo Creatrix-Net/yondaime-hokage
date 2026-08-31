@@ -15,7 +15,6 @@ from discord.ext import commands
 from ..functions import ExpiringCache
 from .time_class import format_relative
 
-
 if TYPE_CHECKING:
     from typing_extensions import Self
 

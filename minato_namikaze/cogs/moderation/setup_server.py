@@ -1,5 +1,4 @@
 from __future__ import annotations
-from __future__ import annotations
 
 import json
 import string
@@ -10,6 +9,7 @@ from json.decoder import JSONDecodeError
 import discord
 from discord.ext import commands
 from discord.ext import tasks
+
 from minato_namikaze.lib import detect_bad_domains
 from minato_namikaze.lib import Embed
 from minato_namikaze.lib import EmbedPaginator
@@ -37,7 +37,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{HAMMER AND WRENCH}")
 
-    async def add_and_check_data(self, dict_to_add: dict, ctx: "Context") -> None:
+    async def add_and_check_data(self, dict_to_add: dict, ctx: Context) -> None:
         database = await self.database_class()
         guild_dict = await database.get(ctx.guild.id)
         if guild_dict is None:
@@ -51,7 +51,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @commands.group()
     @commands.guild_only()
     @is_mod()
-    async def setup(self, ctx: "Context"):
+    async def setup(self, ctx: Context):
         """
         This commands setups some logging system for system for server with some nice features
         """
@@ -62,7 +62,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @setup.command(usage="<add_type> <textchannel>")
     async def add(
         self,
-        ctx: "Context",
+        ctx: Context,
         add_type: typing.Literal["ban", "feedback", "warns", "unban"],
         channel: commands.TextChannelConverter,
     ):
@@ -89,7 +89,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @setup.command(usage="<textchannel.mention> <support_required_role>")
     async def support(
         self,
-        ctx: "Context",
+        ctx: Context,
         textchannel: commands.TextChannelConverter,
         support_required_role: commands.RoleConverter,
     ):
@@ -110,7 +110,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @setup.command(usage="<option> [action] [logging_channel]")
     async def badlinks(
         self,
-        ctx: "Context",
+        ctx: Context,
         action: None | (typing.Literal["ban", "mute", "timeout", "kick", "log"]) = None,
         logging_channel: commands.TextChannelConverter | None = None,
         option: typing.Literal["yes", "no", "on", "off", True, False] = True,
@@ -139,11 +139,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                 "badlinks": {
                     "option": option,
                     "action": action,
-                    "logging_channel": (
-                        logging_channel.id
-                        if logging_channel is not None
-                        else logging_channel
-                    ),
+                    "logging_channel": (logging_channel.id if logging_channel is not None else logging_channel),
                 },
             },
             ctx=ctx,
@@ -152,7 +148,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @setup.command(usage="<channel> [no_of_stars] [self_star] [ignore_nsfw]")
     async def starboard(
         self,
-        ctx: "Context",
+        ctx: Context,
         channel: commands.TextChannelConverter | discord.TextChannel,
         no_of_stars: int | None = 5,
         self_star: bool | None = False,
@@ -182,11 +178,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        if (
-            message is None
-            or message.content == string.whitespace
-            or message.content is None
-        ):
+        if message is None or message.content == string.whitespace or message.content is None:
             return
         ctx = await self.bot.get_context(message)
         detected_urls = await detect_bad_domains(
@@ -196,9 +188,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             return
         embed = ErrorEmbed(title="SCAM/PHISHING/ADULT LINK(S) DETECTED")
         detected_string = "\n".join([f"- ||{i}||" for i in set(detected_urls)])
-        embed.description = (
-            f"The following scam url(s) were detected:\n{detected_string}"
-        )
+        embed.description = f"The following scam url(s) were detected:\n{detected_string}"
         embed.set_author(
             name=message.author,
             icon_url=message.author.display_avatar.url,
@@ -261,7 +251,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @commands.command()
     @commands.guild_only()
     @is_mod()
-    async def raw_data(self, ctx: "Context"):
+    async def raw_data(self, ctx: Context):
         """
         It returns the raw data which is stored in the database in the form of json
         """
@@ -344,7 +334,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     @is_mod()
     async def deletedata(
         self,
-        ctx: "Context",
+        ctx: Context,
         type_data: typing.Literal[
             "ban",
             "unban",
@@ -438,11 +428,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             return
 
         channel = self.bot.get_channel(payload.channel_id)
-        if (
-            data.get("ignore_nsfw") is not None
-            and data.get("ignore_nsfw")
-            and channel.is_nsfw()
-        ):
+        if data.get("ignore_nsfw") is not None and data.get("ignore_nsfw") and channel.is_nsfw():
             return
 
         msg = await channel.fetch_message(payload.message_id)
@@ -479,10 +465,7 @@ class ServerSetup(commands.Cog, name="Server Setup"):
                     description = embed_user.description
             if not isinstance(embed_user.image.url, discord.embeds._EmptyEmbed):
                 embed.set_image(url=embed_user.image.url)
-        if (
-            isinstance(embed.image.url, discord.embeds._EmptyEmbed)
-            and len(msg.attachments) > 0
-        ):
+        if isinstance(embed.image.url, discord.embeds._EmptyEmbed) and len(msg.attachments) > 0:
             attachment = msg.attachments[0]
             if attachment.content_type.lower() in [
                 "image/jpeg",
@@ -513,18 +496,21 @@ class ServerSetup(commands.Cog, name="Server Setup"):
             ),
         )
 
-
     async def database_class(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "main")
 
     async def database_class_antiraid(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "antiraid")
 
     async def database_class_mentionspam(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "mentionspam")
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(ServerSetup(bot))

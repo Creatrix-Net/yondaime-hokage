@@ -1,7 +1,10 @@
 from __future__ import annotations
+
 import random
+
 import discord
 from discord.ext import commands
+
 
 class HigherOrLowerView(discord.ui.View):
     def __init__(self, ctx, current_number):
@@ -12,7 +15,10 @@ class HigherOrLowerView(discord.ui.View):
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user.id != self.ctx.author.id:
-            await interaction.response.send_message("This isn't your game!", ephemeral=True)
+            await interaction.response.send_message(
+                "This isn't your game!",
+                ephemeral=True,
+            )
             return False
         return True
 
@@ -44,12 +50,21 @@ class HigherOrLowerView(discord.ui.View):
             self.stop()
 
     @discord.ui.button(label="Higher", style=discord.ButtonStyle.success, emoji="⬆️")
-    async def btn_higher(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def btn_higher(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button,
+    ):
         await self.process_guess(interaction, True)
 
     @discord.ui.button(label="Lower", style=discord.ButtonStyle.danger, emoji="⬇️")
-    async def btn_lower(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def btn_lower(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button,
+    ):
         await self.process_guess(interaction, False)
+
 
 class HigherOrLower(commands.Cog):
     def __init__(self, bot):
@@ -68,6 +83,7 @@ class HigherOrLower(commands.Cog):
             color=discord.Color.blue(),
         )
         await ctx.send(embed=embed, view=view)
+
 
 async def setup(bot):
     await bot.add_cog(HigherOrLower(bot))

@@ -1,9 +1,12 @@
 from __future__ import annotations
+
 import html
 import random
+
 import aiohttp
 import discord
 from discord.ext import commands
+
 
 class TriviaView(discord.ui.View):
     def __init__(self, ctx, correct_answer, all_answers):
@@ -16,7 +19,10 @@ class TriviaView(discord.ui.View):
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user.id != self.ctx.author.id:
-            await interaction.response.send_message("This isn't your trivia game!", ephemeral=True)
+            await interaction.response.send_message(
+                "This isn't your trivia game!",
+                ephemeral=True,
+            )
             return False
         return True
 
@@ -26,7 +32,7 @@ class TriviaView(discord.ui.View):
             if child.label == self.correct_answer:
                 child.style = discord.ButtonStyle.success
 
-        if hasattr(self, 'message') and self.message:
+        if hasattr(self, "message") and self.message:
             embed = self.message.embeds[0]
             embed.color = discord.Color.red()
             embed.set_footer(text="Time's up!")
@@ -35,9 +41,14 @@ class TriviaView(discord.ui.View):
             except discord.HTTPException:
                 pass
 
+
 class TriviaButton(discord.ui.Button):
     def __init__(self, answer, custom_id_suffix):
-        super().__init__(style=discord.ButtonStyle.primary, label=answer[:80], custom_id=f"trivia_{custom_id_suffix}")
+        super().__init__(
+            style=discord.ButtonStyle.primary,
+            label=answer[:80],
+            custom_id=f"trivia_{custom_id_suffix}",
+        )
         self.answer = answer
 
     async def callback(self, interaction: discord.Interaction):
@@ -63,6 +74,7 @@ class TriviaButton(discord.ui.Button):
 
         view.stop()
 
+
 class Trivia(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -76,7 +88,9 @@ class Trivia(commands.Cog):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 if response.status != 200:
-                    return await ctx.send("Failed to fetch trivia question. Try again later.")
+                    return await ctx.send(
+                        "Failed to fetch trivia question. Try again later.",
+                    )
                 data = await response.json()
 
         if data.get("response_code") != 0 or not data.get("results"):
@@ -98,6 +112,7 @@ class Trivia(commands.Cog):
 
         view = TriviaView(ctx, correct_answer, all_answers)
         view.message = await ctx.send(embed=embed, view=view)
+
 
 async def setup(bot):
     await bot.add_cog(Trivia(bot))

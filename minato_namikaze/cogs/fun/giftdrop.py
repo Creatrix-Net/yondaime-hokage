@@ -96,10 +96,14 @@ class Cashdrop(commands.Cog):
                 return
 
             creds = random.randint(cmin, cmax)
-            await msg.edit(content=f"Correct! {answer_msg.author.mention} got {creds} {await bank.get_currency_name(guild=message.guild)}!")
+            await msg.edit(
+                content=f"Correct! {answer_msg.author.mention} got {creds} {await bank.get_currency_name(guild=message.guild)}!",
+            )
             await bank.deposit_credits(answer_msg.author, creds)
         else:
-            msg = await channel.send(f"Some {await bank.get_currency_name(guild=message.guild)} have fallen, type pickup to pick them up!")
+            msg = await channel.send(
+                f"Some {await bank.get_currency_name(guild=message.guild)} have fallen, type pickup to pick them up!",
+            )
 
             def check(m):
                 return m.channel == channel and m.content == "pickup"
@@ -111,7 +115,9 @@ class Cashdrop(commands.Cog):
                 return
 
             creds = random.randint(cmin, cmax)
-            await msg.edit(content=f"{pickup_msg.author.mention} picked up {creds} {await bank.get_currency_name(guild=message.guild)}!")
+            await msg.edit(
+                content=f"{pickup_msg.author.mention} picked up {creds} {await bank.get_currency_name(guild=message.guild)}!",
+            )
             await bank.deposit_credits(pickup_msg.author, creds)
 
     @commands.group(name="cashdrop", aliases=["cd"])

@@ -47,7 +47,9 @@ class Economy(commands.Cog):
 
         try:
             await bank.transfer_credits(ctx.author, user, amount)
-            await ctx.send(f"Successfully transferred **{amount}** {currency} to {user.display_name}.")
+            await ctx.send(
+                f"Successfully transferred **{amount}** {currency} to {user.display_name}.",
+            )
         except InsufficientFunds:
             await ctx.send(f"You don't have enough {currency} to do that.")
 
@@ -64,7 +66,9 @@ class Economy(commands.Cog):
             remaining = cooldown - (now - last_claimed)
             hours, remainder = divmod(remaining, 3600)
             minutes, _ = divmod(remainder, 60)
-            return await ctx.send(f"You already claimed your daily! Try again in {hours}h {minutes}m.")
+            return await ctx.send(
+                f"You already claimed your daily! Try again in {hours}h {minutes}m.",
+            )
 
         amount = 500
         await bank.deposit_credits(ctx.author, amount)
@@ -84,14 +88,18 @@ class Economy(commands.Cog):
         try:
             await bank.withdraw_credits(ctx.author, amount)
         except InsufficientFunds:
-            return await ctx.send(f"You don't have enough {currency} to gamble that much.")
+            return await ctx.send(
+                f"You don't have enough {currency} to gamble that much.",
+            )
 
         if random.choice([True, False]):
             winnings = amount * 2
             await bank.deposit_credits(ctx.author, winnings)
             await ctx.send(f"🎲 You won! You receive **{winnings}** {currency}!")
         else:
-            await ctx.send(f"🎲 You lost **{amount}** {currency}. Better luck next time!")
+            await ctx.send(
+                f"🎲 You lost **{amount}** {currency}. Better luck next time!",
+            )
 
     @commands.command(aliases=["top"])
     async def leaderboard(self, ctx):

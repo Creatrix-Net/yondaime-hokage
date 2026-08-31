@@ -460,7 +460,10 @@ class Developer(commands.Cog):
         embed.add_field(name="Message", value=msg)
 
         if "{link}" in msg:
-            embed.add_field(name="Link", value=f"[Click Here]({await self.bot.get_required_perms_invite_link})")
+            embed.add_field(
+                name="Link",
+                value=f"[Click Here]({await self.bot.get_required_perms_invite_link})",
+            )
         await ctx.send(embed=embed)
 
     @dminvite.command(name="toggle")
@@ -469,7 +472,9 @@ class Developer(commands.Cog):
         """Toggle whether the bot auto-responds to invites sent in DMs."""
         track = await self.config.global_().get_attr("tracking", True)
         await self.config.global_().set_attr("tracking", not track)
-        await ctx.send(f"DM Invite tracking is now **{'enabled' if not track else 'disabled'}**.")
+        await ctx.send(
+            f"DM Invite tracking is now **{'enabled' if not track else 'disabled'}**.",
+        )
 
     @dminvite.command(name="message")
     @commands.is_owner()

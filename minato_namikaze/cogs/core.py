@@ -1,10 +1,10 @@
 from __future__ import annotations
-from __future__ import annotations
 
 import discord
 from discord.ext import commands
 
 from minato_namikaze.lib.database.config_api import Config
+
 
 class Core(commands.Cog):
     def __init__(self, bot):
@@ -22,7 +22,9 @@ class Core(commands.Cog):
     async def disable(self, ctx: commands.Context, cog_name: str):
         """Disable a cog in this server."""
         if not self.bot.get_cog(cog_name):
-            return await ctx.send("Cog not found. Please provide a valid loaded cog name (case-sensitive).")
+            return await ctx.send(
+                "Cog not found. Please provide a valid loaded cog name (case-sensitive).",
+            )
         if cog_name == "Core":
             return await ctx.send("You cannot disable the Core configuration cog.")
 
@@ -42,7 +44,6 @@ class Core(commands.Cog):
             await self.config.guild(ctx.guild).set_attr("disabled_cogs", disabled)
         await ctx.send(f"{cog_name} has been enabled in this server.")
 
-
     @commands.group(invoke_without_command=True)
     @commands.has_permissions(manage_guild=True)
     async def perms(self, ctx: commands.Context):
@@ -51,18 +52,28 @@ class Core(commands.Cog):
 
     @perms.command(name="addrole")
     @commands.has_permissions(manage_guild=True)
-    async def perms_addrole(self, ctx: commands.Context, command_name: str, role: discord.Role):
+    async def perms_addrole(
+        self,
+        ctx: commands.Context,
+        command_name: str,
+        role: discord.Role,
+    ):
         """Allow a specific role to use a command."""
         cmd = self.bot.get_command(command_name)
         if not cmd:
             return await ctx.send("Command not found.")
 
         overrides = await self.config.guild(ctx.guild).get_attr("perm_overrides", {})
-        cmd_overrides = overrides.setdefault(cmd.qualified_name, {"roles": [], "channels": [], "users": []})
+        cmd_overrides = overrides.setdefault(
+            cmd.qualified_name,
+            {"roles": [], "channels": [], "users": []},
+        )
         if role.id not in cmd_overrides["roles"]:
             cmd_overrides["roles"].append(role.id)
             await self.config.guild(ctx.guild).set_attr("perm_overrides", overrides)
-        await ctx.send(f"Role {role.name} added to the allowlist for {cmd.qualified_name}.")
+        await ctx.send(
+            f"Role {role.name} added to the allowlist for {cmd.qualified_name}.",
+        )
 
     @perms.command(name="clear")
     @commands.has_permissions(manage_guild=True)
@@ -77,6 +88,7 @@ class Core(commands.Cog):
             del overrides[cmd.qualified_name]
             await self.config.guild(ctx.guild).set_attr("perm_overrides", overrides)
         await ctx.send(f"Cleared all custom permissions for {cmd.qualified_name}.")
+
 
 async def setup(bot):
     await bot.add_cog(Core(bot))

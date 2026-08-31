@@ -1,8 +1,11 @@
 from __future__ import annotations
+
 import discord
 from discord.ext import commands
-from minato_namikaze.lib.database.config_api import Config
+
 from minato_namikaze.lib import has_permissions
+from minato_namikaze.lib.database.config_api import Config
+
 
 class Counting(commands.Cog):
     def __init__(self, bot):
@@ -37,7 +40,7 @@ class Counting(commands.Cog):
         try:
             number = int(message.content.strip())
         except ValueError:
-            return # Ignore non-numbers
+            return  # Ignore non-numbers
 
         current_count = await guild_config.get_attr("current_count", 0)
         last_user_id = await guild_config.get_attr("last_user_id", None)
@@ -45,7 +48,9 @@ class Counting(commands.Cog):
         if number == current_count + 1:
             if message.author.id == last_user_id:
                 await message.add_reaction("❌")
-                await message.channel.send(f"{message.author.mention} ruined the count at **{current_count}** by counting twice in a row! Start over from 1.")
+                await message.channel.send(
+                    f"{message.author.mention} ruined the count at **{current_count}** by counting twice in a row! Start over from 1.",
+                )
                 await guild_config.set_attr("current_count", 0)
                 await guild_config.set_attr("last_user_id", None)
             else:
@@ -54,9 +59,12 @@ class Counting(commands.Cog):
                 await guild_config.set_attr("last_user_id", message.author.id)
         else:
             await message.add_reaction("❌")
-            await message.channel.send(f"{message.author.mention} ruined the count at **{current_count}**. The next number was **{current_count + 1}**! Start over from 1.")
+            await message.channel.send(
+                f"{message.author.mention} ruined the count at **{current_count}**. The next number was **{current_count + 1}**! Start over from 1.",
+            )
             await guild_config.set_attr("current_count", 0)
             await guild_config.set_attr("last_user_id", None)
+
 
 async def setup(bot):
     await bot.add_cog(Counting(bot))

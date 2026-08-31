@@ -22,7 +22,6 @@ from minato_namikaze import Session
 from minato_namikaze import vars
 from minato_namikaze.discordbot import MinatoNamikazeBot
 
-
 initcoloroma(autoreset=True)  # type: ignore
 
 os.environ["ALEMBIC_CONFIG"] = str(vars.CONFIG_FILE)

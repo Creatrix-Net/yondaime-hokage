@@ -18,7 +18,6 @@ from minato_namikaze.lib import EmbedPaginator
 from minato_namikaze.lib import ErrorEmbed
 from minato_namikaze.lib import LinksAndVars
 
-
 if TYPE_CHECKING:
     from lib import Context
 

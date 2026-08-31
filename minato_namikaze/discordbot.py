@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import logging
+import os
 import random
 from collections import Counter
 from collections import defaultdict
@@ -155,7 +156,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
             conf = Config("Core", "core")
             disabled = await conf.guild(ctx.guild).get_attr("disabled_cogs", [])
             if ctx.command.cog_name in disabled:
-                raise commands.CheckFailure(f"The '{ctx.command.cog_name}' feature is disabled in this server.")
+                raise commands.CheckFailure(
+                    f"The '{ctx.command.cog_name}' feature is disabled in this server.",
+                )
             return True
 
         @self.check
@@ -195,7 +198,9 @@ class MinatoNamikazeBot(commands.AutoShardedBot):
                     allowed = True
 
                 if not allowed:
-                    raise commands.CheckFailure(f"You do not have permission to use {cmd_name} in this server.")
+                    raise commands.CheckFailure(
+                        f"You do not have permission to use {cmd_name} in this server.",
+                    )
             return True
 
         self.owner_id = self.bot_app_info.owner.id

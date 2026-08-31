@@ -1,17 +1,22 @@
 from __future__ import annotations
-from __future__ import annotations
 
 import logging
 from typing import Any
 
-from sqlalchemy import select, update
+from sqlalchemy import select
+from sqlalchemy import update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .config import GlobalConfig, GuildConfig, UserConfig, ChannelConfig, RoleConfig
+from .config import ChannelConfig
+from .config import GlobalConfig
+from .config import GuildConfig
+from .config import RoleConfig
+from .config import UserConfig
 from .session import session_obj
 
 log = logging.getLogger(__name__)
+
 
 class Group:
     def __init__(self, table, entity_id: int | None, cog_name: str):
@@ -47,17 +52,26 @@ class Group:
             if self.entity_id is not None:
                 values[id_col_name] = self.entity_id
 
-            stmt = insert(self.table).values(**values).on_conflict_do_update(
-                index_elements=[col.name for col in self.table.primary_key.columns],
-                set_={"value": value},
+            stmt = (
+                insert(self.table)
+                .values(**values)
+                .on_conflict_do_update(
+                    index_elements=[col.name for col in self.table.primary_key.columns],
+                    set_={"value": value},
+                )
             )
             await session.execute(stmt)
             await session.commit()
 
+
 class Config:
     @classmethod
     def get_conf(cls, cog_instance: Any, identifier: str) -> Config:
-        cog_name = getattr(cog_instance, "qualified_name", cog_instance.__class__.__name__)
+        cog_name = getattr(
+            cog_instance,
+            "qualified_name",
+            cog_instance.__class__.__name__,
+        )
         return cls(cog_name, identifier)
 
     def __init__(self, cog_name: str, identifier: str):

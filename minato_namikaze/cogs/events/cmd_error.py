@@ -68,11 +68,19 @@ class BotEventsCommands(commands.Cog):
             if cmd_name:
                 all_commands = [c.name for c in self.bot.commands]
                 all_commands.extend([a for c in self.bot.commands for a in c.aliases])
-                matches = difflib.get_close_matches(cmd_name, all_commands, n=1, cutoff=0.6)
+                matches = difflib.get_close_matches(
+                    cmd_name,
+                    all_commands,
+                    n=1,
+                    cutoff=0.6,
+                )
                 if matches:
                     suggestion = f"\n\nDid you mean **{matches[0]}**?"
 
-            e2 = ErrorEmbed(title="Command Error!", description=f"`{error}`{suggestion}")
+            e2 = ErrorEmbed(
+                title="Command Error!",
+                description=f"`{error}`{suggestion}",
+            )
             e2.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e2, delete_after=self.delete_after_time)
 

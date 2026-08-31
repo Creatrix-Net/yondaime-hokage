@@ -314,6 +314,7 @@ class Moderation(commands.Cog):
         user: discord.User | discord.Member,
     ):
 
+        database = await self.database_class()
         ban = self.bot.get_channel((await database.get(guild.id)).get("ban"))
         ban_entry = await guild.fetch_ban(discord.Object(id=user.id))
 
@@ -340,6 +341,7 @@ class Moderation(commands.Cog):
         user: discord.User | discord.Member,
     ):
 
+        database = await self.database_class()
         unban = self.bot.get_channel((await database.get(guild.id)).get("unban"))
         try:
             event = await guild.audit_logs().find(

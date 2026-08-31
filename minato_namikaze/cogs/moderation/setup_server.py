@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 import string
@@ -31,7 +31,6 @@ class ServerSetup(commands.Cog, name="Server Setup"):
     def __init__(self, bot: MinatoNamikazeBot):
         self.bot: MinatoNamikazeBot = bot
         self.description = "Do some necessary setup through an interactive mode."
-        self.cleanup.start()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
@@ -48,43 +47,10 @@ class ServerSetup(commands.Cog, name="Server Setup"):
         await ctx.send(":ok_hand:")
         return
 
-    @tasks.loop(hours=1, reconnect=True)
-    async def cleanup(self):
-        database = await self.database_class()
-        async for message in database._Database__channel.history(limit=None):
-            cnt = message.content
-            try:
-                data = json.loads(str(cnt))
-                data.pop("type")
-                data_keys = list(map(str, list(data.keys())))
-                try:
-                    await commands.GuildConverter().convert(
-                        await self.bot.get_context(message),
-                        str(data_keys[0]),
-                    )
-                except (commands.CommandError, commands.BadArgument):
-                    if not self.bot.local:
-                        await message.delete()
-            except JSONDecodeError:
-                if not self.bot.local:
-                    await message.delete()
-
     @commands.group()
     @commands.guild_only()
     @is_mod()
-        async def database_class(self):
-        from minato_namikaze.lib.database.config_api import DatabaseShim
-        return DatabaseShim(self.__class__.__name__, "main")
-        
-    async def database_class_antiraid(self):
-        from minato_namikaze.lib.database.config_api import DatabaseShim
-        return DatabaseShim(self.__class__.__name__, "antiraid")
-        
-    async def database_class_mentionspam(self):
-        from minato_namikaze.lib.database.config_api import DatabaseShim
-        return DatabaseShim(self.__class__.__name__, "mentionspam")
-
-async def setup(self, ctx: "Context"):
+    async def setup(self, ctx: "Context"):
         """
         This commands setups some logging system for system for server with some nice features
         """
@@ -561,3 +527,4 @@ async def setup(self, ctx: "Context"):
 
 async def setup(bot: "MinatoNamikazeBot") -> None:
     await bot.add_cog(ServerSetup(bot))
+

@@ -65,7 +65,6 @@ class AntiRaid(commands.Cog):
         self.message_batches = defaultdict(list)
         self.tracker = InviteTracker(bot)
         self.bulk_send_messages.start()
-        self.cleanup.start()
 
     @property
     def display_emoji(self) -> discord.PartialEmoji:
@@ -73,44 +72,6 @@ class AntiRaid(commands.Cog):
             name="discord_certified_moderator",
             id=922030031146995733,
         )
-
-    @tasks.loop(hours=1, reconnect=True)
-    async def cleanup(self):
-        database = await self.database_class_antiraid()
-        async for message in database._Database__channel.history(limit=None):
-            cnt = message.content
-            try:
-                data = loads(str(cnt))
-                data.pop("type")
-                data_keys = list(map(str, list(data.keys())))
-                try:
-                    await commands.GuildConverter().convert(
-                        await self.bot.get_context(message),
-                        str(data_keys[0]),
-                    )
-                except (commands.CommandError, commands.BadArgument):
-                    if not self.bot.local:
-                        await message.delete()
-            except JSONDecodeError:
-                if not self.bot.local:
-                    await message.delete()
-
-        database = await self.database_class_mentionspam()
-        async for message in database._Database__channel.history(limit=None):
-            cnt = message.content
-            try:
-                data = loads(str(cnt))
-                data.pop("type")
-                data_keys = list(map(str, list(data.keys())))
-                try:
-                    await commands.GuildConverter().convert(
-                        await self.bot.get_context(message),
-                        str(data_keys[0]),
-                    )
-                except (commands.CommandError, commands.BadArgument):
-                    await message.delete()
-            except JSONDecodeError:
-                await message.delete()
 
     async def add_and_check_data(
         self,
@@ -237,7 +198,7 @@ class AntiRaid(commands.Cog):
 
         try:
             await author.ban(reason=f"Spamming mentions ({mention_count} mentions)")
-        except Exception as e:
+        except discord.HTTPException as e:
             log.info(
                 f"Failed to autoban member {author} (ID: {author.id}) in guild ID {guild_id}",
             )
@@ -580,7 +541,7 @@ class AntiRaid(commands.Cog):
         for i in channels:
             try:
                 ignore_list.remove(i.id)
-            except:
+            except ValueError:
                 pass
 
         guild_dict.update({"safe_mention_channel_ids": ignore_list})

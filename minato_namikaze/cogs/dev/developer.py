@@ -126,7 +126,7 @@ class Developer(commands.Cog):
             page = Embed(title=title)
 
             for guild in chunk:
-                if page.description == None:
+                if page.description is None:
                     page.description = guild
                 else:
                     page.description += f"\n{guild}"

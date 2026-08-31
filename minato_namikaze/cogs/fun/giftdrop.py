@@ -6,26 +6,16 @@ import operator
 import random
 
 import discord
-from redbot.core import bank
-from redbot.core import commands
-from redbot.core import Config
-from redbot.core.utils.predicates import MessagePredicate
+from minato_namikaze.lib.database.bank import bank
+from discord.ext import commands
+from minato_namikaze.lib.database.config_api import Config
+
 
 
 class Cashdrop(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=95932766180343808)
-        self.config.register_guild(
-            active=False,
-            maths=True,
-            chance=1,
-            interval=60,
-            timestamp=None,
-            credits_max=550,
-            credits_min=50,
-            channel=None,
-        )
+        self.config = Config("Fun", "cashdrop")
         self.cache = {}
         asyncio.create_task(self.init_loop())
 
@@ -54,88 +44,75 @@ class Cashdrop(commands.Cog):
         asyncio.create_task(self.save_triggers())
 
     async def generate_cache(self):
-        self.cache = await self.config.all_guilds()
+        pass # Cache is bypassed, we fetch directly if active
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.bot:
+        if message.author.bot or message.guild is None:
             return
-        if message.guild is None:
+            
+        active = await self.config.guild(message.guild).get_attr("active", False)
+        if not active:
             return
+            
+        chance = await self.config.guild(message.guild).get_attr("chance", 1)
+        if random.randint(0, 100) > chance:
+            return
+            
+        interval = await self.config.guild(message.guild).get_attr("interval", 60)
+        
+        # In-memory timestamps to avoid DB spam
         if message.guild.id not in self.cache:
+            self.cache[message.guild.id] = {}
+            
+        last_time = self.cache[message.guild.id].get("timestamp")
+        now = datetime.datetime.now(tz=datetime.timezone.utc)
+        
+        if last_time and (now - last_time).total_seconds() < interval:
             return
-        if not self.cache[message.guild.id]["active"]:
-            return
-        if random.randint(0, 100) > self.cache[message.guild.id]["chance"]:
-            return
-        if self.cache[message.guild.id]["timestamp"] is None:
-            self.cache[message.guild.id]["timestamp"] = datetime.datetime.now(
-                tz=datetime.timezone.utc,
-            )
-        if (
-            datetime.datetime.now(tz=datetime.timezone.utc)
-            - self.cache[message.guild.id]["timestamp"]
-        ).total_seconds() < self.cache[message.guild.id]["interval"]:
-            return
-        self.cache[message.guild.id]["timestamp"] = datetime.datetime.now(
-            tz=datetime.timezone.utc,
-        )
-        if self.cache[message.guild.id]["channel"] is not None:
-            channel = message.guild.get_channel(self.cache[message.guild.id]["channel"])
-            if channel is None:
-                channel = message.channel
-        else:
+            
+        self.cache[message.guild.id]["timestamp"] = now
+        
+        channel_id = await self.config.guild(message.guild).get_attr("channel", None)
+        channel = message.guild.get_channel(channel_id) if channel_id else message.channel
+        if not channel:
             channel = message.channel
-        if self.cache[message.guild.id]["maths"]:
+            
+        maths = await self.config.guild(message.guild).get_attr("maths", True)
+        cmin = await self.config.guild(message.guild).get_attr("credits_min", 50)
+        cmax = await self.config.guild(message.guild).get_attr("credits_max", 550)
+        
+        if maths:
             string, answer = self.random_calc()
             msg = await channel.send(string)
+            
+            def check(m):
+                return m.channel == channel and m.content == str(answer)
+                
             try:
-                pred = MessagePredicate.equal_to(
-                    str(answer),
-                    channel=channel,
-                    user=None,
-                )
-                answer_msg: discord.Message = await self.bot.wait_for(
-                    "message",
-                    check=pred,
-                    timeout=10,
-                )
+                answer_msg = await self.bot.wait_for("message", check=check, timeout=10)
             except asyncio.TimeoutError:
                 await msg.edit(content="Too slow!")
                 return
-            if not pred.result:
-                creds = random.randint(
-                    self.cache[message.guild.id]["credits_min"],
-                    self.cache[message.guild.id]["credits_max"],
-                )
-                await msg.edit(
-                    content=f"Correct! {answer_msg.author.mention} got {creds} {await bank.get_currency_name(guild=message.guild)}!",
-                )
-                await bank.deposit_credits(answer_msg.author, creds)
+                
+            creds = random.randint(cmin, cmax)
+            await msg.edit(content=f"Correct! {answer_msg.author.mention} got {creds} {await bank.get_currency_name(guild=message.guild)}!")
+            await bank.deposit_credits(answer_msg.author, creds)
         else:
-            msg = await channel.send(
-                f"Some {await bank.get_currency_name(guild=message.guild)} have fallen, type `pickup` to pick them up!",
-            )
-            pred = MessagePredicate.equal_to("pickup", channel=channel, user=None)
+            msg = await channel.send(f"Some {await bank.get_currency_name(guild=message.guild)} have fallen, type pickup to pick them up!")
+            
+            def check(m):
+                return m.channel == channel and m.content == "pickup"
+                
             try:
-                pickup_msg: discord.Message = await self.bot.wait_for(
-                    "message",
-                    check=pred,
-                    timeout=10,
-                )
+                pickup_msg = await self.bot.wait_for("message", check=check, timeout=10)
             except asyncio.TimeoutError:
                 await msg.edit(content="Too slow!")
                 return
 
-            if not pred.result:
-                creds = random.randint(
-                    self.cache[message.guild.id]["credits_min"],
-                    self.cache[message.guild.id]["credits_max"],
-                )
-                await msg.edit(
-                    content=f"{pickup_msg.author.mention} picked up {creds} {await bank.get_currency_name(guild=message.guild)}!",
-                )
-                await bank.deposit_credits(pickup_msg.author, creds)
+            creds = random.randint(cmin, cmax)
+            await msg.edit(content=f"{pickup_msg.author.mention} picked up {creds} {await bank.get_currency_name(guild=message.guild)}!")
+            await bank.deposit_credits(pickup_msg.author, creds)
 
     @commands.group(name="cashdrop", aliases=["cd"])
     @commands.guild_only()
@@ -151,12 +128,12 @@ class Cashdrop(commands.Cog):
         Toggle the cashdrop
         """
         guild = ctx.guild
-        active = await self.config.guild(guild).active()
+        active = await self.config.guild(guild).get_attr("active", False)
         if active:
-            await self.config.guild(guild).active.set(False)
+            await self.config.guild(guild).set_attr("active", False)
             await ctx.send("Cashdrop is now disabled")
         else:
-            await self.config.guild(guild).active.set(True)
+            await self.config.guild(guild).set_attr("active", True)
             await ctx.send("Cashdrop is now enabled")
         await self.generate_cache()
 
@@ -169,7 +146,7 @@ class Cashdrop(commands.Cog):
             await ctx.send("Chance must be between 0 and 100")
             return
         guild = ctx.guild
-        await self.config.guild(guild).chance.set(chance)
+        await self.config.guild(guild).set_attr("chance", chance)
         await ctx.send(f"Chance set to {chance}%")
         await self.generate_cache()
 
@@ -182,7 +159,7 @@ class Cashdrop(commands.Cog):
             await ctx.send("Interval must be greater than 0")
             return
         guild = ctx.guild
-        await self.config.guild(guild).interval.set(interval)
+        await self.config.guild(guild).set_attr("interval", interval)
         await ctx.send(f"Interval set to {interval} seconds")
         await self.generate_cache()
 
@@ -195,7 +172,7 @@ class Cashdrop(commands.Cog):
         if max < 0:
             await ctx.send("Max must be greater than 0")
             return
-        mincredits = await self.config.guild(ctx.guild).credits_min()
+        mincredits = await self.config.guild(ctx.guild).get_attr("credits_min", 50)
         if max < mincredits:
             await ctx.send("Max must be greater than min")
             return
@@ -213,7 +190,7 @@ class Cashdrop(commands.Cog):
         if min < 0:
             await ctx.send("Min must be greater than 0")
             return
-        maxcredits = await self.config.guild(ctx.guild).credits_max()
+        maxcredits = await self.config.guild(ctx.guild).get_attr("credits_max", 550)
         if maxcredits < min:
             await ctx.send("Min must be less than min")
             return
@@ -229,10 +206,10 @@ class Cashdrop(commands.Cog):
         """
         guild = ctx.guild
         if toggle:
-            await self.config.guild(guild).maths.set(True)
+            await self.config.guild(guild).set_attr("maths", True)
             await ctx.send("Maths mode is now enabled")
         else:
-            await self.config.guild(guild).maths.set(False)
+            await self.config.guild(guild).set_attr("maths", False)
             await ctx.send("Maths mode is now disabled")
         await self.generate_cache()
 
@@ -245,3 +222,6 @@ class Cashdrop(commands.Cog):
         await self.config.guild(guild).channel.set(channel.id)
         await ctx.send(f"Channel set to {channel.mention}")
         await self.generate_cache()
+
+async def setup(bot):
+    await bot.add_cog(Cashdrop(bot))

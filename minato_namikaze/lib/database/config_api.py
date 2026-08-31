@@ -24,7 +24,7 @@ class Group:
                 self.table.cog_name == self.cog_name,
                 self.table.key == key,
             )
-            if self.entity_id != None:
+            if self.entity_id is not None:
                 id_col = list(self.table.primary_key.columns)[0]
                 stmt = stmt.where(id_col == self.entity_id)
 

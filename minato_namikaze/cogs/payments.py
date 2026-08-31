@@ -6,10 +6,7 @@ from discord.ext import commands
 
 from minato_namikaze.lib import Base
 from sqlalchemy import BigInteger
-from sqlalchemy import Boolean
 from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import Integer
 from sqlalchemy_utils import URLType
 
 if TYPE_CHECKING:

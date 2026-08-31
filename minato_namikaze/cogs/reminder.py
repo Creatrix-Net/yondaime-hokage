@@ -20,8 +20,6 @@ from sqlalchemy import Integer
 from sqlalchemy import select
 from sqlalchemy import String
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.exc import MultipleResultsFound
-from sqlalchemy.exc import NoResultFound
 from sqlalchemy.util._collections import immutabledict
 
 from minato_namikaze.lib import Base

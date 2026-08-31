@@ -4,7 +4,6 @@ import asyncio
 import datetime
 import logging
 from collections import defaultdict
-from json.decoder import JSONDecodeError
 from typing import Literal
 from typing import TYPE_CHECKING
 
@@ -12,7 +11,6 @@ import discord
 import num2words
 from discord.ext import commands
 from discord.ext import tasks
-from orjson import loads
 from sqlalchemy import BigInteger
 from sqlalchemy import Column
 from sqlalchemy import DateTime
@@ -549,18 +547,21 @@ class AntiRaid(commands.Cog):
         self.get_guild_config.invalidate(self, ctx.guild.id)
         await ctx.send("Updated mentionspam ignore list.")
 
-
     async def database_class(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "main")
-        
+
     async def database_class_antiraid(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "antiraid")
-        
+
     async def database_class_mentionspam(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "mentionspam")
+
 
 async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(AntiRaid(bot))

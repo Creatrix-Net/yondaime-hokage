@@ -7,8 +7,10 @@ from .session import session_obj
 from .models_bank import BankAccount
 from .config_api import Config
 
+
 class InsufficientFunds(Exception):
     pass
+
 
 class Bank:
     @staticmethod
@@ -24,7 +26,9 @@ class Bank:
         return await conf.global_().get_attr("is_global", True)
 
     @staticmethod
-    def _get_guild_id(user: Union[discord.Member, discord.User], is_glob: bool) -> Optional[int]:
+    def _get_guild_id(
+        user: Union[discord.Member, discord.User], is_glob: bool
+    ) -> Optional[int]:
         if is_glob:
             return None
         guild = getattr(user, "guild", None)
@@ -45,7 +49,9 @@ class Bank:
             return bal if bal is not None else 0
 
     @staticmethod
-    async def set_balance(user: Union[discord.Member, discord.User], amount: int) -> int:
+    async def set_balance(
+        user: Union[discord.Member, discord.User], amount: int
+    ) -> int:
         if amount < 0:
             raise ValueError("Balance cannot be negative.")
         is_glob = await Bank.is_global()
@@ -59,7 +65,9 @@ class Bank:
             account = (await session.execute(query)).scalar_one_or_none()
 
             if not account:
-                account = BankAccount(user_id=user.id, guild_id=guild_id, balance=amount)
+                account = BankAccount(
+                    user_id=user.id, guild_id=guild_id, balance=amount
+                )
                 session.add(account)
             else:
                 account.balance = amount
@@ -68,7 +76,9 @@ class Bank:
             return amount
 
     @staticmethod
-    async def deposit_credits(user: Union[discord.Member, discord.User], amount: int) -> int:
+    async def deposit_credits(
+        user: Union[discord.Member, discord.User], amount: int
+    ) -> int:
         if amount < 0:
             raise ValueError("Cannot deposit negative amounts.")
         is_glob = await Bank.is_global()
@@ -82,7 +92,9 @@ class Bank:
             account = (await session.execute(query)).scalar_one_or_none()
 
             if not account:
-                account = BankAccount(user_id=user.id, guild_id=guild_id, balance=amount)
+                account = BankAccount(
+                    user_id=user.id, guild_id=guild_id, balance=amount
+                )
                 session.add(account)
             else:
                 account.balance += amount
@@ -93,7 +105,9 @@ class Bank:
         return new_bal
 
     @staticmethod
-    async def withdraw_credits(user: Union[discord.Member, discord.User], amount: int) -> int:
+    async def withdraw_credits(
+        user: Union[discord.Member, discord.User], amount: int
+    ) -> int:
         if amount < 0:
             raise ValueError("Cannot withdraw negative amounts.")
         is_glob = await Bank.is_global()
@@ -116,22 +130,34 @@ class Bank:
         return new_bal
 
     @staticmethod
-    async def transfer_credits(from_user: Union[discord.Member, discord.User], to_user: Union[discord.Member, discord.User], amount: int) -> int:
+    async def transfer_credits(
+        from_user: Union[discord.Member, discord.User],
+        to_user: Union[discord.Member, discord.User],
+        amount: int,
+    ) -> int:
         await Bank.withdraw_credits(from_user, amount)
         await Bank.deposit_credits(to_user, amount)
         return await Bank.get_balance(from_user)
 
     @staticmethod
-    async def get_leaderboard(guild: Optional[discord.Guild] = None, limit: int = 10) -> List[Tuple[int, int]]:
+    async def get_leaderboard(
+        guild: Optional[discord.Guild] = None, limit: int = 10
+    ) -> List[Tuple[int, int]]:
         is_glob = await Bank.is_global()
         guild_id = None if is_glob else (guild.id if guild else None)
 
         async with session_obj() as session:
-            query = select(BankAccount.user_id, BankAccount.balance).where(
-                BankAccount.guild_id == guild_id,
-            ).order_by(desc(BankAccount.balance)).limit(limit)
+            query = (
+                select(BankAccount.user_id, BankAccount.balance)
+                .where(
+                    BankAccount.guild_id == guild_id,
+                )
+                .order_by(desc(BankAccount.balance))
+                .limit(limit)
+            )
 
             result = await session.execute(query)
             return [(row[0], row[1]) for row in result.all()]
+
 
 bank = Bank()

@@ -34,11 +34,6 @@ class RoleButton(discord.ui.Button):
                 ephemeral=True,
             )
 
-            return await interaction.response.send_message(
-                "Role not found.",
-                ephemeral=True,
-            )
-
         if self.limit_to_one:
             roles_to_remove = [
                 interaction.guild.get_role(r)

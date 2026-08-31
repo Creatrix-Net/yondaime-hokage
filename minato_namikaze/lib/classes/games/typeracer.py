@@ -293,7 +293,11 @@ class TypeRacer:
 
     @staticmethod
     async def wait_for_tr_response(
-        ctx: commands.Context, text: str, *, timeout: int, start
+        ctx: commands.Context,
+        text: str,
+        *,
+        timeout: int,
+        start,
     ):
 
         text = text.lower().replace("\n", " ").strip(".")
@@ -302,8 +306,7 @@ class TypeRacer:
             message = await ctx.bot.wait_for(
                 "message",
                 timeout=timeout,
-                check=lambda m: m.channel == ctx.channel
-                and m.content.lower().replace("\n", " ").strip(".") == text,
+                check=lambda m: m.channel == ctx.channel and m.content.lower().replace("\n", " ").strip(".") == text,
             )
         except asyncio.TimeoutError:
             return await ctx.reply(

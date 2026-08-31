@@ -1,16 +1,19 @@
 from __future__ import annotations
+
+import logging
 import random
 import time
 
 import discord
 from discord.ext import commands
 
-from minato_namikaze.lib.database.bank import bank, InsufficientFunds
-from minato_namikaze.lib.database.config_api import Config
 from minato_namikaze.lib import has_permissions
+from minato_namikaze.lib.database.bank import bank
+from minato_namikaze.lib.database.bank import InsufficientFunds
+from minato_namikaze.lib.database.config_api import Config
 
-import logging
 log = logging.getLogger(__name__)
+
 
 class Economy(commands.Cog):
     def __init__(self, bot):
@@ -24,11 +27,11 @@ class Economy(commands.Cog):
         user = user or ctx.author
         bal = await bank.get_balance(user)
         currency = await bank.get_currency_name(ctx.guild)
-        
+
         embed = discord.Embed(
             title=f"{user.display_name}'s Balance",
             description=f"**{bal}** {currency}",
-            color=discord.Color.green()
+            color=discord.Color.green(),
         )
         await ctx.send(embed=embed)
 
@@ -39,9 +42,9 @@ class Economy(commands.Cog):
             return await ctx.send("You must transfer a positive amount.")
         if user == ctx.author:
             return await ctx.send("You cannot pay yourself.")
-            
+
         currency = await bank.get_currency_name(ctx.guild)
-        
+
         try:
             await bank.transfer_credits(ctx.author, user, amount)
             await ctx.send(f"Successfully transferred **{amount}** {currency} to {user.display_name}.")
@@ -53,20 +56,20 @@ class Economy(commands.Cog):
         """Claim your daily credits."""
         user_conf = self.daily_config.user(ctx.author)
         last_claimed = await user_conf.get_attr("last_claimed", 0)
-        
+
         now = int(time.time())
-        cooldown = 86400 # 24 hours
-        
+        cooldown = 86400  # 24 hours
+
         if now - last_claimed < cooldown:
             remaining = cooldown - (now - last_claimed)
             hours, remainder = divmod(remaining, 3600)
             minutes, _ = divmod(remainder, 60)
             return await ctx.send(f"You already claimed your daily! Try again in {hours}h {minutes}m.")
-            
+
         amount = 500
         await bank.deposit_credits(ctx.author, amount)
         await user_conf.set_attr("last_claimed", now)
-        
+
         currency = await bank.get_currency_name(ctx.guild)
         await ctx.send(f"You claimed your daily **{amount}** {currency}!")
 
@@ -75,14 +78,14 @@ class Economy(commands.Cog):
         """Gamble your credits. 50% chance to double, 50% chance to lose it all."""
         if amount <= 0:
             return await ctx.send("You must gamble a positive amount.")
-            
+
         currency = await bank.get_currency_name(ctx.guild)
-        
+
         try:
             await bank.withdraw_credits(ctx.author, amount)
         except InsufficientFunds:
             return await ctx.send(f"You don't have enough {currency} to gamble that much.")
-            
+
         if random.choice([True, False]):
             winnings = amount * 2
             await bank.deposit_credits(ctx.author, winnings)
@@ -95,18 +98,18 @@ class Economy(commands.Cog):
         """Show the wealthiest users."""
         top_users = await bank.get_leaderboard(guild=ctx.guild, limit=10)
         currency = await bank.get_currency_name(ctx.guild)
-        
+
         if not top_users:
             return await ctx.send("The leaderboard is empty.")
-            
+
         desc = ""
         for idx, (user_id, bal) in enumerate(top_users, start=1):
             desc += f"**{idx}.** <@{user_id}>: {bal} {currency}\n"
-            
+
         embed = discord.Embed(
             title="Economy Leaderboard",
             description=desc,
-            color=discord.Color.gold()
+            color=discord.Color.gold(),
         )
         await ctx.send(embed=embed)
 
@@ -131,7 +134,7 @@ class Economy(commands.Cog):
         """Set the currency name. If bank is local, sets for this server."""
         conf = Config("Economy", "bank")
         is_glob = await bank.is_global()
-        
+
         if is_glob:
             await conf.global_().set_attr("currency_name", name)
             await ctx.send(f"Global currency name set to **{name}**.")
@@ -145,7 +148,7 @@ class Economy(commands.Cog):
         """Set a user's exact balance."""
         if amount < 0:
             return await ctx.send("Balance cannot be negative.")
-            
+
         await bank.set_balance(user, amount)
         currency = await bank.get_currency_name(ctx.guild)
         await ctx.send(f"Set {user.display_name}'s balance to **{amount}** {currency}.")

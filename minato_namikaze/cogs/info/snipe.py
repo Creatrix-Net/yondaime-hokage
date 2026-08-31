@@ -35,9 +35,7 @@ class Snipe(commands.Cog):
         async def on_message_edit(before: discord.Message, after: discord.Message):
             if before.author.bot or after.author.bot:
                 return  # DEPARTMENT OF REDUNDANCY DEPARTMENT
-            if (self.eval(before.content, after.content) >= 10) and (
-                len(before.content) > len(after.content)
-            ):
+            if (self.eval(before.content, after.content) >= 10) and (len(before.content) > len(after.content)):
                 self.snipes[before.channel.id] = [before, after]
 
     @property
@@ -96,7 +94,7 @@ class Snipe(commands.Cog):
         return self.minDis(str1, str2, n, m, dp)
 
     @commands.command()
-    async def snipe(self, ctx: "Context"):
+    async def snipe(self, ctx: Context):
         "\"Snipes\" someone's message that's been edited or deleted."
         try:
             snipe = self.snipes[ctx.channel.id]
@@ -135,5 +133,5 @@ class Snipe(commands.Cog):
         self.snipes[ctx.channel.id] = None
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Snipe(bot))

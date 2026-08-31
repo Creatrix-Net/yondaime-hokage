@@ -1,4 +1,5 @@
-﻿import random
+from __future__ import annotations
+import random
 import discord
 from discord.ext import commands
 
@@ -21,21 +22,21 @@ class HigherOrLowerView(discord.ui.View):
             next_number = random.randint(1, 100)
 
         won = (guess_higher and next_number > self.current_number) or (not guess_higher and next_number < self.current_number)
-        
+
         if won:
             self.score += 1
             self.current_number = next_number
             embed = discord.Embed(
                 title="Higher or Lower",
                 description=f"Correct! The number was **{next_number}**.\n\nCurrent Score: **{self.score}**\n\nIs the next number (1-100) higher or lower than **{self.current_number}**?",
-                color=discord.Color.green()
+                color=discord.Color.green(),
             )
             await interaction.response.edit_message(embed=embed, view=self)
         else:
             embed = discord.Embed(
                 title="Higher or Lower - Game Over",
                 description=f"Wrong! The number was **{next_number}**.\n\nFinal Score: **{self.score}**",
-                color=discord.Color.red()
+                color=discord.Color.red(),
             )
             for child in self.children:
                 child.disabled = True
@@ -60,11 +61,11 @@ class HigherOrLower(commands.Cog):
         """Play a game of Higher or Lower."""
         number = random.randint(1, 100)
         view = HigherOrLowerView(ctx, number)
-        
+
         embed = discord.Embed(
             title="Higher or Lower",
             description=f"I picked a number between 1 and 100.\n\nIs the next number higher or lower than **{number}**?",
-            color=discord.Color.blue()
+            color=discord.Color.blue(),
         )
         await ctx.send(embed=embed, view=view)
 

@@ -28,7 +28,11 @@ def insert_returns(body):
 
 
 async def copy_context_with(
-    ctx: commands.Context, *, author=None, channel=None, **kwargs
+    ctx: commands.Context,
+    *,
+    author=None,
+    channel=None,
+    **kwargs,
 ):
 
     alt_message: discord.Message = copy.copy(ctx.message)
@@ -56,9 +60,7 @@ async def check_permissions(ctx, perms, *, check=all):
         return True
 
     resolved = ctx.channel.permissions_for(ctx.author)
-    return check(
-        getattr(resolved, name, None) == value for name, value in perms.items()
-    )
+    return check(getattr(resolved, name, None) == value for name, value in perms.items())
 
 
 def has_permissions(*, check=all, **perms):
@@ -77,9 +79,7 @@ async def check_guild_permissions(ctx, perms, *, check=all):
         return False
 
     resolved = ctx.author.guild_permissions
-    return check(
-        getattr(resolved, name, None) == value for name, value in perms.items()
-    )
+    return check(getattr(resolved, name, None) == value for name, value in perms.items())
 
 
 def has_guild_permissions(*, check=all, **perms):
@@ -200,11 +200,7 @@ async def serverinfo(
     )
     embed.add_field(
         name=":bell: Notifications",
-        value=(
-            "All Messages "
-            if guild.default_notifications == discord.NotificationLevel.all_messages
-            else "Disabled"
-        ),
+        value=("All Messages " if guild.default_notifications == discord.NotificationLevel.all_messages else "Disabled"),
     )
     embed.add_field(name="Categories", value=len(guild.categories))
     embed.add_field(
@@ -261,11 +257,7 @@ async def userinfo(user: discord.Member, guild: discord.Guild, bot) -> discord.E
 
     show_roles = (
         ", ".join(
-            [
-                f"<@&{x.id}>"
-                for x in sorted(user.roles, key=lambda x: x.position, reverse=True)
-                if x.id != guild.default_role.id
-            ],
+            [f"<@&{x.id}>" for x in sorted(user.roles, key=lambda x: x.position, reverse=True) if x.id != guild.default_role.id],
         )
         if len(user.roles) > 1
         else "None"

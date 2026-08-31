@@ -175,12 +175,7 @@ master_doc = "index"
 
 
 def autodoc_skip_member_handler(app, what, name, obj, skip, options):
-    return (
-        "__str__" in name.lower()
-        or "__init__" in name.lower()
-        or "__repr__" in name.lower()
-        or setup in name.lower()
-    )
+    return "__str__" in name.lower() or "__init__" in name.lower() or "__repr__" in name.lower() or setup in name.lower()
 
 
 # Automatically called by sphinx at startup

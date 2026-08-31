@@ -6,10 +6,10 @@ import operator
 import random
 
 import discord
-from minato_namikaze.lib.database.bank import bank
 from discord.ext import commands
-from minato_namikaze.lib.database.config_api import Config
 
+from minato_namikaze.lib.database.bank import bank
+from minato_namikaze.lib.database.config_api import Config
 
 
 class Cashdrop(commands.Cog):
@@ -44,66 +44,66 @@ class Cashdrop(commands.Cog):
         asyncio.create_task(self.save_triggers())
 
     async def generate_cache(self):
-        pass # Cache is bypassed, we fetch directly if active
+        pass  # Cache is bypassed, we fetch directly if active
 
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot or message.guild is None:
             return
-            
+
         active = await self.config.guild(message.guild).get_attr("active", False)
         if not active:
             return
-            
+
         chance = await self.config.guild(message.guild).get_attr("chance", 1)
         if random.randint(0, 100) > chance:
             return
-            
+
         interval = await self.config.guild(message.guild).get_attr("interval", 60)
-        
+
         # In-memory timestamps to avoid DB spam
         if message.guild.id not in self.cache:
             self.cache[message.guild.id] = {}
-            
+
         last_time = self.cache[message.guild.id].get("timestamp")
         now = datetime.datetime.now(tz=datetime.timezone.utc)
-        
+
         if last_time and (now - last_time).total_seconds() < interval:
             return
-            
+
         self.cache[message.guild.id]["timestamp"] = now
-        
+
         channel_id = await self.config.guild(message.guild).get_attr("channel", None)
         channel = message.guild.get_channel(channel_id) if channel_id else message.channel
         if not channel:
             channel = message.channel
-            
+
         maths = await self.config.guild(message.guild).get_attr("maths", True)
         cmin = await self.config.guild(message.guild).get_attr("credits_min", 50)
         cmax = await self.config.guild(message.guild).get_attr("credits_max", 550)
-        
+
         if maths:
             string, answer = self.random_calc()
             msg = await channel.send(string)
-            
+
             def check(m):
                 return m.channel == channel and m.content == str(answer)
-                
+
             try:
                 answer_msg = await self.bot.wait_for("message", check=check, timeout=10)
             except asyncio.TimeoutError:
                 await msg.edit(content="Too slow!")
                 return
-                
+
             creds = random.randint(cmin, cmax)
             await msg.edit(content=f"Correct! {answer_msg.author.mention} got {creds} {await bank.get_currency_name(guild=message.guild)}!")
             await bank.deposit_credits(answer_msg.author, creds)
         else:
             msg = await channel.send(f"Some {await bank.get_currency_name(guild=message.guild)} have fallen, type pickup to pick them up!")
-            
+
             def check(m):
                 return m.channel == channel and m.content == "pickup"
-                
+
             try:
                 pickup_msg = await self.bot.wait_for("message", check=check, timeout=10)
             except asyncio.TimeoutError:
@@ -222,6 +222,7 @@ class Cashdrop(commands.Cog):
         await self.config.guild(guild).channel.set(channel.id)
         await ctx.send(f"Channel set to {channel.mention}")
         await self.generate_cache()
+
 
 async def setup(bot):
     await bot.add_cog(Cashdrop(bot))

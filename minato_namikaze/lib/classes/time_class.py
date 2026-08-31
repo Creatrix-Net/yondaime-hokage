@@ -309,7 +309,7 @@ class FriendlyTimeResult:
 
     async def ensure_constraints(
         self,
-        ctx: "Context",
+        ctx: Context,
         uft: UserFriendlyTime,
         now: datetime.datetime,
         remaining: str,

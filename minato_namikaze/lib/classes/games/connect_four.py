@@ -86,7 +86,11 @@ class ConnectFour(discord.ui.View):
     children: list[ConnectFourButton]
 
     def __init__(
-        self, *, red: discord.Member, blue: discord.Member, auto: bool = False
+        self,
+        *,
+        red: discord.Member,
+        blue: discord.Member,
+        auto: bool = False,
     ):
         super().__init__()
         self.red_player = red
@@ -163,45 +167,29 @@ class ConnectFour(discord.ui.View):
 
         for x in range(6):
             for i in range(4):
-                if (
-                    self.board[x][i]
-                    == self.board[x][i + 1]
-                    == self.board[x][i + 2]
-                    == self.board[x][i + 3]
-                ) and self.board[x][i] != BLANK:
+                if (self.board[x][i] == self.board[x][i + 1] == self.board[x][i + 2] == self.board[x][i + 3]) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         for x in range(3):
             for i in range(7):
-                if (
-                    self.board[x][i]
-                    == self.board[x + 1][i]
-                    == self.board[x + 2][i]
-                    == self.board[x + 3][i]
-                ) and self.board[x][i] != BLANK:
+                if (self.board[x][i] == self.board[x + 1][i] == self.board[x + 2][i] == self.board[x + 3][i]) and self.board[x][i] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         for x in range(3):
             for i in range(4):
-                if (
-                    self.board[x][i]
-                    == self.board[x + 1][i + 1]
-                    == self.board[x + 2][i + 2]
-                    == self.board[x + 3][i + 3]
-                ) and self.board[x][i] != BLANK:
+                if (self.board[x][i] == self.board[x + 1][i + 1] == self.board[x + 2][i + 2] == self.board[x + 3][i + 3]) and self.board[x][
+                    i
+                ] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 
         for x in range(5, 2, -1):
             for i in range(4):
-                if (
-                    self.board[x][i]
-                    == self.board[x - 1][i + 1]
-                    == self.board[x - 2][i + 2]
-                    == self.board[x - 3][i + 3]
-                ) and self.board[x][i] != BLANK:
+                if (self.board[x][i] == self.board[x - 1][i + 1] == self.board[x - 2][i + 2] == self.board[x - 3][i + 3]) and self.board[x][
+                    i
+                ] != BLANK:
                     self.winner = self._EmojiToPlayer[self.board[x][i]]
                     return True
 

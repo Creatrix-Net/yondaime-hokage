@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 class ElementConverter(Converter):
     """Converts a given argument to an element object"""
 
-    async def convert(self, ctx: "Context", argument: str) -> ELEMENTS:
+    async def convert(self, ctx: Context, argument: str) -> ELEMENTS:
         result = None
         if argument.isdigit():
             if int(argument) > 118 or int(argument) < 1:
@@ -90,31 +90,19 @@ class Elements(commands.Cog):
     @staticmethod
     def get_xray_wavelength(element: ELEMENTS) -> str:
         try:
-            ka = 1239.84 / (
-                13.6057 * ((element.atomic_number - 1) ** 2) * ((1 / 1**2) - (1 / 2**2))
-            )
+            ka = 1239.84 / (13.6057 * ((element.atomic_number - 1) ** 2) * ((1 / 1**2) - (1 / 2**2)))
         except Exception:
             ka = ""
         try:
-            kb = 1239.84 / (
-                13.6057 * ((element.atomic_number - 1) ** 2) * ((1 / 1**2) - (1 / 3**2))
-            )
+            kb = 1239.84 / (13.6057 * ((element.atomic_number - 1) ** 2) * ((1 / 1**2) - (1 / 3**2)))
         except Exception:
             kb = ""
         try:
-            la = 1239.84 / (
-                13.6057
-                * ((element.atomic_number - 7.4) ** 2)
-                * ((1 / 1**2) - (1 / 2**3))
-            )
+            la = 1239.84 / (13.6057 * ((element.atomic_number - 7.4) ** 2) * ((1 / 1**2) - (1 / 2**3)))
         except Exception:
             la = ""
         try:
-            lb = 1239.84 / (
-                13.6057
-                * ((element.atomic_number - 7.4) ** 2)
-                * ((1 / 1**2) - (1 / 2**4))
-            )
+            lb = 1239.84 / (13.6057 * ((element.atomic_number - 7.4) ** 2) * ((1 / 1**2) - (1 / 2**4)))
         except Exception:
             lb = ""
 
@@ -128,7 +116,7 @@ class Elements(commands.Cog):
     @commands.bot_has_permissions(embed_links=True)
     async def element(
         self,
-        ctx: "Context",
+        ctx: Context,
         element: ElementConverter,
         measurement: MeasurementConverter = None,
     ) -> None:
@@ -155,7 +143,7 @@ class Elements(commands.Cog):
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
-    async def elements(self, ctx: "Context", *elements: ElementConverter) -> None:
+    async def elements(self, ctx: Context, *elements: ElementConverter) -> None:
         """
         Display information about multiple elements
         `elements` can be the name, symbol or atomic number of the element
@@ -171,7 +159,7 @@ class Elements(commands.Cog):
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
-    async def ptable(self, ctx: "Context") -> None:
+    async def ptable(self, ctx: Context) -> None:
         """Display a menu of all elements"""
         embeds = [await self.element_embed(ELEMENTS(e)) for e in range(1, 119)]
         paginator = EmbedPaginator(ctx=ctx, entries=embeds)
@@ -179,10 +167,7 @@ class Elements(commands.Cog):
 
     async def element_embed(self, element: ELEMENTS) -> discord.Embed:
         embed = discord.Embed()
-        embed_title = (
-            f"[{element.name} ({element.symbol})"
-            f" - {element.atomic_number}](https://en.wikipedia.org/wiki/{element.name})"
-        )
+        embed_title = f"[{element.name} ({element.symbol})" f" - {element.atomic_number}](https://en.wikipedia.org/wiki/{element.name})"
         embed.description = ("{embed_title}\n\n{desc}\n\n{sources}\n\n{uses}").format(
             embed_title=embed_title,
             desc=element.description,
@@ -217,5 +202,5 @@ class Elements(commands.Cog):
         return embed
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Elements(bot))

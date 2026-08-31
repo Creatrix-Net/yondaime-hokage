@@ -2,7 +2,7 @@
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [master, main]
   pull_request:
 
 jobs:
@@ -13,6 +13,6 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - name: Run Prettier
         run: npx prettier --check "**/*.{yml,yaml,json,md}"

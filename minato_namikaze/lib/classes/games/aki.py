@@ -73,10 +73,7 @@ class Akinator(discord.ui.View):
         embed = Embed(
             title="Guess your character!",
             description=(
-                "```swift\n"
-                f"Question-Number  : {self.questions}\n"
-                f"Progression-Level: {self.aki.progression}\n```\n"
-                f"{self.build_bar()}"
+                "```swift\n" f"Question-Number  : {self.questions}\n" f"Progression-Level: {self.aki.progression}\n```\n" f"{self.build_bar()}"
             ),
         )
         embed.add_field(name="- Question -", value=self.aki.question)

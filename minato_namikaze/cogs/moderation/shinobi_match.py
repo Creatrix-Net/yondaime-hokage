@@ -46,9 +46,7 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
             LinksAndVars.character_data.value,
         ) as resp:
             character_data: dict = orjson.loads(await resp.text())
-        return [
-            Characters.from_record(character_data[i], ctx, i) for i in character_data
-        ]
+        return [Characters.from_record(character_data[i], ctx, i) for i in character_data]
 
     @classmethod
     async def return_random_characters(self, ctx: Context) -> list[Characters]:
@@ -142,18 +140,21 @@ class ShinobiMatchCog(commands.Cog, name="Shinobi Match"):
             view=view,
         )
 
-
     async def database_class(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "main")
-        
+
     async def database_class_antiraid(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "antiraid")
-        
+
     async def database_class_mentionspam(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "mentionspam")
+
 
 async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(ShinobiMatchCog(bot))

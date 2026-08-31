@@ -333,17 +333,11 @@ class Element(Base):
         """
 
         if charge == 0:
-            if (
-                self.ionenergies.get(1, None) is not None
-                and self.electron_affinity is not None
-            ):
+            if self.ionenergies.get(1, None) is not None and self.electron_affinity is not None:
                 return (self.ionenergies[1] - self.electron_affinity) * 0.5
             return None
         if charge > 0:
-            if (
-                self.ionenergies.get(charge + 1, None) is not None
-                and self.ionenergies.get(charge, None) is not None
-            ):
+            if self.ionenergies.get(charge + 1, None) is not None and self.ionenergies.get(charge, None) is not None:
                 return (self.ionenergies[charge + 1] - self.ionenergies[charge]) * 0.5
             return None
         if charge < 0:
@@ -522,16 +516,9 @@ class Element(Base):
 
         ie = self.ionenergies.get(charge, None)
 
-        radii = [
-            (ir.coordination, ir.spin, getattr(ir, radius))
-            for ir in self.ionic_radii
-            if ir.charge == charge
-        ]
+        radii = [(ir.coordination, ir.spin, getattr(ir, radius)) for ir in self.ionic_radii if ir.charge == charge]
 
-        return {
-            (coordination_number, spin): li_xue(ie, crystal_radius, self.ec.max_n())
-            for coordination_number, spin, crystal_radius in radii
-        }
+        return {(coordination_number, spin): li_xue(ie, crystal_radius, self.ec.max_n()) for coordination_number, spin, crystal_radius in radii}
 
     def electronegativity_martynov_batsanov(self) -> float:
         r"""
@@ -545,10 +532,7 @@ class Element(Base):
         - :math:`I_{k}` is the :math:`k` th ionization potential.
         """
 
-        ionenergies = [
-            self.ionenergies.get(i, None)
-            for i in range(1, self.nvalence(method="simple") + 1)
-        ]
+        ionenergies = [self.ionenergies.get(i, None) for i in range(1, self.nvalence(method="simple") + 1)]
 
         if all(ionenergies):
             return martynov_batsanov(ionenergies)
@@ -622,11 +606,7 @@ class Element(Base):
     def __repr__(self):
         return "{}(\n{})".format(
             self.__class__.__name__,
-            " ".join(
-                f"\t{key}={getattr(self, key)!r},\n"
-                for key in sorted(self.__dict__.keys())
-                if not key.startswith("_")
-            ),
+            " ".join(f"\t{key}={getattr(self, key)!r},\n" for key in sorted(self.__dict__.keys()) if not key.startswith("_")),
         )
 
 
@@ -642,12 +622,7 @@ def fetch_attrs_for_group(attrs: list[str], group: int = 18) -> tuple[list[Any]]
     """
 
     session = get_session()
-    members = (
-        session.query(Element)
-        .filter(Element.group_id == group)
-        .order_by(Element.atomic_number)
-        .all()
-    )
+    members = session.query(Element).filter(Element.group_id == group).order_by(Element.atomic_number).all()
 
     results = tuple([getattr(member, attr) for member in members] for attr in attrs)
     session.close()
@@ -694,11 +669,7 @@ class IonicRadius(Base):
     def __repr__(self):
         return "{}(\n{})".format(
             self.__class__.__name__,
-            " ".join(
-                f"\t{key}={getattr(self, key)!r},\n"
-                for key in sorted(self.__dict__.keys())
-                if not key.startswith("_")
-            ),
+            " ".join(f"\t{key}={getattr(self, key)!r},\n" for key in sorted(self.__dict__.keys()) if not key.startswith("_")),
         )
 
 
@@ -889,11 +860,9 @@ class ScreeningConstant(Base):
 
     def __repr__(self):
 
-        return (
-            "<ScreeningConstant(Z={:4d}, n={:3d}, s={:s}, screening={:10.4f})>".format(
-                self.atomic_number,
-                self.n,
-                self.s,
-                self.screening,
-            )
+        return "<ScreeningConstant(Z={:4d}, n={:3d}, s={:s}, screening={:10.4f})>".format(
+            self.atomic_number,
+            self.n,
+            self.s,
+            self.screening,
         )

@@ -35,7 +35,7 @@ class Music(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="voice_channel", id=942447961210753047)
 
-    async def cog_before_invoke(self, ctx: "Context"):
+    async def cog_before_invoke(self, ctx: Context):
         """
         Coroutine called before command invocation.
         We mainly just want to check whether the user is in the players controller channel.
@@ -56,7 +56,7 @@ class Music(commands.Cog):
             raise NoChannelProvided
         return
 
-    async def cog_command_error(self, ctx: "Context", error: Exception):
+    async def cog_command_error(self, ctx: Context, error: Exception):
         """Cog wide error handler."""
         if isinstance(error, IncorrectChannelError):
             return
@@ -68,7 +68,7 @@ class Music(commands.Cog):
                 ),
             )
 
-    async def cog_check(self, ctx: "Context"):
+    async def cog_check(self, ctx: Context):
         """Cog wide check, which disallows commands in DMs."""
         if not ctx.guild:
             await ctx.send(
@@ -96,15 +96,11 @@ class Music(commands.Cog):
         return e
 
     @commands.command()
-    async def join(self, ctx: "Context"):
+    async def join(self, ctx: Context):
         """Joins the voice channel"""
         voice_state_author = ctx.author.voice
         voice_state_me = ctx.me.voice
-        if (
-            voice_state_author
-            and voice_state_me
-            and voice_state_author == voice_state_me
-        ):
+        if voice_state_author and voice_state_me and voice_state_author == voice_state_me:
             return
 
         if voice_state_author is None:
@@ -114,7 +110,7 @@ class Music(commands.Cog):
         await ctx.send(embed=SuccessEmbed(description="```Joined```"))
 
     @commands.command()
-    async def leave(self, ctx: "Context"):
+    async def leave(self, ctx: Context):
         """Disconnects from a voice channel"""
         voice_state_me = ctx.me.voice
 
@@ -128,7 +124,7 @@ class Music(commands.Cog):
             pass
 
     @commands.command(usage="<music.url | music.name>")
-    async def play(self, ctx: "Context", *, url):
+    async def play(self, ctx: Context, *, url):
         """Plays the requested music"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         if not player:
@@ -142,28 +138,28 @@ class Music(commands.Cog):
             await ctx.send(embed=self.songembed(song, queued=True))
 
     @commands.command()
-    async def pause(self, ctx: "Context"):
+    async def pause(self, ctx: Context):
         """Pauses the current music playing"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         song = await player.pause()
         await ctx.send(embed=StarboardEmbed(description=f"```Paused {song.name}```"))
 
     @commands.command()
-    async def resume(self, ctx: "Context"):
+    async def resume(self, ctx: Context):
         """Resumes music"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         song = await player.resume()
         await ctx.send(embed=StarboardEmbed(description=f"```Resumed {song.name}```"))
 
     @commands.command()
-    async def stop(self, ctx: "Context"):
+    async def stop(self, ctx: Context):
         """Stops the Music Player"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         await player.stop()
         await ctx.send(embed=ErrorEmbed(description="```Stopped```"))
 
     @commands.command()
-    async def loop(self, ctx: "Context"):
+    async def loop(self, ctx: Context):
         """Iterates the current playing song"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         song = await player.toggle_song_loop()
@@ -177,7 +173,7 @@ class Music(commands.Cog):
             )
 
     @commands.command()
-    async def queue(self, ctx: "Context"):
+    async def queue(self, ctx: Context):
         """Displays the songs queue"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         paginator = EmbedPaginator(
@@ -187,14 +183,14 @@ class Music(commands.Cog):
         await paginator.start()
 
     @commands.command()
-    async def np(self, ctx: "Context"):
+    async def np(self, ctx: Context):
         """Gives info about current playing song"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         song = player.now_playing()
         await ctx.send(embed=self.songembed(song))
 
     @commands.command()
-    async def skip(self, ctx: "Context"):
+    async def skip(self, ctx: Context):
         """Skips the current playing song"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         data = await player.skip(force=True)
@@ -210,7 +206,7 @@ class Music(commands.Cog):
             )
 
     @commands.command(usage="<value between 1-100>", aliases=["vol"])
-    async def volume(self, ctx: "Context", vol: int | float):
+    async def volume(self, ctx: Context, vol: int | float):
         """
         Changes the volume for the current song
         `Note: Negative volume numbers will be converted to 0`
@@ -231,7 +227,7 @@ class Music(commands.Cog):
         )
 
     @commands.command(usage="<song.index.value>")
-    async def remove_song(self, ctx: "Context", index: int):
+    async def remove_song(self, ctx: Context, index: int):
         """Song the specified song using its index value"""
         player = self.bot.music.get_player(guild_id=ctx.guild.id)
         song = await player.remove_from_queue(int(index))
@@ -246,12 +242,12 @@ class Music(commands.Cog):
     @stop.error
     @resume.error
     @loop.error
-    async def error_handler(self, ctx: "Context", error, *args, **kwargs):
+    async def error_handler(self, ctx: Context, error, *args, **kwargs):
         await ctx.send(
             embed=ErrorEmbed(description="No song in the queue"),
             delete_after=5,
         )
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Music(bot))

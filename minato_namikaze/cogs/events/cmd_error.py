@@ -28,7 +28,7 @@ class BotEventsCommands(commands.Cog):
         self.delete_after_time = 5
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx: "Context", error):
+    async def on_command_error(self, ctx: Context, error):
         if ctx.cog is not None and ctx.cog.qualified_name.lower() == "Music".lower():
             return
         error_channel = await self.bot.fetch_channel(
@@ -62,6 +62,7 @@ class BotEventsCommands(commands.Cog):
 
         elif isinstance(error, commands.CommandNotFound):
             import difflib
+
             cmd_name = str(error).split('"')[1] if '"' in str(error) else None
             suggestion = ""
             if cmd_name:
@@ -70,7 +71,7 @@ class BotEventsCommands(commands.Cog):
                 matches = difflib.get_close_matches(cmd_name, all_commands, n=1, cutoff=0.6)
                 if matches:
                     suggestion = f"\n\nDid you mean **{matches[0]}**?"
-                    
+
             e2 = ErrorEmbed(title="Command Error!", description=f"`{error}`{suggestion}")
             e2.set_footer(text=f"{ctx.author.name}")
             await ctx.channel.send(embed=e2, delete_after=self.delete_after_time)
@@ -317,5 +318,5 @@ class BotEventsCommands(commands.Cog):
                 )
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(BotEventsCommands(bot))

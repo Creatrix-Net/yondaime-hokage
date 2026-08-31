@@ -116,17 +116,10 @@ def deltaN(id1, id2, charge1=0, charge2=0, missingIsZero=True):
     session = get_session()
     atns = ids_to_attr([id1, id2], attr="atomic_number")
 
-    e1, e2 = (
-        session.query(Element).filter(Element.atomic_number == a).one() for a in atns
-    )
+    e1, e2 = (session.query(Element).filter(Element.atomic_number == a).one() for a in atns)
 
-    chi = [
-        x.en_mulliken(charge=c, missingIsZero=missingIsZero)
-        for x, c in zip([e1, e2], [charge1, charge2])
-    ]
+    chi = [x.en_mulliken(charge=c, missingIsZero=missingIsZero) for x, c in zip([e1, e2], [charge1, charge2])]
 
     if all(x is not None for x in chi):
-        return (chi[0] - chi[1]) / (
-            2.0 * (e1.hardness(charge=charge1) + e2.hardness(charge=charge2))
-        )
+        return (chi[0] - chi[1]) / (2.0 * (e1.hardness(charge=charge1) + e2.hardness(charge=charge2)))
     return None

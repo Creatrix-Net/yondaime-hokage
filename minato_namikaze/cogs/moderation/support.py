@@ -31,8 +31,8 @@ def errorembed(ctx):
 
 
 class Support(commands.Cog):
-    def __init__(self, bot: "MinatoNamikazeBot"):
-        self.bot: "MinatoNamikazeBot" = bot
+    def __init__(self, bot: MinatoNamikazeBot):
+        self.bot: MinatoNamikazeBot = bot
         self.description = "Displays the support command for the server, this can only be used if the owner has enabled it"
 
     @property
@@ -70,10 +70,7 @@ class Support(commands.Cog):
                 delete_after=4,
             )
             return
-        if (
-            discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
-            in ctx.message.author.roles
-        ):
+        if discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]) in ctx.message.author.roles:
             await ctx.send(
                 embed=ErrorEmbed(
                     description=f"{ctx.message.author.mention} you already applied for the support , please check the {channel.mention} channel.",
@@ -134,10 +131,7 @@ class Support(commands.Cog):
                 embed=ErrorEmbed(description=f"{member.mention} is a bot! :robot:"),
             )
             return
-        if (
-            not discord.utils.get(ctx.guild.roles, id=data.get("support")[-1])
-            in member.roles
-        ):
+        if not discord.utils.get(ctx.guild.roles, id=data.get("support")[-1]) in member.roles:
             e = ErrorEmbed(
                 title="Sorry !",
                 description=f"{member.mention} has not requested any **support** !",
@@ -252,9 +246,7 @@ class Support(commands.Cog):
         e2 = discord.Embed(
             title="New Feedback!",
             description=feed,
-            colour=ctx.author.color
-            or ctx.author.top_role.colour.value
-            or discord.Color.random(),
+            colour=ctx.author.color or ctx.author.top_role.colour.value or discord.Color.random(),
         )
         e2.set_author(
             name=ctx.author.display_name,
@@ -266,18 +258,21 @@ class Support(commands.Cog):
         )
         await channel.send(embed=e2)
 
-
     async def database_class(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "main")
-        
+
     async def database_class_antiraid(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "antiraid")
-        
+
     async def database_class_mentionspam(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "mentionspam")
+
 
 async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Support(bot))

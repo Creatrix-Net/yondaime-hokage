@@ -1,4 +1,5 @@
-﻿from __future__ import annotations
+from __future__ import annotations
+from __future__ import annotations
 
 import logging
 from typing import Any
@@ -22,7 +23,7 @@ class Group:
         async with session_obj() as session:
             stmt = select(self.table.value).where(
                 self.table.cog_name == self.cog_name,
-                self.table.key == key
+                self.table.key == key,
             )
             if self.entity_id != None:
                 id_col = list(self.table.primary_key.columns)[0]
@@ -37,18 +38,18 @@ class Group:
     async def set_attr(self, key: str, value: Any) -> None:
         async with session_obj() as session:
             id_col_name = list(self.table.primary_key.columns)[0].name
-            
+
             values = {
                 "cog_name": self.cog_name,
                 "key": key,
-                "value": value
+                "value": value,
             }
             if self.entity_id is not None:
                 values[id_col_name] = self.entity_id
 
             stmt = insert(self.table).values(**values).on_conflict_do_update(
                 index_elements=[col.name for col in self.table.primary_key.columns],
-                set_={"value": value}
+                set_={"value": value},
             )
             await session.execute(stmt)
             await session.commit()
@@ -77,4 +78,3 @@ class Config:
 
     def role(self, role):
         return Group(RoleConfig, role.id, self.cog_name)
-

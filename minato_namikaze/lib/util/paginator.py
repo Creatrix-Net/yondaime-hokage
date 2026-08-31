@@ -85,12 +85,8 @@ class RoboPages(discord.ui.View):
         self.go_to_first_page.disabled = page_number == 0
         if self.compact:
             max_pages = self.source.get_max_pages()
-            self.go_to_last_page.disabled = (
-                max_pages is None or (page_number + 1) >= max_pages
-            )
-            self.go_to_next_page.disabled = (
-                max_pages is not None and (page_number + 1) >= max_pages
-            )
+            self.go_to_last_page.disabled = max_pages is None or (page_number + 1) >= max_pages
+            self.go_to_next_page.disabled = max_pages is not None and (page_number + 1) >= max_pages
             self.go_to_previous_page.disabled = page_number == 0
             return
 
@@ -243,11 +239,7 @@ class RoboPages(discord.ui.View):
             )
 
             def message_check(m):
-                return (
-                    m.author.id == author_id
-                    and channel == m.channel
-                    and m.content.isdigit()
-                )
+                return m.author.id == author_id and channel == m.channel and m.content.isdigit()
 
             try:
                 msg = await self.ctx.bot.wait_for(
@@ -287,9 +279,7 @@ class FieldPageSource(menus.ListPageSource):
 
         maximum = self.get_max_pages()
         if maximum > 1:
-            text = (
-                f"Page {menu.current_page + 1}/{maximum} ({len(self.entries)} entries)"
-            )
+            text = f"Page {menu.current_page + 1}/{maximum} ({len(self.entries)} entries)"
             self.embed.set_footer(text=text)
 
         return self.embed
@@ -323,9 +313,7 @@ class SimplePageSource(menus.ListPageSource):
 
         maximum = self.get_max_pages()
         if maximum > 1:
-            footer = (
-                f"Page {menu.current_page + 1}/{maximum} ({len(self.entries)} entries)"
-            )
+            footer = f"Page {menu.current_page + 1}/{maximum} ({len(self.entries)} entries)"
             menu.embed.set_footer(text=footer)
 
         menu.embed.description = "\n".join(pages)

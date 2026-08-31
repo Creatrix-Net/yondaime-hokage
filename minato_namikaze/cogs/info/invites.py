@@ -84,16 +84,13 @@ class Invites(commands.Cog):
     @tasks.loop(minutes=POLL_PERIOD)
     async def update_invite_expiry(self):
         # flatten all the invites in the cache into one single list
-        flattened = [
-            invite for inner in self.bot.invites.values() for invite in inner.values()
-        ]
+        flattened = [invite for inner in self.bot.invites.values() for invite in inner.values()]
         # get current posix time
         current = time.time()
         self.bot.expiring_invites = {
             inv.max_age
             - int(
-                current
-                - inv.created_at.replace(tzinfo=datetime.timezone.utc).timestamp(),
+                current - inv.created_at.replace(tzinfo=datetime.timezone.utc).timestamp(),
             ): inv
             for inv in flattened
             if inv.max_age != 0
@@ -120,11 +117,7 @@ class Invites(commands.Cog):
         # is truthy otherwise this conditional will
         # raise an error because we passed an
         # empty sequence to min()
-        elif (
-            exists
-            and self.bot.expiring_invites
-            and self.bot.shortest_invite > min(self.bot.expiring_invites.keys())
-        ):
+        elif exists and self.bot.expiring_invites and self.bot.shortest_invite > min(self.bot.expiring_invites.keys()):
             # this conditional needs to run before we
             # update self._last_update
             self.delete_expired.restart()
@@ -248,7 +241,7 @@ class Invites(commands.Cog):
     # to handle commands.NoPrivateMessage
     @commands.guild_only()
     @commands.command()
-    async def invitestats(self, ctx: "Context"):
+    async def invitestats(self, ctx: Context):
         """Displays the top 10 most used invites in the guild."""
         # PEP8 + same code, more readability
         invites = self.bot.invites.get(ctx.guild.id, None)
@@ -290,5 +283,5 @@ class Invites(commands.Cog):
         await ctx.send(embed=embed)
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(Invites(bot))

@@ -291,16 +291,8 @@ class AntiRaid(commands.Cog):
         if guild_dict is None:
             fmt = "Raid Mode: off\nBroadcast Channel: None"
         else:
-            ch = (
-                f"<#{guild_dict['broadcast_channel']}>"
-                if guild_dict["broadcast_channel"]
-                else None
-            )
-            mode = (
-                RaidMode(guild_dict["raid_mode"])
-                if guild_dict["raid_mode"] is not None
-                else RaidMode.off
-            )
+            ch = f"<#{guild_dict['broadcast_channel']}>" if guild_dict["broadcast_channel"] else None
+            mode = RaidMode(guild_dict["raid_mode"]) if guild_dict["raid_mode"] is not None else RaidMode.off
             fmt = f"Raid Mode: {mode.name.capitalize()}\nBroadcast Channel: {ch}"
 
         await ctx.send(fmt)
@@ -430,12 +422,7 @@ class AntiRaid(commands.Cog):
                     "This server has not set up mention spam banning.",
                 )
 
-            ignores = (
-                ", ".join(
-                    f"<#{e}>" for e in guild_dict.get("safe_mention_channel_ids", [])
-                )
-                or "None"
-            )
+            ignores = ", ".join(f"<#{e}>" for e in guild_dict.get("safe_mention_channel_ids", [])) or "None"
             return await ctx.send(
                 f'- Threshold: {guild_dict["mention_count"]} mentions\n- Ignored Channels: {ignores}',
             )
@@ -549,18 +536,21 @@ class AntiRaid(commands.Cog):
         self.get_guild_config.invalidate(self, ctx.guild.id)
         await ctx.send("Updated mentionspam ignore list.")
 
-
     async def database_class(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "main")
-        
+
     async def database_class_antiraid(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "antiraid")
-        
+
     async def database_class_mentionspam(self):
         from minato_namikaze.lib.database.config_api import DatabaseShim
+
         return DatabaseShim(self.__class__.__name__, "mentionspam")
+
 
 async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(AntiRaid(bot))

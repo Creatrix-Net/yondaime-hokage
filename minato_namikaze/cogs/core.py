@@ -1,4 +1,5 @@
-﻿from __future__ import annotations
+from __future__ import annotations
+from __future__ import annotations
 
 import discord
 from discord.ext import commands
@@ -24,7 +25,7 @@ class Core(commands.Cog):
             return await ctx.send("Cog not found. Please provide a valid loaded cog name (case-sensitive).")
         if cog_name == "Core":
             return await ctx.send("You cannot disable the Core configuration cog.")
-        
+
         disabled = await self.config.guild(ctx.guild).get_attr("disabled_cogs", [])
         if cog_name not in disabled:
             disabled.append(cog_name)
@@ -55,7 +56,7 @@ class Core(commands.Cog):
         cmd = self.bot.get_command(command_name)
         if not cmd:
             return await ctx.send("Command not found.")
-        
+
         overrides = await self.config.guild(ctx.guild).get_attr("perm_overrides", {})
         cmd_overrides = overrides.setdefault(cmd.qualified_name, {"roles": [], "channels": [], "users": []})
         if role.id not in cmd_overrides["roles"]:
@@ -70,7 +71,7 @@ class Core(commands.Cog):
         cmd = self.bot.get_command(command_name)
         if not cmd:
             return await ctx.send("Command not found.")
-        
+
         overrides = await self.config.guild(ctx.guild).get_attr("perm_overrides", {})
         if cmd.qualified_name in overrides:
             del overrides[cmd.qualified_name]

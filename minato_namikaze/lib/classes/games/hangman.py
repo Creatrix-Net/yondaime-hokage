@@ -175,9 +175,7 @@ class Hangman:
 
             def check(m):
                 if m.channel == ctx.channel and m.author == ctx.author:
-                    return (
-                        len(m.content) == 1 and m.content.lower() in self._alpha
-                    ) or (m.content.lower() == self.word)
+                    return (len(m.content) == 1 and m.content.lower() in self._alpha) or (m.content.lower() == self.word)
 
             message = await ctx.bot.wait_for("message", check=check)
 

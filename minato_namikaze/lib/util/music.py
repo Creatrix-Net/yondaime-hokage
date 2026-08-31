@@ -456,7 +456,8 @@ class MusicPlayer:
         """
         source = discord.PCMVolumeTransformer(
             discord.FFmpegPCMAudio(
-                self.music.queue[self.ctx.guild.id][0].source, **self.ffmpeg_opts
+                self.music.queue[self.ctx.guild.id][0].source,
+                **self.ffmpeg_opts,
             ),
         )
         self.voice.play(
@@ -679,12 +680,7 @@ class Music:
         guild = kwargs.get("guild_id")
         channel = kwargs.get("channel_id")
         for player in self.players:
-            if (
-                guild
-                and channel
-                and player.ctx.guild.id == guild
-                and player.voice.channel.id == channel
-            ):
+            if guild and channel and player.ctx.guild.id == guild and player.voice.channel.id == channel:
                 return player
             elif not guild and channel and player.voice.channel.id == channel:
                 return player

@@ -1,4 +1,5 @@
-﻿import discord
+from __future__ import annotations
+import discord
 from discord.ext import commands
 from minato_namikaze.lib.database.config_api import Config
 from minato_namikaze.lib import has_permissions
@@ -26,21 +27,21 @@ class Counting(commands.Cog):
     async def on_message(self, message: discord.Message):
         if message.author.bot or not message.guild:
             return
-            
+
         guild_config = self.config.guild(message.guild)
         channel_id = await guild_config.get_attr("channel_id", None)
-        
+
         if not channel_id or message.channel.id != channel_id:
             return
-            
+
         try:
             number = int(message.content.strip())
         except ValueError:
             return # Ignore non-numbers
-            
+
         current_count = await guild_config.get_attr("current_count", 0)
         last_user_id = await guild_config.get_attr("last_user_id", None)
-        
+
         if number == current_count + 1:
             if message.author.id == last_user_id:
                 await message.add_reaction("❌")

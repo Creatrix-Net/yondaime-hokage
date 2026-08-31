@@ -66,7 +66,7 @@ class QuickPoll(commands.Cog):
                 continue
 
     @commands.command(aliases=["poll", "polls"])
-    async def polltime(self, ctx: "Context"):
+    async def polltime(self, ctx: Context):
         """Create polls easily"""
 
         def check(m):
@@ -191,7 +191,7 @@ class QuickPoll(commands.Cog):
         usage="<poll id>",
         aliases=["result", "results"],
     )
-    async def tally(self, ctx: "Context", poll_id: commands.MessageConverter):
+    async def tally(self, ctx: Context, poll_id: commands.MessageConverter):
         """Get polls results"""
         error_message = ErrorEmbed(description=f"**{poll_id.id}** is not a poll!")
         if len(poll_id.embeds) <= 0:
@@ -249,18 +249,10 @@ class QuickPoll(commands.Cog):
         embed = Embed(title="Poll Results")
         lengths = [[len(str(x)) for x in row] for row in valid_reactions_list]
 
-        max_lengths = [
-            max(map(itemgetter(x), lengths))
-            for x in range(0, len(valid_reactions_list[0]))
-        ]
+        max_lengths = [max(map(itemgetter(x), lengths)) for x in range(0, len(valid_reactions_list[0]))]
 
         format_str = "".join(map(lambda x: "%%-%ss | " % x, max_lengths))
-        embed.description = (
-            "```markdown\n"
-            + (format_str % valid_reactions_list[0])
-            + "\n"
-            + "-" * (sum(max_lengths) + len(max_lengths) * 3 - 1)
-        )
+        embed.description = "```markdown\n" + (format_str % valid_reactions_list[0]) + "\n" + "-" * (sum(max_lengths) + len(max_lengths) * 3 - 1)
         for x in valid_reactions_list[1:]:
             embed.description += f"\n{format_str % x}"
         embed.description += "\n```"
@@ -269,7 +261,7 @@ class QuickPoll(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def quickpoll(self, ctx: "Context", *questions_and_choices: str):
+    async def quickpoll(self, ctx: Context, *questions_and_choices: str):
         """
         Makes a poll quickly.
 

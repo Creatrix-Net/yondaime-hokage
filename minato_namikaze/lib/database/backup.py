@@ -354,9 +354,7 @@ class BackupDatabse:
                         text_data[i]["role_overwrites"],
                     ),
                     slowmode_delay=text_data[i]["slowmode_delay"],
-                    default_auto_archive_duration=text_data[i][
-                        "default_auto_archive_duration"
-                    ],
+                    default_auto_archive_duration=text_data[i]["default_auto_archive_duration"],
                     topic=text_data[i]["topic"],
                     permissions_synced=text_data[i]["permissions_synced"],
                     category=await self.return_category_channel(
@@ -384,9 +382,7 @@ class BackupDatabse:
                 )
                 try:
                     await created_text.edit(
-                        default_auto_archive_duration=text_data[i][
-                            "default_auto_archive_duration"
-                        ],
+                        default_auto_archive_duration=text_data[i]["default_auto_archive_duration"],
                         permissions_synced=text_data[i]["permissions_synced"],
                         reason=self.reason(code, self.ctx.author),
                     )
@@ -412,9 +408,7 @@ class BackupDatabse:
                     ),
                     bitrate=voice_data[i]["bitrate"],
                     permissions_synced=voice_data[i]["permissions_synced"],
-                    video_quality_mode=discord.VideoQualityMode[
-                        voice_data[i]["video_quality_mode"]
-                    ],
+                    video_quality_mode=discord.VideoQualityMode[voice_data[i]["video_quality_mode"]],
                     user_limit=voice_data[i]["user_limit"],
                     category=await self.return_category_channel(
                         voice_data[i]["category"],
@@ -432,9 +426,7 @@ class BackupDatabse:
                         voice_data[i]["role_overwrites"],
                     ),
                     bitrate=voice_data[i]["bitrate"],
-                    video_quality_mode=discord.VideoQualityMode[
-                        voice_data[i]["video_quality_mode"]
-                    ],
+                    video_quality_mode=discord.VideoQualityMode[voice_data[i]["video_quality_mode"]],
                     user_limit=voice_data[i]["user_limit"],
                     category=await self.return_category_channel(
                         voice_data[i]["category"],
@@ -468,9 +460,7 @@ class BackupDatabse:
                     ),
                     bitrate=stage_data[i]["bitrate"],
                     permissions_synced=stage_data[i]["permissions_synced"],
-                    video_quality_mode=discord.VideoQualityMode[
-                        stage_data[i]["video_quality_mode"]
-                    ],
+                    video_quality_mode=discord.VideoQualityMode[stage_data[i]["video_quality_mode"]],
                     user_limit=stage_data[i]["user_limit"],
                     topic=stage_data[i]["topic"],
                     category=await self.return_category_channel(
@@ -498,9 +488,7 @@ class BackupDatabse:
                     await created_stage.edit(
                         permissions_synced=voice_data[i]["permissions_synced"],
                         reason=self.reason(code, self.ctx.author),
-                        video_quality_mode=discord.VideoQualityMode[
-                            stage_data[i]["video_quality_mode"]
-                        ],
+                        video_quality_mode=discord.VideoQualityMode[stage_data[i]["video_quality_mode"]],
                         bitrate=stage_data[i]["bitrate"],
                         user_limit=stage_data[i]["user_limit"],
                     )
@@ -550,9 +538,7 @@ class BackupDatabse:
                     commands.BadArgument,
                 ):
                     try:
-                        object_role_or_member = (
-                            await commands.MemberConverter().convert(self.ctx, k)
-                        )
+                        object_role_or_member = await commands.MemberConverter().convert(self.ctx, k)
                     except (
                         commands.MemberNotFound,
                         commands.CommandError,

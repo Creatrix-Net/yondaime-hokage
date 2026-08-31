@@ -1,59 +1,59 @@
 ﻿# See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-    -   id: end-of-file-fixer
-    -   id: check-yaml
-    -   id: check-added-large-files
-    -   id: check-case-conflict
-    -   id: check-merge-conflict
-    -   id: check-symlinks
-    -   id: detect-private-key
-    -   id: check-json
-    -   id: check-ast
-    -   id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: detect-private-key
+      - id: check-json
+      - id: check-ast
+      - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
-    -   id: requirements-txt-fixer
+      - id: requirements-txt-fixer
 
--   repo: https://github.com/asottile/add-trailing-comma
+  - repo: https://github.com/asottile/add-trailing-comma
     rev: v3.1.0
     hooks:
-    -   id: add-trailing-comma
+      - id: add-trailing-comma
 
--   repo: https://github.com/asottile/reorder_python_imports
+  - repo: https://github.com/asottile/reorder_python_imports
     rev: v3.12.0
     hooks:
-    -   id: reorder-python-imports
-        args: [--py310-plus, --add-import, 'from __future__ import annotations']
+      - id: reorder-python-imports
+        args: [--py310-plus, --add-import, "from __future__ import annotations"]
 
--   repo: https://github.com/asottile/pyupgrade
+  - repo: https://github.com/asottile/pyupgrade
     rev: v3.16.0
     hooks:
-    -   id: pyupgrade
+      - id: pyupgrade
         args: [--py310-plus]
 
--   repo: https://github.com/psf/black
+  - repo: https://github.com/psf/black
     rev: 24.8.0
     hooks:
-    -   id: black
+      - id: black
         args: [--line-length=150]
 
--   repo: https://github.com/pre-commit/mirrors-prettier
+  - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v3.1.0
     hooks:
-    -   id: prettier
+      - id: prettier
         types_or: [yaml, json, markdown]
         exclude: ^(Pipfile\.lock|\.agent-context/)
 
--   repo: https://github.com/PyCQA/bandit
+  - repo: https://github.com/PyCQA/bandit
     rev: 1.7.9
     hooks:
-    -   id: bandit
+      - id: bandit
         args: ["-r", "minato_namikaze/", "--skip", "B101"]
 
--   repo: https://github.com/gitleaks/gitleaks
+  - repo: https://github.com/gitleaks/gitleaks
     rev: v8.18.4
     hooks:
-    -   id: gitleaks
+      - id: gitleaks

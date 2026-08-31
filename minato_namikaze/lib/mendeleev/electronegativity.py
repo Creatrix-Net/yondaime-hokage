@@ -56,12 +56,7 @@ def li_xue(ionization_energy: float, radius: float, valence_pqn: int) -> float:
         radius: Type of radius to be used in the calculation, either `crystal_radius` as recommended in the paper or `ionic_radius`
         valence_pqn: valence principal quantum number
     """
-    return (
-        n_effective(valence_pqn, source="zhang")
-        * math.sqrt(ionization_energy / RY)
-        * 100.0
-        / radius
-    )
+    return n_effective(valence_pqn, source="zhang") * math.sqrt(ionization_energy / RY) * 100.0 / radius
 
 
 def martynov_batsanov(ionization_energies: list[float]) -> float:
@@ -100,11 +95,7 @@ def mulliken(
     - :math:`A` is the electron affinity
     """
     if ionization_energy is not None:
-        if (
-            electron_affinity is not None
-            and electron_affinity < 0.0
-            and allow_negative_ea
-        ):
+        if electron_affinity is not None and electron_affinity < 0.0 and allow_negative_ea:
             return (ionization_energy + electron_affinity) * 0.5
         if electron_affinity is not None or missing_is_zero:
             return ionization_energy * 0.5

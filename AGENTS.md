@@ -39,7 +39,7 @@ implies.
 
 ### Phase 1 — Stabilize: security, performance, current standards
 
-Goal: the *existing* feature set, unchanged in behavior, running on
+Goal: the _existing_ feature set, unchanged in behavior, running on
 current, secure, non-deprecated foundations. No new features. No
 architectural redesign yet — that's Phase 2. This is a hardening and
 modernization pass, not a rewrite.
@@ -48,6 +48,7 @@ Checklist (work through systematically, one cog/module at a time, commit
 per logical unit):
 
 - **discord.py currency audit**
+
   - Diff current code against the latest stable discord.py changelog and
     migration notes. Flag and fix deprecated API usage (e.g. legacy
     `Bot.__init__` kwargs, old intents patterns, anything using
@@ -62,6 +63,7 @@ per logical unit):
     `discordbot.py` — verify which is live, delete the other).
 
 - **Security pass**
+
   - Every `eval`/`exec`-capable command (`dev eval`, Jishaku's `py`,
     `shell`, `sh` etc.) must be confirmed owner-only at the permission
     check level, not just hidden from help. Audit the actual check
@@ -85,6 +87,7 @@ per logical unit):
     role than themselves via a raw ID path).
 
 - **Performance pass**
+
   - Any synchronous/blocking call inside an async context (file I/O,
     `requests`-style calls, CPU-bound image manipulation in `img.py`)
     should be moved to a thread executor or an async-native library.
@@ -116,7 +119,7 @@ documented as deferred with a reason.
 
 ### Phase 2 — Refactor: Red-DiscordBot-style modularity
 
-Goal: restructure the *proven-working* Phase-1 code into a modular
+Goal: restructure the _proven-working_ Phase-1 code into a modular
 architecture inspired by Red-DiscordBot, without changing user-facing
 command behavior unless explicitly agreed and logged as a decision.
 
@@ -157,7 +160,7 @@ assumed).
 Goal: implement new functionality by hand (agent-assisted, not
 auto-generated wholesale) on top of the Phase-2 architecture. Candidate
 features and any feature explicitly greenlit for this phase get their own
-file under `.agent-context/decisions/` describing scope *before*
+file under `.agent-context/decisions/` describing scope _before_
 implementation starts, so a future agent knows what "done" means for that
 feature without re-deriving it from the diff.
 
@@ -195,10 +198,11 @@ including sessions run by a different model or a different tool — without
 re-deriving history from the diff or from this file's static instructions.
 
 ### Why it's gitignored
+
 The point is a scratch/working-memory layer that doesn't pollute the
 repo's actual history, doesn't need to survive a squash-merge, and can be
 freely rewritten/pruned without affecting collaborators who only care
-about the code. It is a *local reasoning trail*, not documentation for
+about the code. It is a _local reasoning trail_, not documentation for
 end users — that's what `docs/` and `README.md` are for.
 
 ### Structure
@@ -223,29 +227,36 @@ end users — that's what `docs/` and `README.md` are for.
 Last updated: <date> by <agent/session identifier>
 
 ## Current phase
+
 Phase <1|2|3> — <one line on where exactly within the phase>
 
 ## Phase 1 status
+
 - [ ] discord.py currency audit
 - [ ] Security pass
 - [ ] Performance pass
 - [ ] Database reality check
-(check off as completed, add sub-items as discovered)
+      (check off as completed, add sub-items as discovered)
 
 ## Phase 2 status
+
 (same pattern, only relevant once Phase 1 is checked off)
 
 ## Phase 3 status
+
 (same pattern)
 
 ## In progress right now
+
 <what the last session was mid-way through, specific enough that a new
 agent can resume without guessing>
 
 ## Known open questions
+
 <anything flagged as undecided — link to the decisions/ file if one exists>
 
 ## Do not touch / explicitly deferred
+
 <anything intentionally left alone, and why — prevents a future agent
 "fixing" something that was deliberately left as-is>
 ```
@@ -266,20 +277,25 @@ Phase: <1|2|3>
 Status: active | superseded by <file>
 
 ## Context
+
 What prompted this decision — what was ambiguous, what tradeoff existed.
 
 ## Options considered
+
 - Option A — pros/cons
 - Option B — pros/cons
 
 ## Decision
+
 What was chosen.
 
 ## Reasoning
+
 Why — this is the part future agents actually need; the "what" is visible
 in the diff, the "why" is not.
 
 ## Files touched
+
 List of files created/modified/deleted as a direct result of this
 decision, so a future agent can trace decision → code without re-reading
 the whole diff history.
@@ -293,6 +309,7 @@ repeating their content.
 
 ```markdown
 ## <date> — session <n>
+
 - Worked on: <what>
 - Decisions made: <link to decisions/ files, if any>
 - Files created: <list>

@@ -39,7 +39,7 @@ class MySupport(commands.Cog, name="My Support"):
         return discord.PartialEmoji(name="\N{SQUARED SOS}")
 
     @commands.command()
-    async def vote(self, ctx: "Context"):
+    async def vote(self, ctx: Context):
         """Get all the voting links"""
         m = VotingMenu(bot=self.bot)
         await m.start(ctx)
@@ -70,7 +70,7 @@ class MySupport(commands.Cog, name="My Support"):
         return "\n".join(self.format_commit(c) for c in commits)
 
     @commands.command(aliases=["stats"])
-    async def about(self, ctx: "Context"):
+    async def about(self, ctx: Context):
         """Tells you information about the bot itself."""
         revision = self.get_last_commits()
         embed = discord.Embed(description="Latest Changes:\n" + revision)
@@ -151,7 +151,7 @@ class MySupport(commands.Cog, name="My Support"):
         description="Generates my invite link for your server",
         aliases=["invite"],
     )
-    async def inviteme(self, ctx: "Context"):
+    async def inviteme(self, ctx: Context):
         """Generates my invite link for your server"""
         embed = discord.Embed(
             title="Invite Link",
@@ -161,20 +161,20 @@ class MySupport(commands.Cog, name="My Support"):
         await ctx.send(embed=embed)
 
     @commands.command(description="Generates my support server invite")
-    async def supportserver(self, ctx: "Context"):
+    async def supportserver(self, ctx: Context):
         """Generates my support server invite"""
         await ctx.send(
             f"**Here you go, my support server invite**\nhttps://discord.gg/{LinksAndVars.invite_code.value}",
         )
 
     @commands.command()
-    async def privacy(self, ctx: "Context"):
+    async def privacy(self, ctx: Context):
         """Get the Privacy Policy"""
         m = PrivacyPolicy(bot=self.bot)
         await m.start(ctx)
 
     @commands.command()
-    async def ping(self, ctx: "Context"):
+    async def ping(self, ctx: Context):
         """Get the Latency"""
         msg = await ctx.send(":ping_pong: Ping... :ping_pong:")
         async with ctx.channel.typing():
@@ -191,7 +191,7 @@ class MySupport(commands.Cog, name="My Support"):
         return
 
     @commands.command()
-    async def source(self, ctx: "Context", *, command: str = None):
+    async def source(self, ctx: Context, *, command: str = None):
         """Displays my full source code or for a specific command.
         To display the source code of a subcommand you can separate it by
         periods, e.g. tag.create for the create subcommand of the tag command
@@ -234,5 +234,5 @@ class MySupport(commands.Cog, name="My Support"):
         await ctx.send(final_url)
 
 
-async def setup(bot: "MinatoNamikazeBot") -> None:
+async def setup(bot: MinatoNamikazeBot) -> None:
     await bot.add_cog(MySupport(bot))

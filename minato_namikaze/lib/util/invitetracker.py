@@ -26,12 +26,7 @@ class InviteTracker:
 
     def __init__(
         self,
-        bot: (
-            discord.Client
-            | discord.AutoShardedClient
-            | commands.Bot
-            | commands.AutoShardedBot
-        ),
+        bot: discord.Client | discord.AutoShardedClient | commands.Bot | commands.AutoShardedBot,
     ):
         self.bot = bot
         self._cache = {}
@@ -83,11 +78,7 @@ class InviteTracker:
             return
         ref_invite = self._cache[invite.guild.id][invite.code]
         if (
-            (
-                ref_invite.created_at.timestamp() + ref_invite.max_age
-                > discord.utils.utcnow().timestamp()
-                or ref_invite.max_age == 0
-            )
+            (ref_invite.created_at.timestamp() + ref_invite.max_age > discord.utils.utcnow().timestamp() or ref_invite.max_age == 0)
             and ref_invite.max_uses > 0
             and ref_invite.uses == ref_invite.max_uses - 1
         ):
@@ -136,17 +127,11 @@ class InviteTracker:
         try:
             for new_invite in await member.guild.invites():
                 for cached_invite in self._cache[member.guild.id].values():
-                    if (
-                        new_invite.code == cached_invite.code
-                        and new_invite.uses - cached_invite.uses == 1
-                        or cached_invite.revoked
-                    ):
+                    if new_invite.code == cached_invite.code and new_invite.uses - cached_invite.uses == 1 or cached_invite.revoked:
                         if cached_invite.revoked:
                             self._cache[member.guild.id].pop(cached_invite.code)
                         elif new_invite.inviter == cached_invite.inviter:
-                            self._cache[member.guild.id][
-                                cached_invite.code
-                            ] = new_invite
+                            self._cache[member.guild.id][cached_invite.code] = new_invite
                         else:
                             self._cache[member.guild.id][cached_invite.code].uses += 1
                         return cached_invite

@@ -28,7 +28,12 @@ if TYPE_CHECKING:
 
 class ConfirmationView(discord.ui.View):
     def __init__(
-        self, *, timeout: float, author_id: int, ctx: Context, delete_after: bool
+        self,
+        *,
+        timeout: float,
+        author_id: int,
+        ctx: Context,
+        delete_after: bool,
     ) -> None:
         super().__init__(timeout=timeout)
         self.value: bool | None = None
@@ -73,9 +78,7 @@ class ConfirmationView(discord.ui.View):
 
 
 class Context(commands.Context):
-    channel: (
-        discord.VoiceChannel | discord.TextChannel | discord.Thread | discord.DMChannel
-    )
+    channel: discord.VoiceChannel | discord.TextChannel | discord.Thread | discord.DMChannel
     prefix: str
     command: commands.Command[Any, ..., Any]
     bot: MinatoNamikazeBot
@@ -126,17 +129,11 @@ class Context(commands.Context):
             "There are too many matches... Which one did you mean? **Only say the number**.",
         )
         await self.send(
-            "\n".join(
-                f"{index}: {entry(item)}" for index, item in enumerate(matches, 1)
-            ),
+            "\n".join(f"{index}: {entry(item)}" for index, item in enumerate(matches, 1)),
         )
 
         def check(m):
-            return (
-                m.content.isdigit()
-                and m.author.id == self.author.id
-                and m.channel.id == self.channel.id
-            )
+            return m.content.isdigit() and m.author.id == self.author.id and m.channel.id == self.channel.id
 
         await self.release()
 
@@ -225,7 +222,8 @@ class Context(commands.Context):
             fp = io.BytesIO(content.encode())
             kwargs.pop("file", None)
             return await self.send(
-                file=discord.File(fp, filename="message_too_long.txt"), **kwargs
+                file=discord.File(fp, filename="message_too_long.txt"),
+                **kwargs,
             )
         else:
             return await self.send(content)
@@ -294,11 +292,9 @@ class Context(commands.Context):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"][
-                "downsized_large"
-            ]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
         except Exception:
-                return
+            return
 
     @staticmethod
     async def get_random_image_from_tag(tag_name: str) -> str | None:
@@ -311,11 +307,9 @@ class Context(commands.Context):
                 return
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
-                "images"
-            ]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
         except Exception:
-                return
+            return
 
     @staticmethod
     def tenor(tag_name: str) -> str | None:
@@ -323,17 +317,15 @@ class Context(commands.Context):
         try:
             return api_model.random(str(tag_name.lower()))
         except Exception:
-                return
+            return
 
     @staticmethod
     def giphy(tag_name: str) -> str | None:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return api_model.random(str(tag_name.lower()))["data"]["images"][
-                "downsized_large"
-            ]["url"]
+            return api_model.random(str(tag_name.lower()))["data"]["images"]["downsized_large"]["url"]
         except Exception:
-                return
+            return
 
     @staticmethod
     async def tenor(tag_name: str) -> str | None:
@@ -341,17 +333,15 @@ class Context(commands.Context):
         try:
             return await api_model.arandom(str(tag_name.lower()))
         except Exception:
-                return
+            return
 
     @staticmethod
     async def giphy(tag_name: str) -> str | None:
         api_model = TenGiphPy.Giphy(token=Tokens.giphy.value)
         try:
-            return (await api_model.arandom(tag=str(tag_name.lower())))["data"][
-                "images"
-            ]["downsized_large"]["url"]
+            return (await api_model.arandom(tag=str(tag_name.lower())))["data"]["images"]["downsized_large"]["url"]
         except Exception:
-                return
+            return
 
 
 class GuildContext(Context):

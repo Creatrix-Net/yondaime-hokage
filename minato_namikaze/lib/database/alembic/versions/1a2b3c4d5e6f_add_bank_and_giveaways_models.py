@@ -1,10 +1,11 @@
-﻿\"\"\"Add bank and giveaways models
+from __future__ import annotations
+"""Add bank and giveaways models
 
 Revision ID: 1a2b3c4d5e6f
-Revises: 
+Revises:
 Create Date: 2026-08-31 10:44:00.000000
 
-\"\"\"
+"""
 from alembic import op
 import sqlalchemy as sa
 
@@ -62,12 +63,12 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.drop_index(op.f('ix_giveaway_entries_giveaway_message_id'), table_name='giveaway_entries')
     op.drop_table('giveaway_entries')
-    
+
     op.drop_index(op.f('ix_giveaways_message_id'), table_name='giveaways')
     op.drop_index(op.f('ix_giveaways_ended'), table_name='giveaways')
     op.drop_index(op.f('ix_giveaways_ends_at'), table_name='giveaways')
     op.drop_table('giveaways')
-    
+
     op.drop_index(op.f('ix_bank_accounts_user_id'), table_name='bank_accounts')
     op.drop_index(op.f('ix_bank_accounts_guild_id'), table_name='bank_accounts')
     op.drop_table('bank_accounts')

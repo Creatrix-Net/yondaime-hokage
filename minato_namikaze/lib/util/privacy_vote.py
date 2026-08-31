@@ -31,10 +31,7 @@ class VotingMenu(menus.Menu):
             LinksAndVars.listing.value,
         ) as resp:
             listing: dict = orjson.loads(await resp.text())
-        listing_formatted_string = "\n".join(
-            f"- **[{i}](https://{listing[i]}/{self.bot.application_id})**"
-            for i in listing
-        )
+        listing_formatted_string = "\n".join(f"- **[{i}](https://{listing[i]}/{self.bot.application_id})**" for i in listing)
         e1 = SuccessEmbed(
             title="Thanks!",
             description=f"Thanks {self.ctx.author.mention}! Here's the links:\n{listing_formatted_string}",

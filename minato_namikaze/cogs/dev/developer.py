@@ -452,14 +452,20 @@ class Developer(commands.Cog):
         embed = discord.Embed(title="DM Invite Settings", color=discord.Color.red())
         track = await self.config.global_().get_attr("tracking", True)
         use_embed = await self.config.global_().get_attr("embed", True)
-        msg = await self.config.global_().get_attr("message", "Thank you for showing interest in me. If you want to add me to your server, please ask the server owner to add me to the server. If you are the server owner, please click on the link below to add me to your server.\n\n{link}")
-        
+        msg = await self.config.global_().get_attr(
+            "message",
+            "Thank you for showing interest in me. If you want to add me to your server, please ask the server owner to add me to the server. If you are the server owner, please click on the link below to add me to your server.\n\n{link}",
+        )
+
         embed.add_field(name="Tracking Invites", value="Yes" if track else "No")
         embed.add_field(name="Embeds", value="Yes" if use_embed else "No")
         embed.add_field(name="Message", value=msg)
-        
+
         if "{link}" in msg:
-            embed.add_field(name="Link", value=f"[Click Here]({await self.bot.get_required_perms_invite_link})")
+            embed.add_field(
+                name="Link",
+                value=f"[Click Here]({await self.bot.get_required_perms_invite_link})",
+            )
         await ctx.send(embed=embed)
 
     @dminvite.command(name="toggle")
@@ -468,8 +474,10 @@ class Developer(commands.Cog):
         """Toggle whether the bot auto-responds to invites sent in DMs."""
         track = await self.config.global_().get_attr("tracking", True)
         await self.config.global_().set_attr("tracking", not track)
-        await ctx.send(f"DM Invite tracking is now **{'enabled' if not track else 'disabled'}**.")
-        
+        await ctx.send(
+            f"DM Invite tracking is now **{'enabled' if not track else 'disabled'}**."
+        )
+
     @dminvite.command(name="message")
     @commands.is_owner()
     async def dminvite_message(self, ctx, *, message: str):
@@ -511,15 +519,15 @@ class Developer(commands.Cog):
         ):
             if not await self.config.global_().get_attr("tracking", True):
                 return
-            
+
             msg = await self.config.global_().get_attr(
-                "message", 
-                "Thank you for showing interest in me. If you want to add me to your server, please ask the server owner to add me to the server. If you are the server owner, please click on the link below to add me to your server.\n\n{link}"
+                "message",
+                "Thank you for showing interest in me. If you want to add me to your server, please ask the server owner to add me to the server. If you are the server owner, please click on the link below to add me to your server.\n\n{link}",
             )
-            
+
             if "{link}" in msg:
                 msg = msg.format(link=await self.bot.get_required_perms_invite_link)
-                
+
             if await self.config.global_().get_attr("embed", True):
                 embed = discord.Embed(color=discord.Color.red(), description=msg)
                 await message.author.send(embed=embed)
@@ -552,7 +560,7 @@ class Developer(commands.Cog):
                 embed=e34,
             )
         except discord.HTTPException:
-                pass
+            pass
         await self.post()
 
     @commands.Cog.listener()
@@ -585,7 +593,7 @@ class Developer(commands.Cog):
             e.set_image(url=await self.bot.get_random_image_from_tag("minato namikaze"))
             await welcome_channel.send(embed=e)
         except discord.HTTPException:
-                pass
+            pass
 
         # Send it to server count channel the support server
         try:
@@ -614,7 +622,7 @@ class Developer(commands.Cog):
                 embed=e34,
             )
         except discord.HTTPException:
-                pass
+            pass
         await self.post()
 
 

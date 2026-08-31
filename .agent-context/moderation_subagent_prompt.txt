@@ -1,0 +1,11 @@
+﻿# Moderation Cog Migration Task
+
+You need to port minato_namikaze/old_outdated/moderation.py to minato_namikaze/cogs/moderation/moderation.py.
+
+Guidelines:
+1. moderation.py contains basic moderation commands (an, kick, warn, purge, lock, etc.).
+2. You must fix the database_class usages (which are currently commented out and broken). Replace them with the Config API from minato_namikaze.lib.database.config_api import Config. For example, Config("Moderation", "warns").
+3. If commands are broken or have undefined variables like data = await (await self.database_class()).get(ctx.guild.id) being commented out, UNCOMMENT them and use the new Config API (data = await self.config.guild(ctx.guild).get_attr("warns", {})).
+4. Ensure no deprecated discord.py 1.7 API is used (e.g. ctx.guild.ban(user) instead of member.ban(), though discord.py 2.0 still supports guild.ban(user)).
+5. Delete old_outdated/moderation.py when you are done.
+6. The file is large (58kb), so use eplace_file_content block by block, or write a python script to do it. DO NOT try to replace the entire file in one API call.

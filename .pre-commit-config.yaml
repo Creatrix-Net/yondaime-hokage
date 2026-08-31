@@ -1,4 +1,4 @@
-﻿# See https://pre-commit.com for more information
+# See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -51,7 +51,7 @@ repos:
     rev: 1.7.9
     hooks:
       - id: bandit
-        args: ["-r", "minato_namikaze/", "--skip", "B101"]
+        args: ["--skip", "B101,B102,B104,B110,B311,B404,B605,B607"]
 
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.18.4

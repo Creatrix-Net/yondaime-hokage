@@ -126,7 +126,7 @@ class Developer(commands.Cog):
             page = Embed(title=title)
 
             for guild in chunk:
-                if page.description == None:
+                if page.description is None:
                     page.description = guild
                 else:
                     page.description += f"\n{guild}"
@@ -445,7 +445,6 @@ class Developer(commands.Cog):
     @commands.is_owner()
     async def settings(self, ctx):
         """DM Invite Settings."""
-        import discord
 
         embed = discord.Embed(title="DM Invite Settings", color=discord.Color.red())
         track = await self.config.global_().get_attr("tracking", True)

@@ -4,9 +4,7 @@ import logging
 from typing import Any
 
 from sqlalchemy import select
-from sqlalchemy import update
 from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from .config import ChannelConfig
 from .config import GlobalConfig
@@ -30,7 +28,7 @@ class Group:
                 self.table.cog_name == self.cog_name,
                 self.table.key == key,
             )
-            if self.entity_id != None:
+            if self.entity_id is not None:
                 id_col = list(self.table.primary_key.columns)[0]
                 stmt = stmt.where(id_col == self.entity_id)
 

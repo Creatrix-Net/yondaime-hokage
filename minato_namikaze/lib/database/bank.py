@@ -8,7 +8,6 @@ from typing import Union
 import discord
 from sqlalchemy import desc
 from sqlalchemy import select
-from sqlalchemy import update
 
 from .config_api import Config
 from .models_bank import BankAccount

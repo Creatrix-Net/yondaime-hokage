@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from sqlalchemy import BigInteger
-from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 

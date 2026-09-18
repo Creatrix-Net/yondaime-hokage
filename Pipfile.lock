@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "29d579f10fb7b160794d41c26c52ed3c96a27b4b951f0a00f068aace4ac5456e"
+            "sha256": "740d1d30d9c4248ba71f10a62626519766bc4c4cee115903214a022ba010b3d3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -1940,11 +1940,12 @@
         },
         "soupsieve": {
             "hashes": [
-                "sha256:0cc76456a30e20f5d7f2e14a98a4ae2ee4e5abdc7c5ea0aafe795f344bc7984c",
-                "sha256:e2dd4a40a628cb5f28f6d4b0db8800b8f581b65bb380b97de22ba5ca8d72572f"
+                "sha256:a2b2c76d67df2382d245409fd71e321a571717e58463efa32ace87dcadac2c12",
+                "sha256:acee8417325c5653e1377dc31eccad59eb82cbc65942afe6174c53b3aaad63fc"
             ],
-            "markers": "python_version >= '3.9'",
-            "version": "==2.8"
+            "index": "pypi",
+            "markers": "python_version >= '3.10'",
+            "version": "==2.9"
         },
         "spotify": {
             "hashes": [
